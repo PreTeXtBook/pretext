@@ -30,6 +30,10 @@
 #     otherwise Python 3.0 might be sufficient
 # 2020-05-20: this module expects Python 3.4 or newer
 
+# Set up logging package:
+import logging
+log = logging.getLogger('ptxlogger')
+
 #############################
 #
 #  Math as LaTeX on web pages
@@ -45,8 +49,8 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     import os.path, subprocess
     import re, os, fileinput  # for &nbsp; fix
 
-    _verbose("converting LaTeX from {} into {} format".format(xml_source, math_format))
-    _debug("converting LaTeX from {} into {} format".format(xml_source, math_format))
+    log.info("converting LaTeX from {} into {} format".format(xml_source, math_format))
+    log.debug("converting LaTeX from {} into {} format".format(xml_source, math_format))
 
     # construct filenames for pre- and post- XSL stylesheets in xsl/support
     extraction_xslt = os.path.join(get_ptx_xsl_path(), "support/extract-math.xsl")
@@ -59,8 +63,8 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     mjintermediate = os.path.join(tmp_dir, "mj-intermediate.html")
     mjoutput = os.path.join(tmp_dir, "mj-output-{}.html".format(math_format))
 
-    _debug("temporary directory for MathJax work: {}".format(tmp_dir))
-    _debug("extracting LaTeX from {} and collected in {}".format(xml_source, mjinput))
+    log.debug("temporary directory for MathJax work: {}".format(tmp_dir))
+    log.debug("extracting LaTeX from {} and collected in {}".format(xml_source, mjinput))
 
     # SVG, MathML, and PNG are visual and we help authors move punctuation into
     # displays, but not into inline versions.  Nemeth braille and speech are not,
@@ -85,7 +89,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     msg = (
         "calling MathJax to convert LaTeX from {} into raw representations as {} in {}"
     )
-    _debug(msg.format(mjinput, math_format, mjoutput))
+    log.debug(msg.format(mjinput, math_format, mjoutput))
 
     # process with  pretext.js  executable from  MathJax (Davide Cervone, Volker Sorge)
     node_exec_cmd = get_executable_cmd("node")
@@ -136,13 +140,13 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     derivedname = get_output_filename(
         xml_source, out_file, dest_dir, "-" + math_format + ".xml"
     )
-    _debug(
+    log.debug(
         "packaging math as {} from {} into XML file {}".format(
             math_format, mjoutput, out_file
         )
     )
     xsltproc(cleaner_xslt, mjoutput, derivedname)
-    _verbose("XML file of math representations deposited as {}".format(derivedname))
+    log.info("XML file of math representations deposited as {}".format(derivedname))
 
 
 ##############################################
@@ -174,7 +178,7 @@ def asymptote_conversion(
         raise ImportError(__module_warning.format("requests"))
 
     msg = 'converting Asymptote diagrams from {} to {} graphics for placement in {} with method "{}"'
-    _verbose(msg.format(xml_source, outformat.upper(), dest_dir, method))
+    log.info(msg.format(xml_source, outformat.upper(), dest_dir, method))
 
     # front-ends and calling routines should guarantee the following
     if not (method in ["local", "server"]):
@@ -183,7 +187,7 @@ def asymptote_conversion(
         )
 
     tmp_dir = get_temporary_directory()
-    _debug("temporary directory: {}".format(tmp_dir))
+    log.debug("temporary directory: {}".format(tmp_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-asymptote.xsl")
     # support publisher file, subtree argument
@@ -193,8 +197,8 @@ def asymptote_conversion(
         stringparams["subtree"] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
     # outputs a list of ids, but we just loop over created files
-    _verbose("extracting Asymptote diagrams from {}".format(xml_source))
-    _verbose(
+    log.info("extracting Asymptote diagrams from {}".format(xml_source))
+    log.info(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
@@ -205,7 +209,7 @@ def asymptote_conversion(
     # no need to check executable or server, PreTeXt XSL does it all
     if outformat == "source" or outformat == "all":
         for asydiagram in os.listdir(tmp_dir):
-            _verbose("copying source file {}".format(asydiagram))
+            log.info("copying source file {}".format(asydiagram))
             shutil.copy2(asydiagram, dest_dir)
     # consolidated process for five possible output formats
     # parameterized for places where  method  differs
@@ -242,14 +246,14 @@ def asymptote_conversion(
         for asydiagram in glob.glob(os.path.join(tmp_dir, "*.asy")):
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outform)
-            _verbose("converting {} to {}".format(asydiagram, asyout))
+            log.info("converting {} to {}".format(asydiagram, asyout))
             # do the work, depending on method
             if method == "local":
                 asy_cmd = asy_cli + [asydiagram]
-                _debug("asymptote conversion {}".format(asy_cmd))
+                log.debug("asymptote conversion {}".format(asy_cmd))
                 subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if method == "server":
-                _debug("asymptote server query {}".format(alberta))
+                log.debug("asymptote server query {}".format(alberta))
                 with open(asydiagram) as f:
                     # protect against Unicode (in comments?)
                     data = f.read().encode("utf-8")
@@ -285,13 +289,13 @@ def sage_conversion(
     # To make all four formats, just call this routine
     # four times and halt gracefully with an explicit "return"
     if outformat == "all":
-        _verbose('Pass 1 for "all" formats, now generating PDF')
+        log.info('Pass 1 for "all" formats, now generating PDF')
         sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, "pdf")
-        _verbose('Pass 2 for "all" formats, now generating SVG')
+        log.info('Pass 2 for "all" formats, now generating SVG')
         sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, "svg")
-        _verbose('Pass 3 for "all" formats, now generating PNG')
+        log.info('Pass 3 for "all" formats, now generating PNG')
         sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, "png")
-        _verbose('Pass 4 for "all" formats, now generating HTML')
+        log.info('Pass 4 for "all" formats, now generating HTML')
         sage_conversion(
             xml_source, pub_file, stringparams, xmlid_root, dest_dir, "html"
         )
@@ -300,19 +304,19 @@ def sage_conversion(
     # thus necessitating the four separate calls above due to the
     # extraction stylesheet producing slightly different Sage code
     # for each possible output format
-    _verbose(
+    log.info(
         "converting Sage diagrams from {} to {} graphics for placement in {}".format(
             xml_source, outformat.upper(), dest_dir
         )
     )
     tmp_dir = get_temporary_directory()
-    _debug("temporary directory: {}".format(tmp_dir))
+    log.debug("temporary directory: {}".format(tmp_dir))
     sage_executable_cmd = get_executable_cmd("sage")
     # TODO why this debug line? get_executable_cmd() outputs the same debug info
-    _debug("sage executable: {}".format(sage_executable_cmd[0]))
+    log.debug("sage executable: {}".format(sage_executable_cmd[0]))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-sageplot.xsl")
-    _verbose("extracting Sage diagrams from {}".format(xml_source))
+    log.info("extracting Sage diagrams from {}".format(xml_source))
     # extraction stylesheet is parameterized by fileformat
     # this is an internal parameter only, do not use otherwise
     stringparams["sageplot.fileformat"] = outformat
@@ -328,8 +332,8 @@ def sage_conversion(
         filebase, _ = os.path.splitext(sageplot)
         sageout = "{0}.{1}".format(filebase, outformat)
         sage_cmd = sage_executable_cmd + [sageplot]
-        _verbose("converting {} to {}".format(sageplot, sageout))
-        _debug("sage conversion {}".format(sage_cmd))
+        log.info("converting {} to {}".format(sageplot, sageout))
+        log.debug("sage conversion {}".format(sage_cmd))
         subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
         shutil.copy2(sageout, dest_dir)
 
@@ -349,7 +353,7 @@ def latex_image_conversion(
         global __module_warning
         raise ImportError(__module_warning.format("pdfCropMargins"))
 
-    _verbose(
+    log.info(
         "converting latex-image pictures from {} to {} graphics for placement in {}".format(
             xml_source, outformat, dest_dir
         )
@@ -357,15 +361,15 @@ def latex_image_conversion(
     # for killing output
     devnull = open(os.devnull, "w")
     tmp_dir = get_temporary_directory()
-    _debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
+    log.debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
-    _verbose("extracting latex-image pictures from {}".format(xml_source))
+    log.info("extracting latex-image pictures from {}".format(xml_source))
     # support publisher file, subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
-    _verbose(
+    log.info(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
     # Need to copy entire external directory in the managed case.
@@ -389,7 +393,7 @@ def latex_image_conversion(
     for latex_image in files:
         if outformat == "source":
             shutil.copy2(latex_image, dest_dir)
-            _verbose("copying {} to {}".format(latex_image, dest_dir))
+            log.info("copying {} to {}".format(latex_image, dest_dir))
         else:
             filebase, _ = os.path.splitext(latex_image)
             latex_image_pdf = "{}.pdf".format(filebase)
@@ -400,9 +404,9 @@ def latex_image_conversion(
             latex_key = get_deprecated_tex_fallback(method)
             tex_executable_cmd = get_executable_cmd(latex_key)
             # TODO why this debug line? get_executable_cmd() outputs the same debug info
-            _debug("tex executable: {}".format(tex_executable_cmd[0]))
+            log.debug("tex executable: {}".format(tex_executable_cmd[0]))
             latex_cmd = tex_executable_cmd + ["-halt-on-error", latex_image]
-            _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
+            log.info("converting {} to {}".format(latex_image, latex_image_pdf))
             # Run LaTeX on the image file, usual console transcript is stdout.
             # "result" is a "CompletedProcess" object.  Specifying an encoding
             # causes captured output to be a string, which is convenient.
@@ -441,7 +445,7 @@ def latex_image_conversion(
                     "-a",
                     "-1",
                 ] + pcm_executable_cmd[1:]
-                _verbose(
+                log.info(
                     "cropping {} to {}".format(
                         latex_image_pdf, "cropped-" + latex_image_pdf
                     )
@@ -454,7 +458,7 @@ def latex_image_conversion(
                         )
                     )
                 shutil.move("cropped-" + latex_image_pdf, latex_image_pdf)
-                _verbose(
+                log.info(
                     "renaming {} to {}".format(
                         "cropped-" + latex_image_pdf, latex_image_pdf
                     )
@@ -466,9 +470,9 @@ def latex_image_conversion(
                 if outformat == "svg" or outformat == "all":
                     pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
                     # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    _debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
+                    log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
                     svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
-                    _verbose(
+                    log.info(
                         "converting {} to {}".format(latex_image_pdf, latex_image_svg)
                     )
                     subprocess.call(svg_cmd)
@@ -483,7 +487,7 @@ def latex_image_conversion(
                     # create high-quality png, presumes "convert" executable
                     pdfpng_executable_cmd = get_executable_cmd("pdfpng")
                     # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    _debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
+                    log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
                     png_cmd = pdfpng_executable_cmd + [
                         "-density",
                         "300",
@@ -492,7 +496,7 @@ def latex_image_conversion(
                         "100",
                         latex_image_png,
                     ]
-                    _verbose(
+                    log.info(
                         "converting {} to {}".format(latex_image_pdf, latex_image_png)
                     )
                     subprocess.call(png_cmd)
@@ -506,13 +510,13 @@ def latex_image_conversion(
                 if outformat == "eps" or outformat == "all":
                     pdfeps_executable_cmd = get_executable_cmd("pdfeps")
                     # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    _debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
+                    log.debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
                     eps_cmd = pdfeps_executable_cmd + [
                         "-eps",
                         latex_image_pdf,
                         latex_image_eps,
                     ]
-                    _verbose(
+                    log.info(
                         "converting {} to {}".format(latex_image_pdf, latex_image_eps)
                     )
                     subprocess.call(eps_cmd)
@@ -571,7 +575,7 @@ def latex_tactile_image_conversion(
 
     # NB: latex (in (5)) and dvisvgm (in (6)) are hard-coded
 
-    _verbose(
+    log.info(
         "converting latex-image from {} to {} graphics for placement in {}".format(
             xml_source, outformat, dest_dir
         )
@@ -579,7 +583,7 @@ def latex_tactile_image_conversion(
     # for killing output
     devnull = open(os.devnull, "w")
     tmp_dir = get_temporary_directory()
-    _debug("temporary directory for latex-image tactile graphics: {}".format(tmp_dir))
+    log.debug("temporary directory for latex-image tactile graphics: {}".format(tmp_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
 
     # 1. Create an XML file of Nemeth representations for entire
@@ -593,7 +597,7 @@ def latex_tactile_image_conversion(
         stringparams["publisher"] = pub_file
     # Pass the just-created math representation file
     stringparams["mathfile"] = math_file
-    _verbose(
+    log.info(
         "string parameters passed to label extraction stylesheet: {}".format(
             stringparams
         )
@@ -650,7 +654,7 @@ def latex_tactile_image_conversion(
     # 4.  Convert each  latex-image  into its own *.tex file, but with a
     # parameter to the standard stylesheet, have labels replaced by a LaTeX
     # \rule{}{} that simply creates space for TikZ to place carefully
-    _verbose("applying latex-image-extraction stylesheet with tactile option")
+    log.info("applying latex-image-extraction stylesheet with tactile option")
     extraction_params = stringparams
     extraction_params["format"] = "tactile"
     extraction_params["labelfile"] = braille_label_file
@@ -679,7 +683,7 @@ def latex_tactile_image_conversion(
             latex_image_svg = "{}.svg".format(filebase)
 
             # 5. Process to DVI with old-school LaTeX
-            _verbose("converting {} to {}".format(latex_image, latex_image_dvi))
+            log.info("converting {} to {}".format(latex_image, latex_image_dvi))
             latex_cmd = ["latex", "-interaction=batchmode", latex_image]
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if not os.path.exists(latex_image_dvi):
@@ -690,7 +694,7 @@ def latex_tactile_image_conversion(
                 )
 
             # 6. Process to SVG with  dvisvgm  utility
-            _verbose("converting {} to {}".format(latex_image_dvi, latex_image_svg))
+            log.info("converting {} to {}".format(latex_image_dvi, latex_image_svg))
             divsvgm_cmd = ["dvisvgm", latex_image_dvi, "--bbox=papersize"]
             subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if not os.path.exists(latex_image_svg):
@@ -702,7 +706,7 @@ def latex_tactile_image_conversion(
 
             # 7.  Place the label content as SVG "text" elements using SVG
             # rectangles as the guide to placement, via an XSL stylesheet
-            _verbose("applying latex-image-extraction stylesheet with tactile option")
+            log.info("applying latex-image-extraction stylesheet with tactile option")
             manipulation_params = stringparams
             manipulation_params["labelfile"] = braille_label_file
             svg_source = os.path.join(tmp_dir, latex_image_svg)
@@ -737,7 +741,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     url_string = "http://tracer.runestone.academy:5000/trace{}"
     server_time_out_string = "PTX:ERROR: the server at {} timed out while processing source {}.  No trace file produced"
 
-    _verbose(
+    log.info(
         "creating trace data from {} for placement in {}".format(xml_source, dest_dir)
     )
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -750,7 +754,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Build list of id's, languages, sources into a scratch directory/file
     tmp_dir = get_temporary_directory()
     code_filename = os.path.join(tmp_dir, "codelens.txt")
-    _debug("Program sources for traces temporarily in {}".format(code_filename))
+    log.debug("Program sources for traces temporarily in {}".format(code_filename))
     xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
     # read lines, one-per-program
     code_file = open(code_filename, "r")
@@ -764,7 +768,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
         source = program_quad[3].replace("\\n", "\n")
-        _verbose("converting {} source {} to a trace...".format(language, visible_id))
+        log.info("converting {} source {} to a trace...".format(language, visible_id))
 
         # success will replace this empty string
         trace = ""
@@ -844,7 +848,7 @@ def webwork_to_xml(
     # support publisher file, but not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
-    _verbose(
+    log.info(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
     effective_pub_file = (
@@ -863,7 +867,7 @@ def webwork_to_xml(
                 "is not in use. WeBWorK representations will be in {}",
             ]
         )
-        _verbose(msg.format(dest_dir))
+        log.warning(msg.format(dest_dir))
         ww_reps_dir = dest_dir
         # Below is not a good choice, but here for backwards compatibility
         ww_images_dir = dest_dir
@@ -884,7 +888,7 @@ def webwork_to_xml(
     # Build dictionaries and localization string into a scratch directory/file
     tmp_dir = get_temporary_directory()
     ww_filename = os.path.join(tmp_dir, "webwork-dicts.txt")
-    _debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
+    log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
     xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     ww_file = open(ww_filename, "r")
@@ -1006,7 +1010,7 @@ def webwork_to_xml(
                     origin[problem]
                 )
             )
-        _verbose(msg)
+        log.info(msg)
 
         # make base64 for PTX problems
         if origin[problem] == "ptx":
@@ -1060,22 +1064,22 @@ def webwork_to_xml(
         )
 
         msg = "sending {} to server to save in {}: origin is '{}'"
-        _verbose(msg.format(problem, ww_reps_file, origin[problem]))
+        log.info(msg.format(problem, ww_reps_file, origin[problem]))
         if origin[problem] == "server":
-            _debug(
+            log.debug(
                 "server-to-ptx: {}\n{}\n{}\n{}".format(
                     problem, ww_domain_path, source[problem], ww_reps_file
                 )
             )
         elif origin[problem] == "ptx":
             if ww_reps_version == "2":
-                _debug(
+                log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
                         problem, ww_domain_path, pgdense[problem], ww_reps_file
                     )
                 )
             elif ww_reps_version == "1":
-                _debug(
+                log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
                         problem,
                         ww_domain_path,
@@ -1087,7 +1091,7 @@ def webwork_to_xml(
         # Ready, go out on the wire
         try:
             response = session.get(ww_domain_path, params=server_params)
-            _debug("Getting problem response from: " + response.url)
+            log.debug("Getting problem response from: " + response.url)
 
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
@@ -1293,7 +1297,7 @@ def webwork_to_xml(
                     qualifier = ""
                     if image_extension == ".tgz":
                         qualifier = "(contents)"
-                    _verbose(msg.format(ptx_image_filename, qualifier, ww_images_dir))
+                    log.info(msg.format(ptx_image_filename, qualifier, ww_images_dir))
                     image_file.write(image_response.content)
             except Exception as e:
                 root_cause = str(e)
@@ -1574,7 +1578,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
-    _verbose(
+    log.info(
         "downloading YouTube thumbnails from {} for placement in {}".format(
             xml_source, dest_dir
         )
@@ -1589,7 +1593,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Build list of id's into a scratch directory/file
     tmp_dir = get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "youtube-ids.txt")
-    _debug("YouTube id list temporarily in {}".format(id_filename))
+    log.debug("YouTube id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     id_file = open(id_filename, "r")
@@ -1600,7 +1604,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         thumb_pair = thumb.split(",")
         url = "http://i.ytimg.com/vi/{}/default.jpg".format(thumb_pair[0])
         path = os.path.join(dest_dir, thumb_pair[1] + ".jpg")
-        _verbose("downloading {} as {}...".format(url, path))
+        log.info("downloading {} as {}...".format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
         r = requests.get(url, stream=True)
@@ -1611,7 +1615,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         else:
             msg = "PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?"
             raise OSError(msg.format(r.status_code, url))
-    _verbose("YouTube thumbnail download complete")
+    log.info("YouTube thumbnail download complete")
 
 
 #####################################
@@ -1628,7 +1632,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     suffix = "png"
 
-    _verbose(
+    log.info(
         "creating interactive previews from {} for placement in {}".format(
             xml_source, dest_dir
         )
@@ -1644,7 +1648,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Build list of id's into a scratch directory/file
     tmp_dir = get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "interactives-ids.txt")
-    _debug("Interactives id list temporarily in {}".format(id_filename))
+    log.debug("Interactives id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
 
     # "run" an assignment for the list of problem numbers
@@ -1660,8 +1664,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     pageres_executable_cmd = get_executable_cmd("pageres")
     # TODO why this debug line? get_executable_cmd() outputs the same debug info
-    _debug("pageres executable: {}".format(pageres_executable_cmd[0]))
-    _debug("interactives identifiers: {}".format(interactives))
+    log.debug("pageres executable: {}".format(pageres_executable_cmd[0]))
+    log.debug("interactives identifiers: {}".format(interactives))
 
     # We look to see if a delay is provided in the
     # command from the configuration file.  The command is
@@ -1689,7 +1693,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         filename_option = "--filename=" + preview + "-preview"
         filename = preview + "-preview." + suffix
         page_with_fragment = "".join([input_page, "#", preview])
-        _verbose("converting {} to {}".format(page_with_fragment, filename))
+        log.info("converting {} to {}".format(page_with_fragment, filename))
 
         # pageres invocation
         # 5-second delay allows Javascript, etc to settle down but can be
@@ -1707,7 +1711,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             input_page,
         ]
 
-        _debug("pageres command: {}".format(cmd))
+        log.debug("pageres command: {}".format(cmd))
 
         subprocess.call(cmd)
         shutil.copy2(filename, dest_dir)
@@ -1849,7 +1853,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
-    _verbose(
+    log.info(
         "downloading MyOpenMath static problems from {} for placement in {}".format(
             xml_source, dest_dir
         )
@@ -1864,7 +1868,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     # Build list of id's into a scratch directory/file
     tmp_dir = get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "mom-ids.txt")
-    _debug("MyOpenMath id list temporarily in {}".format(id_filename))
+    log.debug("MyOpenMath id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of problem numbers
     id_file = open(id_filename, "r")
@@ -1874,7 +1878,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     for problem in problems:
         url = "https://www.myopenmath.com/util/mbx.php?id={}".format(problem)
         path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
-        _verbose("downloading MOM #{} to {}...".format(problem, path))
+        log.info("downloading MOM #{} to {}...".format(problem, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
         r = requests.get(url, stream=True)
@@ -1886,7 +1890,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
             else:
                 msg = "PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?"
                 raise OSError(msg.format(r.status_code, url))
-    _verbose("MyOpenMath static problem download complete")
+    log.info("MyOpenMath static problem download complete")
 
 
 #######################
@@ -1900,7 +1904,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     import subprocess  # run()
 
     # general message for this entire procedure
-    _verbose(
+    log.info(
         "converting {} into BRF in {} combining UEB2 and Nemeth".format(
             xml_source, dest_dir
         )
@@ -1908,7 +1912,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 
     # Build into a scratch directory
     tmp_dir = get_temporary_directory()
-    _debug("Braille manufacture in temporary directory: {}".format(tmp_dir))
+    log.debug("Braille manufacture in temporary directory: {}".format(tmp_dir))
 
     # use of  math_format is for consistency
     # with MathJax used to make EPUB
@@ -1922,11 +1926,11 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
-    _debug(msg.format(xml_source, math_format, math_representations))
+    log.debug(msg.format(xml_source, math_format, math_representations))
     mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
     msg = "converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})"
-    _debug(msg.format(xml_source, math_representations, liblouis_xml))
+    log.debug(msg.format(xml_source, math_representations, liblouis_xml))
     stringparams["mathfile"] = math_representations
     # pass in the page format (for messages about graphics, etc.)
     stringparams["page-format"] = page_format
@@ -1955,11 +1959,11 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     final_brf = get_output_filename(xml_source, out_file, dest_dir, ".brf")
     liblouis_exec_cmd = get_executable_cmd("liblouis")
     msg = "applying liblouis to {} with configurations {}, creating BRF {}"
-    _debug(msg.format(liblouis_xml, cfg, final_brf))
+    log.debug(msg.format(liblouis_xml, cfg, final_brf))
     liblouis_cmd = liblouis_exec_cmd + ["-f", cfg, liblouis_xml, final_brf]
 
     subprocess.run(liblouis_cmd)
-    _verbose("BRF file deposited as {}".format(final_brf))
+    log.info("BRF file deposited as {}".format(final_brf))
 
 
 ####################
@@ -1990,7 +1994,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
         raise ImportError(__module_warning.format("lxml"))
 
     # general message for this entire procedure
-    _verbose(
+    log.info(
         "converting {} into EPUB in {} with math as {}".format(
             xml_source, dest_dir, math_format
         )
@@ -1998,7 +2002,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
     # Build into a scratch directory
     tmp_dir = get_temporary_directory()
-    _debug("EPUB manufacture in temporary directory: {}".format(tmp_dir))
+    log.debug("EPUB manufacture in temporary directory: {}".format(tmp_dir))
 
     # Before making a zip file, the temporary directory should look
     # like the unzipped version of an EPUB file.  For us, that goes:
@@ -2026,11 +2030,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
-    _debug(msg.format(xml_source, math_format, math_representations))
+    log.debug(msg.format(xml_source, math_format, math_representations))
     mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
     # optionally, build a file of speech versions of the math
     if math_format == "svg":
-        _debug(msg.format(xml_source, "speech", speech_representations))
+        log.debug(msg.format(xml_source, "speech", speech_representations))
         mathjax_latex(xml_source, pub_file, speech_representations, None, "speech")
 
     # Build necessary content and infrastructure EPUB files,
@@ -2038,7 +2042,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # EPUB/xhtml directory via exsl:document templates in
     # the EPUB XSL conversion.  The stylesheet does record,
     # and produce some information needed for the packaging here.
-    _verbose(
+    log.info(
         "converting source ({}) and clean representations ({}) into EPUB files".format(
             xml_source, math_representations
         )
@@ -2136,7 +2140,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
         title_ASCII = "".join([x if ord(x) < 128 else "?" for x in title])
         subtitle_ASCII = "".join([x if ord(x) < 128 else "?" for x in subtitle])
         author_ASCII = "".join([x if ord(x) < 128 else "?" for x in author])
-        _verbose("attempting to construct cover image using LaTeX and ImageMagick")
+        log.info("attempting to construct cover image using LaTeX and ImageMagick")
         try:
             # process with the  xelatex  engine (better Unicode support)
             latex_key = get_deprecated_tex_fallback("xelatex")
@@ -2178,8 +2182,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
             subprocess.run(png_cmd)
             os.chdir(owd)
         except:
-            _verbose("failed to construct cover image using LaTeX and ImageMagick")
-            _verbose("attempting to construct cover image using pageres")
+            log.warning("failed to construct cover image using LaTeX and ImageMagick")
+            log.info("attempting to construct cover image using pageres")
             try:
                 pageres_executable_cmd = get_executable_cmd("pageres")
                 pageres_cmd = pageres_executable_cmd + [
@@ -2194,8 +2198,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 subprocess.run(pageres_cmd)
                 os.chdir(owd)
             except:
-                _verbose("failed to construct cover image using pageres")
-                _verbose(
+                log.warning("failed to construct cover image using pageres")
+                log.info(
                     'attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
                 )
                 try:
@@ -2277,10 +2281,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                     )
                     cover_png.save(cover_source)
                 except:
-                    _verbose(
+                    log.warning(
                         'failed to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
                     )
-                    _verbose("attempting to construct crude bitmap font cover image")
+                    log.info("attempting to construct crude bitmap font cover image")
                     try:
                         title_words = title_ASCII.split()
                         title_font = PIL.ImageFont.load_default()
@@ -2295,11 +2299,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                         cover_png.save(cover_source)
                     except:
                         # We failed to build a cover.png so we remove all references to cover.png
-                        _verbose("failed to construct a cover image")
+                        log.warning("failed to construct a cover image")
         try:
             shutil.copy2(cover_source, cover_dest)
         except:
-            _verbose("removing references to cover image from package.opf")
+            log.info("removing references to cover image from package.opf")
             package_opf = os.path.join(tmp_dir, "EPUB/package.opf")
             package_opf_tree = ET.parse(package_opf)
             for meta in package_opf_tree.xpath(
@@ -2351,7 +2355,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     title_file_element = packaging_tree.xpath("/packaging/filename")[0]
     title_file = ET.tostring(title_file_element, method="text").decode("ascii")
     epub_file = "{}-{}.epub".format(title_file, math_format)
-    _verbose("packaging an EPUB temporarily as {}".format(epub_file))
+    log.info("packaging an EPUB temporarily as {}".format(epub_file))
     owd = os.getcwd()
     os.chdir(tmp_dir)
     with ZIP.ZipFile(epub_file, mode="w", compression=ZIP.ZIP_DEFLATED) as epub:
@@ -2366,7 +2370,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
             for name in files:
                 epub.write(os.path.join(root, name))
     derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
-    _verbose("EPUB file deposited as {}".format(derivedname))
+    log.info("EPUB file deposited as {}".format(derivedname))
     shutil.copy2(epub_file, derivedname)
     os.chdir(owd)
 
@@ -2414,7 +2418,7 @@ def html(
         shutil.copytree(generated_abs, generated_dir)
 
     # Write output into temporary directory
-    _verbose("converting {} to HTML in {}".format(xml, tmp_dir))
+    log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
     map_path_to_xml_id(xml, tmp_dir)
 
@@ -2431,7 +2435,7 @@ def html(
         owd = os.getcwd()
         os.chdir(tmp_dir)
         zip_file = "html-output.zip"
-        _verbose(
+        log.info(
             "packaging a zip file temporarily as {}".format(
                 os.path.join(tmp_dir, zip_file)
             )
@@ -2442,7 +2446,7 @@ def html(
                     epub.write(os.path.join(root, name))
         derivedname = get_output_filename(xml, out_file, dest_dir, ".zip")
         shutil.copy2(zip_file, derivedname)
-        _verbose("zip file of HTML output deposited as {}".format(derivedname))
+        log.info("zip file of HTML output deposited as {}".format(derivedname))
         os.chdir(owd)
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
@@ -2556,7 +2560,7 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
     # unless an  out_file  has been specified
     derivedname = get_output_filename(xml, out_file, dest_dir, ".xml")
     # Write output into working directory, no scratch space needed
-    _verbose(
+    log.info(
         "converting {} to enhanced (pre-processed) PreTeXt source as {}".format(
             xml, derivedname
         )
@@ -2585,7 +2589,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # unless an  out_file  has been specified
     derivedname = get_output_filename(xml, out_file, dest_dir, ".tex")
     # Write output into working directory, no scratch space needed
-    _verbose("converting {} to LaTeX as {}".format(xml, derivedname))
+    log.info("converting {} to LaTeX as {}".format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
@@ -2664,7 +2668,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 #################
 
 # Pythonic replacement for xsltproc executable
-def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print):
+def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.info):
     """
     Apply an XSL stylesheet to an XML source, with control over location of results.
 
@@ -2694,11 +2698,11 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print)
         global __module_warning
         raise ImportError(__module_warning.format("lxml"))
 
-    _verbose("XSL conversion of {} by {}".format(xml, xsl))
+    log.info("PTX: XSL conversion of {} by {}".format(xml, xsl))
     debug_string = (
         "XSL conversion via {} of {} to {} and/or into directory {} with parameters {}"
     )
-    _debug(debug_string.format(xsl, xml, result, output_dir, stringparams))
+    log.debug(debug_string.format(xsl, xml, result, output_dir, stringparams))
 
     # string parameters arrive in a "plain" string:string dictionary
     # but the values need to be prepped for lxml use, always
@@ -2755,7 +2759,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print)
             end = len(xslt.error_log)
             # print out any unprinted messages from error_log
             for line in range(start, end):
-                outputfn("    * ", xslt.error_log[line].message)
+                outputfn(f"    * {xslt.error_log[line].message}")
             start = end
         if texc is None:
             outputfn("PTX: Successful application of {}".format(xsl))
@@ -2798,40 +2802,6 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=print)
 # Utility Functions
 #
 ###################
-
-
-def set_verbosity(v):
-    """Set how chatty routines are at console: 0, 1, or 2"""
-    # 0 - nothing
-    # 1 - _verbose() only
-    # 2 - _verbose() and _debug()
-    global __verbosity
-
-    if (v != 0) and (v != 1) and (v != 2):
-        raise ValueError("PTX:ERROR: verbosity level is 0, 1, or 2, not {}".format(v))
-    __verbosity = v
-
-
-def _verbose(msg):
-    """Write a concise message to the console on program progress"""
-    # N.B.: this should be an informative progress indicator for an impatient
-    # author who wonders if anything is happening.  Use _debug() for messages
-    # with content useful for location or solving problems.
-    global __verbosity
-
-    if __verbosity >= 1:
-        print("PTX: {}".format(msg))
-
-
-def _debug(msg):
-    """Write a message to the console with some useful raw information"""
-    # N.B. This can be as detailed and infotrmative as possible,
-    # and should be helpful in locating where a problem occurs
-    # or what scenario caused that problem.
-    global __verbosity
-
-    if __verbosity >= 2:
-        print("PTX:DEBUG: {}".format(msg))
 
 
 def python_version():
@@ -2901,7 +2871,7 @@ def get_source_path(source_file):
 
     # split path off filename
     source_dir, _ = os.path.split(source_file)
-    _verbose("discovering source file's directory name: {}".format(source_dir))
+    log.info("discovering source file's directory name: {}".format(source_dir))
     return os.path.normpath(source_dir)
 
 
@@ -2918,7 +2888,7 @@ def get_executable_cmd(exec_name):
     global __executables
 
     # get the name, but then see if it really, really works
-    _debug(
+    log.debug(
         'locating "{}" in [executables] section of configuration file'.format(exec_name)
     )
     # 'tex' deprecated, and replaced by 'latex', 'pdflatex', and 'xelatex'
@@ -2956,7 +2926,7 @@ def get_executable_cmd(exec_name):
         ]
     if error_messages:
         raise OSError("\n".join(error_messages))
-    _debug(
+    log.debug(
         "{} executable: {}, options: {}".format(
             exec_name, config_cmd_line[0], " ".join(config_cmd_line[1:])
         )
@@ -2983,7 +2953,7 @@ def get_deprecated_tex_fallback(key):
 
 def sanitize_url(url):
     """Verify a server address"""
-    _verbose("validating, cleaning server URL: {}".format(url))
+    log.info("validating, cleaning server URL: {}".format(url))
     try:
         import requests  # test a URL
     except ImportError:
@@ -3003,7 +2973,7 @@ def sanitize_alpha_num_underscore(param):
     import string
 
     allowed = set(string.ascii_letters + string.digits + "_")
-    _verbose("verifying parameter: {}".format(param))
+    log.info("verifying parameter: {}".format(param))
     if not (set(param) <= allowed):
         raise ValueError(
             "PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ ".format(
@@ -3045,26 +3015,27 @@ def release_temporary_directories():
     """Release scratch directories unless requesting debugging info"""
     import shutil  #  rmtree()
 
-    global __verbosity
     global __temps
 
-    _debug("Temporary directories left behind for inspection: {}".format(__temps))
-    if __verbosity < 2:
+    # log.level is 10 for debug, greater for all other levels.
+    if log.level > 10: 
         for td in __temps:
-            _verbose("Removing temporary directory {}".format(td))
+            log.info("Removing temporary directory {}".format(td))
             # conservatively, raise exception on errors
             shutil.rmtree(td, ignore_errors=False)
+    else:
+        log.debug("Temporary directories left behind for inspection: {}".format(__temps))
 
 
 def verify_input_directory(inputdir):
     """Verify directory exists, or raise error.  Return absolute path"""
     import os.path  # isdir(), abspath()
 
-    _verbose("verifying and expanding input directory: {}".format(inputdir))
+    log.info("verifying and expanding input directory: {}".format(inputdir))
     if not (os.path.isdir(inputdir)):
         raise ValueError("directory {} does not exist".format(inputdir))
     absdir = os.path.abspath(inputdir)
-    _verbose("input directory expanded to absolute path: {}".format(absdir))
+    log.info("input directory expanded to absolute path: {}".format(absdir))
     return absdir
 
 
@@ -3142,8 +3113,6 @@ def get_managed_directories(xml_source, pub_file):
 # whose scope is the module, so must be declared
 # by employing routines as non-local ("global")
 #
-#  __verbosity - level of detail in console output
-#
 #  __ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
@@ -3153,11 +3122,6 @@ def get_managed_directories(xml_source, pub_file):
 #
 #  __module_warning - stock import-failure warning message
 
-# verbosity parameter defaults to 0 at startup
-# employing application can use set_verbosity()
-# to override via application's methodology
-__verbosity = None
-set_verbosity(0)
 
 # Discover and set distribution path once at start-up
 __ptx_path = None
