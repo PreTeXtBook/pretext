@@ -295,11 +295,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="webwork.divisional.static" select="'yes'" />
 <xsl:param name="webwork.reading.static" select="'yes'" />
 <xsl:param name="webwork.worksheet.static" select="'yes'" />
+<xsl:param name="webwork.project.static" select="'no'" />
 <!-- We make variables instead of using the params directly, so that in EPUB we can overrule -->
 <xsl:variable name="b-webwork-inline-static" select="$webwork.inline.static = 'yes'" />
 <xsl:variable name="b-webwork-divisional-static" select="$webwork.divisional.static = 'yes'" />
 <xsl:variable name="b-webwork-reading-static" select="$webwork.reading.static = 'yes'" />
 <xsl:variable name="b-webwork-worksheet-static" select="$webwork.worksheet.static = 'yes'" />
+<xsl:variable name="b-webwork-project-static" select="$webwork.project.static = 'yes'" />
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
 <xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>
@@ -4267,6 +4269,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="block-type"/>
 
     <xsl:choose>
+        <!-- webwork case -->
+        <xsl:when test="webwork-reps">
+            <xsl:apply-templates select="introduction|webwork-reps|conclusion">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:when>
         <xsl:when test="task">
             <xsl:apply-templates select="introduction|task|conclusion">
                 <xsl:with-param name="b-original" select="$b-original"/>
@@ -10427,22 +10435,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- what is born visible under control of a switch -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
-    <xsl:variable name="b-has-hint" select="(ancestor::exercises and $b-has-divisional-hint) or
+    <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
+                                            (ancestor::exercises and $b-has-divisional-hint) or
                                             (ancestor::reading-questions and $b-has-reading-hint) or
                                             (ancestor::worksheet and $b-has-worksheet-hint) or
-                                            (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
-    <xsl:variable name="b-has-answer" select="(ancestor::exercises and $b-has-divisional-answer) or
+                                            (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-answer) or
+                                              (ancestor::exercises and $b-has-divisional-answer) or
                                               (ancestor::reading-questions and $b-has-reading-answer) or
                                               (ancestor::worksheet and $b-has-worksheet-answer) or
-                                              (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
-    <xsl:variable name="b-has-solution" select="(ancestor::exercises and $b-has-divisional-solution) or
+                                              (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-solution) or
+                                                (ancestor::exercises and $b-has-divisional-solution) or
                                                 (ancestor::reading-questions and $b-has-reading-solution) or
                                                 (ancestor::worksheet and $b-has-worksheet-solution) or
-                                                (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
-    <xsl:variable name="b-static" select="(ancestor::exercises and $b-webwork-divisional-static) or
+                                                (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:variable name="b-static" select="(ancestor::*[&PROJECT-FILTER;] and $b-webwork-project-static) or
+                                          (ancestor::exercises and $b-webwork-divisional-static) or
                                           (ancestor::reading-questions and $b-webwork-reading-static) or
                                           (ancestor::worksheet and $b-webwork-worksheet-static) or
-                                          (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-webwork-inline-static)"/>
+                                          (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-webwork-inline-static)"/>
     <xsl:choose>
         <!-- We print the static version when that is explicitly directed. -->
         <xsl:when test="($b-static = 'yes')">
