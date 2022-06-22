@@ -2657,7 +2657,6 @@ the xsltproc executable.
                 <p>A <tag>url</tag> element with content will get a footnote, containing the (simplified) URL in the mandatory <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you are using a construction that was deprecated on 2020-01-05.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/" visual="http://example.com/">With a duplicate <attr>visual</attr> attribute</url></li>
-                    <li><url href="http://example.com/">Without a <attr>visual</attr> attribute (deprecated)</url></li>
                 </ul></p>
 
                 <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version</p>
@@ -6700,6 +6699,351 @@ the xsltproc executable.
                     <caption>Cellular Automata</caption>
                     <interactive xml:id="wolfram-cellular-automata" wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
                 </figure>
+            </subsection>
+        </section>
+
+        <section xml:id="section-interactive-exercises">
+            <title>Interactive Exercises</title>
+
+            <introduction>
+                <p>Interactive components, <em>just</em> for testing, no commentary.</p>
+            </introduction>
+
+            <exercises>
+                <title>True/False</title>
+
+                <p>A True/False question.</p>
+
+                <exercise label="vector-space-dimension">
+                    <title>True/False</title>
+                    <idx>vector space</idx>
+                    <statement correct="no">
+                        <p>Every vector space has finite dimension.</p>
+                    </statement>
+                    <feedback>
+                        <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                    </feedback>
+                    <hint>
+                        <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-FTC"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                    </hint>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Multiple-Choice</title>
+
+                <p>Multiple-Choice problem</p>
+
+                <exercise label="multiple-choice-not-randomized">
+                    <title>Multiple-Choice, Not Randomized, One Answer</title>
+                    <idx>stop signs</idx>
+                    <statement>
+                        <p>What color is a stop sign?</p>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Green</p>
+                            </statement>
+                            <feedback>
+                                <p>Green means <q>go!</q>.</p>
+                            </feedback>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Red</p>
+                            </statement>
+                            <feedback>
+                                <p>Red is universally used for prohibited activities or serious warnings.</p>
+                            </feedback>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>White</p>
+                            </statement>
+                            <feedback>
+                                <p>White might be hard to see.</p>
+                            </feedback>
+                        </choice>
+                    </choices>
+                    <hint>
+                        <p>What did you see last time you went driving?</p>
+                    </hint>
+                    <hint>
+                        <p>Maybe go out for a drive?</p>
+                    </hint>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Parsons Problem, Math Proof</title>
+
+                <p>With some MathJax.</p>
+
+                <exercise label="number-theory-proof" adaptive="yes">
+                    <title>Parsons Problem, Mathematical Proof</title>
+                    <idx>even numbers</idx>
+                    <statement>
+                        <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>.</p>
+                    </statement>
+                    <blocks>
+                        <block order="2">
+                            <p>Suppose <m>n</m> is even.</p>
+                        </block>
+                        <block order="3">
+                            <choice><p>Then <m>n</m> is a prime number.</p></choice>
+                            <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                            <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                        </block>
+                        <block order="1" correct="no">
+                            <p>Click the heels of your ruby slippers together three times.</p>
+                        </block>
+                        <block order="5">
+                            <p>So we have the displayed equation: <me>n = 2m + 0</me>.</p>
+                            <p>This is a superfluous second paragraph in this block.</p>
+                        </block>
+                        <block order="4">
+                            <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                        </block>
+                    </blocks>
+                    <hint>Dorothy will not be much help with this proof.</hint>
+                </exercise>
+
+            </exercises>
+
+            <exercises>
+                <title>Parsons Problem, Code</title>
+
+                <p>Programming Parsons problem, requiring indentation.</p>
+
+                <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
+                    <title>Parsons Problem, Programming</title>
+                    <idx>prime numbers</idx>
+                    <idx>Sieve of Eratosthenes</idx>
+                    <statement>
+                        <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                        <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem requires the reader to provide the necessary indentation.]</p>
+                    </statement>
+                    <blocks>
+                        <block order="6">
+                            <cline>n = 250</cline>
+                        </block>
+                        <block order="2">
+                            <choice correct="yes">
+                                <cline>primes = []</cline>
+                                <cline>candidates = list(range(2,n))</cline>
+                            </choice>
+                            <choice>
+                                <cline>candidates = []</cline>
+                                <cline>primes = list(range(2,n))</cline>
+                            </choice>
+                        </block>
+                        <block order="7" correct="no">
+                            <cline>primes = candidates + [p]</cline>
+                        </block>
+                        <block order="8">
+                            <cline>while candidates:</cline>
+                        </block>
+                        <block order="3">
+                            <cline>    p = candidates[0]</cline>
+                            <cline>    primes.append(p)</cline>
+                        </block>
+                        <block order="1">
+                            <cline>    for nonprime in range(p, n, p):</cline>
+                        </block>
+                        <block order="5">
+                            <cline>        if nonprime in candidates:</cline>
+                            <cline>            candidates.remove(nonprime)</cline>
+                        </block>
+                        <block order="4">
+                            <cline>print(primes)</cline>
+                        </block>
+                    </blocks>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Matching</title>
+
+                <p>Events and dates.</p>
+
+                <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
+                <exercise label="matching-dates">
+                    <title>Matching Problem, Dates</title>
+                    <idx>matching US dates</idx>
+                    <statement>
+                        <p>Match each event in United States history with the year it happened.</p>
+                    </statement>
+                    <feedback>
+                        <p>Review <url href="https://www.britannica.com/list/25-decade-defining-events-in-us-history" visual="www.britannica.com/list/25-decade-defining-events-in-us-history">Encyclopedia Brittania, 25 Decade-Defining Events in U.S. History</url>url.</p>
+                    </feedback>
+                    <matches>
+                        <match order="4">
+                            <premise>Monroe Doctrine</premise>
+                            <response>1823</response>
+                        </match>
+                        <match order="3">
+                            <premise>Haymarket Riot</premise>
+                            <response>1886</response>
+                        </match>
+                        <match order="1">
+                            <premise>Louisiana Purchase</premise>
+                            <response>1803</response>
+                        </match>
+                        <match order="2">
+                            <premise>Battle of Gettysburg</premise>
+                            <response>1863</response>
+                        </match>
+                    </matches>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Clickable Area</title>
+
+                <p>Words, not code.</p>
+
+                <exercise label="clickable-text">
+                    <title>Clickable Areas, <q>Regular</q> Text</title>
+
+                    <statement>
+                        <p>Identify (by clicking, or by circling) all of the nouns in this quotation by Eleanor Roosevelt.</p>
+                    </statement>
+
+                    <areas>
+                        <p><q>The <area>future</area> belongs to <area correct="no">those</area> who believe in the <area correct="yes">beauty</area> of <area correct="no">their</area> <area>dreams</area>.</q></p>
+                    </areas>
+
+                    <feedback>
+                        <p>The incorrect words are pronouns.</p>
+                    </feedback>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Old-Style Fillin-In</title>
+
+                <p>Do not use this as a model for new exercises.  Just for backwards-compatibility.</p>
+
+                <exercise label="fillin-string-integer">
+                    <title>Fill-In, String and Number Answers</title>
+
+                    <statement>
+                        <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
+                        <p><var/> <c>age = </c> <var/><c>;</c></p>
+                    </statement>
+                    <setup>
+                        <var>
+                            <condition string="int">
+                                <feedback>
+                                    <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                                </feedback>
+                            </condition>
+                        </var>
+                        <var>
+                            <condition number="5">
+                                <feedback>
+                                    <p>An integer variable may be initialized to a value.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Use <c>5</c> as the initial value of the variable.</p>
+                                </feedback>
+                            </condition>
+                        </var>
+                    </setup>
+                </exercise>
+            </exercises>
+
+            <reading-questions>
+                <title>A Reading Question</title>
+
+                <exercise label="short-answer-question">
+                    <title>Short Answer</title>
+
+                    <statement>
+                        <p>This should be built with a text-box, <em>only</em> on a capable server (Runestone).  So it can be answered</p>
+                    </statement>
+                </exercise>
+            </reading-questions>
+
+            <subsection>
+                <title>Faux Subsection</title>
+
+                <p>We used <tag>exercises</tag> divisions above, and need a <tag>subsection</tag> to feed the schema.</p>
+            </subsection>
+        </section>
+
+        <section xml:id="section-interactive-code">
+            <title>Interactive Coding</title>
+
+            <introduction>
+                <p>More interactive components, just for testing, no commentary.</p>
+            </introduction>
+
+            <exercises>
+                <title>ActiveCode</title>
+
+                <p>ActiveCode, Python program.</p>
+
+                <listing xml:id="program-activecode-python">
+                    <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+                    <program xml:id="python-hello-world" interactive='activecode' language="python">
+                        <input>
+                        print("Hello, World!")
+                        </input>
+                    </program>
+                </listing>
+            </exercises>
+
+            <exercises>
+                <title>CodeLens</title>
+
+                <p>A steppable Python program.</p>
+
+                <listing xml:id="program-codelens-python">
+                    <caption>A Python program, stepable with CodeLens</caption>
+                    <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                        <input>
+                        print('Hello, World!')
+                        </input>
+                    </program>
+                </listing>
+            </exercises>
+
+            <exercises>
+                <title>Activity with An ActiveCode</title>
+
+                <p>Something to do with ActiveCode program.</p>
+
+                <activity xml:id="coding-exercise-partial-two">
+                    <title>Activity Coding Exercise</title>
+
+                    <statement>
+                        <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </activity>
+            </exercises>
+
+            <subsection>
+                <title>YouTube</title>
+
+                <p>Video, observable on a Runestone server.</p>
+
+                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="external/yt-list-variables.png"/>
             </subsection>
         </section>
 

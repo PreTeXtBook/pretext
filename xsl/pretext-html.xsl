@@ -6842,6 +6842,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <body>
                 <!-- potential document-id per-page -->
                 <xsl:call-template name="document-id"/>
+                <!-- React flag -->
+                <xsl:call-template name="react-in-use-flag"/>
                 <!-- the first class controls the default icon -->
                 <xsl:attribute name="class">
                     <xsl:choose>
@@ -9690,6 +9692,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <body class="pretext ignore-math">
                 <!-- potential document-id per-page -->
                 <xsl:call-template name="document-id"/>
+                <!-- React flag -->
+                <xsl:call-template name="react-in-use-flag"/>
                 <div>
                     <!-- the actual interactive bit          -->
                     <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
@@ -10508,6 +10512,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <body>
             <!-- potential document-id per-page -->
             <xsl:call-template name="document-id"/>
+            <!-- React flag -->
+            <xsl:call-template name="react-in-use-flag"/>
             <!-- the first class controls the default icon -->
             <xsl:attribute name="class">
                 <xsl:choose>
@@ -10648,6 +10654,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <body class="ignore-math">
             <!-- potential document-id per-page -->
             <xsl:call-template name="document-id"/>
+            <!-- React flag -->
+            <xsl:call-template name="react-in-use-flag"/>
             <xsl:copy-of select="$content" />
             <!-- analytics services, if requested -->
             <xsl:call-template name="statcounter"/>
@@ -10669,6 +10677,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($document-id = '')">
         <xsl:attribute name="id">
             <xsl:value-of select="$document-id"/>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="react-in-use-flag">
+    <xsl:if test="$b-debug-react">
+        <xsl:attribute name="data-react-in-use">
+            <xsl:value-of select="'yes'"/>
         </xsl:attribute>
     </xsl:if>
 </xsl:template>
