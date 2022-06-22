@@ -6980,6 +6980,73 @@ the xsltproc executable.
             </subsection>
         </section>
 
+        <section xml:id="section-interactive-code">
+            <title>Interactive Coding</title>
+
+            <introduction>
+                <p>More interactive components, just for testing, no commentary.</p>
+            </introduction>
+
+            <exercises>
+                <title>ActiveCode</title>
+
+                <p>ActiveCode, Python program.</p>
+
+                <listing xml:id="program-activecode-python">
+                    <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+                    <program xml:id="python-hello-world" interactive='activecode' language="python">
+                        <input>
+                        print("Hello, World!")
+                        </input>
+                    </program>
+                </listing>
+            </exercises>
+
+            <exercises>
+                <title>CodeLens</title>
+
+                <p>A steppable Python program.</p>
+
+                <listing xml:id="program-codelens-python">
+                    <caption>A Python program, stepable with CodeLens</caption>
+                    <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                        <input>
+                        print('Hello, World!')
+                        </input>
+                    </program>
+                </listing>
+            </exercises>
+
+            <exercises>
+                <title>Activity with An ActiveCode</title>
+
+                <p>Something to do with ActiveCode program.</p>
+
+                <activity xml:id="coding-exercise-partial-two">
+                    <title>Activity Coding Exercise</title>
+
+                    <statement>
+                        <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </activity>
+            </exercises>
+
+            <subsection>
+                <title>YouTube</title>
+
+                <p>Video, observable on a Runestone server.</p>
+
+                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="external/yt-list-variables.png"/>
+            </subsection>
+        </section>
+
         <section xml:id="section-audio">
             <title>Audio</title>
 
