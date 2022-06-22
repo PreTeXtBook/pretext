@@ -1568,7 +1568,7 @@
                     attribute archive {text}?,
                     attribute source {text},
                     attribute decorative {"yes" | "no"}?,
-                    element description {TextShort}?
+                    element description {text}?
                 }
             ImageCode =
                 element image {
@@ -1578,7 +1578,7 @@
                     attribute margins {text}?,
                     attribute archive {text}?,
                     attribute decorative {"yes" | "no"}?,
-                    element description {TextShort}?,
+                    element description {text}?,
                     (
                         element latex-image {text} |
                         element asymptote {text} |
@@ -1594,7 +1594,7 @@
                     attribute pg-name {text}?,
                     attribute width {text}?,
                     attribute decorative {"yes" | "no"}?,
-                    element description {(TextShort | WWVariable)*}?,
+                    element description {(text | WWVariable)*}?,
                     element latex-image {
                         attribute syntax {"PGtikz"},
                         text

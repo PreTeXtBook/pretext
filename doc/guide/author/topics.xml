@@ -2217,7 +2217,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).</p>
 
-            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example:</p>
+            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  A description should use plain text to describe the important aspects of the image given its context. This description will migrate to an HTML alt attribute, and some assistive technology will cut it off at 100<ndash/>140 characters. For example:</p>
 
             <pre>
             <![CDATA[
