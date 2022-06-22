@@ -4318,7 +4318,7 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid />, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash />103.</biblio>
 
                 <conclusion>
-                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
+                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see that <xref ref="biblio-beezer-fcla" /> has a short annotation?  So you can make annotated bibliographies easily.</p>
                 </conclusion>
             </references>
 
