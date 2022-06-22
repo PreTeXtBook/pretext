@@ -6066,7 +6066,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- originally in the source.  We could try to condition on a bare    -->
 <!-- "static" versus "static/stage" but it seems safer to stick with   -->
 <!-- a "choose" and a straightforward match.                           -->
-<xsl:template match="exercise[webwork-reps]" mode="exercise-components">
+<xsl:template match="exercise[webwork-reps]|*[boolean(&PROJECT-FILTER;) and webwork-reps]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>

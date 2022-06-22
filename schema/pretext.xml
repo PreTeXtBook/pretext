@@ -1258,7 +1258,8 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
-                          (IntroductionStatement?, Task+, ConclusionStatement?)
+                          (IntroductionStatement?, Task+, ConclusionStatement?) |
+                          (IntroductionText?, WebWork, ConclusionText?)
                        ),
                        Postlude?
                     )
