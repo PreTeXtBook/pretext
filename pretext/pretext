@@ -22,7 +22,7 @@
 #     argparse is backported to 3.1 (?)
 # 2020-05-20: this script expects Python 3.4 or newer
 
-import pretext as ptx
+import lib as ptx
 
 ###################
 # Utility Functions
