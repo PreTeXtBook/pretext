@@ -578,7 +578,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
-    <div class="runestone ">
+    <div class="runestone">
         <!-- ul can have multiple answer attribute -->
         <ul data-component="multiplechoice" data-multipleanswers="false">
             <xsl:attribute name="id">
@@ -641,7 +641,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
-    <div class="runestone ">
+    <div class="runestone">
         <!-- ul can have multiple answer attribute -->
         <ul data-component="multiplechoice">
             <xsl:attribute name="id">
@@ -891,7 +891,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="runestone">
-        <div data-component="clickablearea" class="runestone" data-question_label="" style="visibility: hidden;">
+        <div data-component="clickablearea" data-question_label="" style="visibility: hidden;">
             <xsl:attribute name="id">
                 <xsl:value-of select="$html-id"/>
             </xsl:attribute>
