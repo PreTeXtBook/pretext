@@ -264,7 +264,7 @@ def asymptote_conversion(
                 shutil.copy2(asyout, dest_dir)
             else:
                 msg = [
-                    "PTX:WARNING: the Asymptote output {} was not built".format(asyout),
+                    "the Asymptote output {} was not built".format(asyout),
                     "             Perhaps your code has errors (try testing in the Asymptote web app).",
                 ]
                 if method == "local":
@@ -275,7 +275,7 @@ def asymptote_conversion(
                         "             Your Asymptote reports its version within the following:",
                         "             {}".format(asyversion),
                     ]
-                print("\n".join(msg))
+                log.warning("\n".join(msg))
 
 
 def sage_conversion(
@@ -417,13 +417,13 @@ def latex_image_conversion(
                 # and we help as much as we can
                 msg = "\n".join(
                     [
-                        "PTX:ERROR:  LaTeX compilation of {} failed.",
+                        "LaTeX compilation of {} failed.",
                         'Re-run, requesting "source" as the format, to analyze the image.',
                         "Likely creating the entire document as PDF will fail similarly.",
                         "The transcript of the LaTeX run follows.",
                     ]
                 ).format(latex_image)
-                print(msg)
+                log.error(msg)
                 print(
                     "##################################################################"
                 )
@@ -452,8 +452,8 @@ def latex_image_conversion(
                 )
                 pdfCropMargins.crop(pcm_cmd)
                 if not os.path.exists("cropped-" + latex_image_pdf):
-                    print(
-                        "PTX:ERROR: There was a problem cropping {} and {} was not created".format(
+                    log.error(
+                        "There was a problem cropping {} and {} was not created".format(
                             latex_image_pdf, "cropped-" + latex_image_pdf
                         )
                     )
@@ -477,8 +477,8 @@ def latex_image_conversion(
                     )
                     subprocess.call(svg_cmd)
                     if not os.path.exists(latex_image_svg):
-                        print(
-                            "PTX:ERROR: There was a problem converting {} to svg and {} was not created".format(
+                        log.error(
+                            "There was a problem converting {} to svg and {} was not created".format(
                                 latex_image_pdf, latex_image_svg
                             )
                         )
@@ -501,8 +501,8 @@ def latex_image_conversion(
                     )
                     subprocess.call(png_cmd)
                     if not os.path.exists(latex_image_png):
-                        print(
-                            "PTX:ERROR: There was a problem converting {} to png and {} was not created".format(
+                        log.error(
+                            "There was a problem converting {} to png and {} was not created".format(
                                 latex_image_pdf, latex_image_png
                             )
                         )
@@ -521,8 +521,8 @@ def latex_image_conversion(
                     )
                     subprocess.call(eps_cmd)
                     if not os.path.exists(latex_image_eps):
-                        print(
-                            "PTX:ERROR: There was a problem converting {} to eps and {} was not created".format(
+                        log.error(
+                            "There was a problem converting {} to eps and {} was not created".format(
                                 latex_image_pdf, latex_image_eps
                             )
                         )
@@ -687,8 +687,8 @@ def latex_tactile_image_conversion(
             latex_cmd = ["latex", "-interaction=batchmode", latex_image]
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if not os.path.exists(latex_image_dvi):
-                print(
-                    "PTX:ERROR: There was a problem compiling {}, so {} was not created".format(
+                log.error(
+                    "There was a problem compiling {}, so {} was not created".format(
                         latex_image, latex_image_dvi
                     )
                 )
@@ -698,8 +698,8 @@ def latex_tactile_image_conversion(
             divsvgm_cmd = ["dvisvgm", latex_image_dvi, "--bbox=papersize"]
             subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if not os.path.exists(latex_image_svg):
-                print(
-                    "PTX:ERROR: There was a problem processing {}, so {} was not created".format(
+                log.error(
+                    "There was a problem processing {}, so {} was not created".format(
                         latex_image, latex_image_svg
                     )
                 )
@@ -908,7 +908,7 @@ def webwork_to_xml(
     elif not(server_params_pub):
         # We rely on the argument server_params
         # This is deprecated in favor of using a publication file
-        print("PTX:WARNING:  WeBWorK server declared using -s argument.\n" +
+        log.warning("WeBWorK server declared using -s argument.\n" +
               "              Please consider using a publication file with publication/webwork/@server instead.")
         server_params = server_params.strip()
         if (server_params.startswith("(") and server_params.endswith(")")):
@@ -929,7 +929,7 @@ def webwork_to_xml(
         # Now we know server_params_pub is nonepty
         # Use it, and warn if server_params argument is also present
         if server_params is not None:
-            print("PTX:WARNING:  Publication file in use and -s argument passed for WeBWorK server.\n"
+            log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
                   + "              -s argument will be ignored.\n"
                   + "              Using publication/webwork values (or defaults) instead.")
         ww_domain       = sanitize_url(server_params_pub["ww_domain"])
@@ -1213,8 +1213,8 @@ def webwork_to_xml(
                         else:
                             break
                     if index == 127:
-                        print(
-                            "PTX:WARNING: Could not find delimiter for verbatim expression"
+                        log.warning(
+                            "Could not find delimiter for verbatim expression"
                         )
                         return "!Could not find delimiter for verbatim expression.!"
                     else:
@@ -2895,14 +2895,14 @@ def get_executable_cmd(exec_name):
     if exec_name == "tex":
         msg = "\n".join(
             [
-                "PTX:WARNING: 'tex'  is deprecated as a key for a LaTeX executable (2022-01-31)'",
+                "'tex'  is deprecated as a key for a LaTeX executable (2022-01-31)'",
                 "             and has been replaced by 'latex', 'pdflatex', or 'xelatex'.",
                 "***  We will attempt to honor your existing LaTeX engine choice.                ***",
                 '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") accordingly  ***',
             ]
         )
         # upgrade to an ERROR/exception after some interval
-        print(msg)
+        log.warning(msg)
     config_cmd_line = __executables[exec_name].split()
 
     # Returns the full-path version of the command, as if the PATH was employed
