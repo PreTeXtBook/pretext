@@ -81,7 +81,7 @@ def verify_input_file(f, file_type):
             " from the command line" if file_type == "config" else "",
         )
         if file_type == "config":
-            print("PTX:WARNING: {}".format(msg))
+            log.warning(msg)
             return None
         else:
             raise ValueError(msg)
@@ -181,11 +181,11 @@ def sanitize_method(method, component, format):
         elif not (method in ["local", "server"]):
             msg = "\n".join(
                 [
-                    'PTX:WARNING: the method given for generating Asymptote diagrams ("{}") is not "local" or "server",',
+                    'the method given for generating Asymptote diagrams ("{}") is not "local" or "server",',
                     '             so using the default method instead ("server")',
                 ]
             )
-            print(msg.format(method))
+            log.warning(msg.format(method))
             return "server"
         # set correctly
         else:
@@ -198,11 +198,11 @@ def sanitize_method(method, component, format):
         elif not (method in ["pdflatex", "xelatex"]):
             msg = "\n".join(
                 [
-                    'PTX:WARNING: the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
+                    'the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
                     '             so using the default method instead ("xelatex")',
                 ]
             )
-            print(msg.format(component, format, method))
+            log.warning(msg.format(component, format, method))
             return "xelatex"
         # set correctly
         else:
@@ -211,11 +211,11 @@ def sanitize_method(method, component, format):
     elif method:
         msg = "".join(
             [
-                'PTX:WARNING: the method "{}" is not applicable for ',
+                'the method "{}" is not applicable for ',
                 'component "{}" and format "{}".  It is being ignored.',
             ]
         )
-        print(msg.format(method, component, format))
+        log.warning(msg.format(method, component, format))
         return None
     # not relevant, not attempted
     return None
