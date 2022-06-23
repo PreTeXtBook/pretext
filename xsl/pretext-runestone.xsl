@@ -1228,57 +1228,59 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- this is the logical negation of the previous, so could be "otherwise" -->
         <xsl:when test="($hosting = 'browser') or $b-host-runestone">
-            <div class="runestone explainer ac_section ">
-                <div data-component="activecode">
-                    <xsl:attribute name="id">
-                        <xsl:value-of select="$hid"/>
-                    </xsl:attribute>
-                    <!-- add some lead-in text to the window -->
-                    <xsl:if test="$exercise-statement">
-                        <div class="ac_question col-md-12">
-                            <xsl:attribute name="id">
-                                <xsl:value-of select="concat($hid, '_question')"/>
-                            </xsl:attribute>
-                            <xsl:apply-templates select="$exercise-statement"/>
-                        </div>
-                    </xsl:if>
-                    <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+            <div class="ptx-runestone-container">
+                <div class="runestone explainer ac_section ">
+                    <div data-component="activecode">
                         <xsl:attribute name="id">
-                            <xsl:value-of select="concat($hid, '_editor')"/>
+                            <xsl:value-of select="$hid"/>
                         </xsl:attribute>
-                        <xsl:attribute name="data-question_label"/>
-                        <!-- Code Lens only for certain languages -->
-                        <xsl:attribute name="data-codelens">
-                            <xsl:choose>
-                                <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
-                                    <xsl:text>true</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
-                                    <xsl:text>true</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>false</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
-                        <!-- SQL (only) needs an attribute so it can find some code -->
-                        <xsl:if test="$active-language = 'sql'">
-                            <xsl:attribute name="data-wasm">
-                                <xsl:text>/_static</xsl:text>
+                        <!-- add some lead-in text to the window -->
+                        <xsl:if test="$exercise-statement">
+                            <div class="ac_question col-md-12">
+                                <xsl:attribute name="id">
+                                    <xsl:value-of select="concat($hid, '_question')"/>
+                                </xsl:attribute>
+                                <xsl:apply-templates select="$exercise-statement"/>
+                            </div>
+                        </xsl:if>
+                        <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="concat($hid, '_editor')"/>
                             </xsl:attribute>
-                        </xsl:if>
-                        <!-- the code itself as text -->
-                        <xsl:call-template name="sanitize-text">
-                            <xsl:with-param name="text" select="input" />
-                        </xsl:call-template>
-                        <!-- optional unit testing, with RS markup to keep it hidden -->
-                        <xsl:if test="tests">
-                            <xsl:text>====&#xa;</xsl:text>
+                            <xsl:attribute name="data-question_label"/>
+                            <!-- Code Lens only for certain languages -->
+                            <xsl:attribute name="data-codelens">
+                                <xsl:choose>
+                                    <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                                        <xsl:text>true</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                                        <xsl:text>true</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>false</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:attribute>
+                            <!-- SQL (only) needs an attribute so it can find some code -->
+                            <xsl:if test="$active-language = 'sql'">
+                                <xsl:attribute name="data-wasm">
+                                    <xsl:text>/_static</xsl:text>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <!-- the code itself as text -->
                             <xsl:call-template name="sanitize-text">
-                                <xsl:with-param name="text" select="tests" />
+                                <xsl:with-param name="text" select="input" />
                             </xsl:call-template>
-                        </xsl:if>
-                    </textarea>
+                            <!-- optional unit testing, with RS markup to keep it hidden -->
+                            <xsl:if test="tests">
+                                <xsl:text>====&#xa;</xsl:text>
+                                <xsl:call-template name="sanitize-text">
+                                    <xsl:with-param name="text" select="tests" />
+                                </xsl:call-template>
+                            </xsl:if>
+                        </textarea>
+                    </div>
                 </div>
             </div>
         </xsl:when>
