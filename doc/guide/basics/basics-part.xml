@@ -915,59 +915,9 @@
       There's some configuration required use
       <webwork/>.
       Please see <xref ref="webwork-author"/> and <xref ref="webwork-publisher"/> for more details.
-      As soon as you add
-      <webwork/> exercises,
-      compiling to produce any output format becomes a multistep process.
+      There is a <webwork/> <pubtitle>Sample Chapter</pubtitle> available elsewhere,
+      with copious examples and output in multiple formats.
     </p>
-
-    <p>
-      When a
-      <webwork/> exercise lives on the server, the code takes one
-      simple form.
-    </p>
-
-    <listing xml:id="basics-l-webwork-opl">
-      <caption>A
-      <webwork/> exercise living on the server</caption>
-      <idx><h><webwork/> exercise</h><h>on a server</h><h><pretext/> code for</h></idx>
-      <idx><h><pretext/> code for</h><h><webwork/> exercise</h><h>on a server</h></idx>
-      <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h><h><webwork/> (on a server)</h></idx>
-
-<program>
-<input><xi:include href="webwork-opl.ptx" parse="text"/></input>
-</program>
-    </listing>
-
-    <p>
-      The code in <xref ref="basics-l-webwork-opl"/> produces the following output:
-    </p>
-
-    <xi:include href="webwork-opl.ptx"/>
-
-    <p>
-      It is also possible to code
-      <webwork/> exercises directly in your <pretext/> source.
-      This shows the most primitive sort of such exercise.
-      <xref ref="webwork-author"/> goes into greater detail.
-    </p>
-
-    <listing xml:id="basics-l-webwork-code">
-      <caption>A simple
-      <webwork/> exercise coded in <pretext/> source</caption>
-      <idx><h><webwork/> exercise</h><h>in <pretext/> source</h><h><pretext/> code for</h></idx>
-      <idx><h><pretext/> code for</h><h><webwork/> exercise</h><h>in <pretext/> source</h></idx>
-      <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h><h><webwork/> (in <pretext/> source)</h></idx>
-
-<program>
-<input><xi:include href="webwork-code.ptx" parse="text"/></input>
-</program>
-    </listing>
-
-    <p>
-      The code in <xref ref="basics-l-webwork-code"/> produces the following output:
-    </p>
-
-    <xi:include href="webwork-code.ptx"/>
   </section>
 
   </chapter>

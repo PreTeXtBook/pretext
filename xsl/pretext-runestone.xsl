@@ -578,60 +578,62 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
-    <div class="runestone ">
-        <!-- ul can have multiple answer attribute -->
-        <ul data-component="multiplechoice" data-multipleanswers="false">
-            <xsl:attribute name="id">
-                <xsl:value-of select="$the-id"/>
-            </xsl:attribute>
-            <!-- Q: the statement is not a list item, but appears *inside* the list? -->
-            <!-- overall statement, not per-choice -->
-            <xsl:apply-templates select="statement"/>
-            <!-- radio button for True -->
-            <xsl:variable name="true-choice-id">
-                <xsl:value-of select="$the-id"/>
-                <xsl:text>_opt_t</xsl:text>
-            </xsl:variable>
-            <li data-component="answer">
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <!-- ul can have multiple answer attribute -->
+            <ul data-component="multiplechoice" data-multipleanswers="false">
                 <xsl:attribute name="id">
-                    <xsl:value-of select="$true-choice-id"/>
+                    <xsl:value-of select="$the-id"/>
                 </xsl:attribute>
-                <!-- Correct answer if problem statement is correct/True -->
-                <xsl:if test="statement/@correct = 'yes'">
-                    <xsl:attribute name="data-correct"/>
-                </xsl:if>
-                <p>True.</p>
-            </li>
-            <li data-component="feedback">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$true-choice-id"/>
-                </xsl:attribute>
-                <!-- identical feedback for each reader responses -->
-                <xsl:apply-templates select="feedback"/>
-            </li>
-            <!-- radio button for False -->
-            <xsl:variable name="false-choice-id">
-                <xsl:value-of select="$the-id"/>
-                <xsl:text>_opt_f</xsl:text>
-            </xsl:variable>
-            <li data-component="answer">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$false-choice-id"/>
-                </xsl:attribute>
-                <!-- Correct answer if problem statement is incorrect/False -->
-                <xsl:if test="statement/@correct = 'no'">
-                    <xsl:attribute name="data-correct"/>
-                </xsl:if>
-                <p>False.</p>
-            </li>
-            <li data-component="feedback">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$false-choice-id"/>
-                </xsl:attribute>
-                <!-- identical feedback for each reader responses -->
-                <xsl:apply-templates select="feedback"/>
-            </li>
-        </ul>
+                <!-- Q: the statement is not a list item, but appears *inside* the list? -->
+                <!-- overall statement, not per-choice -->
+                <xsl:apply-templates select="statement"/>
+                <!-- radio button for True -->
+                <xsl:variable name="true-choice-id">
+                    <xsl:value-of select="$the-id"/>
+                    <xsl:text>_opt_t</xsl:text>
+                </xsl:variable>
+                <li data-component="answer">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$true-choice-id"/>
+                    </xsl:attribute>
+                    <!-- Correct answer if problem statement is correct/True -->
+                    <xsl:if test="statement/@correct = 'yes'">
+                        <xsl:attribute name="data-correct"/>
+                    </xsl:if>
+                    <p>True.</p>
+                </li>
+                <li data-component="feedback">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$true-choice-id"/>
+                    </xsl:attribute>
+                    <!-- identical feedback for each reader responses -->
+                    <xsl:apply-templates select="feedback"/>
+                </li>
+                <!-- radio button for False -->
+                <xsl:variable name="false-choice-id">
+                    <xsl:value-of select="$the-id"/>
+                    <xsl:text>_opt_f</xsl:text>
+                </xsl:variable>
+                <li data-component="answer">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$false-choice-id"/>
+                    </xsl:attribute>
+                    <!-- Correct answer if problem statement is incorrect/False -->
+                    <xsl:if test="statement/@correct = 'no'">
+                        <xsl:attribute name="data-correct"/>
+                    </xsl:if>
+                    <p>False.</p>
+                </li>
+                <li data-component="feedback">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$false-choice-id"/>
+                    </xsl:attribute>
+                    <!-- identical feedback for each reader responses -->
+                    <xsl:apply-templates select="feedback"/>
+                </li>
+            </ul>
+        </div>
     </div>
 </xsl:template>
 
@@ -641,40 +643,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
-    <div class="runestone ">
-        <!-- ul can have multiple answer attribute -->
-        <ul data-component="multiplechoice">
-            <xsl:attribute name="id">
-                <xsl:value-of select="$the-id"/>
-            </xsl:attribute>
-            <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
-            <xsl:attribute name="data-multipleanswers">
-                <xsl:choose>
-                    <xsl:when test="choices/@multiple-correct = 'yes'">
-                        <xsl:text>true</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="choices/@multiple-correct = 'no'">
-                        <xsl:text>false</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$ncorrect > 1">
-                        <xsl:text>true</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>false</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <!-- bare attribute, iff requested -->
-            <xsl:if test="choices/@randomize = 'yes'">
-                <xsl:attribute name="data-random"/>
-            </xsl:if>
-            <!-- Q: the statement is not a list item, but appears *inside* the list? -->
-            <!-- overall statement, not per-choice -->
-            <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="choices/choice">
-                <xsl:with-param name="the-id" select="$the-id"/>
-            </xsl:apply-templates>
-        </ul>
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <!-- ul can have multiple answer attribute -->
+            <ul data-component="multiplechoice">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$the-id"/>
+                </xsl:attribute>
+                <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
+                <xsl:attribute name="data-multipleanswers">
+                    <xsl:choose>
+                        <xsl:when test="choices/@multiple-correct = 'yes'">
+                            <xsl:text>true</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="choices/@multiple-correct = 'no'">
+                            <xsl:text>false</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$ncorrect > 1">
+                            <xsl:text>true</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>false</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <!-- bare attribute, iff requested -->
+                <xsl:if test="choices/@randomize = 'yes'">
+                    <xsl:attribute name="data-random"/>
+                </xsl:if>
+                <!-- Q: the statement is not a list item, but appears *inside* the list? -->
+                <!-- overall statement, not per-choice -->
+                <xsl:apply-templates select="statement"/>
+                <xsl:apply-templates select="choices/choice">
+                    <xsl:with-param name="the-id" select="$the-id"/>
+                </xsl:apply-templates>
+            </ul>
+        </div>
     </div>
 </xsl:template>
 
@@ -715,61 +719,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
-    <div class="runestone" style="max-width: none;">
-        <div data-component="parsons" class="parsons">
-            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-            <div class="parsons_question parsons-text" >
-                <!-- the prompt -->
-                <xsl:apply-templates select="statement"/>
-            </div>
-            <pre class="parsonsblocks" data-question_label="" style="visibility: hidden;">
-                <!-- author opts-in to adaptive problems -->
-                <xsl:attribute name="data-language">
-                    <xsl:choose>
-                        <xsl:when test="$b-natural">
-                            <xsl:text>natural</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- must now have @language -->
-                            <xsl:value-of select="@language"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <xsl:variable name="numbered" select="blocks/@numbered"/>
-                <xsl:choose>
-                    <xsl:when test="($numbered = 'left') or ($numbered = 'right')">
-                        <xsl:attribute name="data-numbered">
-                            <xsl:value-of select="$numbered"/>
-                        </xsl:attribute>
-                    </xsl:when>
-                    <!-- default is un-numbered, so no attribute at all -->
-                    <xsl:when test="$numbered = 'no'"/>
-                    <xsl:otherwise/>
-                </xsl:choose>
-                <xsl:if test="@adaptive = 'yes'">
-                    <xsl:attribute name="data-adaptive">
-                        <xsl:text>true</xsl:text>
+    <div class="ptx-runestone-container">
+        <div class="runestone" style="max-width: none;">
+            <div data-component="parsons" class="parsons">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <div class="parsons_question parsons-text" >
+                    <!-- the prompt -->
+                    <xsl:apply-templates select="statement"/>
+                </div>
+                <pre class="parsonsblocks" data-question_label="" style="visibility: hidden;">
+                    <!-- author opts-in to adaptive problems -->
+                    <xsl:attribute name="data-language">
+                        <xsl:choose>
+                            <xsl:when test="$b-natural">
+                                <xsl:text>natural</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <!-- must now have @language -->
+                                <xsl:value-of select="@language"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:attribute>
-                </xsl:if>
-                <!-- author asks student to provide indentation via  -->
-                <!-- the indentation-enabled "drop" text window      -->
-                <!-- (not relevant for natural language)             -->
-                <xsl:attribute name="data-noindent">
+                    <xsl:variable name="numbered" select="blocks/@numbered"/>
                     <xsl:choose>
-                        <xsl:when test="@indentation = 'hide'">
-                            <xsl:text>false</xsl:text>
+                        <xsl:when test="($numbered = 'left') or ($numbered = 'right')">
+                            <xsl:attribute name="data-numbered">
+                                <xsl:value-of select="$numbered"/>
+                            </xsl:attribute>
                         </xsl:when>
-                        <!-- default is 'show' -->
-                        <xsl:otherwise>
-                            <xsl:text>true</xsl:text>
-                        </xsl:otherwise>
+                        <!-- default is un-numbered, so no attribute at all -->
+                        <xsl:when test="$numbered = 'no'"/>
+                        <xsl:otherwise/>
                     </xsl:choose>
-                </xsl:attribute>
-                <!-- the blocks -->
-                <xsl:apply-templates select="blocks/block">
-                    <xsl:with-param name="b-natural" select="$b-natural"/>
-                </xsl:apply-templates>
-            </pre>
+                    <xsl:if test="@adaptive = 'yes'">
+                        <xsl:attribute name="data-adaptive">
+                            <xsl:text>true</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <!-- author asks student to provide indentation via  -->
+                    <!-- the indentation-enabled "drop" text window      -->
+                    <!-- (not relevant for natural language)             -->
+                    <xsl:attribute name="data-noindent">
+                        <xsl:choose>
+                            <xsl:when test="@indentation = 'hide'">
+                                <xsl:text>false</xsl:text>
+                            </xsl:when>
+                            <!-- default is 'show' -->
+                            <xsl:otherwise>
+                                <xsl:text>true</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <!-- the blocks -->
+                    <xsl:apply-templates select="blocks/block">
+                        <xsl:with-param name="b-natural" select="$b-natural"/>
+                    </xsl:apply-templates>
+                </pre>
+            </div>
         </div>
     </div>
 </xsl:template>
@@ -846,41 +852,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="html-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
-    <div class="runestone">
-        <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
-            <xsl:attribute name="id">
-                <xsl:value-of select="$html-id"/>
-            </xsl:attribute>
-            <span data-subcomponent="question">
-                <xsl:apply-templates select="statement"/>
-            </span>
-            <xsl:if test="feedback">
-                <span data-subcomponent="feedback">
-                    <xsl:apply-templates select="feedback"/>
-                </span>
-            </xsl:if>
-            <xsl:for-each select="matches/match">
-                <xsl:variable name="sub-id">
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
+                <xsl:attribute name="id">
                     <xsl:value-of select="$html-id"/>
-                    <xsl:text>_drag</xsl:text>
-                    <xsl:number />
-                </xsl:variable>
-                <!-- PTX premise = RS draggable -->
-                <li data-subcomponent="draggable">
-                    <xsl:attribute name="id">
-                        <xsl:value-of select="$sub-id"/>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="premise"/>
-                </li>
-                <!-- PTX response = RS dropzone -->
-                <li data-subcomponent="dropzone">
-                    <xsl:attribute name="for">
-                        <xsl:value-of select="$sub-id"/>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="response"/>
-                </li>
-            </xsl:for-each>
-        </ul>
+                </xsl:attribute>
+                <span data-subcomponent="question">
+                    <xsl:apply-templates select="statement"/>
+                </span>
+                <xsl:if test="feedback">
+                    <span data-subcomponent="feedback">
+                        <xsl:apply-templates select="feedback"/>
+                    </span>
+                </xsl:if>
+                <xsl:for-each select="matches/match">
+                    <xsl:variable name="sub-id">
+                        <xsl:value-of select="$html-id"/>
+                        <xsl:text>_drag</xsl:text>
+                        <xsl:number />
+                    </xsl:variable>
+                    <!-- PTX premise = RS draggable -->
+                    <li data-subcomponent="draggable">
+                        <xsl:attribute name="id">
+                            <xsl:value-of select="$sub-id"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="premise"/>
+                    </li>
+                    <!-- PTX response = RS dropzone -->
+                    <li data-subcomponent="dropzone">
+                        <xsl:attribute name="for">
+                            <xsl:value-of select="$sub-id"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="response"/>
+                    </li>
+                </xsl:for-each>
+            </ul>
+        </div>
     </div>
 </xsl:template>
 
@@ -890,18 +898,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="html-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
-    <div class="runestone">
-        <div data-component="clickablearea" class="runestone" data-question_label="" style="visibility: hidden;">
-            <xsl:attribute name="id">
-                <xsl:value-of select="$html-id"/>
-            </xsl:attribute>
-            <span data-question="">
-                <xsl:apply-templates select="statement"/>
-            </span>
-            <span data-feedback="">
-                <xsl:apply-templates select="feedback"/>
-            </span>
-            <xsl:apply-templates select="areas" mode="clickable-html"/>
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <div data-component="clickablearea" data-question_label="" style="visibility: hidden;">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="$html-id"/>
+                </xsl:attribute>
+                <span data-question="">
+                    <xsl:apply-templates select="statement"/>
+                </span>
+                <span data-feedback="">
+                    <xsl:apply-templates select="feedback"/>
+                </span>
+                <xsl:apply-templates select="areas" mode="clickable-html"/>
+            </div>
         </div>
     </div>
 </xsl:template>
@@ -965,14 +975,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Runestone structure -->
 <xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
-    <div class="runestone">
-        <!-- dropped "visibility: hidden" on next div -->
-        <div data-component="fillintheblank" data-question_label="">
-            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-            <xsl:apply-templates select="statement"/>
-            <script type="application/json">
-                <xsl:apply-templates select="setup" mode="json-conditions"/>
-            </script>
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <!-- dropped "visibility: hidden" on next div -->
+            <div data-component="fillintheblank" data-question_label="">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:apply-templates select="statement"/>
+                <script type="application/json">
+                    <xsl:apply-templates select="setup" mode="json-conditions"/>
+                </script>
+            </div>
         </div>
     </div>
 </xsl:template>
@@ -1128,10 +1140,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB - not currently applying to short-form with no "statement" -->
 <!-- NB: match is recycled in manifest formation                   -->
 <xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
-    <div class="runestone">
-        <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
-            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-            <xsl:apply-templates select="statement"/>
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:apply-templates select="statement"/>
+            </div>
         </div>
     </div>
 </xsl:template>
@@ -1296,23 +1310,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>.js</xsl:text>
     </xsl:variable>
     <!-- the Runestone HTML -->
-    <div class="runestone codelens">
-        <div class="cd_section" data-component="codelens" data-question_label="">
-            <div class="pytutorVisualizer">
-                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:attribute name="data-params">
-                    <xsl:value-of select="$parameter-dictionary"/>
-                </xsl:attribute>
+    <div class="ptx-runestone-container">
+        <div class="runestone codelens">
+            <div class="cd_section" data-component="codelens" data-question_label="">
+                <div class="pytutorVisualizer">
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <xsl:attribute name="data-params">
+                        <xsl:value-of select="$parameter-dictionary"/>
+                    </xsl:attribute>
+                </div>
+                <!-- no caption, should go inside a listing? -->
             </div>
-            <!-- no caption, should go inside a listing? -->
+            <!-- access simple script with variable set to -->
+            <!-- the trace data via the @src attribute     -->
+            <script>
+                <xsl:attribute name="src">
+                    <xsl:value-of select="$trace-file"/>
+                </xsl:attribute>
+            </script>
         </div>
-        <!-- access simple script with variable set to -->
-        <!-- the trace data via the @src attribute     -->
-        <script>
-            <xsl:attribute name="src">
-                <xsl:value-of select="$trace-file"/>
-            </xsl:attribute>
-        </script>
     </div>
 </xsl:template>
 

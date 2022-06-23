@@ -24,6 +24,21 @@
 
 import pretext as ptx
 
+# Set up logging (replacing _verbose/_debug).  
+# Use log.info(<string>) or log.debug(<string>).  
+# Also available now are log.critical(), log.error(), and log.warning(). 
+# 0-level verbosity will be set to only show log.critical() messages.
+import logging
+#ptxlogger will be compatible with the CLI logger.
+log = logging.getLogger('ptxlogger')
+log.setLevel(logging.DEBUG)
+# Create stream handler for console output.  
+# Later we will set the level with log.setLevel(logging.[level])
+console_log = logging.StreamHandler()
+log_format = logging.Formatter('PTX:%(levelname)-8s: %(message)s')
+console_log.setFormatter(log_format)
+log.addHandler(console_log)
+
 ###################
 # Utility Functions
 ###################
@@ -58,7 +73,7 @@ def verify_input_file(f, file_type):
         msg = "input file verification should receive a 'source', 'publisher', 'stylesheet', or 'config' parameter, not '{}'"
         raise ValueError(msg.format(file_type))
 
-    ptx._verbose("verifying and expanding {} file: {}".format(file_descriptor, f))
+    log.info("verifying and expanding {} file: {}".format(file_descriptor, f))
     if not (os.path.isfile(f)):
         msg = "{} file {}{} does not exist".format(
             file_descriptor,
@@ -66,14 +81,14 @@ def verify_input_file(f, file_type):
             " from the command line" if file_type == "config" else "",
         )
         if file_type == "config":
-            print("PTX:WARNING: {}".format(msg))
+            log.warning(msg)
             return None
         else:
             raise ValueError(msg)
     absf = os.path.abspath(f)
     if file_type == "publisher":
         absf = absf.replace(os.sep, "/")
-    ptx._verbose(
+    log.info(
         "input {} file expanded to absolute path: {}".format(file_descriptor, absf)
     )
     return absf
@@ -166,11 +181,11 @@ def sanitize_method(method, component, format):
         elif not (method in ["local", "server"]):
             msg = "\n".join(
                 [
-                    'PTX:WARNING: the method given for generating Asymptote diagrams ("{}") is not "local" or "server",',
+                    'the method given for generating Asymptote diagrams ("{}") is not "local" or "server",',
                     '             so using the default method instead ("server")',
                 ]
             )
-            print(msg.format(method))
+            log.warning(msg.format(method))
             return "server"
         # set correctly
         else:
@@ -183,11 +198,11 @@ def sanitize_method(method, component, format):
         elif not (method in ["pdflatex", "xelatex"]):
             msg = "\n".join(
                 [
-                    'PTX:WARNING: the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
+                    'the method given for the "{}" component and format "{}" ("{}") is not "pdflatex" or "xelatex",',
                     '             so using the default method instead ("xelatex")',
                 ]
             )
-            print(msg.format(component, format, method))
+            log.warning(msg.format(component, format, method))
             return "xelatex"
         # set correctly
         else:
@@ -196,11 +211,11 @@ def sanitize_method(method, component, format):
     elif method:
         msg = "".join(
             [
-                'PTX:WARNING: the method "{}" is not applicable for ',
+                'the method "{}" is not applicable for ',
                 'component "{}" and format "{}".  It is being ignored.',
             ]
         )
-        print(msg.format(method, component, format))
+        log.warning(msg.format(method, component, format))
         return None
     # not relevant, not attempted
     return None
@@ -234,26 +249,26 @@ def get_executables(arg_supplied_config_file):
         config_file_list.append(arg_supplied_config_file)
 
     # report on which configuration files are being examined
-    ptx._verbose("parsing possible configuration files: {}".format(config_file_list))
+    log.info("parsing possible configuration files: {}".format(config_file_list))
 
     config = configparser.ConfigParser()
     files_read = config.read(config_file_list)
     # report on which configuration files were used
-    ptx._debug("configuration files actually used/read: {}".format(files_read))
+    log.debug("configuration files actually used/read: {}".format(files_read))
     if not (user_config_file in files_read) and not (
         arg_supplied_config_file in files_read
     ):
-        ptx._verbose("using default configuration only")
+        log.info("using default configuration only")
     if not (user_config_file in files_read):
         msg = "custom configuration file not used at {}"
-        ptx._verbose(msg.format(user_config_file))
+        log.info(msg.format(user_config_file))
     if arg_supplied_config_file and not (arg_supplied_config_file in files_read):
         msg = "command-line specified config file not used at {}"
-        ptx._verbose(msg.format(arg_supplied_config_file))
+        log.info(msg.format(arg_supplied_config_file))
 
     executable_dict = dict(config["executables"])
     # report the dictionary of keys
-    ptx._debug("dictionary of executables/commands: {}".format(executable_dict))
+    log.info("dictionary of executables/commands: {}".format(executable_dict))
 
     return executable_dict
 
@@ -470,17 +485,19 @@ def main():
 
     # set verbosity of supplied console messages
     # based on CLI argument, if supplied (0,1,2)
-    # Parser can return None, this is level 0
-    if not (args.verbose):
-        ptx.set_verbosity(0)
+    # Parser can return None, this is critical logs only
+    if not (args.verbose) or args.verbose == 0:
+        log.setLevel(logging.CRITICAL)
+    elif args.verbose == 1:
+        log.setLevel(logging.INFO)
     else:
-        ptx.set_verbosity(args.verbose)
+        log.setLevel(logging.DEBUG) #not strictly necessary, we set this as the default earlier
 
     # Now, and only now, we can report some setup,
     # since we had to wait for the vebosity to be reported and set
 
     # Report the command-line arguments just obtained
-    ptx._debug("Parsed CLI args {}".format(vars(args)))
+    log.debug("Parsed CLI args {}".format(vars(args)))
 
     # Issue command-line argument deprecations
     if args.data_dir:
@@ -493,14 +510,14 @@ def main():
         raise ValueError(msg)
 
     # Report Python version in debugging output
-    ptx._debug(
+    log.debug(
         "Python version: {} (expecting 3.6 or newer)".format(ptx.python_version())
     )
 
     # Check discovering directory locations as
     # realized by PreTeXt installation
     # Necessary for locating configuration files (next)
-    ptx._debug(
+    log.debug(
         "discovered distribution and xsl directories: {}, {}".format(
             ptx.get_ptx_path(), ptx.get_ptx_xsl_path()
         )
@@ -551,7 +568,7 @@ def main():
         publication_file = verify_input_file(stringparams["publisher"], "publisher")
         del stringparams["publisher"]
 
-    ptx._verbose("Done examining environment and initializing setup info")
+    log.info("Done examining environment and initializing setup info")
 
     # The big switch
     if args.component == "asy":
