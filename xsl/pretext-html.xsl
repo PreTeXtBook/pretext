@@ -11758,7 +11758,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    tags: "none",&#xa;</xsl:text>
         <xsl:text>    tagSide: "right",&#xa;</xsl:text>
         <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
-        <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl'</xsl:text>
+        <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'color', 'newcommand', 'knowl'</xsl:text>
         <xsl:text>]}&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  options: {&#xa;</xsl:text>
@@ -11785,7 +11785,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    mtextInheritFont: true&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  loader: {&#xa;</xsl:text>
-        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
+        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/color', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
         <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:if test="$b-debug-react">
