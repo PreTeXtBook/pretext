@@ -1228,6 +1228,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- this is the logical negation of the previous, so could be "otherwise" -->
         <xsl:when test="($hosting = 'browser') or $b-host-runestone">
+            <div class="ptx-runestone-container">
             <div class="runestone explainer ac_section ">
                 <div data-component="activecode">
                     <xsl:attribute name="id">
@@ -1280,6 +1281,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:if>
                     </textarea>
                 </div>
+            </div>
             </div>
         </xsl:when>
     </xsl:choose>
