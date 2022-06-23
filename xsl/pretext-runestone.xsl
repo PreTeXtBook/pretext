@@ -578,6 +578,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
+    <div class="ptx-runestone-container">
     <div class="runestone">
         <!-- ul can have multiple answer attribute -->
         <ul data-component="multiplechoice" data-multipleanswers="false">
@@ -633,6 +634,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </li>
         </ul>
     </div>
+    </div>
 </xsl:template>
 
 <!-- Multiple Choice -->
@@ -641,6 +643,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
+    <div class="ptx-runestone-container">
     <div class="runestone">
         <!-- ul can have multiple answer attribute -->
         <ul data-component="multiplechoice">
@@ -675,6 +678,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="the-id" select="$the-id"/>
             </xsl:apply-templates>
         </ul>
+    </div>
     </div>
 </xsl:template>
 
@@ -715,6 +719,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <div class="ptx-runestone-container">
     <div class="runestone" style="max-width: none;">
         <div data-component="parsons" class="parsons">
             <xsl:apply-templates select="." mode="runestone-id-attribute"/>
@@ -771,6 +776,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </pre>
         </div>
+    </div>
     </div>
 </xsl:template>
 
@@ -846,6 +852,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="html-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
+    <div class="ptx-runestone-container">
     <div class="runestone">
         <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
             <xsl:attribute name="id">
@@ -882,6 +889,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </ul>
     </div>
+    </div>
 </xsl:template>
 
 <!-- Clickable Area Problem -->
@@ -890,6 +898,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="html-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
+    <div class="ptx-runestone-container">
     <div class="runestone">
         <div data-component="clickablearea" data-question_label="" style="visibility: hidden;">
             <xsl:attribute name="id">
@@ -903,6 +912,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </span>
             <xsl:apply-templates select="areas" mode="clickable-html"/>
         </div>
+    </div>
     </div>
 </xsl:template>
 
@@ -965,6 +975,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Runestone structure -->
 <xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
+    <div class="ptx-runestone-container">
     <div class="runestone">
         <!-- dropped "visibility: hidden" on next div -->
         <div data-component="fillintheblank" data-question_label="">
@@ -974,6 +985,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="setup" mode="json-conditions"/>
             </script>
         </div>
+    </div>
     </div>
 </xsl:template>
 
@@ -1128,11 +1140,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB - not currently applying to short-form with no "statement" -->
 <!-- NB: match is recycled in manifest formation                   -->
 <xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
+    <div class="ptx-runestone-container">
     <div class="runestone">
         <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
             <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <xsl:apply-templates select="statement"/>
         </div>
+    </div>
     </div>
 </xsl:template>
 
@@ -1296,6 +1310,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>.js</xsl:text>
     </xsl:variable>
     <!-- the Runestone HTML -->
+    <div class="ptx-runestone-container">
     <div class="runestone codelens">
         <div class="cd_section" data-component="codelens" data-question_label="">
             <div class="pytutorVisualizer">
@@ -1313,6 +1328,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$trace-file"/>
             </xsl:attribute>
         </script>
+    </div>
     </div>
 </xsl:template>
 
