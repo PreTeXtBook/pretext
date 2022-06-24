@@ -432,10 +432,6 @@ def latex_image_conversion(
                     "##################################################################"
                 )
             else:
-                pcm_executable_cmd = get_executable_cmd("pdfcrop")
-                # Strip the executable itself, since we will .crop() internally,
-                # but do keep the options/arguments provided by a publisher,
-                # which *might* supersede ones give here earlier (untested)
                 # Threshold implies only byte value 255 is white, which
                 # assumes these images are *produced* on white backgrounds
                 pcm_cmd = [
@@ -448,7 +444,7 @@ def latex_image_conversion(
                     "0",
                     "-a",
                     "-1",
-                ] + pcm_executable_cmd[1:]
+                ]
                 log.info(
                     "cropping {} to {}".format(
                         latex_image_pdf, "cropped-" + latex_image_pdf
@@ -2922,11 +2918,6 @@ def get_executable_cmd(exec_name):
             ),
             '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") and/or install  ***',
             "***  the necessary program and/or make sure the executable is on your PATH         ***",
-        ]
-    if config_cmd_line[0] == "pdfcrop":
-        error_messages += [
-            'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
-            'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".',
         ]
     if error_messages:
         raise OSError("\n".join(error_messages))
