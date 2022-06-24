@@ -436,10 +436,14 @@ def latex_image_conversion(
                 # Strip the executable itself, since we will .crop() internally,
                 # but do keep the options/arguments provided by a publisher,
                 # which *might* supersede ones give here earlier (untested)
+                # Threshold implies only byte value 255 is white, which
+                # assumes these images are *produced* on white backgrounds
                 pcm_cmd = [
                     latex_image_pdf,
                     "-o",
                     "cropped-" + latex_image_pdf,
+                    "-t",
+                    "254",
                     "-p",
                     "0",
                     "-a",
