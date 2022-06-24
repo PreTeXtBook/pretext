@@ -294,6 +294,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-webwork-worksheet-static" select="$webwork.worksheet.static = 'yes'" />
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
+<xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>
+<xsl:variable name="webwork-minor-version" select="$document-root//webwork-reps[1]/@ww_minor_version"/>
 
 <xsl:variable name="webwork-domain">
     <xsl:choose>
@@ -10274,7 +10276,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
             <xsl:when test="$webwork-reps-version = 2">
-                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork/2.{$webwork-minor-version}/pretext-webwork.js"></script>
                 <script src="{$webwork-domain}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
         </xsl:choose>

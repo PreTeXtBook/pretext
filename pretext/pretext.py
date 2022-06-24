@@ -942,20 +942,46 @@ def webwork_to_xml(
     ww_domain_path = ww_domain_ww2 + "html2xml"
 
     # Establish WeBWorK version
+
+    # First try to identify the WW version according to what a response hash says it is.
+    # This should work for 2.17 and beyond.
     try:
-        landing_page = requests.get(ww_domain_ww2)
+        params_for_version_determination = dict(
+            problemSeed=1,
+            displayMode='PTX',
+            courseID=courseID,
+            userID=userID,
+            outputformat='raw'
+        )
+        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
+        ww_version = ""
+        if "ww_version" in version_determination_json:
+            ww_version = version_determination_json["ww_version"]
+            ww_version_match = re.search(
+                r"((\d+)\.(\d+))", ww_version, re.I
+            )
     except Exception as e:
         root_cause = str(e)
-        msg = (
-            "PTX:ERROR:   There was a problem contacting the WeBWorK server.\n"
-            + "             Is there a WeBWorK landing page at {}?\n"
-        )
+        msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
         raise ValueError(msg.format(ww_domain_ww2) + root_cause)
 
-    landing_page_text = landing_page.text
-    ww_version_match = re.search(
-        r"WW.VERSION:\s*((\d+)\.(\d+))", landing_page_text, re.I
-    )
+    # Now if that failed, try to infer the version from what is printed on the landing page.
+    if ww_version == "":
+        try:
+            landing_page = requests.get(ww_domain_ww2)
+        except Exception as e:
+            root_cause = str(e)
+            msg = (
+                "PTX:ERROR:   There was a problem contacting the WeBWorK server.\n"
+                + "             Is there a WeBWorK landing page at {}?\n"
+            )
+            raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+        landing_page_text = landing_page.text
+
+        ww_version_match = re.search(
+            r"WW.VERSION:\s*((\d+)\.(\d+))", landing_page_text, re.I
+        )
+
     try:
         ww_version = ww_version_match.group(1)
         ww_major_version = int(ww_version_match.group(2))
@@ -1334,6 +1360,8 @@ def webwork_to_xml(
         # Use "webwork-reps" as parent tag for the various representations of a problem
         webwork_reps = ET.SubElement(webwork_representations, "webwork-reps")
         webwork_reps.set("version", ww_reps_version)
+        webwork_reps.set("ww_major_version", str(ww_major_version))
+        webwork_reps.set("ww_minor_version", str(ww_minor_version))
         webwork_reps.set("{%s}id" % (XML), "extracted-" + problem)
         webwork_reps.set("ww-id", problem)
         static = ET.SubElement(webwork_reps, "static")
