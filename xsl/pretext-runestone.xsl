@@ -569,7 +569,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="runestone-to-interactive">
     <xsl:variable name="runestone" select="string(@runestone)"/>
-    <xsl:copy-of select="document('rs-substitutes.xml', $original)/substitutes/substitute[@xml:id = $runestone]"/>
+    <div class="ptx-runestone-container">
+        <xsl:copy-of select="document('rs-substitutes.xml', $original)/substitutes/substitute[@xml:id = $runestone]"/>
+    </div>
 </xsl:template>
 
 <!-- True/False -->
