@@ -386,7 +386,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- collection, which is technically a "conf.py" file, per-book -->
             <library-metadata publisher="pretext">
                 <!-- sanitizes footnotes, quotes, math for overall title-->
-                <xsl:comment>Missing a blurb for library description, book back covers</xsl:comment>
                 <title>
                     <xsl:apply-templates select="$document-root" mode="title-plain"/>
                 </title>
@@ -400,6 +399,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:attribute>
                     <xsl:value-of select="$docinfo/document-id"/>
                 </document-id>
+                <!-- duplicate blurb, blurb/@shelf for Runestone's convenience -->
+                <!-- use "value-of" to enforce assumption there is no markup   -->
+                <!-- NB: if absent in PTX source, these are empty in manifest  -->
+                <shelf>
+                    <xsl:value-of select="$docinfo/blurb/@shelf"/>
+                </shelf>
+                <blurb>
+                    <xsl:value-of select="$docinfo/blurb"/>
+                </blurb>
             </library-metadata>
             <!-- LaTeX packages and macros first -->
             <latex-macros>
