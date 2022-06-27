@@ -1099,7 +1099,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (always just a component of something larger).  WeBWork   -->
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
-        <xsl:attribute name="exercise-customization">
+        <xsl:variable name="exercise-customization">
             <xsl:choose>
                 <xsl:when test="&PROJECT-FILTER;">
                     <xsl:text>project</xsl:text>
@@ -1108,11 +1108,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$division"/>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:attribute name="exercise-customization">
+            <xsl:value-of select="$exercise-customization"/>
         </xsl:attribute>
         <!-- Determine and record types of interactivity, partially based   -->
         <!-- on location due to publisher options for "short answer" (only) -->
         <xsl:apply-templates select="." mode="exercise-interactive-attribute">
-            <xsl:with-param name="division" select="$division"/>
+            <xsl:with-param name="exercise-type" select="$exercise-customization"/>
         </xsl:apply-templates>
         <!-- catch remaining attributes -->
         <xsl:apply-templates select="@*" mode="exercise">
@@ -1131,7 +1134,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These "interactivity types" are meant for Runestone-enabled  -->
 <!-- interactive exercises and projects                           -->
 <xsl:template match="*" mode="exercise-interactive-attribute">
-    <xsl:param name="division"/>
+    <xsl:param name="exercise-type"/>
 
     <xsl:attribute name="exercise-interactive">
         <xsl:choose>
@@ -1174,19 +1177,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- parameter. This only matters when we are on a Runestone server.  -->
             <xsl:when test="$b-host-runestone">
                 <xsl:choose>
-                    <xsl:when test="($division = 'inline') and $b-sa-inline-dynamic">
+                    <xsl:when test="($exercise-type = 'inline') and $b-sa-inline-dynamic">
                         <xsl:text>shortanswer</xsl:text>
                     </xsl:when>
-                    <xsl:when test="($division = 'divisional') and $b-sa-divisional-dynamic">
+                    <xsl:when test="($exercise-type = 'divisional') and $b-sa-divisional-dynamic">
                         <xsl:text>shortanswer</xsl:text>
                     </xsl:when>
-                    <xsl:when test="($division = 'reading') and $b-sa-reading-dynamic">
+                    <xsl:when test="($exercise-type = 'reading') and $b-sa-reading-dynamic">
                         <xsl:text>shortanswer</xsl:text>
                     </xsl:when>
-                    <xsl:when test="($division = 'worksheet') and $b-sa-worksheet-dynamic">
+                    <xsl:when test="($exercise-type = 'worksheet') and $b-sa-worksheet-dynamic">
                         <xsl:text>shortanswer</xsl:text>
                     </xsl:when>
-                    <xsl:when test="($division = 'project') and $b-sa-project-dynamic">
+                    <xsl:when test="($exercise-type = 'project') and $b-sa-project-dynamic">
                         <xsl:text>shortanswer</xsl:text>
                     </xsl:when>
                     <!-- examples are never assesments                -->
