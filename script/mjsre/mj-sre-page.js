@@ -279,8 +279,17 @@ if (!(argv.svg || argv.svgenhanced)) {
   //  Wait for SRE, if needed
   //
   if (needsSRE) {
-    let jsonPath = require.resolve('speech-rule-engine/lib/mathmaps/base.json').replace(/\/base\.json$/, '');
-    Sre.setupEngine({xpath: require.resolve('wicked-good-xpath/dist/wgxpath.install-node.js'), json: jsonPath});
+    const feature = {
+      xpath: require.resolve('wicked-good-xpath/dist/wgxpath.install-node.js'),
+      json: require.resolve('speech-rule-engine/lib/mathmaps/base.json').replace(/\/base\.json$/, '')
+    };
+    Sre.setupEngine(feature);
+    if (argv.braille) {
+      Sre.setupEngine({locale: 'nemeth'});
+    }
+    if (argv.speech || argv.svgenhanced) {
+      Sre.setupEngine({locale: argv.locale});
+    }
     await Sre.sreReady();
   }
   //
