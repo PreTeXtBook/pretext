@@ -1149,7 +1149,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- interactive, see "static" v. "dynamic" publisher variables.          -->
 <!-- NB - not currently applying to short-form with no "statement" -->
 <!-- NB: match is recycled in manifest formation                   -->
-<xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive = 'shortanswer']|
+project[@exercise-interactive = 'shortanswer']|activity[@exercise-interactive = 'shortanswer']|exploration[@exercise-interactive = 'shortanswer']|investigation[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
     <div class="ptx-runestone-container">
         <div class="runestone">
             <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
