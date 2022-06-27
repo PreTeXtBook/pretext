@@ -434,7 +434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Project in a Subsection</title>
 
                 <statement>
-                    <p>You would work this project on paper, most likely.</p>
+                    <p>You would work this project on paper, most likely. A little bit of markup, to test a bug: <m>x^2</m>.  (The bug is only apparent under a soon-to-be-deprecated method for specifying a question to be an interactive short-answer question on Runestone Academy.)</p>
                 </statement>
             </project>
         </subsection>
