@@ -2509,6 +2509,8 @@ def map_path_to_xml_id(
 
     path_to_xml_id = collections.defaultdict(list)
 
+    xml = str(pathlib.Path(xml).resolve()) # normalize path separators to current OS
+
     # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
     is_win = sys.platform == "win32"
 
