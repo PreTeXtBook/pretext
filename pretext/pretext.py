@@ -2535,7 +2535,7 @@ def map_path_to_xml_id(
 
     # Load the XML, performing xincludes using this loader.
     huge_parser = lxml.etree.XMLParser(huge_tree=True)
-    src_tree = lxml.etree.parse(xml, parser=huge_parser)
+    src_tree = lxml.etree.parse(pathlib.Path(xml), parser=huge_parser)
     lxml.ElementInclude.include(src_tree, loader=my_loader)
 
     # Walk though every element with an xml ID.
