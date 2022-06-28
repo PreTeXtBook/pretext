@@ -60,9 +60,12 @@
             <li>
                 <p>
                     You should create a new <c>&lt;target name="runestone"&gt;&lt;/target&gt;</c> in your <c>project.ptx</c>.
-                    The contents of this tag will likely be identical to your usual html-format build target,
-                    except you should change your <c>&lt;publication&gt;</c> to point to a new file, perhaps named
-                    <c>publication/runestone.ptx</c>.
+                    The contents of this tag will differ from your usual html-format build target,
+                    in the following ways.  1) You should change your <c>&lt;publication&gt;</c> to point to a new file, perhaps named
+                    <c>publication/runestone.ptx</c>.  2) You should change your <c>&lt;output-dir&gt;</c> to point to <c>published/document-id</c>
+                    where <c>document-id</c> is defined in your <c>&lt;docinfo&gt;</c>.  Note Runestone's preferred practice
+                    for the <c>document-id</c> is to have a simple lowercase string with no dashes or other special characters.  This value
+                    is visible to readers who want to register for your course on Runestone outside of any formal setting.
                 </p>
             </li>
             <li>
@@ -74,10 +77,21 @@
             </li>
             <li>
                 <p>
-                    Use <c>pretext deploy</c> on the command line to deploy your project to GitHub (it will walk
-                    you through setup if you haven't deployed your project before). You do <em>not</em> have to
+                    Update the <c>&lt;docinfo&gt;</c> section of your book so that it includes a <tag>blurb</tag>
+                    with a <attr>shelf</attr>.  The blurb should not contain any additional markup, just a simple
+                    string, that describes your book.  Think of something like what you would read on a book jacket.
+                    The <attr>shelf</attr> tells the Runestone software where your book belongs in the categories
+                    on the Runestone library page.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Use <c>pretext deploy</c> on the command line, or simply <c>git push</c> the changes described above
+                    to GitHub if you are comfortable with git. The <c>deploy</c> command will walk
+                    you through setup if you haven't deployed your project to github before. You do <em>not</em> have to
                     enable GitHub Pages unless you want to (GitHub Pages does not have the features of a Runestone
-                    server, but can host your regular html-format build).
+                    server, and will not render a build for the runestone target properly.  You can host your regular
+                    html-format build on github.).
                 </p>
             </li>
             <li>
