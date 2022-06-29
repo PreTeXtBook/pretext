@@ -230,25 +230,6 @@
           </li>
 
           <li>
-            <title>Pageres</title>
-            <p>
-              If your book contains <em>interactive</em> elements, such as GeoGebra,
-              or videos in formats other than YouTube, the <pretext />-CLI wil want to take screenshots of the web-based content to produce
-              <q>preview</q> images.
-            </p>
-
-            <p>
-              Previews are generated using a program called <c>pageres</c>.
-              Installing this on Windows is actually quite difficult, and it does not seem to be working correctly at this time.
-              (To install, you must first install <c>node.js</c>. The installation is time-consuming, and it will probably mess up your existing Python installation.)
-              You can avoid the need for <c>pageres</c> by taking screenshots manually,
-              and including them in your book using the <attr>preview</attr> attribute.
-              (Usage will look like <c>&lt; interactive preview="preview.png" &gt;</c>.)
-              A future version of the <pretext />-CLI may be able to use a Python-based alternative that will bypass the need for this program.
-            </p>
-          </li>
-
-          <li>
             <title>GitHub Deskop</title>
             <p>
               If you find it difficult to manage git from the command line,
