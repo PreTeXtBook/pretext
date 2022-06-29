@@ -428,13 +428,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </program>
             </activity>
 
-            <p>Nothing suggests this next <tag>project</tag> is interactive.  And we have configured the publication file to make any <q>project-like</q> to never be a <q>short answer</q> interactive question, even when built to host on a capable platform.</p>
+            <p>Nothing suggests this next <tag>project</tag> is interactive.</p>
 
             <project>
                 <title>Project in a Subsection</title>
 
                 <statement>
-                    <p>You would work this project on paper, most likely. A little bit of markup, to test a bug: <m>x^2</m>.  (The bug is only apparent under a soon-to-be-deprecated method for specifying a question to be an interactive short-answer question on Runestone Academy.)</p>
+                    <p>You would work this project on paper, most likely.  It is <em>never</em> interactive since there is no indication of a desire for that, even if hosted on a capable platform.</p>
+
+                    <p>A little bit of markup, to test a bug: <m>x^2</m>.  (The bug was only apparent under a deprecated method for specify a question to be an interactive short-answer question on Runestone Academy.)</p>
                 </statement>
             </project>
         </subsection>
@@ -458,14 +460,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </program>
             </exploration>
 
-            <p>The simple <tag>exercise</tag> could be a <q>short answer</q> question on a capable interactive platform, except that we have used the publication file to configure <q>inline</q> exercises to never be interactive.</p>
+            <p>The next simple <tag>exercise</tag> will be a <q>short answer</q> question on a capable interactive platform since we have included a <tag>response</tag> element.</p>
 
             <exercise>
                 <title>Inline Exercise in a Subsection</title>
 
                 <statement>
-                    <p>I am never ever an interactive short answer question.</p>
+                    <p>I am an interactive short answer question, but only on a capable platform.</p>
                 </statement>
+                <response/>
             </exercise>
         </subsection>
     </section>
@@ -1048,8 +1051,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Short Answer</title>
 
             <statement>
-                <p>This sample book is configured to make some simple questions interactive on a capable platform, and to make others never interactive, even if it is possible.  In this case a <q>divisional</q> exercise (like this one) could be made interactive for capable platforms by adjusting a switch in the publication file.</p>
+                <p>This sample book is configured to make some simple questions interactive on a capable platform, by adding a <tag>response</tag> element as a signal.</p>
             </statement>
+            <response/>
         </exercise>
 
         <exercise label="fillin-integer">
@@ -1178,8 +1182,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <exercise label="simple-reading-question">
             <statement>
                 <p>This is a simple question.  Does this look like a short answer question?</p>
-                <p>Both questions in this <q>reading-questions</q> division should render in an interactive <q>short answer</q> form on a capable platform.  This is the default, and we have also explicitly set this behavior in the publication file.</p>
+                <p>Both questions in this <q>reading-questions</q> division should render in an interactive <q>short answer</q> form on a capable platform.</p>
             </statement>
+            <response/>
             <hint>
                 <p>Shouldn't be hard!</p>
             </hint>
@@ -1189,6 +1194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
             </statement>
+            <response/>
         </exercise>
     </reading-questions>
 
