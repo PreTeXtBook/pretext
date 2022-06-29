@@ -434,8 +434,8 @@ dfn {
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates/>
   </img>
+  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Side-By-Side -->
@@ -447,18 +447,11 @@ dfn {
     <xsl:param name="layout" />
     <xsl:param name="panels" />
 
-    <xsl:variable name="left-margin"  select="$layout/left-margin" />
-    <xsl:variable name="right-margin" select="$layout/right-margin" />
-
     <div style="display: table;">
         <xsl:attribute name="style">
             <xsl:text>display:table;</xsl:text>
-            <xsl:text>margin-left:</xsl:text>
-            <xsl:value-of select="$left-margin" />
-            <xsl:text>;</xsl:text>
-            <xsl:text>margin-right:</xsl:text>
-            <xsl:value-of select="$right-margin" />
-            <xsl:text>;</xsl:text>
+            <xsl:text>margin-left:auto;</xsl:text>
+            <xsl:text>margin-right:auto;</xsl:text>
         </xsl:attribute>
         <xsl:copy-of select="$panels" />
     </div>
@@ -478,7 +471,7 @@ dfn {
           </xsl:attribute>
         </xsl:if>
         <xsl:attribute name="style">
-            <xsl:text>display:table-cell;</xsl:text>
+            <xsl:text>display:inline;</xsl:text>
             <xsl:text>width:</xsl:text>
             <xsl:call-template name="relative-width">
                 <xsl:with-param name="width" select="$width" />
