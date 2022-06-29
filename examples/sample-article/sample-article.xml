@@ -6119,13 +6119,13 @@ the xsltproc executable.
                 </figure>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="svg-interactives">
                 <title>SVG</title>
 
                 <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
 
-                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The change in <m>x</m>, denoted here as <m>h</m>, is reported when the <q>Show secant line</q> option is ticked.  The <m>h</m> is being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with <c>$...$</c> nor by <c>\(...\)</c>, but instead by using <tag>script</tag> tags that MathJax recognizes.  So the employment of MathJax here is accomplished with<cd>
-                    <cline>&lt;script type="math/tex">h = &lt;/script></cline>
+                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The functions to choose from via radio buttons, and the change in <m>x</m>, denoted later as <m>h</m>, are being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with simply <c>$...$</c> nor by simply <c>\(...\)</c>, but instead by using the <c>\(...\)</c> and then also wrapping that in a <tag>span</tag> element with a <attr>class</attr> attribute set to <c>process-math</c>. (The latter is how we instruct MathJax as to which parts of a page to process, or not).  So to have MathJax render a nice <m>x^2</m> in this context (math inside <init>HTML</init> inside a <tag>slate</tag> inside an <tag>interactive</tag>) would be accomplished with<cd>
+                    <cline>&lt;span class="process-math"&gt;x^2&lt;/span&gt;</cline>
                 </cd></p>
 
                 <figure xml:id="figure-interactive-slopes">
@@ -6146,18 +6146,18 @@ the xsltproc executable.
                             Here's an illustration of this basic idea.
                             </div>
                             <div id="function_list" style="text-align: center" xmlns="http://www.w3.org/1999/xhtml">
-                                Choose \(f\):
+                                Choose <span class="process-math">\(f\)</span>:
                                 <span class="function_radio_container" style="padding-left: 10px">
                                     <input type="radio" class="radio" name="function" value="f1" id="f1" />
-                                    \(f(x)=x^2\)
+                                    <span class="process-math">\(f(x)=x^2\)</span>
                                 </span>
                                 <span class="function_radio_container">
                                     <input type="radio" class="radio" name="function" value="f2" />
-                                    \(f(x)=\frac{1}{3}e^x\)
+                                    <span class="process-math">\(f(x)=\frac{1}{3}e^x\)</span>
                                 </span>
                                 <span class="function_radio_container">
                                     <input type="radio" class="radio" name="function" value="f3" />
-                                    \(f(x)=\sin(2x^2)+x/4\)
+                                    <span class="process-math">\(f(x)=\sin(2x^2)+x/4\)</span>
                                 </span>
                             </div>
                         </slate>
@@ -6173,7 +6173,7 @@ the xsltproc executable.
                                         <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
                                     </table></td>
                                     <td><table>
-                                        <tr><td class="dimit" style="text-align: left;"><script type="math/tex">h = </script> <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;"><span class="process-math">\(h\)</span> = <span id="h_value_display"></span></td></tr>
                                         <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
                                         <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
                                     </table></td>
