@@ -1112,11 +1112,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="exercise-customization">
             <xsl:value-of select="$exercise-customization"/>
         </xsl:attribute>
-        <!-- Determine and record types of interactivity, partially based   -->
-        <!-- on location due to publisher options for "short answer" (only) -->
-        <xsl:apply-templates select="." mode="exercise-interactive-attribute">
-            <xsl:with-param name="exercise-type" select="$exercise-customization"/>
-        </xsl:apply-templates>
+        <!-- Determine and record types of interactivity -->
+        <xsl:apply-templates select="." mode="exercise-interactive-attribute"/>
         <!-- catch remaining attributes -->
         <xsl:apply-templates select="@*" mode="exercise">
             <xsl:with-param name="division" select="$division"/>
@@ -1134,8 +1131,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These "interactivity types" are meant for Runestone-enabled  -->
 <!-- interactive exercises and projects                           -->
 <xsl:template match="*" mode="exercise-interactive-attribute">
-    <xsl:param name="exercise-type"/>
-
     <xsl:attribute name="exercise-interactive">
         <xsl:choose>
             <!-- hack for temporary demo HTML versions -->
@@ -1168,38 +1163,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and program[(@interactive = 'codelens') or (@interactive = 'activecode')]">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
+            <xsl:when test="statement and response">
+                <xsl:text>shortanswer</xsl:text>
+            </xsl:when>
+            <!-- That's it, we are out of opportunities to be interactive         -->
             <!-- Now we have what once would have been called a "traditional"     -->
             <!-- PreTeXt question, which is just "statement|hint|answer|solution" -->
-            <!-- (perhaps after a bit of preprocessing.  More accurately, these   -->
-            <!-- are "short answer", "essay", or "free response".  We have allow  -->
-            <!-- these to be interactive (or not) for a capable platform.         -->
-            <!-- Conveniently, we have the cusomization types in the $division    -->
-            <!-- parameter. This only matters when we are on a Runestone server.  -->
-            <xsl:when test="$b-host-runestone">
-                <xsl:choose>
-                    <xsl:when test="($exercise-type = 'inline') and $b-sa-inline-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($exercise-type = 'divisional') and $b-sa-divisional-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($exercise-type = 'reading') and $b-sa-reading-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($exercise-type = 'worksheet') and $b-sa-worksheet-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($exercise-type = 'project') and $b-sa-project-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <!-- examples are never assesments                -->
-                    <!-- maybe WeBWork will someday be on a RS server -->
-                    <xsl:otherwise>
-                        <xsl:text>static</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- That's it, we are out of opportunities to be interactive -->
             <xsl:otherwise>
                 <xsl:text>static</xsl:text>
             </xsl:otherwise>
@@ -1261,12 +1230,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding')]
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
                               |project[@exercise-interactive = 'coding']
                               |activity[@exercise-interactive = 'coding']
                               |exploration[@exercise-interactive = 'coding']
                               |investigation[@exercise-interactive = 'coding']" mode="representations">
-    <!-- always preserve "exercise" container, with attributes -->
+    <!-- always preserve "exercise" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
         <xsl:choose>
@@ -1283,9 +1253,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
-
-<!-- Short Answer -->
-<!-- @exercise-interactive = 'shortanswer' needs no adjustments -->
 
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->
