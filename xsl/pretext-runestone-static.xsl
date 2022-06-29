@@ -43,9 +43,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- before these templates are applied, so these should just  -->
 <!-- produce the "body" of the exercise.                       -->
 
+<!-- The application of the "runestone-to-static" template is     -->
+<!-- controlled by a surrounding "match" that limits elements     -->
+<!-- to "exercise", PROJECT-LIKE, and soon "task".  So the        -->
+<!-- matches here are fine with a *[@exercise-interactive='foo'], -->
+<!-- as a convenience.                                            -->
+
 <!-- True/False -->
 
-<xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'truefalse']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
@@ -92,7 +98,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive = 'multiplechoice']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'multiplechoice']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
@@ -152,7 +158,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
     <!-- default for @language is "natural" -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
@@ -452,7 +458,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problems -->
 
-<xsl:template match="exercise[@exercise-interactive = 'matching']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
@@ -515,7 +521,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Clickable Area -->
 
-<xsl:template match="exercise[@exercise-interactive = 'clickablearea']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'clickablearea']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
@@ -669,7 +675,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Fill-In the Blanks (Basic) -->
 
-<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- reproduce statement identically, but replace var w/ fillin -->
@@ -739,7 +745,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Short Answer -->
 
 <!-- Authored with a "response" element, we effectively drop it here -->
-<xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'shortanswer']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- reproduce usual components -->
@@ -752,7 +758,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Active Code -->
 
-<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'coding']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <statement>
