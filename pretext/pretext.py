@@ -1657,11 +1657,44 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import subprocess, shutil
     import os  # chdir
     import os.path  # join()
+    import asyncio  # get_event_loop()
 
-    suffix = "png"
+    # external module, often forgotten
+    # imported here, used only in interior
+    # routine to launch browser
+    try:
+        import pyppeteer  # launch()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("pyppeteer"))
+
+    # Interior asynchronous routine to manage the Chromium
+    # headless browser and snapshot the desired iframe
+    async def snapshot(input_page, fragment, out_file):
+
+        # input_page: the "standalone" page of the interactive
+        #             hosted at the base URL
+        # fragement:  the hash/fragement identifier of the iframe
+        # out_file:   resulting image file in scratch directory
+
+        # the "standalone" page has one "iframe" known by
+        # the HTML id coming in here as "fragment"
+        xpath = "//iframe[@id='{}'][1]".format(fragment)
+
+        browser = await pyppeteer.launch()
+        page = await browser.newPage()
+        await page.goto(input_page)
+        await page.waitForXPath(xpath);
+        # wait again, 5 seconds, for more than just splash screens, etc
+        await page.waitFor(5000)
+        # list of locations, need first (and only) one
+        elt = await page.xpath(xpath);
+        await elt[0].screenshot({'path': out_file})
+        await browser.close()
+    # End of interior routine
 
     log.info(
-        "creating interactive previews from {} for placement in {}".format(
+        "using Pyppeteer package to create previews for interactives from {} for placement in {}".format(
             xml_source, dest_dir
         )
     )
@@ -1690,58 +1723,22 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # call will need to accept the override as a stringparam
     baseurl = interactives[0]
 
-    pageres_executable_cmd = get_executable_cmd("pageres")
-    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-    log.debug("pageres executable: {}".format(pageres_executable_cmd[0]))
-    log.debug("interactives identifiers: {}".format(interactives))
-
-    # We look to see if a delay is provided in the
-    # command from the configuration file.  The command is
-    # a list of command-line pieces.  We inefficently
-    # look in all of them, even if it might be found early.
-    delay_specified = any(
-        [
-            (p.startswith("-d") or p.startswith("--delay"))
-            for p in pageres_executable_cmd
-        ]
-    )
-
-    # pageres-cli writes into current working directory
+    # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
+    # TODO: just write to "dest_dir"?
     owd = os.getcwd()
     os.chdir(tmp_dir)
 
     # Start after the leading base URL sneakiness
     for preview in interactives[1:]:
+        # parameters
         input_page = os.path.join(baseurl, preview + ".html")
-        page_with_fragment = "".join([input_page, "#", preview])
-        selector_option = "--selector=#" + preview
-        # file suffix is provided by pageres
-        format_option = "--format=" + suffix
-        filename_option = "--filename=" + preview + "-preview"
-        filename = preview + "-preview." + suffix
-        page_with_fragment = "".join([input_page, "#", preview])
-        log.info("converting {} to {}".format(page_with_fragment, filename))
-
-        # pageres invocation
-        # 5-second delay allows Javascript, etc to settle down but can be
-        # overridden with a -dN or --delay=N provided in the  pretext.cfg  file
-        if not (delay_specified):
-            pageres_executable_cmd.append("-d5")
-        # Overwriting files prevents numbered versions (with spaces!)
-        # --transparent, --crop do not seem very effective
-        cmd = pageres_executable_cmd + [
-            "-v",
-            "--overwrite",
-            "--transparent",
-            selector_option,
-            filename_option,
-            input_page,
-        ]
-
-        log.debug("pageres command: {}".format(cmd))
-
-        subprocess.call(cmd)
+        filename = preview + "-preview.png"
+        # progress report
+        msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
+        log.info(msg.format(preview, input_page, filename))
+        # event loop and copy
+        asyncio.get_event_loop().run_until_complete(snapshot(input_page, preview, filename))
         shutil.copy2(filename, dest_dir)
 
     # restore working directory
