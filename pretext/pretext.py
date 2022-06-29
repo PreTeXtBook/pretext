@@ -2512,6 +2512,8 @@ def map_path_to_xml_id(
 
     path_to_xml_id = collections.defaultdict(list)
 
+    xml = str(pathlib.Path(xml).resolve()) # normalize path separators to current OS
+
     # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
     is_win = sys.platform == "win32"
 
@@ -2535,7 +2537,7 @@ def map_path_to_xml_id(
 
     # Load the XML, performing xincludes using this loader.
     huge_parser = lxml.etree.XMLParser(huge_tree=True)
-    src_tree = lxml.etree.parse(pathlib.Path(xml), parser=huge_parser)
+    src_tree = lxml.etree.parse(xml, parser=huge_parser)
     lxml.ElementInclude.include(src_tree, loader=my_loader)
 
     # Walk though every element with an xml ID.
