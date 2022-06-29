@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
 <!--********************************************************************
-Copyright 2019 Andrew Rechnitzer, Steven Clontz, Robert A. Beezer
+Copyright 2019-2022 Andrew Rechnitzer, Steven Clontz, Robert A. Beezer
 
 This file is part of PreTeXt.
 
@@ -504,7 +504,14 @@ dfn {
 <xsl:template match="definition">
   <div class="boxed definition">
     <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
+      <xsl:choose>
+	<xsl:when test="@source-number">
+	  <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:apply-templates select="." mode="type-name" />:
+	</xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
     <xsl:apply-templates select="statement"/>
