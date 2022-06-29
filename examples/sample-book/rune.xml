@@ -1163,6 +1163,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exercises>
 
     <section>
+        <title>Projects and Friends</title>
+
+        <p><q>PROJECT-LIKE</q> refers to the elements/blocks <tag>project</tag>, <tag>activity</tag>, <tag>activity</tag>, and <tag>exploration</tag>.  They are very similar to <tag>exercise</tag>, and here we stress that they can be interactive in all the same ways an <tag>exercise</tag> can.  Key differences are that they are blocks, and so are peers of other blocks like paragraphs and examples, and are children of divisions.  By default they have their own numbering scheme, though we expect this to convert to an elective behavior.</p>
+
+        <p>Both <tag>exercise</tag> and PROJECT-LIKE can be structured with <tag>task</tag>.  It would be natural to have a <tag>project</tag> with multiple <tag>task</tag>, each a possibly different interactive problem type.  We expect that to be possible soon.  For now, <tag>exercise</tag> and <tag>project</tag> (and friends) need to be structured with a <tag>statement</tag> (and their associated signal) in order to be interactive.</p>
+
+        <activity label="activity-multiple-choice-multiple-answers">
+            <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which colors might be found in a rainbow?  (Note that the radio buttons now allow multiple buttons to be selected.)</p>
+            </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is a definitely one of the colors.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Yellow</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, yellow is correct.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>Black</p>
+                    </statement>
+                    <feedback>
+                        <p>Remember the acronym<ellipsis/><acro>ROY G BIV</acro>.  <q>B</q> stands for blue.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, green is one of the colors.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>Do you know the acronym<ellipsis/><acro>ROY G BIV</acro> for the colors of a rainbow, and their order?</p>
+            </hint>
+        </activity>
+    </section>
+
+    <section>
         <title>Expedited Samples</title>
 
         <p>We hack in various interactive Runestone exercise types while <pretext/> markup evolves to cover more of Runestone's repertoire.  In static output these will just produce a message.  In <init>HTML</init> they may be interactive simply in a browser, or they may require being hosted on a Runestone server in order to perform.</p>
