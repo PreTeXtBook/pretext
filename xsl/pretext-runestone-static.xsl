@@ -666,6 +666,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fill-In the Blanks (Basic) -->
 
 <xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- reproduce statement identically, but replace var w/ fillin -->
     <xsl:apply-templates select="statement" mode="fillin-statement"/>
     <!-- Any authored hints, answers, solutions, not derived from   -->
