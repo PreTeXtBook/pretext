@@ -1166,9 +1166,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and response">
                 <xsl:text>shortanswer</xsl:text>
             </xsl:when>
-            <!-- That's it, we are out of opportunities to be interactive         -->
+            <!-- That's it, we are out of opportunities to be interactive -->
+
+            <!-- A child that is a task indicates the exercise/project   -->
+            <!-- is a container and we will need to (later) investigate  -->
+            <!-- each task in turn                                       -->
+            <xsl:when test="task">
+                <xsl:text>container</xsl:text>
+            </xsl:when>
             <!-- Now we have what once would have been called a "traditional"     -->
             <!-- PreTeXt question, which is just "statement|hint|answer|solution" -->
+            <!-- Or maybe just a bare statement that is not structured as such    -->
             <xsl:otherwise>
                 <xsl:text>static</xsl:text>
             </xsl:otherwise>
@@ -1224,6 +1232,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clickable Area    -->
 <!-- ActiveCode        -->
 
+<!-- TODO: definitely need better filters -->
+<!-- complement (not()), single attribute -->
+<!-- Also in Runestone manifest creation  -->
+
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
@@ -1232,11 +1244,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
-                              |project[@exercise-interactive = 'coding']
-                              |activity[@exercise-interactive = 'coding']
-                              |exploration[@exercise-interactive = 'coding']
-                              |investigation[@exercise-interactive = 'coding']" mode="representations">
-    <!-- always preserve "exercise" container here, with attributes -->
+                      |
+                      project[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                     activity[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                  exploration[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                investigation[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]" mode="representations">
+    <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
         <xsl:choose>
