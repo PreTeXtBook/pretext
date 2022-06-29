@@ -39,6 +39,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in blocks of code as part of Parsons problems              -->
 <xsl:include href = "./pretext-text-utilities.xsl"/>
 
+<!-- The enclosing "exercise" and its attributes are preserved -->
+<!-- before these templates are applied, so these should just  -->
+<!-- produce the "body" of the exercise.                       -->
+
 <!-- True/False -->
 
 <xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-static">
@@ -677,7 +681,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="answer"/>
     <xsl:copy-of select="solution"/>
     <xsl:apply-templates select="statement" mode="fillin-solution"/>
-
 </xsl:template>
 
 <!-- Fillin Statement -->
@@ -733,6 +736,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fillin characters="1"/>
 </xsl:template>
 
+<!-- Short Answer -->
+
+<!-- Authored with a "response" element, we effectively drop it here -->
+<xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
+    <!-- reproduce usual components -->
+    <xsl:copy-of select="statement"/>
+    <!-- skip over response until it carries something relevant -->
+    <xsl:copy-of select="hint"/>
+    <xsl:copy-of select="answer"/>
+    <xsl:copy-of select="solution"/>
+</xsl:template>
 
 <!-- Active Code -->
 

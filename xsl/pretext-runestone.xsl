@@ -1151,14 +1151,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: match is recycled in manifest formation                   -->
 <xsl:template match="exercise[@exercise-interactive = 'shortanswer']|
 project[@exercise-interactive = 'shortanswer']|activity[@exercise-interactive = 'shortanswer']|exploration[@exercise-interactive = 'shortanswer']|investigation[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
-    <div class="ptx-runestone-container">
-        <div class="runestone">
-            <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
-                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:apply-templates select="statement"/>
+    <xsl:choose>
+        <xsl:when test="$b-host-runestone">
+            <!-- when "response" has attributes, perhaps they get interpreted here -->
+            <div class="ptx-runestone-container">
+                <div class="runestone">
+                    <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
+                        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                        <xsl:apply-templates select="statement"/>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- pointless to do fancy outside of a server/LMS situation -->
+            <xsl:apply-templates select="statement"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- YouTube Video -->
