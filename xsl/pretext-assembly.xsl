@@ -1099,7 +1099,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (always just a component of something larger).  WeBWork   -->
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
-        <xsl:variable name="exercise-customization">
+        <xsl:attribute name="exercise-customization">
             <xsl:choose>
                 <xsl:when test="&PROJECT-FILTER;">
                     <xsl:text>project</xsl:text>
@@ -1108,9 +1108,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$division"/>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
-        <xsl:attribute name="exercise-customization">
-            <xsl:value-of select="$exercise-customization"/>
         </xsl:attribute>
         <!-- Determine and record types of interactivity -->
         <xsl:apply-templates select="." mode="exercise-interactive-attribute"/>
