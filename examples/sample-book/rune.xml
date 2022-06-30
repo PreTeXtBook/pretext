@@ -1213,6 +1213,159 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Do you know the acronym<ellipsis/><acro>ROY G BIV</acro> for the colors of a rainbow, and their order?</p>
             </hint>
         </activity>
+
+        <p>Now an <tag>exercise</tag> with two <tag>task</tag>.  Since the latter is a short-answer question, it will only be interactive on a capable platform.</p>
+
+        <exercise>
+            <title>True/False and Explain</title>
+            <introduction>
+                <p>Structured with task, we can have an introduction, but this does not migrate with the interactive portions.</p>
+            </introduction>
+
+            <task label="true-false-task">
+                <title>True/False</title>
+                <idx>vector space</idx>
+                <statement correct="no">
+                    <p>Every vector space has finite dimension.</p>
+                </statement>
+                <feedback>
+                    <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                </feedback>
+                <hint>
+                    <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                </hint>
+            </task>
+
+            <task label="short-answer-task">
+                <statement>
+                    <p>Explain your reasoning in the previous question.</p>
+                </statement>
+                <response/>
+            </task>
+        </exercise>
+
+        <p>Now an <tag>exploration</tag> nested two-deep with <em>the same two questions</em>, two times each, just for testing purposes.</p>
+
+        <exploration>
+            <title>Exploring Two-Deep</title>
+
+            <task>
+                <title>First Iterations of Each</title>
+
+                <task label="task-multiple-choice-first">
+                    <title>Multiple-Choice, Not Randomized, One Answer (First Copy)</title>
+                    <idx>stop signs</idx>
+                    <statement>
+                        <p>What color is a stop sign?</p>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Green</p>
+                            </statement>
+                            <feedback>
+                                <p>Green means <q>go!</q>.</p>
+                            </feedback>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Red</p>
+                            </statement>
+                            <feedback>
+                                <p>Red is universally used for prohibited activities or serious warnings.</p>
+                            </feedback>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>White</p>
+                            </statement>
+                            <feedback>
+                                <p>White might be hard to see.</p>
+                            </feedback>
+                        </choice>
+                    </choices>
+                    <hint>
+                        <p>What did you see last time you went driving?</p>
+                    </hint>
+                    <hint>
+                        <p>Maybe go out for a drive?</p>
+                    </hint>
+                </task>
+
+                <task label="task-active-code-first">
+                    <title>Python ActiveCode (First Copy)</title>
+                    <statement>
+                        <p>Run the following program and observe the information provided at each step.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </task>
+            </task>
+
+            <task>
+                <title>Second Iterations of Each</title>
+
+                <task label="task-multiple-choice-second">
+                    <title>Multiple-Choice, Not Randomized, One Answer (Second Copy)</title>
+                    <idx>stop signs</idx>
+                    <statement>
+                        <p>What color is a stop sign?</p>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Green</p>
+                            </statement>
+                            <feedback>
+                                <p>Green means <q>go!</q>.</p>
+                            </feedback>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Red</p>
+                            </statement>
+                            <feedback>
+                                <p>Red is universally used for prohibited activities or serious warnings.</p>
+                            </feedback>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>White</p>
+                            </statement>
+                            <feedback>
+                                <p>White might be hard to see.</p>
+                            </feedback>
+                        </choice>
+                    </choices>
+                    <hint>
+                        <p>What did you see last time you went driving?</p>
+                    </hint>
+                    <hint>
+                        <p>Maybe go out for a drive?</p>
+                    </hint>
+                </task>
+
+                <task label="task-active-code-second">
+                    <title>Python ActiveCode (Second Copy)</title>
+                    <statement>
+                        <p>Run the following program and observe the information provided at each step.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </task>
+            </task>
+        </exploration>
+
     </section>
 
     <section>
