@@ -2445,9 +2445,11 @@ def html(
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
-    map_path_to_xml_id(xml, tmp_dir)
+    # Only produce a file of directory locations when requested
+    if (file_format == "html-with-mapping"):
+        map_path_to_xml_id(xml, tmp_dir)
 
-    if file_format == "html":
+    if file_format in ["html", "html-with-mapping"]:
         # with multiple files, we need to copy a tree, and
         # shutil.copytree() will balk at overwriting directories
         # before Python 3.8.  The  distutils  module is old
@@ -2476,6 +2478,11 @@ def html(
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
 
+
+# Following is an experimental routine to support online two-panel
+# editing with Bryan Jones' CodeChat tool.  Look to see where it is
+# called, and chase your way backward to an undocumented switch/format
+# in  pretext/pretext  that enables this
 
 # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
 #

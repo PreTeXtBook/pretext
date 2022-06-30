@@ -683,6 +683,19 @@ def main():
                 out_file,
                 dest_dir,
             )
+        # Top-secret (undocumented): just like "html", only
+        # also builds  mapping.json  for CAT + CodeChat work
+        elif args.format == "html-mapping":
+            ptx.html(
+                xml_source,
+                publication_file,
+                stringparams,
+                args.xmlid,
+                "html-with-mapping",
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+            )
         elif args.format == "pdf":
             ptx.pdf(
                 xml_source,
