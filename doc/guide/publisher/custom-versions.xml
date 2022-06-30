@@ -106,6 +106,10 @@
                 <title>Additional Material</title>
 
                 <p>Some material may not be desired for every output format.  Some interactive material might not make sense in a printed book.  Or perhaps certain types of exercises are included at the end of each chapter, or not.  By putting these elements in components, they may be included or excluded via a publication file.  The idea here is that some versions contain a <em>subset</em> of all the available, authored material.  For example, a version might include content in the <c>videos</c> and <c>labs</c> components, but exclude content in the <c>genome</c> component.</p>
+
+                <p>An <q>annotated</q> Instructor's Version can be accomplished with additional material, perhaps in a selection of <tag>commentary</tag> elements looking like like <cd>
+                    <cline>&lt;commentary component="instructor"&gt;</cline>
+                </cd></p>
             </paragraphs>
 
             <paragraphs>
