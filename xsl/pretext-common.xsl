@@ -3518,7 +3518,7 @@ Book (with parts), "section" at level 3
 <!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
+<xsl:template match="exercise|program|&PROJECT-LIKE;|task" mode="runestone-id">
     <!-- Once we generate labels, we can warn an author that they should   -->
     <!-- be committing to a long-term @label value for database entries.   -->
     <!-- We do this by checking for the $gen-id-sep string being present   -->

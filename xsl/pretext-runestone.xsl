@@ -333,7 +333,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|&PROJECT-LIKE;|task" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
@@ -465,6 +465,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </title>
         <!-- nearly a dead end, recurse into "exercise" and PROJECT-LIKE at *any* PTX -->
         <!-- depth, for example within a "subsection" (which Runestone does not have) -->
+        <!-- If any of the next select are containers (full of "task") they will not  -->
+        <!-- meet the dead-end monster match below, and the default template will     -->
+        <!-- recurse into non-container "task" eventually, so "task" do get           -->
+        <!-- processed, even if they seem to be missing from this select.             -->
         <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
@@ -473,7 +477,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A Runestone exercise needs to identify itself when an instructor wants   -->
 <!-- to select it for assignment, so we want to provide enough identification -->
 <!-- in the manifest, via a "label" element full of raw text.                 -->
-<xsl:template match="exercise|project|activity|exploration|investigation" mode="runestone-manifest-label">
+<xsl:template match="exercise|project|activity|exploration|investigation|task" mode="runestone-manifest-label">
     <label>
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text> </xsl:text>
@@ -530,6 +534,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'shortanswer')]
                      |
                 investigation[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                         task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or

@@ -1090,7 +1090,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  Use locations computed here, remove elsewhere                  -->
 <!-- 4.  Recognize new, modern fill-in problems                         -->
 
-<xsl:template match="exercise|&PROJECT-LIKE;" mode="exercise">
+<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="exercise">
     <xsl:param name="division"/>
 
     <xsl:copy>
@@ -1099,16 +1099,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (always just a component of something larger).  WeBWork   -->
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
-        <xsl:attribute name="exercise-customization">
-            <xsl:choose>
-                <xsl:when test="&PROJECT-FILTER;">
-                    <xsl:text>project</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$division"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
+        <xsl:if test="not(self::task)">
+            <xsl:attribute name="exercise-customization">
+                <xsl:choose>
+                    <xsl:when test="&PROJECT-FILTER;">
+                        <xsl:text>project</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$division"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:if>
         <!-- Determine and record types of interactivity -->
         <xsl:apply-templates select="." mode="exercise-interactive-attribute"/>
         <!-- catch remaining attributes -->
@@ -1165,9 +1167,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- That's it, we are out of opportunities to be interactive -->
 
-            <!-- A child that is a task indicates the exercise/project   -->
-            <!-- is a container and we will need to (later) investigate  -->
-            <!-- each task in turn                                       -->
+            <!-- A child that is a task indicates the exercise/project/task -->
+            <!-- that is its parent is simply a container, rather than a    -->
+            <!-- terminal task which would be structured with a "statement" -->
+            <!-- in order to be interactive                                 -->
             <xsl:when test="task">
                 <xsl:text>container</xsl:text>
             </xsl:when>
@@ -1270,6 +1273,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'shortanswer')]
                      |
                 investigation[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                         task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
