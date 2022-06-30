@@ -7044,7 +7044,7 @@ the xsltproc executable.
 
                 <p>Video, observable on a Runestone server.</p>
 
-                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="external/yt-list-variables.png"/>
+                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png"/>
             </subsection>
         </section>
 
