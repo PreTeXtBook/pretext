@@ -551,15 +551,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
     </xsl:copy>
     <xsl:choose>
-        <!-- deprecated, force the issue using @href -->
-        <xsl:when test="not(@visual)">
-            <fn pi:url="{@href}"/>
-        </xsl:when>
         <!-- explicitly opt-out, so no footnote -->
         <xsl:when test="@visual = ''"/>
         <!-- go for it, as requested by author -->
-        <xsl:otherwise>
+        <xsl:when test="@visual">
             <fn pi:url="{@visual}"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- When an author has not made an effort to provide a visual   -->
+            <!-- alternative, then attempt some obvious clean-up of the      -->
+            <!-- default, and if not possible, settle for an ugly visual URL -->
+            <xsl:variable name="truncated-href">
+                <xsl:choose>
+                    <xsl:when test="substring(@href, 1, 8) = 'https://'">
+                        <xsl:value-of select="substring(@href, 9)"/>
+                    </xsl:when>
+                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                        <xsl:value-of select="substring(@href, 8)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@href"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <fn pi:url="{$truncated-href}"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
