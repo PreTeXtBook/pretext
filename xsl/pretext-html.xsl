@@ -488,10 +488,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- build a very simple  index.html  page pointing at  $html-index-page -->
+    <!-- This is the one place we insert a (timestamped) blurb, since the    -->
+    <!-- file is already exceptional and one-off                             -->
     <exsl:document href="index.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template name="converter-blurb-html" />
+            <xsl:call-template name="converter-blurb-html"/>
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
@@ -2119,7 +2121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template name="converter-blurb-html" />
+            <xsl:call-template name="converter-blurb-html-no-date"/>
             <head>
                 <!-- dissuade indexing duplicated content -->
                 <meta name="robots" content="noindex, nofollow" />
@@ -6837,7 +6839,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="standalone-filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
+        <xsl:call-template name="converter-blurb-html-no-date"/>
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
@@ -9714,7 +9716,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="iframe-filename" />
     </xsl:variable>
     <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
+        <xsl:call-template name="converter-blurb-html-no-date"/>
         <html lang="{$document-language}">
             <head>
                 <!-- configure MathJax by default for @platform variants -->
@@ -10504,7 +10506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 
     <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-    <xsl:call-template name="converter-blurb-html" />
+    <xsl:call-template name="converter-blurb-html-no-date"/>
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
@@ -10644,7 +10646,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-    <xsl:call-template name="converter-blurb-html" />
+    <xsl:call-template name="converter-blurb-html-no-date"/>
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
