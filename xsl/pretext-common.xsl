@@ -10822,8 +10822,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:if test="$b-debug-datedfiles">
     <xsl:copy-of select="$lead-in" /><xsl:text>*       on </xsl:text>  <xsl:value-of select="date:date-time()" />
                                                                       <xsl:text>       *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*   A recent stable commit (2020-08-09):   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>* 98f21740783f166a773df4dc83cab5293ab63a4a *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*   A recent stable commit (2022-07-01):   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>* 6c761d3dba23af92cba35001c852aac04ae99a5f *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*         https://pretextbook.org          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
