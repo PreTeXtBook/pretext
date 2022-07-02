@@ -33,7 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>We collect Runestone interactive items for testing here, in sections of their own.</p>
     </introduction>
 
-    <section>
+    <section xml:id="activecode">
         <title>ActiveCode</title>
 
         <p>Python programs are made interactive in HTML, on request.</p>
@@ -389,7 +389,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </section>
 
-    <section>
+    <section xml:id="videos-in-runestone">
         <title>YouTube Videos</title>
 
         <p>Runestone uses a YouTube API that broadcasts events when a reader interacts with a video.  In this way, Runestone can record video-watching as an activity.  As <pretext/> output we concede better behavior on small screens (<q>responsiveness</q>) to enable this feature in a Runestone version.  Various <pretext/> features, such as playlists, are not yet supported<mdash/>make a request.</p>
@@ -399,7 +399,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>The margins here are asymmetric just as a test.  And this text is here to see where the video ends.</p>
     </section>
 
-    <section>
+    <section xml:id="rune-nested-divisions">
         <title>Deeper</title>
 
         <introduction>
@@ -473,7 +473,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
-    <exercises>
+    <exercises xml:id="interactive-exercises">
         <title>Interactive Exercises</title>
 
         <p>A sample of interactive problem types.</p>
@@ -1162,7 +1162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </exercises>
 
-    <section>
+    <section xml:id="interactive-projects">
         <title>Projects and Friends</title>
 
         <p><q>PROJECT-LIKE</q> refers to the elements/blocks <tag>project</tag>, <tag>activity</tag>, <tag>activity</tag>, and <tag>exploration</tag>.  They are very similar to <tag>exercise</tag>, and here we stress that they can be interactive in all the same ways an <tag>exercise</tag> can.  Key differences are that they are blocks, and so are peers of other blocks like paragraphs and examples, and are children of divisions.  By default they have their own numbering scheme, though we expect this to convert to an elective behavior.</p>
