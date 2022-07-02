@@ -2831,6 +2831,106 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
         raise ValueError(msg)
 
 
+########################
+#
+# JaaS
+# Jing as a Service
+# (Validation with Jing)
+#
+########################
+
+def validate(xml_source, out_file, dest_dir):
+    import os.path  # split()
+    from lxml import etree  # parse()
+    import zipfile #  ZipFile()
+
+    try:
+        import requests  # post()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("requests"))
+
+    # JaaS server location
+    server_url = 'https://mathgenealogy.org:9000/validate'
+    # Alias for XInclude namespace
+    NSMAP = {"xi": "http://www.w3.org/2001/XInclude"}
+    # home for zip file construction
+    tmp_dir = get_temporary_directory()
+
+    # directory location of main source file, every filename collected
+    # below (in *_files lists) is relative to this directory
+    d = os.path.split(xml_source)[0]
+    base = os.path.split(xml_source)[1]
+
+    # Initialize with overall source file's
+    # name (base), relative to its location (d)
+    # all_files will be the eventual result
+    all_files = [base]
+    # new_files is refreshed for each pass of the while loop,
+    # non-empty ensures the while loop happens at least once
+    new_files = [base]
+    while new_files:
+        # accumulator to become the subsequent new_files
+        next_files = []
+        for f in new_files:
+            # construct full filename for parse operation
+            # do not xinclude, that would defeat the purpose
+            file_tree = etree.parse(os.path.join(d, f))
+            includes = file_tree.xpath("//xi:include", namespaces=NSMAP)
+            # @href attributes are relative to the location
+            #  of f, which we compute as f_dir
+            f_dir = os.path.split(f)[0]
+            for elt in includes:
+                # the href, required/expected/necessary
+                if "href" in elt.attrib:
+                    href = elt.attrib["href"]
+                else:
+                    raise ValueError("an xi:include element lacks the expected @href attribute")
+                # the normaized filename, relative to the main file location (d)
+                # this is where the eventual results are first created
+                rel_path = os.path.normpath(os.path.join(f_dir, href))
+                # always of interest, always add to result, even
+                # a text file might be needed to feed the schema
+                all_files.append(rel_path)
+                # if including a text file, then lxml inspection
+                # will fail, AND we don't need to examine it further,
+                # as it is a dead-end in the tree (can't xi:include anyway)
+                parsing = None
+                if 'parse' in elt.attrib:
+                    parsing = elt.attrib['parse']
+                # Usually we want to inspect a file for more includes,
+                # so we add most to the list of files to examine next
+                if not(parsing == 'text'):
+                    next_files.append(rel_path)
+        # recycle next_files into new_files, and next_file
+        # will be re-initialized as while loop resumes
+        new_files = next_files
+
+    # Build a zip file of the source, files with relative paths
+    # zipfile.ZIP_DEFLATED is the "usual  ZIP compression method"
+    zip_filename = os.path.join(tmp_dir, "test.zip")
+    log.info("packaging source temporarily as {}".format(zip_filename))
+    owd = os.getcwd()
+    os.chdir(d)
+    with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+        # set() will avoid duplicate files included twice (or more)
+        for f in set(all_files):
+            zip_file.write(f)
+    os.chdir(owd)
+
+    # fresh schema from the PreTeXt distribution
+    schema_filename = os.path.join(get_ptx_path(), "schema", "pretext.rng")
+    files = {'source': open(zip_filename,'rb'), 'rng': open(schema_filename,'rb')}
+    data = {'mainfile': base}
+    log.info("communicating with server at {}".format(server_url))
+    r = requests.post(server_url, data=data, files=files)
+
+    derivedname = get_output_filename(xml_source, out_file, dest_dir, ".jing")
+    with open(derivedname, "w") as f:
+        f.writelines(r.text)
+    log.info("messages from validation in {}".format(derivedname))
+
+
 ###################
 #
 # Utility Functions

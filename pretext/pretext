@@ -461,7 +461,9 @@ def get_cli_arguments():
         action="store_true",
         dest="abort",
     )
-
+    # Needs help-file, once public
+    # Will default to False
+    parser.add_argument("-V", "--validate", action="store_true", dest="validate")
     parser.add_argument(
         "xml_file", help="PreTeXt source file with content", action="store"
     )
@@ -528,6 +530,7 @@ def main():
 
     # check and sanitize XML source, presumed to exiast
     xml_source = verify_input_file(args.xml_file, "source")
+
     # data directory is optional, so allow for None here
     if args.data_dir:
         data_dir = ptx.verify_input_directory(args.data_dir)
@@ -571,7 +574,10 @@ def main():
     log.info("Done examining environment and initializing setup info")
 
     # The big switch
-    if args.component == "asy":
+    # Validation trumps everything, since it is an easy switch
+    if args.validate:
+        ptx.validate(xml_source, out_file, dest_dir)
+    elif args.component == "asy":
         if args.format in ["html", "pdf", "svg", "png", "eps", "source", "all"]:
             ptx.asymptote_conversion(
                 xml_source,
