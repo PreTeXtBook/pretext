@@ -10813,6 +10813,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Converter information for header, generic -->
 <!-- params are strings to make comment lines in target file    -->
 <!-- "copy-of" supresses output-escaping of HTML/XML characters -->
+<!-- Parameterize by need/desire for date/commit information    -->
 <xsl:template name="converter-blurb">
     <xsl:param name="lead-in" />
     <xsl:param name="lead-out" />
@@ -10824,6 +10825,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:copy-of select="$lead-in" /><xsl:text>*   A recent stable commit (2020-08-09):   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>* 98f21740783f166a773df4dc83cab5293ab63a4a *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*         https://pretextbook.org          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>********************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- This version is identical (keep in sync) but *never* has any date  -->
+<!-- information.  This was added for the multitude of files in an HTML  -->
+<!-- conversion, when we just left one file (index.html) with a date. -->
+<xsl:template name="converter-blurb-no-date">
+    <xsl:param name="lead-in" />
+    <xsl:param name="lead-out" />
+    <xsl:copy-of select="$lead-in" /><xsl:text>********************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*       Generated from PreTeXt source      *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*         https://pretextbook.org          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
@@ -10847,6 +10862,17 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template name="converter-blurb-html">
     <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in">
+            <xsl:text disable-output-escaping='yes'>&lt;!--</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="lead-out">
+            <xsl:text disable-output-escaping='yes'>--&gt;</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="converter-blurb-html-no-date">
+    <xsl:call-template name="converter-blurb-no-date">
         <xsl:with-param name="lead-in">
             <xsl:text disable-output-escaping='yes'>&lt;!--</xsl:text>
         </xsl:with-param>
