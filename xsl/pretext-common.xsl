@@ -10596,13 +10596,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($text.alignment != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2022-01-05  @visual required on a "url" with content -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//url[node() and @href and not(@visual)]" />
-        <xsl:with-param name="date-string" select="'2022-01-05'" />
-        <xsl:with-param name="message" select="'a &quot;url&quot; with content (provided clickable text) now requires a &quot;@visual&quot; attribute.  The &quot;@href&quot; attribute is being used in its place'"/>
-    </xsl:call-template>
-    <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 1/20 -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2022-01-31'" />
