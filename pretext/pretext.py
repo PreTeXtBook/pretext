@@ -3203,12 +3203,20 @@ def get_managed_directories(xml_source, pub_file):
         element_list = pub_tree.xpath("/publication/source/directories")
         if element_list:
             attributes_dict = element_list[0].attrib
-            # common error message
+            # common error messages
             abs_path_error = " ".join(
                 [
                     "the directory path to data for images, given in the",
                     'publisher file as "source/directories/@{}" must be relative to',
                     'the PreTeXt source file location, and not the absolute path "{}"',
+                ]
+            )
+            missing_dir_error = " ".join(
+                [
+                    'the directory "{}" implied by the value "{}" in the',
+                    '"source/directories/@{}" entry of the publisher file does not',
+                    "exist. Check the spelling, create the necessary directory, or entirely",
+                    'remove the whole "source/directories" element of the publisher file.'
                 ]
             )
             # attribute absent => None
@@ -3218,7 +3226,10 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                generated = verify_input_directory(abs_path)
+                try:
+                    generated = verify_input_directory(abs_path)
+                except:
+                    raise ValueError(missing_dir_error.format(abs_path, raw_path, gen_attr))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
@@ -3226,7 +3237,10 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                external = verify_input_directory(abs_path)
+                try:
+                    external = verify_input_directory(abs_path)
+                except:
+                    raise ValueError(missing_dir_error.format(abs_path, raw_path, ext_attr))
     # pair of discovered absolute paths
     return (generated, external)
 
