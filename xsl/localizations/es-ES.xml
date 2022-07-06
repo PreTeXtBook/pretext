@@ -231,4 +231,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'>Evaluate</localization>
     <!-- <localization string-id='code'>Code</localization> -->
+    <!-- Interactive exercise feedback messages                          -->
+    <!-- These might be part of a feedback message for submitting        -->
+    <!-- an answer, e.g. "Correct!" or "Correct: 50%".                   -->
+    <!-- <localization string-id='correct'>Correct</localization> -->
+    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
+    <!-- <localization string-id='blank'>Blank</localization> -->
 </locale>
