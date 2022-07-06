@@ -32,6 +32,7 @@
 
 # Set up logging package:
 import logging
+from turtle import back
 log = logging.getLogger('ptxlogger')
 
 #############################
@@ -112,8 +113,8 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     mj_option = "--" + mj_var
     mj_tag = "mj-" + mj_var
     mjpage_cmd = node_exec_cmd + [mjsre_page, mj_option, mjinput]
-    outfile = open(mjoutput, "w")
-    subprocess.run(mjpage_cmd, stdout=outfile)
+    with open(mjoutput, "w") as outfile:
+        subprocess.run(mjpage_cmd, stdout=outfile)
 
     # the 'mjpage' executable converts spaces inside of a LaTeX
     # \text{} into &nbsp; entities, which is a good idea, and
@@ -132,8 +133,9 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     owd = os.getcwd()
     os.chdir(tmp_dir)
     html_file = mjoutput
-    for line in fileinput.input(html_file, inplace=1):
-        print(xhtml_elt.sub(repl, line), end="")
+    with fileinput.FileInput(html_file, inplace=True, backup=".bak") as file:
+        for line in file:
+            print(xhtml_elt.sub(repl, line), end="")
     os.chdir(owd)
 
     # clean up and package MJ representations, font data, etc
@@ -2109,8 +2111,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     html_elt = re.compile(orig)
     for root, dirs, files in os.walk(xhtml_dir):
         for fn in files:
-            for line in fileinput.input(fn, inplace=1):
-                print(html_elt.sub(repl, line), end="")
+            with fileinput.FileInput(fn, inplace=True, backup=".bak") as file:
+                for line in file:
+                    print(html_elt.sub(repl, line), end="")
     os.chdir(owd)
 
     # EPUB stylesheet writes an XHTML file with
