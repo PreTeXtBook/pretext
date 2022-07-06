@@ -10365,6 +10365,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data-seed" >
             <xsl:value-of select="static/@seed"/>
         </xsl:attribute>
+        <xsl:attribute name="data-localize-correct">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'correct'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-incorrect">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'incorrect'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-blank">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'blank'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
         <xsl:choose>
             <xsl:when test="server-data/@problemSource">
                 <xsl:attribute name="data-problemSource">
