@@ -82,7 +82,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # Trying to correct baseline for inline math in Kindle, so we
     # insert a \mathstrut into all the inline math before feeding to MathJax
     if math_format == "kindle":
-        with fileinput.FileInput(mjinput, inplace=True, backup=".bak") as file:
+        with fileinput.FileInput(mjinput, inplace=True) as file:
             for line in file:
                 print(line.replace(r"\(", r"\(\mathstrut "), end="")
 
@@ -133,7 +133,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     owd = os.getcwd()
     os.chdir(tmp_dir)
     html_file = mjoutput
-    with fileinput.FileInput(html_file, inplace=True, backup=".bak") as file:
+    with fileinput.FileInput(html_file, inplace=True) as file:
         for line in file:
             print(xhtml_elt.sub(repl, line), end="")
     os.chdir(owd)
@@ -2111,7 +2111,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     html_elt = re.compile(orig)
     for root, dirs, files in os.walk(xhtml_dir):
         for fn in files:
-            with fileinput.FileInput(fn, inplace=True, backup=".bak") as file:
+            with fileinput.FileInput(fn, inplace=True) as file:
                 for line in file:
                     print(html_elt.sub(repl, line), end="")
     os.chdir(owd)
