@@ -10383,6 +10383,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="lang" select="$document-language"/>
             </xsl:call-template>
         </xsl:attribute>
+        <xsl:attribute name="data-localize-submit">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'submit'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-check-responses">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'check-responses'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-reveal">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'reveal'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-randomize">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'randomize'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-reset">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'reset'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
         <xsl:choose>
             <xsl:when test="server-data/@problemSource">
                 <xsl:attribute name="data-problemSource">
@@ -10417,7 +10447,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </div>
         <div class="problem-buttons">
-            <button class="webwork-button" onclick="handleWW('{@ww-id}')">Make Interactive</button>
+            <button class="webwork-button" onclick="handleWW('{@ww-id}')">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'activate'"/>
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+            </button>
         </div>
     </xsl:element>
 </xsl:template>

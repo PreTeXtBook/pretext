@@ -229,4 +229,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='correct'>Correct</localization> -->
     <!-- <localization string-id='incorrect'>Incorrect</localization> -->
     <!-- <localization string-id='blank'>Blank</localization> -->
+    <!-- <localization string-id='submit'>Submit</localization> -->
+    <!-- <localization string-id='check-responses'>Check Responses</localization> -->
+    <!-- <localization string-id='reveal'>Reveal</localization> -->
+    <!-- <localization string-id='randomize'>Randomize</localization> -->
+    <!-- <localization string-id='activate'>Activate</localization> -->
+    <!-- <localization string-id='reset'>Reset</localization> -->
 </locale>
