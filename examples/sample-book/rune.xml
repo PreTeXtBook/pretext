@@ -963,6 +963,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </matches>
         </exercise>
 
+        <exercise label="matching-bases">
+            <title>Matching Problem, Linear Algebra</title>
+            <idx>matching bases and subspaces</idx>
+            <statement>
+                <p>Match each subspace with a basis for that subspace. (You may assume that each set is really a basis for at least one of the subspaces.)</p>
+            </statement>
+            <feedback>
+                <p>Each putative basis is a subset of exactly one of the three subspaces.  So for each subspace, two of the three sets can be ruled out by simply testing that the vectors of the basis are members of the subspace, via the membership criteria.</p>
+            </feedback>
+            <matches>
+                <match order="2">
+                    <premise><m>\left\{\langle x,y,z\rangle\mid - y + z = 0\right\}</m></premise>
+                    <response><m>\left\{\langle -4, 3, 3\rangle, \langle 3, -2, -2 \rangle\right\}</m></response>
+                </match>
+                <match order="2">
+                    <premise><m>\left\{\langle x,y,z\rangle\mid -3x - 5y + z = 0\right\}</m></premise>
+                    <response><m>\left\{\langle -4, 3, 3\rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
+                </match>
+                <match order="2">
+                    <premise><m>\left\{\langle x,y,z\rangle\mid -2x - 5y + 2z = 0\right\}</m></premise>
+                    <response><m>\left\{\langle 3, -2, -2 \rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
+                </match>
+            </matches>
+            <hint>
+                <p>For openers, a basis for a subspace must be a <em>subset</em> of the subspace.</p>
+            </hint>
+        </exercise>
+
         <exercise label="clickable-text">
             <title>Clickable Areas, <q>Regular</q> Text</title>
 
