@@ -745,7 +745,10 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Trace Server: language abbreviation goes in argument
     url_string = "http://tracer.runestone.academy:5000/trace{}"
-    server_time_out_string = "PTX:ERROR: the server at {} timed out while processing source {}.  No trace file produced"
+    server_error_msg = '\n'.join([
+           "the server at {} could not process program source file {}.",
+           "No trace file was produced.  The generated traceback follows, other files will still be processed."
+           ])
 
     log.info(
         "creating trace data from {} for placement in {}".format(xml_source, dest_dir)
@@ -783,15 +786,17 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text[r.text.find('{"code":') :]
-            except requests.ReadTimeout:
-                print(server_time_out_string.format(url, visible_id))
+            except Exception as e:
+                log.critical(traceback.format_exc())
+                log.critical(server_error_msg.format(url, visible_id))
         elif language == "java":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text
-            except requests.ReadTimeout:
-                print(server_time_out_string.format(url, visible_id))
+            except Exception as e:
+                log.critical(traceback.format_exc())
+                log.critical(server_error_msg.format(url, visible_id))
         elif language == "python":
             # local routines handle this case, no server involved
             trace = runestone.codelens.pg_logger.exec_script_str_local(
