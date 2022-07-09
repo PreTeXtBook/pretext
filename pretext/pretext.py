@@ -34,6 +34,11 @@
 import logging
 log = logging.getLogger('ptxlogger')
 
+# Can show full traceback, and then continue processing
+# https://stackoverflow.com/questions/3702675/
+# how-to-catch-and-print-the-full-exception-traceback-without-halting-exiting-the
+import traceback  # format_exc()
+
 #############################
 #
 #  Math as LaTeX on web pages
