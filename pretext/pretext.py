@@ -729,13 +729,9 @@ def latex_tactile_image_conversion(
 
 # Convert program source code into traces for the interactive
 # CodeLens tool in Runestone
-# Dependencies:  pg_logger.pty, pg_encoder.py, _js_var_finalizer()
-# See RunestoneComponents/runestone/codelens/visualizer.py (get_trace())
-
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import runestone.codelens.pg_logger  # exec_script_str_local()
 
     try:
         import requests  # post()
@@ -818,17 +814,6 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
             with open(trace_file, "w") as f:
                 f.write(trace)
-
-
-# 2022-04-21:  "finalizer" routine from Runestone project
-#   Used with permission from Bradley Miller
-#   RunestoneComponents/blob/runestone/codelens/visualizer.py
-def _js_var_finalizer(input_code, output_trace):
-    import json
-
-    ret = dict(code=input_code, trace=output_trace)
-    json_output = json.dumps(ret, indent=None)
-    return json_output
 
 
 ################################
