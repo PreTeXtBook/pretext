@@ -773,7 +773,11 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         runestone_id = program_quad[0]
         visible_id = program_quad[1]
         language = program_quad[2]
-        url = url_string.format(language)
+        if language == 'python':
+            url = url_string.format('py')
+        else:
+            # c, cpp, java
+            url = url_string.format(language)
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
         source = program_quad[3].replace("\\n", "\n")
@@ -798,11 +802,13 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 log.critical(traceback.format_exc())
                 log.critical(server_error_msg.format(url, visible_id))
         elif language == "python":
-            # local routines handle this case, no server involved
-            trace = runestone.codelens.pg_logger.exec_script_str_local(
-                source, None, False, None, _js_var_finalizer
-            )
-
+            try:
+                r = requests.post(url, data=dict(src=source), timeout=30)
+                if r.status_code == 200:
+                    trace = r.text
+            except Exception as e:
+                log.critical(traceback.format_exc())
+                log.critical(server_error_msg.format(url, visible_id))
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
