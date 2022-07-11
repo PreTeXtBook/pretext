@@ -674,6 +674,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </task>
 </xsl:template>
 
+<!-- 2022-07-10 webwork//latex-image[syntax='PGtikz'] deprecated    -->
+<!-- to just a normal latex-image. The text content for the code    -->
+<!-- must be wrapped in a tikzpicture environment.                  -->
+<xsl:template match="latex-image[@syntax='PGtikz']" mode="repair">
+    <xsl:copy>
+        <!-- we drop the @syntax attribute -->
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'syntax')]" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+<xsl:template match="latex-image[@syntax='PGtikz']/text()" mode="repair">
+    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:copy>
+                <xsl:apply-templates select="."/>
+            </xsl:copy>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- Identification -->
