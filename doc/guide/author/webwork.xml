@@ -374,22 +374,17 @@
       <subsubsection>
         <title>Using <c>TikZ</c></title>
         <p>
-          In a problem statement (or hint, or solution), you may use an <tag>image</tag> with a <tag>latex-image</tag> child
-          that has <attr>syntax</attr> set to <c>PGtikz</c>. (This requires the <webwork/> server to be version 2.16 or later.)
+          In a problem statement (or hint, or solution), you may use an <tag>image</tag> with a <tag>latex-image</tag> child,
+          as long as the host <webwork/> server is version 2.16 or later.
+          See <xref ref="topic-latex-images"/> for generalities about using <tag>latex-image</tag>.
         </p>
         <p>
-          The content of the <tag>latex-image</tag> should be TikZ code
-          that one might insert inside a <c>\begin{tikzpicture}...\end{tikzpicture}</c>
-          when writing a TeX document.
-          That is, you should not include <c>\begin{tikzpicture}</c> and <c>\end{tikzpicture}</c>
-          in your image code.
+          However, if a <tag>latex-image</tag> is inside a <tag>webwork</tag>,
+          you must use <c>\(...\)</c> instead of <c>$...$</c> to encase any inline math in the image.
+          And if you have display math, that should use <c>\[...\]</c> instead of <c>$$...$$</c>.
         </p>
         <p>
-          You must use <c>\(...\)</c> instead of <c>$...$</c> to encase inline math.
-          And if you have display math in the TikZ image, that should use <c>\[...\]</c> instead of <c>$$...$$</c>.
-        </p>
-        <p>
-          Your image code can use variables that you defined in the <tag>pg-code</tag> section.
+          Your latex-image code can use variables that you defined in the <tag>pg-code</tag> section.
           Scalar variables may be used simply by using their perl names including the dollar sign sigil.
           For example, <c>\draw ($a,$b) -- ($c,$d);</c> where <c>$a</c>, <c>$b</c>, <c>$c</c>, and <c>$d</c> are variables.
           However, any instance of <c>\$</c> in code will be interpreted as an escaped dollar sign first,
@@ -401,35 +396,34 @@
         </p>
         <p>
           In perl, <c>$</c>, <c>@</c>, and <c>%</c> each have special meaning.
-          So you may wonder about using them in your TikZ code.
-          The short answer is that you should use them just as you would use them in a regular <latex/>/TikZ document.
+          So you may wonder about using them in your latex-image code.
+          The short answer is that you should use them just as you would use them in a regular <latex/> document.
           So when you would like a dollar sign, write <c>\$</c>.
           For a percent sign, use <c>\%</c>.
           An <q>at</q> character does not need escaping, so write <c>@</c>.
         </p>
         <p>
-          As mentioned above, <em>do not</em> use a dollar sign for math.
+          As mentioned above, do not use a dollar sign to encase math.
           If you want to put a <latex/> comment in the code,
           you may write it in the usual way like <c>% This is a comment</c>.
         </p>
         <p>
-          Your project's <tag>docinfo</tag> may contain a <tag>latex-image-preamble</tag> element
-          with attribue <attr>syntax</attr> set to <c>PGtikz</c>.
-          If so, all TikZ images inside a <tag>webwork</tag> will load that <tag>latex-image-preamble</tag>
-          so you may control styling and other things globally.
-          However, the host course on the <webwork/> server must first be given some additional attention.
+          Your project's <tag>docinfo</tag> may contain a <tag>latex-image-preamble</tag> element.
+          If so, and if that preamble content should affect the latex-images inside the <tag>webwork</tag>,
+          then you need to get that preamble content up on the <webwork/> host course.
+          In many cases, you will <em>need</em> to get that preamble content up on the host course for the image to even compile.
           See <xref ref="webwork-pg-macros"/>.
         </p>
         <p>
           When the <webwork/> server makes one of these images for the first time,
-          it caches the image. Generally, if you then edit the TikZ source code,
+          it caches the image. Generally, if you then edit the image source code,
           the <webwork/> server will not rebuild the image. So while you are developing an image,
           you may want to put <c>$refreshCachedImages = 1;</c> into your <tag>pg-code</tag>
           for the problem. This will force the <webwork/> server to rebuild the image.
-          Once the image is stable, remove that line from the <tag>pg-code</tag>.
+          <alert>Once the image is stable, remove that line from the <tag>pg-code</tag>.</alert>
           Otherwise every time someone views the image in an embedded interactive HTML exercise,
           the <webwork/> server will rebuild the image. Beyond the extra strain on the server,
-          this will cause a lag for your readers to see the image.
+          this will cause a lag for your readers.
         </p>
         <p>
           See the <webwork/> sample chapter for examples.
