@@ -68,7 +68,7 @@
       <title>Using an Existing <webwork/> Problem</title>
       <p>
         If a problem already exists and is accessible from the hosting course's <c>templates/</c> folder,
-        then you can simply include it as a <attr>source</attr> attribute.
+        then you can try to simply include it as a <attr>source</attr> attribute.
         For example if it is a problem in the Open Problem Library (OPL), then relative to the <c>templates/</c> folder,
         its path is <c>Library/...</c> and you may use:
         <cd>&lt;webwork source="Library/PCC/BasicAlgebra/Exponents/exponentsMultiplication0.pg" /></cd>
@@ -77,6 +77,41 @@
         Or if you have a problem's PG file, you can upload it into the hosting course's <c>templates/local/</c> folder and use it with:
         <cd>&lt;webwork source="local/my_problem.pg" /></cd>
       </p>
+      <warning>
+        <title>Not Every PG Problem is Compatible with <pretext/></title>
+        <p>
+          Some problems that work fine within <webwork/> are not compatible with <pretext/>.
+          Typically, these are exercises that use older PG coding techniques.
+          To be compatible with <pretext/>, all of the macros used by a problem must be updated to give <pretext/> output.
+          We have done this with modern PG macros and macros that are frequently used.
+          But still, not every OPL problem (for example) is compatible with <pretext/>.
+          In some cases, maybe it would be straightforward to train the macros to give <pretext/> output.
+          But in many cases, older macros are not structured well and <pretext/> is all about good structure.
+          So it could be a significant project to retrofit <pretext/> compatibility.
+        </p>
+        <p>
+          If you elect to use a problem that is incompatible with <pretext/> but you don't yet know that,
+          a few things could happen. One is that when you process the problems to gather static representations,
+          you will get an error message that the problem did not return valid XML.
+        </p>
+        <p>
+          Or you might coincidentally get valid XML back, but something is just missing or wrong.
+          There's no automated check for that; you should read the output to check that the problem is complete.
+          We recommend reading your PDF output with hints, answers, and solutions exposed,
+          to be sure you are seeing the static version of the exercise.
+        </p>
+        <p>
+          If there is an incompatible OPL problem that you would really like to use,
+          you have three options:
+          <ul>
+            <li>Author the problem in <pretext/> from scratch as described elsewhere in this section.</li>
+            <li>Edit the code for that OPL problem to use compatible macros.</li>
+            <li>Edit the incompatible macros to be compatible with <pretext/>.</li>
+          </ul>
+          The last two options involve contributing to the OPL and PG repositories on GitHub,
+          so it is more expedient to use the first option.
+        </p>
+      </warning>
     </subsection>
 
     <subsection>
