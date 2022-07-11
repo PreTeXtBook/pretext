@@ -51,8 +51,8 @@
 
         <!-- 
         This initialism specifies the filename of the macro file (WWSC.pl) that 
-        must be present in the WeBWorK server to be able to generate the Pretext 
-        Tikz figures. Make sure this macro file is in your server (a copy is
+        must be present in the WeBWorK server to be able to generate latex-image
+        images. Make sure this macro file is in your server (a copy is
         included in  pg-macros folder), and that the macro filename is changed 
         if the initialism is changed.
         -->
@@ -71,10 +71,6 @@
         </feedback>
 
         <latex-image-preamble>
-            \usepackage{tikz}
-        </latex-image-preamble>
-
-        <latex-image-preamble syntax="PGtikz">
             \usepackage{pgfplots}
             \pgfplotsset{
                 every axis/.append style={
@@ -85,7 +81,6 @@
                 }
             }
         </latex-image-preamble>
-
     </docinfo>
 
     <article xml:id="sample-ww-chapter">
@@ -1192,10 +1187,10 @@
             </p>
             <p>
                 If your <webwork/> server is version 2.16 or later,
-                <webwork/> problems can process TikZ code. Here is an example.
+                <webwork/> problems can process <tag>latex-image</tag> code. Here is an example.
             </p>
             <exercise>
-                <title>A static TikZ graph</title>
+                <title>A static <tag>latex-image</tag> graph</title>
                 <webwork>
                     <pg-code>
                         Context("IntegerFunctions");
@@ -1218,18 +1213,20 @@
                                 the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
                                 to one pair from the 7 orange balls
                             </description>
-                            <latex-image syntax="PGtikz">
-                                \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
-                                \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
-                                \foreach \x in {1,...,6}
-                                    \foreach \y in {1,...,\x}
-                                        \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
-                                \foreach \y in {1,...,7}
-                                    \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
-                                \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
-                                \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
-                                \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
-                                \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
+                                    \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
+                                    \foreach \x in {1,...,6}
+                                        \foreach \y in {1,...,\x}
+                                            \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
+                                    \foreach \y in {1,...,7}
+                                        \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
+                                    \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
+                                    \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
+                                    \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
+                                    \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                         <instruction>
@@ -1243,7 +1240,7 @@
             </exercise>
 
             <exercise>
-                <title>A randomized TikZ graph</title>
+                <title>A randomized <tag>latex-image</tag> graph</title>
                 <introduction>
                     <p>
                         These images may depend on the random seed.
@@ -1265,8 +1262,10 @@
                                 a rectangle whose width is labeled <var name="$b"/> cm
                                 and height is labeled <var name="$b"/> cm
                             </description>
-                            <latex-image syntax="PGtikz">
-                                \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                         <p>
@@ -1277,11 +1276,11 @@
             </exercise>
 
             <exercise>
-                <title>A TikZ graph affected by <tag>latex-image-preamble</tag></title>
+                <title>A <tag>latex-image</tag> graph affected by <tag>latex-image-preamble</tag></title>
                 <introduction>
                     <p>
-                        This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>
-                        with <attr>syntax</attr> set to <c>PGtikz</c>. This exercise has graph styling that is affected by that.
+                        This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>.
+                        This exercise has graph styling that is affected by that.
                     </p>
                 </introduction>
                 <webwork>
@@ -1301,10 +1300,12 @@
                                 the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
                                 <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
                             </description>
-                            <latex-image syntax="PGtikz">
-                                \begin{axis}
-                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
-                                \end{axis}
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \begin{axis}
+                                        \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                    \end{axis}
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                         <p>
@@ -1331,16 +1332,17 @@
                             a printed at sign, and a percent sign used as a comment marker.
                         </p>
                         <image width="50%">
-                            <latex-image syntax="PGtikz">
-                                \node at (0,0) {I need about \$3.50.};
-                                \node at (0,1) {You gotta give 110\%.};  %This is a comment.
-                                \node at (0,2) {Send email user@domain.com.};
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \node at (0,0) {I need about \$3.50.};
+                                    \node at (0,1) {You gotta give 110\%.};  %This is a comment.
+                                    \node at (0,2) {Send email user@domain.com.};
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                     </statement>
                 </webwork>
             </exercise>
-
 
             <!-- TODO: Support for packages, such as pgfplots -->
 
@@ -1364,7 +1366,7 @@
                         $solgr = init_graph(-1,-1,4,4,
                         axes=>[0,0],
                         grid=>[5,5],
-                        size=>[300,300]
+                        size=>[300,180]
                         );
                         add_functions($solgr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                         $solgr->moveTo(0,1);
@@ -2337,6 +2339,53 @@
                     </exercise>
                 </exercisegroup>
             </exercises>
+        </section>
+
+        <section xml:id="section-deprecations">
+            <title>Deprecations</title>
+
+            <p>
+                This section is for testing if deprecated features are still supported
+            </p>
+
+            <exercise>
+                <introduction>
+                    <p>
+                        Once upon a time a <tab>latex-image</tab> inside a <tab>webwork</tab>
+                        needed to have an <attr>syntax</attr> attribute with value <c>PGtikz</c>.
+                        This exercise is here to test that we can still honor such exercises in a project's source.
+                    </p>
+                </introduction>
+                <webwork>
+                    <pg-code>
+                        @roots = (-3..3)[NchooseK(7,3)];
+                        @roots = num_sort(@roots);
+                        $answer = List(@roots);
+                        $xmin = min(-1,@roots)-1;
+                        $xmax = max(1,@roots)+1;
+                        $refreshCachedImages = 1;
+                    </pg-code>
+                    <statement>
+                        <p>
+                            What are the roots of this polynomial?
+                        </p>
+                        <image width="50%">
+                            <description>
+                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
+                                <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
+                            </description>
+                            <latex-image syntax="PGtikz">
+                                \begin{axis}
+                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                \end{axis}
+                            </latex-image>
+                        </image>
+                        <p>
+                            <var name="$answer" width="20"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <backmatter>
