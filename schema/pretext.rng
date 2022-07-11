@@ -1965,9 +1965,6 @@
       </optional>
       <optional>
         <element name="latex-image">
-          <attribute name="syntax">
-            <value>PGtikz</value>
-          </attribute>
           <text/>
         </element>
       </optional>
@@ -3970,11 +3967,6 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="latex-image-preamble">
-      <optional>
-        <attribute name="syntax">
-          <value>PGtikz</value>
-        </attribute>
-      </optional>
       <text/>
     </element>
   </define>

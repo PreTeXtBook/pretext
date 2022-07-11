@@ -1040,6 +1040,23 @@ def webwork_to_xml(
             )
         log.info(msg)
 
+        # If and only if the server is version 2.16, we adjust PG code to use PGtikz.pl
+        # instead of PGlateximage.pl
+        if ww_major_version == 2 and ww_minor_version == 16 and origin[problem] == "ptx":
+            pgdense[problem] = pgdense[problem].replace('PGlateximage.pl','PGtikz.pl')
+            pgdense[problem] = pgdense[problem].replace('createLaTeXImage','createTikZImage')
+            pgdense[problem] = pgdense[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
+            pgdense[problem] = pgdense[problem].replace('END_LATEX_IMAGE','END_TIKZ')
+            pghuman[problem] = pghuman[problem].replace('PGlateximage.pl','PGtikz.pl')
+            pghuman[problem] = pghuman[problem].replace('createLaTeXImage','createTikZImage')
+            pghuman[problem] = pghuman[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
+            pghuman[problem] = pghuman[problem].replace('END_LATEX_IMAGE','END_TIKZ')
+            # We crudely remove tikzpicture environment delimiters
+            pgdense[problem] = pgdense[problem].replace('\\begin{tikzpicture}','')
+            pgdense[problem] = pgdense[problem].replace('\\end{tikzpicture}','')
+            pghuman[problem] = pghuman[problem].replace('\\begin{tikzpicture}','')
+            pghuman[problem] = pghuman[problem].replace('\\end{tikzpicture}','')
+
         # make base64 for PTX problems
         if origin[problem] == "ptx":
             if ww_reps_version == "2":
