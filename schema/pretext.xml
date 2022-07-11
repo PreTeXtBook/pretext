@@ -1596,7 +1596,6 @@
                     attribute decorative {"yes" | "no"}?,
                     element description {(TextShort | WWVariable)*}?,
                     element latex-image {
-                        attribute syntax {"PGtikz"},
                         text
                     }?
                 }
@@ -2398,7 +2397,6 @@
                 }
             Configuration |=
                 element latex-image-preamble {
-                    attribute syntax {"PGtikz"}?,
                     text
                 }
             Configuration |=

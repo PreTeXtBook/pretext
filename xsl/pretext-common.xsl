@@ -10778,6 +10778,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an ad-hoc &quot;stage&quot; element in a scaffolded WeBWorK problem has been replaced by a standard PreTeXt &quot;task&quot; element, so make simple subsitutions.  We will attempt to honor your request'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-07-10  deprecate latex-image with @syntax="PGtikz" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//latex-image[@syntax='PGtikz']" />
+        <xsl:with-param name="date-string" select="'2022-07-10'" />
+        <xsl:with-param name="message" select="'a &quot;latex-image&quot; with &quot;@syntax&quot; attribute set to &quot;PGtikz&quot; is deprecated in favor of a plain &quot;latex-image&quot;.  After removing the attribute, the &quot;latex-image&quot; code needs to be placed inside a &quot;tikzpicture&quot; invironment. Until you make such changes to your source, we will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

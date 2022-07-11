@@ -548,7 +548,7 @@
         <xsl:with-param name="text" select=".//pg-code" />
     </xsl:call-template>
     <!-- if there are latex-image in the problem, put their code here -->
-    <xsl:apply-templates select=".//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
+    <xsl:apply-templates select=".//image[latex-image]" mode="latex-image-code"/>
 </xsl:template>
 
 <!-- default template, for complete presentation -->
@@ -862,10 +862,10 @@
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- when there is a PGtikz graph -->
-        <xsl:if test=".//latex-image[@syntax = 'PGtikz']">
+        <!-- when there is a latex-image graph -->
+        <xsl:if test=".//latex-image">
             <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'PGtikz.pl'"/>
+                <xsl:with-param name="string" select="'PGlateximage.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
@@ -1322,7 +1322,7 @@
     <xsl:value-of select="@name"/>
 </xsl:template>
 
-<xsl:template match="latex-image[@syntax = 'PGtikz']/var" mode="latex-image">
+<xsl:template match="latex-image/var" mode="latex-image">
     <xsl:value-of select="@name" />
 </xsl:template>
 
@@ -1554,7 +1554,7 @@
     <xsl:text>)@]* </xsl:text>
 </xsl:template>
 
-<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="components">
+<xsl:template match="image[latex-image]" mode="components">
     <xsl:variable name="visible-id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
@@ -1593,26 +1593,26 @@
     <xsl:apply-templates select="text()|var"/>
 </xsl:template>
 
-<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code">
+<xsl:template match="image[latex-image]" mode="latex-image-code">
     <xsl:variable name="visible-id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
     <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
     <xsl:value-of select="$pg-name"/>
-    <xsl:text> = createTikZImage();&#xa;</xsl:text>
-    <xsl:if test="$docinfo/latex-image-preamble[@syntax = 'PGtikz']">
+    <xsl:text> = createLaTeXImage();&#xa;</xsl:text>
+    <xsl:if test="$docinfo/latex-image-preamble">
         <xsl:value-of select="$pg-name"/>
         <xsl:text>->addToPreamble(latexImagePreamble());&#xa;</xsl:text>
     </xsl:if>
-    <xsl:variable name="pg-tikz-code">
+    <xsl:variable name="pg-latex-image-code">
         <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
     </xsl:variable>
     <xsl:value-of select="$pg-name"/>
-    <xsl:text>->BEGIN_TIKZ&#xa;</xsl:text>
+    <xsl:text>->BEGIN_LATEX_IMAGE&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="$pg-tikz-code"/>
+        <xsl:with-param name="text" select="$pg-latex-image-code"/>
     </xsl:call-template>
-    <xsl:text>&#xa;END_TIKZ&#xa;</xsl:text>
+    <xsl:text>&#xa;END_LATEX_IMAGE&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="text()" mode="latex-image">
