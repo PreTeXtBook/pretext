@@ -73,18 +73,15 @@
 </xsl:template>
 
 <xsl:template match="book|article" mode="latex-image-preamble">
-    <xsl:if test="$docinfo/latex-image-preamble[@syntax = 'PGtikz']">
+    <xsl:if test="$docinfo/latex-image-preamble">
         <xsl:text># Return a string containing the latex-image-preamble contents.&#xa;</xsl:text>
-        <xsl:text># To be used by TikZImage objects as in:&#xa;</xsl:text>
+        <xsl:text># To be used by LaTeXImage objects as in:&#xa;</xsl:text>
         <xsl:text># $image->addToPreamble(latexImagePreamble())&#xa;</xsl:text>
-        <!-- If PTX latex-image evolves to "know" it is a tikz image, xypic image, etc. -->
-        <!-- then this perl subroutine might evolve to accept an argument identifying   -->
-        <!-- which type of latex-image-preamble to use.                                 -->
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>sub latexImagePreamble {&#xa;</xsl:text>
         <xsl:text>return &lt;&lt;'END_LATEX_IMAGE_PREAMBLE'&#xa;</xsl:text>
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="$docinfo/latex-image-preamble[@syntax = 'PGtikz']" />
+            <xsl:with-param name="text" select="$docinfo/latex-image-preamble" />
         </xsl:call-template>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>END_LATEX_IMAGE_PREAMBLE&#xa;</xsl:text>
