@@ -125,6 +125,7 @@ mini-pdf:
 	install -d $(PDFOUT)
 	$(PTX)/pretext/pretext -vv -c all -f pdf -p $(MINIPUB) -d $(PDFOUT) $(MINI)
 
+
 #########################################################################
 # TeX versions
 # use -x latex.fillin.style box for box answer blanks instead of underlines
@@ -139,6 +140,7 @@ mini-latex:
 	install -d $(TEXOUT)
 	$(PTX)/pretext/pretext -vv -c all -f latex -p $(MINIPUB) -d $(TEXOUT) $(MINI)
 
+
 #########################################################################
 # HTML output
 # Note that for the sample chapter, first we make the latex-image svg.
@@ -148,12 +150,8 @@ mini-latex:
 # or best practice for a real PreTeXt project using WeBWorK problems.
 
 sample-chapter-html:
-	-rm -r $(IMGOUT)
-	install -d $(IMGOUT)
-	$(PTX)/pretext/pretext -vv -c latex-image -f svg -p $(SMPCPUB) -d $(IMGOUT) $(SMPC)
 	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
-	install -d $(WWEXAMPLE)/sample-chapter/generated/latex-image
-	cp $(IMGOUT)/*.svg $(WWEXAMPLE)/sample-chapter/generated/latex-image
+	$(PTX)/pretext/pretext -c latex-image -f svg -p $(SMPCPUB) $(SMPC)
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
 	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x webwork.divisional.static no debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
