@@ -548,6 +548,10 @@
         <xsl:with-param name="text" select=".//pg-code" />
     </xsl:call-template>
     <!-- if there are latex-image in the problem, put their code here -->
+    <!-- introduction images are not needed except for human readable code -->
+    <xsl:if test="$b-human-readable">
+        <xsl:apply-templates select="ancestor::exercisegroup/introduction//image[latex-image]" mode="latex-image-code"/>
+    </xsl:if>
     <xsl:apply-templates select=".//image[latex-image]" mode="latex-image-code"/>
 </xsl:template>
 
@@ -863,7 +867,7 @@
             </xsl:call-template>
         </xsl:if>
         <!-- when there is a latex-image graph -->
-        <xsl:if test=".//latex-image">
+        <xsl:if test=".//latex-image or ($b-human-readable and ancestor::exercisegroup/introduction//latex-image)">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGlateximage.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -1246,7 +1250,7 @@
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
-        <xsl:if test=".//latex-image">
+        <xsl:if test=".//latex-image or ancestor::exercisegroup/introduction//latex-image">
             <xsl:value-of select="$ptx-pg-macros" />
         </xsl:if>
         <xsl:value-of select="$course-macros" />
@@ -1257,7 +1261,7 @@
     </xsl:variable>
     <xsl:value-of select="$load-macros" />
     <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
-    <xsl:if test=".//image[@pg-name] and not($b-human-readable)">
+    <xsl:if test="(.//image[@pg-name] or .//image[latex-image]) and not($b-human-readable)">
         <xsl:text>$refreshCachedImages=1;</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -1555,15 +1559,11 @@
 </xsl:template>
 
 <xsl:template match="image[latex-image]" mode="components">
-    <xsl:variable name="visible-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:text>[@image(insertGraph(</xsl:text>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
     <!-- alt attribute for accessibility -->
@@ -1594,25 +1594,31 @@
 </xsl:template>
 
 <xsl:template match="image[latex-image]" mode="latex-image-code">
-    <xsl:variable name="visible-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text> = createLaTeXImage();&#xa;</xsl:text>
     <xsl:if test="$docinfo/latex-image-preamble">
-        <xsl:value-of select="$pg-name"/>
+        <xsl:apply-templates select="." mode="pg-name"/>
         <xsl:text>->addToPreamble(latexImagePreamble());&#xa;</xsl:text>
     </xsl:if>
     <xsl:variable name="pg-latex-image-code">
         <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
     </xsl:variable>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>->BEGIN_LATEX_IMAGE&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="$pg-latex-image-code"/>
     </xsl:call-template>
     <xsl:text>&#xa;END_LATEX_IMAGE&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="image[latex-image]" mode="pg-name">
+    <xsl:text>$image_</xsl:text>
+    <xsl:number count="image" from="webwork" level="any" />
+</xsl:template>
+
+<xsl:template match="exercisegroup/introduction//image[latex-image]" mode="pg-name">
+    <xsl:text>$introduction_image_</xsl:text>
+    <xsl:number count="image" from="exercisegroup" level="any" />
 </xsl:template>
 
 <xsl:template match="text()" mode="latex-image">
