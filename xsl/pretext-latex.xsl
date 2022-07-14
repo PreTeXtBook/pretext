@@ -11299,6 +11299,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
 </xsl:template>
 
+<!-- A "pubnote", which could contain any publication information -->
+<xsl:template match="biblio[@type='bibtex']/pubnote">
+    <xsl:text> [</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
 <!-- Pages should come last, so put a period.    -->
 <!-- Two forms: @start and @end,                 -->
 <!-- or total number as content (as for a book). -->
