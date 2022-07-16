@@ -25,9 +25,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     %entities;
 ]>
 
+<!-- "pi" necessary to trap "visual" URLs automatically being -->
+<!-- added by "assembly" for with-content "url" elements      -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
@@ -437,6 +440,12 @@ dfn {
     <xsl:apply-templates/>
   </img>
 </xsl:template>
+
+<!-- A "url" with content gets an automatic footnote with the @visual -->
+<!-- attribute value (if non-empty) or a mildly-sanitized version of  -->
+<!-- @href.  This template identifies and kills that special          -->
+<!-- construction, since a slideshow really doesn't need footnotes.   -->
+<xsl:template match="fn[@pi:url]"/>
 
 <!-- Side-By-Side -->
 <!-- Built by implementing two abstract   -->
