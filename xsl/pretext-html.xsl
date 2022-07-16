@@ -11923,6 +11923,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
         <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
+        <!-- tell Runestone components that MathJax is all loaded -->
+        <xsl:text>startup: {&#xa;</xsl:text>
+        <xsl:text>    pageReady() {&#xa;</xsl:text>
+        <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
+        <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
+        <xsl:text>      $(document).trigger("runestone:mathjax-ready");&#xa;</xsl:text>
+        <xsl:text>      }&#xa;</xsl:text>
+        <xsl:text>    )}&#xa;</xsl:text>
+        <xsl:text>},&#xa;</xsl:text>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
             <xsl:text>  options: {&#xa;</xsl:text>
