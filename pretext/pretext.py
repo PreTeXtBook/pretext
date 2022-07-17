@@ -1107,10 +1107,23 @@ def webwork_to_xml(
             pghuman[problem] = pghuman[problem].replace('\\begin{tikzpicture}','')
             pghuman[problem] = pghuman[problem].replace('\\end{tikzpicture}','')
 
+        # The code in pgdense[problem] may have `$refreshCachedImages=1;`
+        # We want to keep this for the code that is sent to the server for static harvesting,
+        # but kill this for the code that is used repeatedly by embedded problems in HTML
+        # So here we branch a copy for embedding where we kill `$refreshCachedImages=1;`
+        # But we can't literally just remove that, since an author may have used something
+        # like `$refreshCachedImages  =  'true' ;` so instead, we change `$refreshCachedImages`
+        # to something inert
+        if origin[problem] == "ptx":
+            embed_problem = re.sub(r'(\$refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
+
         # make base64 for PTX problems
         if origin[problem] == "ptx":
             if ww_reps_version == "2":
                 pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode(
+                    "utf-8"
+                )
+                embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode(
                     "utf-8"
                 )
             elif ww_reps_version == "1":
@@ -1551,7 +1564,7 @@ def webwork_to_xml(
                 if origin[problem] == "server":
                     source_value = source[problem]
                 else:
-                    source_value = pgbase64
+                    source_value = embed_problem_base64
 
             server_data = ET.SubElement(webwork_reps, "server-data")
             server_data.set(source_key, source_value)
