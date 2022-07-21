@@ -602,7 +602,7 @@ def latex_tactile_image_conversion(
     if pub_file:
         stringparams["publisher"] = pub_file
     # Pass the just-created math representation file
-    stringparams["mathfile"] = math_file
+    stringparams["mathfile"] = math_file.replace(os.sep, "/")
     log.info(
         "string parameters passed to label extraction stylesheet: {}".format(
             stringparams
@@ -1975,7 +1975,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 
     msg = "converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})"
     log.debug(msg.format(xml_source, math_representations, liblouis_xml))
-    stringparams["mathfile"] = math_representations
+    stringparams["mathfile"] = math_representations.replace(os.sep, "/")
     # pass in the page format (for messages about graphics, etc.)
     stringparams["page-format"] = page_format
     if pub_file:
@@ -2094,17 +2094,17 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     params = {}
 
     # the EPUB production is parmameterized by how math is produced
-    params["mathfile"] = math_representations
+    params["mathfile"] = math_representations.replace(os.sep, "/")
     # It is convenient for the subsequent XSL to always get a 'speechfile'
     # string parameter.  An empty string seems to not provoke an error,
     # though perhaps the resulting variable is crazy.  We'll just be
     # sure not to access the variable unless making SVG images.
     if math_format == "svg":
-        params["speechfile"] = speech_representations
+        params["speechfile"] = speech_representations.replace(os.sep, "/")
     else:
         params["speechfile"] = ""
     params["math.format"] = math_format
-    params["tmpdir"] = tmp_dir
+    params["tmpdir"] = tmp_dir.replace(os.sep, "/")
     if pub_file:
         params["publisher"] = pub_file
     xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
