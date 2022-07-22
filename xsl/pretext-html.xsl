@@ -12258,9 +12258,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-activate-hypothesis">
         <script type="application/json" class="js-hypothesis-config">
         <xsl:text>{&#xa;</xsl:text>
-        <xsl:text>    "openLoginForm": false;</xsl:text>
-        <xsl:text>    "openSidebar": false;</xsl:text>
-        <xsl:text>    "showHighlights": true;</xsl:text>
+        <xsl:text>    "openSidebar": false,</xsl:text>
+        <xsl:text>    "showHighlights": true,</xsl:text>
         <xsl:text>}</xsl:text>
         </script>
         <script src="https://hypothes.is/embed.js" async=""></script>
