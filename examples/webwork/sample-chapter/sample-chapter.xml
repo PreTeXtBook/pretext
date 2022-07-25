@@ -1323,9 +1323,6 @@
                     </p>
                 </introduction>
                 <webwork>
-                    <pg-code>
-                        $refreshCachedImages = 1;
-                    </pg-code>
                     <statement>
                         <p>
                             The code below has a printed dollar sign, a printed percent sign,
@@ -1401,6 +1398,67 @@
                     </solution>
                 </webwork>
             </exercise>
+
+            <exercises>
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>
+                            This exercisegroup has a <tag>latex-image</tag> image in its introduction.
+                            In standalone versions of the exercise, this image should be repeated.
+                        </p>
+                        <image width="50%">
+                          <latex-image>
+                            \begin{tikzpicture}
+                                \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(L\)} --++ (0,3) node[right,pos=0.5] {\(W\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(D\)} --++ (0,3) --++ (4,0);
+                            \end{tikzpicture}
+                          </latex-image>
+                        </image>
+                    </introduction>
+                    <exercise>
+                        <webwork>
+                            <statement>
+                                <p>
+                                    Find <m>D</m> when <m>L=4</m> and <m>W=3</m>.
+                                </p>
+                                <p>
+                                    <var name="'5'" width="10"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <image>
+                                  <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(4\)} --++ (0,3) node[right,pos=0.5] {\(3\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(5\)} --++ (0,3) --++ (4,0);
+                                    \end{tikzpicture}
+                                  </latex-image>
+                                </image>
+                            </solution>
+                        </webwork>
+                    </exercise>
+                    <exercise>
+                        <webwork>
+                            <statement>
+                                <p>
+                                    Find <m>D</m> when <m>L=12</m> and <m>W=5</m>.
+                                </p>
+                                <p>
+                                    <var name="'13'" width="10"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <image>
+                                  <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(12\)} --++ (0,3) node[right,pos=0.5] {\(5\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(13\)} --++ (0,3) --++ (4,0);
+                                    \end{tikzpicture}
+                                  </latex-image>
+                                </image>
+                            </solution>
+                        </webwork>
+                    </exercise>
+                </exercisegroup>
+            </exercises>
+
         </section>
 
         <section>
@@ -2363,7 +2421,6 @@
                         $answer = List(@roots);
                         $xmin = min(-1,@roots)-1;
                         $xmax = max(1,@roots)+1;
-                        $refreshCachedImages = 1;
                     </pg-code>
                     <statement>
                         <p>
