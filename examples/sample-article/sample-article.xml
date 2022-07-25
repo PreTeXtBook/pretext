@@ -4291,12 +4291,12 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
 
                 <biblio type="bibtex" xml:id="CF">
-                <author>J. B. Conrey and D. W. Farmer</author>
-                <title>Mean values of <m>L</m>-functions and symmetry</title>
-                <journal>Internat. Math. Res. Notices</journal>
-                <number>17</number>
-                <year>2000</year>
-                <pages start="883" end="908"/>
+                    <author>J. B. Conrey and D. W. Farmer</author>
+                    <title>Mean values of <m>L</m>-functions and symmetry</title>
+                    <journal>Internat. Math. Res. Notices</journal>
+                    <number>17</number>
+                    <year>2000</year>
+                    <pages start="883" end="908"/>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
@@ -4304,13 +4304,13 @@ the xsltproc executable.
                 </biblio>
 
                 <biblio type="bibtex" xml:id="Dav">
-                <author>H. Davenport</author>
-                <title>Multiplicative Number Theory</title>
-                <series>GTM</series>
-                <volume>74</volume>
-                <publisher>Springer-Verlag New York, NY</publisher>
-                <year>2000</year>
-                <pages>xiv+177</pages>
+                    <author>H. Davenport</author>
+                    <title>Multiplicative Number Theory</title>
+                    <series>GTM</series>
+                    <volume>74</volume>
+                    <publisher>Springer-Verlag New York, NY</publisher>
+                    <year>2000</year>
+                    <pages>xiv+177</pages>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
