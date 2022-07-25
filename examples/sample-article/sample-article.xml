@@ -4311,6 +4311,7 @@ the xsltproc executable.
                     <publisher>Springer-Verlag New York, NY</publisher>
                     <year>2000</year>
                     <pages>xiv+177</pages>
+                    <pubnote>A note may accompany a bibliographic item, such as saying the manuscript is under review.  But it cannot contain any formatting.</pubnote>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
