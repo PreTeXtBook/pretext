@@ -10784,6 +10784,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-07-10'" />
         <xsl:with-param name="message" select="'a &quot;latex-image&quot; with &quot;@syntax&quot; attribute set to &quot;PGtikz&quot; is deprecated in favor of a plain &quot;latex-image&quot;.  After removing the attribute, the &quot;latex-image&quot; code needs to be placed inside a &quot;tikzpicture&quot; environment. Until you make such changes to your source, we will attempt to honor your request'"/>
     </xsl:call-template>
+    <!-- 2022-07-25  warn of impending Wolfram CDF deprecation -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//interactive[@wolfram-cdf]" />
+        <xsl:with-param name="date-string" select="'2022-07-25'" />
+        <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; is slated to be removed soon.  Post on the &quot;pretext-support&quot; Google Group if this is an issue for your project'"/>
+    </xsl:call-template>
     <!--  -->
 </xsl:template>
 
