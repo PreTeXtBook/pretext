@@ -4,6 +4,6 @@ These "cheat sheets" are in the style of similar quick reference sheets pioneere
 
 * `quickref-pretext.tex`: general authoring techniques, initiated by Tom Judson
 
-Authored in LaTeX, given their structure, which would not be well-represented in PreTeXt.  Built PDF versions are available on tne PreTeXt website.
+Authored in LaTeX, given their structure, which would not be well-represented in PreTeXt.  Built PDF versions are available on the PreTeXt website.  If you build your own copies while editing, use `xelatex`, not `pdflatex`.
 
 Extensions, edits, and reorganization are all welcome contributions.  Topics represented by additional quickrefs would also be welcome.
