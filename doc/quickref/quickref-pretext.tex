@@ -1,0 +1,367 @@
+% Sage CLI Quick Reference
+% (c) 2022 by Thomas W.\ Judson,
+% Licensed with the GNU Free Documentation License (GFDL)
+%   http://www.gnu.org/copyleft/fdl.html
+%
+%  History
+%
+%    2012-06-15  Initial version based on Sage 9.4
+%
+%
+\documentclass{article}
+\usepackage{graphicx}  
+\usepackage[landscape]{geometry}
+\usepackage[pdftex]{color}
+\usepackage{url}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{textcomp}
+\newcommand{\ex}{\color{blue}}
+\newcommand{\apost}{\textquotesingle}
+\newcommand{\warn}{\bf\color{red}}
+\pagestyle{empty}
+\advance\topmargin-.9in
+\advance\textheight2in
+\advance\textwidth3.0in
+\advance\oddsidemargin-1.45in
+\advance\evensidemargin-1.45in
+\parindent0pt
+\parskip2pt
+% Section break, dictates column widths?
+\newcommand{\hr}{\centerline{\rule{3.5in}{1pt}}}
+% Adjust gap to affect spacing, page count
+\newcommand{\sect}[1]{\hr\par\vspace*{2pt}\textbf{#1}\par}
+% Mandatory indentation on subsidiary lines
+\newcommand{\skipin}{\hspace*{12pt}}
+% notation shortcut
+\newcommand{\Z}{\mathbb{Z}}
+
+\begin{document}
+\begin{multicols*}{3}
+\begin{center}
+\textbf{PreTeXt Quick Reference}\\
+Version 1.0 \\
+T.\ W.\ Judson and others??? \\
+GNU Free Document License, extend for your own use. \\
+For more details, see \url{https://pretextbook.org/doc/guide/html/}
+\end{center}
+% backup over center environment gap
+\vspace{-2ex}
+%*********************************************
+\sect{PreTeXt Documents}
+For an article
+\footnotesize{
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<pretext>
+  <article>
+    <title>Hello World!</title>
+    <p>This is a PreTeXt document.</p>
+  </article>
+</pretext>
+\end{verbatim}
+or a book
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<pretext>
+  <book>
+    <title>Hello World!</title>
+    
+    <chapter>
+    	<title>My Great Chapter</title>
+    	<p>This is a PreTeXt document.</p>
+   </chapter>
+   
+  </book>
+</pretext>
+\end{verbatim}
+}
+%
+
+\sect{Structure of a PreTeXt Document}
+
+PreTeXt documents are structured and may contain divisions such as \texttt{<chapter>} (for books), \texttt{<section>}, \texttt{<subsection>}, and \texttt{<p>} (paragraphs).
+
+{\footnotesize
+\begin{verbatim}
+<section>
+  <title>Mandatory</title>
+  <p>First paragraph. </p>
+
+  <p>Second paragraph.</p>
+</section>
+\end{verbatim}
+}
+
+Divisions may contain other divisions. Divisions require a \texttt{<title>}.
+
+{\footnotesize
+\begin{verbatim}
+<section>
+  <title>Mandatory</title>
+  <introduction>
+    <p>Introductory text. (Optional.)</p>
+  </introduction>
+
+  <subsection>
+    <title>Mandatory</title>
+    <p>Subsection content.</p>
+  </subsection>
+
+  <conclusion>
+    <p>Concluding text. (Optional.)</p>
+  </conclusion>
+</section>
+\end{verbatim}
+}
+%*********************************************
+%*********************************************
+\sect{Blocks}
+
+Besides paragraphs (\texttt{<p>}) the most common object to include in a division, 
+ \texttt{<remark>},  \texttt{<example>}, \texttt{<figure>} and \texttt{<table>}.
+ 
+ \sect{Cross-References}
+
+Any element that you place a \texttt{@xml:id} on can become the target of a cross-reference. For example, suppose your source had \texttt{<subsection xml:id="subsection-flowers">} and someplace else you wrote \texttt{<xref ref="subsection-flowers" />}.
+
+\sect{Mathematics in PreTeXt}
+
+
+Since PreTeXt has robust support for mathematical formulas. Inside the tags that delimit math environments, your code is basically \LaTeX\, with the caveat that you must be careful with \texttt{<}, \texttt{>}, and \texttt{\&} since they are special symbols for XML.  When typing math in your PreTeXt code, use \texttt{\textbackslash{lt}} for  \texttt{<}, \texttt{\textbackslash{gt}} for  \texttt{>}, and \texttt{\textbackslash{amp}} for  \texttt{\&}.
+
+For inline math, wrap things in the \texttt{<m>} tag: $a^2 + b^2 = c^2$ is 
+produced by \texttt{<m>a\^{}2 + b\^{}2 = c\^{}2</m>}.
+
+
+
+We get displayed equations via the \texttt{<me>} and \texttt{<men>}. (to produce a numbered equation) tags.  The code
+{\footnotesize
+\begin{verbatim}
+<me>
+   \frac{d}{dx} \int_1^x \frac{1}{t}\, dt 
+</me>
+<men xml:id="eqn-ftc">
+  \int_a^b f(x)\, dx = F(b) - F(a)
+</men>
+\end{verbatim}
+}
+produces
+\[
+ \frac{d}{dx} \int_1^x \frac{1}{t}\, dt 
+ \]
+ \begin{equation}
+ \int_a^b f(x)\, dx = F(b) - F(a)
+ \end{equation}
+
+For a collection of equations all aligned at a designated point, use \texttt{<md>} and \texttt{<mrow>} (\texttt{<mdn>} for numbered equations.). The code
+\begin{verbatim}
+  <md>
+    <mrow>x \amp = r\cos\theta</mrow>
+    <mrow>y \amp = r\sin\theta</mrow>
+  </md>
+  \end{verbatim}
+  produces
+  \begin{align*}
+   x & = r\cos\theta \\
+   y & = r\sin\theta.
+  \end{align*}
+
+
+\sect{Images, Figures, sidebyside}
+
+Images can be included using the \texttt{<image>} tag with the \texttt{@source}.  The \texttt{@width} attribute can be used to control the size of the image.  Images can be wrapped inside a \texttt{<figure>}. A \texttt{<figure>} must have a \texttt{<caption>}, and the figure will be numbered.
+The \texttt{<sidebyside>} tag provides flexible options for placing several images together or combining figures with subcaptions.
+ PreTeXt provides support for authoring with graphics languages such as Asymptote, TikZ, PGF, PSTricks, and xy-pic in addition to using Sage code to describe a plot or image. In most cases output can be obtained as smoothly-scalable SVG images, in addition to other formats like PDF or PNG. For accessibility, every \texttt{<image>} should either have a \texttt{<description>} child.
+{ \footnotesize
+ \begin{verbatim}
+<figure xml:id="figure-spring-mass">
+  <image width="60\%" xml:id="spring-mass">
+    <description>a mass on a table that is
+       attached to a wall with a spring</description>
+     <latex-image>
+       <xi:include href="tikz/spring-mass.tex"  
+         parse="text"/>
+      </latex-image>
+  </image>
+   <caption>A spring-mass system</caption>
+</figure>
+\end{verbatim}
+}
+ %*********************************************
+\sect{Lists}
+
+The structure of ordered lists (numbered), unordered lists (bullets) and description lists (defined terms) is given by the \texttt{<ol>}, \texttt{<ul>}, \texttt{<dl>} tags (respectively). List items are delimited with the \texttt{<li>} tag.
+
+%*********************************************
+\sect{Theorem-Like Elements}
+
+The tags \texttt{<theorem>}, \texttt{<algorithm>}, \texttt{<claim>}, \texttt{<corollary>}, \texttt{<fact>}, \texttt{<identity>}, \texttt{<lemma>}, and \texttt{<proposition>} have the same structure in PreTeXt.
+ {\footnotesize
+ \begin{verbatim}
+<theorem>
+    <title>Optional</title>
+  <statement>
+    <p>Here's the statement of the theorem.</p>
+  </statement>
+
+  <proof>
+    <p>You don't actually need a proof.</p>
+  </proof>
+</theorem>
+\end{verbatim}
+}
+
+\sect{Example-Like Elements}
+
+The tags \texttt{<example>}, \texttt{<problem>}, and \texttt{<question>} have the same structure in PreTeXt.
+ {\footnotesize
+ \begin{verbatim}
+<example>
+  <title>Differentiating a polynomial</title>
+  <p>The derivative of the function
+  <m>f(x) = 3x^5-7x+5</m> is <m>f'(x) = 15x^4-7</m>.</p>
+</example>
+\end{verbatim}
+}
+
+
+\sect{Axiom-Like Elements}
+
+The tags \texttt{<assumption>}, \texttt{<axiom>}, \texttt{<conjecture>}, \texttt{<heuristic>}, \texttt{<hypothesis>}, and \texttt{<principle>} have the same structure in PreTeXt.
+ {\footnotesize
+ \begin{verbatim}
+<axiom>
+    <title>Optional</title>
+    <creator>Peano</creator>
+  <statement>
+    <p>Here's the statement of the axiom.</p>
+  </statement>
+</axiom>
+\end{verbatim}
+}
+
+\sect{Remark-Like Elements}
+
+The tags \texttt{<convention>}, \texttt{<insight>}, \texttt{<note>}, \texttt{<observation>}, \texttt{<remark>}, and \texttt{<warning>} have the same structure in PreTeXt.
+ {\footnotesize
+ \begin{verbatim}
+<remark>
+  <title>A little remark</title>
+  <p>This is a remark.</p>
+</remark>
+\end{verbatim}
+}
+
+
+
+ \hr\textbf{Project-Like Elements}
+
+
+The tags \texttt{<activity>}, \texttt{<exploration>}, \texttt{<investigation>}, and \texttt{<project>} have the same structure in PreTeXt.
+ {\footnotesize
+ \begin{verbatim}
+<project>
+  <title>A structured project</title>
+  <introduction>
+    <p>Here is the introduction.</p>
+  </introduction>
+
+  <task>
+    <statement>
+      <p>The first step to do.</p>
+    </statement>
+  </task>
+
+  <task>
+    <statement>
+      <p>The second step to do.</p>
+    </statement>
+  </task>
+
+  <conclusion>
+    <p>A little wrap up.</p>
+  </conclusion>
+</project>
+\end{verbatim}
+}
+
+
+ \sect{Exercises}
+ 
+An \texttt{<exercise>} in the middle of a division, intermixed between theorems and paragraphs and figures. In this case, it is labeled as a ``Checkpoint.''  You can put several \texttt{<exercise>}s as part of an \texttt{<exercises>} element within a division, which is the typical way for creating a collection of exercises together at the end of a division such as a chapter or section.  An \texttt{<exercisegroup>} can group together a collection of exercises that have a set of common instructions.  A specialized division, \texttt{<reading-questions>}, can be used to house \texttt{<exercise>}s designed to test or guide a reader's comprehension of the material in that division.  It is possible to embed WeBWorK exercises into a PreTeXt document
+
+An \texttt{<exercise>} has the following structure.
+ {\footnotesize
+ \begin{verbatim}
+<exercise>
+  <statement>
+    <p>The <c>statement</c> is mandatory.</p>
+  </statement>
+  <hint>
+    <p>Optional.</p>
+  </hint>
+  <answer>
+    <p>Optional.</p>
+  </answer>
+  <solution>
+    <p>Optional.</p>
+  </solution>
+</exercise>
+\end{verbatim}
+}
+
+\sect{Worksheets}
+
+A \texttt{<worksheet>} is a specialized division that can be a child of most divisions and can contain most PreTeXt tags.
+
+\sect{Tables}
+
+Similar to \LaTeX\, PreTeXt provides a \texttt{<table>} tag and a \texttt{<tabular>} tag. The \texttt{<tabular>} tag is used for producing the array of data, while the \texttt{<table>} tag provides the number and title.
+
+%*********************************************
+
+%*********************************************
+ \hr\textbf{SageMath Content}
+
+A SageMath cell can be included in a PreTeXt document.
+
+ {\footnotesize
+ \begin{verbatim}
+<sage>
+<input>
+2+2
+</input>
+<output>
+4
+</output>
+</sage>
+\end{verbatim}
+}
+
+SageMath can be used to created an image in a PreTeXt document.
+
+ {\footnotesize
+ \begin{verbatim}
+<figure xml:id="fig-sage-cubic">
+  <caption>A cubic plotted by SageMath on
+  <m>[-3,2]</m></caption>
+  <image xml:id="sageplot-cubic" width="50%">
+    <description>A cubic function on the interval
+    [-3,2]</description>
+
+    <sageplot>
+     f(x) = (x-1)*(x+1)*(x-2)
+     plot(f, (x, -3, 2), color='blue', thickness=3)
+    </sageplot>
+  </image>
+</figure>
+\end{verbatim}
+}
+
+
+
+\end{multicols*}
+
+\end{document}
