@@ -130,6 +130,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These are *significant*, *intentional* source elements requiring a monospace font   -->
 <!-- (and not incindentals like an email address which could just be the default tt font -->
 <xsl:variable name="b-needs-mono-font" select="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr"/>
+<xsl:variable name="b-has-long-tabular" select="boolean($document-root//notation-list|$document-root//list-of|$document-root//tabular[@break='yes'])" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -1772,8 +1773,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists are built as "longtable" so they span multiple pages    -->
     <!-- and get "continuation" footers, for example.  It is the       -->
     <!-- "list generator" element which provokes the package inclusion -->
-    <xsl:if test="$document-root//notation-list|$document-root//list-of">
-        <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
+    <!-- An author can elect breakable "tabular" as well                -->
+    <xsl:if test="$b-has-long-tabular">
+        <xsl:text>%% Package for tables (potentially) spanning multiple pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
     <!-- This is the place to add part numbers to the numbering, which   -->
@@ -3352,8 +3354,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, fontlower=\blocktitlefont</xsl:text>
 </xsl:template>
 
+<!-- This style is "breakable" to allow for "tabular" realized as "longtable". -->
+<!-- Normally a table will not break at all, so the breakability of the        -->
+<!-- tcolorbox is not really relevant.  This is in lieu of trying to make      -->
+<!-- a special-case style within the confines of the semi-elaborate process    -->
+<!-- of naming/using styles. -->
 <xsl:template match="table" mode="tcb-style">
-    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt, fonttitle=\blocktitlefont</xsl:text>
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt, fonttitle=\blocktitlefont, breakable</xsl:text>
 </xsl:template>
 
 <!-- "list" contents are breakable, so we rub out annoying faint lines -->
@@ -9498,6 +9505,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- set environment based on breakability -->
+    <xsl:variable name="tabular-environment">
+        <xsl:choose>
+            <xsl:when test="@break = 'yes'">
+                <xsl:text>longtable</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>tabular</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- get a newline if inside a "stack" -->
     <xsl:if test="parent::stack and preceding-sibling::*">
         <xsl:text>\par&#xa;</xsl:text>
@@ -9517,7 +9535,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--   vertical borders (left side, right side, three widths) -->
     <!--   horizontal alignment (left, center, right)             -->
     <xsl:text>{\tabularfont%&#xa;</xsl:text>
-    <xsl:text>\begin{tabular}{</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$tabular-environment"/>
+    <xsl:text>}{</xsl:text>
     <!-- start with left vertical border -->
     <xsl:call-template name="vrule-specification">
         <xsl:with-param name="width" select="$table-left" />
@@ -9623,7 +9643,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-valign" select="$table-valign" />
     </xsl:apply-templates>
     <!-- mandatory finish, exclusive of any final row specifications -->
-    <xsl:text>\end{tabular}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$tabular-environment"/>
+    <xsl:text>}&#xa;</xsl:text>
     <!-- finish grouping for tabular font -->
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
