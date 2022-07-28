@@ -3236,6 +3236,15 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             A paragraph cell can be right-justified with the <attr>halign</attr> attribute set to <c>justify</c>.  But be aware that if the column is skinny, this can lead to awkward inter-word spaces.</p>
         </subsection>
 
+        <subsection>
+            <title>Breakable Tabulars</title>
+            <idx><h>table</h><h>breakable</h></idx>
+            <idx><h>tabular</h><h>breakable</h></idx>
+
+            <p>A <tag>tabular</tag> may be specified as <term>breakable</term>, inside of a <tag>table</tag> or not.  Use the attribute <attr>break</attr> set to <c>yes</c>.  (The default is <c>no</c>.)  This only affects conversions to formats with page breaks, such as <init>PDF</init>.  Usually the motivation will be a <tag>table</tag> or <tag>tabular</tag> that is too long for a page, but even a shorter table can be allowed to page break.</p>
+
+            <p>As of 2022-07-28 this is effective for simple tables, but introduces some variations for more complex constructions.  This is implemented with the <latex/> <c>longtable</c> package, which suggests it may take up to four passes with <latex/> to obtain the final version.  It is also not effective for a <tag>tabular</tag> that is a side-by-side panel.  Consult the sample article for examples where more progress is necessary.</p>
+        </subsection>
 
         <subsection>
             <title>Table Philosophy</title>
