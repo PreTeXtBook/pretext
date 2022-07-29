@@ -212,6 +212,16 @@
         </li>
 
         <li>
+            <title>I'd like to keep using <latex/> markup for mathematics, in other words, $<ellipsis/>$ and \[<ellipsis/>\]</title>
+
+            <p>If you <em>were</em> somehow able to mix-in a dollar sign into your <pretext/> document, how would you then write <q>The bus ride cost me $2.50</q>?  The <latex/> solution, <c>\$</c>, is not going to help you.  It is a shortcoming of <tex/> that so many characters have special meanings in certain circumstances.</p>
+
+            <p>If you insist, you can still author using $<ellipsis/>$ and \[<ellipsis/>\], and before processing do a global search-and-replace.  But converting a leading <c>$</c> to <c>&lt;m&gt;</c> and a trailing <c>$</c> to <c>&lt;/m&gt;</c> will drive you mad unless you are really good with regular expressions.  So perhaps better to use <c>\(</c> and <c>\)</c> for inline mathematics and search-and-replace will go better.  I count six keypresses for that, including the shifts for the parentheses, while it just takes me seven keypresses for the PreTeXt <tag>m</tag> element, when I use an editor that auto-completes elements with a two-key combination.</p>
+
+            <p>We realize change is hard<mdash/>we used <latex/> for thirty years.  But we believe the long-term advantages of <pretext/> markup are worth the short-term rearrangements.</p>
+        </li>
+
+        <li>
             <title>Why not <latex/>?  Why <pretext/>?</title>
             <p><tex/> was first released in 1978.  There was no Internet, no <init>HTML</init>, no Unicode, and no YouTube.  There have been many attempts to convert <tex/>/<latex/> to more modern document formats.  They are not hard to find<mdash/>none is satisfactory.  We know because we have spent many years trying to adapt them to our purposes.</p>
 
