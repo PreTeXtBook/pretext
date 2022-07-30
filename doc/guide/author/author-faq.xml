@@ -227,7 +227,7 @@
 
             <p>Many laud <latex/> for its ability to separate content from presentation.  The key word is <em>ability</em>.  It is possible to use <latex/> in a purely semantic way.  But it very rarely happens in practice.  And we suspect that when it does, the result looks much like <init>XML</init> anyway, such as the use of many <c>\begin{}/\end{}</c> pairs.  <latex/> allows authors enough freedom that it is impossible to accurately discern intent in a totally automated way.</p>
 
-            <p>By contrast, an <init>XML</init> vocabulary defined by a schema (i.e. <pretext/>) forces authors to communicate intent and denies authors the opportunity to micro-manage presentation.  The result is automated conversions to many useful output formats with no extra effort from the author, including future conversions to formats not yet imagined.  And <init>XSL</init>, once understood, is a robust and powerful tool for the sorts of text-manipulation tasks necessary.</p>
+            <p>By contrast, an <init>XML</init> vocabulary defined by a schema (i.e.<nbsp/><pretext/>) forces authors to communicate intent and denies authors the opportunity to micro-manage presentation.  The result is automated conversions to many useful output formats with no extra effort from the author, including future conversions to formats not yet imagined.  And <init>XSL</init>, once understood, is a robust and powerful tool for the sorts of text-manipulation tasks necessary.</p>
         </li>
 
         <li>
@@ -266,13 +266,13 @@
         </li>
 
         <li>
-          <title>I would like to use a standard package in my Sage code.</title>
+          <title>I would like to use a standard package in my Sage code</title>
 
           <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
         </li>
 
         <li>
-          <title>I would like to use a (large) data file in my Sage code.</title>
+          <title>I would like to use a (large) data file in my Sage code</title>
 
           <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
         </li>
