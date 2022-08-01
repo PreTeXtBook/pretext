@@ -130,37 +130,47 @@
         </console>
 
         <p>
-          Now we build an HTML version with the following command:
+          Now we build a version for the web (HTML) with the following command:
         </p>
 
         <console>
-          <input>pretext build html -d</input>
+          <input>pretext build web</input>
         </console>
 
-        <p>
-          The <c>-d</c> flag tells <pretext /> to generate any images described in the source.  After doing this once, you can omit the <c>-d</c>, unless you modify the code for one of the images described in the source.
-        </p>
+        <remark>
+          <p>
+            <pretext /> can generate a wide variety of images and other assets, <em>if</em> you have appropriate software (such as SageMath, Asymptote, <latex />) installed.  To try this, in the file <c>source/main.ptx</c> follow the instructions to uncomment the line <c>&lt;xi:include href="./ch_generate.ptx"/&gt;</c>, and use the command <c>pretext build -g all</c>.
+          </p>
+
+          <p>
+            The <c>-g</c> flag tells <pretext /> to generate any images described in the source, and <c>all</c> says to try all types of assets.  After doing this once, you can omit the <c>-g</c>, unless you modify the code for one of the images described in the source.
+          </p>
+        </remark>
 
         <p>
-          Finally, we can view the results of our conversion using this command:
+          Finally, we can view the results of our conversion using this command, which starts up a simple web server so we can see all content:
         </p>
 
         <console>
-          <input>pretext view html</input>
+          <input>pretext view web</input>
         </console>
 
         <p>
-          The output from this command will give a url to click on that should show you to html output.
+          The output from this command will give a url to click on or copy that should show you the web output.
         </p>
 
         <p>
-          To build and then view a PDF, you would enter the following two lines:
+          To build and then view something suitable for print (PDF), you would enter the following two lines:
         </p>
 
         <console>
-          <input>pretext build pdf</input>
-          <input>pretext view pdf</input>
+          <input>pretext build print</input>
+          <input>pretext view print</input>
         </console>
+
+        <p>
+          This will once again give a web link for the print version.  For this introductory example, you can also directly open the file located at <c>output/print/main.pdf</c>
+        </p>
       </paragraphs>
 
       <paragraphs>
