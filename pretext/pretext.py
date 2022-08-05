@@ -1689,26 +1689,30 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Interior asynchronous routine to manage the Chromium
     # headless browser and snapshot the desired iframe
-    async def snapshot(input_page, fragment, out_file):
+    async def snapshot(input_page, interactives):
 
-        # input_page: the "standalone" page of the interactive
-        #             hosted at the base URL
-        # fragement:  the hash/fragement identifier of the iframe
-        # out_file:   resulting image file in scratch directory
-
-        # the "standalone" page has one "iframe" known by
-        # the HTML id coming in here as "fragment"
-        xpath = "//iframe[@id='{}'][1]".format(fragment)
+        # input_page:    the "standalone" page of the interactive
+        #                hosted at the base URL
+        # interactives:  list of hash/fragment identifiers of the iframes
 
         browser = await pyppeteer.launch()
         page = await browser.newPage()
         await page.goto(input_page)
-        await page.waitForXPath(xpath);
-        # wait again, 5 seconds, for more than just splash screens, etc
-        await page.waitFor(5000)
-        # list of locations, need first (and only) one
-        elt = await page.xpath(xpath);
-        await elt[0].screenshot({'path': out_file})
+        # wait 20 seconds for page load
+        await page.waitFor(20*1000)
+
+        for interactive in interactives:
+            # progress report
+            out_file = interactive + "-preview.png"
+            msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
+            log.info(msg.format(interactive, input_page, out_file))
+            # the "standalone" page has one "iframe" known by
+            # the HTML id coming in here as "interactive"
+            xpath = "//iframe[@id='{}'][1]".format(interactive)
+            await page.waitForXPath(xpath)
+            # list of locations, need first (and only) one
+            elt = await page.xpath(xpath)
+            await elt[0].screenshot({'path': out_file})
         await browser.close()
     # End of interior routine
 
@@ -1731,37 +1735,27 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.debug("Interactives id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
 
-    # "run" an assignment for the list of problem numbers
-    id_file = open(id_filename, "r")
     # read lines, skipping blank lines
-    interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
+    with open(id_filename,"r") as id_file:
+        interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
-    # Cheating a bit, base URL is *always* first item
-    # Presumed to not have a trailing slash
-    # Once this is a publisher option, then the xsltproc
-    # call will need to accept the override as a stringparam
-    baseurl = interactives[0]
+    # FIXME this should be an HTML page with all iframes for all interactives build by xslt
+    # FIXME no seriously some XSLT magic needs to go here
+    input_page = "file://foo/bar/FIXME.html"
 
     # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
     # TODO: just write to "dest_dir"?
     owd = os.getcwd()
     os.chdir(tmp_dir)
-
-    # Start after the leading base URL sneakiness
-    for preview in interactives[1:]:
-        # parameters
-        input_page = os.path.join(baseurl, preview + ".html")
-        filename = preview + "-preview.png"
-        # progress report
-        msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
-        log.info(msg.format(preview, input_page, filename))
+    try:
         # event loop and copy
-        asyncio.get_event_loop().run_until_complete(snapshot(input_page, preview, filename))
-        shutil.copy2(filename, dest_dir)
-
-    # restore working directory
-    os.chdir(owd)
+        asyncio.get_event_loop().run_until_complete(snapshot(input_page, interactives))
+        for interactive in interactives:
+            shutil.copy2(interactive + "-preview.png", dest_dir)
+    finally:
+        # restore working directory
+        os.chdir(owd)
 
 
 ############
