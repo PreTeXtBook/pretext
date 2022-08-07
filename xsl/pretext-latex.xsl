@@ -7571,20 +7571,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="interactive[@wolfram-cdf]" mode="static-caption">
-    <xsl:choose>
-        <!-- author-supplied override -->
-        <xsl:when test="caption">
-            <xsl:apply-templates select="caption" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\mono{www.wolframcloud.com/objects/</xsl:text>
-            <xsl:value-of select="@wolfram-cdf"/>
-            <xsl:text>}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Nothing automatic to say about non-server interactives -->
 <xsl:template match="interactive" mode="static-caption">
     <xsl:choose>
