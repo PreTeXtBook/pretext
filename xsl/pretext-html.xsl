@@ -9626,20 +9626,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
-<!-- Wolfram Computable Document Format -->
-<!-- Just mildly more involved than the Desmos case                                              -->
-<!-- https://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html              -->
-<!-- More for MMA origination, but discusses "cloud credits"                                     -->
-<!-- https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html -->
-<!-- https://www.wolfram.com/cloud-credits/                                                      -->
-<xsl:template match="interactive[@wolfram-cdf]" mode="iframe-interactive">
-    <!-- Query string option: _embed=iframe will provide Wolfram footer -->
-    <iframe src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless">
-        <xsl:apply-templates select="." mode="iframe-id"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
-    </iframe>
-</xsl:template>
-
 <!-- Geogebra -->
 <!-- Similar again, but with options fixed -->
 <xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
@@ -9758,7 +9744,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf|@iframe]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
