@@ -10790,6 +10790,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-07-25'" />
         <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; is slated to be removed soon.  Post on the &quot;pretext-support&quot; Google Group if this is an issue for your project'"/>
     </xsl:call-template>
+    <!-- 2022-08-07  Wolfram CDF deprecation -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//interactive[@wolfram-cdf]" />
+        <xsl:with-param name="date-string" select="'2022-08-07'" />
+        <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; has been removed'"/>
+    </xsl:call-template>
     <!--  -->
 </xsl:template>
 
