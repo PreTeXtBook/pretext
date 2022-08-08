@@ -10090,51 +10090,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- @source attribute to multiple script tags -->
 <xsl:template match="interactive[@platform]/@source">
-    <xsl:call-template name="one-script">
-        <xsl:with-param name="token-list">
-            <xsl:call-template name="prepare-token-list">
-                <xsl:with-param name="token-list" select="." />
-            </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- A recursive template to create a script tag for each JS file -->
-<xsl:template name="one-script">
-    <xsl:param name="token-list" />
-    <xsl:choose>
-        <xsl:when test="$token-list = ''" />
-        <xsl:otherwise>
-            <script>
-                <!-- this is a hack to allow for local files and network resources,   -->
-                <!-- with or without managed directories.  There should be a separate -->
-                <!-- attribute like an @href used for audio and video, and then any   -->
-                <!-- "http"-leading string should be flagged as a deprecation         -->
-                <xsl:variable name="location">
-                    <xsl:variable name="raw-location" select="substring-before($token-list, ' ')"/>
-                    <xsl:choose>
-                        <xsl:when test="substring($raw-location,1,4) = 'http'">
-                            <xsl:value-of select="$raw-location"/>
-                        </xsl:when>
-                        <xsl:when test="not($b-managed-directories)">
-                            <xsl:value-of select="$raw-location"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- empty when not using managed directories -->
-                            <xsl:value-of select="$external-directory"/>
-                            <xsl:value-of select="$raw-location"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+    <xsl:variable name="scripts" select="str:tokenize(., ', ')"/>
+    <!-- $scripts is a collection of "token" and does not have -->
+    <!-- a root, which implies the form of the "for-each"      -->
+    <xsl:for-each select="$scripts">
+        <!-- create a script tag for each JS file -->
+        <script>
+            <!-- this is a hack to allow for local files and network resources,   -->
+            <!-- with or without managed directories.  There should be a separate -->
+            <!-- attribute like an @href used for audio and video, and then any   -->
+            <!-- "http"-leading string should be flagged as a deprecation         -->
+            <xsl:variable name="location">
+                <xsl:variable name="raw-location">
+                    <xsl:value-of select="."/>
                 </xsl:variable>
-                <xsl:attribute name="src">
-                    <xsl:value-of select="$location" />
-                </xsl:attribute>
-            </script>
-            <xsl:call-template name="one-script">
-                <xsl:with-param name="token-list" select="substring-after($token-list, ' ')" />
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="substring($raw-location,1,4) = 'http'">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:when test="not($b-managed-directories)">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- empty when not using managed directories -->
+                        <xsl:value-of select="$external-directory"/>
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:attribute name="src">
+                <xsl:value-of select="$location" />
+            </xsl:attribute>
+        </script>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- @css attribute to multiple "link" element -->
