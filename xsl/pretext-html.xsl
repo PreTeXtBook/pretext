@@ -10149,7 +10149,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A recursive template to create a link element for each CSS file -->
-<!-- This is used to process  $html.css.extra  as well               -->
 <xsl:template name="one-css">
     <xsl:param name="token-list" />
     <xsl:choose>
@@ -12269,7 +12268,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- CSS header -->
-<!-- The "one-css" template is defined elsewhere -->
 <xsl:template name="css">
     <xsl:if test="not($b-debug-react)">
         <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
@@ -12282,16 +12280,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
     </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
-    <!-- The prepared list (extra blank space) will cause failure  -->
-    <!-- if $html.css.extra is empty (i.e. not specified)          -->
     <xsl:if test="not($html.css.extra = '')">
-        <xsl:call-template name="one-css">
-            <xsl:with-param name="token-list">
-                <xsl:call-template name="prepare-token-list">
-                    <xsl:with-param name="token-list" select="$html.css.extra" />
-                </xsl:call-template>
-            </xsl:with-param>
-        </xsl:call-template>
+        <xsl:variable name="csses" select="str:tokenize($html.css.extra, ', ')"/>
+        <!-- $scripts is a collection of "token" and does not have -->
+        <!-- a root, which implies the form of the "for-each"      -->
+        <xsl:for-each select="$csses">
+            <link rel="stylesheet" type="text/css">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </link>
+        </xsl:for-each>
     </xsl:if>
     <!-- For testing purposes a developer can set the stringparam -->
     <!-- "debug.developer.css" to the value "yes" and provide a   -->
