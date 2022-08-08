@@ -18,7 +18,7 @@
 
     <section xml:id="publication-file">
         <title>Publication File</title>
-        <idx><h>publication file</h></idx> <idx><h>publication file</h><see>publication file</see></idx>
+        <idx><h>publication file</h></idx> <idx><h>publisher file</h><see>publication file</see></idx>
 
         <p>As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publication file</term>. Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publication-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
 
