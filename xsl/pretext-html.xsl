@@ -10132,8 +10132,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- a root, which implies the form of the "for-each"      -->
     <xsl:for-each select="$csses">
         <link rel="stylesheet" type="text/css">
+            <!-- This is a hack to allow for local files and network -->
+            <!-- resources, with or without managed directories.     -->
+            <xsl:variable name="location">
+                <xsl:variable name="raw-location">
+                    <xsl:value-of select="."/>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="substring($raw-location,1,4) = 'http'">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:when test="not($b-managed-directories)">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- empty when not using managed directories -->
+                        <xsl:value-of select="$external-directory"/>
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
             <xsl:attribute name="href">
-                <xsl:value-of select="." />
+                <xsl:value-of select="$location" />
             </xsl:attribute>
         </link>
     </xsl:for-each>
