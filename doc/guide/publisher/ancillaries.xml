@@ -19,7 +19,40 @@
 
         <p>An author may include a <tag>hint</tag>, <tag>answer</tag>, and/or <tag>solution</tag> as part of each <tag>exercise</tag> or <tag>project</tag>.  Some of these may be designed for the reader, while some may designed for the instructor.  A separate conversion is available to make a <init>PDF</init> containing just these items.</p>
 
-        <p>In the usual way, execute<cd>
+        <p>
+            To use the CLI, first create a small <init>XSL</init> file, called <c>solution-manual.xsl</c>, in the <c>xsl</c> folder at the root of your project, containing the following lines.
+        </p>
+
+        <pre>
+        <![CDATA[
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+            <xsl:import href="./core/pretext-solution-manual-latex.xsl"/>
+        </xsl:stylesheet>
+        ]]>
+        </pre>
+        
+        <p>
+            Then add the following target in your project manifest.
+        </p>
+
+        <pre>
+        <![CDATA[
+        <target name="solutions">
+            <format>custom</format>
+            <source>source/main.ptx</source>
+            <publication>publication/publication.ptx</publication>
+            <xsl>xsl/solution-manual.xsl</xsl>
+            <output-dir>output/solutions</output-dir>
+        </target>
+        ]]>
+        </pre>
+
+        <p>
+            Then you can build the solution manual with <c>pretext build solutions</c>.
+        </p>
+
+        <p>Or using xsltproc, execute<cd>
             <cline>xsltproc -xinclude pretext-solution-manual-latex.xsl fauna.xml</cline>
         </cd>with suitable paths in front of the stylesheet and the source file.  The result will be a file like <c>fauna.tex</c>, which can be processed with a <latex/> engine such as <c>pdflatex</c>.  By default, the result will include <em>all</em> <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> for <em>every</em> <tag>exercise</tag> or <tag>project</tag> anywhere in your <tag>book</tag>.  Note that this conversion is explicitly designed only for <tag>book</tag>, so send a request for support for an <tag>article</tag>.  Division headings (<tag>chapter</tag>, <tag>section</tag>, <ellipsis/>) will be present, if and only if they have content.  Page headers will help locate chapters and sections.  Exercise numbers will be complete, to make it easier to locate individual problems.  In other words, Exercise 3 from Exercises 5.6 will be labeled as 5.6.3, not just 3, as in the original text.</p>
 

@@ -37,15 +37,7 @@
         </pre>
 
         <p>
-            The path to a publication file can be specified using the <c>-p</c> option for <c>pretext build</c>.  For example, if your publication file is <c>publication.ptx</c> in the folder <c>publication</c> (parallel to <c>source</c>), you would enter the following.
-        </p>
-
-        <console>
-            <input>pretext build html -p publication/publication.ptx</input>
-        </console>
-
-        <p>
-            Alternatively, you can specify the path to the publication file in the <c>project.ptx</c> manifest in the <tag>publication</tag> element for each <tag>target</tag>, allowing you to have a different publication file for different targets.
+            When using the CLI, the path to a publication file must be specified in the project manifest in the <tag>publication</tag> element for each <tag>target</tag>.
         </p>
         <aside>
         <p>To employ the file using <c>xsltproc</c> you use a string parameter (<xref ref="processing-parameters"/>) named <c>publisher</c>.  This should have a path that is relative to the main file for the document.  For example, assuming <c>pod.xml</c> and <c>fauna.xml</c> are in the same directory<cd>
@@ -107,9 +99,7 @@
     <section xml:id="processing-parameters">
         <title>Processing Parameters</title>
 
-        <p>Many of the options for different conversions are accomplished by command-line options by <term>string parameters</term>.  Here is an example:<cd>
-            <cline>pretext build pdf --stringparam latex.font.size "14pt"</cline>
-        </cd>This will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
+        <p>Some of the options for different conversions are accomplished by <term>string parameters</term>.  You can set these in the project manifest using, for example, <tag>stringparam key="latex.font.size" value="14pt"</tag>.  This will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
 
         <aside>
             <p>
@@ -123,11 +113,20 @@
     <section>
         <title>Watermarks</title>
 
-        <p>Output can contain a <term>watermark</term><idx>watermark</idx>, which is prominent text in the background of a document.  You might use it to make a draft version (with a date?), or a CONFIDENTIAL version, or a document intended for limited distribution, such as an instructor's solution manual.</p>
+        <p>
+            Output can contain a <term>watermark</term><idx>watermark</idx>, which is prominent text in the background of a document.  You might use it to make a draft version (with a date?), or a CONFIDENTIAL version, or a document intended for limited distribution, such as an instructor's solution manual.
+        </p>
 
-        <p>To use, specify the text, and an optional scaling factor to adjust the size.  If your text has spaces, you may need to enclose the string in quote marks so that it passes correctly as a string parameter. For example, all on one line,<cd>
-            <cline>pretext build pdf --stringparam watermark.text "DRAFT 2034-05-25"</cline>
-            <cline>  --stringparam watermark.scale 0.5</cline>
-        </cd></p>
+        <p>
+            To use, specify the text, and an optional scaling factor to adjust the size. For example, in the <tag>target</tag> you want this, include the following lines:
+        </p>
+
+        <pre>
+        <![CDATA[
+            <stringparam key="watermark.text" value="DRAFT 2034-05-25"/>
+            <stringparam key="watermakr.scale" value="0.5"/>
+            ]]>
+        </pre>
+         
     </section>
 </chapter>
