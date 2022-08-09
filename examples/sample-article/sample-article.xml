@@ -7751,14 +7751,9 @@ the xsltproc executable.
             <subsection xml:id="interactive-threejs">
                 <title>threejs</title>
 
-                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+                <p>Once upon a time there was an example here using the <c>threejs</c> 3D Javascript library.  It was <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.</p>
 
-                <figure xml:id="figure-threejs-splines">
-                    <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
-                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="preview/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
-                        <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
-                    </interactive>
-                </figure>
+                <p>But it would seem to have become a bit more complicated to embed and our example was not rendering.  As of 2022-08-08, we have removed it.  Of course, you can find it in the git repository, perhaps searching on the date string just mentioned.  It woulld be interesting to see if our <tag>interactive</tag> framework could still support the changes.</p>
 
                 <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
