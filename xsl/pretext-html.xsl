@@ -11865,6 +11865,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
+        <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa</xsl:text>
         <xsl:text>window.MathJax = {&#xa;</xsl:text>
         <xsl:text>  tex: {&#xa;</xsl:text>
         <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
@@ -11902,11 +11903,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <!-- tell Runestone components that MathJax is all loaded -->
-        <xsl:text>startup: {&#xa;</xsl:text>
+        <xsl:text>  startup: {&#xa;</xsl:text>
         <xsl:text>    pageReady() {&#xa;</xsl:text>
         <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
         <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
-        <xsl:text>      $(document).trigger("runestone:mathjax-ready");&#xa;</xsl:text>
+        <xsl:text>      rsMathReady();&#xa;</xsl:text>
         <xsl:text>      }&#xa;</xsl:text>
         <xsl:text>    )}&#xa;</xsl:text>
         <xsl:text>},&#xa;</xsl:text>
