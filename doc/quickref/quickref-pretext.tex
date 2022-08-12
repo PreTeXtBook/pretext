@@ -302,7 +302,7 @@ An \texttt{<exercise>} has the following structure.
   <statement>
     <p>The <c>statement</c> is mandatory.</p>
   </statement>
-  <marker[s] />
+  <optional-signal/>
   <hint>
     <p>Optional.</p>
   </hint>
@@ -316,8 +316,7 @@ An \texttt{<exercise>} has the following structure.
 \end{verbatim}
 }
 
-Markers are an important component of an exercise if you want to add something that will be interactive in html and Runestone.  markers include \texttt{<choice>} inside a \texttt{<choices>}  for multiple choice questions, \texttt{block} inside a \texttt{blocks} for parsons (mixed up blocks) programs, \texttt{<premise>} and \texttt{<response>} inside a \texttt{<match>} for matching, an \texttt{<area>} inside \texttt{<areas>} for clickable area, \texttt{<response>} for short answer, and \texttt{<var>} inside both \texttt{<statement>} and \texttt{setup} for fill in the blank.  See \texttt{https://pretextbook.org/examples/sample-book/annotated/interactive-exercises.html} for examples and source.
-
+An element we generically call a ``signal'' is an important component of an exercise if you want to add something that will be interactive in HTML and Runestone.  Signals include \texttt{<choices>} for multiple choice questions, \texttt{<blocks>} for Parsons (mixed up blocks) problems, \texttt{<match>} for matching, \texttt{<areas>} for clickable area, \texttt{<response>} for short answer, and \texttt{<setup>} for fill-in-the-blank.  A True/False question simply uses a \texttt{correct} attribute on \texttt{<statement>} as a signal.  The signal element usually has further structure, see \texttt{pretextbook.org} for examples and source.
 
 \sect{Worksheets}
 
