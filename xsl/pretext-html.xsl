@@ -7148,6 +7148,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$generic-preview-svg-data-uri" />
                     </xsl:when>
                     <xsl:otherwise>
+                        <!-- empty when not using managed directories -->
+                        <xsl:value-of select="$external-directory"/>
                         <xsl:value-of select="@preview" />
                     </xsl:otherwise>
                 </xsl:choose>
@@ -7349,8 +7351,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:call-template name="generic-preview-svg"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <img src="{@preview}" class="video-poster"
-                            alt="Video cover image"/>
+                        <img class="video-poster" alt="Video cover image">
+                            <xsl:attribute name="src">
+                                <!-- empty when not using managed directories -->
+                                <xsl:value-of select="$external-directory"/>
+                                <xsl:value-of select="@preview"/>
+                            </xsl:attribute>
+                        </img>
                     </xsl:otherwise>
                 </xsl:choose>
             </div>
