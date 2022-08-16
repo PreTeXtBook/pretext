@@ -11872,7 +11872,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
-        <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa</xsl:text>
+        <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
         <xsl:text>window.MathJax = {&#xa;</xsl:text>
         <xsl:text>  tex: {&#xa;</xsl:text>
         <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
