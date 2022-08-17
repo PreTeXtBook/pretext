@@ -57,7 +57,7 @@
           <ul>
             <li>
               <p>
-                Python, version 3.8 or later.  In a terminal, type <c>python --version</c> to ensure you are already set up.  On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>.
+                Python, version 3.8.5 or later.  In a terminal, type <c>python --version</c> to ensure you are already set up.  On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>.
               </p>
             </li>  
             <li>
