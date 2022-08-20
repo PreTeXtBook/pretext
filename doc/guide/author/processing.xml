@@ -43,12 +43,13 @@
         </p>
 
         <p>
-            Wherever the functionality of the <pretext />-CLI allows it, instructions in this guide will use that method.  We will collect corresponding processing instructions using <c>xsltrpoc</c> in <xref ref="xsltproc"/>.  Information on the use of the <pretext /> script can be found in <xref ref="pretext-script" />.  These tools are especially useful when developing new features for <pretext />, so they are housed in the <xref ref="part-developer" text="title"/>.
+            Wherever the functionality of the <pretext />-CLI allows it, instructions in this guide will use that method.  We will collect corresponding processing instructions using <c>xsltproc</c> in <xref ref="xsltproc"/>.  Information on the use of the <pretext /> script can be found in <xref ref="pretext-script" />.  These tools are especially useful when developing new features for <pretext />, so they are housed in the <xref ref="part-developer" text="title"/>.
         </p>
     </section>
 
     <section xml:id="processing-CLI">
         <title>The <pretext />-CLI</title>
+        <idx><h>CLI</h></idx>
         <introduction>
         <p>
             Here we will outline the functionality of the <pretext />-CLI.  Instructions for installing this command line interface can be found in <xref ref="quickstart-getting-pretext"/>.
@@ -63,22 +64,28 @@
         </console>
 
         <p>
-            You should get back something like <c>0.4.1</c>.  If this doesn't work, try starting the previous line with <c>python -m</c>, which might help if your PATH is not set up correctly.  In fact, prepending <c>python -m</c> to all commands in this section might be necessary, depending on your system.
+            You should get back something like <c>1.0.2</c>.  If this doesn't work, try starting the previous line with <c>python -m</c> (or maybe <c>python3 -m</c> on Mac/Linux), which might help if your PATH is not set up correctly.  In fact, prepending <c>python -m</c> to all commands in this section might be necessary, depending on your system.
         </p>
         <p>
+            This documentation will assume you have version 1.0 or later of the CLI.
             You can upgrade the CLI to the most recent version through PIP using the command:
         </p>
         <console>
-            <input>pip install pretextbook --upgrade</input>
+            <input>pip install pretext --upgrade</input>
         </console>
 
         <p>
-            For quick hints about what you can do, the CLI has built-in help.  You can access this by entering <c>pretext --help</c> or <c>pretext build --help</c> (replacing <c>build</c> with <c>new</c> or <c>view</c> or etc.)
+            <idx><h>CLI</h><h><c>--help</c></h></idx>
+            For quick hints about what you can do, the CLI has built-in help.  You can access this by entering <c>pretext --help</c> or <c>pretext build --help</c> (replacing <c>build</c> with <c>new</c> or <c>view</c> or <c>generate</c>
+            etc.)
         </p>
         </introduction>
 
         <subsection>
             <title>Starting a New Project: <c>pretext new</c></title>
+            <idx><h><c>new</c></h></idx>
+            <idx><h><c>pretext new</c></h></idx>
+            <idx><h>CLI</h><h><c>new</c></h></idx>
             <p>
                 To generate a new book or article, from the folder in which you want to project located, type:
             </p>
@@ -88,42 +95,108 @@
             </console>
 
             <p>
-                This creates a new book in the folder <q>new-pretext-project</q> which you can safely rename.  For a new article, use <c>pretext new article</c>.
+                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.
             </p>
 
             <p>
-                <idx><h>project manifest</h></idx>
-                <idx><h>manifest</h></idx>
-                The new project includes a file <q>project.ptx</q> which we call the <term>project manifest</term>. This is an <init>XML</init> file that specifies options for converting your source into different <term>target</term> outputs.  We will describe the contents of this file more in a bit.
+                Inside the <q>new-pretext-project</q> folder, you will find the following folders and files:
+                <dl>
+                    <li>
+                        <title>assets</title>
+                        <p>
+                            A folder to place static (external) assets, such as images or data files, that you will include in your project, for example, with <tage>image source="frog.jpg"</tage>.
+                        </p>
+                    </li>
+                    <li>
+                        <title>generate-assets</title>
+                        <p>
+                            A folder that will hold assets (such as images) generated from source, using the <c>pretext generate</c> command.  You should not manually edit any contents of this folder.
+                        </p>
+                    </li>
+                    <li>
+                        <title>publication</title>
+                        <p>
+                            A folder to hold your publication files.  One publication file is included, but you can have as many as you want.  See <xref ref="publication-file-reference"/>.
+                        </p>
+                    </li>
+                    <li>
+                        <title>source</title>
+                        <p>
+                            A folder to hold all your <pretext /> source files.  These are the main files you will edit to control the content of your project.
+                        </p>
+                    </li>
+                    <li>
+                        <title>.gitignore</title>
+                        <p>
+                            A file containing a list of folders and files that should not be tracked by git if you use it for version control.
+                        </p>
+                    </li>
+                    <li>
+                        <title>project.ptx</title>
+                        <p>
+                            An <init>XML</init> file called the <term>project manifest</term>. This specifies options for converting your source into different <term>target</term> outputs.  We will describe the contents of this file in <xref ref="cli-project-manifest"/>.
+                        </p>
+                    </li>
+                    <li>
+                        <title>README.md</title>
+                        <p>
+                            A file that you can use to describe your project.
+                        </p>                        
+                    </li>
+                    <li>
+                        <title>requirements.txt</title>
+                        <p>
+                            A simple text file that contains the version of the CLI that is initially used to build the project.  If you upgrade the CLI, you will be warned to also update the version in this file once you know that things build as expected.
+                        </p>
+                    </li>
+                </dl>
+            </p>
+
+            <p>
+                Once you build your project, you will get a folder called <q>output</q>.  Do not edit the contents of this folder manually.
             </p>
         </subsection>
         <subsection>
             <title>Converting: <c>pretext build</c></title>
+            <idx><h><c>build</c></h></idx>
+            <idx><h><c>pretext build</c></h></idx>
+            <idx><h>CLI</h><h><c>build</c></h></idx>
             <p>
                 To convert your source into one of the available output formats, say HTML, run the command:
             </p>
 
             <console>
-                <input>pretext build html</input>
+                <input>pretext build web</input>
             </console>
 
             <p>
-                Here <q>html</q> is the <attr>name</attr> of one of the targets in the project manifest (<c>project.ptx</c>).
+                Here <q>web</q> is the <attr>name</attr> of one of the targets in the project manifest (<c>project.ptx</c>).  To build different targets, replace it with the <attr>name</attr> of another target, as in <c>pretext build print</c>. 
+            </p>
+
+            <p>
+                You can also build the first (default) target of the manifest by omitting the target: just type <c>pretext build</c>.
             </p>
         </subsection>
 
         <subsection>
             <title>Viewing output: <c>pretext view</c></title>
+            <idx><h>CLI</h><h><c>view</c></h></idx>
+            <idx><h><c>view</c></h></idx>
+            <idx><h><c>pretext view</c></h></idx>
             <p>
                 After you convert your source into, say HTML, you can view the output using the command:
             </p>
 
             <console>
-                <input>pretext view html</input>
+                <input>pretext view web</input>
             </console>
 
             <p>
-                This will direct you to open a local server at a provided address (perhaps <url href="http://localhost:8000" visual="http://localhost:8000"/>).  Replace <q>html</q> in the above with other build targets as appropriate.
+                This will direct you to open a local server at a provided address (perhaps <url href="http://localhost:8000" visual="http://localhost:8000"/>).  Replace <q>web</q> in the above with other build targets as appropriate.
+            </p>
+
+            <p>
+                If you are on your own machine (i.e., not CoCalc), <c>pretext view</c> will attempt to open your default program for the type of file you are opening.  You can prevent this attempt using the <c>--no-launch</c> flag.
             </p>
 
             <p>
@@ -131,11 +204,229 @@
             </p>
 
             <console>
-                <input>pretext view html --watch</input>
+                <input>pretext view web --watch</input>
             </console>
 
             <p>
-                This currently only supports HTML-format targets.
+               (You can use <c>-w</c> as a shorthand for <c>--watch</c>.) This currently only supports HTML-format targets.
+            </p>
+
+            <p>
+                When you are done, stop the server by hitting <c>CTRL+C</c>
+            </p>
+
+            <insight>
+                <p>
+                    In addition to the <em>watch</em> option <c>-w</c>, you can use the flags <c>-b</c> to build before viewing, <c>-g</c> to generate assets before viewing, or combine these with <c>-bg</c>.
+                </p>
+            </insight>
+
+            <p>
+                Note that the project is only viewable on your local machine (even if you are working in CoCalc).  To make the output available to the public, you will need to copy the output to a web server, or use the <c>pretext deploy</c> command, described below.
+            </p>
+        </subsection>
+        <subsection>
+            <title>Generating assets: <c>pretext generate</c></title>
+            <idx><h><c>generate</c></h></idx>
+            <idx><h><c>pretext generate</c></h></idx>
+            <idx><h>CLI</h><h><c>generate</c></h></idx>
+            <p>
+                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos.  We call these elements <q>assets</q> or <q>generated assets</q>.  To generate the assets, run the following command.  
+            </p>
+
+            <console>
+                <input>pretext generate</input>
+            </console>
+
+            <insight>
+                <p>
+                    You can also generate assets and build at the same time, using <c>pretext build -g web</c> which will generate all assets for the target named <q>web</q>.
+                </p>
+            </insight>
+
+            <p>
+                This will generate all assets in the default formats for the first target in the project manifest.  If you need formats for another target, you can specify the target name with the <c>-t</c> flag, as in, for the target named <q>print</q>,
+            </p>
+
+            <console>
+                <input>pretext generate -t print</input>
+            </console>
+
+            <p>
+                Generating assets can be time consuming, so likely you will not want to repeat this step unless you have edited one of the elements of a particular asset type.  To further speed up the process, you can limit which sorts of assets you generate.  For example, if you edit a few <tag>latex-image</tag> elements, you can just generate these (for the first target in the manifest) with,
+            </p>
+
+            <console>
+                <input>pretext generate latex-image</input>
+            </console>
+
+            <p>
+                To be even more precise, if the element you wish to generate has an <attr>xml:id</attr>, you can generate just that element using the <c>-x</c> flag.  For example, if your <tag>latex-image</tag> has id <q>img-circle</q>, generate it with,
+            </p>
+
+            <console>
+                <input>pretext generate -x img-circle</input>
+            </console>
+
+            <p>
+                Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag. 
+            </p>
+        </subsection>
+
+        <subsection>
+            <title>Hosting your project: <c>pretext deploy</c></title>
+            <idx><h>hosting</h></idx>
+            <idx><h>CLI</h><h><c>deploy</c></h></idx>
+            <idx><h><c>deploy</c></h></idx>
+            <idx><h><c>pretext deploy</c></h></idx>
+            <p>
+                When you are ready to share your project with the world, you can copy the contents of the <c>output/web</c> (or whatever you called the output of your html build) to any webserver.  A convenient free option is to use <url href="https://pages.github.com/">GitHub Pages</url>, and the CLI makes this especially easy.
+            </p>
+
+            <p>
+                If you already track your source files using GitHub, all you need to do is enter the following command:
+            </p>
+
+            <console>
+                <input>pretext deploy</input>
+            </console>
+
+            <p>
+                This copies the contents of the html output folder into <c>docs</c>, commits the changes, and pushes them to GitHub.  All you need to do then is ensure that you enable the pages feature in your GitHub repository (<c>Settings</c>, then <c>Pages</c>, then set to deploy from a branch: gh-pages).
+            </p>
+
+            <p>
+                If your project is not already tracked on GitHub, the CLI will walk you through the steps you need to get set up.
+            </p>
+        </subsection>
+
+        <subsection xml:id="cli-project-manifest">
+            <title>The project manifest: <c>project.ptx</c></title>
+            <idx><h>project manifest</h></idx>
+            <idx><h>manifest</h></idx>
+            <idx><h>CLI</h><h>project manifest</h></idx>
+            <idx><h><c>project.ptx</c></h></idx>
+            <p>
+                The project manifest, always named <q>project.ptx</q>, contains information about each <term>target</term> you will build, as well as the names of <term>executables</term> of external tools that might be needed for building targets and generating assets.
+            </p>
+
+            <p>
+                The CLI looks for this file, so you should have only one.  If you have a project that was not created using <c>pretext new</c>, you can get a copy of the file by running <c>pretext init</c>.  You can also get the most recent template version of the manifest by running <c>pretext init --refresh</c>, which will create time-stamped versions of the files for you to copy from to your current manifest.
+            </p>
+
+            <p>
+                While we use the .ptx extension, the manifest is not technically a pretext document, since it does not agree with the schema.  However, it must have a specific structure to be used with the CLI.  Below we show a sample manifest (you can also look at the result of <c>pretext new</c> or <c>pretext init</c>).
+            </p>
+
+            <pre>
+            <![CDATA[
+            <?xml version="1.0" encoding="utf-8"?>
+            <project>
+              <targets>
+                <target name="web">
+                  <format>html</format>
+                  <source>source/main.ptx</source>
+                  <publication>publication/publication.ptx</publication>
+                  <output-dir>output/web</output-dir>
+                </target>
+                <target name="print" pdf-method="xelatex">
+                  <format>pdf</format>
+                  <source>source/main.ptx</source>
+                  <publication>publication/publication.ptx</publication>
+                  <output-dir>output/print</output-dir>
+                </target>
+                <target name="print-latex">
+                  <format>latex</format>
+                  <source>source/main.ptx</source>
+                  <publication>publication/publication.ptx</publication>
+                  <output-dir>output/print-latex</output-dir>
+                </target>
+                <target name="subset">
+                  <format>html</format>
+                  <source>source/main.ptx</source>
+                  <publication>publication/publication.ptx</publication>
+                  <output-dir>output/subset</output-dir>
+                  <stringparam key="debug.skip-knowls" value="yes"/>
+                  <xmlid-root>ch_first</xmlid-root>
+                </target>
+              </targets>
+              <executables>
+                <latex>latex</latex>
+                <pdflatex>pdflatex</pdflatex>
+                <xelatex>xelatex</xelatex>
+                <pdfsvg>pdf2svg</pdfsvg>
+                <asy>asy</asy>
+                <sage>sage</sage>
+                <pdfpng>convert</pdfpng>
+                <pdfeps>pdftops</pdfeps>
+                <node>node</node>
+                <liblouis>file2brl</liblouis>
+              </executables>
+            </project>
+            ]]>
+            </pre>
+
+            <p>
+                <idx><h>CLI</h><h>executables</h></idx>
+                Inside the root <tag>project</tag>, we have <tag>targets</tag> and <tag>executables</tag>.  The latter contains the commands you would call on the terminal to execute the specified command.  You can likely leave this as is, but if a command is not on your PATH, you could put the full path to the executable here.
+            </p>
+
+            <p>
+                <idx><h>CLI</h><h>targets</h></idx>
+                Each element of <tag>targets</tag> is a <tag>target</tag> that has a <attr>name</attr> attribute.  The name (e.g., web, print) is what you specify when you run build, view, or generate assets for a specific target (so <c>pretext build web</c>, <c>pretext view web</c> or <c>pretext generate -t web</c>).
+            </p>
+
+            <p>
+                <idx><h>CLI</h><h>format</h></idx>
+                The children of a <tag>target</tag> start with <tag>format</tag>, which must be one of html, pdf, latex, custom, epub, kindle, or braille (although the last three of these are still experimental, as of 8/10/2022).  If the format is <q>pdf</q>, you can specify the latex engine used to process the .tex file by using the <attr>pdf-method</attr> attribute on <tag>target</tag>.
+            </p>
+
+            <p>
+                Next we have <tag>source</tag> which contains a (preferably) relative path to the main source file you will compile.  Different targets might have different main source files, in case you create a separate version of your project that includes only some chapters, for example. 
+            </p>
+
+            <p>
+                <idx><h>publication file</h></idx>
+                <idx><h>CLI</h><h>publication file</h></idx>
+                The <tag>publication</tag> element specifies the path the the publication file for the target.  Different targets can have different publication files.
+            </p>
+
+            <p>
+                <idx><h>output-dir</h></idx>
+                <idx><h>CLI</h><h>output-dir</h></idx>
+                The <tag>output-dir</tag> element gives the path to the folder where the output of <c>pretext build</c> should go.  It is strongly recommended that this be a subfolder of <q>output</q>, which is ignored by git by default.  Again, different targets can, and probably should, have different output folders.
+            </p>
+
+            <p>
+                <idx><h>stringparam</h></idx>
+                <idx><h>CLI</h><h>stringparam</h></idx>
+                <idx><h>xmlid-root</h></idx>
+                <idx><h>CLI</h><h>xmlid-root</h></idx>
+                The above tags are required for each target.  There are also some optional tags that can further customize the behavior of a particular target.  The <tage>stringparam</tage> tag with attributes <attr>key</attr> and <attr>value</attr> can be used to specify stringparameter options (although most of the stringparameters that were previously used to control output are now controlled by the publication file).  The <tag>xmlid-root</tag> element is used to specify the xml:id of a division of a project for building only that subset of the project (useful for quickly testing just one chapter or section).
+            </p>
+
+            <p>
+                <idx><h>custom xsl</h></idx>
+                <idx><h>CLI</h><h><c>custom xsl</c></h></idx>
+                The last optional element we will mention is the <tag>xsl</tag> element.  Here you would provide the path to a custom xsl file that itself calls the standard pretext-provided xsl.  To import the standard xsl file (say pretext-common.xsl) near the top of the custom xsl file, import it using <c>&lt;xsl:import href="./core/pretext-common.xsl"/&gt;</c>.  To see an example of this used to build a revealjs slideshow, try <c>pretext new slideshow</c>.  Note that if you use the <q>custom</q> format, the <tag>xsl</tag> element is required, although it can be used on any format.  This is also how you would use the custom latex styles provided by pretext.
+            </p>
+        </subsection>
+
+        <subsection>
+            <title>Getting help</title>
+            <p>
+                <idx><h>CLI</h><h><c>-v debug</c></h></idx>
+                In addition to checking <c>pretext --help</c>, <c>pretext build --help</c>, <c>pretext generate --help</c>, etc, you have a few options when you run into trouble.  If you are getting errors that don't make sense, even after trying follow the suggestion of the error messages, look at the file <q>cli.log</q>, which includes even debug-level log messages.  You can also run the CLI using this higher level of verbosity using the <c>-v debug</c> option, which must go right after <c>pretext</c> command, before the subcommands (<c>build</c>, <c>generates</c>, etc.).  That is, enter the following for example,
+            </p>
+
+            <console>
+                <input>pretext -v debug build web</input>
+            </console>
+
+            <p>
+                <idx><h><c>pretext support</c></h></idx>
+                <idx><h>CLI</h><h><c>support</c></h></idx>
+                You can also ask for help on the <url href="https://groups.google.com/g/pretext-support">google support group</url>.  When you post there, please run <c>pretext support</c> from inside your project's folder and copy the output into your help request.
             </p>
         </subsection>
     </section>
@@ -150,7 +441,7 @@
         </p>
 
         <p>
-            Let us suppose that your <c>book</c> on animals has a <c>chapter</c> on mammals with a <c>section</c> on monkeys.  Then you need to do the following:
+            Suppose your <c>book</c> on animals has a <c>chapter</c> on mammals with a <c>section</c> on monkeys.  Then you need to do the following:
             <ol>
                 <li>
                     <p>For the file containing the <tag>chapter</tag> tag for the chapter on mammals, place the attribute
@@ -202,17 +493,7 @@
 
         <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publication file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publication-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> since that is the name used to call them using <c>xsltproc</c>. The <pretext />-CLI can set these stringparams easily as well.</p>
 
-        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl" visual="github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would enter the following.</p>
-
-        <console>
-            <input>pretext build pdf --stringparam latex.font.size "20pt"</input>
-        </console>
-
-        <p>You can use as many stringparam as you like; just repeat the pattern <c>--stringparam name value</c> for each one.  The quotation marks are not strictly needed in this example, but if the value of the parameter has spaces, slashes, <etc />, then you need to quote-protect the string from the command-line processor, and either single or double quotes will work (and protect the other kind).</p>
-
-        <p>
-            Instead of passing these stringparams on the command line, you can specify them inside your project manifest.  Inside a particular <tag>target</tag>, include <tage>stringparam key="latex.font.size" value="20pt"</tage>, for example.  Each stringparam you want to set gets its own <tage>stringparam key="" value=""</tage> element.
-        </p>
+        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl" visual="github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would specify them inside your project manifest.  Inside a particular <tag>target</tag>, include <tage>stringparam key="latex.font.size" value="20pt"</tage>, for example.  Each stringparam you want to set gets its own <tage>stringparam key="" value=""</tage> element.</p>
 
         <p>These parameters are documented in the <init>XSL</init> files themselves, available in <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl" visual="github.com/PreTeXtBook/pretext/tree/dev/xsl"><c>xsl</c> folder in the <pretext /> GitHub repository</url>, principally <c>pretext-common.xsl</c>, <c>pretext-latex.xsl</c> and <c>pretext-html.xsl</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Guide.</p>
 
@@ -393,19 +674,17 @@
 
         <p>We have done several things to encourage such customizations.  We have tried to put as much stylistic information as possible in the <latex /> preamble and keep as much as possible out of the body.  (There is always room for improvement on this score, please be in touch if you have a need.)  For small adjustments the <c>latex.preamble.early</c> and <c>latex.preamble.late</c> stringparam are possible vehicles, though all the <latex /> code to make light blue, flush-right rules is going to be messy on the command-line.</p>
 
-        <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>.  You can then tell the <pretext />-CLI to use that <init>XSL</init> file instead of the standard one provided by <pretext /> using a command like the following.</p>
-
-        <console>
-            <input>pretext build pdf -x xsl/custom-latex.xsl</input>
-        </console>
+        <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>.  You can then tell the <pretext />-CLI to use that <init>XSL</init> file instead of the standard one provided by <pretext /> through the <tag>xsl</tag> element in a <tag>target</tag> of the project manifest.</p>
 
         <p>
-            This assumes that you have an <init>XSL</init> file called <c>custom-latex.xsl</c> located in the folder <c>xsl</c> inside the root of your project.  You can also specify this in your <c>project.ptx</c> manifest file using <c>&lt;xsl&gt;xsl/custom-latex.xsl&lt;/xsl&gt;</c> as an element in the corresponding <tag>target</tag>.
+            Assume that you have an <init>XSL</init> file called <c>custom-latex.xsl</c> located in the folder <c>xsl</c> inside the root of your project.  In your <c>project.ptx</c> manifest file, use <c>&lt;xsl&gt;xsl/custom-latex.xsl&lt;/xsl&gt;</c> as an element in the corresponding <tag>target</tag>.
         </p>
 
         <p>
-            The custom <init>XSL</init> file should import the stock <pretext /> file for the type of output you want to create.  This is done using the line <tage>xsl:import pretext-href="pretext-latex.xsl"</tage>, which should be placed near the top of the file; everything after it will redefine the various rules imported from the stock <init>XSL</init>.  Note the <attr>pretext-href</attr> attribute.  Standard <init>XSL</init> would use <attr>href</attr> here; the <attr>pretext-href</attr> tells the CLI to substitute the correct stock <init>XSL</init>, so that you don't need to know the path to its location on your system.  (See <xref ref="extra-stylesheet"/>
-            to see how to use such a stylesheet with the <c>pretext/pretext</c> script.)
+            The custom <init>XSL</init> file should import the stock <pretext /> file for the type of output you want to create.  This is done using the line <tage>xsl:import href="./core/pretext-latex.xsl"</tage>, which should be placed near the top of the file; everything after it will redefine the various rules imported from the stock <init>XSL</init>.  Note the <attr>href</attr> attribute's value starts with <c>./core/</c>.  This works because the CLI copies all the standard <init>XSL</init> to a subfolder <c>core</c> of the temporary directory holding your custom <init>XSL</init> so that you don't need to know the path to its location on your system.  
+        </p>
+        <p>
+            See <xref ref="extra-stylesheet"/> to see how to use such a stylesheet with the <c>pretext/pretext</c> script.
         </p>
 
         <p>
@@ -477,11 +756,11 @@
         <p>The upside to this is that small edits to the code can easily accomplish minor changes or corrections necessary for the images.  The <latex /> macros provided by an author can be used in the text <em>and</em> in a diagram, leading to greater consistency between the two.  Finally, starting from source, we can do the best possible job of producing image formats that are compatible with the document output formats and which scale smoothly in PDFs and in web browsers.</p>
 
         <p>
-            The downside is that processing these images requires various <q>helper</q> programs, such as <c>asy</c>, <c>pdflatex</c>, and <c>sage</c>.  This requires installing the helper program and perhaps setting the path to it on your system.  This is done inside the <c>project.ptx</c> manifest as children as the <tag>executables</tag> element.
+            The downside is that processing these images requires various <q>helper</q> programs, such as <c>pdflatex</c> and <c>sage</c>.  This requires installing the helper program and perhaps setting the path to it on your system.  This is done inside the <c>project.ptx</c> manifest as children as the <tag>executables</tag> element.
         </p>
 
         <p>
-            Whenever you need to process images described in your source, run <c>pretext build</c> with the <c>-d</c> flag.  This will build the correct image output file for your specified target format. If you would like to build additional image formats, you can add <c>-df all</c> to the command.  You can also use <c>-a</c> in conjunction with <c>-d</c> to only build these assets and not convert your entire source (useful for really large projects).
+            Whenever you need to process images described in your source, run <c>pretext generate</c>.  This will build the correct image output file for your specified target (use <c>-t [target]</c>). If you would like to build additional image formats, you can add <c>--all-formats</c> to the command.  
         </p>
 
 
@@ -531,15 +810,15 @@
         </p>
 
         <console>
-            <input>pretext view html</input>
+            <input>pretext view web</input>
         </console>
 
         <p>
-            You can replace <q>html</q> with any build target, although it is really <init>HTML</init> builds that benefit from this feature.  The CLI uses Python to spin up a local web server so you can see a copy of your output by going to the <init>URL</init> the CLI gives as output (usually <url href="http://localhost:8000" visual="http://localhost:8000"/>, although if you are working in CoCalc, this will be different).
+            You can replace <q>web</q> with any target name, although it is really <init>HTML</init> builds that benefit from this feature.  The CLI uses Python to spin up a local web server so you can see a copy of your output by going to the <init>URL</init> the CLI gives as output (usually <url href="http://localhost:8000" visual="http://localhost:8000"/>, although if you are working in CoCalc, this will be different).
         </p>
 
         <p>
-            There are two useful options that can be used with <c>pretext view</c> to speed up authoring.  First, the <c>-b</c> flag will convert your source before starting the server (i.e., runs <c>pretext build</c> in the background).  Second, for small projects, adding the <c>-w</c> flag with <q>watch</q> your source for changes and rebuilds the <init>HTML</init> output whenever the source changes (this also builds the source before starting the server).
+            There are two useful options that can be used with <c>pretext view</c> to speed up authoring.  First, the <c>-b</c> flag will build your source before starting the server (i.e., runs <c>pretext build</c> in the background).  Similarly, the <c>-g</c> flag will generate assets prior to viewing.  For small projects, adding the <c>-w</c> flag will <q>watch</q> your source for changes and rebuild the <init>HTML</init> output whenever the source changes (this also builds the source before starting the server).
         </p>
 
         <p>
@@ -547,7 +826,7 @@
         </p>
 
         <p>
-            Finally, having this quick local web server is so useful that you can use the <c>-d</c> option to specify a path to any directory to serve any files, not just those created in <pretext />.
+            Finally, having this quick local web server might be useful for other purposes. You can use the <c>-d</c> option to specify a path to any directory to serve any files, not just those created in <pretext />.
         </p>
     </section>
 
@@ -570,7 +849,7 @@
             This process currently requires <c>xsltproc</c>, and is described in <xref ref="xsltproc-doctest-sage"/>.
         </p>
 
-        <p>The <c>mathbook/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one, or several file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.  See <xref ref="common-chunking-options"/> for details on obtaining more than one file.</p>
+        <p>The <c>pretext/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one, or several file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.  See <xref ref="common-chunking-options"/> for details on obtaining more than one file.</p>
 
         <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 
@@ -580,15 +859,16 @@
     <section xml:id="topic-build-in-cocalc">
         <title>Building Output in CoCalc</title>
 
-        <p>CoCalc <url href="https://cocalc.com/" visual="cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with MathBook <init>XML</init>.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
-            <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.</p></li>
+        <p>CoCalc <url href="https://cocalc.com/" visual="cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with <pretext />.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
+            <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.  It is also now possible to start a virtual VS Code session and use their powerful text editing capabilities.</p></li>
             <li><p><c>git</c>: installed (so you can clone/pull <pretext/>).</p></li>
             <li><p><c>jing</c>: installed, so you can do <init>RELAX-NG</init> validation.</p></li>
             <li><p><latex />: installed with many additional packages.</p></li>
             <li><p>Python: installed, necessary for <c>pretext</c> script.</p></li>
+            <li><p><c>pretext</c>: the CLI should be installed by default, although the version might lag.  Assuming you have a paid subscription, you should be able to upgrade with <c>pip install --upgrade pretext</c></p></li>
             <li><p><init>PDF</init> viewer: handed off to your browser.</p></li>
             <li><p><init>HTML</init> viewer: get a context menu on the cloud icon in the file view, and open in a new tab or new window.</p></li>
-            <li><p><init>HTML</init> server: nope.  Zip up output and host elsewhere.</p></li>
+           <li><p><c>pretext view web</c> will allow you to view output through a python server.</p></li>
         </ul></p>
     </section>
 

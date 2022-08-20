@@ -10,6 +10,7 @@
 
 <docinfo>
     <rename element="note" xml:lang="en-US">Best Practice</rename>
+    <rename element="insight" xml:lang="en-US">Shortcut</rename>
     <!-- a demonstration in Basic Reference -->
     <rename element="algorithm" xml:lang="en-US">Porism</rename>
     <latex-image-preamble>

@@ -12,14 +12,14 @@
 
     <introduction>
       <p>
-        This chapter serves as a tutorial for quickly getting started with <pretext />.  We will describe how to run <pretext /> in the cloud using CoCalc, and one path to installing <pretext /> on a local machine (assuming you already have some prerequisite software installed).  Then we will generate an example book, as well as a minimal example <pretext /> document and convert them to HTML and PDF.  Finally, we will discuss some ways to extend the minimal example.  Let's get started.
+        This chapter serves as a tutorial for quickly getting started with <pretext />.  We will describe how to run <pretext /> in the cloud using CoCalc, and a path to installing <pretext /> on a local machine (assuming you already have some prerequisite software installed).  Then we will generate an example book, as well as a minimal example <pretext /> document and convert them to HTML and PDF.  Finally, we will discuss some ways to extend the minimal example.  Let's get started.
       </p>
     </introduction>
 
     <section xml:id="quickstart-getting-pretext">
       <title>Getting <pretext /></title>
       <p>
-        For the sake of this tutorial, we will use the <pretext />-CLI, a python-based command line interface that simplifies the installation of <pretext />, and allows you to easily create, build (convert), and view <pretext /> documents.  Other setups that provide more flexibility at the cost of complexity can be found in <xref ref="processing"/>.
+        For the sake of this tutorial, we will use the <pretext />-CLI, a python-based command line interface that simplifies the installation of <pretext />, and allows you to easily create, build (convert), and view <pretext /> documents.  Other setups that provide more flexibility at the cost of complexity can be found in <xref ref="processing"/>.  Furthur documentation of the <pretext />-CLI is available in <xref ref="processing-CLI"/>.
       </p>
 
       <p>
@@ -40,7 +40,7 @@
       <paragraphs>
         <title>Using CoCalc</title>
         <p>
-          CoCalc has graciously already installed the <pretext />-CLI, as well as <latex />, so there is almost no setup required.
+          CoCalc has graciously already installed the <pretext />-CLI, as well as <latex />, so there is almost no setup required, although the version available there might lag behind the most recent release.
         </p>
         <p>
           Simply visit <url href="https://cocalc.com/" visual="cocalc.com"/>.  There you can click on the <q>Run CoCalc Now</q> button, or sign up for a free account so you can save your work.  Once you are in a CoCalc <em>project</em>, click on the <q>New</q> tab and select the <q>Linux terminal</q> button.  This will give you a command prompt where you can start typing commands.
@@ -57,9 +57,9 @@
           <ul>
             <li>
               <p>
-                Python, version 3.8 or later.  In a terminal, type <c>python --version</c> to ensure you are already set up.
+                Python, version 3.8.5 or later.  In a terminal, type <c>python --version</c> to ensure you are already set up.  On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>.
               </p>
-            </li>
+            </li>  
             <li>
               <p>
                 <latex />.  Try <c>xelatex --version</c> to see if you already have this.
@@ -67,7 +67,7 @@
             </li>
             <li>
               <p>
-                Any text editor.  <url href="https://code.visualstudio.com/" visual="code.visualstudio.com/">Visual Studio Code</url> is a reasonable choice (and has a pretext-tools extension available), but so are SublimeText, atom, emacs, vi, etc.  See <xref ref="editors"/>.
+                Any text editor.  <url href="https://code.visualstudio.com/" visual="code.visualstudio.com/">Visual Studio Code</url> is an excelent choice (and has an extension, <url href="https://marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools">PreTeXt-tools</url>, with specific language support), but other editors such as SublimeText, atom, emacs, vi, etc. can also be used.  See <xref ref="editors"/>.
               </p>
             </li>
           </ul>
@@ -78,7 +78,7 @@
         </p>
 
         <console>
-          <input>pip install pretextbook</input>
+          <input>pip install pretext</input>
         </console>
 
         <p>
@@ -86,18 +86,19 @@
         </p>
 
           <console>
-            <input>python -m pip install pretextbook</input>
+            <input>python -m pip install pretext</input>
           </console>
+          (or, if <c>python3</c> worked above, do <c>python3 -m pip install pretext</c>.)
         <p>
           The <c>python -m</c> helps in case Python is on your <init>PATH</init> but <c>pip</c> is not.  This is a useful fix for the rest of the commands listed for the <pretext />-CLI.
         </p>
 
         <p>
-          To ensure that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (0.5.1, for example).
+          To ensure that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (1.0.3, for example).
         </p>
 
         <p>
-          We are now ready to move on to creating and converting a new <pretext /> document.
+          We are now ready to move on to creating and converting a new <pretext /> document using the <pretext />-CLI.  For more documentation about this CLI, see <xref ref="processing-CLI"/>
         </p>
       </paragraphs>
     </section>
@@ -139,11 +140,11 @@
 
         <remark>
           <p>
-            <pretext /> can generate a wide variety of images and other assets, <em>if</em> you have appropriate software (such as SageMath, Asymptote, <latex />) installed.  To try this, in the file <c>source/main.ptx</c> follow the instructions to uncomment the line <c>&lt;xi:include href="./ch_generate.ptx"/&gt;</c>, and use the command <c>pretext build -g all</c>.
+            <pretext /> can generate a wide variety of images and other assets, <em>if</em> you have appropriate software (such as SageMath or <latex />) installed.  To try this, in the file <c>source/main.ptx</c> follow the instructions to uncomment the line <c>&lt;xi:include href="./ch_generate.ptx"/&gt;</c>, and use the command <c>pretext build -g</c>.
           </p>
 
           <p>
-            The <c>-g</c> flag tells <pretext /> to generate any images described in the source, and <c>all</c> says to try all types of assets.  After doing this once, you can omit the <c>-g</c>, unless you modify the code for one of the images described in the source.
+            The <c>-g</c> flag tells <pretext /> to generate any images described in the source and to prepare any WeBWorK exercises.  After doing this once, you can omit the <c>-g</c>, unless you modify the code for one of the images described in the source.
           </p>
         </remark>
 
@@ -156,7 +157,7 @@
         </console>
 
         <p>
-          The output from this command will give a url to click on or copy that should show you the web output.
+          The output from this command will give a URL to click on (and might even open your browser to that location) that should show you the web output.  When you are done viewing, return to the terminal and hit <c>CTRL+C</c> to terminate the server. 
         </p>
 
         <p>
@@ -169,7 +170,7 @@
         </console>
 
         <p>
-          This will once again give a web link for the print version.  For this introductory example, you can also directly open the file located at <c>output/print/main.pdf</c>
+          If you are building on a local machine, the view command should open your pdf viewer; on CoCalc you will get a web link for the print version.  You can also directly open the file located at <c>output/print/main.pdf</c>
         </p>
       </paragraphs>
 
@@ -189,7 +190,7 @@
           <input>pretext new hello</input>
         </console>
         <p>
-          This creates another <c>new-pretext-project</c>, and you can follow the directions above to navigate to it, build and view it.
+          This creates another <c>new-pretext-project</c>, and you can follow the directions above to navigate to it, build, and view it.
         </p>
 
         <p>
@@ -248,7 +249,8 @@
     <section xml:id="quickstart-extend-minimal-example">
         <title>Extending the Minimal Example</title>
 
-        <p>We will not keep reproducing the entire example but instead suggest a series of modifications.  After each edit, convert the file again (<c>python -m pretext build html</c>) to make sure your syntax is correct (before you get too far along) and to see the changes (<c>python -m pretext view html</c>).</p>
+        <p>We will not keep reproducing the entire example but instead suggest a series of modifications.  After each edit, convert the file again (<c>pretext build web</c>) to make sure your syntax is correct (before you get too far along) and to see the changes (<c>pretext view web</c>).
+        Since this is a pretty small document, you could also use the following trick: run <c>pretext view -w web</c>, which will build the source, start the local server, and then rebuild whenever you save a sorce file.</p>
 
         <p>The generic name of the resulting files is pretty bland, and it would be nice to have a title for our article.  We will add an <term>attribute</term><idx>attribute</idx> to the <tag>article</tag> tag, specifically <attr>xml:id</attr>, which is a very important part of <pretext /> and used frequently.  For now, it will be used to generate the names of the output files.  (The <q>at</q> symbol is a way of reminding you that it is an attribute, it is not part of what you author.)</p>
 
@@ -359,3 +361,5 @@
         </p>
     </section>
 </chapter>
+
+
