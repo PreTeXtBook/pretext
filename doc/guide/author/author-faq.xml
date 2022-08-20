@@ -180,13 +180,13 @@
             <p>
               If you have errors when you run <c>pdflatex</c> or <c>xelatex</c>,
               that is more likely to be caused by a problem with your <latex /> installation
-              than with <pretext />.  It is difficult to make legitimate <pretext /> 
+              than with <pretext />.  It is difficult to make legitimate <pretext />
               that fails to compile; an exception being math markup inside a math element
               (<tag>m</tag>, <tag>me</tag>, and friends).
             </p>
 
             <p>
-              To check your <latex /> installation, run <c>pdflatex -version</c>.  
+              To check your <latex /> installation, run <c>pdflatex -version</c>.
               If it reports something older than <q>TeX Live 2017</q>,
               then updating may help.  If the trouble seems to be coming from a
               particular package, then check which version of the package is being used.
@@ -199,7 +199,7 @@
             <p>
               If the PDF is created without errors, but something looks wrong in the PDF,
               then probably the <pretext /> source markup is wrong.  Validate your source
-              against the schema (see <xref ref="schema-validation" />), and also carefully examine the HTML output.  
+              against the schema (see <xref ref="schema-validation" />), and also carefully examine the HTML output.
               If that does not reveal the problem, seek expert help.
             </p>
         </li>

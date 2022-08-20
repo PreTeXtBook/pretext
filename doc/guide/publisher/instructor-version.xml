@@ -35,7 +35,7 @@
             ]]>
         </pre>
         <p>
-        Or, using <c>xsltproc</c>, use:            
+        Or, using <c>xsltproc</c>, use:
         <cd>
                 <cline>xsltproc -stringparam commentary yes ...</cline>
         </cd>

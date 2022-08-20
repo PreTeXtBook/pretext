@@ -141,7 +141,7 @@
                         <title>README.md</title>
                         <p>
                             A file that you can use to describe your project.
-                        </p>                        
+                        </p>
                     </li>
                     <li>
                         <title>requirements.txt</title>
@@ -170,7 +170,7 @@
             </console>
 
             <p>
-                Here <q>web</q> is the <attr>name</attr> of one of the targets in the project manifest (<c>project.ptx</c>).  To build different targets, replace it with the <attr>name</attr> of another target, as in <c>pretext build print</c>. 
+                Here <q>web</q> is the <attr>name</attr> of one of the targets in the project manifest (<c>project.ptx</c>).  To build different targets, replace it with the <attr>name</attr> of another target, as in <c>pretext build print</c>.
             </p>
 
             <p>
@@ -231,7 +231,7 @@
             <idx><h><c>pretext generate</c></h></idx>
             <idx><h>CLI</h><h><c>generate</c></h></idx>
             <p>
-                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos.  We call these elements <q>assets</q> or <q>generated assets</q>.  To generate the assets, run the following command.  
+                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos.  We call these elements <q>assets</q> or <q>generated assets</q>.  To generate the assets, run the following command.
             </p>
 
             <console>
@@ -269,7 +269,7 @@
             </console>
 
             <p>
-                Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag. 
+                Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag.
             </p>
         </subsection>
 
@@ -382,7 +382,7 @@
             </p>
 
             <p>
-                Next we have <tag>source</tag> which contains a (preferably) relative path to the main source file you will compile.  Different targets might have different main source files, in case you create a separate version of your project that includes only some chapters, for example. 
+                Next we have <tag>source</tag> which contains a (preferably) relative path to the main source file you will compile.  Different targets might have different main source files, in case you create a separate version of your project that includes only some chapters, for example.
             </p>
 
             <p>
@@ -681,7 +681,7 @@
         </p>
 
         <p>
-            The custom <init>XSL</init> file should import the stock <pretext /> file for the type of output you want to create.  This is done using the line <tage>xsl:import href="./core/pretext-latex.xsl"</tage>, which should be placed near the top of the file; everything after it will redefine the various rules imported from the stock <init>XSL</init>.  Note the <attr>href</attr> attribute's value starts with <c>./core/</c>.  This works because the CLI copies all the standard <init>XSL</init> to a subfolder <c>core</c> of the temporary directory holding your custom <init>XSL</init> so that you don't need to know the path to its location on your system.  
+            The custom <init>XSL</init> file should import the stock <pretext /> file for the type of output you want to create.  This is done using the line <tage>xsl:import href="./core/pretext-latex.xsl"</tage>, which should be placed near the top of the file; everything after it will redefine the various rules imported from the stock <init>XSL</init>.  Note the <attr>href</attr> attribute's value starts with <c>./core/</c>.  This works because the CLI copies all the standard <init>XSL</init> to a subfolder <c>core</c> of the temporary directory holding your custom <init>XSL</init> so that you don't need to know the path to its location on your system.
         </p>
         <p>
             See <xref ref="extra-stylesheet"/> to see how to use such a stylesheet with the <c>pretext/pretext</c> script.
@@ -760,7 +760,7 @@
         </p>
 
         <p>
-            Whenever you need to process images described in your source, run <c>pretext generate</c>.  This will build the correct image output file for your specified target (use <c>-t [target]</c>). If you would like to build additional image formats, you can add <c>--all-formats</c> to the command.  
+            Whenever you need to process images described in your source, run <c>pretext generate</c>.  This will build the correct image output file for your specified target (use <c>-t [target]</c>). If you would like to build additional image formats, you can add <c>--all-formats</c> to the command.
         </p>
 
 

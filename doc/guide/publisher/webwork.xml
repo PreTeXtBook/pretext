@@ -187,7 +187,7 @@
         Before anything else can be done, a <pretext/> project with <webwork/> problems must first have its <webwork/> content extracted and processed into multiple representations, which are then collected into an auxiliary XML file.
         Using the CLI, this is done with <c>pretext generate webwork</c> (if you want to reference a particular target, add <c>-t [targetname]</c>).
       </p>
-        
+
       <p>
         If instead you want to use the <c>pretext/pretext</c> script, you might need to install the Python <c>requests</c> module.
         It is not uncommon for your computer to not have <c>requests</c> installed (although it comes with the CLI),
@@ -247,7 +247,7 @@
       <title>HTML output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as above.  Build the HTML with <c>pretext build web</c>.  
+        We assume you are using managed directories, and have <webwork/> representations file as above.  Build the HTML with <c>pretext build web</c>.
         You can also use <c>pretext/pretext</c> to build HTML. For example:
       </p>
       <console>

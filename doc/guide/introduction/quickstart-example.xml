@@ -59,7 +59,7 @@
               <p>
                 Python, version 3.8.5 or later.  In a terminal, type <c>python --version</c> to ensure you are already set up.  On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>.
               </p>
-            </li>  
+            </li>
             <li>
               <p>
                 <latex />.  Try <c>xelatex --version</c> to see if you already have this.
@@ -157,7 +157,7 @@
         </console>
 
         <p>
-          The output from this command will give a URL to click on (and might even open your browser to that location) that should show you the web output.  When you are done viewing, return to the terminal and hit <c>CTRL+C</c> to terminate the server. 
+          The output from this command will give a URL to click on (and might even open your browser to that location) that should show you the web output.  When you are done viewing, return to the terminal and hit <c>CTRL+C</c> to terminate the server.
         </p>
 
         <p>

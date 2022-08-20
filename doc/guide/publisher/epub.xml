@@ -18,7 +18,7 @@
     <section>
         <title>Prerequisites</title>
         <p>
-            There are a handful of prerequisites to build an <init>EPUB</init> version of a book.  
+            There are a handful of prerequisites to build an <init>EPUB</init> version of a book.
             <ul>
                 <li>
                     <p>
@@ -32,13 +32,13 @@
                 </li>
                 <li>
                     <p>
-                        You must use a publication file (referred to below as <c>publication.ptx</c>) with <cd>source/directories/@generated</cd> and <cd>source/directories/@external</cd> so that images can be located and bundled (these are included by default if you use <c>pretext new</c> or <c>pretext init</c> for your project). 
+                        You must use a publication file (referred to below as <c>publication.ptx</c>) with <cd>source/directories/@generated</cd> and <cd>source/directories/@external</cd> so that images can be located and bundled (these are included by default if you use <c>pretext new</c> or <c>pretext init</c> for your project).
                     </p>
 
                     <p>
                         To use a non-generic cover image, the publication file must also have <c>epub/@cover</c> that points to the cover image (<init>JPEG</init> or <init>PNG</init>, 2048 pixels tall, 1280 pixels wide).
                     </p>
-                </li> 
+                </li>
             </ul>
             If you use the <c>pretext/pretext</c> script, you will need to generate any source-defined images in <init>SVG</init> format for standard <init>EPUB</init>, and <init>PNG</init> format for Kindle.
         </p>
@@ -77,7 +77,7 @@
         </console>
 
         <p>
-            If instead, you wish to use the <c>pretext/pretext</c> script, make sure to first generate images into the correct format (<init>SVG</init> for regular <init>EPUB</init> and <init>PNG</init> for kindle).  
+            If instead, you wish to use the <c>pretext/pretext</c> script, make sure to first generate images into the correct format (<init>SVG</init> for regular <init>EPUB</init> and <init>PNG</init> for kindle).
             Converting to <init>EPUB</init> with <init>SVG</init> math (used everywhere other than Kindle), run as a single command-line
             <cd>
                 <cline>/path/to/mathbook/pretext/pretext -c all -f epub-svg</cline>

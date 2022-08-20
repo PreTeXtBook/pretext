@@ -31,7 +31,7 @@
         </xsl:stylesheet>
         ]]>
         </pre>
-        
+
         <p>
             Then add the following target in your project manifest.
         </p>

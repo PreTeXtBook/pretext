@@ -25,7 +25,7 @@
         <p>The <c>pretext</c> script is located in a directory of the <pretext/> distribution also named <c>pretext</c>.  So we often refer to it as the <c>pretext/pretext</c> script to avoid confusion with all the other places we say <pretext/>.  As a simple check on your ability to run the script, with a suitable path you can run<cd>
             <cline>/path/to/pretext/pretext -h</cline>
         </cd> to get a summary of the commands.   Since the command lives in the <c>pretext</c> directory, you may prefer to change to that directory for your first attempt.  On a Unix-like system (Linux, Mac) you may need to go <c>./pretext</c> since the program is not on your PATH.  Thus, depending on your executable name (<xref ref="python-executable"/>),
-        whether the script is in your path, and whether you have made the file executable, you might need to run 
+        whether the script is in your path, and whether you have made the file executable, you might need to run
         <cd>
             <cline>python /path/to/pretext/pretext -h</cline>
         </cd>
@@ -33,7 +33,7 @@
         <cd>
             <cline>python3 /path/to/pretext/pretext -h</cline>
         </cd></p>
-        
+
         <p>
         Some of the processing may take a long time, or you may experience trouble.  There are two switches to enable more verbose output in your terminal or console.<cd>
             <cline>pretext -v [command arguments]</cline>

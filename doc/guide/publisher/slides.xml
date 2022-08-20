@@ -14,7 +14,7 @@
     <section xml:id="publisher-revealjs">
         <title>Reveal.js</title>
         <p>
-            To create a reveal.js slideshow using pretext, start by creating a new project as follows. 
+            To create a reveal.js slideshow using pretext, start by creating a new project as follows.
         </p>
 
         <console>
