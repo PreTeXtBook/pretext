@@ -756,7 +756,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@time-limit and $b-host-runestone">
             <!-- TODO: make this a template and move to RS-specific file -->
             <div class="timedAssessment">
-                <ul data-component="timedAssessment" data-question_label="2.7.1" id="timed1">
+                <ul data-component="timedAssessment" data-question_label="">
+                    <!-- a Runestone id -->
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                     <!-- one mandatory attribute -->
                     <xsl:attribute name="data-time">
                         <xsl:value-of select="@time-limit"/>
