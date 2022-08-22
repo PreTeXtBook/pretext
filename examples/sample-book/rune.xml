@@ -1198,6 +1198,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </exercises>
 
+    <section xml:id="exercises-timed">
+        <title>Exercises that are Timed</title>
+
+        <p>This is a section that merely explains and holds an <tag>exercises</tag> division, which will be at the level of a <tag>subsection</tag>.  There is a <attr>time-limit</attr> attribute on <tag>exercises</tag>, set to the value <c>10</c>, which implies (a) the collection of (two) exercises is a <q>timed exam</q> when hosted on Runestone, and (b) a student will have 10 minutes to complete the collection.</p>
+
+        <p>Showing results, showing feedback, displaying a timer, and allowing pausing are all enabled by default.  To disable any of these features, set the corresponding attributes on the <tag>exercises</tag> division, <attr>results</attr>, <attr>feedback</attr>, <attr>timer</attr>, <attr>pause</attr>, to the value <c>no</c>.  As a test, we have turned off pausing.  Don't panic!</p>
+
+        <p>Of course, if you are not viewing this while online and hosted on a Runestone server, then these exercises will not look any different than in other places.</p>
+
+        <p>(Since this is an unstructured division, the number of the <tag>exercises</tag> is not displayed when born.  It does <em>have</em> a number, which is the same as the enclosing <tag>section</tag>.  To wit: <xref ref="exercises-timed"/> versus <xref ref="timing-exercises"/>.)</p>
+
+        <exercises xml:id="timing-exercises" label="timed-exercises" time-limit="10" pause="no">
+            <title>Timed Exercises</title>
+
+            <introduction>
+                <p>You have 10 minutes to do these exercises when hosted online on a Runestone server.</p>
+            </introduction>
+
+            <exercise label="vector-space-dimension-timed">
+                <title>True/False</title>
+                <idx>vector space</idx>
+                <statement correct="no">
+                    <p>Every vector space has finite dimension.</p>
+                </statement>
+                <feedback>
+                    <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                </feedback>
+                <hint>
+                    <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                </hint>
+            </exercise>
+
+            <exercise label="multiple-choice-not-randomized-timed">
+                <title>Multiple-Choice, Not Randomized, One Answer</title>
+                <idx>stop signs</idx>
+                <statement>
+                    <p>What color is a stop sign?</p>
+                </statement>
+                <!-- to appear as problem with potentially multiple correct -->
+                <!-- answers (even though there is only one), use           -->
+                <!--                                                        -->
+                <!--     <choices multiple-correct="yes">                   -->
+                <!--                                                        -->
+                <choices>
+                    <choice>
+                        <statement>
+                            <p>Green</p>
+                        </statement>
+                        <feedback>
+                            <p>Green means <q>go!</q>.</p>
+                        </feedback>
+                    </choice>
+                    <choice correct="yes">
+                        <statement>
+                            <p>Red</p>
+                        </statement>
+                        <feedback>
+                            <p>Red is universally used for prohibited activities or serious warnings.</p>
+                        </feedback>
+                    </choice>
+                    <choice>
+                        <statement>
+                            <p>White</p>
+                        </statement>
+                        <feedback>
+                            <p>White might be hard to see.</p>
+                        </feedback>
+                    </choice>
+                </choices>
+                <hint>
+                    <p>What did you see last time you went driving?</p>
+                </hint>
+                <hint>
+                    <p>Maybe go out for a drive?</p>
+                </hint>
+            </exercise>
+        </exercises>
+    </section>
+
     <section xml:id="interactive-projects">
         <title>Projects and Friends</title>
 
