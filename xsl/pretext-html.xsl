@@ -753,7 +753,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- some extra wrapping for timed exercises -->
         <!-- presence of @time-limit is the signal   -->
-        <xsl:when test="@time-limit and $b-host-runestone">
+        <xsl:when test="@time-limit">
             <!-- TODO: make this a template and move to RS-specific file -->
             <div class="timedAssessment">
                 <ul data-component="timedAssessment" data-question_label="">
