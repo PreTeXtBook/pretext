@@ -738,6 +738,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="exercises" mode="structural-division-inner-content">
+    <xsl:param name="heading-level"/>
+
+    <!-- this is identical to the default template -->
+    <xsl:variable name="the-exercises">
+        <xsl:apply-templates select="*">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+        <!-- only at "section" level. only when building for a Runestone server -->
+        <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- some extra wrapping for timed exercises -->
+        <!-- presence of @time-limit is the signal   -->
+        <xsl:when test="@time-limit and $b-host-runestone">
+            <!-- TODO: make this a template and move to RS-specific file -->
+            <div class="timedAssessment">
+                <ul data-component="timedAssessment" data-question_label="2.7.1" id="timed1">
+                    <!-- one mandatory attribute -->
+                    <xsl:attribute name="data-time">
+                        <xsl:value-of select="@time-limit"/>
+                    </xsl:attribute>
+                    <!-- result, timer, feedback, pause are *on* by  -->
+                    <!-- default if a PreTeXt attribute is "no" then -->
+                    <!-- issue empty "data-no-*" Runestone attribute -->
+                    <xsl:if test="@results = 'no'">
+                        <xsl:attribute name="data-no-result"/>
+                    </xsl:if>
+                    <xsl:if test="@timer = 'no'">
+                        <xsl:attribute name="data-no-timer"/>
+                    </xsl:if>
+                    <xsl:if test="@feedback = 'no'">
+                        <xsl:attribute name="data-no-feedback"/>
+                    </xsl:if>
+                    <xsl:if test="@pause = 'no'">
+                        <xsl:attribute name="data-no-pause"/>
+                    </xsl:if>
+                    <!-- the actual list of exercises -->
+                    <xsl:copy-of select="$the-exercises"/>
+                </ul>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy-of select="$the-exercises"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Only &STRUCTURAL; elements will pass through here, but we -->
 <!-- can't limit the match (without explicit exclusions), this -->
 <!-- is the default.  Which is to just apply templates to      -->
