@@ -6346,6 +6346,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer"  />
     <xsl:param name="b-has-solution"  />
 
+    <!-- The  $b-has-*  variables are a *desire* to see some component.   -->
+    <!-- But if an individual exercise does not have such a component,    -->
+    <!-- then it will not be shown.  So these  $b-showing-*s  variables   -->
+    <!-- are per-exercise indications.                                    -->
+    <!--                                                                  -->
+    <!-- An exercise always has a "statement" and if shown, it is inline. -->
+    <!-- When not shown (like in backmatter solutions) the exercise may   -->
+    <!-- still have a "title" which is shown inline.  So the first        -->
+    <!-- solution-like may be inline (no statement shown, no title        -->
+    <!-- authored), or it may follow the statement/title and need a       -->
+    <!-- separator to begin on a new line with a bit of a break.          -->
+
+    <xsl:variable name="b-showing-statement" select="$b-has-statement or title"/>
+    <xsl:variable name="b-showing-hints" select="$b-has-hint and hint"/>
+    <xsl:variable name="b-showing-answers" select="$b-has-answer and answer"/>
+    <xsl:variable name="b-showing-solutions" select="$b-has-solution and solution"/>
+
     <!-- structured (with components) versus unstructured (simply a bare statement) -->
     <xsl:choose>
         <xsl:when test="statement">
@@ -6384,7 +6401,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:for-each>
                 </xsl:if>
             </xsl:if>
-            <xsl:if test="$b-has-hint">
+            <!-- more coming and inline presentation already used up, so add a final separator -->
+            <xsl:if test="$b-showing-statement and ($b-showing-hints or $b-showing-answers or $b-showing-solutions)">
+                <xsl:call-template name="exercise-component-separator"/>
+            </xsl:if>
+            <xsl:if test="$b-showing-hints">
                 <xsl:apply-templates select="hint">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="purpose" select="$purpose" />
@@ -6392,22 +6413,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-has-answer" select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution" select="$b-has-solution" />
                 </xsl:apply-templates>
+                <!-- more coming, add a final separator -->
+                <xsl:if test="$b-showing-answers or $b-showing-solutions">
+                    <xsl:call-template name="exercise-component-separator"/>
+                </xsl:if>
             </xsl:if>
-            <xsl:if test="$b-has-answer">
+            <xsl:if test="$b-showing-answers">
                 <xsl:apply-templates select="answer">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
                     <xsl:with-param name="b-has-solution" select="$b-has-solution" />
                 </xsl:apply-templates>
+                <!-- more coming, add a final separator -->
+                <xsl:if test="$b-showing-solutions">
+                    <xsl:call-template name="exercise-component-separator"/>
+                </xsl:if>
             </xsl:if>
-            <xsl:if test="$b-has-solution">
+            <xsl:if test="$b-showing-solutions">
                 <xsl:apply-templates select="solution">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
                 </xsl:apply-templates>
             </xsl:if>
+            <!-- done, no final separator is provided -->
         </xsl:when>
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
@@ -6421,6 +6451,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- We place a separator *after* an exercise component if, and only if, -->
+<!-- we know there are more components to come.  So if we have multiple  -->
+<!-- solution-like, we place one after instance, but the last (see       -->
+<!-- templates for each solution-like).  Between groups of identical     -->
+<!-- solution-like we need to *perhaps* place a separator.               -->
 <xsl:template name="exercise-component-separator">
     <xsl:text>\par\smallskip%&#xa;</xsl:text>
 </xsl:template>
@@ -6432,7 +6467,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6441,6 +6475,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+    <!-- separate hints after all but final one -->
+    <xsl:if test="following-sibling::hint">
+        <xsl:call-template name="exercise-component-separator"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="answer">
@@ -6449,7 +6487,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-solution" />
 
-    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6458,6 +6495,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+    <!-- separate answers after all but final one -->
+    <xsl:if test="following-sibling::answer">
+        <xsl:call-template name="exercise-component-separator"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="solution">
@@ -6465,7 +6506,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
 
-    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6474,6 +6514,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+    <!-- separate solutions after all but final one -->
+    <xsl:if test="following-sibling::solution">
+        <xsl:call-template name="exercise-component-separator"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Each component has a similar look, so we combine here -->
