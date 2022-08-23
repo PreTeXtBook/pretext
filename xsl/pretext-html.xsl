@@ -758,7 +758,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="timedAssessment">
                 <ul data-component="timedAssessment" data-question_label="">
                     <!-- a Runestone id -->
-                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <!-- TODO: use attribute template in RS file -->
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                    </xsl:attribute>
                     <!-- one mandatory attribute -->
                     <xsl:attribute name="data-time">
                         <xsl:value-of select="@time-limit"/>

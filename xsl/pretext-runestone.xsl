@@ -333,7 +333,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;|task|exercises" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
