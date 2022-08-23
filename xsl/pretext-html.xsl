@@ -11443,6 +11443,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- Runestone user menu -->
                             <!-- Conditional on a build for Runestone hosting -->
                             <xsl:call-template name="runestone-bust-menu"/>
+                            <!-- A scratch ActiveCode via a pencil icon, always -->
+                            <xsl:call-template name="runestone-scratch-activecode"/>
                             <!-- Span to encase Prev/Up/Next buttons and float right    -->
                             <!-- Each button gets an id for keypress recognition/action -->
                             <xsl:element name="span">

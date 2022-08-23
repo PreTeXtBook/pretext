@@ -126,7 +126,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.enableScratchAC = true;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.new_server_prefix = "/ns";&#xa;</xsl:text>
                 <!-- no .build_info -->
                 <!-- no .python3 -->
@@ -219,8 +219,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.useRunestoneServices = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.host = 'http://127.0.0.1:8000';&#xa;</xsl:text>
                 <!-- no .app -->
-                <xsl:text>eBookConfig.course = 'PTX Course: Title Here';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.basecourse = 'PTX Base Course';&#xa;</xsl:text>
+                <!-- scratch Active Code fails if these faux strings have spaces or colons -->
+                <xsl:text>eBookConfig.course = 'PTX_Course_Title_Here';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.basecourse = 'PTX_Base_Course';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isLoggedIn = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.email = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isInstructor = false;&#xa;</xsl:text>
@@ -231,7 +232,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = false;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.enableScratchAC = true;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.build_info = "";&#xa;</xsl:text>
                 <xsl:text>eBookConfig.python3 = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.acDefaultLanguage = 'python';&#xa;</xsl:text>
@@ -323,6 +324,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
     </xsl:if>
+</xsl:template>
+
+<!-- Scratch ActiveCode window, for all builds (powered by Runestone   -->
+<!-- Javascript).  But more languages available on a Runestone server. -->
+<!-- Unicode Character 'PENCIL' (U+270F)                               -->
+<xsl:template name="runestone-scratch-activecode">
+    <a href="javascript:runestoneComponents.popupScratchAC()" class="activecode-toggle" title="Scratch ActiveCode">
+        <span class="icon">&#x270F;</span>
+    </a>
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
