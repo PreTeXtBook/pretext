@@ -157,13 +157,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#xa;</xsl:text>
             <xsl:text>{% endif %}&#xa;</xsl:text>
 
-            <!-- When hosted, we embed YouTube videos in a slightly different -->
-            <!-- manner, and with the next script it is possible to monitor   -->
-            <!-- reader events associated with the use of the videos          -->
-            <!-- NB: placed here just for initial testing w/ diffs, -->
-            <!--     could move up above Google Ad section          -->
-            <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
-
             <!-- We only show the Runestone "bust" menu icon if we are building        -->
             <!-- for a Runestone server, so this CSS is only needed in that case.      -->
             <!-- Perhaps it should exist in Runestone's CSS or maybe in PreTeXt's CSS? -->
@@ -1203,6 +1196,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- monitoring events from readers.  We have to pass in an actual    -->
 <!-- height and width (in pixels) for semi-custom attributes here.    -->
 <!-- Many PreTeXt video features (like posters) are lost.             -->
+<!-- The Runestone JavaScript will automatically include the          -->
+<!-- player_api JavaScript after it has set up the appropriate        -->
+<!-- events such as API loaded.                                       -->
+
 <!-- TODO: are start/end attributes useful?      -->
 <xsl:template match="video[@youtube]" mode="runestone-youtube-embed">
     <xsl:param name="width"/>
