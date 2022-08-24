@@ -160,9 +160,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- When hosted, we embed YouTube videos in a slightly different -->
             <!-- manner, and with the next script it is possible to monitor   -->
             <!-- reader events associated with the use of the videos          -->
-            <!-- NB: placed here just for initial testing w/ diffs, -->
-            <!--     could move up above Google Ad section          -->
-            <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
+	    <!-- The Runestone javascript will automatically include the player_api -->
+	    <!-- After it has set up the appropriate events such as API loaded -->
 
             <!-- We only show the Runestone "bust" menu icon if we are building        -->
             <!-- for a Runestone server, so this CSS is only needed in that case.      -->
