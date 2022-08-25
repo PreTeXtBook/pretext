@@ -44,6 +44,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 
     <html>
+        <!-- Turn on a Runestone ActiveCode window, both for show, -->
+        <!-- and for testing purposes.  This is not strictly       -->
+        <!-- necessary, due to this publisher file specifying a    -->
+        <!-- build for a Runestone server.  But the default is     -->
+        <!-- Python and we are specifying C++.                     -->
+        <calculator activecode="cpp"/>
         <!-- build for a Runestone server, not viewable otherwise  -->
         <platform host="runestone"/>
         <!-- knowled checkpoints interfere with ActiveCode         -->
