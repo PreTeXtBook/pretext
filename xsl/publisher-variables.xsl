@@ -1684,6 +1684,73 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+<!-- Scratch ActiveCode Window -->
+<!-- Pop-up a window for testing program code.  So "calculator-like" but we      -->
+<!-- reserve the word "calculator" for the hand-held type (even if more modern). -->
+<xsl:variable name="html-scratch-activecode-language">
+    <!-- Builds for a Runestone server default to having this   -->
+    <!-- available via a button, and a "generic" build defaults -->
+    <!-- to not having a button (or teh feature in any event).  -->
+    <xsl:variable name="activecode-default">
+        <xsl:choose>
+            <xsl:when test="$b-host-runestone">
+                <xsl:text>python</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="entered-lang" select="$publication/html/calculator/@activecode"/>
+    <xsl:choose>
+        <!-- languages *always* supported, including "none" -->
+        <xsl:when test="($entered-lang = 'none') or
+                        ($entered-lang = 'python') or
+                        ($entered-lang = 'javascript') or
+                        ($entered-lang = 'html') or
+                        ($entered-lang = 'sql')">
+            <!-- HTML has odd identifier, due to CodeMirror API, we  -->
+            <!-- use a simple one for our authors and translate here -->
+            <xsl:choose>
+                <xsl:when test="$entered-lang = 'html'">
+                    <xsl:text>htmlmixed</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$entered-lang"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- languages only available on a Runestone server -->
+        <xsl:when test="($entered-lang = 'c') or
+                        ($entered-lang = 'cpp') or
+                        ($entered-lang = 'java') or
+                        ($entered-lang = 'python3') or
+                        ($entered-lang = 'octave')">
+            <xsl:choose>
+                <!-- good when hosting on a server -->
+                <xsl:when test="$b-host-runestone">
+                    <xsl:value-of select="$entered-lang"/>
+                </xsl:when>
+                <!-- sounds good, but no, not the right build -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file requests "<xsl:value-of select="$entered-lang"/>", but this language is not supported unless the publisher file also indicates the build is meant to be hosted on a Runestone server. Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+                    <xsl:value-of select="$activecode-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- an attempt was made, but failed to be any sort of language -->
+        <xsl:when test="$publication/html/calculator/@activecode">
+            <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file should be a programming language or "none", not "<xsl:value-of select="$publication/html/calculator/@activecode"/>". Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+            <xsl:value-of select="$activecode-default"/>
+        </xsl:when>
+        <!-- no attempt to specify build-dependent default value -->
+        <xsl:otherwise>
+            <xsl:value-of select="$activecode-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-has-scratch-activecode" select="not($html-scratch-activecode-language = 'none')"/>
 
 <!--                          -->
 <!-- HTML Index Page Redirect -->
