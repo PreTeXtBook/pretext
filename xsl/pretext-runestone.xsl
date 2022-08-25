@@ -126,11 +126,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = true;&#xa;</xsl:text>
+                <!-- Scratch ActiveCode windows are a publisher option -->
+                <xsl:text>eBookConfig.enableScratchAC = </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-has-scratch-activecode">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>;&#xa;</xsl:text>
+                <!-- And set the language when scratch ActiveCode is enabled -->
+                <xsl:if test="$b-has-scratch-activecode">
+                    <xsl:text>eBookConfig.acDefaultLanguage = '</xsl:text>
+                    <xsl:value-of select="$html-scratch-activecode-language"/>
+                    <xsl:text>';&#xa;</xsl:text>
+                </xsl:if>
+                <!-- end Scratch ActiveCode windows -->
                 <xsl:text>eBookConfig.new_server_prefix = "/ns";&#xa;</xsl:text>
                 <!-- no .build_info -->
                 <!-- no .python3 -->
-                <!-- no .acDefaultLanguage -->
                 <!-- no .runestone_version -->
                 <!-- no .jobehost -->
                 <!-- no .proxyuri_runs -->
@@ -232,10 +248,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = false;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = true;&#xa;</xsl:text>
+                <!-- Scratch ActiveCode windows are a publisher option -->
+                <xsl:text>eBookConfig.enableScratchAC = </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-has-scratch-activecode">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>;&#xa;</xsl:text>
+                <!-- And set the language when scratch ActiveCode is enabled -->
+                <xsl:if test="$b-has-scratch-activecode">
+                    <xsl:text>eBookConfig.acDefaultLanguage = '</xsl:text>
+                    <xsl:value-of select="$html-scratch-activecode-language"/>
+                    <xsl:text>';&#xa;</xsl:text>
+                </xsl:if>
+                <!-- end Scratch ActiveCode windows -->
                 <xsl:text>eBookConfig.build_info = "";&#xa;</xsl:text>
                 <xsl:text>eBookConfig.python3 = null;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.acDefaultLanguage = 'python';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.runestone_version = '5.0.1';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.jobehost = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.proxyuri_runs = '';&#xa;</xsl:text>
@@ -328,11 +360,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Scratch ActiveCode window, for all builds (powered by Runestone   -->
 <!-- Javascript).  But more languages available on a Runestone server. -->
+<!-- Only if requested, explicitly or implicitly, via publisher file.  -->
 <!-- Unicode Character 'PENCIL' (U+270F)                               -->
 <xsl:template name="runestone-scratch-activecode">
-    <a href="javascript:runestoneComponents.popupScratchAC()" class="activecode-toggle" title="Scratch ActiveCode">
-        <span class="icon">&#x270F;</span>
-    </a>
+    <xsl:if test="$b-has-scratch-activecode">
+        <a href="javascript:runestoneComponents.popupScratchAC()" class="activecode-toggle" title="Scratch ActiveCode">
+            <span class="icon">&#x270F;</span>
+        </a>
+    </xsl:if>
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
