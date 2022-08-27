@@ -497,6 +497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
+                <!-- Add a canonical link here, in generic build case? -->
                 <!-- more "meta" elements for discovery -->
                 <xsl:call-template name="open-graph-info"/>
             </head>
@@ -6906,6 +6907,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="title-plain" />
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
+                <!-- canonical link for better SEO -->
+                <xsl:call-template name="canonical-link">
+                    <xsl:with-param name="filename" select="$filename"/>
+                </xsl:call-template>
                 <!-- more "meta" elements for discovery -->
                 <xsl:call-template name="open-graph-info"/>
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -10620,6 +10625,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <!-- canonical link for better SEO -->
+            <xsl:call-template name="canonical-link">
+                <xsl:with-param name="filename" select="$the-filename"/>
+            </xsl:call-template>
             <!-- more "meta" elements for discovery -->
             <xsl:call-template name="open-graph-info"/>
             <!-- favicon -->
@@ -10751,6 +10760,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <meta name="Keywords" content="Authored in PreTeXt" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <!-- canonical link for better SEO -->
+            <xsl:call-template name="canonical-link">
+                <xsl:with-param name="filename" select="$filename"/>
+            </xsl:call-template>
             <!-- more "meta" elements for discovery -->
             <xsl:call-template name="open-graph-info"/>
             <!-- jquery used by sage, webwork, knowls -->
@@ -10811,6 +10824,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 <!-- Page Identification -->
 <!-- ################### -->
+
+<!-- Canonical Link -->
+<!-- TODO: condition for generic builds at $site-root, need base-url, etc -->
+<xsl:template name="canonical-link">
+    <xsl:param name="filename"/>
+
+    <!-- book-wide site URL -->
+    <xsl:variable name="site-root">
+        <xsl:value-of select="concat('https://runestone.academy/ns/books/published/', $document-id, '/')"/>
+    </xsl:variable>
+    <!-- just for Runestone builds -->
+    <xsl:if test="$b-host-runestone">
+        <xsl:variable name="full-url" select="concat($site-root, $filename)"/>
+        <link rel="canonical" href="{$full-url}"/>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Open Graph Protocol, advertise to Facebook, others       -->
 <!-- https://ogp.me/                                          -->
