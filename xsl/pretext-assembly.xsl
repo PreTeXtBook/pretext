@@ -1189,7 +1189,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
             </xsl:when>
-            <xsl:when test="statement//var and not(webwork)">
+            <xsl:when test="statement//var and not(webwork) and not(self::task//ancestor::webwork)">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
             <!-- new dynamic fillin goes here, perhaps:                     -->
