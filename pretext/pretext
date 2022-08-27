@@ -520,9 +520,15 @@ def main():
     # realized by PreTeXt installation
     # Necessary for locating configuration files (next)
     log.debug(
-        "discovered distribution and xsl directories: {}, {}".format(
+        "PreTeXt distribution and xsl directories: {}, {}".format(
             ptx.get_ptx_path(), ptx.get_ptx_xsl_path()
         )
+    )
+
+    # Report Runestone Services version in debugging output
+    # Note: make sure this has been retrieved/installed first
+    log.debug(
+        "Runestone Services version: {}".format(ptx.get_runestone_services_version())
     )
 
     # The "get" will report 'executables' in configuration file
