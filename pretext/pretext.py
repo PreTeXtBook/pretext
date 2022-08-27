@@ -3029,6 +3029,23 @@ def get_source_path(source_file):
     return os.path.normpath(source_dir)
 
 
+def get_runestone_services_version():
+    """Examine Runestone Services file for version number"""
+    import os.path  # join()
+
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # label file
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("lxml"))
+
+    services_file = os.path.join(get_ptx_path(), "xsl", "support", "runestone-services.xml")
+    services = ET.parse(services_file)
+    version_element = services.xpath("/all/version")[0]
+    return version_element.text
+
+
 def set_executables(adict):
     global __executables
 
