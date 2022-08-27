@@ -157,8 +157,7 @@
     <title>PG Macros from the <pretext/> Source</title>
     <p>
       The project's <webwork/> exercises may rely on PG macros that are written into the project's source.
-      For example, the exercises might have TikZ images that rely on <tag>docinfo/latex-image-preamble</tag>
-      with <attr>syntax</attr> set to <c>PGtikz</c>.
+      For example, the exercises might have TikZ images that rely on <tag>docinfo/latex-image-preamble</tag>.
     </p>
     <p>
       For this, a PG macro library file must be built and placed in the host course's <c>templates/macros/</c>
@@ -186,8 +185,12 @@
       <title>Extraction and Processing</title>
       <p>
         Before anything else can be done, a <pretext/> project with <webwork/> problems must first have its <webwork/> content extracted and processed into multiple representations, which are then collected into an auxiliary XML file.
-        We do this with the <c>pretext/pretext</c> script which uses Python and the Python <c>requests</c> module.
-        It is not uncommon for your computer to not have <c>requests</c> installed,
+        Using the CLI, this is done with <c>pretext generate webwork</c> (if you want to reference a particular target, add <c>-t [targetname]</c>).
+      </p>
+
+      <p>
+        If instead you want to use the <c>pretext/pretext</c> script, you might need to install the Python <c>requests</c> module.
+        It is not uncommon for your computer to not have <c>requests</c> installed (although it comes with the CLI),
         so you should check if it is there and install it if need be.
         You can check if it is installed from the command line with:
         <cd>
@@ -244,8 +247,8 @@
       <title>HTML output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as above.
-        Now you may use <c>pretext/pretext</c> to build HTML. For example:
+        We assume you are using managed directories, and have <webwork/> representations file as above.  Build the HTML with <c>pretext build web</c>.
+        You can also use <c>pretext/pretext</c> to build HTML. For example:
       </p>
       <console>
         <prompt>$ </prompt>
@@ -259,7 +262,7 @@
         If unspecified, this will be the current working directory.
       </p>
       <p>
-        There are several string parameters you may pass to <c>pretext</c> using
+        There are several string parameters you may include in the project manifest, or pass to <c>pretext/pretext</c> using
         <c>-x stringparam option stringparam option ...</c>. If you use <c>-x</c> with <c>pretext</c>,
         make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
       </p>
@@ -327,8 +330,8 @@
       <title><latex/> output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as above.
-        Now you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
+        We assume you are using managed directories, and have <webwork/> representations file as above.  Then build as normal with the CLI.  Or
+        you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
       </p>
       <console>
         <prompt>$ </prompt>

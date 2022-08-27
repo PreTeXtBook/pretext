@@ -19,6 +19,11 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "./entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -440,7 +445,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
   </xsl:if>
   <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
-    <xsl:call-template name="fillin-text">
+    <xsl:call-template name="fillin-text"/>
   </xsl:if>
   <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
       <xsl:call-template name="fillin-math"/>

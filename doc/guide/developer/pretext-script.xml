@@ -25,7 +25,7 @@
         <p>The <c>pretext</c> script is located in a directory of the <pretext/> distribution also named <c>pretext</c>.  So we often refer to it as the <c>pretext/pretext</c> script to avoid confusion with all the other places we say <pretext/>.  As a simple check on your ability to run the script, with a suitable path you can run<cd>
             <cline>/path/to/pretext/pretext -h</cline>
         </cd> to get a summary of the commands.   Since the command lives in the <c>pretext</c> directory, you may prefer to change to that directory for your first attempt.  On a Unix-like system (Linux, Mac) you may need to go <c>./pretext</c> since the program is not on your PATH.  Thus, depending on your executable name (<xref ref="python-executable"/>),
-        whether the script is in your path, and whether you have made the file executable, you might need to run 
+        whether the script is in your path, and whether you have made the file executable, you might need to run
         <cd>
             <cline>python /path/to/pretext/pretext -h</cline>
         </cd>
@@ -33,7 +33,7 @@
         <cd>
             <cline>python3 /path/to/pretext/pretext -h</cline>
         </cd></p>
-        
+
         <p>
         Some of the processing may take a long time, or you may experience trouble.  There are two switches to enable more verbose output in your terminal or console.<cd>
             <cline>pretext -v [command arguments]</cline>
@@ -238,13 +238,7 @@ The script should be run on the entire document, even if all the images are in o
 
                     <p>Note that for all this to work, you need to properly serve your project's <init>HTML</init> output with the interactive content.  (A local server may be a possibility, but we have not tried.  See <xref ref="processing-testing-html"/>.  Or you can try a temporary public server, see <xref ref="processing-testing-html-globally"/>).  Then you need to announce the location of this hosted <init>HTML</init>, which is accomplished via a <q>base URL</q> in a publication file.  Start at <xref ref="online-base-url"/> for details on this publisher variable.  Note that the chunk level in your publication file used in this process <em>must</em> match the chunk level used when you build your <init>HTML</init> output, and mismatches for other publisher variables could have some ill effects.</p>
 
-                    <p><c>pageres</c> is the <c>node</c> program enabling this process.  So follow <xref ref="node-and-npm"/> and install the <c>pageres-cli</c> package (not simply <c>pageres</c>).  In <em>your copy</em> of <c>pretext/pretext.cfg</c> you will see an entry for <c>pageres</c>.  Provide a complete path to within your installation of the <c>pageres-cli</c> package (see <xref ref="pretext-helpers"/>).  For example, my setup uses<cd>
-                        <cline>pageres = /home/rob/node_modules/.bin/pageres</cline>
-                    </cd>Now call <c>pretext/pretext</c> with <c>-c preview</c>.  There is no need to set a format<mdash/>you get what you get (<init>PNG</init> images).</p>
-
-                    <p>There is a default 5-second delay for each new snapshot to let the page render and the image to settle down.  To change this set an argument for the <c>pageres</c> executable in <c>pretext/pretext.cfg</c>, such as<cd>
-                        <cline>pageres = /home/rob/node_modules/.bin/pageres -d20</cline>
-                    </cd></p>
+                    <p>The automatic screenshots will then be managed by the Python <c>pyppeteer</c> package, which you will need to have installed in your Python virtual environment (see <xref ref="pip-install"/>).</p>
                 </li>
 
                 <li xml:id="mathematics-representations">

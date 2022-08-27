@@ -534,7 +534,7 @@ the xsltproc executable.
             </sage>
 
             <!-- https://github.com/sagemath/sagecell/blob/master/contrib/vm/container_manager.py#L260 -->
-            <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html" visual="r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
+            <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
 
             <sage language="r">
                 <input>
@@ -2650,13 +2650,14 @@ the xsltproc executable.
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
 
-                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute must be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
+                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
 
                 <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape" text="type-global"/>). </p>
 
-                <p>A <tag>url</tag> element with content will get a footnote, containing the (simplified) URL in the mandatory <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you are using a construction that was deprecated on 2020-01-05.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
+                <p>A <tag>url</tag> element with content will get a footnote, by containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/" visual="http://example.com/">With a duplicate <attr>visual</attr> attribute</url></li>
+                    <li><url href="http://example.com/">With no <attr>visual</attr> attribute</url>, so an edited one is formulated (no protocol)</li>
                 </ul></p>
 
                 <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version</p>
@@ -4290,12 +4291,12 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
 
                 <biblio type="bibtex" xml:id="CF">
-                <author>J. B. Conrey and D. W. Farmer</author>
-                <title>Mean values of <m>L</m>-functions and symmetry</title>
-                <journal>Internat. Math. Res. Notices</journal>
-                <number>17</number>
-                <year>2000</year>
-                <pages start="883" end="908"/>
+                    <author>J. B. Conrey and D. W. Farmer</author>
+                    <title>Mean values of <m>L</m>-functions and symmetry</title>
+                    <journal>Internat. Math. Res. Notices</journal>
+                    <number>17</number>
+                    <year>2000</year>
+                    <pages start="883" end="908"/>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
@@ -4303,13 +4304,14 @@ the xsltproc executable.
                 </biblio>
 
                 <biblio type="bibtex" xml:id="Dav">
-                <author>H. Davenport</author>
-                <title>Multiplicative Number Theory</title>
-                <series>GTM</series>
-                <volume>74</volume>
-                <publisher>Springer-Verlag New York, NY</publisher>
-                <year>2000</year>
-                <pages>xiv+177</pages>
+                    <author>H. Davenport</author>
+                    <title>Multiplicative Number Theory</title>
+                    <series>GTM</series>
+                    <volume>74</volume>
+                    <publisher>Springer-Verlag New York, NY</publisher>
+                    <year>2000</year>
+                    <pages>xiv+177</pages>
+                    <pubnote>A note may accompany a bibliographic item, such as saying the manuscript is under review.  But it cannot contain any formatting.</pubnote>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
@@ -5208,6 +5210,7 @@ the xsltproc executable.
 
             <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
 
+
             <!-- Default matches HTML and LaTEX, left. -->
             <!-- We set this table's default to right. -->
             <table>
@@ -5254,7 +5257,8 @@ the xsltproc executable.
 
             <p>Example from above, but now with horizontal rules, plus an extra row to test the bottom border.  See the source for comments.</p>
 
-            <table>
+            <!-- Keep this in sync with breakable version, xml:id of horizontal-rules-breakable-table -->
+            <table xml:id="horizontal-rules-table">
                 <title>Horizontal Rules Example</title>
                 <tabular bottom="minor" top="major" halign="right">
                     <col top="minor"/>
@@ -5916,6 +5920,1205 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <p>We now finish this section with some <em>long</em> tables.  Ones that will not fit on a single printed page.  So this is only of interest when producing this sample article as a <init>PDF</init>.  First a <q>naked</q> tabular, which should force a new page to start, and then still overrun the end of the page.</p>
+
+            <tabular>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+            </tabular>
+
+            <p>Now the same <tag>tabular</tag>, but within a <tag>table</tag>.  Behavior should be similar, a new page and then it overruns the bottom of the page.</p>
+
+
+            <table>
+                <title>A Lot of Colors</title>
+                <tabular>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>When you wish to allow a <tag>tabular</tag> to split itself at a page break, you can add the attribute <attr>break</attr> with the value <c>yes</c>.  Certainly this will control a <tag>table</tag> or <tag>tabular</tag> which is longer than a page, but will also allow a shorter one to break.  This might useful in a draft stage before undertaking page-fitting.</p>
+
+            <p>Here is the long <tag>tabular</tag> again, but with the <attr>break</attr> attribute set to <c>yes</c>.</p>
+
+            <tabular break="yes">
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+            </tabular>
+
+            <p>Here is the long <tag>table</tag> again, but with the <attr>break</attr> attribute set to <c>yes</c> on the <attr>tabular</attr>.</p>
+
+           <table>
+                <title>A Lot of Colors, Breaking</title>
+                <tabular break="yes">
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>This device is not ideal, as some features of tables are not behaving as expected.  More precisely, we switch from the standard <latex/> <c>tabular</c> environment to the <c>longtable</c> environment from the package of the same name when table-breaking is requested.  So there may be some undesirable interaction with other packages.  For one, full-width horizontal rules seem to become as wide as the page (rather than as wide as the tabular).  The following table is <xref ref="horizontal-rules-table" text="type-global"/> repeated but as a breakable <tag>tabular</tag>.  The <c>longtable</c> package documentation suggests it accomodates the <c>array</c> package, but it also seems to make a variety of redefinitions.  Furthermore, a panel of a side-by-side cannot be a breakable tabular, or a <latex/> compilation error occurs.</p>
+
+            <table xml:id="horizontal-rules-breakable-table">
+                <title>Horizontal Rules Example</title>
+                <tabular bottom="minor" top="major" halign="right" break="yes">
+                    <col top="minor"/>
+                    <col />
+                    <col top="none" halign="center" />
+                    <col top="major" />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row bottom="none">
+                        <cell>First</cell>
+                        <cell bottom="major">Second</cell>
+                        <cell bottom="major">Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row bottom="medium">
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row halign="left">
+                        <cell bottom="none">1</cell>
+                        <cell halign="center" bottom="minor">2</cell>
+                        <cell bottom="none">3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- proper bottom, otherwise defaults -->
+                    <row bottom="medium">
+                        <cell>1</cell>
+                        <cell>2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <p>The <c>longtable</c> package allows for headers and footers indicating continued tables.  A possible enhancement is to support this feature in the case of a long table.</p>
         </section>
 
         <section xml:id="section-interactive-authored">
@@ -6119,13 +7322,13 @@ the xsltproc executable.
                 </figure>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="svg-interactives">
                 <title>SVG</title>
 
                 <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
 
-                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The change in <m>x</m>, denoted here as <m>h</m>, is reported when the <q>Show secant line</q> option is ticked.  The <m>h</m> is being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with <c>$...$</c> nor by <c>\(...\)</c>, but instead by using <tag>script</tag> tags that MathJax recognizes.  So the employment of MathJax here is accomplished with<cd>
-                    <cline>&lt;script type="math/tex">h = &lt;/script></cline>
+                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The functions to choose from via radio buttons, and the change in <m>x</m>, denoted later as <m>h</m>, are being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with simply <c>$...$</c> nor by simply <c>\(...\)</c>, but instead by using the <c>\(...\)</c> and then also wrapping that in a <tag>span</tag> element with a <attr>class</attr> attribute set to <c>process-math</c>. (The latter is how we instruct MathJax as to which parts of a page to process, or not).  So to have MathJax render a nice <m>x^2</m> in this context (math inside <init>HTML</init> inside a <tag>slate</tag> inside an <tag>interactive</tag>) would be accomplished with<cd>
+                    <cline>&lt;span class="process-math"&gt;x^2&lt;/span&gt;</cline>
                 </cd></p>
 
                 <figure xml:id="figure-interactive-slopes">
@@ -6146,18 +7349,18 @@ the xsltproc executable.
                             Here's an illustration of this basic idea.
                             </div>
                             <div id="function_list" style="text-align: center" xmlns="http://www.w3.org/1999/xhtml">
-                                Choose \(f\):
+                                Choose <span class="process-math">\(f\)</span>:
                                 <span class="function_radio_container" style="padding-left: 10px">
                                     <input type="radio" class="radio" name="function" value="f1" id="f1" />
-                                    \(f(x)=x^2\)
+                                    <span class="process-math">\(f(x)=x^2\)</span>
                                 </span>
                                 <span class="function_radio_container">
                                     <input type="radio" class="radio" name="function" value="f2" />
-                                    \(f(x)=\frac{1}{3}e^x\)
+                                    <span class="process-math">\(f(x)=\frac{1}{3}e^x\)</span>
                                 </span>
                                 <span class="function_radio_container">
                                     <input type="radio" class="radio" name="function" value="f3" />
-                                    \(f(x)=\sin(2x^2)+x/4\)
+                                    <span class="process-math">\(f(x)=\sin(2x^2)+x/4\)</span>
                                 </span>
                             </div>
                         </slate>
@@ -6173,7 +7376,7 @@ the xsltproc executable.
                                         <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
                                     </table></td>
                                     <td><table>
-                                        <tr><td class="dimit" style="text-align: left;"><script type="math/tex">h = </script> <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;"><span class="process-math">\(h\)</span> = <span id="h_value_display"></span></td></tr>
                                         <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
                                         <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
                                     </table></td>
@@ -6423,12 +7626,12 @@ the xsltproc executable.
 
                 <p>Do one of the following:<ol>
                     <li>Identify a material ID from GeoGebra's Classroom Resources site. You might even make the material yourself on that site.</li>
-                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder" visual="www.opinionatedgeek.com/codecs/base64decoder"/>.</li>
+                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder"/>.</li>
                     <li>Obtain a base64 encoded string for a GeoGebra applet. You might first open a <c>.ggb</c> file in a desktop installation of GeoGebra, and push ctrl-shift-B (command-shift-B on a Mac) and then the string will be in your clipboard.</li>
                     <li>None of the above, with the intention to make an applet from scratch.</li>
                 </ol></p>
 
-                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
+                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
 
                 <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft" visual="www.geogebra.org/m/D4s2v4ft"/>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>. It is important to use one command per line.</p>
 
@@ -6548,14 +7751,9 @@ the xsltproc executable.
             <subsection xml:id="interactive-threejs">
                 <title>threejs</title>
 
-                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+                <p>Once upon a time there was an example here using the <c>threejs</c> 3D Javascript library.  It was <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.</p>
 
-                <figure xml:id="figure-threejs-splines">
-                    <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
-                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="preview/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
-                        <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
-                    </interactive>
-                </figure>
+                <p>But it would seem to have become a bit more complicated to embed and our example was not rendering.  As of 2022-08-08, we have removed it.  Of course, you can find it in the git repository, perhaps searching on the date string just mentioned.  It woulld be interesting to see if our <tag>interactive</tag> framework could still support the changes.</p>
 
                 <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
@@ -6675,29 +7873,6 @@ the xsltproc executable.
                 <figure xml:id="figure-calcplot3d">
                     <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m> (full application)</caption>
                     <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="3:2"/>
-                </figure>
-            </subsection>
-
-            <subsection>
-                <title>Wolfram CDF</title>
-                <idx>Wolfram CDF</idx>
-
-                <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" visual="reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html"/> for information about creating your demonstration.</p>
-
-                <p><url href="http://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html" /> explains hosting CDF files at the Wolfram Cloud, and is the source of <xref ref="wolfram-cdf-cellular-automata" text="type-global" />.  You can learn about powering your CDF with Wolfram Cloud Credits at <url href="https://www.wolfram.com/cloud-credits/" />.  CDF is a public format, and the FreeCDF<trademark /> license is a variant of a Creative Commons BY-SA license, see <url href="http://www.wolfram.com/cdf/adopting-cdf/licensing-options.html" />.</p>
-
-                <p>The first example here (<xref ref="wolfram-cdf-sine-curve" text="type-global" />) was developed by Itai Seggev, a Senior Kernel Developer at Wolfram.</p>
-
-                <p>(2018-04-02) These behave as expected in Chrome, but perhaps not in Firefox.  Testing welcome.</p>
-
-                <figure xml:id="wolfram-cdf-sine-curve">
-                    <caption>Variable Sine Curve</caption>
-                    <interactive xml:id="wolfram-sine-curve" wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" width="80%" aspect="1:1" />
-                </figure>
-
-                <figure xml:id="wolfram-cdf-cellular-automata">
-                    <caption>Cellular Automata</caption>
-                    <interactive xml:id="wolfram-cellular-automata" wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
                 </figure>
             </subsection>
         </section>
@@ -6970,6 +8145,7 @@ the xsltproc executable.
                     <statement>
                         <p>This should be built with a text-box, <em>only</em> on a capable server (Runestone).  So it can be answered</p>
                     </statement>
+                    <response/>
                 </exercise>
             </reading-questions>
 
@@ -7043,7 +8219,7 @@ the xsltproc executable.
 
                 <p>Video, observable on a Runestone server.</p>
 
-                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="external/yt-list-variables.png"/>
+                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png"/>
             </subsection>
         </section>
 

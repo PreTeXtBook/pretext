@@ -34,6 +34,11 @@
 import logging
 log = logging.getLogger('ptxlogger')
 
+# Can show full traceback, and then continue processing
+# https://stackoverflow.com/questions/3702675/
+# how-to-catch-and-print-the-full-exception-traceback-without-halting-exiting-the
+import traceback  # format_exc()
+
 #############################
 #
 #  Math as LaTeX on web pages
@@ -81,7 +86,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # Trying to correct baseline for inline math in Kindle, so we
     # insert a \mathstrut into all the inline math before feeding to MathJax
     if math_format == "kindle":
-        with fileinput.FileInput(mjinput, inplace=True, backup=".bak") as file:
+        with fileinput.FileInput(mjinput, inplace=True) as file:
             for line in file:
                 print(line.replace(r"\(", r"\(\mathstrut "), end="")
 
@@ -112,8 +117,8 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     mj_option = "--" + mj_var
     mj_tag = "mj-" + mj_var
     mjpage_cmd = node_exec_cmd + [mjsre_page, mj_option, mjinput]
-    outfile = open(mjoutput, "w")
-    subprocess.run(mjpage_cmd, stdout=outfile)
+    with open(mjoutput, "w") as outfile:
+        subprocess.run(mjpage_cmd, stdout=outfile)
 
     # the 'mjpage' executable converts spaces inside of a LaTeX
     # \text{} into &nbsp; entities, which is a good idea, and
@@ -132,8 +137,9 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     owd = os.getcwd()
     os.chdir(tmp_dir)
     html_file = mjoutput
-    for line in fileinput.input(html_file, inplace=1):
-        print(xhtml_elt.sub(repl, line), end="")
+    with fileinput.FileInput(html_file, inplace=True) as file:
+        for line in file:
+            print(xhtml_elt.sub(repl, line), end="")
     os.chdir(owd)
 
     # clean up and package MJ representations, font data, etc
@@ -432,19 +438,19 @@ def latex_image_conversion(
                     "##################################################################"
                 )
             else:
-                pcm_executable_cmd = get_executable_cmd("pdfcrop")
-                # Strip the executable itself, since we will .crop() internally,
-                # but do keep the options/arguments provided by a publisher,
-                # which *might* supersede ones give here earlier (untested)
+                # Threshold implies only byte value 255 is white, which
+                # assumes these images are *produced* on white backgrounds
                 pcm_cmd = [
                     latex_image_pdf,
                     "-o",
                     "cropped-" + latex_image_pdf,
+                    "-t",
+                    "254",
                     "-p",
                     "0",
                     "-a",
                     "-1",
-                ] + pcm_executable_cmd[1:]
+                ]
                 log.info(
                     "cropping {} to {}".format(
                         latex_image_pdf, "cropped-" + latex_image_pdf
@@ -596,7 +602,7 @@ def latex_tactile_image_conversion(
     if pub_file:
         stringparams["publisher"] = pub_file
     # Pass the just-created math representation file
-    stringparams["mathfile"] = math_file
+    stringparams["mathfile"] = math_file.replace(os.sep, "/")
     log.info(
         "string parameters passed to label extraction stylesheet: {}".format(
             stringparams
@@ -723,13 +729,9 @@ def latex_tactile_image_conversion(
 
 # Convert program source code into traces for the interactive
 # CodeLens tool in Runestone
-# Dependencies:  pg_logger.pty, pg_encoder.py, _js_var_finalizer()
-# See RunestoneComponents/runestone/codelens/visualizer.py (get_trace())
-
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import runestone.codelens.pg_logger  # exec_script_str_local()
 
     try:
         import requests  # post()
@@ -739,7 +741,10 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Trace Server: language abbreviation goes in argument
     url_string = "http://tracer.runestone.academy:5000/trace{}"
-    server_time_out_string = "PTX:ERROR: the server at {} timed out while processing source {}.  No trace file produced"
+    server_error_msg = '\n'.join([
+           "the server at {} could not process program source file {}.",
+           "No trace file was produced.  The generated traceback follows, other files will still be processed."
+           ])
 
     log.info(
         "creating trace data from {} for placement in {}".format(xml_source, dest_dir)
@@ -764,7 +769,11 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         runestone_id = program_quad[0]
         visible_id = program_quad[1]
         language = program_quad[2]
-        url = url_string.format(language)
+        if language == 'python':
+            url = url_string.format('py')
+        else:
+            # c, cpp, java
+            url = url_string.format(language)
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
         source = program_quad[3].replace("\\n", "\n")
@@ -777,21 +786,25 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text[r.text.find('{"code":') :]
-            except requests.ReadTimeout:
-                print(server_time_out_string.format(url, visible_id))
+            except Exception as e:
+                log.critical(traceback.format_exc())
+                log.critical(server_error_msg.format(url, visible_id))
         elif language == "java":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text
-            except requests.ReadTimeout:
-                print(server_time_out_string.format(url, visible_id))
+            except Exception as e:
+                log.critical(traceback.format_exc())
+                log.critical(server_error_msg.format(url, visible_id))
         elif language == "python":
-            # local routines handle this case, no server involved
-            trace = runestone.codelens.pg_logger.exec_script_str_local(
-                source, None, False, None, _js_var_finalizer
-            )
-
+            try:
+                r = requests.post(url, data=dict(src=source), timeout=30)
+                if r.status_code == 200:
+                    trace = r.text
+            except Exception as e:
+                log.critical(traceback.format_exc())
+                log.critical(server_error_msg.format(url, visible_id))
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
@@ -801,17 +814,6 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
             with open(trace_file, "w") as f:
                 f.write(trace)
-
-
-# 2022-04-21:  "finalizer" routine from Runestone project
-#   Used with permission from Bradley Miller
-#   RunestoneComponents/blob/runestone/codelens/visualizer.py
-def _js_var_finalizer(input_code, output_trace):
-    import json
-
-    ret = dict(code=input_code, trace=output_trace)
-    json_output = json.dumps(ret, indent=None)
-    return json_output
 
 
 ################################
@@ -942,20 +944,46 @@ def webwork_to_xml(
     ww_domain_path = ww_domain_ww2 + "html2xml"
 
     # Establish WeBWorK version
+
+    # First try to identify the WW version according to what a response hash says it is.
+    # This should work for 2.17 and beyond.
     try:
-        landing_page = requests.get(ww_domain_ww2)
+        params_for_version_determination = dict(
+            problemSeed=1,
+            displayMode='PTX',
+            courseID=courseID,
+            userID=userID,
+            outputformat='raw'
+        )
+        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
+        ww_version = ""
+        if "ww_version" in version_determination_json:
+            ww_version = version_determination_json["ww_version"]
+            ww_version_match = re.search(
+                r"((\d+)\.(\d+))", ww_version, re.I
+            )
     except Exception as e:
         root_cause = str(e)
-        msg = (
-            "PTX:ERROR:   There was a problem contacting the WeBWorK server.\n"
-            + "             Is there a WeBWorK landing page at {}?\n"
-        )
+        msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
         raise ValueError(msg.format(ww_domain_ww2) + root_cause)
 
-    landing_page_text = landing_page.text
-    ww_version_match = re.search(
-        r"WW.VERSION:\s*((\d+)\.(\d+))", landing_page_text, re.I
-    )
+    # Now if that failed, try to infer the version from what is printed on the landing page.
+    if ww_version == "":
+        try:
+            landing_page = requests.get(ww_domain_ww2)
+        except Exception as e:
+            root_cause = str(e)
+            msg = (
+                "PTX:ERROR:   There was a problem contacting the WeBWorK server.\n"
+                + "             Is there a WeBWorK landing page at {}?\n"
+            )
+            raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+        landing_page_text = landing_page.text
+
+        ww_version_match = re.search(
+            r"WW.VERSION:\s*((\d+)\.(\d+))", landing_page_text, re.I
+        )
+
     try:
         ww_version = ww_version_match.group(1)
         ww_major_version = int(ww_version_match.group(2))
@@ -1011,6 +1039,23 @@ def webwork_to_xml(
                 )
             )
         log.info(msg)
+
+        # If and only if the server is version 2.16, we adjust PG code to use PGtikz.pl
+        # instead of PGlateximage.pl
+        if ww_major_version == 2 and ww_minor_version == 16 and origin[problem] == "ptx":
+            pgdense[problem] = pgdense[problem].replace('PGlateximage.pl','PGtikz.pl')
+            pgdense[problem] = pgdense[problem].replace('createLaTeXImage','createTikZImage')
+            pgdense[problem] = pgdense[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
+            pgdense[problem] = pgdense[problem].replace('END_LATEX_IMAGE','END_TIKZ')
+            pghuman[problem] = pghuman[problem].replace('PGlateximage.pl','PGtikz.pl')
+            pghuman[problem] = pghuman[problem].replace('createLaTeXImage','createTikZImage')
+            pghuman[problem] = pghuman[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
+            pghuman[problem] = pghuman[problem].replace('END_LATEX_IMAGE','END_TIKZ')
+            # We crudely remove tikzpicture environment delimiters
+            pgdense[problem] = pgdense[problem].replace('\\begin{tikzpicture}','')
+            pgdense[problem] = pgdense[problem].replace('\\end{tikzpicture}','')
+            pghuman[problem] = pghuman[problem].replace('\\begin{tikzpicture}','')
+            pghuman[problem] = pghuman[problem].replace('\\end{tikzpicture}','')
 
         # make base64 for PTX problems
         if origin[problem] == "ptx":
@@ -1334,6 +1379,8 @@ def webwork_to_xml(
         # Use "webwork-reps" as parent tag for the various representations of a problem
         webwork_reps = ET.SubElement(webwork_representations, "webwork-reps")
         webwork_reps.set("version", ww_reps_version)
+        webwork_reps.set("ww_major_version", str(ww_major_version))
+        webwork_reps.set("ww_minor_version", str(ww_minor_version))
         webwork_reps.set("{%s}id" % (XML), "extracted-" + problem)
         webwork_reps.set("ww-id", problem)
         static = ET.SubElement(webwork_reps, "static")
@@ -1629,11 +1676,44 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import subprocess, shutil
     import os  # chdir
     import os.path  # join()
+    import asyncio  # get_event_loop()
 
-    suffix = "png"
+    # external module, often forgotten
+    # imported here, used only in interior
+    # routine to launch browser
+    try:
+        import pyppeteer  # launch()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("pyppeteer"))
+
+    # Interior asynchronous routine to manage the Chromium
+    # headless browser and snapshot the desired iframe
+    async def snapshot(input_page, fragment, out_file):
+
+        # input_page: the "standalone" page of the interactive
+        #             hosted at the base URL
+        # fragement:  the hash/fragement identifier of the iframe
+        # out_file:   resulting image file in scratch directory
+
+        # the "standalone" page has one "iframe" known by
+        # the HTML id coming in here as "fragment"
+        xpath = "//iframe[@id='{}'][1]".format(fragment)
+
+        browser = await pyppeteer.launch()
+        page = await browser.newPage()
+        await page.goto(input_page)
+        await page.waitForXPath(xpath);
+        # wait again, 5 seconds, for more than just splash screens, etc
+        await page.waitFor(5000)
+        # list of locations, need first (and only) one
+        elt = await page.xpath(xpath);
+        await elt[0].screenshot({'path': out_file})
+        await browser.close()
+    # End of interior routine
 
     log.info(
-        "creating interactive previews from {} for placement in {}".format(
+        "using Pyppeteer package to create previews for interactives from {} for placement in {}".format(
             xml_source, dest_dir
         )
     )
@@ -1662,58 +1742,22 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # call will need to accept the override as a stringparam
     baseurl = interactives[0]
 
-    pageres_executable_cmd = get_executable_cmd("pageres")
-    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-    log.debug("pageres executable: {}".format(pageres_executable_cmd[0]))
-    log.debug("interactives identifiers: {}".format(interactives))
-
-    # We look to see if a delay is provided in the
-    # command from the configuration file.  The command is
-    # a list of command-line pieces.  We inefficently
-    # look in all of them, even if it might be found early.
-    delay_specified = any(
-        [
-            (p.startswith("-d") or p.startswith("--delay"))
-            for p in pageres_executable_cmd
-        ]
-    )
-
-    # pageres-cli writes into current working directory
+    # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
+    # TODO: just write to "dest_dir"?
     owd = os.getcwd()
     os.chdir(tmp_dir)
 
     # Start after the leading base URL sneakiness
     for preview in interactives[1:]:
+        # parameters
         input_page = os.path.join(baseurl, preview + ".html")
-        page_with_fragment = "".join([input_page, "#", preview])
-        selector_option = "--selector=#" + preview
-        # file suffix is provided by pageres
-        format_option = "--format=" + suffix
-        filename_option = "--filename=" + preview + "-preview"
-        filename = preview + "-preview." + suffix
-        page_with_fragment = "".join([input_page, "#", preview])
-        log.info("converting {} to {}".format(page_with_fragment, filename))
-
-        # pageres invocation
-        # 5-second delay allows Javascript, etc to settle down but can be
-        # overridden with a -dN or --delay=N provided in the  pretext.cfg  file
-        if not (delay_specified):
-            pageres_executable_cmd.append("-d5")
-        # Overwriting files prevents numbered versions (with spaces!)
-        # --transparent, --crop do not seem very effective
-        cmd = pageres_executable_cmd + [
-            "-v",
-            "--overwrite",
-            "--transparent",
-            selector_option,
-            filename_option,
-            input_page,
-        ]
-
-        log.debug("pageres command: {}".format(cmd))
-
-        subprocess.call(cmd)
+        filename = preview + "-preview.png"
+        # progress report
+        msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
+        log.info(msg.format(preview, input_page, filename))
+        # event loop and copy
+        asyncio.get_event_loop().run_until_complete(snapshot(input_page, preview, filename))
         shutil.copy2(filename, dest_dir)
 
     # restore working directory
@@ -1931,7 +1975,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 
     msg = "converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})"
     log.debug(msg.format(xml_source, math_representations, liblouis_xml))
-    stringparams["mathfile"] = math_representations
+    stringparams["mathfile"] = math_representations.replace(os.sep, "/")
     # pass in the page format (for messages about graphics, etc.)
     stringparams["page-format"] = page_format
     if pub_file:
@@ -2050,17 +2094,17 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     params = {}
 
     # the EPUB production is parmameterized by how math is produced
-    params["mathfile"] = math_representations
+    params["mathfile"] = math_representations.replace(os.sep, "/")
     # It is convenient for the subsequent XSL to always get a 'speechfile'
     # string parameter.  An empty string seems to not provoke an error,
     # though perhaps the resulting variable is crazy.  We'll just be
     # sure not to access the variable unless making SVG images.
     if math_format == "svg":
-        params["speechfile"] = speech_representations
+        params["speechfile"] = speech_representations.replace(os.sep, "/")
     else:
         params["speechfile"] = ""
     params["math.format"] = math_format
-    params["tmpdir"] = tmp_dir
+    params["tmpdir"] = tmp_dir.replace(os.sep, "/")
     if pub_file:
         params["publisher"] = pub_file
     xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
@@ -2084,8 +2128,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     html_elt = re.compile(orig)
     for root, dirs, files in os.walk(xhtml_dir):
         for fn in files:
-            for line in fileinput.input(fn, inplace=1):
-                print(html_elt.sub(repl, line), end="")
+            with fileinput.FileInput(fn, inplace=True) as file:
+                for line in file:
+                    print(html_elt.sub(repl, line), end="")
     os.chdir(owd)
 
     # EPUB stylesheet writes an XHTML file with
@@ -2420,9 +2465,11 @@ def html(
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
-    map_path_to_xml_id(xml, tmp_dir)
+    # Only produce a file of directory locations when requested
+    if (file_format == "html-with-mapping"):
+        map_path_to_xml_id(xml, tmp_dir)
 
-    if file_format == "html":
+    if file_format in ["html", "html-with-mapping"]:
         # with multiple files, we need to copy a tree, and
         # shutil.copytree() will balk at overwriting directories
         # before Python 3.8.  The  distutils  module is old
@@ -2451,6 +2498,11 @@ def html(
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
 
+
+# Following is an experimental routine to support online two-panel
+# editing with Bryan Jones' CodeChat tool.  Look to see where it is
+# called, and chase your way backward to an undocumented switch/format
+# in  pretext/pretext  that enables this
 
 # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
 #
@@ -2483,6 +2535,8 @@ def map_path_to_xml_id(
     import lxml.ElementInclude
 
     path_to_xml_id = collections.defaultdict(list)
+
+    xml = str(pathlib.Path(xml).resolve()) # normalize path separators to current OS
 
     # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
     is_win = sys.platform == "win32"
@@ -2797,6 +2851,106 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
         raise ValueError(msg)
 
 
+########################
+#
+# JaaS
+# Jing as a Service
+# (Validation with Jing)
+#
+########################
+
+def validate(xml_source, out_file, dest_dir):
+    import os.path  # split()
+    from lxml import etree  # parse()
+    import zipfile #  ZipFile()
+
+    try:
+        import requests  # post()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("requests"))
+
+    # JaaS server location
+    server_url = 'https://mathgenealogy.org:9000/validate'
+    # Alias for XInclude namespace
+    NSMAP = {"xi": "http://www.w3.org/2001/XInclude"}
+    # home for zip file construction
+    tmp_dir = get_temporary_directory()
+
+    # directory location of main source file, every filename collected
+    # below (in *_files lists) is relative to this directory
+    d = os.path.split(xml_source)[0]
+    base = os.path.split(xml_source)[1]
+
+    # Initialize with overall source file's
+    # name (base), relative to its location (d)
+    # all_files will be the eventual result
+    all_files = [base]
+    # new_files is refreshed for each pass of the while loop,
+    # non-empty ensures the while loop happens at least once
+    new_files = [base]
+    while new_files:
+        # accumulator to become the subsequent new_files
+        next_files = []
+        for f in new_files:
+            # construct full filename for parse operation
+            # do not xinclude, that would defeat the purpose
+            file_tree = etree.parse(os.path.join(d, f))
+            includes = file_tree.xpath("//xi:include", namespaces=NSMAP)
+            # @href attributes are relative to the location
+            #  of f, which we compute as f_dir
+            f_dir = os.path.split(f)[0]
+            for elt in includes:
+                # the href, required/expected/necessary
+                if "href" in elt.attrib:
+                    href = elt.attrib["href"]
+                else:
+                    raise ValueError("an xi:include element lacks the expected @href attribute")
+                # the normaized filename, relative to the main file location (d)
+                # this is where the eventual results are first created
+                rel_path = os.path.normpath(os.path.join(f_dir, href))
+                # always of interest, always add to result, even
+                # a text file might be needed to feed the schema
+                all_files.append(rel_path)
+                # if including a text file, then lxml inspection
+                # will fail, AND we don't need to examine it further,
+                # as it is a dead-end in the tree (can't xi:include anyway)
+                parsing = None
+                if 'parse' in elt.attrib:
+                    parsing = elt.attrib['parse']
+                # Usually we want to inspect a file for more includes,
+                # so we add most to the list of files to examine next
+                if not(parsing == 'text'):
+                    next_files.append(rel_path)
+        # recycle next_files into new_files, and next_file
+        # will be re-initialized as while loop resumes
+        new_files = next_files
+
+    # Build a zip file of the source, files with relative paths
+    # zipfile.ZIP_DEFLATED is the "usual  ZIP compression method"
+    zip_filename = os.path.join(tmp_dir, "test.zip")
+    log.info("packaging source temporarily as {}".format(zip_filename))
+    owd = os.getcwd()
+    os.chdir(d)
+    with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+        # set() will avoid duplicate files included twice (or more)
+        for f in set(all_files):
+            zip_file.write(f)
+    os.chdir(owd)
+
+    # fresh schema from the PreTeXt distribution
+    schema_filename = os.path.join(get_ptx_path(), "schema", "pretext.rng")
+    files = {'source': open(zip_filename,'rb'), 'rng': open(schema_filename,'rb')}
+    data = {'mainfile': base}
+    log.info("communicating with server at {}".format(server_url))
+    r = requests.post(server_url, data=data, files=files)
+
+    derivedname = get_output_filename(xml_source, out_file, dest_dir, ".jing")
+    with open(derivedname, "w") as f:
+        f.writelines(r.text)
+    log.info("messages from validation in {}".format(derivedname))
+
+
 ###################
 #
 # Utility Functions
@@ -2875,6 +3029,23 @@ def get_source_path(source_file):
     return os.path.normpath(source_dir)
 
 
+def get_runestone_services_version():
+    """Examine Runestone Services file for version number"""
+    import os.path  # join()
+
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # label file
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("lxml"))
+
+    services_file = os.path.join(get_ptx_path(), "xsl", "support", "runestone-services.xml")
+    services = ET.parse(services_file)
+    version_element = services.xpath("/all/version")[0]
+    return version_element.text
+
+
 def set_executables(adict):
     global __executables
 
@@ -2918,11 +3089,6 @@ def get_executable_cmd(exec_name):
             ),
             '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") and/or install  ***',
             "***  the necessary program and/or make sure the executable is on your PATH         ***",
-        ]
-    if config_cmd_line[0] == "pdfcrop":
-        error_messages += [
-            'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
-            'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".',
         ]
     if error_messages:
         raise OSError("\n".join(error_messages))
@@ -3074,12 +3240,20 @@ def get_managed_directories(xml_source, pub_file):
         element_list = pub_tree.xpath("/publication/source/directories")
         if element_list:
             attributes_dict = element_list[0].attrib
-            # common error message
+            # common error messages
             abs_path_error = " ".join(
                 [
                     "the directory path to data for images, given in the",
                     'publisher file as "source/directories/@{}" must be relative to',
                     'the PreTeXt source file location, and not the absolute path "{}"',
+                ]
+            )
+            missing_dir_error = " ".join(
+                [
+                    'the directory "{}" implied by the value "{}" in the',
+                    '"source/directories/@{}" entry of the publisher file does not',
+                    "exist. Check the spelling, create the necessary directory, or entirely",
+                    'remove the whole "source/directories" element of the publisher file.'
                 ]
             )
             # attribute absent => None
@@ -3089,7 +3263,10 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                generated = verify_input_directory(abs_path)
+                try:
+                    generated = verify_input_directory(abs_path)
+                except:
+                    raise ValueError(missing_dir_error.format(abs_path, raw_path, gen_attr))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
@@ -3097,7 +3274,10 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                external = verify_input_directory(abs_path)
+                try:
+                    external = verify_input_directory(abs_path)
+                except:
+                    raise ValueError(missing_dir_error.format(abs_path, raw_path, ext_attr))
     # pair of discovered absolute paths
     return (generated, external)
 

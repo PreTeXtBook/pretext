@@ -45,6 +45,13 @@
               <url href="https://www.geogebra.org/" visual="www.geogebra.org">GeoGebra Project</url>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
         </subsection>
 
+        <subsection xml:id="online-scratch-activecode">
+            <title>ActiveCode Programming Windows</title>
+            <idx><h>ActiveCode</h><h>window in <init>HTML</init></h></idx>
+
+            <p>A window that allows for entering, and executing, computer programs can be made available for every page.  The reader can click on a pencil icon to activate this window.  Some languages can run in a web browser as part of any <init>HTML</init> output, while some other languages require infrastructure on a Runestone server to execute, and so are only available when you specify that hosting option.  Note that the publisher will select a single language for use with the entire document. See <xref ref="online-activecode"/> for details on specifying this option.</p>
+        </subsection>
+
         <subsection xml:id="online-base-url">
             <title>Base URL</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>

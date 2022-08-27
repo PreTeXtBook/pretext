@@ -294,6 +294,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-webwork-worksheet-static" select="$webwork.worksheet.static = 'yes'" />
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
+<xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>
+<xsl:variable name="webwork-minor-version" select="$document-root//webwork-reps[1]/@ww_minor_version"/>
 
 <xsl:variable name="webwork-domain">
     <xsl:choose>
@@ -486,13 +488,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- build a very simple  index.html  page pointing at  $html-index-page -->
+    <!-- This is the one place we insert a (timestamped) blurb, since the    -->
+    <!-- file is already exceptional and one-off                             -->
     <exsl:document href="index.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template name="converter-blurb-html" />
+            <xsl:call-template name="converter-blurb-html"/>
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
+                <!-- Add a canonical link here, in generic build case? -->
                 <!-- more "meta" elements for discovery -->
                 <xsl:call-template name="open-graph-info"/>
             </head>
@@ -732,6 +737,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="solutions">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="exercises" mode="structural-division-inner-content">
+    <xsl:param name="heading-level"/>
+
+    <!-- this is identical to the default template -->
+    <xsl:variable name="the-exercises">
+        <xsl:apply-templates select="*">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+        <!-- only at "section" level. only when building for a Runestone server -->
+        <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- some extra wrapping for timed exercises -->
+        <!-- presence of @time-limit is the signal   -->
+        <xsl:when test="@time-limit">
+            <!-- TODO: make this a template and move to RS-specific file -->
+            <div class="timedAssessment">
+                <ul data-component="timedAssessment" data-question_label="">
+                    <!-- a Runestone id -->
+                    <!-- TODO: use attribute template in RS file -->
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                    </xsl:attribute>
+                    <!-- one mandatory attribute -->
+                    <xsl:attribute name="data-time">
+                        <xsl:value-of select="@time-limit"/>
+                    </xsl:attribute>
+                    <!-- result, timer, feedback, pause are *on* by  -->
+                    <!-- default if a PreTeXt attribute is "no" then -->
+                    <!-- issue empty "data-no-*" Runestone attribute -->
+                    <xsl:if test="@results = 'no'">
+                        <xsl:attribute name="data-no-result"/>
+                    </xsl:if>
+                    <xsl:if test="@timer = 'no'">
+                        <xsl:attribute name="data-no-timer"/>
+                    </xsl:if>
+                    <xsl:if test="@feedback = 'no'">
+                        <xsl:attribute name="data-no-feedback"/>
+                    </xsl:if>
+                    <xsl:if test="@pause = 'no'">
+                        <xsl:attribute name="data-no-pause"/>
+                    </xsl:if>
+                    <!-- the actual list of exercises -->
+                    <xsl:copy-of select="$the-exercises"/>
+                </ul>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy-of select="$the-exercises"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Only &STRUCTURAL; elements will pass through here, but we -->
@@ -2117,7 +2176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template name="converter-blurb-html" />
+            <xsl:call-template name="converter-blurb-html-no-date"/>
             <head>
                 <!-- dissuade indexing duplicated content -->
                 <meta name="robots" content="noindex, nofollow" />
@@ -6810,7 +6869,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="standalone-filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
+        <xsl:call-template name="converter-blurb-html-no-date"/>
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
@@ -6823,6 +6882,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="title-plain" />
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
+                <!-- canonical link for better SEO -->
+                <xsl:call-template name="canonical-link">
+                    <xsl:with-param name="filename" select="$filename"/>
+                </xsl:call-template>
                 <!-- more "meta" elements for discovery -->
                 <xsl:call-template name="open-graph-info"/>
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -7111,6 +7174,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$generic-preview-svg-data-uri" />
                     </xsl:when>
                     <xsl:otherwise>
+                        <!-- empty when not using managed directories -->
+                        <xsl:value-of select="$external-directory"/>
                         <xsl:value-of select="@preview" />
                     </xsl:otherwise>
                 </xsl:choose>
@@ -7312,8 +7377,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:call-template name="generic-preview-svg"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <img src="{@preview}" class="video-poster"
-                            alt="Video cover image"/>
+                        <img class="video-poster" alt="Video cover image">
+                            <xsl:attribute name="src">
+                                <!-- empty when not using managed directories -->
+                                <xsl:value-of select="$external-directory"/>
+                                <xsl:value-of select="@preview"/>
+                            </xsl:attribute>
+                        </img>
                     </xsl:otherwise>
                 </xsl:choose>
             </div>
@@ -9191,6 +9261,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>, </xsl:text>
 </xsl:template>
 
+<!-- A "pubnote", which could contain any publication information -->
+<xsl:template match="biblio[@type='bibtex']/pubnote">
+    <xsl:text> [</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
 <!-- Pages should come last, so put a period.    -->
 <!-- Two forms: @start and @end,                 -->
 <!-- or total number as content (as for a book). -->
@@ -9576,20 +9653,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
-<!-- Wolfram Computable Document Format -->
-<!-- Just mildly more involved than the Desmos case                                              -->
-<!-- https://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html              -->
-<!-- More for MMA origination, but discusses "cloud credits"                                     -->
-<!-- https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html -->
-<!-- https://www.wolfram.com/cloud-credits/                                                      -->
-<xsl:template match="interactive[@wolfram-cdf]" mode="iframe-interactive">
-    <!-- Query string option: _embed=iframe will provide Wolfram footer -->
-    <iframe src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless">
-        <xsl:apply-templates select="." mode="iframe-id"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
-    </iframe>
-</xsl:template>
-
 <!-- Geogebra -->
 <!-- Similar again, but with options fixed -->
 <xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
@@ -9673,7 +9736,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="iframe-filename" />
     </xsl:variable>
     <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
+        <xsl:call-template name="converter-blurb-html-no-date"/>
         <html lang="{$document-language}">
             <head>
                 <!-- configure MathJax by default for @platform variants -->
@@ -9708,7 +9771,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf|@iframe]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
@@ -10054,81 +10117,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- @source attribute to multiple script tags -->
 <xsl:template match="interactive[@platform]/@source">
-    <xsl:call-template name="one-script">
-        <xsl:with-param name="token-list">
-            <xsl:call-template name="prepare-token-list">
-                <xsl:with-param name="token-list" select="." />
-            </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- A recursive template to create a script tag for each JS file -->
-<xsl:template name="one-script">
-    <xsl:param name="token-list" />
-    <xsl:choose>
-        <xsl:when test="$token-list = ''" />
-        <xsl:otherwise>
-            <script>
-                <!-- this is a hack to allow for local files and network resources,   -->
-                <!-- with or without managed directories.  There should be a separate -->
-                <!-- attribute like an @href used for audio and video, and then any   -->
-                <!-- "http"-leading string should be flagged as a deprecation         -->
-                <xsl:variable name="location">
-                    <xsl:variable name="raw-location" select="substring-before($token-list, ' ')"/>
-                    <xsl:choose>
-                        <xsl:when test="substring($raw-location,1,4) = 'http'">
-                            <xsl:value-of select="$raw-location"/>
-                        </xsl:when>
-                        <xsl:when test="not($b-managed-directories)">
-                            <xsl:value-of select="$raw-location"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- empty when not using managed directories -->
-                            <xsl:value-of select="$external-directory"/>
-                            <xsl:value-of select="$raw-location"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+    <xsl:variable name="scripts" select="str:tokenize(., ', ')"/>
+    <!-- $scripts is a collection of "token" and does not have -->
+    <!-- a root, which implies the form of the "for-each"      -->
+    <xsl:for-each select="$scripts">
+        <!-- create a script tag for each JS file -->
+        <script>
+            <!-- this is a hack to allow for local files and network resources,   -->
+            <!-- with or without managed directories.  There should be a separate -->
+            <!-- attribute like an @href used for audio and video, and then any   -->
+            <!-- "http"-leading string should be flagged as a deprecation         -->
+            <xsl:variable name="location">
+                <xsl:variable name="raw-location">
+                    <xsl:value-of select="."/>
                 </xsl:variable>
-                <xsl:attribute name="src">
-                    <xsl:value-of select="$location" />
-                </xsl:attribute>
-            </script>
-            <xsl:call-template name="one-script">
-                <xsl:with-param name="token-list" select="substring-after($token-list, ' ')" />
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="substring($raw-location,1,4) = 'http'">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:when test="not($b-managed-directories)">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- empty when not using managed directories -->
+                        <xsl:value-of select="$external-directory"/>
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:attribute name="src">
+                <xsl:value-of select="$location" />
+            </xsl:attribute>
+        </script>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- @css attribute to multiple "link" element -->
 <xsl:template match="interactive[@platform]/@css">
-    <xsl:call-template name="one-css">
-        <xsl:with-param name="token-list">
-            <xsl:call-template name="prepare-token-list">
-                <xsl:with-param name="token-list" select="." />
-            </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- A recursive template to create a link element for each CSS file -->
-<!-- This is used to process  $html.css.extra  as well               -->
-<xsl:template name="one-css">
-    <xsl:param name="token-list" />
-    <xsl:choose>
-        <xsl:when test="$token-list = ''" />
-        <xsl:otherwise>
-            <link rel="stylesheet" type="text/css">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="substring-before($token-list, ' ')" />
-                </xsl:attribute>
-            </link>
-            <xsl:call-template name="one-css">
-                <xsl:with-param name="token-list" select="substring-after($token-list, ' ')" />
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="csses" select="str:tokenize(., ', ')"/>
+    <!-- $scripts is a collection of "token" and does not have -->
+    <!-- a root, which implies the form of the "for-each"      -->
+    <xsl:for-each select="$csses">
+        <link rel="stylesheet" type="text/css">
+            <!-- This is a hack to allow for local files and network -->
+            <!-- resources, with or without managed directories.     -->
+            <xsl:variable name="location">
+                <xsl:variable name="raw-location">
+                    <xsl:value-of select="."/>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="substring($raw-location,1,4) = 'http'">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:when test="not($b-managed-directories)">
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- empty when not using managed directories -->
+                        <xsl:value-of select="$external-directory"/>
+                        <xsl:value-of select="$raw-location"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:attribute name="href">
+                <xsl:value-of select="$location" />
+            </xsl:attribute>
+        </link>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Next two utilities write attributes, so cannot go in -common -->
@@ -10235,7 +10290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
             <xsl:when test="$webwork-reps-version = 2">
-                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork/2.{$webwork-minor-version}/pretext-webwork.js"></script>
                 <script src="{$webwork-domain}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
         </xsl:choose>
@@ -10322,6 +10377,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data-seed" >
             <xsl:value-of select="static/@seed"/>
         </xsl:attribute>
+        <xsl:attribute name="data-localize-correct">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'correct'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-incorrect">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'incorrect'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-blank">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'blank'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-submit">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'submit'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-check-responses">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'check-responses'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-reveal">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'reveal'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-randomize">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'randomize'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-reset">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'reset'"/>
+                <xsl:with-param name="lang" select="$document-language"/>
+            </xsl:call-template>
+        </xsl:attribute>
         <xsl:choose>
             <xsl:when test="server-data/@problemSource">
                 <xsl:attribute name="data-problemSource">
@@ -10356,7 +10459,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </div>
         <div class="problem-buttons">
-            <button class="webwork-button" onclick="handleWW('{@ww-id}')">Make Interactive</button>
+            <button class="webwork-button" onclick="handleWW('{@ww-id}')">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'activate'"/>
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+            </button>
         </div>
     </xsl:element>
 </xsl:template>
@@ -10463,7 +10571,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 
     <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-    <xsl:call-template name="converter-blurb-html" />
+    <xsl:call-template name="converter-blurb-html-no-date"/>
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
@@ -10478,6 +10586,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <!-- canonical link for better SEO -->
+            <xsl:call-template name="canonical-link">
+                <xsl:with-param name="filename" select="$the-filename"/>
+            </xsl:call-template>
             <!-- more "meta" elements for discovery -->
             <xsl:call-template name="open-graph-info"/>
             <!-- favicon -->
@@ -10626,12 +10738,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-    <xsl:call-template name="converter-blurb-html" />
+    <xsl:call-template name="converter-blurb-html-no-date"/>
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <meta name="Keywords" content="Authored in PreTeXt" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <!-- canonical link for better SEO -->
+            <xsl:call-template name="canonical-link">
+                <xsl:with-param name="filename" select="$filename"/>
+            </xsl:call-template>
             <!-- more "meta" elements for discovery -->
             <xsl:call-template name="open-graph-info"/>
             <!-- jquery used by sage, webwork, knowls -->
@@ -10692,6 +10808,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 <!-- Page Identification -->
 <!-- ################### -->
+
+<!-- Canonical Link -->
+<!-- TODO: condition for generic builds at $site-root, need base-url, etc -->
+<xsl:template name="canonical-link">
+    <xsl:param name="filename"/>
+
+    <!-- book-wide site URL -->
+    <xsl:variable name="site-root">
+        <xsl:value-of select="concat('https://runestone.academy/ns/books/published/', $document-id, '/')"/>
+    </xsl:variable>
+    <!-- just for Runestone builds -->
+    <xsl:if test="$b-host-runestone">
+        <xsl:variable name="full-url" select="concat($site-root, $filename)"/>
+        <link rel="canonical" href="{$full-url}"/>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Open Graph Protocol, advertise to Facebook, others       -->
 <!-- https://ogp.me/                                          -->
@@ -11378,6 +11511,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Runestone user menu -->
                 <!-- Conditional on a build for Runestone hosting -->
                 <xsl:call-template name="runestone-bust-menu"/>
+                <!-- A scratch ActiveCode via a pencil icon, always -->
+                <xsl:call-template name="runestone-scratch-activecode"/>
                 <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
                 <xsl:call-template name="user-preferences-menu"/>
                 <!-- Span to encase Prev/Up/Next buttons and float right    -->
@@ -11752,6 +11887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
+        <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
         <xsl:text>window.MathJax = {&#xa;</xsl:text>
         <xsl:text>  tex: {&#xa;</xsl:text>
         <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
@@ -11788,12 +11924,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/color', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
         <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
-        <xsl:if test="$b-debug-react">
-            <xsl:text>/* Mathjax typesetting operation is under the control of React */&#xa;</xsl:text>
-            <xsl:text>  startup: {&#xa;</xsl:text>
-            <xsl:text>    typeset: false,&#xa;</xsl:text>
-            <xsl:text>  },&#xa;</xsl:text>
-        </xsl:if>
+        <xsl:text>  startup: {&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$b-debug-react">
+                <xsl:text>    /* Mathjax typesetting operation is under the control of React */&#xa;</xsl:text>
+                <xsl:text>    typeset: false,&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- tell Runestone components that MathJax is all loaded -->
+                <xsl:text>    pageReady() {&#xa;</xsl:text>
+                <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
+                <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
+                <xsl:text>      rsMathReady();&#xa;</xsl:text>
+                <xsl:text>      }&#xa;</xsl:text>
+                <xsl:text>    )}&#xa;</xsl:text>
+                <xsl:text>  },&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
             <xsl:text>  options: {&#xa;</xsl:text>
@@ -12129,9 +12276,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-activate-hypothesis">
         <script type="application/json" class="js-hypothesis-config">
         <xsl:text>{&#xa;</xsl:text>
-        <xsl:text>    "openLoginForm": false;</xsl:text>
-        <xsl:text>    "openSidebar": false;</xsl:text>
-        <xsl:text>    "showHighlights": true;</xsl:text>
+        <xsl:text>    "openSidebar": false,</xsl:text>
+        <xsl:text>    "showHighlights": true,</xsl:text>
         <xsl:text>}</xsl:text>
         </script>
         <script src="https://hypothes.is/embed.js" async=""></script>
@@ -12155,7 +12301,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- CSS header -->
-<!-- The "one-css" template is defined elsewhere -->
 <xsl:template name="css">
     <xsl:if test="not($b-debug-react)">
         <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
@@ -12168,16 +12313,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
     </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
-    <!-- The prepared list (extra blank space) will cause failure  -->
-    <!-- if $html.css.extra is empty (i.e. not specified)          -->
     <xsl:if test="not($html.css.extra = '')">
-        <xsl:call-template name="one-css">
-            <xsl:with-param name="token-list">
-                <xsl:call-template name="prepare-token-list">
-                    <xsl:with-param name="token-list" select="$html.css.extra" />
-                </xsl:call-template>
-            </xsl:with-param>
-        </xsl:call-template>
+        <xsl:variable name="csses" select="str:tokenize($html.css.extra, ', ')"/>
+        <!-- $scripts is a collection of "token" and does not have -->
+        <!-- a root, which implies the form of the "for-each"      -->
+        <xsl:for-each select="$csses">
+            <link rel="stylesheet" type="text/css">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </link>
+        </xsl:for-each>
     </xsl:if>
     <!-- For testing purposes a developer can set the stringparam -->
     <!-- "debug.developer.css" to the value "yes" and provide a   -->

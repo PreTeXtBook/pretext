@@ -44,18 +44,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 
     <html>
+        <!-- Turn on a Runestone ActiveCode window, both for show, -->
+        <!-- and for testing purposes.  This is not strictly       -->
+        <!-- necessary, due to this publisher file specifying a    -->
+        <!-- build for a Runestone server.  But the default is     -->
+        <!-- Python and we are specifying C++.                     -->
+        <calculator activecode="cpp"/>
         <!-- build for a Runestone server, not viewable otherwise  -->
         <platform host="runestone"/>
         <!-- knowled checkpoints interfere with ActiveCode         -->
         <!-- problems, perhaps keep this anyway, but knowl         -->
         <!-- some limited range for testing                        -->
         <knowl exercise-inline="no"/>
-        <!-- "Regular" PreTeXt exercises are eassy/short-answer    -->
-        <!-- questions.  Maybe we want them to be dynamic or maybe -->
-        <!-- we don't.  This is controlled by the category, with   -->
-        <!-- "dynamic" as the default, so it is opt-out, as here.  -->
-        <!-- Presently only reading questions are short-answer.    -->
-        <short-answer inline="static" divisional="static" reading="dynamic" worksheet="static" project="static"/>
         <!-- @xml:id of a page to be target of index.html redirect -->
         <!-- This is the @xml:id of the "frontmatter", so this is  -->
         <!-- default behavior, but we do this as a test and as an  -->

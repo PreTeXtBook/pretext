@@ -461,7 +461,9 @@ def get_cli_arguments():
         action="store_true",
         dest="abort",
     )
-
+    # Needs help-file, once public
+    # Will default to False
+    parser.add_argument("-V", "--validate", action="store_true", dest="validate")
     parser.add_argument(
         "xml_file", help="PreTeXt source file with content", action="store"
     )
@@ -518,9 +520,15 @@ def main():
     # realized by PreTeXt installation
     # Necessary for locating configuration files (next)
     log.debug(
-        "discovered distribution and xsl directories: {}, {}".format(
+        "PreTeXt distribution and xsl directories: {}, {}".format(
             ptx.get_ptx_path(), ptx.get_ptx_xsl_path()
         )
+    )
+
+    # Report Runestone Services version in debugging output
+    # Note: make sure this has been retrieved/installed first
+    log.debug(
+        "Runestone Services version: {}".format(ptx.get_runestone_services_version())
     )
 
     # The "get" will report 'executables' in configuration file
@@ -528,6 +536,7 @@ def main():
 
     # check and sanitize XML source, presumed to exiast
     xml_source = verify_input_file(args.xml_file, "source")
+
     # data directory is optional, so allow for None here
     if args.data_dir:
         data_dir = ptx.verify_input_directory(args.data_dir)
@@ -571,7 +580,10 @@ def main():
     log.info("Done examining environment and initializing setup info")
 
     # The big switch
-    if args.component == "asy":
+    # Validation trumps everything, since it is an easy switch
+    if args.validate:
+        ptx.validate(xml_source, out_file, dest_dir)
+    elif args.component == "asy":
         if args.format in ["html", "pdf", "svg", "png", "eps", "source", "all"]:
             ptx.asymptote_conversion(
                 xml_source,
@@ -679,6 +691,19 @@ def main():
                 stringparams,
                 None,
                 "zip",
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+            )
+        # Top-secret (undocumented): just like "html", only
+        # also builds  mapping.json  for CAT + CodeChat work
+        elif args.format == "html-mapping":
+            ptx.html(
+                xml_source,
+                publication_file,
+                stringparams,
+                args.xmlid,
+                "html-with-mapping",
                 extra_stylesheet,
                 out_file,
                 dest_dir,

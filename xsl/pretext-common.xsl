@@ -3518,7 +3518,7 @@ Book (with parts), "section" at level 3
 <!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id">
+<xsl:template match="exercise|program|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id">
     <!-- Once we generate labels, we can warn an author that they should   -->
     <!-- be committing to a long-term @label value for database entries.   -->
     <!-- We do this by checking for the $gen-id-sep string being present   -->
@@ -10596,13 +10596,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($text.alignment != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2022-01-05  @visual required on a "url" with content -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//url[node() and @href and not(@visual)]" />
-        <xsl:with-param name="date-string" select="'2022-01-05'" />
-        <xsl:with-param name="message" select="'a &quot;url&quot; with content (provided clickable text) now requires a &quot;@visual&quot; attribute.  The &quot;@href&quot; attribute is being used in its place'"/>
-    </xsl:call-template>
-    <!--  -->
     <!-- 2022-01-31  exercise component visibility setting 1/20 -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2022-01-31'" />
@@ -10785,6 +10778,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an ad-hoc &quot;stage&quot; element in a scaffolded WeBWorK problem has been replaced by a standard PreTeXt &quot;task&quot; element, so make simple subsitutions.  We will attempt to honor your request'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-07-10  deprecate latex-image with @syntax="PGtikz" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//latex-image[@syntax='PGtikz']" />
+        <xsl:with-param name="date-string" select="'2022-07-10'" />
+        <xsl:with-param name="message" select="'a &quot;latex-image&quot; with &quot;@syntax&quot; attribute set to &quot;PGtikz&quot; is deprecated in favor of a plain &quot;latex-image&quot;.  After removing the attribute, the &quot;latex-image&quot; code needs to be placed inside a &quot;tikzpicture&quot; environment. Until you make such changes to your source, we will attempt to honor your request'"/>
+    </xsl:call-template>
+    <!-- 2022-07-25  warn of impending Wolfram CDF deprecation -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//interactive[@wolfram-cdf]" />
+        <xsl:with-param name="date-string" select="'2022-07-25'" />
+        <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; is slated to be removed soon.  Post on the &quot;pretext-support&quot; Google Group if this is an issue for your project'"/>
+    </xsl:call-template>
+    <!-- 2022-08-07  Wolfram CDF deprecation -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//interactive[@wolfram-cdf]" />
+        <xsl:with-param name="date-string" select="'2022-08-07'" />
+        <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; has been removed'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
@@ -10813,6 +10825,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Converter information for header, generic -->
 <!-- params are strings to make comment lines in target file    -->
 <!-- "copy-of" supresses output-escaping of HTML/XML characters -->
+<!-- Parameterize by need/desire for date/commit information    -->
 <xsl:template name="converter-blurb">
     <xsl:param name="lead-in" />
     <xsl:param name="lead-out" />
@@ -10821,9 +10834,23 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:if test="$b-debug-datedfiles">
     <xsl:copy-of select="$lead-in" /><xsl:text>*       on </xsl:text>  <xsl:value-of select="date:date-time()" />
                                                                       <xsl:text>       *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*   A recent stable commit (2020-08-09):   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>* 98f21740783f166a773df4dc83cab5293ab63a4a *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*   A recent stable commit (2022-07-01):   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>* 6c761d3dba23af92cba35001c852aac04ae99a5f *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*         https://pretextbook.org          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>********************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- This version is identical (keep in sync) but *never* has any date  -->
+<!-- information.  This was added for the multitude of files in an HTML  -->
+<!-- conversion, when we just left one file (index.html) with a date. -->
+<xsl:template name="converter-blurb-no-date">
+    <xsl:param name="lead-in" />
+    <xsl:param name="lead-out" />
+    <xsl:copy-of select="$lead-in" /><xsl:text>********************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*       Generated from PreTeXt source      *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*         https://pretextbook.org          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
@@ -10847,6 +10874,17 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template name="converter-blurb-html">
     <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in">
+            <xsl:text disable-output-escaping='yes'>&lt;!--</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="lead-out">
+            <xsl:text disable-output-escaping='yes'>--&gt;</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="converter-blurb-html-no-date">
+    <xsl:call-template name="converter-blurb-no-date">
         <xsl:with-param name="lead-in">
             <xsl:text disable-output-escaping='yes'>&lt;!--</xsl:text>
         </xsl:with-param>

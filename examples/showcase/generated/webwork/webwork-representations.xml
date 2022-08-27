@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-representations>
-  <webwork-reps version="2" xml:id="extracted-webwork-12" ww-id="webwork-12">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-12" ww-id="webwork-12">
     <static seed="12">
       <statement><p>This Venn Diagram groups animals by certain characteristics.</p>
 <!-- PTX:WARNING: PGML wanted to center align here. -->
@@ -101,7 +101,7 @@ END_PGML
 ENDDOCUMENT();
 ]]></pg>
   </webwork-reps>
-  <webwork-reps version="2" xml:id="extracted-webwork-15" ww-id="webwork-15">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-15" ww-id="webwork-15">
     <static seed="15" source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg">
       <statement><p>Find the prime factorization of <m>35</m>.</p>
 <p><m>35={}</m><fillin name="AnSwEr0001" characters="11"/></p>
@@ -118,7 +118,7 @@ ENDDOCUMENT();
     <server-data sourceFilePath="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
     <pg source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
   </webwork-reps>
-  <webwork-reps version="2" xml:id="extracted-webwork-18" ww-id="webwork-18">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-18" ww-id="webwork-18">
     <static seed="18">
       <task><title>Identify Coefficients</title>
 <statement><p>Consider the equation</p>
@@ -262,7 +262,7 @@ Scaffold::End();
 ENDDOCUMENT();
 ]]></pg>
   </webwork-reps>
-  <webwork-reps version="2" xml:id="extracted-webwork-20" ww-id="webwork-20">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-20" ww-id="webwork-20">
     <static seed="20">
       <statement><p><ol label="a.">
 <li>
@@ -378,7 +378,7 @@ END_PGML
 ENDDOCUMENT();
 ]]></pg>
   </webwork-reps>
-  <webwork-reps version="2" xml:id="extracted-webwork-5" ww-id="webwork-5">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-5" ww-id="webwork-5">
     <static seed="5">
       <statement><p>Consider the function <m>f</m> defined by <m>f(x)={\sqrt{x}}\text{.}</m>
 <ol label="a.">
@@ -572,7 +572,7 @@ END_PGML
 ENDDOCUMENT();
 ]]></pg>
   </webwork-reps>
-  <webwork-reps version="2" xml:id="extracted-webwork-9" ww-id="webwork-9">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-9" ww-id="webwork-9">
     <static seed="9">
       <statement><p>Simplify the expression <m>{x^{2}x^{5}}\text{.}</m></p>
 </statement>

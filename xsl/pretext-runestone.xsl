@@ -46,9 +46,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Javascript unless it is necessary.  Various   -->
 <!-- values of @exercise-interactive are added in the        -->
 <!-- pre-processing phase.  program/@interactive takes on    -->
-<!-- values of 'activecode' and 'codelens'.  So a small      -->
-<!-- amount of imprecision here, but should not be critical. -->
-<xsl:variable name="b-needs-runestone" select="boolean($document-root//exercise[@exercise-interactive]|$document-root//program[@interactive])"/>
+<!-- values of 'activecode' and 'codelens'.                  -->
+<xsl:variable name="b-needs-runestone" select="boolean($document-root//*[@exercise-interactive and not(@exercise-interactive='container') and not(@exercise-interactive='static')]|$document-root//program[@interactive])"/>
 
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
@@ -127,11 +126,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+                <!-- Scratch ActiveCode windows are a publisher option -->
+                <xsl:text>eBookConfig.enableScratchAC = </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-has-scratch-activecode">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>;&#xa;</xsl:text>
+                <!-- And set the language when scratch ActiveCode is enabled -->
+                <xsl:if test="$b-has-scratch-activecode">
+                    <xsl:text>eBookConfig.acDefaultLanguage = '</xsl:text>
+                    <xsl:value-of select="$html-scratch-activecode-language"/>
+                    <xsl:text>';&#xa;</xsl:text>
+                </xsl:if>
+                <!-- end Scratch ActiveCode windows -->
                 <xsl:text>eBookConfig.new_server_prefix = "/ns";&#xa;</xsl:text>
                 <!-- no .build_info -->
                 <!-- no .python3 -->
-                <!-- no .acDefaultLanguage -->
                 <!-- no .runestone_version -->
                 <!-- no .jobehost -->
                 <!-- no .proxyuri_runs -->
@@ -157,13 +172,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <xsl:text>&#xa;</xsl:text>
             <xsl:text>{% endif %}&#xa;</xsl:text>
-
-            <!-- When hosted, we embed YouTube videos in a slightly different -->
-            <!-- manner, and with the next script it is possible to monitor   -->
-            <!-- reader events associated with the use of the videos          -->
-            <!-- NB: placed here just for initial testing w/ diffs, -->
-            <!--     could move up above Google Ad section          -->
-            <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
 
             <!-- We only show the Runestone "bust" menu icon if we are building        -->
             <!-- for a Runestone server, so this CSS is only needed in that case.      -->
@@ -227,8 +235,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.useRunestoneServices = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.host = 'http://127.0.0.1:8000';&#xa;</xsl:text>
                 <!-- no .app -->
-                <xsl:text>eBookConfig.course = 'PTX Course: Title Here';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.basecourse = 'PTX Base Course';&#xa;</xsl:text>
+                <!-- scratch Active Code fails if these faux strings have spaces or colons -->
+                <xsl:text>eBookConfig.course = 'PTX_Course_Title_Here';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.basecourse = 'PTX_Base_Course';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isLoggedIn = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.email = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.isInstructor = false;&#xa;</xsl:text>
@@ -239,10 +248,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.activities = null;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.downloadsEnabled = false;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.allow_pairs = false;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+                <!-- Scratch ActiveCode windows are a publisher option -->
+                <xsl:text>eBookConfig.enableScratchAC = </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-has-scratch-activecode">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>;&#xa;</xsl:text>
+                <!-- And set the language when scratch ActiveCode is enabled -->
+                <xsl:if test="$b-has-scratch-activecode">
+                    <xsl:text>eBookConfig.acDefaultLanguage = '</xsl:text>
+                    <xsl:value-of select="$html-scratch-activecode-language"/>
+                    <xsl:text>';&#xa;</xsl:text>
+                </xsl:if>
+                <!-- end Scratch ActiveCode windows -->
                 <xsl:text>eBookConfig.build_info = "";&#xa;</xsl:text>
                 <xsl:text>eBookConfig.python3 = null;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.acDefaultLanguage = 'python';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.runestone_version = '5.0.1';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.jobehost = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.proxyuri_runs = '';&#xa;</xsl:text>
@@ -333,8 +358,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Scratch ActiveCode window, for all builds (powered by Runestone   -->
+<!-- Javascript).  But more languages available on a Runestone server. -->
+<!-- Only if requested, explicitly or implicitly, via publisher file.  -->
+<!-- Unicode Character 'PENCIL' (U+270F)                               -->
+<xsl:template name="runestone-scratch-activecode">
+    <xsl:if test="$b-has-scratch-activecode">
+        <a href="javascript:runestoneComponents.popupScratchAC()" class="activecode-toggle" title="Scratch ActiveCode">
+            <span class="icon">&#x270F;</span>
+        </a>
+    </xsl:if>
+</xsl:template>
+
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
@@ -386,7 +423,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- collection, which is technically a "conf.py" file, per-book -->
             <library-metadata publisher="pretext">
                 <!-- sanitizes footnotes, quotes, math for overall title-->
-                <xsl:comment>Missing a blurb for library description, book back covers</xsl:comment>
                 <title>
                     <xsl:apply-templates select="$document-root" mode="title-plain"/>
                 </title>
@@ -400,6 +436,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:attribute>
                     <xsl:value-of select="$docinfo/document-id"/>
                 </document-id>
+                <!-- duplicate blurb, blurb/@shelf for Runestone's convenience -->
+                <!-- use "value-of" to enforce assumption there is no markup   -->
+                <!-- NB: if absent in PTX source, these are empty in manifest  -->
+                <shelf>
+                    <xsl:value-of select="$docinfo/blurb/@shelf"/>
+                </shelf>
+                <blurb>
+                    <xsl:value-of select="$docinfo/blurb"/>
+                </blurb>
             </library-metadata>
             <!-- LaTeX packages and macros first -->
             <latex-macros>
@@ -458,6 +503,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </title>
         <!-- nearly a dead end, recurse into "exercise" and PROJECT-LIKE at *any* PTX -->
         <!-- depth, for example within a "subsection" (which Runestone does not have) -->
+        <!-- If any of the next select are containers (full of "task") they will not  -->
+        <!-- meet the dead-end monster match below, and the default template will     -->
+        <!-- recurse into non-container "task" eventually, so "task" do get           -->
+        <!-- processed, even if they seem to be missing from this select.             -->
         <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
@@ -466,7 +515,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A Runestone exercise needs to identify itself when an instructor wants   -->
 <!-- to select it for assignment, so we want to provide enough identification -->
 <!-- in the manifest, via a "label" element full of raw text.                 -->
-<xsl:template match="exercise|project|activity|exploration|investigation" mode="runestone-manifest-label">
+<xsl:template match="exercise|project|activity|exploration|investigation|task" mode="runestone-manifest-label">
     <label>
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text> </xsl:text>
@@ -494,10 +543,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
-                              |project[@exercise-interactive = 'coding']
-                              |activity[@exercise-interactive = 'coding']
-                              |exploration[@exercise-interactive = 'coding']
-                              |investigation[@exercise-interactive = 'coding']" mode="runestone-manifest">
+                      |
+                      project[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                     activity[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                  exploration[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                investigation[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                         task[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]" mode="runestone-manifest">
     <question>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
@@ -525,27 +615,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
-<!-- PROJECT-LIKE to the Runestone manifest -->
-<!--   PROJECT-LIKE with "program" *outside* of "statement" -->
-<!-- TODO: where should un-supported languages get caught?  Here is pretty late. -->
-<xsl:template match="project[statement/statement and statement/program]|activity[statement/statement and statement/program]|exploration[statement/statement and statement/program]|investigation[statement/statement and statement/program]" mode="runestone-manifest">
-    <question>
-        <!-- label is from the PROJECT-LIKE -->
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <!-- Duplicate, but still should look like original (ID, etc.),  -->
-        <!-- not knowled. Solutions are available in the originals, via  -->
-        <!-- an "in context" link off the Assignment page                -->
-        <xsl:apply-templates select="."  mode="exercise-components">
-            <xsl:with-param name="b-original" select="true()"/>
-            <xsl:with-param name="block-type" select="'visible'"/>
-            <xsl:with-param name="b-has-statement" select="true()" />
-            <xsl:with-param name="b-has-hint"      select="false()" />
-            <xsl:with-param name="b-has-answer"    select="false()" />
-            <xsl:with-param name="b-has-solution"  select="false()" />
-        </xsl:apply-templates>
-    </question>
-</xsl:template>
-
 <!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
 <xsl:template match="appendix" mode="runestone-manifest"/>
 
@@ -564,10 +633,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "regular" PreTeXt statement together with some additional -->
 <!-- interactive material to make a hybrid "statement"         -->
 
+<!-- The application of the "runestone-to-interactive" template is -->
+<!-- controlled by a surrounding "match" that limits elements      -->
+<!-- to "exercise", PROJECT-LIKE, and soon "task".  So the         -->
+<!-- matches here are fine with a *[@exercise-interactive='foo'],  -->
+<!-- as a convenience.                                             -->
 
 <!-- Hacked -->
 
-<xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'htmlhack']" mode="runestone-to-interactive">
     <xsl:variable name="runestone" select="string(@runestone)"/>
     <div class="ptx-runestone-container">
         <xsl:copy-of select="document('rs-substitutes.xml', $original)/substitutes/substitute[@xml:id = $runestone]"/>
@@ -576,7 +650,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- True/False -->
 
-<xsl:template match="exercise[@exercise-interactive = 'truefalse']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'truefalse']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
@@ -641,7 +715,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Multiple Choice -->
 
-<xsl:template match="exercise[@exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
@@ -718,7 +792,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Parsons Problem -->
 
-<xsl:template match="exercise[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <div class="ptx-runestone-container">
@@ -850,7 +924,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problem -->
 
-<xsl:template match="exercise[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
     <xsl:variable name="html-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
@@ -896,7 +970,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Clickable Area Problem -->
 
-<xsl:template match="exercise[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
     <xsl:variable name="html-id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
@@ -976,7 +1050,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fill-in-the-Blanks problem -->
 
 <!-- Runestone structure -->
-<xsl:template match="exercise[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
     <div class="ptx-runestone-container">
         <div class="runestone">
             <!-- dropped "visibility: hidden" on next div -->
@@ -1117,7 +1191,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Coding exercise -->
 
-<xsl:template match="exercise[@exercise-interactive = 'coding']|project[@exercise-interactive = 'coding']|activity[@exercise-interactive = 'coding']|exploration[@exercise-interactive = 'coding']|investigation[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'coding']" mode="runestone-to-interactive">
     <!-- We don't have a 'coding' attribute value  -->
     <!-- unless one of the two tests below is true -->
     <xsl:choose>
@@ -1141,15 +1215,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- interactive, see "static" v. "dynamic" publisher variables.          -->
 <!-- NB - not currently applying to short-form with no "statement" -->
 <!-- NB: match is recycled in manifest formation                   -->
-<xsl:template match="exercise[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
-    <div class="ptx-runestone-container">
-        <div class="runestone">
-            <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
-                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:apply-templates select="statement"/>
+<xsl:template match="*[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
+    <xsl:choose>
+        <xsl:when test="$b-host-runestone">
+            <!-- when "response" has attributes, perhaps they get interpreted here -->
+            <div class="ptx-runestone-container">
+                <div class="runestone">
+                    <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
+                        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                        <xsl:apply-templates select="statement"/>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- pointless to do fancy outside of a server/LMS situation -->
+            <xsl:apply-templates select="statement"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- YouTube Video -->
@@ -1158,6 +1241,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- monitoring events from readers.  We have to pass in an actual    -->
 <!-- height and width (in pixels) for semi-custom attributes here.    -->
 <!-- Many PreTeXt video features (like posters) are lost.             -->
+<!-- The Runestone JavaScript will automatically include the          -->
+<!-- player_api JavaScript after it has set up the appropriate        -->
+<!-- events such as API loaded.                                       -->
+
 <!-- TODO: are start/end attributes useful?      -->
 <xsl:template match="video[@youtube]" mode="runestone-youtube-embed">
     <xsl:param name="width"/>

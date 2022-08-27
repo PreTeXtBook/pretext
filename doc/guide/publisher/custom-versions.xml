@@ -79,7 +79,15 @@
         <subsection>
             <title>Forming a Version</title>
 
-            <p>Now, a publisher can elect to include or exclude all of the content of each component.  This is accomplished with the <attr>include</attr> attribute of the <tag>source</tag> element inside a publication file.  The value of this attribute is a space-separated list of some of the component names in use.  See <xref ref="publication-file-source-version"/> for the specifics.</p>
+            <p>Now, a publisher can elect to include or exclude all of the content of each component.  This is accomplished with the <attr>include</attr> attribute of the <c>source/include</c> element inside a publication file.  The value of this attribute is a space-separated listing of some of the component names in use.  An example minimal publication file could look like the following example.  See <xref ref="publication-file-source-version"/> for the specifics.</p>
+
+            <pre><![CDATA[
+                <publication>
+                    <source>
+                        <version include="videos labs"/>
+                    </source>
+                </publication>]]>
+            </pre>
 
             <p>This attribute is interpreted according to these rules:<ul>
                 <li>An element whose <attr>component</attr> value <em>is</em> in the list in <attr>include</attr> will be included in the source that will be converted.</li>
@@ -98,6 +106,10 @@
                 <title>Additional Material</title>
 
                 <p>Some material may not be desired for every output format.  Some interactive material might not make sense in a printed book.  Or perhaps certain types of exercises are included at the end of each chapter, or not.  By putting these elements in components, they may be included or excluded via a publication file.  The idea here is that some versions contain a <em>subset</em> of all the available, authored material.  For example, a version might include content in the <c>videos</c> and <c>labs</c> components, but exclude content in the <c>genome</c> component.</p>
+
+                <p>An <q>annotated</q> Instructor's Version can be accomplished with additional material, perhaps in a selection of <tag>commentary</tag> elements looking like like <cd>
+                    <cline>&lt;commentary component="instructor"&gt;</cline>
+                </cd></p>
             </paragraphs>
 
             <paragraphs>

@@ -1684,6 +1684,73 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+<!-- Scratch ActiveCode Window -->
+<!-- Pop-up a window for testing program code.  So "calculator-like" but we      -->
+<!-- reserve the word "calculator" for the hand-held type (even if more modern). -->
+<xsl:variable name="html-scratch-activecode-language">
+    <!-- Builds for a Runestone server default to having this   -->
+    <!-- available via a button, and a "generic" build defaults -->
+    <!-- to not having a button (or teh feature in any event).  -->
+    <xsl:variable name="activecode-default">
+        <xsl:choose>
+            <xsl:when test="$b-host-runestone">
+                <xsl:text>python</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="entered-lang" select="$publication/html/calculator/@activecode"/>
+    <xsl:choose>
+        <!-- languages *always* supported, including "none" -->
+        <xsl:when test="($entered-lang = 'none') or
+                        ($entered-lang = 'python') or
+                        ($entered-lang = 'javascript') or
+                        ($entered-lang = 'html') or
+                        ($entered-lang = 'sql')">
+            <!-- HTML has odd identifier, due to CodeMirror API, we  -->
+            <!-- use a simple one for our authors and translate here -->
+            <xsl:choose>
+                <xsl:when test="$entered-lang = 'html'">
+                    <xsl:text>htmlmixed</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$entered-lang"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- languages only available on a Runestone server -->
+        <xsl:when test="($entered-lang = 'c') or
+                        ($entered-lang = 'cpp') or
+                        ($entered-lang = 'java') or
+                        ($entered-lang = 'python3') or
+                        ($entered-lang = 'octave')">
+            <xsl:choose>
+                <!-- good when hosting on a server -->
+                <xsl:when test="$b-host-runestone">
+                    <xsl:value-of select="$entered-lang"/>
+                </xsl:when>
+                <!-- sounds good, but no, not the right build -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file requests "<xsl:value-of select="$entered-lang"/>", but this language is not supported unless the publisher file also indicates the build is meant to be hosted on a Runestone server. Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+                    <xsl:value-of select="$activecode-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- an attempt was made, but failed to be any sort of language -->
+        <xsl:when test="$publication/html/calculator/@activecode">
+            <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file should be a programming language or "none", not "<xsl:value-of select="$publication/html/calculator/@activecode"/>". Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+            <xsl:value-of select="$activecode-default"/>
+        </xsl:when>
+        <!-- no attempt to specify build-dependent default value -->
+        <xsl:otherwise>
+            <xsl:value-of select="$activecode-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-has-scratch-activecode" select="not($html-scratch-activecode-language = 'none')"/>
 
 <!--                          -->
 <!-- HTML Index Page Redirect -->
@@ -2264,129 +2331,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-
-<!--                             -->
-<!-- HTML Short Answer Questions -->
-<!--                             -->
-
-<!-- Whether or not a "short answer" or "eassy" or "open-ended" question  -->
-<!-- is in an interactive form in a text may be configured based on the   -->
-<!-- five types of questions/locations.  We offer two choices:  static    -->
-<!-- (traditional PreTeXt) or dynamic (Runestone now, WeBWorK someday).   -->
-<!-- "dynamic" is only available on supported platforms, so we make it    -->
-<!-- the default, but use will be conditional also on targeting a capable -->
-<!-- platform.  In other words, these variables/setting are only relevant -->
-<!-- for *some* types of HTML output.                                     -->
-
-<!-- "inline" questions -->
-<xsl:variable name="sa-inline-style">
-    <xsl:choose>
-        <xsl:when test="$publication/html/short-answer/@inline = 'static'">
-            <xsl:text>static</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/short-answer/@inline = 'dynamic'">
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- attempted, but not valid, default to dynamic -->
-        <xsl:when test="$publication/html/short-answer/@inline">
-            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "inline" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@inline"/>". Proceeding with default value: "dynamic"</xsl:message>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-sa-inline-dynamic" select="$sa-inline-style = 'dynamic'"/>
-
-<!-- "divisional" questions -->
-<xsl:variable name="sa-divisional-style">
-    <xsl:choose>
-        <xsl:when test="$publication/html/short-answer/@divisional = 'static'">
-            <xsl:text>static</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/short-answer/@divisional = 'dynamic'">
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- attempted, but not valid, default to dynamic -->
-        <xsl:when test="$publication/html/short-answer/@divisional">
-            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "divisional" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@divisional"/>". Proceeding with default value: "dynamic"</xsl:message>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-sa-divisional-dynamic" select="$sa-divisional-style = 'dynamic'"/>
-
-<!-- "worksheet" questions -->
-<xsl:variable name="sa-worksheet-style">
-    <xsl:choose>
-        <xsl:when test="$publication/html/short-answer/@worksheet = 'static'">
-            <xsl:text>static</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/short-answer/@worksheet = 'dynamic'">
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- attempted, but not valid, default to dynamic -->
-        <xsl:when test="$publication/html/short-answer/@worksheet">
-            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "worksheet" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@worksheet"/>". Proceeding with default value: "dynamic"</xsl:message>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-sa-worksheet-dynamic" select="$sa-worksheet-style = 'dynamic'"/>
-
-<!-- "reading" questions -->
-<xsl:variable name="sa-reading-style">
-    <xsl:choose>
-        <xsl:when test="$publication/html/short-answer/@reading = 'static'">
-            <xsl:text>static</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/short-answer/@reading = 'dynamic'">
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- attempted, but not valid, default to dynamic -->
-        <xsl:when test="$publication/html/short-answer/@reading">
-            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "reading" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@reading"/>". Proceeding with default value: "dynamic"</xsl:message>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-sa-reading-dynamic" select="$sa-reading-style = 'dynamic'"/>
-
-<!-- "project" questions -->
-<xsl:variable name="sa-project-style">
-    <xsl:choose>
-        <xsl:when test="$publication/html/short-answer/@project = 'static'">
-            <xsl:text>static</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/short-answer/@project = 'dynamic'">
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- attempted, but not valid, default to dynamic -->
-        <xsl:when test="$publication/html/short-answer/@project">
-            <xsl:message>PTX:WARNING: HTML short-answer interactive style for "project" questions in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/short-answer/@project"/>". Proceeding with default value: "dynamic"</xsl:message>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>dynamic</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="b-sa-project-dynamic" select="$sa-project-style = 'dynamic'"/>
 
 <!--               -->
 <!-- HTML Base URL -->

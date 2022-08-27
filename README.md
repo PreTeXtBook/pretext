@@ -10,7 +10,7 @@ Quickstart instructions at project website:  [pretextbook.org](https://pretextbo
 Help and development discussions:
 * Support forum/mailing-list: [pretext-support](https://groups.google.com/forum/#!forum/pretext-support)
 * Announcements only, low-volume: [pretext-announce](https://groups.google.com/forum/#!forum/pretext-announce)
-
+* Submitting an issue is the last option for receiving help. See the [Contributing Guide](CONTRIBUTING.md).
 
 PreTeXt is guided by the following principles:
 ----------------------------------------------

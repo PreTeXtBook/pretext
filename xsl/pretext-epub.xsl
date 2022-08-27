@@ -219,9 +219,6 @@
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is relatively new, as of 2021-08-01.  Note that creating&#xa;an EPUB requires the pretext/pretext script, and not this stylesheet alone.</xsl:with-param>
-    </xsl:call-template>
     <!-- no hope for an "article" so fail immediately, with warning -->
     <xsl:if test="not($b-is-book)">
         <xsl:call-template name="banner-warning">

@@ -110,7 +110,8 @@ const needsSRE = argv.speech || argv.braille || argv.svgenhanced;
 //
 //  Load SRE if needed for speech or braille
 //
-const {sreReady} = (needsSRE ? require('mathjax-full/js/a11y/sre.js') : {sreReady: Promise.resolve()});
+const {Sre} = needsSRE ? require('mathjax-full/js/a11y/sre.js') :
+      {Sre: {sreReady: Promise.resolve()}};
 
 //
 //  Read the HTML file
@@ -198,11 +199,11 @@ const mmldoc = mathjax.document('', {
 });
 if (argv.svgenhanced) {
   renderActions.svg = action(STATE.PRETEXTACTION, (math, doc, adaptor) => {
-    let out = mmldoc.convert(SRE.toEnriched(math.outputData.mml).toString());
+    let out = mmldoc.convert(Sre.toEnriched(math.outputData.mml).toString());
     math.outputData.pretext.push(out);
     math.outputData.pretext.push(adaptor.text('\n'));
   }, () => {
-    SRE.setupEngine({speech: argv.depth, modality: 'speech', locale: argv.locale, domain: argv.rules});
+    Sre.setupEngine({speech: argv.depth, modality: 'speech', locale: argv.locale, domain: argv.rules});
   });
 }
 
@@ -223,11 +224,11 @@ if (argv.mathml) {
 //
 if (argv.speech) {
   renderActions.speech = action(STATE.PRETEXTACTION, (math, doc, adaptor) => {
-    const speech = SRE.toSpeech(math.outputData.mml);
+    const speech = Sre.toSpeech(math.outputData.mml);
     math.outputData.pretext.push(adaptor.node('mjx-speech', {}, [adaptor.text(speech)]));
     math.outputData.pretext.push(adaptor.text('\n'));
   }, () => {
-    SRE.setupEngine({modality: 'speech', locale: argv.locale, domain: argv.rules});
+    Sre.setupEngine({modality: 'speech', locale: argv.locale, domain: argv.rules});
   });
 }
 
@@ -237,11 +238,11 @@ if (argv.speech) {
 //
 if (argv.braille) {
   renderActions.braille = action(STATE.PRETEXTACTION, (math, doc, adaptor) => {
-    const speech = SRE.toSpeech(math.outputData.mml);
+    const speech = Sre.toSpeech(math.outputData.mml);
     math.outputData.pretext.push(adaptor.node('mjx-braille', {}, [adaptor.text(speech)]));
     math.outputData.pretext.push(adaptor.text('\n'));
   }, () => {
-    SRE.setupEngine({modality: 'braille', locale: 'nemeth', markup: 'layout', domain: 'default'});
+    Sre.setupEngine({modality: 'braille', locale: 'nemeth', markup: 'layout', domain: 'default'});
   });
 }
 
@@ -278,8 +279,18 @@ if (!(argv.svg || argv.svgenhanced)) {
   //  Wait for SRE, if needed
   //
   if (needsSRE) {
-    SRE.setupEngine({xpath: require.resolve('wicked-good-xpath/dist/wgxpath.install-node.js')});
-    await sreReady();
+    const feature = {
+      xpath: require.resolve('wicked-good-xpath/dist/wgxpath.install-node.js'),
+      json: require.resolve('speech-rule-engine/lib/mathmaps/base.json').replace(/\/base\.json$/, '')
+    };
+    Sre.setupEngine(feature);
+    if (argv.braille) {
+      Sre.setupEngine({locale: 'nemeth'});
+    }
+    if (argv.speech || argv.svgenhanced) {
+      Sre.setupEngine({locale: argv.locale});
+    }
+    await Sre.sreReady();
   }
   //
   //  Render the document

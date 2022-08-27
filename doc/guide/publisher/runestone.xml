@@ -11,27 +11,41 @@
     <title>Conversion to Runestone</title>
 
     <introduction>
-        <p><url href="https://runestone.academy" visual="runestone.academy">Runestone Interactive</url> is a textbook hosting system orginally designed for <init>HTML</init> textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.  Any instructor can easily spin-up an instance of your book for their course, at no charge to the school or to the students.</p>
+        <p><url href="https://runestone.academy" visual="runestone.academy">Runestone Academy</url> is a textbook hosting system orginally designed for <init>HTML</init> textbooks about computer science.  It is similar in design and goals to <pretext/>, but is also complementary in important ways.  In particular, Runestone excels at providing very interactive versions where student work in the textbook can be graded (automatically or manually), scores recorded, and that information can be viewed by an instructor.  Any instructor can easily spin-up an instance of your book for their course, hosted at Runestone Academy at no charge to the school or to the students.  Could not be easier.</p>
     </introduction>
 
     <section>
         <title>About Runestone Academy</title>
 
-        <p>Runestone textbooks are designed around interactive activities and active reading.  We are well along in the process of exposing these capabilities via <pretext/> markup, as of 2022-06-13.  Expect this list to expand, and change slightly, as we make further progress.<ul>
+        <p>Runestone textbooks are designed around interactive activities and active reading.  We are well along in the process of exposing these capabilities via <pretext/> markup, as of 2022-07-02.  Expect this list to expand, and change slightly, as we make further progress.  Publicly-accessible Runestone servers are availble at <url href="https://runestone.academy" visual="Runestone.Academy">Runestone Academy</url>.<ul>
             <li>Every feature of the usual <pretext/> <init>HTML</init> output should function identically on a Runestone server.</li>
-            <li>Any <tag>exercise</tag> authored in <pretext/> can be electively rendered as a Runestone short answer question, when the Runestone platform is targeted as the host.  A student can use <latex/> notation in formulating their answer, and Runestone will provide the instructor an efficient interface for reviewing student responses, provide feedback, and assign scores.  See <xref ref="online-short-answer-options"/> for options that will silence this behavior.</li>
+
+            <li>Any <tag>exercise</tag> authored in <pretext/> can be electively rendered as a Runestone short answer question, when the Runestone platform is targeted as the host.  A student can use <latex/> notation in formulating their answer, and Runestone will provide the instructor an efficient interface for reviewing student responses, provide feedback, and assign scores.</li>
+
             <li>We have designed markup for the various types of problems available in Runestone: True/False, multiple choice, Parsons problems, matching, clickable area, (basic) fill-in, and ActiveCode programming exercises.  Hosted on Runestone, readers have their responses graded and get instant feedback, plus their results are saved at the site.  For other <init>HTML</init> output, hosted on your own server, these problems are automatically graded and the reader gets instant feedback, but of course, responses and scores are not saved anywhere.</li>
+
             <li>As much as possible, non-interactive versions of these problems will render in less-capable formats, like <init>PDF</init>, <init>EPUB</init>, and braille.</li>
-            <li>A <tag>program</tag> element with the attribute <attr>interactive</attr> set to <c>activecode</c> will be realized as a Runestone ActiveCode element, where programs can be edited, compiled, and run.  In some cases a CodeLens interactive trace utility is available.  The <attr>language</attr> must be set.  Supported values for the language when hosted at Runestone are: <c>python</c>, <c>python2</c>, <c>python3</c>, <c>c</c>, <c>cpp</c> (C++), <c>javascript</c>, <c>java</c>, <c>octave</c> (Matlab), <c>sql</c>, and <c>html</c>.  When hosted on your own server, <c>python</c>, <c>javascript</c>, <c>sql</c>, and <c>html</c>, are supported with in-browser routines.  So you do not need to configure <em>anything</em> server-side for this capability.</li>
-            <li>Programs may be supplied with the CodeLens utility, allowing a reader to step through the program.  This ability vbaries by language, and by hosting location.</li>
+
+            <li>A <tag>program</tag> element with the attribute <attr>interactive</attr> set to <c>activecode</c> (even outside of a an exercise) will be realized as a Runestone ActiveCode interactive program, where programs can be edited, compiled, and run.  In some cases a CodeLens interactive trace utility is also available.  The <attr>language</attr> must be set.  Supported values for the language when hosted at Runestone are: <c>python</c>, <c>python3</c>, <c>c</c>, <c>cpp</c> (C++), <c>javascript</c>, <c>java</c>, <c>octave</c> (Matlab), <c>sql</c>, and <c>html</c>.  When hosted on your own server, <c>python</c>, <c>javascript</c>, <c>sql</c>, and <c>html</c>, are supported with in-browser routines.  So you do not need to configure <em>anything</em> server-side for this capability.</li>
+
+            <li>Similarly, a <tag>program</tag> element with the attribute <attr>interactive</attr> set to <c>codelens</c> (even outside of a an exercise) will be realized as a Runestone CodeLens interactive program.  This allowa a reader to step through the program, much like in a debugger, but with more informative displays of the intermediate state of the program (and nothing like breakpoints or changing variable's values).  This ability varies by language, and by hosting location.</li>
+
+            <li>Every feature described for an <tag>exercise</tag> is also available for PROJECT-LIKE, and for individual terminal <tag>task</tag> within these structures.</li>
+
             <li>More <pretext/> markup for Runestone books is coming and will go here.</li>
+
             <li>All of the interactive exercises on a Runestone server can be worked by a student at the location in the book where they were authored, or a student may use the interface provided by the server (the <term>assignment page</term>) to locate exercises assigned by an instructor, at a location disjoint from the text itself.</li>
+
+            <li>Additional activities are available when your book is hosted on a Runestone server, such as <term>peer instruction</term>.  For example, you may choose an exercise, typically multiple-choice, for all the students to answer in class.  Then the server can pair up students <em>with different answers</em> to discuss their responses before any more is know about the solution.  This can be done through a chat window for a class where moving around is difficult.</li>
+
             <li>Students and instructors are provided extensive reports on progress.</li>
+
             <li>Instructors may download a spreadsheet of scores at any time.</li>
         </ul></p>
 
         <p>We will not attempt to duplicate Runestone's documentation here.  Visit the <url href="https://runestone.academy" visual="runestone.academy">Runestone Academy</url> site to learn more about all the features designed for hosting your textbook for everybody's courses.</p>
     </section>
+
 
     <section xml:id="sec-publishing-to-runestone-academy">
         <title>Publishing to Runestone Academy</title>
@@ -60,30 +74,53 @@
             <li>
                 <p>
                     You should create a new <c>&lt;target name="runestone"&gt;&lt;/target&gt;</c> in your <c>project.ptx</c>.
-                    The contents of this tag will likely be identical to your usual html-format build target,
-                    except you should change your <c>&lt;publication&gt;</c> to point to a new file, perhaps named
-                    <c>publication/runestone.ptx</c>.
+                    The contents of this tag will differ from your usual html-format build target,
+                    in the following ways.  1) You should change your <tag>publication</tag> to point to a new file, perhaps named
+                    <c>publication/runestone.ptx</c>.  2) You should change your <tag>output-dir</tag> to point to <c>published/document-id</c>
+                    where <tag>document-id</tag> is defined in your <tag>docinfo</tag>.  Note Runestone's preferred practice
+                    for the <tag>document-id</tag> is to have a simple lowercase string with no dashes or other special characters.  This value
+                    is visible to readers who want to register for your course on Runestone outside of any formal setting.
                 </p>
             </li>
             <li>
                 <p>
                     Copy the usual publication file you use for your html-format build target and name it as
                     <c>publication/runestone.ptx</c> (or whatever you chose in the previous step). Edit this file
-                    so your <c>&lt;html&gt;</c> element matches the example above.
+                    so your <tag>html</tag> element matches the example above.
                 </p>
             </li>
             <li>
                 <p>
-                    Use <c>pretext deploy</c> on the command line to deploy your project to GitHub (it will walk
-                    you through setup if you haven't deployed your project before). You do <em>not</em> have to
+                    Update the <tag>docinfo</tag> section of your book so that it includes a <tag>blurb</tag>
+                    with a <attr>shelf</attr>.  The blurb should not contain any additional markup, just a simple
+                    string, that describes your book.  Think of something like what you would read on a book jacket.
+                    It might even also be used automatically in the future for exactly that:
+                    a blurb on the back cover of a hardback book.  So keep it simple<mdash/>straight ASCII text, nothing fancy.
+                    The <attr>shelf</attr> tells the Runestone software where your book belongs in the categories
+                    on the Runestone library page.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Use <c>pretext deploy</c> on the command line, or simply <c>git push</c> the changes described above
+                    to GitHub if you are comfortable with git. The <c>deploy</c> command will walk
+                    you through setup if you haven't deployed your project to github before. You do <em>not</em> have to
                     enable GitHub Pages unless you want to (GitHub Pages does not have the features of a Runestone
-                    server, but can host your regular html-format build).
+                    server, and will not render a build for the Runestone target properly.  You can host your regular
+                    html-format build on GitHub.).
+                </p>
+            </li>
+            <li>
+                <p>
+                    Runestone servers are able to host both a <c>draft</c> and a <c>published</c> version of your book.
+                    When you open an issue (in the next step) inquire about how to specify this in your <c>project.ptx</c> file.
+                    Then let us know, so you are the only person to have to ask.  Thanks.
                 </p>
             </li>
             <li>
                 <p>
                     Log into GitHub and open an Issue at
-                    <url href="https://github.com/RunestoneInteractive/RunestoneServer/issues/new"/>
+                    <url href="https://github.com/RunestoneInteractive/RunestoneServer/issues/new" visual="github.com/RunestoneInteractive/RunestoneServer/issues/new"/>
                     to request that your project be added to Runestone Academy. Be sure to provide the URL
                     of your GitHub repository (e.g. <c>https://github.com/UserName/repo-name/</c>). Runestone
                     Academy administrators will communicate with you via GitHub to complete this process.

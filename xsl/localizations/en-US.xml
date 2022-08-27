@@ -248,4 +248,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='evaluate'>Evaluate</localization>
     <localization string-id='evaluate'>Evaluate</localization>
     <!-- <localization string-id='code'>Code</localization> -->
+    <!-- Interactive exercise feedback messages                   -->
+    <!-- These might be part of a feedback message for submitting -->
+    <!-- an answer, e.g. "Correct!" or "Correct: 50%".            -->
+    <localization string-id='correct'>Correct</localization>
+    <localization string-id='incorrect'>Incorrect</localization>
+    <!-- To signal that a reader left an answer blank             -->
+    <localization string-id='blank'>Blank</localization>
+    <!-- Submit or check responses                                -->
+    <localization string-id='submit'>Submit</localization>
+    <localization string-id='check-responses'>Check Responses</localization>
+    <!-- Reveal correct answers                                   -->
+    <localization string-id='reveal'>Reveal</localization>
+    <!-- Randomize parameters for a randomizable exercise         -->
+    <localization string-id='randomize'>Randomize</localization>
+    <!-- Activate an interactive (from a static preview)          -->
+    <localization string-id='activate'>Activate</localization>
+    <!-- Reset an interactive to its original state               -->
+    <localization string-id='reset'>Reset</localization>
+
 </locale>

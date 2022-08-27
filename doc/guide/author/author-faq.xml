@@ -180,13 +180,13 @@
             <p>
               If you have errors when you run <c>pdflatex</c> or <c>xelatex</c>,
               that is more likely to be caused by a problem with your <latex /> installation
-              than with <pretext />.  It is difficult to make legitimate <pretext /> 
+              than with <pretext />.  It is difficult to make legitimate <pretext />
               that fails to compile; an exception being math markup inside a math element
               (<tag>m</tag>, <tag>me</tag>, and friends).
             </p>
 
             <p>
-              To check your <latex /> installation, run <c>pdflatex -version</c>.  
+              To check your <latex /> installation, run <c>pdflatex -version</c>.
               If it reports something older than <q>TeX Live 2017</q>,
               then updating may help.  If the trouble seems to be coming from a
               particular package, then check which version of the package is being used.
@@ -199,7 +199,7 @@
             <p>
               If the PDF is created without errors, but something looks wrong in the PDF,
               then probably the <pretext /> source markup is wrong.  Validate your source
-              against the schema (see <xref ref="schema-validation" />), and also carefully examine the HTML output.  
+              against the schema (see <xref ref="schema-validation" />), and also carefully examine the HTML output.
               If that does not reveal the problem, seek expert help.
             </p>
         </li>
@@ -212,12 +212,22 @@
         </li>
 
         <li>
+            <title>I'd like to keep using <latex/> markup for mathematics, in other words, $<ellipsis/>$ and \[<ellipsis/>\]</title>
+
+            <p>If you <em>were</em> somehow able to mix-in a dollar sign into your <pretext/> document, how would you then write <q>The bus ride cost me $2.50</q>?  The <latex/> solution, <c>\$</c>, is not going to help you.  It is a shortcoming of <tex/> that so many characters have special meanings in certain circumstances.</p>
+
+            <p>If you insist, you can still author using $<ellipsis/>$ and \[<ellipsis/>\], and before processing do a global search-and-replace.  But converting a leading <c>$</c> to <c>&lt;m&gt;</c> and a trailing <c>$</c> to <c>&lt;/m&gt;</c> will drive you mad unless you are really good with regular expressions.  So perhaps better to use <c>\(</c> and <c>\)</c> for inline mathematics and search-and-replace will go better.  I count six keypresses for that, including the shifts for the parentheses, while it just takes me seven keypresses for the PreTeXt <tag>m</tag> element, when I use an editor that auto-completes elements with a two-key combination.</p>
+
+            <p>We realize change is hard<mdash/>we used <latex/> for thirty years.  But we believe the long-term advantages of <pretext/> markup are worth the short-term rearrangements.</p>
+        </li>
+
+        <li>
             <title>Why not <latex/>?  Why <pretext/>?</title>
             <p><tex/> was first released in 1978.  There was no Internet, no <init>HTML</init>, no Unicode, and no YouTube.  There have been many attempts to convert <tex/>/<latex/> to more modern document formats.  They are not hard to find<mdash/>none is satisfactory.  We know because we have spent many years trying to adapt them to our purposes.</p>
 
             <p>Many laud <latex/> for its ability to separate content from presentation.  The key word is <em>ability</em>.  It is possible to use <latex/> in a purely semantic way.  But it very rarely happens in practice.  And we suspect that when it does, the result looks much like <init>XML</init> anyway, such as the use of many <c>\begin{}/\end{}</c> pairs.  <latex/> allows authors enough freedom that it is impossible to accurately discern intent in a totally automated way.</p>
 
-            <p>By contrast, an <init>XML</init> vocabulary defined by a schema (i.e. <pretext/>) forces authors to communicate intent and denies authors the opportunity to micro-manage presentation.  The result is automated conversions to many useful output formats with no extra effort from the author, including future conversions to formats not yet imagined.  And <init>XSL</init>, once understood, is a robust and powerful tool for the sorts of text-manipulation tasks necessary.</p>
+            <p>By contrast, an <init>XML</init> vocabulary defined by a schema (i.e.<nbsp/><pretext/>) forces authors to communicate intent and denies authors the opportunity to micro-manage presentation.  The result is automated conversions to many useful output formats with no extra effort from the author, including future conversions to formats not yet imagined.  And <init>XSL</init>, once understood, is a robust and powerful tool for the sorts of text-manipulation tasks necessary.</p>
         </li>
 
         <li>
@@ -256,13 +266,13 @@
         </li>
 
         <li>
-          <title>I would like to use a standard package in my Sage code.</title>
+          <title>I would like to use a standard package in my Sage code</title>
 
           <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
         </li>
 
         <li>
-          <title>I would like to use a (large) data file in my Sage code.</title>
+          <title>I would like to use a (large) data file in my Sage code</title>
 
           <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
         </li>

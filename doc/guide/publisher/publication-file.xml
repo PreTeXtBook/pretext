@@ -252,7 +252,7 @@
 
             <p>The<cd>
                 <cline>/publication/html/calculator</cline>
-            </cd>element has the following attributes:<ul>
+            </cd>element has the following attribute:<ul>
                 <li>
                     <p><attr>model</attr>: used to control which calculator is available on every page.  Possible values are:<ul>
                         <li><c>geogebra-classic</c></li>
@@ -262,7 +262,31 @@
                         <li><c>none</c></li>
                     </ul></p>
                 </li>
-            </ul>  See <xref ref="online-embedded-calculator"/> for more.</p>
+            </ul>The default is <c>none</c>.  See <xref ref="online-embedded-calculator"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-activecode">
+            <title>HTML ActiveCode Programming Window</title>
+            <idx><h>ActiveCode</h><h>window in <init>HTML</init></h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/calculator</cline>
+            </cd>element has the following attribute:<ul>
+                <li>
+                    <p><attr>activecode</attr>: used to control if an ActiveCode window is available on every page, and if so, which language it undestands.  Possible values are:<ul>
+                        <li><c>python</c> (Python)</li>
+                        <li><c>javascript</c> (JavaScript)</li>
+                        <li><c>html</c> (<init>HTML</init>)</li>
+                        <li><c>sql</c> (<init>SQL</init>)</li>
+                        <li><c>c</c> (C, Runestone server only)</li>
+                        <li><c>cpp</c> (C++, Runestone server only)</li>
+                        <li><c>java</c> (Java, Runestone server only)</li>
+                        <li><c>python3</c> (Python 3, Runestone server only)</li>
+                        <li><c>octave</c> (Octave, Runestone server only)</li>
+                        <li><c>none</c></li>
+                    </ul></p>
+                </li>
+            </ul>For a build hosted at a Runestone server, <c>python</c> is the default.  For an <init>HTML</init> build hosted elsewhere, <c>none</c> is the default.  See <xref ref="online-scratch-activecode"/> for more.</p>
         </subsection>
 
         <subsection xml:id="online-index-page">
@@ -421,17 +445,6 @@
                 <li><c>web</c>: the default, meant for self-hosting with no server configuration, features, or assumptions</li>
                 <li><c>runestone</c>: output meant for hosting on a Runestone server (<xref ref="runestone"/>)</li>
             </ul>Here <term>platform</term> refers to the server where the <init>HTML</init> output will eventually be hosted.  The effect is to create minor variations in the output to take advantage of extra features of the indicated platform.</p>
-        </subsection>
-
-        <subsection xml:id="online-short-answer-options">
-            <title>HTML Interactive Short Answer Exercises</title>
-            <idx><h>short answer</h><h>HTML</h></idx>
-
-            <p>When <init>HTML</init> output is configured for use on an interactive platform, such as Runestone (<xref ref="runestone"/>), you may want <term>short answer</term> (or <term>essay</term> or <term>open-ended</term>) exercises to appear <term>static</term>, much as they would in print.  Or you might want them to be <term>dynamic</term>, where a student can enter an answer in a text box, for later grading by an instructor.  See <xref ref="short-answer-exercises"/> for more rationale and explanation.  This behavior can be elected as a group for each of the five type of exercises.  Note: these options are only consulted when output is configured for a platform which can express the distinction.</p>
-
-            <p>The<cd>
-                <cline>/publication/html/short-answer</cline>
-            </cd>element can have five different attributes: <attr>inline</attr>, <attr>divisional</attr>, <attr>worksheet</attr>, <attr>reading</attr>, and <attr>project</attr>.  For each, the allowed attribute values are <c>static</c> and <c>dynamic</c>.  The default for each is <c>dynamic</c>, so in practice, these options are used to make certain groups of exercises non-interactive when there is no expectation of reviewing them online, or recording progress or scores.  In other words, you need to <q>opt-out</q> of dynamic short-answer questions.</p>
         </subsection>
 
         <subsection xml:id="online-style-options">

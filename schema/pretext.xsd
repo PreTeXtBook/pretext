@@ -1735,7 +1735,7 @@
               </xs:complexType>
             </xs:element>
             <xs:choice>
-              <xs:element name="latex-image" type="xs:string"/>
+              <xs:element ref="latex-image"/>
               <xs:element ref="asymptote"/>
               <xs:element ref="sageplot"/>
             </xs:choice>
@@ -1757,6 +1757,7 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="latex-image" type="xs:string"/>
   <xs:element name="asymptote" type="xs:string"/>
   <xs:element name="sageplot">
     <xs:complexType mixed="true">
@@ -1784,17 +1785,7 @@
                 </xs:choice>
               </xs:complexType>
             </xs:element>
-            <xs:element minOccurs="0" name="latex-image">
-              <xs:complexType mixed="true">
-                <xs:attribute name="syntax" use="required">
-                  <xs:simpleType>
-                    <xs:restriction base="xs:token">
-                      <xs:enumeration value="PGtikz"/>
-                    </xs:restriction>
-                  </xs:simpleType>
-                </xs:attribute>
-              </xs:complexType>
-            </xs:element>
+            <xs:element minOccurs="0" ref="latex-image"/>
           </xs:sequence>
           <xs:attribute name="pg-name"/>
           <xs:attribute name="width"/>
@@ -3651,17 +3642,7 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="package" type="xs:string"/>
-  <xs:element name="latex-image-preamble">
-    <xs:complexType mixed="true">
-      <xs:attribute name="syntax">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="PGtikz"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="latex-image-preamble" type="xs:string"/>
   <xs:element name="asymptote-preamble" type="xs:string"/>
   <xs:element name="macros" type="xs:string"/>
   <xs:element name="cross-references">

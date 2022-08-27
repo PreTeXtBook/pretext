@@ -130,6 +130,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These are *significant*, *intentional* source elements requiring a monospace font   -->
 <!-- (and not incindentals like an email address which could just be the default tt font -->
 <xsl:variable name="b-needs-mono-font" select="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr"/>
+<xsl:variable name="b-has-long-tabular" select="boolean($document-root//notation-list|$document-root//list-of|$document-root//tabular[@break='yes'])" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -1772,8 +1773,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists are built as "longtable" so they span multiple pages    -->
     <!-- and get "continuation" footers, for example.  It is the       -->
     <!-- "list generator" element which provokes the package inclusion -->
-    <xsl:if test="$document-root//notation-list|$document-root//list-of">
-        <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
+    <!-- An author can elect breakable "tabular" as well                -->
+    <xsl:if test="$b-has-long-tabular">
+        <xsl:text>%% Package for tables (potentially) spanning multiple pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
     <!-- This is the place to add part numbers to the numbering, which   -->
@@ -3352,8 +3354,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, fontlower=\blocktitlefont</xsl:text>
 </xsl:template>
 
+<!-- This style is "breakable" to allow for "tabular" realized as "longtable". -->
+<!-- Normally a table will not break at all, so the breakability of the        -->
+<!-- tcolorbox is not really relevant.  This is in lieu of trying to make      -->
+<!-- a special-case style within the confines of the semi-elaborate process    -->
+<!-- of naming/using styles. -->
 <xsl:template match="table" mode="tcb-style">
-    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt, fonttitle=\blocktitlefont</xsl:text>
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt, fonttitle=\blocktitlefont, breakable</xsl:text>
 </xsl:template>
 
 <!-- "list" contents are breakable, so we rub out annoying faint lines -->
@@ -6339,6 +6346,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer"  />
     <xsl:param name="b-has-solution"  />
 
+    <!-- The  $b-has-*  variables are a *desire* to see some component.   -->
+    <!-- But if an individual exercise does not have such a component,    -->
+    <!-- then it will not be shown.  So these  $b-showing-*s  variables   -->
+    <!-- are per-exercise indications.                                    -->
+    <!--                                                                  -->
+    <!-- An exercise always has a "statement" and if shown, it is inline. -->
+    <!-- When not shown (like in backmatter solutions) the exercise may   -->
+    <!-- still have a "title" which is shown inline.  So the first        -->
+    <!-- solution-like may be inline (no statement shown, no title        -->
+    <!-- authored), or it may follow the statement/title and need a       -->
+    <!-- separator to begin on a new line with a bit of a break.          -->
+
+    <xsl:variable name="b-showing-statement" select="$b-has-statement or title"/>
+    <xsl:variable name="b-showing-hints" select="$b-has-hint and hint"/>
+    <xsl:variable name="b-showing-answers" select="$b-has-answer and answer"/>
+    <xsl:variable name="b-showing-solutions" select="$b-has-solution and solution"/>
+
     <!-- structured (with components) versus unstructured (simply a bare statement) -->
     <xsl:choose>
         <xsl:when test="statement">
@@ -6377,7 +6401,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:for-each>
                 </xsl:if>
             </xsl:if>
-            <xsl:if test="$b-has-hint">
+            <!-- more coming and inline presentation already used up, so add a final separator -->
+            <xsl:if test="$b-showing-statement and ($b-showing-hints or $b-showing-answers or $b-showing-solutions)">
+                <xsl:call-template name="exercise-component-separator"/>
+            </xsl:if>
+            <xsl:if test="$b-showing-hints">
                 <xsl:apply-templates select="hint">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="purpose" select="$purpose" />
@@ -6385,22 +6413,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-has-answer" select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution" select="$b-has-solution" />
                 </xsl:apply-templates>
+                <!-- more coming, add a final separator -->
+                <xsl:if test="$b-showing-answers or $b-showing-solutions">
+                    <xsl:call-template name="exercise-component-separator"/>
+                </xsl:if>
             </xsl:if>
-            <xsl:if test="$b-has-answer">
+            <xsl:if test="$b-showing-answers">
                 <xsl:apply-templates select="answer">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
                     <xsl:with-param name="b-has-solution" select="$b-has-solution" />
                 </xsl:apply-templates>
+                <!-- more coming, add a final separator -->
+                <xsl:if test="$b-showing-solutions">
+                    <xsl:call-template name="exercise-component-separator"/>
+                </xsl:if>
             </xsl:if>
-            <xsl:if test="$b-has-solution">
+            <xsl:if test="$b-showing-solutions">
                 <xsl:apply-templates select="solution">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
                 </xsl:apply-templates>
             </xsl:if>
+            <!-- done, no final separator is provided -->
         </xsl:when>
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
@@ -6414,6 +6451,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- We place a separator *after* an exercise component if, and only if, -->
+<!-- we know there are more components to come.  So if we have multiple  -->
+<!-- solution-like, we place one after instance, but the last (see       -->
+<!-- templates for each solution-like).  Between groups of identical     -->
+<!-- solution-like we need to *perhaps* place a separator.               -->
 <xsl:template name="exercise-component-separator">
     <xsl:text>\par\smallskip%&#xa;</xsl:text>
 </xsl:template>
@@ -6425,7 +6467,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6434,6 +6475,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+    <!-- separate hints after all but final one -->
+    <xsl:if test="following-sibling::hint">
+        <xsl:call-template name="exercise-component-separator"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="answer">
@@ -6442,7 +6487,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-solution" />
 
-    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6451,6 +6495,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+    <!-- separate answers after all but final one -->
+    <xsl:if test="following-sibling::answer">
+        <xsl:call-template name="exercise-component-separator"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="solution">
@@ -6458,7 +6506,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
 
-    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6467,6 +6514,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+    <!-- separate solutions after all but final one -->
+    <xsl:if test="following-sibling::solution">
+        <xsl:call-template name="exercise-component-separator"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Each component has a similar look, so we combine here -->
@@ -7559,20 +7610,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:text>\mono{www.desmos.com/calculator/</xsl:text>
             <xsl:value-of select="@desmos"/>
-            <xsl:text>}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="interactive[@wolfram-cdf]" mode="static-caption">
-    <xsl:choose>
-        <!-- author-supplied override -->
-        <xsl:when test="caption">
-            <xsl:apply-templates select="caption" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\mono{www.wolframcloud.com/objects/</xsl:text>
-            <xsl:value-of select="@wolfram-cdf"/>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -9498,6 +9535,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- set environment based on breakability -->
+    <xsl:variable name="tabular-environment">
+        <xsl:choose>
+            <xsl:when test="@break = 'yes'">
+                <xsl:text>longtable</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>tabular</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- get a newline if inside a "stack" -->
     <xsl:if test="parent::stack and preceding-sibling::*">
         <xsl:text>\par&#xa;</xsl:text>
@@ -9517,7 +9565,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--   vertical borders (left side, right side, three widths) -->
     <!--   horizontal alignment (left, center, right)             -->
     <xsl:text>{\tabularfont%&#xa;</xsl:text>
-    <xsl:text>\begin{tabular}{</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$tabular-environment"/>
+    <xsl:text>}{</xsl:text>
     <!-- start with left vertical border -->
     <xsl:call-template name="vrule-specification">
         <xsl:with-param name="width" select="$table-left" />
@@ -9623,7 +9673,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-valign" select="$table-valign" />
     </xsl:apply-templates>
     <!-- mandatory finish, exclusive of any final row specifications -->
-    <xsl:text>\end{tabular}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$tabular-environment"/>
+    <xsl:text>}&#xa;</xsl:text>
     <!-- finish grouping for tabular font -->
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
@@ -11297,6 +11349,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>no.\@\,</xsl:text>
     <xsl:apply-templates select="text()"/>
     <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- A "pubnote", which could contain any publication information -->
+<xsl:template match="biblio[@type='bibtex']/pubnote">
+    <xsl:text> [</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>]</xsl:text>
 </xsl:template>
 
 <!-- Pages should come last, so put a period.    -->

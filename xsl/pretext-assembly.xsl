@@ -551,15 +551,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
     </xsl:copy>
     <xsl:choose>
-        <!-- deprecated, force the issue using @href -->
-        <xsl:when test="not(@visual)">
-            <fn pi:url="{@href}"/>
-        </xsl:when>
         <!-- explicitly opt-out, so no footnote -->
         <xsl:when test="@visual = ''"/>
         <!-- go for it, as requested by author -->
-        <xsl:otherwise>
+        <xsl:when test="@visual">
             <fn pi:url="{@visual}"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- When an author has not made an effort to provide a visual   -->
+            <!-- alternative, then attempt some obvious clean-up of the      -->
+            <!-- default, and if not possible, settle for an ugly visual URL -->
+            <xsl:variable name="truncated-href">
+                <xsl:choose>
+                    <xsl:when test="substring(@href, 1, 8) = 'https://'">
+                        <xsl:value-of select="substring(@href, 9)"/>
+                    </xsl:when>
+                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                        <xsl:value-of select="substring(@href, 8)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@href"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <fn pi:url="{$truncated-href}"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -657,6 +672,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <task>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
     </task>
+</xsl:template>
+
+<!-- 2022-07-10 webwork//latex-image[syntax='PGtikz'] deprecated    -->
+<!-- to just a normal latex-image. The text content for the code    -->
+<!-- must be wrapped in a tikzpicture environment.                  -->
+<xsl:template match="latex-image[@syntax='PGtikz']" mode="repair">
+    <xsl:copy>
+        <!-- we drop the @syntax attribute -->
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'syntax')]" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+<xsl:template match="latex-image[@syntax='PGtikz']/text()" mode="repair">
+    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:copy>
+                <xsl:apply-templates select="."/>
+            </xsl:copy>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -1090,7 +1126,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  Use locations computed here, remove elsewhere                  -->
 <!-- 4.  Recognize new, modern fill-in problems                         -->
 
-<xsl:template match="exercise|&PROJECT-LIKE;" mode="exercise">
+<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="exercise">
     <xsl:param name="division"/>
 
     <xsl:copy>
@@ -1099,21 +1135,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (always just a component of something larger).  WeBWork   -->
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
-        <xsl:attribute name="exercise-customization">
-            <xsl:choose>
-                <xsl:when test="&PROJECT-FILTER;">
-                    <xsl:text>project</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$division"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <!-- Determine and record types of interactivity, partially based   -->
-        <!-- on location due to publisher options for "short answer" (only) -->
-        <xsl:apply-templates select="." mode="exercise-interactive-attribute">
-            <xsl:with-param name="division" select="$division"/>
-        </xsl:apply-templates>
+        <xsl:if test="not(self::task)">
+            <xsl:attribute name="exercise-customization">
+                <xsl:choose>
+                    <xsl:when test="&PROJECT-FILTER;">
+                        <xsl:text>project</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$division"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- Determine and record types of interactivity -->
+        <xsl:apply-templates select="." mode="exercise-interactive-attribute"/>
         <!-- catch remaining attributes -->
         <xsl:apply-templates select="@*" mode="exercise">
             <xsl:with-param name="division" select="$division"/>
@@ -1131,8 +1166,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These "interactivity types" are meant for Runestone-enabled  -->
 <!-- interactive exercises and projects                           -->
 <xsl:template match="*" mode="exercise-interactive-attribute">
-    <xsl:param name="division"/>
-
     <xsl:attribute name="exercise-interactive">
         <xsl:choose>
             <!-- hack for temporary demo HTML versions -->
@@ -1156,7 +1189,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
             </xsl:when>
-            <xsl:when test="statement//var and not(webwork)">
+            <xsl:when test="statement//var and not(webwork) and not(self::task//ancestor::webwork)">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
             <!-- new dynamic fillin goes here, perhaps:                     -->
@@ -1165,38 +1198,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and program[(@interactive = 'codelens') or (@interactive = 'activecode')]">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
-            <!-- Now we have what once would have been called a "traditional"     -->
-            <!-- PreTeXt question, which is just "statement|hint|answer|solution" -->
-            <!-- (perhaps after a bit of preprocessing.  More accurately, these   -->
-            <!-- are "short answer", "essay", or "free response".  We have allow  -->
-            <!-- these to be interactive (or not) for a capable platform.         -->
-            <!-- Conveniently, we have the cusomization types in the $division    -->
-            <!-- parameter. This only matters when we are on a Runestone server.  -->
-            <xsl:when test="$b-host-runestone">
-                <xsl:choose>
-                    <xsl:when test="($division = 'inline') and $b-sa-inline-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($division = 'divisional') and $b-sa-divisional-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($division = 'reading') and $b-sa-reading-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($division = 'worksheet') and $b-sa-worksheet-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="($division = 'project') and $b-sa-project-dynamic">
-                        <xsl:text>shortanswer</xsl:text>
-                    </xsl:when>
-                    <!-- examples are never assesments                -->
-                    <!-- maybe WeBWork will someday be on a RS server -->
-                    <xsl:otherwise>
-                        <xsl:text>static</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:when test="statement and response">
+                <xsl:text>shortanswer</xsl:text>
             </xsl:when>
             <!-- That's it, we are out of opportunities to be interactive -->
+
+            <!-- A child that is a task indicates the exercise/project/task -->
+            <!-- that is its parent is simply a container, rather than a    -->
+            <!-- terminal task which would be structured with a "statement" -->
+            <!-- in order to be interactive                                 -->
+            <xsl:when test="task">
+                <xsl:text>container</xsl:text>
+            </xsl:when>
+            <!-- Now we have what once would have been called a "traditional"     -->
+            <!-- PreTeXt question, which is just "statement|hint|answer|solution" -->
+            <!-- Or maybe just a bare statement that is not structured as such    -->
             <xsl:otherwise>
                 <xsl:text>static</xsl:text>
             </xsl:otherwise>
@@ -1252,18 +1268,64 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clickable Area    -->
 <!-- ActiveCode        -->
 
+<!-- TODO: definitely need better filters -->
+<!-- complement (not()), single attribute -->
+<!-- Also in Runestone manifest creation  -->
+
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding')]
-                              |project[@exercise-interactive = 'coding']
-                              |activity[@exercise-interactive = 'coding']
-                              |exploration[@exercise-interactive = 'coding']
-                              |investigation[@exercise-interactive = 'coding']" mode="representations">
-    <!-- always preserve "exercise" container, with attributes -->
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                      |
+                      project[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                     activity[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                  exploration[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                investigation[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]
+                     |
+                         task[ (@exercise-interactive = 'truefalse') or
+                               (@exercise-interactive = 'multiplechoice') or
+                               (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'shortanswer')]" mode="representations">
+    <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
         <xsl:choose>
@@ -1280,9 +1342,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
-
-<!-- Short Answer -->
-<!-- @exercise-interactive = 'shortanswer' needs no adjustments -->
 
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->

@@ -14,7 +14,23 @@
     <section xml:id="publisher-revealjs">
         <title>Reveal.js</title>
         <p>
-            Run this to produce a Reveal.js slideshow:<cd>
+            To create a reveal.js slideshow using pretext, start by creating a new project as follows.
+        </p>
+
+        <console>
+            <input>pretext new slideshow</input>
+        </console>
+
+        <p>
+            You will notice a few differences from a standard project.   In the project manifest, the format is <q>custom</q>, and there is an <tag>xsl</tag> tag that points to a custom xsl stylesheet in the xsl folder of the project.  This will import the correct reveal.js stylesheet.  After authoring your slides, you can build them with the following command.
+        </p>
+
+        <console>
+            <input>pretext build web</input>
+        </console>
+
+        <p>
+            To use <c>xsltproc</c>, run this to produce a Reveal.js slideshow:<cd>
                 <cline>xsltproc --xinclude -o path/to/output/slides.html</cline>
                 <cline>  --stringparam publisher path/to/source/publication.xml</cline>
                 <cline>  path/to/pretext/xsl/pretext-revealjs.xsl path/to/source/slides.xml</cline>
