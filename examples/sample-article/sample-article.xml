@@ -8674,7 +8674,9 @@ the xsltproc executable.
 
                     <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut-and-paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <tag>?xml version="1.0" encoding="UTF-8" ?</tag> as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation
+                        <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd>
+                    as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
                     <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
