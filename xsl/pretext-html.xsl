@@ -338,6 +338,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="runestone-manifest"/>
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
+    <!-- build a search page (in development) -->
+    <xsl:if test="$debug.search.page = 'yes'">
+        <xsl:call-template name="search-page"/>
+    </xsl:if>
     <!-- The main event                          -->
     <!-- We process the enhanced source pointed  -->
     <!-- to by $root at  /mathbook  or  /pretext -->
@@ -11884,6 +11888,152 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-short"/>
         </title>
+</xsl:template>
+
+<!-- Search Page -->
+<xsl:template name="search-page">
+    <!-- First, a Javascript file, defining the raw "documents" -->
+    <!-- of the eventual index, and then converted by Lunr into -->
+    <!-- a Javascript variable ptx_lunr_idx that defines the    -->
+    <!-- index.  This index variable is included below in the   -->
+    <!-- search page via a script element, for use/consumption  -->
+    <!-- by the Lunr search() method.                           -->
+    <exsl:document href="lunr-pretext-search-index.js" method="text" encoding="UTF-8">
+        <xsl:text>var ptx_lunr_docs = [&#xa;</xsl:text>
+        <xsl:apply-templates select="$document-root" mode="partition-search"/>
+        <!-- lazy: rather than usung an XSL variable to strip final comma -->
+        {  "url": "Lunr",
+           "title": "",
+           "body": "Like Solr, but much smaller, and not as bright."
+        }
+        <xsl:text>]&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
+        <xsl:text>  this.ref('url')&#xa;</xsl:text>
+        <xsl:text>  this.field('title')&#xa;</xsl:text>
+        <xsl:text>  this.field('body')&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
+        <xsl:text>    this.add(doc)&#xa;</xsl:text>
+        <xsl:text>  }, this)&#xa;</xsl:text>
+        <xsl:text>})&#xa;</xsl:text>
+    </exsl:document>
+    <!-- Stock page, identical in structure for every project -->
+    <exsl:document href="search.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <head>
+            <script src="https://unpkg.com/lunr/lunr.js"/>
+            <script src="lunr-pretext-search-index.js"/>
+        </head>
+        <body>
+            <p>This page needs work.  Outputs are just string representations of the JSON object that is the search result - it needs interpretation.</p>
+
+            <hr size="3"/>
+
+            <p>Hardwired to search for the Latin "interdum" which makes appearances in the sample article from various uses of Ipsum Lorem.</p>
+
+            <script>document.write(JSON.stringify(ptx_lunr_idx.search("interdum")));</script>
+
+            <hr size="3"/>
+
+            <p>Hardwired to search for "corollary" which makes appearances in the sample article once in a title, otherwise in the body.  Note a difference in returned metadata.</p>
+
+            <script>document.write(JSON.stringify(ptx_lunr_idx.search("corollary")));</script>
+
+        </body>
+    </exsl:document>
+</xsl:template>
+
+<!-- The modal template "partition-search" follows just the structural -->
+<!-- elements (divisions), stopping when a division is a chunk of the  -->
+<!-- HTML ouput 9as configured by the publisher).  Filename and title  -->
+<!-- are recorded.  Then processing passes to the templates with mode  -->
+<!-- "page-text".                                                      -->
+
+<xsl:template match="&STRUCTURAL;" mode="partition-search">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$chunk = 'true'">
+            <!-- Debugging traversing divisions -->
+            <!-- <xsl:message>Page: <xsl:apply-templates select="." mode="title-full"/></xsl:message> -->
+            <!-- <xsl:message><xsl:apply-templates select="." mode="containing-filename"/></xsl:message> -->
+            <xsl:text>{&#xa;</xsl:text>
+            <xsl:text>  "url": "</xsl:text>
+            <xsl:apply-templates select="." mode="containing-filename"/>
+            <xsl:text>",&#xa;</xsl:text>
+            <xsl:text>  "title": "</xsl:text>
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>",&#xa;</xsl:text>
+            <xsl:text>  "body": "</xsl:text>
+            <xsl:apply-templates select="." mode="page-text"/>
+            <!-- text here, sanitized -->
+            <xsl:text>"&#xa;</xsl:text>
+            <xsl:text>},&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="&STRUCTURAL;" mode="partition-search"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The "page-text" templates basically recurse into elements    -->
+<!-- with no effect and duplicate text() nodes, properly escaped  -->
+<!-- for use in a big old JSON data structure.  This is the place -->
+<!-- to make adjustments by ignoring or modifying certain aspects -->
+<!-- of the content of a page.                                    -->
+
+<xsl:template match="*" mode="page-text">
+    <xsl:apply-templates select="node()" mode="page-text"/>
+</xsl:template>
+
+<!-- "Generators" need content, LaTeX and TeX avoid goofy CSS -->
+<xsl:template match="pretext|webwork[not(node())]" mode="page-text">
+    <xsl:apply-templates select="."/>
+    <xsl:text> </xsl:text>
+</xsl:template>
+<xsl:template match="latex" mode="page-text">
+    <xsl:text>latex </xsl:text>
+</xsl:template>
+<xsl:template match="tex" mode="page-text">
+    <xsl:text>tex </xsl:text>
+</xsl:template>
+
+<!-- tags need angle brackets -->
+<!-- Empty tag version needs JSON escaping, otherwise -->
+<!-- this shouldn't be necessary - but for tag abuse. -->
+<xsl:template match="tag|tage" mode="page-text">
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:text>&lt;</xsl:text>
+            <xsl:value-of select="text()"/>
+            <xsl:if test="self::tage">
+                <xsl:text>/</xsl:text>
+            </xsl:if>
+            <xsl:text>&gt; </xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!--
+TODO:
+  hints, answers, solutions (only if elected by publisher in text)
+  math bits?
+  latex image code
+-->
+
+<xsl:template match="text()" mode="page-text">
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+    <!-- a space seems necessary to separate some text() nodes, -->
+    <!-- like consecutive (simple) list items.  Presumably it   -->
+    <!-- can't hurt to have too many?                           -->
+    <xsl:text> </xsl:text>
 </xsl:template>
 
 
