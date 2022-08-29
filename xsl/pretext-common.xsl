@@ -573,6 +573,9 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- HTML only, a developer must elect to use this CSS file -->
 <xsl:param name="debug.developer.css" select="'no'"/>
 
+<!-- HTML only, produces a search page while in development -->
+<xsl:param name="debug.search.page" select="'no'"/>
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->
