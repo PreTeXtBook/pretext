@@ -11918,6 +11918,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  }, this)&#xa;</xsl:text>
         <xsl:text>})&#xa;</xsl:text>
     </exsl:document>
+    <exsl:document href="lunr-pretext-search-block-index.js" method="text" encoding="UTF-8">
+        <xsl:text>var ptx_lunr_block_docs = [&#xa;</xsl:text>
+        <xsl:apply-templates select="$document-root" mode="block-search"/>
+        <!-- lazy: rather than usung an XSL variable to strip final comma -->
+        {  "id": "Lunr",
+           "title": "",
+           "body": "Like Solr, but much smaller, and not as bright."
+        }
+        <xsl:text>]&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>var ptx_lunr_block_idx = lunr(function () {&#xa;</xsl:text>
+        <xsl:text>  this.ref('id')&#xa;</xsl:text>
+        <xsl:text>  this.field('title')&#xa;</xsl:text>
+        <xsl:text>  this.field('body')&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>  ptx_lunr_block_docs.forEach(function (doc) {&#xa;</xsl:text>
+        <xsl:text>    this.add(doc)&#xa;</xsl:text>
+        <xsl:text>  }, this)&#xa;</xsl:text>
+        <xsl:text>})&#xa;</xsl:text>
+    </exsl:document>
     <!-- Stock page, identical in structure for every project -->
     <exsl:document href="search.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <head>
@@ -11966,6 +11986,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="&STRUCTURAL;" mode="partition-search"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="&STRUCTURAL;" mode="block-search">
+    <!-- examine *children* (only) that are blocks-->
+    <xsl:apply-templates select="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;" mode="document-entry"/>
+    <!-- inline exercises with some filter? -->
+    <!-- recurse into children that are structural -->
+    <xsl:apply-templates select="&STRUCTURAL;" mode="block-search"/>
 </xsl:template>
 
 <!-- Fields of a fundamental entry of the source data structure -->
