@@ -11960,58 +11960,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Debugging traversing divisions -->
             <!-- <xsl:message>Page: <xsl:apply-templates select="." mode="title-full"/></xsl:message> -->
             <!-- <xsl:message><xsl:apply-templates select="." mode="containing-filename"/></xsl:message> -->
-            <xsl:text>{&#xa;</xsl:text>
-            <!-- string to identify results with original docs -->
-            <xsl:text>  "id": "</xsl:text>
-            <xsl:call-template name="escape-json-string">
-                <xsl:with-param name="text">
-                    <xsl:apply-templates select="." mode="html-id"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- filename relative to search page -->
-            <xsl:text>  "url": "</xsl:text>
-            <xsl:call-template name="escape-json-string">
-                <xsl:with-param name="text">
-                    <xsl:apply-templates select="." mode="containing-filename"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- the type of the division -->
-            <xsl:text>  "type": "</xsl:text>
-            <xsl:call-template name="escape-json-string">
-                <xsl:with-param name="text">
-                    <xsl:apply-templates select="." mode="type-name"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- the number of the division -->
-            <xsl:text>  "number": "</xsl:text>
-            <xsl:call-template name="escape-json-string">
-                <xsl:with-param name="text">
-                    <xsl:apply-templates select="." mode="number"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- title of division that is a page -->
-            <xsl:text>  "title": "</xsl:text>
-            <xsl:call-template name="escape-json-string">
-                <xsl:with-param name="text">
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- all text on the page, more or less, duplicates title -->
-            <xsl:text>  "body": "</xsl:text>
-            <xsl:apply-templates select="." mode="page-text"/>
-            <!-- text here, sanitized -->
-            <xsl:text>"&#xa;</xsl:text>
-            <xsl:text>},&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="document-entry"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="&STRUCTURAL;" mode="partition-search"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Fields of a fundamental entry of the source data structure -->
+<xsl:template match="*" mode="document-entry">
+    <xsl:text>{&#xa;</xsl:text>
+    <!-- string to identify results with original docs -->
+    <xsl:text>  "id": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- filename relative to search page -->
+    <xsl:text>  "url": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="containing-filename"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- the type of the division -->
+    <xsl:text>  "type": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="type-name"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- the number of the division -->
+    <xsl:text>  "number": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- title of division that is a page -->
+    <xsl:text>  "title": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- all text on the page, more or less, duplicates title -->
+    <xsl:text>  "body": "</xsl:text>
+    <xsl:apply-templates select="." mode="page-text"/>
+    <!-- text here, sanitized -->
+    <xsl:text>"&#xa;</xsl:text>
+    <xsl:text>},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- The "page-text" templates basically recurse into elements    -->
