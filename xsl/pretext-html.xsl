@@ -11943,13 +11943,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <head>
             <script src="https://unpkg.com/lunr/lunr.js"/>
             <script src="lunr-pretext-search-page-index.js"/>
+            <script src="lunr-pretext-search-block-index.js"/>
             <!-- titles might have math in them -->
             <xsl:call-template name="mathjax"/>
         </head>
         <body>
             <p>This page needs work.  Outputs are just string representations of the JSON object that is the search result - it needs interpretation.</p>
 
-            <hr size="3"/>
+            <h3>Page Searches</h3>
 
             <p>Hardwired to search for the Latin "interdum" which makes appearances in the sample article from various uses of Ipsum Lorem.</p>
 
@@ -11960,6 +11961,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Hardwired to search for "corollary" which makes appearances in the sample article once in a title, otherwise in the body.  Note a difference in returned metadata.</p>
 
             <script>document.write(JSON.stringify(ptx_lunr_page_idx.search("corollary")));</script>
+
+            <h3>Block Searches</h3>
+
+            <p>Hardwired to search for Bunyakovsky, of the Cauchy-Bunyakovsky-Schwarz Lemma.</p>
+
+            <script>document.write(JSON.stringify(ptx_lunr_block_idx.search("bunyakovsky")));</script>
+
+            <hr size="3"/>
+
+            <p>Hardwired to search for "corollary" which makes appearances in the sample article once in a block (theorem).</p>
+
+            <script>document.write(JSON.stringify(ptx_lunr_block_idx.search("corollary")));</script>
 
         </body>
     </exsl:document>
