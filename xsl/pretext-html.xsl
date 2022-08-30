@@ -11969,9 +11969,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:text>",&#xa;</xsl:text>
+            <!-- filename relative to search page -->
             <xsl:text>  "url": "</xsl:text>
-            <xsl:apply-templates select="." mode="containing-filename"/>
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="." mode="containing-filename"/>
+                </xsl:with-param>
+            </xsl:call-template>
             <xsl:text>",&#xa;</xsl:text>
+            <!-- the type of the division -->
+            <xsl:text>  "type": "</xsl:text>
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="." mode="type-name"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>",&#xa;</xsl:text>
+            <!-- the number of the division -->
+            <xsl:text>  "number": "</xsl:text>
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="." mode="number"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>",&#xa;</xsl:text>
+            <!-- title of division that is a page -->
             <xsl:text>  "title": "</xsl:text>
             <xsl:call-template name="escape-json-string">
                 <xsl:with-param name="text">
@@ -11979,6 +12001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:text>",&#xa;</xsl:text>
+            <!-- all text on the page, more or less, duplicates title -->
             <xsl:text>  "body": "</xsl:text>
             <xsl:apply-templates select="." mode="page-text"/>
             <!-- text here, sanitized -->
