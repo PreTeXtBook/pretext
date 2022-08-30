@@ -11923,6 +11923,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <head>
             <script src="https://unpkg.com/lunr/lunr.js"/>
             <script src="lunr-pretext-search-index.js"/>
+            <!-- titles might have math in them -->
+            <xsl:call-template name="mathjax"/>
         </head>
         <body>
             <p>This page needs work.  Outputs are just string representations of the JSON object that is the search result - it needs interpretation.</p>
