@@ -11902,14 +11902,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>var ptx_lunr_docs = [&#xa;</xsl:text>
         <xsl:apply-templates select="$document-root" mode="partition-search"/>
         <!-- lazy: rather than usung an XSL variable to strip final comma -->
-        {  "url": "Lunr",
+        {  "id": "Lunr",
            "title": "",
            "body": "Like Solr, but much smaller, and not as bright."
         }
         <xsl:text>]&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
-        <xsl:text>  this.ref('url')&#xa;</xsl:text>
+        <xsl:text>  this.ref('id')&#xa;</xsl:text>
         <xsl:text>  this.field('title')&#xa;</xsl:text>
         <xsl:text>  this.field('body')&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
@@ -11959,6 +11959,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- <xsl:message>Page: <xsl:apply-templates select="." mode="title-full"/></xsl:message> -->
             <!-- <xsl:message><xsl:apply-templates select="." mode="containing-filename"/></xsl:message> -->
             <xsl:text>{&#xa;</xsl:text>
+            <!-- string to identify results with original docs -->
+            <xsl:text>  "id": "</xsl:text>
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="." mode="html-id"/>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>",&#xa;</xsl:text>
             <xsl:text>  "url": "</xsl:text>
             <xsl:apply-templates select="." mode="containing-filename"/>
             <xsl:text>",&#xa;</xsl:text>
