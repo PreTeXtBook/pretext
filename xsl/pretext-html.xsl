@@ -11983,7 +11983,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>  "url": "</xsl:text>
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
-            <xsl:apply-templates select="." mode="containing-filename"/>
+            <xsl:apply-templates select="." mode="url"/>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>",&#xa;</xsl:text>
