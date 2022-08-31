@@ -1096,7 +1096,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Fill-In, Integer Answer</title>
 
             <statement>
-                <p>The game of bowling uses <var/> pins that you try to knock down.</p>
+                <p>The game of bowling uses <var width="28"/> pins that you try to knock down. (This answer blank has been set to be very wide.)</p>
             </statement>
             <setup>
                 <var>
@@ -1123,8 +1123,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Fill-In, String and Number Answers</title>
 
             <statement>
-                <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
-                <p><var/> <c>age = </c> <var/><c>;</c></p>
+                <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>. (These two answer blanks have been set to be very short.)</p>
+                <p><var width="2"/> <c>age = </c> <var width="3"/><c>;</c></p>
             </statement>
             <setup>
                 <var>
