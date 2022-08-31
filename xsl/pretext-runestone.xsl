@@ -1086,8 +1086,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
         </xsl:choose>
     </xsl:variable>
-    <!-- the actual form fill-in, with hint -->
-    <input type="text" placeholder="{$placeholder-hint}"/>
+    <!-- the actual form fill-in, with hint and width -->
+    <input type="text" placeholder="{$placeholder-hint}">
+        <xsl:if test="@width">
+            <xsl:attribute name="size">
+                <xsl:value-of select="@width"/>
+            </xsl:attribute>
+        </xsl:if>
+    </input>
 </xsl:template>
 
 <!-- JSON list-of-list structure -->
