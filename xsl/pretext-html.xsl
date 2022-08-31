@@ -11944,36 +11944,137 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <script src="https://unpkg.com/lunr/lunr.js"/>
             <script src="lunr-pretext-search-page-index.js"/>
             <script src="lunr-pretext-search-block-index.js"/>
+            <!-- The styles in the following should move to a .css file -->
+            <style>
+                article {
+                    width: 60%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    font-family: sans-serif;
+                }
+
+                .searchbox {
+                    height: 60px;
+                    border: solid;
+                    border-radius: 5px;
+                    background-color: #eeee;
+                }
+
+                .searchwidget {
+                    padding-top: 15px;
+                    padding-left: 20px;
+                    font-size: larger;
+                }
+
+                .searchwidget input {
+                    font-size: larger;
+                }
+
+                .helpbox {
+                    display: none;
+                }
+            </style>
+
             <!-- titles might have math in them -->
             <xsl:call-template name="mathjax"/>
         </head>
         <body>
-            <p>This page needs work.  Outputs are just string representations of the JSON object that is the search result - it needs interpretation.</p>
+        <article>
+            <h1>Search in this book</h1>
+            <hr />
+            <!-- All of this javascript should move to a .js file -->
+            <script>
+                function doSearch() {
+                    let terms = document.getElementById("ptxsearch").value;
+                    let resultArea = document.getElementById("searchresults")
+                    let dresultArea = document.getElementById("dsearchresults")
+                    resultArea.innerHTML = "";
+                    let pageResult = ptx_lunr_page_idx.search(terms);
+                    let blockResult = ptx_lunr_block_idx.search(terms);
+                    addResultToPage(pageResult, ptx_lunr_page_docs, resultArea);
+                    addResultToPage(blockResult, ptx_lunr_block_docs, dresultArea)
+                }
 
-            <h3>Page Searches</h3>
+                function findEntry(resultId, db) {
+                    for (const page of db) {
+                        if (page.id === resultId) {
+                            return page;
+                        }
+                    }
+                    return resultId;
+                }
 
-            <p>Hardwired to search for the Latin "interdum" which makes appearances in the sample article from various uses of Ipsum Lorem.</p>
+                function addResultToPage(result, docs, resultArea) {
+                    for (let res of result) {
+                        let info  = findEntry(res.ref, docs);
+                        res.number = info.number;
+                        res.type = info.type;
+                        res.title = info.title;
+                        res.url = info.url;
+                    }
+                    result.sort((a, b) => a.number.localeCompare(b.number))
+                    for (const res of result) {
 
-            <script>document.write(JSON.stringify(ptx_lunr_page_idx.search("interdum")));</script>
+                        let link = document.createElement("a")
+                        let bullet = document.createElement("li")
+                        bullet.style.marginTop = "5px";
+                        link.href = `${res.url}`;
+                        link.innerHTML = `${res.type} ${res.number} ${res.title}`;
+                        bullet.appendChild(link)
+                        let p = document.createElement("text");
+                        p.innerHTML = `  (${res.score})`;
+                        bullet.appendChild(p);
+                        resultArea.appendChild(bullet);
+                    }
 
-            <hr size="3"/>
+                }
 
-            <p>Hardwired to search for "corollary" which makes appearances in the sample article once in a title, otherwise in the body.  Note a difference in returned metadata.</p>
 
-            <script>document.write(JSON.stringify(ptx_lunr_page_idx.search("corollary")));</script>
+                function showHelp() {
+                    let state = document.getElementById("helpme").style.display;
+                    if (state == "none") {
+                        document.getElementById("helpme").style.display = "block";
+                        document.getElementById("helpbutt").innerHTML = "Hide Help"
+                    } else {
+                        document.getElementById("helpme").style.display = "none";
+                        document.getElementById("helpbutt").innerHTML = "Show Help"
+                    }
+                }
+            </script>
+            <div class="searchbox">
+                <div class="searchwidget">
+                    <label for="ptxsearch">Search Terms</label>
+                    <input id="ptxsearch" type="text" name="terms" onchange="doSearch()" />
+                    <button id="helpbutt" type="button" onclick="showHelp()">Show Help</button>
+                </div>
 
-            <h3>Block Searches</h3>
+            </div>
+            <div id="helpme" class="helpbox" style="display: none;">
+                <p>
+                    By default search will return documents with any of your terms.
+                <ul>
+                    <li>To search for documents with all of your terms use + to get get multiple AND choice search for +multiple +choice</li>
+                    <li>to search and exclude pages with a particular word use - +multiple -choice means must include multiple and must not include choice.</li>
+                    <li>To search the title only of the page title:subgroups</li>
+                    <li>To make one term more important you can boost it with ^ so multiple^10 choice would look for multiple OR choice and give a much higher score to those that contain multiple</li>
+                    <li>To do a fuzzy search subgroups~2 would match words with an edit distance of 2 from subgroups. This is useful if you are not sure of the spelling.</li>
+                </ul>
+                Lunr does not support searching for phrases. But you can get close with the logical AND.
+                </p>
+            </div>
 
-            <p>Hardwired to search for Bunyakovsky, of the Cauchy-Bunyakovsky-Schwarz Lemma.</p>
+            <div>
+                <h2>Page Results</h2>
+                <ol id="searchresults">
+                </ol>
+            </div>
+            <div>
+                <h2>Detailed Results</h2>
+                <ol id="dsearchresults">
+                </ol>
+            </div>
 
-            <script>document.write(JSON.stringify(ptx_lunr_block_idx.search("bunyakovsky")));</script>
-
-            <hr size="3"/>
-
-            <p>Hardwired to search for "corollary" which makes appearances in the sample article once in a block (theorem).</p>
-
-            <script>document.write(JSON.stringify(ptx_lunr_block_idx.search("corollary")));</script>
-
+        </article>
         </body>
     </exsl:document>
 </xsl:template>
