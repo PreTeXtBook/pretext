@@ -697,7 +697,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="var" mode="fillin-statement">
-    <fillin characters="5"/>
+    <fillin>
+        <xsl:attribute name="characters">
+            <xsl:choose>
+                <xsl:when test="@width">
+                    <xsl:value-of select="@width"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- arbitrary default width -->
+                    <xsl:text>5</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+    </fillin>
 </xsl:template>
 
 <!-- Fillin complete solution -->
