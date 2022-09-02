@@ -416,7 +416,7 @@
 
         <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
 
-        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-exceptional-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-exceptional-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the <pretext /> conversion tool, the <pretext />-CLI.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
     </section>
 
     <section xml:id="overview-sage">
