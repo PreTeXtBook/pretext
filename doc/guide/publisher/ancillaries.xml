@@ -49,7 +49,7 @@
         </pre>
 
         <p>
-            Then you can build the solution manual with <c>pretext build solutions</c>.
+            Then you can build the solution manual with the <pretext />-CLI using <c>pretext build solutions</c>.
         </p>
 
         <p>Or using xsltproc, execute<cd>

@@ -17,7 +17,7 @@
 
         <p>On Linux and Mac, you will likely have at least some version of Python already installed.  On Windows, you may need to explicitly install it.  (We hope to provide some more careful advice here for Windows users.  For now, see <xref ref="installing-anaconda"/> and <xref ref="windows-subsystem-linux"/>.)</p>
 
-        <p>Python 2 is no longer being developed and is officially dead.  That does not mean you do not have it on your system.  And for older systems, it may well be the default.  <pretext/> requires at least Python 3.6 (current as of 2021-05-21).  At a command-line, or in a terminal or console, or at a command-prompt, try<cd>
+        <p>Python 2 is no longer being developed and is officially dead.  That does not mean you do not have it on your system.  And for older systems, it may well be the default.  <pretext/> requires at least Python 3.8.5 (current as of 2022-08-31).  At a command-line, or in a terminal or console, or at a command-prompt, try<cd>
             <cline>python --version</cline>
         </cd>and if the result is unacceptable, then try<cd>
             <cline>python3 --version</cline>
@@ -69,6 +69,10 @@
 
         <p><init>PIP</init>, in the open source tradition of recursive acronyms,
         stands for <q>PIP Installs Packages</q>.  This package manager helps you obtain software and keep it up-to-date.  There are three packages that are indispensable for use with <pretext/> so you can practice doing installations now via your virtual environment.</p>
+
+        <p>
+          If you have installed the <pretext/>-CLI already using pip, then all the programs below are already installed.  Otherwise (for example, if you are using <c>xsltproc</c>) you will need to install the following manually.
+        </p>
 
         <p>In your virtual environment, go<cd>
             <cline>(ptx) $ pip install lxml</cline>

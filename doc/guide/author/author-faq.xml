@@ -113,7 +113,7 @@
 
         <li>
             <title>Why do I get no output and some warnings about bugs?</title>
-            <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)
+            <p>There is a good chance you have <q>modularized</q> your source files and have not included an <tag>xi:include</tag> for each modularized file.  (See <xref ref="processing-modular" />.)
                If that was your mistake, then you should have seen a warning.
                Please check to see if there was a warning you missed.  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
         </li>
@@ -206,9 +206,9 @@
 
         <li>
             <title>I have great output, so why does validation produce hundreds of errors?</title>
-            <p>Success with a tool like <c>xsltproc</c>, in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guaranteee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
+            <p>Success with a tool like the <pretext/>-CLI (see <xref ref="processing-CLI"/>), in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guaranteee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
 
-            <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100% valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
+            <p>We do raise some errors during processing with the <pretext/>-CLI, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100% valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
         </li>
 
         <li>
