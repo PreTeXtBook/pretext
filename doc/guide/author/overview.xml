@@ -102,8 +102,6 @@
         <title>Images</title>
         <idx>image</idx>
 
-        <p></p>
-
         <p>You can include an image via the <tag>image</tag><idx>image</idx> tag, using the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path from the top-level of the appropriate directory. Read <xref ref="processing-directory-management"/> for details on how to set these directories correctly.  If you are starting a new project, using the <pretext />-CLI (with the command <c>pretext new book</c>, for example), then most of the setup portion is done for you and the top-level folder for images that are created external to the project is called <c>assests</c>, and it is a sibling of the <c>source</c> directory. It is your responsibility to locate that file properly relative to this directory, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="ch2-images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>c2-images</c> below wherever you set the <attr>external</attr> top-level directory, and you would place the <c>butterflies.jpg</c> inside of it.</p>
             
         <p>The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
