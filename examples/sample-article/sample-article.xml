@@ -961,7 +961,7 @@ the xsltproc executable.
                     </note>
 
                     <aside xml:id="an-aside">
-                        <title>An Aside</title>
+                        <title>An Aside with a <em>Formatted</em> Title</title>
                         <idx>aside</idx>
 
                         <p>An <tag>aside</tag> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <tag>historical</tag> or <tag>biographical</tag>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
@@ -8603,7 +8603,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
-                <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" text="title" /></p></li>
+                <li><p>A cross-reference to an aside, by title necessarily, and with some formatting in the title: <xref ref="an-aside" text="title" /></p></li>
                 <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global" /></p></li>
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global" /></p></li>
                 <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
