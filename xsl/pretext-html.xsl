@@ -8085,7 +8085,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and then condition on the location of the    -->
 <!-- actual link, which is sensitive to display   -->
 <!-- math in particular                           -->
-<!-- See xsl/pretext-common.xsl for more info    -->
+<!-- See xsl/pretext-common.xsl for more info     -->
+<!-- NB: for HTML output, the $content variable   -->
+<!-- may have HTML elements in it (e.g. link is a  -->
+<!-- title with emphasis, or a MathJax processing  -->
+<!-- span) so we want a "copy-of" here, not a      -->
+<!-- "value-of".                                   -->
 <!-- TODO: could match on "xref" once link routines  -->
 <!-- are broken into two and other uses are rearranged -->
 <xsl:template match="*" mode="xref-link">
@@ -8098,7 +8103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- 1st exceptional case, xref in a webwork, or in    -->
         <!-- some sort of title.  Then just parrot the content -->
         <xsl:when test="ancestor::webwork-reps|ancestor::title|ancestor::shorttitle|ancestor::subtitle">
-            <xsl:value-of select="$content" />
+            <xsl:copy-of select="$content"/>
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
         <!--   with Javascript (pure HTML) we can make knowls    -->
@@ -8145,7 +8150,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$target" mode="tooltip-text" />
                 </xsl:attribute>
                 <!-- link content from common template -->
-                <xsl:value-of select="$content" />
+                <xsl:copy-of select="$content"/>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -8154,7 +8159,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For pure HTML we can make a true knowl or traditional link -->
 <!-- when an "xref" is authored inside of a display math "mrow" -->
 <!-- Requires https://pretextbook.org/js/lib/mathjaxknowl.js    -->
-<!-- loaded as a MathJax extension for knowls to render         -->
+<!-- loaded as a MathJax extension for knowls to render.        -->
+<!-- See discussion in "xref-link" about "copy-of" necessity.   -->
 <xsl:template match="*" mode="xref-link-display-math">
     <xsl:param name="target"/>
     <xsl:param name="content"/>
@@ -8175,7 +8181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$content"/>
+    <xsl:copy-of select="$content"/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
