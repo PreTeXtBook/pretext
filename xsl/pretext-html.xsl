@@ -12114,7 +12114,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="&STRUCTURAL;" mode="search-block-docs">
     <!-- examine *children* (only) that are blocks of selected types -->
-    <xsl:apply-templates select="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;" mode="search-document"/>
+    <xsl:apply-templates select="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise" mode="search-document"/>
     <!-- recurse into children that are structural -->
     <xsl:apply-templates select="&STRUCTURAL;" mode="search-block-docs"/>
 </xsl:template>
