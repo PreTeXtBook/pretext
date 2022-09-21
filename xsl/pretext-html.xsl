@@ -340,7 +340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="doc-manifest"/>
     <!-- build a search page (in development) -->
     <xsl:if test="$debug.search.page = 'yes'">
-        <xsl:call-template name="search-page"/>
+        <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- The main event                          -->
     <!-- We process the enhanced source pointed  -->
@@ -11896,17 +11896,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </title>
 </xsl:template>
 
-<!-- Search Page -->
-<xsl:template name="search-page">
-    <!-- First, a Javascript file, defining the raw "documents" -->
-    <!-- of the eventual index, and then converted by Lunr into -->
-    <!-- a Javascript variable ptx_lunr_*_idx that defines the  -->
-    <!-- index.  This index variable is included below in the   -->
-    <!-- search page via a script element, for use/consumption  -->
-    <!-- by the Lunr search() method.                           -->
+<!-- ###### -->
+<!-- Search -->
+<!-- ###### -->
+
+<xsl:template name="search-page-construction">
+    <!-- First, two Javascript files, defining the raw "documents"    -->
+    <!-- of the eventual index, and then converted by Lunr into a     -->
+    <!-- Javascript variables of the form  ptx_lunr_*_idx that        -->
+    <!-- defines two indices (one page, pne blocks).  These index     -->
+    <!-- variables are included later in the search page via a script -->
+    <!-- element, for use/consumption by the Lunr search() method.    -->
     <exsl:document href="lunr-pretext-search-page-index.js" method="text" encoding="UTF-8">
         <xsl:text>var ptx_lunr_page_docs = [&#xa;</xsl:text>
-        <xsl:apply-templates select="$document-root" mode="partition-search"/>
+        <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
         <!-- lazy: rather than usung an XSL variable to strip final comma -->
         {  "id": "Lunr",
            "title": "",
@@ -11926,7 +11929,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
     <exsl:document href="lunr-pretext-search-block-index.js" method="text" encoding="UTF-8">
         <xsl:text>var ptx_lunr_block_docs = [&#xa;</xsl:text>
-        <xsl:apply-templates select="$document-root" mode="block-search"/>
+        <xsl:apply-templates select="$document-root" mode="search-block-docs"/>
         <!-- lazy: rather than usung an XSL variable to strip final comma -->
         {  "id": "Lunr",
            "title": "",
@@ -11944,7 +11947,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  }, this)&#xa;</xsl:text>
         <xsl:text>})&#xa;</xsl:text>
     </exsl:document>
-    <!-- Stock page, identical in structure for every project -->
+    <!-- Stock HTML search page, identical in structure for every project -->
     <exsl:document href="search.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <head>
             <script src="https://unpkg.com/lunr/lunr.js"/>
@@ -12085,39 +12088,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
-<!-- The modal template "partition-search" follows just the structural -->
-<!-- elements (divisions), stopping when a division is a chunk of the  -->
-<!-- HTML ouput 9as configured by the publisher).  Filename and title  -->
-<!-- are recorded.  Then processing passes to the templates with mode  -->
-<!-- "page-text".                                                      -->
+<!-- The modal template "search-page-docs" traverses the structural   -->
+<!-- elements (divisions), stopping when a division is a chunk of the -->
+<!-- HTML ouput (as configured by the publisher).  A search document  -->
+<!-- is created for the content of such HTML output page.  This is    -->
+<!-- one collection of possible search results, in correspondence     -->
+<!-- with the actual pages of the output.                             -->
 
-<xsl:template match="&STRUCTURAL;" mode="partition-search">
+<xsl:template match="&STRUCTURAL;" mode="search-page-docs">
     <xsl:variable name="chunk">
         <xsl:apply-templates select="." mode="is-chunk"/>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$chunk = 'true'">
-            <!-- Debugging traversing divisions -->
-            <!-- <xsl:message>Page: <xsl:apply-templates select="." mode="title-full"/></xsl:message> -->
-            <!-- <xsl:message><xsl:apply-templates select="." mode="containing-filename"/></xsl:message> -->
-        <xsl:apply-templates select="." mode="document-entry"/>
+            <xsl:apply-templates select="." mode="search-document"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="&STRUCTURAL;" mode="partition-search"/>
+            <xsl:apply-templates select="&STRUCTURAL;" mode="search-page-docs"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="&STRUCTURAL;" mode="block-search">
-    <!-- examine *children* (only) that are blocks-->
-    <xsl:apply-templates select="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;" mode="document-entry"/>
-    <!-- inline exercises with some filter? -->
+<!-- The modal "search-block-docs" traverses structural nodes and creates   -->
+<!-- a search document for selected blocks that are children of a division. -->
+
+<xsl:template match="&STRUCTURAL;" mode="search-block-docs">
+    <!-- examine *children* (only) that are blocks of selected types -->
+    <xsl:apply-templates select="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;" mode="search-document"/>
     <!-- recurse into children that are structural -->
-    <xsl:apply-templates select="&STRUCTURAL;" mode="block-search"/>
+    <xsl:apply-templates select="&STRUCTURAL;" mode="search-block-docs"/>
 </xsl:template>
 
-<!-- Fields of a fundamental entry of the source data structure -->
-<xsl:template match="*" mode="document-entry">
+<!-- For any node, be it a page or a child of a division, a  -->
+<!-- "search document" data structure is created, the actual -->
+<!-- content is realized by the "search-node-text" template, -->
+<!-- which is designed to be overridden in some situations.  -->
+
+<xsl:template match="*" mode="search-document">
     <xsl:text>{&#xa;</xsl:text>
     <!-- string to identify results with original docs -->
     <xsl:text>  "id": "</xsl:text>
@@ -12161,38 +12168,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>",&#xa;</xsl:text>
     <!-- all text on the page, more or less, duplicates title -->
     <xsl:text>  "body": "</xsl:text>
-    <xsl:apply-templates select="." mode="page-text"/>
+    <xsl:apply-templates select="." mode="search-node-text"/>
     <!-- text here, sanitized -->
     <xsl:text>"&#xa;</xsl:text>
     <xsl:text>},&#xa;</xsl:text>
 </xsl:template>
 
-<!-- The "page-text" templates basically recurse into elements    -->
-<!-- with no effect and duplicate text() nodes, properly escaped  -->
-<!-- for use in a big old JSON data structure.  This is the place -->
-<!-- to make adjustments by ignoring or modifying certain aspects -->
-<!-- of the content of a page.                                    -->
+<!-- The "search-node-text" templates basically recurses into elements -->
+<!-- with no effect and duplicate the text() nodes, properly escaped   -->
+<!-- for use in a big old JSON data structure.  This is the place to   -->
+<!-- make adjustments by ignoring or modifying certain aspects of the  -->
+<!-- content of an element.                                            -->
 
-<xsl:template match="*" mode="page-text">
-    <xsl:apply-templates select="node()" mode="page-text"/>
+<xsl:template match="*" mode="search-node-text">
+    <xsl:apply-templates select="node()" mode="search-node-text"/>
 </xsl:template>
 
 <!-- "Generators" need content, LaTeX and TeX avoid goofy CSS -->
-<xsl:template match="pretext|webwork[not(node())]" mode="page-text">
+<xsl:template match="pretext|webwork[not(node())]" mode="search-node-text">
     <xsl:apply-templates select="."/>
     <xsl:text> </xsl:text>
 </xsl:template>
-<xsl:template match="latex" mode="page-text">
+<xsl:template match="latex" mode="search-node-text">
     <xsl:text>latex </xsl:text>
 </xsl:template>
-<xsl:template match="tex" mode="page-text">
+<xsl:template match="tex" mode="search-node-text">
     <xsl:text>tex </xsl:text>
 </xsl:template>
 
 <!-- tags need angle brackets -->
 <!-- Empty tag version needs JSON escaping, otherwise -->
 <!-- this shouldn't be necessary - but for tag abuse. -->
-<xsl:template match="tag|tage" mode="page-text">
+<xsl:template match="tag|tage" mode="search-node-text">
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
             <xsl:text>&lt;</xsl:text>
@@ -12212,7 +12219,7 @@ TODO:
   latex image code
 -->
 
-<xsl:template match="text()" mode="page-text">
+<xsl:template match="text()" mode="search-node-text">
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text" select="."/>
     </xsl:call-template>
