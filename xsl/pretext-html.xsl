@@ -11908,14 +11908,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- variables are included later in the search page via a script -->
     <!-- element, for use/consumption by the Lunr search() method.    -->
     <exsl:document href="lunr-pretext-search-page-index.js" method="text" encoding="UTF-8">
+        <xsl:variable name="json-docs">
+            <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
+        </xsl:variable>
         <xsl:text>var ptx_lunr_page_docs = [&#xa;</xsl:text>
-        <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
-        <!-- lazy: rather than usung an XSL variable to strip final comma -->
-        {  "id": "Lunr",
-           "title": "",
-           "body": "Like Solr, but much smaller, and not as bright."
-        }
-        <xsl:text>]&#xa;</xsl:text>
+        <!-- Strip a trailing comma, and a newline, to be proper JSON -->
+        <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
+        <!-- restore newline just stripped -->
+        <xsl:text>&#xa;]&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>var ptx_lunr_page_idx = lunr(function () {&#xa;</xsl:text>
         <xsl:text>  this.ref('id')&#xa;</xsl:text>
@@ -11928,14 +11928,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>})&#xa;</xsl:text>
     </exsl:document>
     <exsl:document href="lunr-pretext-search-block-index.js" method="text" encoding="UTF-8">
+        <xsl:variable name="json-docs">
+            <xsl:apply-templates select="$document-root" mode="search-block-docs"/>
+        </xsl:variable>
         <xsl:text>var ptx_lunr_block_docs = [&#xa;</xsl:text>
-        <xsl:apply-templates select="$document-root" mode="search-block-docs"/>
-        <!-- lazy: rather than usung an XSL variable to strip final comma -->
-        {  "id": "Lunr",
-           "title": "",
-           "body": "Like Solr, but much smaller, and not as bright."
-        }
-        <xsl:text>]&#xa;</xsl:text>
+        <!-- Strip a trailing comma, and a newline, to be proper JSON -->
+        <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
+        <!-- restore newline just stripped -->
+        <xsl:text>&#xa;]&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>var ptx_lunr_block_idx = lunr(function () {&#xa;</xsl:text>
         <xsl:text>  this.ref('id')&#xa;</xsl:text>
@@ -12171,6 +12171,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="search-node-text"/>
     <!-- text here, sanitized -->
     <xsl:text>"&#xa;</xsl:text>
+    <!-- NB: final comma AND newline are stripped above -->
     <xsl:text>},&#xa;</xsl:text>
 </xsl:template>
 
