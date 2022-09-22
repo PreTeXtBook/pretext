@@ -11901,48 +11901,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###### -->
 
 <xsl:template name="search-page-construction">
-    <!-- First, two Javascript files, defining the raw "documents"    -->
-    <!-- of the eventual index, and then converted by Lunr into a     -->
-    <!-- Javascript variables of the form  ptx_lunr_*_idx that        -->
-    <!-- defines two indices (one page, pne blocks).  These index     -->
-    <!-- variables are included later in the search page via a script -->
-    <!-- element, for use/consumption by the Lunr search() method.    -->
-    <exsl:document href="lunr-pretext-search-page-index.js" method="text" encoding="UTF-8">
+    <!-- First, a Javascript file, defining the raw "documents"     -->
+    <!-- of the eventual index, and then converted by Lunr into     -->
+    <!-- a Javascript variable , ptx_lunr_idx.  This index variable -->
+    <!-- is included later in the search page via a script element, -->
+    <!-- for use/consumption by the Lunr search() method.           -->
+    <exsl:document href="lunr-pretext-search-index.js" method="text" encoding="UTF-8">
         <xsl:variable name="json-docs">
             <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
         </xsl:variable>
-        <xsl:text>var ptx_lunr_page_docs = [&#xa;</xsl:text>
+        <xsl:text>var ptx_lunr_docs = [&#xa;</xsl:text>
         <!-- Strip a trailing comma, and a newline, to be proper JSON -->
         <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
         <!-- restore newline just stripped -->
         <xsl:text>&#xa;]&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
-        <xsl:text>var ptx_lunr_page_idx = lunr(function () {&#xa;</xsl:text>
+        <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
         <xsl:text>  this.ref('id')&#xa;</xsl:text>
         <xsl:text>  this.field('title')&#xa;</xsl:text>
         <xsl:text>  this.field('body')&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
-        <xsl:text>  ptx_lunr_page_docs.forEach(function (doc) {&#xa;</xsl:text>
-        <xsl:text>    this.add(doc)&#xa;</xsl:text>
-        <xsl:text>  }, this)&#xa;</xsl:text>
-        <xsl:text>})&#xa;</xsl:text>
-    </exsl:document>
-    <exsl:document href="lunr-pretext-search-block-index.js" method="text" encoding="UTF-8">
-        <xsl:variable name="json-docs">
-            <xsl:apply-templates select="$document-root" mode="search-block-docs"/>
-        </xsl:variable>
-        <xsl:text>var ptx_lunr_block_docs = [&#xa;</xsl:text>
-        <!-- Strip a trailing comma, and a newline, to be proper JSON -->
-        <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
-        <!-- restore newline just stripped -->
-        <xsl:text>&#xa;]&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>var ptx_lunr_block_idx = lunr(function () {&#xa;</xsl:text>
-        <xsl:text>  this.ref('id')&#xa;</xsl:text>
-        <xsl:text>  this.field('title')&#xa;</xsl:text>
-        <xsl:text>  this.field('body')&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>  ptx_lunr_block_docs.forEach(function (doc) {&#xa;</xsl:text>
+        <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
         <xsl:text>    this.add(doc)&#xa;</xsl:text>
         <xsl:text>  }, this)&#xa;</xsl:text>
         <xsl:text>})&#xa;</xsl:text>
@@ -12125,6 +12104,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is designed to be overridden in some situations.  -->
 
 <xsl:template match="*" mode="search-document">
+    <xsl:param name="level"/>
+
     <xsl:text>{&#xa;</xsl:text>
     <!-- string to identify results with original docs -->
     <xsl:text>  "id": "</xsl:text>
@@ -12133,6 +12114,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:with-param>
     </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- level 2 indicates need for indentation -->
+    <xsl:text>  "level": "</xsl:text>
+    <xsl:value-of select="$level"/>
     <xsl:text>",&#xa;</xsl:text>
     <!-- filename relative to search page -->
     <xsl:text>  "url": "</xsl:text>
