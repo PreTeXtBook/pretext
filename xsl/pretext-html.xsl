@@ -12072,7 +12072,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML ouput (as configured by the publisher).  A search document  -->
 <!-- is created for the content of such HTML output page.  This is    -->
 <!-- one collection of possible search results, in correspondence     -->
-<!-- with the actual pages of the output.                             -->
+<!-- with the actual pages of the output, and displayed at level 1    -->
+<!-- (no indentation).  Each such page then gives rise to more        -->
+<!-- detailed results, which are primarily "blocks" of the page.      -->
 
 <xsl:template match="&STRUCTURAL;" mode="search-page-docs">
     <xsl:variable name="chunk">
@@ -12080,7 +12082,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$chunk = 'true'">
-            <xsl:apply-templates select="." mode="search-document"/>
+            <xsl:apply-templates select="." mode="search-document">
+                <xsl:with-param name="level" select="'1'"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="search-block-docs"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="&STRUCTURAL;" mode="search-page-docs"/>
@@ -12088,20 +12093,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- The modal "search-block-docs" traverses structural nodes and creates   -->
-<!-- a search document for selected blocks that are children of a division. -->
+<!-- The modal "search-block-docs" traverses all nodes (of a page), -->
+<!-- stopping to create a search document for selected blocks.      -->
+<!-- Generally these are elements that admit/display titles. These  -->
+<!-- will be displayed with an indentation (thus, at level 2).      -->
 
-<xsl:template match="&STRUCTURAL;" mode="search-block-docs">
-    <!-- examine *children* (only) that are blocks of selected types -->
-    <xsl:apply-templates select="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise" mode="search-document"/>
-    <!-- recurse into children that are structural -->
-    <xsl:apply-templates select="&STRUCTURAL;" mode="search-block-docs"/>
+<xsl:template match="*" mode="search-block-docs">
+    <xsl:apply-templates select="*" mode="search-block-docs"/>
 </xsl:template>
 
-<!-- For any node, be it a page or a child of a division, a  -->
-<!-- "search document" data structure is created, the actual -->
-<!-- content is realized by the "search-node-text" template, -->
-<!-- which is designed to be overridden in some situations.  -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise" mode="search-block-docs">
+    <!-- build a search document and dead-end -->
+    <xsl:apply-templates select="." mode="search-document">
+        <xsl:with-param name="level" select="'2'"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- For any node, be it a page or a block, a "search document"  -->
+<!-- data structure is created, the actual content is realized   -->
+<!-- by the "search-node-text" template, which is designed to be -->
+<!-- overridden in some situations.  The level comes in as a     -->
+<!-- parameter and is recorded in the data structure.            -->
 
 <xsl:template match="*" mode="search-document">
     <xsl:param name="level"/>
