@@ -12102,7 +12102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="search-block-docs"/>
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise" mode="search-block-docs">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p[descendant::term]" mode="search-block-docs">
     <!-- build a search document and dead-end -->
     <xsl:apply-templates select="." mode="search-document">
         <xsl:with-param name="level" select="'2'"/>
@@ -12146,6 +12146,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="type-name"/>
         </xsl:with-param>
     </xsl:call-template>
+    <xsl:if test="self::p">
+        <xsl:text> (with a defined term)</xsl:text>
+    </xsl:if>
     <xsl:text>",&#xa;</xsl:text>
     <!-- the number of the division -->
     <xsl:text>  "number": "</xsl:text>
@@ -12208,6 +12211,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&gt; </xsl:text>
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- A defined term (or several) might appear inside a paragraph.  -->
+<!-- We then isolate just the text of the "term" element(s) as     -->
+<!-- the search document, since we do not want lots of "Paragraph" -->
+<!-- showing up in the search results.                             -->
+
+<xsl:template match="p[descendant::term]" mode="search-node-text">
+    <xsl:apply-templates select=".//term" mode="search-node-text"/>
 </xsl:template>
 
 <!--
