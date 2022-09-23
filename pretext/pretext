@@ -128,6 +128,7 @@ def get_destination_directory(directory, xml_source, pub_file, component):
         "sageplot": "sageplot",
         "trace": "trace",
         "youtube": "youtube",
+        "qrcode": "qrcode",
     }
     # if specified, check, sanitize, return absolute path
     if directory:
@@ -320,6 +321,7 @@ def get_cli_arguments():
         ),
         ("pg-macros", "Server-side macros for WeBWorK problem generation"),
         ("youtube", "Thumbnails for YouTube videos (JPEG only)"),
+        ("qrcode", "QR codes for static versions of interactive content"),
         ("preview", "Static preview images for interactives"),
         ("mom", "MyOpenMath problem files, static versions"),
         ("math", "Math elements for MathJax conversion (only)"),
@@ -650,6 +652,10 @@ def main():
         ptx.pg_macros(xml_source, dest_dir)
     elif args.component == "youtube":
         ptx.youtube_thumbnail(
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+        )
+    elif args.component == "qrcode":
+        ptx.qrcode(
             xml_source, publication_file, stringparams, args.xmlid, dest_dir
         )
     elif args.component == "preview":

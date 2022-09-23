@@ -1665,6 +1665,65 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.info("YouTube thumbnail download complete")
 
 
+########################
+#
+#  QR Code manufacturing
+#
+########################
+
+
+def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+    import os.path  # join()
+
+    # https://pypi.org/project/qrcode/
+    try:
+        import qrcode  # YouTube server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("qrcode"))
+
+    log.info(
+        "manufacturing QR codes from {} for placement in {}".format(
+            xml_source, dest_dir
+        )
+    )
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-qrcode.xsl")
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, "qrcode-ids.txt")
+    log.debug("QR code id list temporarily in {}".format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    # "run" an assignment for the list of triples of strings
+    id_file = open(id_filename, "r")
+    # read lines, but only lines that are comma delimited
+    interactives = [inter.strip() for inter in id_file.readlines() if "," in inter]
+
+    for inter in interactives:
+        inter_pair = inter.split(",")
+        url = inter_pair[0]
+        path = os.path.join(dest_dir, inter_pair[1] + ".png")
+        log.info('creating URL with content "{}" as {}...'.format(url, path))
+        # Using more elaborate (class) calls to simply get a zero border,
+        # rather than cropping (ala https://stackoverflow.com/questions/9870876)
+        # Simple version: qr_image = qrcode.make(url), has border
+        qr = qrcode.QRCode(version=None,
+                           error_correction=qrcode.constants.ERROR_CORRECT_L,
+                           box_size=10,
+                           border=0
+                           )
+        qr.add_data(url)
+        qr_image = qr.make_image(fill_color="black", back_color="white")
+        # Now save as a PNG
+        qr_image.save(path)
+    log.info("QR code creation complete")
+
+
 #####################################
 #
 #  Interactive preview screenshotting
