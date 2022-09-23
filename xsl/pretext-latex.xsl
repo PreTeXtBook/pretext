@@ -7356,6 +7356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that also functions as a link (we color it black locally)   -->
 <!-- It seems that special TeX characters (of a URL) are handled -->
 <!-- A blank URL sends back failure indicator                    -->
+<!-- "static-url" template is in -common, universal              -->
 <!-- TODO: switches for color, nolink in print   -->
 <!-- TODO: size as parameter, defauls to \qrsize -->
 <xsl:template match="*" mode="static-qr">
@@ -7373,44 +7374,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[QR LINK]</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Static URL's -->
-<!-- Predictable and/or stable URLs for versions  -->
-<!-- of interactives available online.  These are -->
-<!--  -->
-<!-- (1) "standalone" pages for author/local material,  -->
-<!-- as a product of the HTML conversion -->
-<!-- (2) computable addresses of network resources, -->
-<!-- eg the YouTube page of a resource -->
-
-<!-- point to HTML-produced, and canonically-hosted, standalone page -->
-<!-- Eventually match on all interactives                            -->
-<!-- NB: baseurl is assumed to have a trailing slash                 -->
-
-<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
-    <xsl:value-of select="$baseurl"/>
-    <xsl:apply-templates select="." mode="standalone-filename" />
-</xsl:template>
-
-<!-- Natural override for YouTube videos               -->
-<!-- Better - standalone page, with "View on You Tube" -->
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
-    <xsl:apply-templates select="." mode="youtube-view-url" />
-    <xsl:if test="@start">
-        <xsl:text>\&amp;start=</xsl:text>
-        <xsl:value-of select="@start" />
-    </xsl:if>
-    <xsl:if test="@end">
-        <xsl:text>\&amp;end=</xsl:text>
-        <xsl:value-of select="@end" />
-    </xsl:if>
-</xsl:template>
-
-<!-- Vimeo view URL -->
-<xsl:template match="video[@vimeo]" mode="static-url">
-    <xsl:text>https://vimeo.com/</xsl:text>
-    <xsl:value-of select="@vimeo"/>
 </xsl:template>
 
 <!-- Static Images -->
@@ -7557,34 +7520,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </c>
     </xsl:variable>
     <xsl:apply-templates select="exsl:node-set($visual-url)/*"/>
-</xsl:template>
-
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
-    <xsl:variable name="youtube">
-        <xsl:choose>
-            <xsl:when test="@youtubeplaylist">
-                <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:text>https://www.youtube.com/</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@youtubeplaylist">
-            <xsl:text>playlist?list=</xsl:text>
-            <xsl:value-of select="$youtube" />
-        </xsl:when>
-        <xsl:when test="contains($youtube, ' ')">
-            <xsl:text>watch_videos?video_ids=</xsl:text>
-            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>watch?v=</xsl:text>
-            <xsl:value-of select="$youtube" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="interactive[@geogebra]" mode="static-caption">

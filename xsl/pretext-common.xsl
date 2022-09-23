@@ -3099,6 +3099,13 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="round($design-width-pixels * $width-fraction div $aspect-ratio)" />
 </xsl:template>
 
+<!-- ###################################### -->
+<!-- Static versions of Interactive Content -->
+<!-- ###################################### -->
+
+<!-- Templates for the pre-processor (and other stylesheets) to use -->
+<!-- for the creation of static versions of interactive content.    -->
+
 <!-- The HTML conversion generates "standalone" pages for videos   -->
 <!-- and other interactives.  Then the LaTeX conversion will make  -->
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
@@ -3111,6 +3118,74 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
+<!-- Static URL's -->
+<!-- Predictable and/or stable URLs for versions         -->
+<!-- of interactives available online.  These are        -->
+<!--                                                     -->
+<!--   (1) "standalone" pages for author/local material, -->
+<!--       as a product of the HTML conversion           -->
+<!--   (2) computable addresses of network resources,    -->
+<!--       eg the YouTube page of a resource             -->
+
+<!-- Point to HTML-produced, and canonically-hosted, standalone page -->
+<!-- NB: baseurl is assumed to have a trailing slash                 -->
+
+<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <xsl:apply-templates select="." mode="standalone-filename" />
+</xsl:template>
+
+<!-- Natural override for YouTube videos               -->
+<!-- Better - standalone page, with "View on You Tube" -->
+
+<!-- NB: ampersand is escaped for LaTeX use, be careful with switch to QR codes via Python! -->
+
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
+    <xsl:apply-templates select="." mode="youtube-view-url" />
+    <xsl:if test="@start">
+        <xsl:text>\&amp;start=</xsl:text>
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <xsl:if test="@end">
+        <xsl:text>\&amp;end=</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
+    <xsl:variable name="youtube">
+        <xsl:choose>
+            <xsl:when test="@youtubeplaylist">
+                <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>https://www.youtube.com/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>playlist?list=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:when>
+        <xsl:when test="contains($youtube, ' ')">
+            <xsl:text>watch_videos?video_ids=</xsl:text>
+            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>watch?v=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Vimeo view URL -->
+<xsl:template match="video[@vimeo]" mode="static-url">
+    <xsl:text>https://vimeo.com/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
 </xsl:template>
 
 
