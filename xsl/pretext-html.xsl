@@ -10651,6 +10651,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="syntax-highlight-header"/>
             <xsl:call-template name="google-search-box-js" />
+            <xsl:call-template name="native-search-box-js" />
             <xsl:call-template name="pretext-js" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
@@ -10721,6 +10722,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- accessibility suggests relative ordering of next items -->
                         <xsl:call-template name="google-search-box" />
                         <xsl:call-template name="native-search-box" />
+                        <xsl:call-template name="native-search-results"/>
                     </div>  <!-- container -->
                 </div>  <!-- banner -->
             <xsl:apply-templates select="." mode="primary-navigation" />
@@ -12507,15 +12509,39 @@ TODO:
     </xsl:if>
 </xsl:template>
 
+<!-- JS for native search -->
+<xsl:template name="native-search-box-js">
+    <xsl:if test="$debug.search.page = 'yes'">
+        <script src="https://unpkg.com/lunr/lunr.js"/>
+        <!-- document-specific variables with search documents -->
+        <script src="lunr-pretext-search-index.js"/>
+        <!-- PreTeXt Javascript and CSS to form and render results of a search -->
+        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"></script>
+        <link href="{$html.css.server}/css/{$html.css.version}/pretext_search.css" rel="stylesheet" type="text/css"/>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Div for native search -->
 <xsl:template name="native-search-box">
     <xsl:if test="$debug.search.page = 'yes'">
         <div class="searchbox">
             <div class="searchwidget">
-                <label for="ptxsearch">Search</label>
-                <input id="ptxsearch" type="text" name="terms" onchange="doSearch()" />
+                <input id="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
                 <button id="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
             </div>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- Div for native search results -->
+<xsl:template name="native-search-results">
+    <xsl:if test="$debug.search.page = 'yes'">
+        <div id="searchresultsplaceholder" style="display: none">
+            <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
+            <h2>Search Results: <span id="searchterms"></span></h2>
+            <ol id="searchresults">
+            </ol>
         </div>
     </xsl:if>
 </xsl:template>
