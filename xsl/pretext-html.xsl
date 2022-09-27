@@ -12527,7 +12527,6 @@ TODO:
     <xsl:if test="$debug.search.page = 'yes'">
         <div class="searchbox">
             <div class="searchwidget">
-                <label for="ptxsearch">Search</label>
                 <input id="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
                 <button id="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
             </div>
@@ -12539,7 +12538,8 @@ TODO:
 <xsl:template name="native-search-results">
     <xsl:if test="$debug.search.page = 'yes'">
         <div id="searchresultsplaceholder" style="display: none">
-            <h2>Search Results</h2>
+<button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
+            <h2>Search Results: <span id="searchterms"></span></h2>
             <ol id="searchresults">
             </ol>
         </div>
