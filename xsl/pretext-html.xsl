@@ -10720,6 +10720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </div>  <!-- title-container -->
                         <!-- accessibility suggests relative ordering of next items -->
                         <xsl:call-template name="google-search-box" />
+                        <xsl:call-template name="native-search-box" />
                     </div>  <!-- container -->
                 </div>  <!-- banner -->
             <xsl:apply-templates select="." mode="primary-navigation" />
@@ -12502,6 +12503,19 @@ TODO:
         <!-- ARIA: "search" role for Google Search div/wrapper -->
         <div class="searchwrapper" role="search">
             <div class="gcse-search" />
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- Div for native search -->
+<xsl:template name="native-search-box">
+    <xsl:if test="$debug.search.page = 'yes'">
+        <div class="searchbox">
+            <div class="searchwidget">
+                <label for="ptxsearch">Search</label>
+                <input id="ptxsearch" type="text" name="terms" onchange="doSearch()" />
+                <button id="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
+            </div>
         </div>
     </xsl:if>
 </xsl:template>
