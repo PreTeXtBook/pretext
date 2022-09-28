@@ -11929,55 +11929,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  }, this)&#xa;</xsl:text>
         <xsl:text>})&#xa;</xsl:text>
     </exsl:document>
-    <!-- Stock HTML search page, identical in structure for every project -->
-    <exsl:document href="search.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <head>
-            <!-- Lunr code to build index, perform search -->
-            <script src="https://unpkg.com/lunr/lunr.js"/>
-            <!-- document-specific variables with search documents -->
-            <script src="lunr-pretext-search-index.js"/>
-            <!-- PreTeXt Javascript and CSS to form and render results of a search -->
-            <script src="{$html.js.server}/js/{$html.js.version}/ptx_search.js"></script>
-            <link href="{$html.css.server}/css/{$html.css.version}/ptx_search.css" rel="stylesheet" type="text/css"/>
-            <!-- titles might have math in them -->
-            <xsl:call-template name="mathjax"/>
-        </head>
-        <body>
-        <article>
-            <h1>Search</h1>
-            <hr />
-
-            <div class="searchbox">
-                <div class="searchwidget">
-                    <label for="ptxsearch">Search Terms</label>
-                    <input id="ptxsearch" type="text" name="terms" onchange="doSearch()" />
-                    <button id="helpbutt" type="button" onclick="showHelp()">Show Help</button>
-                </div>
-            </div>
-
-            <div id="helpme" class="helpbox" style="display: none;">
-                <p>
-                    By default search will return documents with any of your terms.
-                <ul>
-                    <li>To search for documents with all of your terms use + to get get multiple AND choice search for +multiple +choice</li>
-                    <li>to search and exclude pages with a particular word use - +multiple -choice means must include multiple and must not include choice.</li>
-                    <li>To search the title only of the page title:subgroups</li>
-                    <li>To make one term more important you can boost it with ^ so multiple^10 choice would look for multiple OR choice and give a much higher score to those that contain multiple</li>
-                    <li>To do a fuzzy search subgroups~2 would match words with an edit distance of 2 from subgroups. This is useful if you are not sure of the spelling.</li>
-                </ul>
-                Lunr does not support searching for phrases. But you can get close with the logical AND.
-                </p>
-            </div>
-
-            <div>
-                <h2>Search Results</h2>
-                <ol id="searchresults">
-                </ol>
-            </div>
-
-        </article>
-        </body>
-    </exsl:document>
 </xsl:template>
 
 <!-- The modal template "search-page-docs" traverses the structural   -->
