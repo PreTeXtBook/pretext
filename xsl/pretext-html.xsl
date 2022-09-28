@@ -12151,6 +12151,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "slate" in an "interactive" can have JS code, GeoGebra too, etc -->
 <xsl:template match="interactive" mode="search-node-text"/>
 
+<!-- WeBWorK exercises, as output of the pre-processor, include    -->
+<!-- a "webwork-reps" element with three elements:                 -->
+<!--                                                               -->
+<!--   "static": meant for LaTeX, but we *will* index this version -->
+<!--   "server-data": base64 versions, empty element with just     -->
+<!--                  attributes, so harmless for search           -->
+<!--   "pg": native WW version (for problem archives), which will  -->
+<!--         be misleading                                         -->
+<!--                                                               -->
+<!-- NB: ideally the "pg" version will not make it here after some -->
+<!-- pre-processor work.  Parsing "static" in the pre-processor    -->
+<!-- and labeling the result with a "pi:" prefix would make sense. -->
+<xsl:template match="pg" mode="search-node-text"/>
+
 <!--
 TODO:
   hints, answers, solutions (only if elected by publisher in text)

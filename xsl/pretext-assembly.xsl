@@ -1353,6 +1353,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- several different representations, all collected in one big file, -->
 <!-- which we mine and duplicate in this pass.                         -->
 
+<!-- NB: when working to improve which parts of the webwork representations -->
+<!-- move on to assembled source, realize that the "static" version meant   -->
+<!-- for non-HTML outputs is also the best thing to provide to the HTML     -->
+<!-- conversion for use as a search document.  Perhaps create the full-on   -->
+<!-- JSON (escaped) string here from "static" and provide it as an internal -->
+<!-- element ("pi:") for later consumption.  Review the destination for     -->
+<!-- similar notes about possible changes.                                  -->
+
 <xsl:template match="webwork[* or @copy or @source]" mode="representations">
     <xsl:variable name="ww-id">
         <xsl:value-of select="@webwork-id"/>
