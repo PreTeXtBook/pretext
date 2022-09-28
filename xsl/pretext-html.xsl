@@ -12024,9 +12024,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>",&#xa;</xsl:text>
     <!-- title of division that is a page -->
     <xsl:text>  "title": "</xsl:text>
+    <!-- title might have HTML markup          -->
+    <!-- e.g. emphasis, span.process-math      -->
+    <!-- RTF -> node-set ->  serialized string -->
+    <xsl:variable name="title-html">
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:variable>
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
-            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:apply-templates select="exsl:node-set($title-html)" mode="serialize"/>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>",&#xa;</xsl:text>
