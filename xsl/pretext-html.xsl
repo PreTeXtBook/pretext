@@ -12109,6 +12109,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="tex" mode="search-node-text">
     <xsl:text>tex </xsl:text>
 </xsl:template>
+<xsl:template match="copyright" mode="search-node-text">
+    <xsl:text>copyright </xsl:text>
+</xsl:template>
+<xsl:template match="copyleft" mode="search-node-text">
+    <xsl:text>copyleft </xsl:text>
+</xsl:template>
 
 <!-- tags need angle brackets -->
 <!-- Empty tag version needs JSON escaping, otherwise -->
