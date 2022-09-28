@@ -12141,11 +12141,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".//term" mode="search-node-text"/>
 </xsl:template>
 
+<!-- Lots of stuff can make very misleading search documents. -->
+<!-- Examples have included: "\subset" in math and "limits"   -->
+<!-- in a WW problem to specify a domain.  So we kill stuff.  -->
+
+<xsl:template match="m|me|men|md|mdn" mode="search-node-text"/>
+<xsl:template match="latex-image|asymptote|sageplot" mode="search-node-text"/>
+<xsl:template match="sage" mode="search-node-text"/>
+<!-- "slate" in an "interactive" can have JS code, GeoGebra too, etc -->
+<xsl:template match="interactive" mode="search-node-text"/>
+
 <!--
 TODO:
   hints, answers, solutions (only if elected by publisher in text)
-  math bits?
-  latex image code
 -->
 
 <xsl:template match="text()" mode="search-node-text">
