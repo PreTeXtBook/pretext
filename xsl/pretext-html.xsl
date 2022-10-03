@@ -12270,10 +12270,28 @@ TODO:
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
+        <!-- probably should be universal, but only adding for MJ 4    -->
+        <!-- TODO: make a literal "script" element with this attribute -->
+        <xsl:if test="$mathjax4-testing">
+            <xsl:attribute name="type">
+                <xsl:text>text/javascript</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="src">
-            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$mathjax4-testing">
+                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.0.0-alpha.1/es5/</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- CHTML is the default, SVG is for debugging -->
             <xsl:choose>
+                <xsl:when test="$mathjax4-testing">
+                    <xsl:text>tex-mml-chtml.js</xsl:text>
+                </xsl:when>
+                <!-- REVIEW svg option for MathJax4 -->
                 <xsl:when test="$debug.mathjax.svg = 'yes'">
                     <xsl:text>tex-svg.js</xsl:text>
                 </xsl:when>
