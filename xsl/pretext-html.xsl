@@ -12288,12 +12288,14 @@ TODO:
             </xsl:choose>
             <!-- CHTML is the default, SVG is for debugging -->
             <xsl:choose>
-                <xsl:when test="$mathjax4-testing">
-                    <xsl:text>tex-mml-chtml.js</xsl:text>
-                </xsl:when>
-                <!-- REVIEW svg option for MathJax4 -->
+                <!-- SVG filename identical for v3, v4 -->
+                <!-- NB: is tex-mml-svg.js new for v4? -->
                 <xsl:when test="$debug.mathjax.svg = 'yes'">
                     <xsl:text>tex-svg.js</xsl:text>
+                </xsl:when>
+                <!-- new filename (default) for v4 -->
+                <xsl:when test="$mathjax4-testing">
+                    <xsl:text>tex-mml-chtml.js</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>tex-chtml.js</xsl:text>
