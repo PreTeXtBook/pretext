@@ -339,7 +339,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
     <!-- build a search page (in development) -->
-    <xsl:if test="$debug.search.page = 'yes'">
+    <xsl:if test="$has-native-search">
         <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- The main event                          -->
@@ -12516,7 +12516,7 @@ TODO:
 
 <!-- JS for native search -->
 <xsl:template name="native-search-box-js">
-    <xsl:if test="$debug.search.page = 'yes'">
+    <xsl:if test="$has-native-search">
         <script src="https://unpkg.com/lunr/lunr.js"/>
         <!-- document-specific variables with search documents -->
         <script src="lunr-pretext-search-index.js"/>
@@ -12529,7 +12529,7 @@ TODO:
 
 <!-- Div for native search -->
 <xsl:template name="native-search-box">
-    <xsl:if test="$debug.search.page = 'yes'">
+    <xsl:if test="$has-native-search">
         <div class="searchbox">
             <div class="searchwidget">
                 <input id="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
@@ -12541,7 +12541,7 @@ TODO:
 
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
-    <xsl:if test="$debug.search.page = 'yes'">
+    <xsl:if test="$has-native-search">
         <div id="searchresultsplaceholder" style="display: none">
             <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
             <h2>Search Results: <span id="searchterms"></span></h2>

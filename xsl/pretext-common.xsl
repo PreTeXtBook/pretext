@@ -573,9 +573,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- HTML only, a developer must elect to use this CSS file -->
 <xsl:param name="debug.developer.css" select="'no'"/>
 
-<!-- HTML only, produces a search page while in development -->
-<xsl:param name="debug.search.page" select="'no'"/>
-
 <!-- HTML only, testing early-releases of MathJax 4 -->
 <xsl:param name="debug.mathjax4" select="'no'"/>
 <xsl:variable name="mathjax4-testing" select="$debug.mathjax4 = 'yes'"/>

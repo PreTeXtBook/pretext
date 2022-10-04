@@ -2601,6 +2601,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<xsl:variable name="native-search-variant">
+    <xsl:variable name="default-native-search" select="'none'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/search/@variant = 'none'">
+            <xsl:value-of select="$publication/html/search/@variant"/>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'default'">
+            <xsl:value-of select="$publication/html/search/@variant"/>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/search/@variant">
+            <xsl:message>PTX:WARNING: HTML search/@variant in publisher file should be "default" or "none", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
+            <xsl:value-of select="$default-native-search"/>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-native-search"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- warn if Google search is also set               -->
+    <!-- TODO: implementation might prefer native search -->
+    <xsl:if test="$b-google-cse and $publication/html/search/@variant and not($publication/html/search/@variant = 'none')">
+        <xsl:message>PTX:WARNING: specifying HTML search/@variant AND search/@google-cx in publisher file is not possible and will lead to unpredictable results</xsl:message>
+    </xsl:if>
+</xsl:variable>
+
+<xsl:variable name="has-native-search" select="not($native-search-variant = 'none')"/>
+
 <!-- Add a boolean variable to toggle "enhanced privacy mode" -->
 <!-- This is an option for embedded YouTube videos            -->
 <!-- and possibly other platforms at a later date.            -->
