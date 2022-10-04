@@ -11903,13 +11903,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Search -->
 <!-- ###### -->
 
+<!-- We build a collection of what Lunr calls "search documents" -->
+<!-- as a Javascript object stored in a file.  For Runestone, it -->
+<!-- needs to go in a different directory than the HTML files.   -->
+<xsl:variable name="lunr-search-file">
+    <xsl:if test="$b-host-runestone">
+        <xsl:text>_static/</xsl:text>
+    </xsl:if>
+    <xsl:text>lunr-pretext-search-index.js</xsl:text>
+</xsl:variable>
+
 <xsl:template name="search-page-construction">
     <!-- First, a Javascript file, defining the raw "documents"     -->
     <!-- of the eventual index, and then converted by Lunr into     -->
     <!-- a Javascript variable , ptx_lunr_idx.  This index variable -->
     <!-- is included later in the search page via a script element, -->
     <!-- for use/consumption by the Lunr search() method.           -->
-    <exsl:document href="lunr-pretext-search-index.js" method="text" encoding="UTF-8">
+    <exsl:document href="{$lunr-search-file}" method="text" encoding="UTF-8">
         <xsl:variable name="json-docs">
             <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
         </xsl:variable>
@@ -12519,7 +12529,7 @@ TODO:
     <xsl:if test="$has-native-search">
         <script src="https://unpkg.com/lunr/lunr.js"/>
         <!-- document-specific variables with search documents -->
-        <script src="lunr-pretext-search-index.js"/>
+        <script src="{$lunr-search-file}"/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
         <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"></script>
         <link href="{$html.css.server}/css/{$html.css.version}/pretext_search.css" rel="stylesheet" type="text/css"/>
