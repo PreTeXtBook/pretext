@@ -34,4 +34,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         userpassword="anonymous"
         />
 
+    <html>
+        <!-- native search with Javascript -->
+        <search variant="default"/>
+    </html>
+
 </publication>

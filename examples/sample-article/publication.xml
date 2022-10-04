@@ -100,6 +100,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Request fewer tracking cookies for YouTube videos     -->
         <!-- This is the default, here for documentation/testing   -->
         <video privacy="yes"/>
+        <!-- native search via Javascript library -->
+        <search variant="default"/>
     </html>
 
     <latex print="no" sides="two">
