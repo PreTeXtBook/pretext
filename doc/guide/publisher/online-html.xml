@@ -191,11 +191,22 @@
         <p>We would be happy to provide support for additional major services.  Just make a feature request.</p>
     </section>
 
-    <section xml:id="online-search">
-        <title>Search</title>
-        <idx>search</idx>
+    <section xml:id="native-search">
+        <title>Native Search</title>
+        <idx><h>search</h><h>native</h></idx>
 
-        <p>Search facilities are enabled through <url href="https://cse.google.com/cse" visual="cse.google.com/cse">Google Custom Search Engine</url><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions have been updated as of 2020-10-01.</p>
+        <p>Note: as of 2022-10-03 we have client-side search supported natively by a Javascript library.  Development and support will favor this approach over our legacy support for an online service (<xref ref="google-search"/>).</p>
+
+        <p>Employing a switch in the publication file will provide a search box and all the supporting infrastructure.  See <xref ref="online-search-options"/> for details.</p>
+    </section>
+
+    <section xml:id="google-search">
+        <title>Google Search</title>
+        <idx><h>search</h><h>Google</h></idx>
+
+        <p>Note: as of 2022-10-03 we have search supported by an online service from Google and a client-side (<q>native</q>)version supported by Javascript (<xref ref="native-search"/>).  Development and support will favor the latter.</p>
+
+        <p>Search facilities can be enabled through <url href="https://cse.google.com/cse" visual="cse.google.com/cse">Google Custom Search Engine</url><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions have been updated as of 2020-10-01.</p>
 
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
