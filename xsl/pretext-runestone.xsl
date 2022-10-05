@@ -26,12 +26,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 ]>
 
 <!-- exsl: necessary to write out Runestone manifest -->
+<!-- str: necessary to tokenize alternate Runestone Services -->
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl str"
 >
 
 
@@ -53,6 +55,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- file is pretty simple, and should be apparent to the cognescenti.           -->
 <xsl:variable name="runestone-services-filename" select="'support/runestone-services.xml'"/>
 <xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
+
+<!-- Alternate Runestone Services -->
+<!-- We allow for an override of the content of the services file via      -->
+<!-- string parameters passed into this stylesheet. The purpose is to      -->
+<!-- allow the core Pythoon routines to query the Runestone server for     -->
+<!-- the *very latest* services file available online.  This will be       -->
+<!-- used instead of the recent (but not always latest) offline version    -->
+<!-- in the repository. This is meant to be a totally automated operation, -->
+<!-- so parameter names are not always human-friendly.                     -->
+<xsl:param name="altrs-js" select="''"/>
+<xsl:param name="altrs-css" select="''"/>
+<xsl:param name="altrs-cdn-url" select="''"/>
+<xsl:param name="altrs-version" select="''"/>
+<!-- We arbitrarily use the version parameter as a flag for the   -->
+<!-- use of alternate services and rely on code to always specify -->
+<!-- all four parameters or none at all.                          -->
+<xsl:variable name="b-altrs-services" select="not($altrs-version = '')"/>
 
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
@@ -260,7 +279,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- on the Runestone Server.  But in the "Runestone for All" case,    -->
     <!-- any build/hosting can hit the Runestone site for the necessary    -->
     <!-- Javascript/CSS to power interactive questions in much the same    -->
-    <!-- manner as at Runestone Academy.                                   -->
+    <!-- manner as at Runestone Academy.  Additionally, overrides via      -->
+    <!-- string parameters are supported.                                  -->
     <xsl:variable name="runestone-cdn">
         <xsl:choose>
             <xsl:when test="$b-host-runestone">
@@ -269,22 +289,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <!-- CDN URL should end in a slash, -->
                 <!-- as version has no slashes      -->
-                <xsl:value-of select="$runestone-services/all/cdn-url"/>
-                <xsl:value-of select="$runestone-services/all/version"/>
+                <xsl:choose>
+                    <xsl:when test="$b-altrs-services">
+                        <xsl:value-of select="$altrs-cdn-url"/>
+                        <xsl:value-of select="$altrs-version"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$runestone-services/all/cdn-url"/>
+                        <xsl:value-of select="$runestone-services/all/version"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:text>/</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
 
-    <!-- When building for a Runestone server or when testing -->
-    <!-- Runestone for All, the $runestone-cdn will point to  -->
-    <!-- the right place for the necessary JS.                -->
+    <!-- The Runestone Services file typically contains multiple filenames    -->
+    <!-- for Javascript and CSS (like two or three).  In the alternate case,  -->
+    <!-- we expect the two string parameters to be lists delimited by a colon -->
+    <!-- (':'), so this character should not ever appear in the filenames.    -->
+    <!-- Note: these variables will be vacuous when the string parameters are -->
+    <!-- empty strings, and then will not ever be employed (below).           -->
+    <xsl:variable name="altrs-js-tokens" select="str:tokenize($altrs-js, ':')"/>
+    <xsl:variable name="altrs-css-tokens" select="str:tokenize($altrs-css, ':')"/>
+
+    <!-- The $runestone-cdn variable will point to the right Runestone  -->
+    <!-- Services file: when hosted on Runestone, inside of _static; or -->
+    <!-- when building for arbitrary hosting, inside the repository.    -->
+    <!-- In the case of alternate information provided via string       -->
+    <!-- parameters, the tokenized node sets will be employed.  Note    -->
+    <!-- how the unions of the two node-sets in the "for-each" are more -->
+    <!-- like exclusive-or, as we always get exactly one of the two.    -->
     <!-- N.B. Enclosing "if" goes away if/when $b-needs-runestone    -->
     <!-- just becomes true all the time.  Indentation predicts this. -->
     <xsl:if test="$b-host-runestone or $b-needs-runestone">
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:for-each select="$runestone-services/all/js/item">
+    <xsl:for-each select="$runestone-services/all/js/item[not($b-altrs-services)]|$altrs-js-tokens[$b-altrs-services]">
         <script type="text/javascript">
             <xsl:attribute name="src">
                 <xsl:value-of select="$runestone-cdn"/>
@@ -292,7 +333,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </script>
     </xsl:for-each>
-    <xsl:for-each select="$runestone-services/all/css/item">
+    <xsl:for-each select="$runestone-services/all/css/item[not($b-altrs-services)]|$altrs-css-tokens[$b-altrs-services]">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
                 <xsl:value-of select="$runestone-cdn"/>
