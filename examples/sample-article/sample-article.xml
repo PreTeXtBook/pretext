@@ -7726,8 +7726,8 @@ the xsltproc executable.
 
             </subsection>
 
-            <subsection xml:id="interactive-iframes">
-                <title>IFrames</title>
+            <subsection xml:id="interactive-iframes-local">
+                <title>IFrames from Files</title>
 
                 <p>An <c>iframe</c> is an <init>HTML</init> element that allows embedding of a complete web page within another one.  Here we use this device to provide interactive 3D diagrams built with other tools.</p>
 
@@ -7745,7 +7745,7 @@ the xsltproc executable.
                 </figure>
                     <!-- preview="preview/threejs-splines.png"  -->
 
-                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.</p>
+                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.  See <xref ref="interactive-iframes-server" text="type-global"/> for the server version.</p>
             </subsection>
 
             <subsection xml:id="interactive-threejs">
@@ -7755,10 +7755,10 @@ the xsltproc executable.
 
                 <p>But it would seem to have become a bit more complicated to embed and our example was not rendering.  As of 2022-08-08, we have removed it.  Of course, you can find it in the git repository, perhaps searching on the date string just mentioned.  It woulld be interesting to see if our <tag>interactive</tag> framework could still support the changes.</p>
 
-                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
+                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes-local" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
 
-                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes" text="type-global"/>:<cd>
+                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes-local" text="type-global"/>:<cd>
                         <cline>var('x,y')</cline>
                         <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
                     </cd></li>
@@ -7873,6 +7873,19 @@ the xsltproc executable.
                 <figure xml:id="figure-calcplot3d">
                     <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m> (full application)</caption>
                     <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="3:2"/>
+                </figure>
+            </subsection>
+
+            <subsection xml:id="interactive-iframes-server">
+                <title>IFrames from Servers</title>
+
+                <p>The <c>iFrame</c> versions of interactives can point to a network location, presuming the endpoint is reasonably well-behaved.  If you are using this sytematically, let us know and perhpas it should become a more dedicated <pretext/> construction.  See <xref ref="interactive-iframes-local" text="type-global"/> for the local file version.</p>
+
+                <p>This example is from <url href="https://phet.colorado.edu/" visual="phet.colorado.edu">PhET Interactive Simulations</url>.</p>
+
+                <figure xml:id="figure-phet-fourier">
+                    <caption>Fourier: Making Waves <c>iframe</c></caption>
+                    <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" aspect="15:10"/>
                 </figure>
             </subsection>
         </section>
