@@ -9749,9 +9749,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Almost too easy and trivial, so last, not first -->
 <!-- Assumes a local, "external", HTML file to house -->
 <xsl:template match="interactive[@iframe]" mode="iframe-interactive">
+    <!-- Distinguish netowk location versus (external) file -->
+    <xsl:variable name="b-network-location" select="(substring(@iframe, 1, 7) = 'http://') or
+                                                    (substring(@iframe, 1, 8) = 'https://')"/>
+
     <xsl:variable name="location">
-        <!-- empty when not using managed directories -->
-        <xsl:value-of select="$external-directory"/>
+        <!-- prefix with directory information if not obviously a network location -->
+        <xsl:if test="not($b-network-location)">
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
+        </xsl:if>
         <xsl:value-of select="@iframe"/>
     </xsl:variable>
     <iframe src="{$location}">
