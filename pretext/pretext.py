@@ -2483,6 +2483,92 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # Conversion to HTML
 ####################
 
+# A helper function to query the latest Runestone
+# Services file, while failing gracefully
+
+def _runestone_services():
+    """Query the very latest Runestone Services file from the RS CDN"""
+    import os.path  # join()
+
+    # external module, often forgotten
+    try:
+        import lxml.etree as ET  # services file
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("lxml"))
+
+    # Canonical location of file of redirections to absolute-latest
+    # released version of Runestone Services
+    services_url = 'https://runestone.academy/cdn/runestone/latest/webpack_static_imports.xml'
+
+    # We assume an online query is a success, until we learn otherwise
+    online_success = True
+
+    # Test if (optional) requests module is installed
+    try:
+        import requests
+    except ImportError:
+        msg = 'the "requests" module is not available and is necessary for querying the Runestone CDN'
+        log.debug(msg)
+        online_success = False
+
+    # Make a request with requests, which could fail if offline
+    if online_success:
+        try:
+            services_response = requests.get(services_url)
+        except requests.exceptions.RequestException as e:
+            msg = '\n'.join(['there was a network problem while trying to retrieve "{}"',
+                             'from the Runestone CDN and the reported problem is:',
+                             '{}'
+                             ])
+            log.debug(msg.format(services_url, e))
+            online_success = False
+
+    # Check that an online request was "OK", HTTP response code 200
+    if online_success:
+        response_status_code = services_response.status_code
+        if response_status_code != 200:
+            msg = '\n'.join(["the file {} was not found at the Runestone CDN",
+                             "the server returned response code {}"
+                             ])
+            log.debug(msg.format(services_url, response_status_code))
+            online_success = False
+
+    if not(online_success):
+        msg = '\n'.join(["unable to get the very latest Runestone Services from the Runestone CDN",
+                         "this is due to an error reported immediately prior. A slightly older",
+                         "version will be used based on information in the PreTeXt repository,",
+                         "so this is not a fatal error, and a fallback is being used"
+                         ])
+        log.debug(msg)
+        # and we cannot proceed, so return with a result that is empty
+        return ('', '', '', '')
+
+    # Now online_success is still True, we have not return'ed
+    # and services_response should be meaningful
+
+    # Convert Runestone file back to XML to unpack with lxml
+    services_xml = services_response.text
+    services = ET.fromstring(services_xml)
+
+    # Unpack contents into format for XSL string parameters
+    # This mirrors the XML file format, including multiple "item"
+    #
+    # colon-delimited string of the JS files
+    altrs_js = ''
+    for js in services.xpath("/all/js/item"):
+        altrs_js = altrs_js + js.text + ':'
+    altrs_js = altrs_js[:-1]
+    # colon-delimited string of the CSS files
+    altrs_css = ''
+    for css in services.xpath("/all/css/item"):
+        altrs_css = altrs_css + css.text + ':'
+    altrs_css = altrs_css[:-1]
+    # single CDN URL
+    altrs_cdn_url = services.xpath("/all/cdn-url")[0].text
+    # single Runestone Services version
+    altrs_version = services.xpath("/all/version")[0].text
+    return (altrs_js, altrs_css, altrs_cdn_url, altrs_version)
 
 def html(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
@@ -2498,6 +2584,27 @@ def html(
 
     # names for scratch directories
     tmp_dir = get_temporary_directory()
+
+    # See if we can get the very latest Runestone Services from the Runestone
+    # CDN.  A non-empty version (fourth parameter) indicates success
+    #  "altrs" = alternate Runestone
+    altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services()
+    online_success = (altrs_version != '')
+    # report repository version always, supersede if newer found
+    msg = 'Runestone Services (via PreTeXt repository): version {}'
+    log.info(msg.format(get_runestone_services_version()))
+    if online_success:
+        msg = 'Runestone Services (using newer, via online CDN query): version {}'
+        log.info(msg.format(altrs_version))
+    # with a successful online query, we load up some string parameters
+    # the receiving stylesheet has the parameters default to empty strings
+    # which translates to consulting the services file in the repository,
+    # so we do nothing when the online query fails
+    if online_success:
+        stringparams["altrs-js"] = altrs_js
+        stringparams["altrs-css"] = altrs_css
+        stringparams["altrs-cdn-url"] = altrs_cdn_url
+        stringparams["altrs-version"] = altrs_version
 
     # support publisher file, and subtree argument
     if pub_file:
