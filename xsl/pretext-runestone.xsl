@@ -38,6 +38,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Not documented, for development use only -->
 <xsl:param name="debug.rs.services.file" select="''"/>
+<xsl:variable name="b-debugging-rs-services" select="not($debug.rs.services.file = '')"/>
 
 
 <!-- ######################## -->
@@ -67,7 +68,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be correct.                                                  -->
 <xsl:variable name="runestone-services-filename">
     <xsl:choose>
-        <xsl:when test="not($debug.rs.services.file = '')">
+        <xsl:when test="$b-debugging-rs-services">
             <xsl:value-of select="$debug.rs.services.file"/>
         </xsl:when>
         <xsl:otherwise>
@@ -86,6 +87,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- used instead of the recent (but not always latest) offline version    -->
 <!-- in the repository. This is meant to be a totally automated operation, -->
 <!-- so parameter names are not always human-friendly.                     -->
+<!--                                                                       -->
+<!-- Priority order                                                        -->
+<!--   1.  Respect debugging parameter                                     -->
+<!--   2.  Accept non-empty parameters (from Python online query, "altrs") -->
+<!--   3.  Offline, standard, use file in repository "support" directory   -->
 <xsl:param name="altrs-js" select="''"/>
 <xsl:param name="altrs-css" select="''"/>
 <xsl:param name="altrs-cdn-url" select="''"/>
@@ -93,7 +99,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We arbitrarily use the version parameter as a flag for the   -->
 <!-- use of alternate services and rely on code to always specify -->
 <!-- all four parameters or none at all.                          -->
-<xsl:variable name="b-altrs-services" select="not($altrs-version = '')"/>
+<xsl:variable name="b-altrs-services" select="not($altrs-version = '') and not($b-debugging-rs-services)"/>
 
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
