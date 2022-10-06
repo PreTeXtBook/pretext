@@ -527,12 +527,6 @@ def main():
         )
     )
 
-    # Report Runestone Services version in debugging output
-    # Note: make sure this has been retrieved/installed first
-    log.debug(
-        "Runestone Services version: {}".format(ptx.get_runestone_services_version())
-    )
-
     # The "get" will report 'executables' in configuration file
     ptx.set_executables(get_executables(args.config_file))
 
