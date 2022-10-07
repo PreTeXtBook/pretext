@@ -51,8 +51,10 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     # Internal calls will specify out_file with complete path
     # External calls might only specify a destination directory
-    import os.path, subprocess
-    import re, os, fileinput  # for &nbsp; fix
+    import os.path
+    import subprocess
+    import os
+    import re, fileinput  # for &nbsp; fix
 
     log.info("converting LaTeX from {} into {} format".format(xml_source, math_format))
     log.debug("converting LaTeX from {} into {} format".format(xml_source, math_format))
@@ -175,7 +177,10 @@ def asymptote_conversion(
     # directory preserved by -vv), using, e.g.,
     #   curl --data-binary @source.asy 'asymptote.ualberta.ca:10007?f=svg' > output.svg
     import os.path  # join()
-    import os, subprocess, shutil, glob
+    import os
+    import subprocess
+    import shutil
+    import glob
 
     try:
         import requests  # post()
@@ -348,10 +353,10 @@ def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
 ):
     # stringparams is a dictionary, best for lxml parsing
-    import platform  # system, machine()
     import os.path  # join()
     import subprocess  # call() is Python 3.5
-    import os, shutil
+    import os
+    import shutil
     # external module, often forgotten
     try:
         import pdfCropMargins
@@ -826,7 +831,8 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 def webwork_to_xml(
     xml_source, pub_file, stringparams, abort_early, server_params, dest_dir
 ):
-    import subprocess, os.path
+    import subprocess
+    import os.path
     import os  # mkdir()
     import sys  # version_info
     import urllib.parse  # urlparse()
@@ -1617,7 +1623,8 @@ def pg_macros(xml_source, dest_dir):
 
 def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import subprocess, shutil
+    import subprocess
+    import shutil
 
     try:
         import requests  # YouTube server
@@ -1732,7 +1739,8 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 
 def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
-    import subprocess, shutil
+    import subprocess
+    import shutil
     import os  # chdir
     import os.path  # join()
     import asyncio  # get_event_loop()
@@ -1948,7 +1956,8 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
-    import subprocess, shutil
+    import subprocess
+    import shutil
 
     try:
         import requests  # MyOpenMath server
@@ -2079,7 +2088,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
     #   'mml': mathematics as MathML
-    import os, os.path, subprocess, shutil
+    import os
+    import os.path
+    import subprocess
+    import shutil
     import re, fileinput
     import zipfile as ZIP
 
@@ -2697,7 +2709,7 @@ def map_path_to_xml_id(
     import urllib.parse  # urlparse
 
     # We assume a previous call to ``xsltproc`` has already verified that lxml is installed.
-    import lxml.etree
+    import lxml.etree as ET
     import lxml.ElementInclude
 
     path_to_xml_id = collections.defaultdict(list)
@@ -2721,13 +2733,13 @@ def map_path_to_xml_id(
     def my_loader(href, parse, encoding=None, parser=None):
         ret = lxml.ElementInclude._lxml_default_loader(href, parse, encoding, parser)
         # The return value may not be an element.
-        if isinstance(ret, lxml.etree._Element):
+        if isinstance(ret, ET._Element):
             ret.attrib[xml_base_attrib] = href
         return ret
 
     # Load the XML, performing xincludes using this loader.
-    huge_parser = lxml.etree.XMLParser(huge_tree=True)
-    src_tree = lxml.etree.parse(xml, parser=huge_parser)
+    huge_parser = ET.XMLParser(huge_tree=True)
+    src_tree = ET.parse(xml, parser=huge_parser)
     lxml.ElementInclude.include(src_tree, loader=my_loader)
 
     # Walk though every element with an xml ID.
@@ -3027,8 +3039,8 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
 
 def validate(xml_source, out_file, dest_dir):
     import os.path  # split()
-    from lxml import etree  # parse()
-    import zipfile #  ZipFile()
+    import lxml.etree as ET  # parse()
+    import zipfile as ZIP #  ZipFile()
 
     try:
         import requests  # post()
@@ -3061,7 +3073,7 @@ def validate(xml_source, out_file, dest_dir):
         for f in new_files:
             # construct full filename for parse operation
             # do not xinclude, that would defeat the purpose
-            file_tree = etree.parse(os.path.join(d, f))
+            file_tree = ET.parse(os.path.join(d, f))
             includes = file_tree.xpath("//xi:include", namespaces=NSMAP)
             # @href attributes are relative to the location
             #  of f, which we compute as f_dir
@@ -3098,7 +3110,7 @@ def validate(xml_source, out_file, dest_dir):
     log.info("packaging source temporarily as {}".format(zip_filename))
     owd = os.getcwd()
     os.chdir(d)
-    with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+    with ZIP.ZipFile(zip_filename, mode="w", compression=ZIP.ZIP_DEFLATED) as zip_file:
         # set() will avoid duplicate files included twice (or more)
         for f in set(all_files):
             zip_file.write(f)
@@ -3187,7 +3199,7 @@ def get_ptx_xsl_path():
 
 def get_source_path(source_file):
     """Returns path of source XML file"""
-    import sys, os.path
+    import os.path
 
     # split path off filename
     source_dir, _ = os.path.split(source_file)
