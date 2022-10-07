@@ -7726,6 +7726,36 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection>
+                <title>CircuitJS</title>
+
+                <p><url href="https://www.falstad.com/circuit/" visual="www.falstad.com/circuit">CircuitJS</url> is an electronic circuit simulator.  A circuit can be described by a language, which PreTeXt will interpret and submit for rendering.  The next two examples are identical, but provided in slightly different ways, see the <pretext/> source for more.  Preview images for PDF will be added later.</p>
+
+                <figure xml:id="figure-circuitjs-attribute">
+                    <caption>CircuitJS Example (source via an encoded attribute)</caption>
+
+                    <interactive xml:id="interactive-circuitjs-attribute" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3"/>
+                </figure>
+
+                <figure xml:id="figure-circuitjs">
+                    <caption>CircuitJS Example (source authored directly)</caption>
+
+                    <interactive xml:id="interactive-circuitjs" circuitjs="" width="90%">
+                        <source>
+                            $ 1 0.000005 10.20027730826997 58 5 50 5e-11
+                            R 464 32 464 -16 0 0 40 3.3 0 0 0.5
+                            g 464 224 464 240 0 0
+                            s 464 32 464 128 0 0 false
+                            s 464 128 464 224 0 1 false
+                            x 274 181 431 184 4 12 bottom\sswitch\s(to\sground)
+                            x 312 85 426 88 4 12 top\sswitch\s(to\sVdd)
+                            O 464 128 544 128 1 0
+                            x 532 110 593 113 4 12 output\spin
+                        </source>
+                    </interactive>
+                </figure>
+            </subsection>
+
             <subsection xml:id="interactive-iframes-local">
                 <title>IFrames from Files</title>
 
