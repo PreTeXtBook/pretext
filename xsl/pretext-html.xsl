@@ -9745,6 +9745,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
+<!-- CircuitJS: https://www.falstad.com -->
+<!-- www.bait-consulting.com/publications/circuit_simulator_manual.pdf -->
+<xsl:template match="interactive[@circuitjs]" mode="iframe-interactive">
+    <!-- CircuitJS native language, as a URL-safe string -->
+    <xsl:variable name="url-string">
+        <xsl:choose>
+            <!-- a prepared string is in the signaling attribute -->
+            <xsl:when test="normalize-space(@circuitjs)">
+                <xsl:value-of select="@circuitjs"/>
+            </xsl:when>
+            <!-- Else, a more-friendly version is in a "source" element -->
+            <!-- Note that when a "source" element is used, and then    -->
+            <!-- provided in iframe/@src, the XSL processing itself     -->
+            <!-- will do the necessary escaping to join lines, etc      -->
+            <!-- (such as newlines to "%0A" and spaces to "%20")        -->
+            <!-- So we just strip leading whitespace primarily          -->
+            <xsl:when test="source">
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param  name="text">
+                        <xsl:value-of select="source"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <!-- no code, empty string, still makes a nice widget -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
+        <xsl:apply-templates select="." mode="iframe-id"/>
+        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+    </iframe>
+</xsl:template>
+
 <!-- Arbitrary IFrame -->
 <!-- Almost too easy and trivial, so last, not first -->
 <!-- Assumes a local, "external", HTML file to house -->
@@ -9827,7 +9860,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@iframe]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
