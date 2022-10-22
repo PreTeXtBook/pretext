@@ -172,6 +172,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Voorwoord</localization>
     <localization string-id='dedication'>Toewyding</localization>
     <localization string-id='colophon'>Kolofon</localization> <!-- I have never heard of an Afrikaans version of colophon. Google Translate gives "slottitel" for the Dutch, meaning "Summary title". So , I just made this up. -D.Basson -->
+    <!-- Runestone Activities -->
+    <!-- <localization string-id='video'>Video</localization> -->
+    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->

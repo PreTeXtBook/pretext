@@ -193,6 +193,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Foreword</localization>
     <localization string-id='dedication'>Dedication</localization>
     <localization string-id='colophon'>Colophon</localization>
+    <!-- Runestone Activities -->
+    <!-- These terms will appear in student activity/engagement -->
+    <!-- reports for an instructor of a Runestone course.       -->
+    <!-- Normally they will not be apparent to a reader.        -->
+    <localization string-id='video'>Video</localization>
+    <localization string-id='program'>Program</localization>
+    <!-- "ActiveCode" and "CodeLens" are Runestone-constructs -->
+    <!-- and so really *should not* be translated.            -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->

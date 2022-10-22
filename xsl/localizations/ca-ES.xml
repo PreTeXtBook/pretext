@@ -176,6 +176,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Pròleg</localization>
     <localization string-id='dedication'>Dedicatòria</localization>
     <localization string-id='colophon'>Colofó</localization>
+    <!-- Runestone Activities -->
+    <!-- <localization string-id='video'>Video</localization> -->
+    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
