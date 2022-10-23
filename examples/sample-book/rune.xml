@@ -1591,6 +1591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
                 <figure xml:id="ups-video">
                     <caption>List Variables</caption>
+                    <title>List Variables</title>
                     <video xml:id="yt-list-vars-eleven" label="youtube-list-vars-eleven" youtube="X1-UNHUajfk"/>
                 </figure>
             </sidebyside>
