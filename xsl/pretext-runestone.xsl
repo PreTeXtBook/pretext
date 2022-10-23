@@ -386,10 +386,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <a href="/runestone/assignments/chooseAssignment">Assignments</a>
                 <a href="/runestone/assignments/practice">Practice</a>
                 <hr/>
-		<!-- if reader is not an instructor the next link will be removed by javascript -->
+                <!-- if reader is not an instructor the next link will be removed by javascript -->
                 <a id="inst_peer_link" href='/{{appname}}/peer/instructor.html'>Peer Instruction (Instructor)</a>
                 <a href='/{{appname}}/peer/student.html'>Peer Instruction (Student)</a>
-		<hr/>
+                <hr/>
                 <a href="/runestone/default/courses">Change Course</a>
                 <hr/>
                 <a id="ip_dropdown_link" href="/runestone/admin/index">Instructor's Page</a>
@@ -398,12 +398,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>{% endif %}&#xa;</xsl:text>
                 <a href="/runestone/dashboard/studentreport">Progress Page</a>
                 <hr/>
+                <xsl:text>&#xa;{% if is_logged_in %}&#xa;</xsl:text>
                 <a href="/runestone/default/user/profile">Edit Profile</a>
                 <a href="/runestone/default/user/change_password">Change Password</a>
                 <a href="/runestone/default/user/logout">Log Out</a>
+                <xsl:text>&#xa;{% else %}&#xa;</xsl:text>
                 <a href="/runestone/default/user/register">Register</a>
                 <a href="/runestone/default/user/login">Login</a>
-                <a href="/runestone/assignments/index">Progress Page</a>
+                <xsl:text>&#xa;{% endif %}&#xa;</xsl:text>
             </div>
         </div>
     </xsl:if>
