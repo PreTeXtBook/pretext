@@ -558,7 +558,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- meet the dead-end monster match below, and the default template will     -->
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
-        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation"  mode="runestone-manifest"/>
+        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -575,6 +575,68 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full"/>
     </label>
 </xsl:template>
+
+<!-- Runestone tracks engagement with YouTube videos and "stray" -->
+<!-- ActiveCode and CodeLens (i.e. an "inline" "program", not as -->
+<!-- a portion of an "exercise".  As these are atomic elements,  -->
+<!-- there is little to grab onto for a label in a report for an -->
+<!-- instructor.  So we provide examination of an enclosing      -->
+<!-- figure ("video") or listing ("program").                    -->
+<!-- TODO: refactor to combine these next two templates          -->
+
+<xsl:template match="video[@youtube]" mode="runestone-manifest-label">
+    <label>
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:choose>
+            <xsl:when test="parent::figure">
+                <xsl:variable name="enclosing-figure" select="parent::figure"/>
+                <xsl:text>: </xsl:text>
+                <xsl:apply-templates select="$enclosing-figure" mode="type-name"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="$enclosing-figure" mode="number"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="$enclosing-figure" mode="title-full"/>
+            </xsl:when>
+            <!-- maybe YouTube ID, or @label -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </label>
+</xsl:template>
+
+<xsl:template match="program[((@interactive = 'codelens') or (@interactive = 'activecode')) and not(parent::exercise)]" mode="runestone-manifest-label">
+    <label>
+        <!-- switch on two variants of coding activities -->
+        <xsl:choose>
+            <xsl:when test="@interactive = 'codelens'">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'program-codelens'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@interactive = 'activecode'">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'program-activecode'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:choose>
+            <xsl:when test="parent::listing">
+                <xsl:variable name="enclosing-listing" select="parent::listing"/>
+                <xsl:text>: </xsl:text>
+                <xsl:apply-templates select="$enclosing-listing" mode="type-name"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="$enclosing-listing" mode="number"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="$enclosing-listing" mode="title-full"/>
+            </xsl:when>
+            <!-- maybe YouTube ID, or @label -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </label>
+</xsl:template>
+
+
 
 <!-- Exercises to the Runestone manifest -->
 <!--   - every True/False "exercise"                  -->
@@ -663,6 +725,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <!-- N.B.  Better here to ask for "exercise-components"? -->
         <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
+    </question>
+</xsl:template>
+
+<!-- TODO: by renaming/refactoring the templates inside of   -->
+<!-- "htmlsrc" then perhaps several of these templates with  -->
+<!-- similar structure can be combined via one larger match. -->
+
+<xsl:template match="video[@youtube]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "video", or enclosing "figure" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-youtube-embed"/>
+        </htmlsrc>
+    </question>
+</xsl:template>
+
+<xsl:template match="program[(@interactive = 'codelens') and not(parent::exercise)]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "program", or enclosing "listing" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-codelens"/>
+        </htmlsrc>
+    </question>
+</xsl:template>
+
+<xsl:template match="program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "program", or enclosing "listing" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </htmlsrc>
     </question>
 </xsl:template>
 
