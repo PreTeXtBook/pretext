@@ -47,11 +47,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
 <!--  -->
-<!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
-<!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
-<!-- memoir class offers more, but maybe other changes? -->
-<xsl:param name="latex.font.size" select="'10pt'" />
-<!--  -->
 <!-- Geometry: page shape, margins, etc            -->
 <!-- Pass a string with any of geometry's options  -->
 <!-- Default is empty and thus ineffective         -->
@@ -187,39 +182,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="toc-level" select="number($toc-level-override)"/>
 
+<!-- NB: Code using $font-size and latex.geometry is also -->
+<!-- used in the latex-image extraction stylesheet. Until -->
+<!-- we do a better job of ensuring they remain in-sync,  -->
+<!-- please coordinate the two sets of templates by hand  -->
+
 <!-- font-size also dictates document class for -->
 <!-- those provided by extsizes, but we can get -->
 <!-- these by just inserting the "ext" prefix   -->
 <!-- We don't load the package, the classes     -->
 <!-- are incorporated in the documentclass[]{}  -->
 <!-- and only if we need the extreme values     -->
-
-<!-- Default is 10pt above, this stupid template     -->
-<!-- provides an error message and also sets a value -->
-<!-- we can condition on for the extsizes package.   -->
-<!-- In predicted order, sort of, so fall out early  -->
-
-<!-- NB: Code using $font-size and latex.geometry is also -->
-<!-- used in the latex-image extraction stylesheet. Until -->
-<!-- we do a better job of ensuring they remain in-sync,  -->
-<!-- please coordinate the two sets of templates by hand  -->
-
-<xsl:variable name="font-size">
-    <xsl:choose>
-        <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:otherwise>
-            <xsl:text>10pt</xsl:text>
-            <xsl:message>PTX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ('10pt')</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- A convenient shortcut/hack that might need expansion later   -->
 <!-- insert "ext" or nothing in front of "regular" document class -->

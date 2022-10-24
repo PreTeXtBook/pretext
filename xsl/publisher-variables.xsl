@@ -3235,6 +3235,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- deprecation message, and moved parameter here.            -->
 <xsl:param name="oldids" select="''"/>
 
+<!-- Deprecated on 2022-10-24.  Definition has changed from  -->
+<!-- a default value of "10pt" to an empty string, so we can -->
+<!-- detect use for a deprecation warning.  Default value is -->
+<!-- preserved in other ways as part of the deprecation.     -->
+<xsl:param name="latex.font.size" select="''" />
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->
