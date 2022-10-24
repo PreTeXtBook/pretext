@@ -104,7 +104,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <search variant="default"/>
     </html>
 
-    <latex print="no" sides="two">
+    <!-- 10pt font is the default -->
+    <latex print="no" sides="two" font-size="10">
         <!-- these are the default alignments, given just as an example -->
         <page right-alignment="flush" bottom-alignment="ragged"/>
         <!-- worksheets are formatted separately by default.   -->
