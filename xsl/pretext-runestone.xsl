@@ -469,7 +469,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- version of Runestone Services used for this build -->
             <runestone-services>
                 <xsl:attribute name="version">
-                    <xsl:value-of select="$runestone-services/all/version"/>
+                    <xsl:choose>
+                        <xsl:when test="$b-altrs-services">
+                            <xsl:value-of select="$altrs-version"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$runestone-services/all/version"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:attribute>
             </runestone-services>
             <!-- mine various bits and pieces of the source for RS metadata  -->
