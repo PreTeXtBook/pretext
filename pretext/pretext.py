@@ -88,6 +88,36 @@ import zipfile
 # regular expression tools
 import re
 
+# * For non-standard packages (such as those installed via PIP) try to keep
+#   dependencies to a minimum by *not* importing at the module-level
+#   (with justified exceptions)
+#
+# * For non-standard packages always import within a try/except block
+#   and use the provided warning message for failures
+#
+# * The "requests" module would be a candidate for a module-level
+#   import but we prefer to leave it as an optional dependency
+
+# This is a convenience for a uniform (detailed) warning when
+# an "extraneous" module fails to load, which is indicative of
+# some problem with an author's working environment
+__module_warning = "\n".join(
+    [
+        'PTX ERROR: the "{}" module has failed to load, and',
+        "  this is necessary for the task you have requested.  Perhaps",
+        "  you have not installed it?  Or perhaps you have forgotten to",
+        "  use a Python virtual environment you set up for this purpose?",
+    ]
+)
+
+# Not much can be done without the "lxml" module which mimics
+# the "xsltproc" executable (they share the same libraries)
+try:
+    import lxml.etree as ET
+except ImportError:
+    raise ImportError(__module_warning.format("lxml"))
+
+
 #############################
 #
 #  Math as LaTeX on web pages
@@ -598,13 +628,6 @@ def latex_tactile_image_conversion(
     xml_source, pub_file, stringparams, dest_dir, outformat
 ):
 
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # label file
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
-
     # Outline:
     #   1.  Locate, isolate, convert math to Unicode braille
     #   2.  Locate, isolate labels in images, replace math
@@ -867,15 +890,11 @@ def webwork_to_xml(
     import tarfile
 
     # external module, often forgotten
-    global __module_warning
-    try:
-        import lxml.etree as ET  # write representations
-    except ImportError:
-        raise ImportError(__module_warning.format("lxml"))
     # at least on Mac installations, requests module is not standard
     try:
         import requests  # webwork server
     except ImportError:
+        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     # support publisher file, but not subtree argument
@@ -1854,13 +1873,6 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 def all_images(xml, pub_file, stringparams, xmlid_root):
     """All images, in all necessary formats, in subdirectories, for production of any project"""
 
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # XML source
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
-
     # parse source, no harm to assume
     # xinclude modularization is necessary
     # NB: see general  "xsltproc()"  for construction of a HUGE parser
@@ -2103,13 +2115,6 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     import PIL.Image  # new()
     import PIL.ImageDraw  # Draw()
     import PIL.ImageFont  # truetype(), load_default()
-
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # packaging file
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
 
     # general message for this entire procedure
     log.info(
@@ -2504,13 +2509,6 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 def _runestone_services():
     """Query the very latest Runestone Services file from the RS CDN"""
 
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # services file
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
-
     # Canonical location of file of redirections to absolute-latest
     # released version of Runestone Services
     services_url = 'https://runestone.academy/cdn/runestone/latest/webpack_static_imports.xml'
@@ -2707,7 +2705,6 @@ def map_path_to_xml_id(
     import urllib.parse  # urlparse
 
     # We assume a previous call to ``xsltproc`` has already verified that lxml is installed.
-    import lxml.etree as ET
     import lxml.ElementInclude
 
     path_to_xml_id = collections.defaultdict(list)
@@ -2914,13 +2911,6 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
     """
     import threading  # Thread()
 
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # XML source
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
-
     log.info("XSL conversion of {} by {}".format(xml, xsl))
     debug_string = (
         "XSL conversion via {} of {} to {} and/or into directory {} with parameters {}"
@@ -3029,7 +3019,6 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
 ########################
 
 def validate(xml_source, out_file, dest_dir):
-    import lxml.etree as ET  # parse()
 
     try:
         import requests  # post()
@@ -3193,13 +3182,6 @@ def get_source_path(source_file):
 
 def get_runestone_services_version():
     """Examine Runestone Services file for version number"""
-
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # label file
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
 
     services_file = os.path.join(get_ptx_path(), "xsl", "support", "runestone-services.xml")
     services = ET.parse(services_file)
@@ -3365,13 +3347,6 @@ def verify_input_directory(inputdir):
 def get_managed_directories(xml_source, pub_file):
     """Returns pair: (generated, external) absolute paths, derived from publisher file"""
 
-    # external module, often forgotten
-    try:
-        import lxml.etree as ET  # publisher file
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("lxml"))
-
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
@@ -3468,15 +3443,3 @@ __executables = None
 
 #  cache of temporary directories
 __temps = []
-
-# This is a convenience for a uniform (detailed) warning when
-# a "extraneous" module fails to load, which is indicative of
-# some problem with an author's working environment
-__module_warning = "\n".join(
-    [
-        'PTX ERROR: the "{}" module has failed to load, and',
-        "  this is necessary for the task you have requested.  Perhaps",
-        "  you have not installed it?  Or perhaps you have forgotten to",
-        "  use a Python virtual environment you set up for this purpose?",
-    ]
-)
