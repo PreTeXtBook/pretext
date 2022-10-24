@@ -173,6 +173,17 @@
             </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
         </subsection>
 
+        <subsection xml:id="latex-font-size-options">
+            <title><latex/> Font Sizes</title>
+            <idx><h>font size options</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>font size option</h></idx>
+            <idx><h>PDF</h><h>font size option</h></idx>
+
+            <p>The document-wide point size can be specified with the<cd>
+                <cline>/publication/latex/@font-size</cline>
+            </cd>attribute can have the value <c>8</c>, <c>9</c>, <c>10</c>, <c>11</c>, <c>12</c>, <c>14</c>, <c>17</c>, <c>20</c>, which are interpreted in points (<q>pt</q>) as the unit of measure.  The default value is <c>10</c>.  See <xref ref="font-size"/> for details.</p>
+        </subsection>
+
         <subsection xml:id="latex-page-options">
             <title><latex/> Page Options</title>
 

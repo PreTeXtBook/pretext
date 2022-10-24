@@ -56,6 +56,12 @@
         <p>Two-sided layout will have asymmetric margins with the ratio of inner (adjacent to spine) to outer at <c>2:3</c>.  You need some extra space at the spine to compensate for the binding, but when a book is open, the two pages are separated by two inner margins, so these do not need to be as wide as the outer margin to give some distance between the pages.  And readers will want more space to write in the outer margins, perhaps providing simple proofs of important results.  (This ratio may be changed with the <c>hmarginratio</c> key of the <c>geometry</c> package.)  Page headers will have page numbers on the outside of the page, with odd numbers on the right-side page.  Chapters will possibly have a blank page between them, so they begin on a right/odd page.  Behavior is similar in the front matter and back matter.</p>
     </section>
 
+    <section xml:id="font-size">
+        <title>Font Size</title>
+
+        <p>The overall (document-wide) font size may be given as one of eight different values, ranging from 8 points to 20 points.  The default is 10 points.  These values influence multiple settings within <latex/> itself, and <pretext/> will also adjust some default values, such as the line-width (in order to preserve an optimal number of characters per line for reading ease).  See <xref ref="latex-font-size-options"/> for precise details.</p>
+    </section>
+
     <section>
         <title>Page Shape</title>
 
@@ -169,11 +175,6 @@
                     <cell>Switch</cell>
                     <cell>Default</cell>
                     <cell>Values</cell>
-                </row>
-                <row>
-                    <cell><c>latex.font.size</c></cell>
-                    <cell><c>10pt</c></cell>
-                    <cell><c>8pt</c> to <c>20pt</c> (8 steps)</cell>
                 </row>
                 <row>
                     <cell><c>latex.geometry</c></cell>
