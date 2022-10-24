@@ -10876,10 +10876,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; has been removed'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2022-1-24  "latex.font.size" is deprecated for publisher variables -->
+    <!-- 2022-10-24  "latex.font.size" is deprecated for publisher variables -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2022-10-24'" />
-        <xsl:with-param name="message" select="'the  latex.font.size  parameter has been replaced by the  latex/@font-size  entry in the publication file.  Note that possible values are the same, but you no longer provide &quot;pt&quot; as the unit of measure.'" />
+        <xsl:with-param name="message" select="'the  latex.font.size  parameter has been replaced by the  latex/@font-size  entry in the publication file.   We will attempt to honor your intent.  Note that possible values are the same, but you no longer provide &quot;pt&quot; as the unit of measure.'" />
         <xsl:with-param name="incorrect-use" select="($latex.font.size != '')" />
     </xsl:call-template>
     <!--  -->
