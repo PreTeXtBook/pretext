@@ -185,9 +185,9 @@
         </subsection>
 
         <subsection xml:id="latex-page-options">
-            <title><latex/> Page Options</title>
+            <title><latex/> Page Shape Options</title>
 
-            <p>The following options affect the <q>shape</q> of each page, so are in a way less <q>global</q> than some of the previous options.  These are all attributes of the <cd>
+            <p>The following options affect the <q>shape</q> of each page, so are in a way less <q>global</q> than some of the previous options.  These are both attributes of the <cd>
                 <cline>/publication/latex/page</cline>
             </cd>element.<ul>
                 <li>
@@ -204,6 +204,10 @@
                      </cd> to values <c>flush</c> or <c>ragged</c> (default) to influence the bottom edge of the block of text on a page.  See <xref ref="print-justification"/> for more.</p>
                 </li>
             </ul></p>
+
+            <p>The content of the element<cd>
+                <cline>/publication/latex/page/geometry</cline>
+            </cd> element will feed directly into a <latex/> <c>\geometry{}</c> element, with no modifications.  (In other words, all whitespace, such as newlines and indentation, will be preserved.)  Be sure to carefully read the advice, an example, and further detail at <xref ref="page-shape"/>.</p>
         </subsection>
 
         <subsection xml:id="latex-worksheet-options">

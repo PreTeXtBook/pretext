@@ -64,7 +64,7 @@
         </table>
     </section>
 
-    <section xml:id="page-shape">
+    <section xml:id="page-shape-styling">
         <title>Page Shape</title>
 
         <p>Various dimensions of a printed page, including the page itself, may be adjusted using the <c>geometry</c> package, so study the documentation of this package to explore possibilities.  The options of this package may be also set on the command line.  To make options part of your style, place the <tag>xsl:param</tag> declaration in your stylesheet as follows (note the two sets of quotes):<cd>

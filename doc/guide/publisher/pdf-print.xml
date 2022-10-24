@@ -62,10 +62,24 @@
         <p>The overall (document-wide) font size may be given as one of eight different values, ranging from 8 points to 20 points.  The default is 10 points.  These values influence multiple settings within <latex/> itself, and <pretext/> will also adjust some default values, such as the line-width (in order to preserve an optimal number of characters per line for reading ease).  See <xref ref="latex-font-size-options"/> for precise details.</p>
     </section>
 
-    <section>
+    <section xml:id="page-shape">
         <title>Page Shape</title>
 
-        <p>The <c>latex.geometry</c> switch can be used to supply a single string composed of any options to the <c>\geometry{}</c> command of the <latex/> <c>geometry</c> package, and these will override any defaults supplied by <pretext/>.  Resist the temptation to pack in as much text on the page as you can.  <pretext/> varies the width of the text in reaction to the font size and is already very close to the maximum number of characters per line for comfortable reading by humans.</p>
+        <p>The conversion to <latex/> defaults to US Letter paper with reasonable margins.  However, the <latex/> <url href="https://ctan.org/pkg/geometry" visual="ctan.org/pkg/geometry"><c>geometry</c> package</url> has numerous options for paper sizes and margins.  The publication file can be used to insert any configuration the package supports.  See <xref ref="latex-page-options"/> for the exact syntax.</p>
+
+        <p>Note that if you change the paper size, you may want to change the text width computed by <pretext/>, and the more changes you make, the more default settings you may need to adjust.  However, if you are producing your book for print-on-demand (<xref ref="print-on-demand"/>) getting the page size and margins just right is a key step of the process.</p>
+
+        <p>Note also that when you use the <tag>geometry</tag> element of the publication file, the <emc>content</emc> of the element (text between the opening and closing tags) will be duplicated <em>exactly</em> into a <latex/> source file.  Being careless here is a good explanation for the <latex/> compilation step to fail.</p>
+
+        <p>Here is an example:<cd>
+            <cline>&lt;latex&gt;</cline>
+            <cline>  &lt;page&gt;</cline>
+            <cline>    &lt;geometry&gt;a4paper,total={16cm,25cm}&lt;/geometry&gt;</cline>
+            <cline>  &lt;/page&gt;</cline>
+            <cline>&lt;/latex&gt;</cline>
+        </cd>twhich will produce in the <latex/> output<cd>
+            <cline>\geometry{a4paper,total={16cm,25cm}}</cline>
+        </cd></p>
 
         <p>An electronic <init>PDF</init> may be printed on physical paper, but perhaps you want to make a version that works well on a portable device that naturally supports a portrait orientation, such as an Android tablet, an iPad, a Kindle (device or application), smart phone, Sony Digital Paper, or a ReMarkable tablet.  Aspect ratios vary across these devices, but once you settle on a target ratio, we have had good luck with the following algorithm and parameters:<ol>
             <li>Specify 10 point text</li>
@@ -74,6 +88,11 @@
             <li>Use aspect ratio to compute an overall height (about 6.5 inches)</li>
             <li>Subtract quarter-inch top and bottom margins to obtain text height</li>
         </ol>Then you can provide the <c>geometry</c> package the overall size as the <c>papersize</c> and the text width and text height as the <c>total</c> size of the body, resulting in equal (tight) margins all around, and good use of limited screen real estate.  These parameters create a <init>PDF</init> that is very legible on a larger smart phone, and for fine detail, rotating the device to landscape works well.  Really.</p>
+
+        <note>
+            <title>Avoid Too Much Text on a Printed Page</title>
+            <p>With freedom comes responsibility.  Resist the temptation to pack in as much text on the page as you can.  <pretext/> varies the width of the text in reaction to the font size and is already very close to the maximum number of characters per line for comfortable reading by humans.  Similarly, very narrow margins can be uncomfortable for reading (or holding a printed book).</p>
+        </note>
     </section>
 
     <section xml:id="latex-asymptote-links">
@@ -175,11 +194,6 @@
                     <cell>Switch</cell>
                     <cell>Default</cell>
                     <cell>Values</cell>
-                </row>
-                <row>
-                    <cell><c>latex.geometry</c></cell>
-                    <cell></cell>
-                    <cell>Any options to <c>\geometry{}</c></cell>
                 </row>
                 <row>
                     <cell><c>latex.pageref</c></cell>
