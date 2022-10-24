@@ -103,20 +103,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@*|node()" mode="extraction"/>
 </xsl:template>
 
-<!-- NB: Code between lines of hashes is cut/paste    -->
-<!-- from the LaTeX conversion.  Until we do a better -->
-<!-- job of ensuring they remain in-sync, please      -->
-<!-- coordinate the two sets of templates by hand     -->
-
-<!-- ######################################### -->
-<!-- Geometry: page shape, margins, etc            -->
-<!-- Pass a string with any of geometry's options  -->
-<!-- Default is empty and thus ineffective         -->
-<!-- Otherwise, happens early in preamble template -->
-<xsl:param name="latex.geometry" select="''"/>
-<!-- ######################################### -->
-
-
 <!-- LaTeX graphics to a standalone file for subsequent processing.     -->
 <!-- Intercept "extraction" process in extract-identity.xsl stylesheet. -->
 <xsl:template match="image[latex-image]" mode="extraction">
@@ -160,10 +146,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>,</xsl:text>
                 <xsl:value-of select="$text-height" />
                 <xsl:text>}}&#xa;</xsl:text>
-                <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
-                <xsl:if test="$latex.geometry != ''">
+                <xsl:text>%% Custom Page Layout Adjustments (use publisher page-geometry)&#xa;</xsl:text>
+                <xsl:if test="$latex-page-geometry != ''">
                     <xsl:text>\geometry{</xsl:text>
-                    <xsl:value-of select="$latex.geometry" />
+                    <xsl:value-of select="$latex-page-geometry" />
                     <xsl:text>}&#xa;</xsl:text>
                 </xsl:if>
                 <!-- ######################################### -->

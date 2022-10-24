@@ -47,12 +47,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
 <!--  -->
-<!-- Geometry: page shape, margins, etc            -->
-<!-- Pass a string with any of geometry's options  -->
-<!-- Default is empty and thus ineffective         -->
-<!-- Otherwise, happens early in preamble template -->
-<xsl:param name="latex.geometry" select="''"/>
-<!--  -->
 <!-- PDF Watermarking                    -->
 <!-- Non-empty string makes it happen    -->
 <!-- Scale works well for "CONFIDENTIAL" -->
@@ -181,11 +175,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="toc-level" select="number($toc-level-override)"/>
-
-<!-- NB: Code using $font-size and latex.geometry is also -->
-<!-- used in the latex-image extraction stylesheet. Until -->
-<!-- we do a better job of ensuring they remain in-sync,  -->
-<!-- please coordinate the two sets of templates by hand  -->
 
 <!-- font-size also dictates document class for -->
 <!-- those provided by extsizes, but we can get -->
@@ -528,10 +517,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$text-height" />
     <xsl:text>}}&#xa;</xsl:text>
-    <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
-    <xsl:if test="$latex.geometry != ''">
+    <xsl:text>%% Custom Page Layout Adjustments (use publisher page-geometry entry)&#xa;</xsl:text>
+    <xsl:if test="$latex-page-geometry != ''">
         <xsl:text>\geometry{</xsl:text>
-        <xsl:value-of select="$latex.geometry" />
+        <xsl:value-of select="$latex-page-geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex-right-alignment = 'ragged'">

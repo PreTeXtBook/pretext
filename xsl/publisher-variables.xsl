@@ -3257,6 +3257,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- preserved in other ways as part of the deprecation.     -->
 <xsl:param name="latex.font.size" select="''" />
 
+<!-- Geometry: page shape, margins, etc. Deprecated    -->
+<!--2022-10-24, non-empty triggers deprecation warning -->
+<xsl:param name="latex.geometry" select="''"/>
+
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->
