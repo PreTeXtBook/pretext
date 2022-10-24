@@ -2842,6 +2842,59 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
 
+<!-- For historical reasons, this variable has "pt" as part -->
+<!-- of its value.  A change would need to be coordinated   -->
+<!-- with every application in the -latex conversion.       -->
+<xsl:variable name="font-size">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/latex/@font-size">
+            <!-- provisional, convenience -->
+            <xsl:variable name="fs" select="$publication/latex/@font-size"/>
+            <xsl:choose>
+                <xsl:when test="($fs =  '8') or
+                                ($fs =  '9') or
+                                ($fs = '10') or
+                                ($fs = '11') or
+                                ($fs = '12') or
+                                ($fs = '14') or
+                                ($fs = '17') or
+                                ($fs = '20')">
+                    <xsl:value-of select="$fs"/>
+                    <xsl:text>pt</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
+                    <xsl:text>10pt</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- via deprecated stringparam: assumes "pt" as the unit of measure   -->
+        <!-- (this is recycled code, so no real attempt to do better)          -->
+        <xsl:when test="not($latex.font.size = '')">
+            <xsl:choose>
+                <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>10pt</xsl:text>
+                    <xsl:message>PTX:ERROR   the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- no publication file entry, no deprecated  -->
+        <!-- string parameter, so use the default value -->
+        <xsl:otherwise>
+            <xsl:text>10pt</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- LaTeX/Asymptote -->
 
 <!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
