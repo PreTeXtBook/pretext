@@ -2895,6 +2895,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Simple - just feeds into a LaTeX \geometry{} -->
+<xsl:variable name="latex-page-geometry">
+    <xsl:choose>
+        <!-- prefer publication file entry -->
+        <xsl:when test="$publication/latex/page/geometry">
+            <xsl:value-of select="$publication/latex/page/geometry"/>
+        </xsl:when>
+        <!-- deprecated string parameter in use-->
+        <xsl:when test="($latex.geometry != '')">
+            <xsl:value-of select="$latex.geometry"/>
+        </xsl:when>
+        <!-- empty is the signal to not use -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- LaTeX/Asymptote -->
 
 <!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
