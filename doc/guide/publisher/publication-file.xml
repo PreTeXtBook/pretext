@@ -237,6 +237,14 @@
                 <cline>/publication/latex/asymptote/@links</cline>
             </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
         </subsection>
+
+        <subsection xml:id="latex-draft-mode-options">
+            <title>Draft Mode</title>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@draft</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of the <latex/> draft mode.  The default is <c>no</c>.  See <xref ref="processing-author-tools"/> for more detail.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-online">
