@@ -101,18 +101,20 @@
         <p>An image described by an <tag>asymptote</tag> element will produce standalone <init>HTML</init> files as part of the convversion to <init>HTML</init> output.  For 3D images, these are interactive (rotate, scale).  If you set a base <init>URL</init> for your project (<xref ref="online-base-url"/>) and request this feature through a publisher switch, then each image in an electronic <init>PDF</init> (<xref ref="electronic-or-print"/>) will be a link to the <init>HTML</init> version. See <xref ref="latex-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
     </section>
 
-    <section>
+    <section xml:id="latex-xref-page-numbers">
         <title>Cross-References</title>
 
-        <p>In an electronic <init>PDF</init>, cross-references will be hyperlinks that take the reader to the target.  Color is used to make them visible, in addition to whatever indication a <init>PDF</init> viewer will provide on hover.  The parameter <c>latex.pageref</c> is by default <c>no</c> in this case, but may be set to <c>yes</c> to include the page number of the target in the cross-reference.</p>
+        <p>In an electronic <init>PDF</init>, cross-references will be hyperlinks that take the reader to the target.  Color is used to make them visible, in addition to whatever indication a <init>PDF</init> viewer will provide on hover.  The publication file entry controlling the use of numbers in cross-references (<xref ref="latex-xref-page-number-options"/>) is by default <c>no</c> in this case, but may be set to <c>yes</c> to include the page number of the target in the cross-reference.</p>
 
-        <p>In a print <init>PDF</init>, cross-references will not be active hyperlinks and will be the same color as the adjoining text.  The parameter <c>latex.pageref</c> is by default <c>yes</c> in this case, but may be set to <c>no</c> to not include the page number of the target in the cross-reference.</p>
+        <p>In a print <init>PDF</init>, cross-references will not be active hyperlinks and will be the same color as the adjoining text.  The publication file entry controlling the use of numbers in cross-references (<xref ref="latex-xref-page-number-options"/>) is by default <c>yes</c> in this case, but may be set to <c>no</c> to not include the page number of the target in the cross-reference.</p>
+
+        <p>See <xref ref=""/> for the syntax of specifying the use of page numbers in cross-references.</p>
     </section>
 
     <section>
         <title>Page Number Fidelity</title>
 
-        <p>If you use a print <init>PDF</init> to produce a physical book, the page numbers may be important to you and your readers.  Thus, you may desire that an electronic <init>PDF</init> have faithful page numbers.  You may have noticed from the discussion about page numbers in cross-references that because the default behavior puts page numbers in the print <init>PDF</init>, and not in the electronic <init>PDF</init>, content will not always appear on the same page for the two conversions.  The solution is simple<mdash/>use <c>latex.pageref</c> to have the two conversions behave identically in this regard.</p>
+        <p>If you use a print <init>PDF</init> to produce a physical book, the page numbers may be important to you and your readers.  Thus, you may desire that an electronic <init>PDF</init> have faithful page numbers.  You may have noticed from the discussion about page numbers in cross-references (<xref ref="latex-xref-page-numbers"/> that because the default behavior puts page numbers in the print <init>PDF</init>, and not in the electronic <init>PDF</init>, content will not always appear on the same page for the two conversions.  The solution is simple<mdash/>use a publication file to have the two conversions behave identically in this regard.</p>
     </section>
 
     <section>
@@ -194,11 +196,6 @@
                     <cell>Switch</cell>
                     <cell>Default</cell>
                     <cell>Values</cell>
-                </row>
-                <row>
-                    <cell><c>latex.pageref</c></cell>
-                    <cell>Depends</cell>
-                    <cell><c>yes</c>, <c>no</c></cell>
                 </row>
                 <row>
                     <cell><c>latex.watermark</c></cell>

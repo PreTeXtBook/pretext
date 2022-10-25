@@ -159,7 +159,7 @@
 
             <p>The conversion to <latex/> can produce a <init>PDF</init> optimized for print, or optimized for use electronically on a screen.  The<cd>
                 <cline>/publication/latex/@print</cline>
-            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.</p>
+            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.  Note that the use of page numbers in cross-references has different default behavior based on this option (which can be overidden, see <xref ref="latex-xref-page-number-options"/>).</p>
         </subsection>
 
         <subsection xml:id="latex-sides-options">
@@ -208,6 +208,14 @@
             <p>The content of the element<cd>
                 <cline>/publication/latex/page/geometry</cline>
             </cd> element will feed directly into a <latex/> <c>\geometry{}</c> element, with no modifications.  (In other words, all whitespace, such as newlines and indentation, will be preserved.)  Be sure to carefully read the advice, an example, and further detail at <xref ref="page-shape"/>.</p>
+        </subsection>
+
+        <subsection xml:id="latex-xref-page-number-options">
+            <title>Page Numbers in Cross-References</title>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@pageref</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of page numbers in cross-references (typically achieved with the <tag>xref</tag> element).  The default varies, as it is dependent on the print option (<xref ref="latex-print-options"/>).  See <xref ref="latex-xref-page-numbers"/> for more on the defaults.</p>
         </subsection>
 
         <subsection xml:id="latex-worksheet-options">
