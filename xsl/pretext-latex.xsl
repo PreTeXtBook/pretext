@@ -263,7 +263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -326,7 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -349,7 +349,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -371,7 +371,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -760,7 +760,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% pdfpages package for front and back covers as PDFs&#xa;</xsl:text>
         <xsl:text>\usepackage[</xsl:text>
         <xsl:choose>
-            <xsl:when test="$latex.draft ='yes'">
+            <xsl:when test="$b-latex-draft-mode">
                 <xsl:text>draft</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -1154,7 +1154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
         <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
-            <xsl:when test="$latex.draft ='yes'">
+            <xsl:when test="$b-latex-draft-mode">
                 <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
                 <xsl:text>\setlength{\workspacestrutwidth}{2pt}&#xa;</xsl:text>
             </xsl:when>
