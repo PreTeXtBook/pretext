@@ -196,16 +196,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Including page numbers in cross-references defaults to      -->
 <!-- 'yes' for an electronic PDF and to 'no' for a print PDF,    -->
 <!-- and of course can be switched away from the default at will -->
+<!-- $latex-pageref is a publisher variable, and so guaranteed   -->
+<!-- to be "yes", "no" or empty.                                 -->
 <!-- NB: upgrade the latex.print variable to something like this -->
 <xsl:variable name="pagerefs-option">
     <xsl:choose>
         <!-- electronic PDF -->
         <xsl:when test="not($b-latex-print)">
             <xsl:choose>
-                <xsl:when test="$latex.pageref = 'yes'">
+                <xsl:when test="$latex-pageref = 'yes'">
                     <xsl:text>yes</xsl:text>
                 </xsl:when>
-                <xsl:when test="($latex.pageref = 'no') or ($latex.pageref = '')">
+                <xsl:when test="($latex-pageref = 'no') or ($latex-pageref = '')">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -213,10 +215,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- print PDF -->
         <xsl:when test="$b-latex-print">
             <xsl:choose>
-                <xsl:when test="$latex.pageref = 'no'">
+                <xsl:when test="$latex-pageref = 'no'">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
-                <xsl:when test="($latex.pageref = 'yes') or ($latex.pageref = '')">
+                <xsl:when test="($latex-pageref = 'yes') or ($latex-pageref = '')">
                     <xsl:text>yes</xsl:text>
                 </xsl:when>
             </xsl:choose>
