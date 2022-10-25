@@ -33,7 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A blurb like this should be authored with no markup whatsoever, -->
     <!-- since it may migrate to unexpected places, like the back cover  -->
     <!-- of a printed version.  Keep it simple.                          -->
-    <blurb shelf="math">This is a book written in PreTeXt, in order to provide testing for a variety of purposes, not least a conversion to Runestone Academy.</blurb>
+    <blurb shelf="Author/Instructor Help">This is a book written in PreTeXt, in order to provide testing for a variety of purposes, not least a conversion to Runestone Academy.</blurb>
 
     <brandlogo url="http://abstract.pugetsound.edu" source="cover_aata_2014.png" />
 
