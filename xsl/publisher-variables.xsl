@@ -3303,6 +3303,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--2022-10-24, non-empty triggers deprecation warning -->
 <xsl:param name="latex.geometry" select="''"/>
 
+<!-- Page Numbers in cross-references, deprecated 2022-10-24 -->
+<xsl:param name="latex.pageref" select="''"/>
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->

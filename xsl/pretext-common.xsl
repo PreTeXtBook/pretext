@@ -10890,6 +10890,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="incorrect-use" select="($latex.geometry != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-10-24  "latex.fillin.style" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.pageref string parameter has been replaced by the  latex/@pageref  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.pageref != '')" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
