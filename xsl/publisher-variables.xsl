@@ -2911,6 +2911,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- The default for the use of page references varies, so that  -->
+<!-- particular logic is in the -latex conversion.  Here we just -->
+<!-- sanitize to "yes", "no" or empty (i.e. ignored)             -->
+<xsl:variable name="latex-pageref">
+    <xsl:choose>
+        <!-- given in publication file -->
+        <xsl:when test="$publication/latex/@pageref">
+            <xsl:choose>
+                <xsl:when test="$publication/latex/@pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the publisher file entry  latex/@pageref  should be "yes" or "no" not "<xsl:value-of select="$publication/latex/@pageref"/>".  The value is being ignored.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- given by deprecated string parameter -->
+        <xsl:when test="($latex.pageref != '')">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$latex.pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.pageref  should be "yes" or "no" not "<xsl:value-of select="$latex.pageref"/>".  The value is being ignored.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- empty if no attempt to influence -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- LaTeX/Asymptote -->
 
 <!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
