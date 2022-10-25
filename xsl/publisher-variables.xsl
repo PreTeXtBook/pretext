@@ -3355,6 +3355,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Numbers in cross-references, deprecated 2022-10-24 -->
 <xsl:param name="latex.pageref" select="''"/>
 
+<!-- Electing LaTeX draft mode, deprecated 2022-10-24 -->
+<xsl:param name="latex.draft" select="''"/>
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->

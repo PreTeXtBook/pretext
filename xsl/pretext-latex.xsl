@@ -77,14 +77,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     N.B. Some are author-defined; others are internal,    -->
 <!--     and CANNOT be used as xml:id's (will raise a warning) -->
 <!--  -->
-<!-- Draft Copies                                              -->
-<!-- Various options for working copies for authors            -->
-<!-- (1) LaTeX's draft mode                                    -->
-<!-- (2) Crop marks on letter paper, centered                  -->
-<!--     presuming geometry sets smaller page size             -->
-<!--     with paperheight, paperwidth                          -->
-<xsl:param name="latex.draft" select="'no'"/>
-<!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
 <!-- early or late                          -->
