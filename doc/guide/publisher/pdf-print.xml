@@ -108,7 +108,7 @@
 
         <p>In a print <init>PDF</init>, cross-references will not be active hyperlinks and will be the same color as the adjoining text.  The publication file entry controlling the use of numbers in cross-references (<xref ref="latex-xref-page-number-options"/>) is by default <c>yes</c> in this case, but may be set to <c>no</c> to not include the page number of the target in the cross-reference.</p>
 
-        <p>See <xref ref=""/> for the syntax of specifying the use of page numbers in cross-references.</p>
+        <p>See <xref ref="latex-xref-page-number-options"/> for the syntax of specifying the use of page numbers in cross-references.</p>
     </section>
 
     <section>
