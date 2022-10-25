@@ -2953,6 +2953,55 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Draft Copies                                              -->
+<!-- Various options for working copies for authors            -->
+<!-- (1) LaTeX's draft mode                                    -->
+<!-- (2) Crop marks on letter paper, centered                  -->
+<!--     presuming geometry sets smaller page size             -->
+<!--     with paperheight, paperwidth                          -->
+<xsl:variable name="latex-draft-mode">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@draft">
+            <xsl:choose>
+                <xsl:when test="$publication/latex/@draft = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@draft = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@draft">
+                    <xsl:message>PTX WARNING: LaTeX draft mode in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@draft"/>". Proceeding with default value: "no"</xsl:message>
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- default -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="($latex.draft != '')">
+            <xsl:choose>
+                <xsl:when test="$latex.draft = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$latex.draft = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.draft  should be "yes" or "no" not "<xsl:value-of select="$latex.draft"/>".  The default value of "no" is being used.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+       </xsl:when>
+        <!-- ho effort to specify, default to "no" -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-latex-draft-mode" select="$latex-draft-mode = 'yes'"/>
+
 <!-- LaTeX/Asymptote -->
 
 <!-- Add a boolean variable to toggle links for Asymptote images in PDF.    -->
