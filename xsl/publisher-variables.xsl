@@ -171,6 +171,75 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Watermarking -->
+<!-- Variables for watermark text (simple!), and a scale factor. -->
+<!-- Boolean variables for existence (one is deprecated LaTeX).  -->
+
+<xsl:variable name="watermark-text">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/common/watermark">
+            <xsl:value-of select="$publication/common/watermark"/>
+        </xsl:when>
+        <!-- string parameter, general -->
+        <xsl:when test="($watermark.text != '')">
+            <xsl:value-of select="$watermark.text"/>
+        </xsl:when>
+        <!-- old LaTeX-specific string parameter -->
+        <xsl:when test="($latex.watermark != '')">
+            <xsl:value-of select="$latex.watermark"/>
+        </xsl:when>
+        <!-- won't get employed if we get here, but... -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Unedited comment, copied from old code:                            -->
+<!-- watermark uses a 5cm font, which can be scaled                     -->
+<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
+<!-- and in the default body width for LaTeX                            -->
+
+<xsl:variable name="watermark-scale">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/common/watermark and $publication/common/watermark/@scale">
+            <xsl:value-of select="$publication/common/watermark/@scale"/>
+        </xsl:when>
+        <!-- string parameter, general -->
+        <xsl:when test="($watermark.text != '') and ($watermark.scale != '')">
+            <xsl:value-of select="$watermark.scale"/>
+        </xsl:when>
+        <!-- old LaTeX-specific string parameter -->
+        <xsl:when test="($latex.watermark != '') and ($latex.watermark.scale != '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <!-- employ (historical) defaults to accompany provided text-->
+        <xsl:otherwise>
+            <xsl:choose>
+                <!-- via publication file -->
+                <xsl:when test="$publication/common/watermark">
+                    <xsl:text>0.5</xsl:text>
+                </xsl:when>
+                <!-- string parameter, general -->
+                <xsl:when test="($watermark.text != '')">
+                    <xsl:text>0.5</xsl:text>
+                </xsl:when>
+                <!-- old LaTeX-specific string parameter -->
+                <xsl:when test="($latex.watermark != '')">
+                    <xsl:text>2.0</xsl:text>
+                </xsl:when>
+                <!-- won't get employed if we get here, but... -->
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- General watermarking, publication file or deprecated stringparam.  Plus  .-->
+<!-- the option of double-deprecated string parameter (indicating LaTeX only). -->
+<xsl:variable name="b-watermark" select="$publication/common/watermark or ($watermark.text != '')"/>
+<xsl:variable name="b-latex-watermark" select="$b-watermark or ($latex.watermark != '')"/>
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
