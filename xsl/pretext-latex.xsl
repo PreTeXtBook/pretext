@@ -47,26 +47,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
 <!--  -->
-<!-- PDF Watermarking                    -->
-<!-- Non-empty string makes it happen    -->
-<!-- Scale works well for "CONFIDENTIAL" -->
-<!-- or  for "DRAFT YYYY/MM/DD"          -->
-<!-- These are deprecated in favor of watermark.text and watermark.scale -->
-<!-- which are now managed in common. These still "work" for now.        -->
-<xsl:param name="latex.watermark" select="''"/>
-<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
-<xsl:param name="latex.watermark.scale" select="''"/>
-<xsl:variable name="latex-watermark-scale">
-    <xsl:choose>
-        <xsl:when test="not($latex.watermark.scale = '')">
-            <xsl:value-of select="$latex.watermark.scale"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>2.0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<!--  -->
 <!-- Author's Tools                                            -->
 <!-- Set the author-tools parameter to 'yes'                   -->
 <!-- (Documented in pretext-common.xsl)                       -->

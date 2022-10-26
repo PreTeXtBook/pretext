@@ -365,16 +365,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- text for a watermark that is centered, -->
-<!-- running at a 45 degree angle           -->
-<xsl:param name="watermark.text" select="''" />
-<xsl:variable name="b-watermark" select="not($watermark.text = '')" />
-
-<!-- watermark uses a 5cm font, which can be scaled                     -->
-<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
-<!-- and in the default body width for LaTeX                            -->
-<xsl:param name="watermark.scale" select="'0.5'" />
-
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->
@@ -10309,18 +10299,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2019-03-07  replace latex.watermark with watermark.text         -->
+    <!-- 2022-10-24  update - to publication file                        -->
     <!-- Still exists and is respected, move to Variable Bad Bank later  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-03-07'" />
-        <xsl:with-param name="message" select="'the  latex.watermark  parameter has been replaced by  watermark.text  which is effective in HTML as well as LaTeX'" />
+        <xsl:with-param name="message" select="'the  latex.watermark  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
             <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale  -->
+    <!-- 2022-10-24  update - to publication file                        -->
     <!-- Still exists and is respected, move to Variable Bad Bank later  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-03-07'" />
-        <xsl:with-param name="message" select="'the  latex.watermark.scale  parameter has been replaced by  watermark.scale  which is effective in HTML as well as LaTeX'" />
+        <xsl:with-param name="message" select="'the  latex.watermark.scale  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
             <xsl:with-param name="incorrect-use" select="($latex.watermark.scale != '')" />
     </xsl:call-template>
     <!--  -->
@@ -10902,6 +10894,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-10-24'" />
         <xsl:with-param name="message" select="'the  latex.draft string parameter has been replaced by the  latex/@draft  entry in the publication file.  We will attempt to honor your intent.'" />
         <xsl:with-param name="incorrect-use" select="($latex.draft != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.text  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.text  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.text != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.scale  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.scale  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.scale != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

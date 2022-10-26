@@ -3427,6 +3427,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Electing LaTeX draft mode, deprecated 2022-10-24 -->
 <xsl:param name="latex.draft" select="''"/>
 
+<!-- These first two are deprecated in favor of watermark.text  -->
+<!-- and watermark.scale, which in turn are deprecated in favor -->
+<!-- of publication file entry.  Double deprecation, second one -->
+<!-- on 2022-10-24.                                             -->
+<xsl:param name="latex.watermark" select="''"/>
+<xsl:param name="latex.watermark.scale" select="''"/>
+<xsl:param name="watermark.text" select="''" />
+<xsl:param name="watermark.scale" select="''" />
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->
@@ -3463,23 +3472,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="exercise.backmatter.hint" select="''" />
 <xsl:param name="exercise.backmatter.answer" select="''" />
 <xsl:param name="exercise.backmatter.solution" select="''" />
-
-<!-- These are deprecated in favor of watermark.text and watermark.scale -->
-<!-- which are now managed in common. These still "work" for now.        -->
-<!-- The default scaling factor of 2.0 is historical.                    -->
-<xsl:param name="latex.watermark" select="''"/>
-<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
-<xsl:param name="latex.watermark.scale" select="''"/>
-<xsl:variable name="latex-watermark-scale">
-    <xsl:choose>
-        <xsl:when test="not($latex.watermark.scale = '')">
-            <xsl:value-of select="$latex.watermark.scale"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>2.0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
 
