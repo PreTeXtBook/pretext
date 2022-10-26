@@ -673,7 +673,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-watermark and $heading-level = 2">
             <p class="watermark">
                 <xsl:text>Watermark text: </xsl:text>
-                <xsl:value-of select="$watermark.text"/>
+                <xsl:value-of select="$watermark-text"/>
                 <xsl:text></xsl:text>
             </p>
         </xsl:if>
@@ -7045,8 +7045,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Color rgb(204,204,204) matches LaTeX 80% grayscale.                           -->
 <xsl:variable name="watermark-svg">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="600" width="600">
-        <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark.scale}cm;">
-            <xsl:value-of select="$watermark.text"/>
+        <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark-scale}cm;">
+            <xsl:value-of select="$watermark-text"/>
         </text>
     </svg>
 </xsl:variable>
