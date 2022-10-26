@@ -145,6 +145,14 @@
         <p>There is only one mode, but it can handle a variety of <pretext/> elements in the <attr>match</attr>.  The text produced by the template will be supplied in a named <c>tcolorbox</c> style via a <c>\tcbset{}</c> command.  It is marginally more complicated than that.  <pretext/> will manage certain aspects of creating a <c>tcolorbox</c>, such as forming the <c>tcolorbox</c> <c>title</c> to be a string like <q>Example 4.5 The Chain Rule.</q>, or just <q>Example 4.6</q> when an author does not include a <pretext/> <tag>title</tag>.  As a style writer, you can change the font, color and placement of that string, but not the use of the type-name, the number, the title, or their order.  The text of your template is additive, meaning it is in addition to what the stock <pretext/> conversion provides.  Your options come last, so will be new and effective, or will replace what the base conversion to <latex/> does.  So in the example above, the base conversion to <latex/> has <c>colback=white</c> (rather than the default gray!), and this will be overridden since pink will come later.</p>
     </section>
 
+    <section>
+        <title>Preamble and Experimentation</title>
+
+        <p>Two hooks are provided to allow for arbitrary additions to the <latex/> preamble.  It should go without saying that this is for experimenting with new features and is no way supported, including, but not limited to, interactions with current <latex/> packages in use, or those added in the future.</p>
+
+        <p>Arbitrary text (<latex/>) used as the values of the string parameters <c>latex.preamble.early</c> and <c>latex.preamble.late</c> will be added to the very beginning, or very end (respectively), of the generated preamble.</p>
+    </section>
+
     <section xml:id="style-xsl-101">
         <title><init>XSL</init> 101</title>
 

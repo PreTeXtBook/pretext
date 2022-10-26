@@ -162,14 +162,6 @@
     </section>
 
     <section>
-        <title>Experimentation</title>
-
-        <p>Two hooks are provided to allow for arbitrary additions to the <latex/> preamble.  It should go without saying that this is for experimenting with new features and is no way supported, including, but not limited to, interactions with current <latex/> packages in use, or those added in the future.</p>
-
-        <p>Arbitrary text (<latex/>) used as the values of <c>latex.preamble.early</c> and <c>latex.preamble.late</c> will be added to the very beginning, or very end (respectively), of the generated preamble.</p>
-    </section>
-
-    <section>
         <title>Styling</title>
         <idx><h>style</h><h>print</h></idx>
 
