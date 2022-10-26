@@ -139,12 +139,6 @@
         </ul></p>
     </section>
 
-    <section>
-        <title>Watermarks</title>
-
-        <p>You can add a watermark to your <init>PDF</init> which will render as large, light grey text, at an angle across the page.  Use <c>latex.watermark</c> to set the text (avoid obscure characters or symbols, and do not use any <init>XML</init> markup).  Use <c>latex.watermark.scale</c> to adjust for long or short text.  The <latex/>-only <q>\\</q> will survive in the text to create multiple lines of text.  Submit a feature request if this is not flexible enough to meet a special need.</p>
-    </section>
-
     <section xml:id="latex-cover-images">
         <title>Cover Images</title>
 
@@ -196,16 +190,6 @@
                     <cell>Switch</cell>
                     <cell>Default</cell>
                     <cell>Values</cell>
-                </row>
-                <row>
-                    <cell><c>latex.watermark</c></cell>
-                    <cell></cell>
-                    <cell>Simple text, no markup</cell>
-                </row>
-                <row>
-                    <cell><c>latex.watermark.scale</c></cell>
-                    <cell><c>2.0</c></cell>
-                    <cell>Positive rational number</cell>
                 </row>
                 <row>
                     <cell><c>latex.preamble.early</c></cell>

@@ -109,6 +109,20 @@
                 </li>
             </ul></p>
         </subsection>
+
+        <subsection xml:id="common-watermark-options">
+            <title>Watermarks</title>
+            <idx><h>common option</h><h>watermark</h></idx>
+            <idx><h>watermark</h><h>common option</h></idx>
+
+            <p>The text of a watermark is given as the content of the <cd>
+                <cline>/publication/common/watermark</cline>
+            </cd>element.  An optional scale factor may be given as a positive rational number with the<cd>
+                <cline>/publication/common/watermark/@scale</cline>
+            </cd>attribute.  The default scale is <c>0.5</c>.</p>
+
+            <p>In the text itself avoid obscure characters or symbols, and do not use any markup.   Keep it simple.  When used with <latex/> output the scharacters <c>\\</c> will survive in the text to create multiple lines of text in the watermark.  This feature is implemented for <latex/> and <init>HTML</init> output.  See <xref ref="watermarks"/> for more detail and an example.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">

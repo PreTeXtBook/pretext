@@ -110,23 +110,19 @@
         <p>Notice that this example does nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source, and why they are documented here in the Publisher's Guide (<xref ref="part-publisher"/>)  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.  Note that we are phasing out these parameters in favor of the Publisher's File (see <xref ref="publication-file"/>).</p>
     </section>
 
-    <section>
+    <section xml:id="watermarks">
         <title>Watermarks</title>
 
-        <p>
-            Output can contain a <term>watermark</term><idx>watermark</idx>, which is prominent text in the background of a document.  You might use it to make a draft version (with a date?), or a CONFIDENTIAL version, or a document intended for limited distribution, such as an instructor's solution manual.
-        </p>
+        <p>Output can contain a <term>watermark</term><idx>watermark</idx>, which is prominent text in the background of a document.  You might use it to make a draft version (with a date?), or a CONFIDENTIAL version, or a document intended for limited distribution, such as an instructor's solution manual.</p>
 
-        <p>
-            To use, specify the text, and an optional scaling factor to adjust the size. For example, in the <tag>target</tag> you want this, include the following lines:
-        </p>
+        <p>In <init>PDF</init> output this text will render as large, light grey text, at an angle across the page.  <init>HTML</init> output will have repeated <init>SVG</init> images of the text below/behind the usual text.</p>
 
-        <pre>
-        <![CDATA[
-            <stringparam key="watermark.text" value="DRAFT 2034-05-25"/>
-            <stringparam key="watermakr.scale" value="0.5"/>
-            ]]>
-        </pre>
+        <p>To use, a publication file entry can be used to specify the text itself, along with a scaling factor that can be used to fill the page and prevent overruns.  Note that the text is assumed to be simple (e.g.<nbsp/>no markup) and when used with <latex/> output certain characters (e.g.<nbsp/>a percent sign) may cause problems.  Make a feature request if the handling of this text needs to be more robust.  See <xref ref="common-watermark-options"/> for exact syntax.</p>
 
+        <p>Here is an example of a specification in the publication file.<cd>
+            <cline>&lt;common&gt;</cline>
+            <cline>  &lt;watermark scale="1.2"&gt;DRAFT 2034-05-25&lt;/watermark&gt;</cline>
+            <cline>&lt;/common&gt;</cline>
+        </cd></p>
     </section>
 </chapter>

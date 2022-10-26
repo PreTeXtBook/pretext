@@ -4256,6 +4256,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <title>Justified Text</title>
                 <p>Right-justified text (an even right margin) can sometimes lead to spaced-out text that is difficult for some readers.  For print, our use of <latex/> as an intermediate format, leads to <init>PDF</init> output where right-justified text can be superior to the alternative, <term>ragged right</term> text.  For more see <xref ref="print-justification"/> and <xref ref="styling-justification"/>.</p>
             </li>
+
+            <li>
+                <title>Watermarks</title>
+                <p>If a document has a watermark (<xref ref="watermarks"/>), then a screen reader will announce its presence at the beginning of each page of <init>HTML</init> content.</p>
+            </li>
         </dl></p>
 
         <p>Here are features which are provided, but require your participation as the author.<dl width="narrow">
