@@ -19,27 +19,6 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!--
-To process this file, at the command-line issue:
-
-xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/sample-article.xml
-
-then find  "derivatives.html"  in the current working directory
-and use a web browser to view.  For PDF/print, issue:
-
-xsltproc -o derivatives.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
-
-and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
-the current working directory.
-
-Ignore any warnings, they are part of testing the warning system.
-
-To see images in your results, copy the examples/images directory
-so that your working directory has the images subdirectory.  See
-the  pretextbook.org  website for information on installing
-the xsltproc executable.
--->
-
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
@@ -5489,7 +5468,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
 
             <table xml:id="table-time-units">
                 <title>Time Units</title>
@@ -8581,7 +8560,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -12417,7 +12396,7 @@ the xsltproc executable.
                 </subsubsection>
 
                 <conclusion>
-                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
+                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, set the level for numbering theorems to <c>3</c>.  See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
 
                     <theorem xml:id="theorem-bad-one">
                         <title>Bad Numbered Theorem One</title>
@@ -12608,9 +12587,7 @@ the xsltproc executable.
         <section xml:id="ancillaries">
             <title>Ancillaries</title>
 
-            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance:<cd>
-                <cline>xsltproc -stringparam commentary yes ...</cline>
-            </cd>Other distinctions are:<ul>
+            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set the string parameter <c>commentary</c> to the value <c>yes</c>. Other distinctions are:<ul>
                 <li>Since it is elective, you need to be careful about cross-references to and from a <tag>commentary</tag>.  It is highly likely that you will want to make cross-references <em>within</em> a <tag>commentary</tag> <em>pointing to</em> other portions of your text, and this is always a good idea.  You will want to avoid making cross-references <em>to</em> a <tag>commentary</tag> from other parts of the text, with the exception of a cross-reference that originates <em>within</em> some <tag>commentary</tag>.</li>
                 <li>Numbered items are prohibited within a <tag>commentary</tag>, such as a <tag>figure</tag> or a <tag>theorem</tag>.  Doing so would disrupt consecutive numbering in different versions, with or without, <tag>commentary</tag> included.  Numbered equations are not prohibited in the schema, but should definitely be avoided anyway.</li>
             </ul></p>
