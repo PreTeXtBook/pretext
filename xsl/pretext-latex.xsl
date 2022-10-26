@@ -1736,29 +1736,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
     <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
     <!-- was at v1.2, 2015-02-19.                                     -->
-    <!-- latex.watermark and latex.watermark.scale are deprecated,    -->
-    <!-- but effort is made here so they still work for now           -->
     <xsl:if test="$b-watermark or $b-latex-watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-watermark">
-                <xsl:value-of select="$watermark.text" />
-            </xsl:when>
-            <xsl:when test="$b-latex-watermark">
-                <xsl:value-of select="$latex.watermark" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:value-of select="$watermark-text" />
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkScale{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-watermark">
-                <xsl:value-of select="$watermark.scale" />
-            </xsl:when>
-            <xsl:when test="$b-latex-watermark">
-                <xsl:value-of select="$latex-watermark-scale" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:value-of select="$watermark-scale" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$author-tools-new = 'yes'" >
