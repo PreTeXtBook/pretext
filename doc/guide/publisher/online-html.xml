@@ -11,7 +11,7 @@
     <title>Conversion to Online HTML</title>
 
     <introduction>
-        <p>This chapter describes way a publisher can adjust the presentation of <pretext/> content in an inline format, without actually changing that content.  Similar to the case for <latex/> conversion (<xref ref="pdf-print"/>) there is a variety of options which may be configured.  As of 2020-05-30 we are transitioning away from command-line string parameters (<xref ref="processing-parameters"/>) to using a publication file (<xref ref="publication-file"/>), which is simultaneously being documented carefully.  During the transition you can explore <c>xsl/pretext-html.xsl</c> by searching on the use of <tag>xsl:param</tag> at the outermost level (i.e. starting in column 1).</p>
+        <p>This chapter describes way a publisher can adjust the presentation of <pretext/> content in an inline format, without actually changing that content.  Similar to the case for <latex/> conversion (<xref ref="pdf-print"/>) there is a variety of options which may be configured.  As of 2022-10-24 we are transitioning away from string parameters (<xref ref="publisher-string-parameters"/>) to using a publication file (<xref ref="publication-file"/>), which is simultaneously being documented carefully.  During the transition you can explore <c>xsl/pretext-html.xsl</c> by searching on the use of <tag>xsl:param</tag> at the outermost level (i.e. starting in column 1).</p>
     </introduction>
 
     <section xml:id="html-publisher-options">

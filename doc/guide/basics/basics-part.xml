@@ -741,7 +741,7 @@
         answers, and solutions appear
         (at all).
         Check <xref
-	ref="processing-publisher-stringparam"
+	ref="publisher-string-parameters"
 	text="type-global" /> for information about <c>stringparam</c>s.
       </p>
 

@@ -20,7 +20,11 @@
         <title>Publication File</title>
         <idx><h>publication file</h></idx> <idx><h>publisher file</h><see>publication file</see></idx>
 
-        <p>As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publication file</term>. Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publication-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
+        <p>A key concept when using <pretext/> to describe your writing project is that an author should concentrate on <em>content</em> and then <em>later</em> a publisher can concentrate on <em>presentation</em>.  (Of course, many <pretext/> authors are also their publisher, making this distinction more difficult than when a professional publisher was a necessity).</p>
+
+        <p>We isolate these publisher decisions in a file we call a <term>publication file</term>.  Generally, use of this file will change <em>how</em> words look, or are arranged, on the page, but will not change the author's words <em>themselves</em>.  some software might call this a <q>configuration file</q>, but we think it is very important to indicate its role in the publication process.</p>
+
+        <p>In tnis section, we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publication-file-reference"/>.</p>
 
         <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.  Avoid using spaces in the filename, even if your operating system encourages it.</p>
 
@@ -36,14 +40,7 @@
             </publication>]]>
         </pre>
 
-        <p>
-            When using the CLI, the path to a publication file must be specified in the project manifest in the <tag>publication</tag> element for each <tag>target</tag>.
-        </p>
-        <aside>
-        <p>To employ the file using <c>xsltproc</c> you use a string parameter (<xref ref="processing-parameters"/>) named <c>publisher</c>.  This should have a path that is relative to the main file for the document.  For example, assuming <c>pod.xml</c> and <c>fauna.xml</c> are in the same directory<cd>
-            <cline>xsltproc -stringparam publisher pod.xml pretext-html.xsl aota.xml</cline>
-        </cd>This file should reduce the many other string parameters in use, and reduce the need for extra <init>XSL</init> files (<xref ref="processing-thin-xsl"/>).</p>
-        </aside>
+        <p>When using the CLI (<xref ref="processing-CLI"/>), the path to a publication file must be specified in the project manifest in the <tag>publication</tag> element for each <tag>target</tag>.</p>
     </section>
 
     <section xml:id="publisher-levels">
@@ -94,20 +91,6 @@
         <p>This is a good example of settings you may wish to employ differently for different output.  Since <init>HTML</init> output automatically puts these components into knowls (<xref ref="knowled-content"/>), you may be less concerned about having them visible as part of the exercise itself.  Conversely, for PDF/print output, you may wish exercise components to only be visible at the end of a book.  Note that migrating solutions to another location is accomplished with a <tag>solutions</tag> specialized division (<xref ref="topic-solutions-division"/>).</p>
 
         <p>Finally, these settings are observed by the stylesheet which creates a solution manual (see <xref ref="solution-manual"/>).  This might explain why controlling the visibility of a <tag>statement</tag> is of interest.</p>
-    </section>
-
-    <section xml:id="processing-parameters">
-        <title>Processing Parameters</title>
-
-        <p>Some of the options for different conversions are accomplished by <term>string parameters</term>.  You can set these in the project manifest using, for example, <tag>stringparam key="latex.font.size" value="14pt"</tag>.  This will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
-
-        <aside>
-            <p>
-                To feed such a string the <c>xsltproc</c>, you would enter <c>xsltproc -stringparam latex.font.size "14pt" pretext-latex.xsl fauna.xml</c>.
-            </p>
-        </aside>
-
-        <p>Notice that this example does nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source, and why they are documented here in the Publisher's Guide (<xref ref="part-publisher"/>)  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.  Note that we are phasing out these parameters in favor of the Publisher's File (see <xref ref="publication-file"/>).</p>
     </section>
 
     <section xml:id="watermarks">

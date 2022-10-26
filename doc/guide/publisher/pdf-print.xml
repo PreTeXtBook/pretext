@@ -173,14 +173,13 @@
         <title>Styling</title>
         <idx><h>style</h><h>print</h></idx>
 
-
         <p>Note that some of these switches are about <em>style</em>.  There are many more ways to influence the style of the <latex/> output, see <xref ref="latex-styles"/>.</p>
     </section>
 
     <section>
         <title>Switch Reference</title>
 
-        <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.  See <xref ref="processing-parameters"/> for more detail.</p>
+        <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.  See <xref ref="publisher-extra-stylesheet"/> for more detail.</p>
 
         <table>
             <title>Options for <latex/> Conversion</title>
