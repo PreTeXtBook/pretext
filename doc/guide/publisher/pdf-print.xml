@@ -176,34 +176,6 @@
         <p>Note that some of these switches are about <em>style</em>.  There are many more ways to influence the style of the <latex/> output, see <xref ref="latex-styles"/>.</p>
     </section>
 
-    <section>
-        <title>Switch Reference</title>
-
-        <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.  See <xref ref="publisher-extra-stylesheet"/> for more detail.</p>
-
-        <table>
-            <title>Options for <latex/> Conversion</title>
-
-            <tabular>
-                <row bottom="medium">
-                    <cell>Switch</cell>
-                    <cell>Default</cell>
-                    <cell>Values</cell>
-                </row>
-                <row>
-                    <cell><c>latex.preamble.early</c></cell>
-                    <cell></cell>
-                    <cell>Arbitrary <latex/></cell>
-                </row>
-                <row>
-                    <cell><c>latex.preamble.late</c></cell>
-                    <cell></cell>
-                    <cell>Arbitrary <latex/></cell>
-                </row>
-            </tabular>
-        </table>
-    </section>
-
     <section xml:id="latex-file">
         <title><latex /> File</title>
 
