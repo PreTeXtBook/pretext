@@ -614,20 +614,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <!-- "video" can be a "figure", and "program" can be in a -->
         <!-- "listing", but the two situations are similar enough -->
-        <!-- to combine and work with a generic parent/enclosure  -->
-        <xsl:choose>
-            <xsl:when test="parent::figure|parent::listing">
-                <xsl:variable name="enclosure" select="parent::*"/>
-                <xsl:text>: </xsl:text>
-                <xsl:apply-templates select="$enclosure" mode="type-name"/>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="$enclosure" mode="number"/>
+        <!-- to combine and work with a generic parent/enclosure. -->
+        <!-- This could well be empty if inline objects.          -->
+        <xsl:variable name="enclosure" select="parent::figure|parent::listing"/>
+        <xsl:variable name="b-title" select="boolean(title)"/>
+        <xsl:variable name="b-enclosure" select="boolean($enclosure)"/>
+        <!-- more coming, use a separator -->
+        <xsl:if test="$b-title or $b-enclosure">
+            <xsl:text>: </xsl:text>
+        </xsl:if>
+        <!-- object's title is "closer" (or may be only  -->
+        <!-- possible identification if standalone) -->
+        <xsl:if test="$b-title">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+        <!-- if an abundance, use a separator -->
+        <xsl:if test="$b-title and $b-enclosure">
+            <xsl:text>; </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-enclosure">
+            <xsl:apply-templates select="$enclosure" mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="$enclosure" mode="number"/>
+            <xsl:if test="$enclosure/title">
                 <xsl:text> </xsl:text>
                 <xsl:apply-templates select="$enclosure" mode="title-full"/>
-            </xsl:when>
-            <!-- maybe YouTube ID, or @label -->
-            <xsl:otherwise/>
-        </xsl:choose>
+            </xsl:if>
+        </xsl:if>
+        <!-- last ditch effor for a YouTube video -->
+        <xsl:if test="self::video[@youtube] and not($b-title) and not($b-enclosure)">
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="@youtube"/>
+        </xsl:if>
     </label>
 </xsl:template>
 
