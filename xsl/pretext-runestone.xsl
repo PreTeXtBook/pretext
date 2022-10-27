@@ -591,61 +591,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- there is little to grab onto for a label in a report for an -->
 <!-- instructor.  So we provide examination of an enclosing      -->
 <!-- figure ("video") or listing ("program").                    -->
-<!-- TODO: refactor to combine these next two templates          -->
 
-<xsl:template match="video[@youtube]" mode="runestone-manifest-label">
+<xsl:template match="video[@youtube]|program[((@interactive = 'codelens') or (@interactive = 'activecode')) and not(parent::exercise)]" mode="runestone-manifest-label">
     <label>
-        <xsl:apply-templates select="." mode="type-name"/>
+        <!-- three ways to get a type-name -->
         <xsl:choose>
-            <xsl:when test="parent::figure">
-                <xsl:variable name="enclosing-figure" select="parent::figure"/>
-                <xsl:text>: </xsl:text>
-                <xsl:apply-templates select="$enclosing-figure" mode="type-name"/>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="$enclosing-figure" mode="number"/>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="$enclosing-figure" mode="title-full"/>
+            <xsl:when test="self::video[@youtube]">
+                <xsl:apply-templates select="." mode="type-name"/>
             </xsl:when>
-            <!-- maybe YouTube ID, or @label -->
-            <xsl:otherwise/>
-        </xsl:choose>
-    </label>
-</xsl:template>
-
-<xsl:template match="program[((@interactive = 'codelens') or (@interactive = 'activecode')) and not(parent::exercise)]" mode="runestone-manifest-label">
-    <label>
-        <!-- switch on two variants of coding activities -->
-        <xsl:choose>
-            <xsl:when test="@interactive = 'codelens'">
+            <xsl:when test="self::program[@interactive = 'codelens']">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'program-codelens'" />
                     <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="@interactive = 'activecode'">
+            <xsl:when test="self::program[@interactive = 'activecode']">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'program-activecode'" />
                     <xsl:with-param name="lang" select="$document-language"/>
                 </xsl:call-template>
             </xsl:when>
         </xsl:choose>
+        <!-- "video" can be a "figure", and "program" can be in a -->
+        <!-- "listing", but the two situations are similar enough -->
+        <!-- to combine and work with a generic parent/enclosure  -->
         <xsl:choose>
-            <xsl:when test="parent::listing">
-                <xsl:variable name="enclosing-listing" select="parent::listing"/>
+            <xsl:when test="parent::figure|parent::listing">
+                <xsl:variable name="enclosure" select="parent::*"/>
                 <xsl:text>: </xsl:text>
-                <xsl:apply-templates select="$enclosing-listing" mode="type-name"/>
+                <xsl:apply-templates select="$enclosure" mode="type-name"/>
                 <xsl:text> </xsl:text>
-                <xsl:apply-templates select="$enclosing-listing" mode="number"/>
+                <xsl:apply-templates select="$enclosure" mode="number"/>
                 <xsl:text> </xsl:text>
-                <xsl:apply-templates select="$enclosing-listing" mode="title-full"/>
+                <xsl:apply-templates select="$enclosure" mode="title-full"/>
             </xsl:when>
             <!-- maybe YouTube ID, or @label -->
             <xsl:otherwise/>
         </xsl:choose>
     </label>
 </xsl:template>
-
-
 
 <!-- Exercises to the Runestone manifest -->
 <!--   - every True/False "exercise"                  -->
