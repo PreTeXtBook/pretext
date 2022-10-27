@@ -208,16 +208,16 @@
         <title>Native Search</title>
         <idx><h>search</h><h>native</h></idx>
 
-        <p>Note: as of 2022-10-03 we have client-side search supported natively by a Javascript library.  Development and support will favor this approach over our legacy support for an online service (<xref ref="google-search"/>).</p>
+        <p>Client-side search is supported natively by a Javascript library.  Search results are tuned to leverage the <em>structure</em> of your <pretext/> project.  As such, as of 2022-10-27, development and support will favor this approach over our legacy support for an online service (<xref ref="google-search"/>).</p>
 
-        <p>Employing a switch in the publication file will provide a search box and all the supporting infrastructure.  See <xref ref="online-search-options"/> for details.</p>
+        <p>Employing a switch in the publication file will provide search boxes (top banner, lower-right corner) and all the supporting infrastructure.  See <xref ref="online-search-options"/> for details.</p>
     </section>
 
     <section xml:id="google-search">
         <title>Google Search</title>
         <idx><h>search</h><h>Google</h></idx>
 
-        <p>Note: as of 2022-10-03 we have search supported by an online service from Google and a client-side (<q>native</q>)version supported by Javascript (<xref ref="native-search"/>).  Development and support will favor the latter.</p>
+        <p>Note: as of 2022-10-27 we have search supported by an online service from Google and a client-side (<q>native</q>)version supported by Javascript (<xref ref="native-search"/>).  Development and support will favor the latter.</p>
 
         <p>Search facilities can be enabled through <url href="https://cse.google.com/cse" visual="cse.google.com/cse">Google Custom Search Engine</url><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions have been updated as of 2020-10-01.</p>
 

@@ -553,7 +553,7 @@
             <p>The<cd>
                 <cline>/publication/html/search</cline>
             </cd>element can have the following attributes:<ul>
-                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  This is search provided natively.</li>
+                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  The default value is<ellipsis/><c>default</c>.  This is search provided natively.</li>
                 <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.  Setting this attribute to a non-empty string is the signal to add the relevant code for a search box in the masthead.</li>
             </ul>Note that if you elect both native search and Google search the two search boxes will overlay each other and one will not be usable.  See <xref ref="native-search"/> and <xref ref="google-search"/> (respectively) for more.</p>
         </subsection>
