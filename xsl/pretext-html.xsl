@@ -10689,7 +10689,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="syntax-highlight-header"/>
+            <xsl:call-template name="syntax-highlight"/>
             <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="native-search-box-js" />
             <xsl:call-template name="pretext-js" />
@@ -10787,7 +10787,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </body>
@@ -12526,14 +12525,9 @@ TODO:
 
 
 <!-- Program Listings highlighted by Prism -->
-<xsl:template name="syntax-highlight-header">
+<xsl:template name="syntax-highlight">
     <xsl:if test="$b-has-program">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template name="syntax-highlight-footer">
-    <xsl:if test="$b-has-program">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
     </xsl:if>
