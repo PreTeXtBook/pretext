@@ -644,6 +644,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- last ditch effor for a YouTube video -->
         <xsl:if test="self::video[@youtube] and not($b-title) and not($b-enclosure)">
             <xsl:text>: </xsl:text>
+            <!-- need to know Runestone CSS to make this code/monospace -->
             <xsl:value-of select="@youtube"/>
         </xsl:if>
     </label>
