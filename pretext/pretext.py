@@ -2103,6 +2103,117 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     subprocess.run(liblouis_cmd)
     log.info("BRF file deposited as {}".format(final_brf))
 
+#!/usr/bin/env python3
+
+# Author: Alexei Kolesnikov
+
+## 2022-05-28. This is a script to split a long brf document
+## that contains many chapters into shorter brf files with a
+## single chapter each.
+## The script is not comprehensive: it makes a number of assumptions
+## about the brf document.
+
+## Assumptions: Chapter titles are at the top of a page,
+## The structure of the chapter title is expected to be:
+## "      ,*apt} #ah ,9tegral ,doma9s" or
+## ",*apt} #ai ,lattices & ,bool1n ,algebras"
+##
+## That is, a number of blank spaces (possibly 0 blank spaces);
+## followed by ",*apt} ", followed by the number indicator and a number.
+## The number of the chapter is followed by a space.
+## The first chapter is Chapter 1; the numbering is consecutive after that.
+
+## There are limited checks to let the user know when something goes wrong.
+
+import re
+import argparse
+ 
+
+
+brf_numbers = 'abcdefghij'
+num_numbers = '1234567890'
+
+brf_to_num_dict = dict(zip(brf_numbers,num_numbers))
+num_to_brf_dict = dict(zip(num_numbers,brf_numbers))
+
+def brf_to_num(string):
+    out = ''
+    for char in string:
+        out += brf_to_num_dict[char]
+    return(int(out))
+
+def num_to_brf(num):
+    out = ''
+    for char in str(num):
+        out += num_to_brf_dict[char]
+    return(out)
+
+
+def split_brf(filename):
+    f = open(filename,'r')
+
+    chunk_counter = 0
+    chapter_counter = 0
+    out = []
+
+    # Lines from the big brf file are stored until the next chapter heading is read
+    # When the new chapter heading is read, the stored lines are written in a file.
+
+    for line in f.readlines():
+        if len(re.findall("\f[ ]{0,10}",line))>0 and \
+           len(re.findall(",\*apt\}",line))>0:
+            m = re.search('#(.+?) ',line)
+            num = brf_to_num(m.group(1))
+
+            if chunk_counter == 0: # If this is the first chapter that we see
+                print(f"Material before Chapter {num} will be in the file chunk0.brf")
+                if num != 1:
+                    print(f"The first chapter is not Chapter 1, it is Chapter {num}.")
+                    chapter_counter = num - 1 # To make it work with the rest of the code
+            else:
+                print(f"Chapter {chapter_counter} will be in the file chunk{chunk_counter}.brf")
+
+            if num != chapter_counter + 1:
+                print(f"Expected Chapter {chapter_counter+1}, but have Chapter {num} instead.")
+                print("Either chapters are not consecutively numbered or something did not parse correctly")
+                chapter_counter = num
+            else:
+                chapter_counter += 1
+
+            if verbose:
+                print(line)
+
+            out_filename = "chunk"+str(chunk_counter)+".brf"
+
+            with open(out_filename,'w') as g:
+                g.writelines(out)
+            out = [line]
+            chunk_counter += 1
+        else:
+            out.append(line)
+
+    # And now writing the last chunk to the file:
+    if chunk_counter == 0: # If there are no chapters found
+        print("Did not find any chapters, they may be formatted in an unexpected way.")
+    else:
+        print(f"Chapter {chapter_counter} will be in the file chunk{chunk_counter}.brf")
+    out_filename = "chunk"+str(chunk_counter)+".brf"
+    with open(out_filename,'w') as g:
+        g.writelines(out)
+
+    f.close()
+
+parser = argparse.ArgumentParser(description="Split a long brf file into chapters",
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("-v", "--verbose", action="store_true", help="verbose output")
+parser.add_argument("long_brf", help="Long brf file to be split")
+args = vars(parser.parse_args())
+
+long_brf = args["long_brf"]
+verbose = args["verbose"]
+
+split_brf(long_brf)
+
 
 ####################
 # Conversion to EPUB
