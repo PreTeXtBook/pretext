@@ -2103,6 +2103,8 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     subprocess.run(liblouis_cmd)
     log.info("BRF file deposited as {}".format(final_brf))
 
+    split_brf(final_brf)
+
 #!/usr/bin/env python3
 
 # Author: Alexei Kolesnikov
@@ -2125,11 +2127,6 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
 
 ## There are limited checks to let the user know when something goes wrong.
 
-import re
-import argparse
- 
-
-
 brf_numbers = 'abcdefghij'
 num_numbers = '1234567890'
 
@@ -2150,7 +2147,11 @@ def num_to_brf(num):
 
 
 def split_brf(filename):
-    f = open(filename,'r')
+    # A stray U+A0 appears in the Table of Contents heading,
+    # and would appear to be a liblooius bug.  Once sorted,
+    # perhaps the encoding should be "ascii" with a try/except
+    # repreating a "UnicodeDecodeError" exception
+    f = open(filename,'r', encoding="latin-1")
 
     chunk_counter = 0
     chapter_counter = 0
@@ -2203,16 +2204,7 @@ def split_brf(filename):
 
     f.close()
 
-parser = argparse.ArgumentParser(description="Split a long brf file into chapters",
-                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("-v", "--verbose", action="store_true", help="verbose output")
-parser.add_argument("long_brf", help="Long brf file to be split")
-args = vars(parser.parse_args())
-
-long_brf = args["long_brf"]
-verbose = args["verbose"]
-
-split_brf(long_brf)
+verbose = True
 
 
 ####################
