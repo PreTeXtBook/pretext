@@ -12607,9 +12607,24 @@ TODO:
     <xsl:if test="$has-native-search">
         <div id="searchresultsplaceholder" style="display: none">
             <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
-            <h2>Search Results: <span id="searchterms"></span></h2>
+            <h2>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'search-results-heading'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+                <xsl:text>: </xsl:text>
+                <span id="searchterms"></span>
+            </h2>
             <!-- div#searchempty is not visible when there are results -->
-            <div id="searchempty"><span>No results.</span></div>
+            <div id="searchempty">
+                <span>
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'no-search-results'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
+                    </xsl:call-template>
+                    <xsl:text>.</xsl:text>
+                </span>
+            </div>
             <ol id="searchresults">
             </ol>
         </div>

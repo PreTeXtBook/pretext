@@ -234,7 +234,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This phrase should suggest that PreTeXt is the source -->
     <!-- language that makes a particular output possible      -->
     <localization string-id='authored'>Authored in PreTeXt</localization>
-    <!-- Parts of memos and letters -->
+    <!-- Search Results display/dialog -->
+    <!-- The result of a search as part of HTML output will throw up       -->
+    <!-- an overlay window with the search results.  "Search Results"      -->
+    <!-- is like a heading.  It renders like "Search Results: algorithm".  -->
+    <!-- When a reader uses a term that produces no results (perhaps they  -->
+    <!-- misspell the search term) then they get a message to that effect. -->
+    <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
+    <localization string-id='search-results-heading'>Search Results</localization>
+    <!-- Short phrase, no punctuation -->
+    <localization string-id='no-search-results'>No results</localization>
+   <!-- Parts of memos and letters -->
     <localization string-id='to'>To</localization>
     <localization string-id='from'>From</localization>
     <localization string-id='subject'>Subject</localization>
