@@ -12608,6 +12608,8 @@ TODO:
         <div id="searchresultsplaceholder" style="display: none">
             <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
             <h2>Search Results: <span id="searchterms"></span></h2>
+            <!-- div#searchempty is not visible when there are results -->
+            <div id="searchempty"><span>No results.</span></div>
             <ol id="searchresults">
             </ol>
         </div>
