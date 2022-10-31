@@ -89,7 +89,7 @@
             <li>Subtract quarter-inch top and bottom margins to obtain text height</li>
         </ol>Then you can provide the <c>geometry</c> package the overall size as the <c>papersize</c> and the text width and text height as the <c>total</c> size of the body, resulting in equal (tight) margins all around, and good use of limited screen real estate.  These parameters create a <init>PDF</init> that is very legible on a larger smart phone, and for fine detail, rotating the device to landscape works well.  Really.</p>
 
-        <note>
+        <note xml:id="best-practice-too-much-text">
             <title>Avoid Too Much Text on a Printed Page</title>
             <p>With freedom comes responsibility.  Resist the temptation to pack in as much text on the page as you can.  <pretext/> varies the width of the text in reaction to the font size and is already very close to the maximum number of characters per line for comfortable reading by humans.  Similarly, very narrow margins can be uncomfortable for reading (or holding a printed book).</p>
         </note>
