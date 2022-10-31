@@ -29,6 +29,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <search variant="default"/>
     </html>
 
+    <latex font-size="10">
+        <page>
+            <geometry>letterpaper,total={6.5in,9in}</geometry>
+        </page>
+    </latex>
+
     <!-- Relative path, relative to "main" source file -->
     <source webwork-problems="webwork-representations.xml">
         <directories external="external" generated="generated"/>
