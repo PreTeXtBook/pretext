@@ -74,7 +74,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:choose>
         <xsl:when test="$subtree=''">
-            <xsl:apply-templates select="$root" mode="extraction"/>
+            <xsl:apply-templates select="$root" mode="extraction-wrapper"/>
         </xsl:when>
         <xsl:otherwise>
             <!-- Context is root of *original* source as we are in the entry template. -->
@@ -85,10 +85,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="not($subtree-root)">
                     <xsl:message terminate="yes">PTX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree"/>") for restriction to a subtree does not exist.  Quitting...</xsl:message>
                 </xsl:if>
-                <xsl:apply-templates select="$subtree-root" mode="extraction"/>
+                <xsl:apply-templates select="$subtree-root" mode="extraction-wrapper"/>
             </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="extraction-wrapper">
+    <xsl:apply-templates select="." mode="extraction"/>
 </xsl:template>
 
 <!-- Traverse the tree,       -->
