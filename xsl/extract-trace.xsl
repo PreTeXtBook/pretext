@@ -45,10 +45,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<xsl:template match="/">
-    <xsl:apply-imports />
-</xsl:template>
-
 <!-- YouTube ID, and internal id as a comma-separated pair per line -->
 <xsl:template match="program[@interactive = 'codelens']" mode="extraction">
     <xsl:apply-templates select="." mode="runestone-id"/>

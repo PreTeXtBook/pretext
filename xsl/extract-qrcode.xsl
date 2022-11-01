@@ -43,10 +43,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<xsl:template match="/">
-    <xsl:apply-imports />
-</xsl:template>
-
 <!-- Are filters here irrelevant?  Just for the implementation of "static-url"? -->
 <xsl:template match="audio[@source|@href]|video[@source|@href|@youtube|@youtubeplaylist|@vimeo]|interactive" mode="extraction">
     <xsl:apply-templates select="." mode="static-url"/>

@@ -43,10 +43,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<xsl:template match="/">
-    <xsl:apply-imports />
-</xsl:template>
-
 <!-- YouTube ID, and internal id as a comma-separated pair per line -->
 <xsl:template match="video[@youtube]" mode="extraction">
     <!-- replace commas with spaces, then normalize space,                       -->
