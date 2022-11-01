@@ -152,6 +152,10 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # SVG, MathML, and PNG are visual and we help authors move punctuation into
     # displays, but not into inline versions.  Nemeth braille and speech are not,
     # so we leave punctuation outside.
+    # 2022-11-01: extraction stylesheet now supports a subtree root,
+    # which we could pass from the interface, into this function, then
+    # into the string parameters.  However, we don't see a real need yet
+    # for this, so we just leave this comment instead.
     if math_format in ["svg", "mml", "kindle"]:
         punctuation = "display"
     elif math_format in ["nemeth", "speech"]:
