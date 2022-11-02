@@ -2126,100 +2126,131 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
         cfg = liblouis_cfg + "," + liblouis_electronic_cfg
     else:
         raise ValueError("PTX:BUG: braille page format not recognized")
-    final_brf = get_output_filename(xml_source, out_file, dest_dir, ".brf")
+
+    # Build a BRF in the *temporary* directory: final or chunkable
+    temp_brf = os.path.join(tmp_dir, "temporary.brf")
     liblouis_exec_cmd = get_executable_cmd("liblouis")
     msg = "applying liblouis to {} with configurations {}, creating BRF {}"
-    log.debug(msg.format(liblouis_xml, cfg, final_brf))
-    liblouis_cmd = liblouis_exec_cmd + ["-f", cfg, liblouis_xml, final_brf]
-
+    log.debug(msg.format(liblouis_xml, cfg, temp_brf))
+    liblouis_cmd = liblouis_exec_cmd + ["-f", cfg, liblouis_xml, temp_brf]
     subprocess.run(liblouis_cmd)
-    log.info("BRF file deposited as {}".format(final_brf))
 
-    split_brf(final_brf)
+    # chunk level is either '0' or '1' (exclusive "if")
+    if chunk_level == '0':
+        # monolithic file
+        final_brf = get_output_filename(xml_source, out_file, dest_dir, ".brf")
+        shutil.copyfile(temp_brf, final_brf)
+        log.info("Single BRF file deposited as {}".format(final_brf))
+    if chunk_level == '1':
+        # chunked into chapters
+        # directory switch could be moved to split routine,
+        # or it could be done in temporary directory and copied out
+        os.chdir(dest_dir)
+        _split_brf(temp_brf)
+        log.info("BRF file chunked and deposited in {}".format(dest_dir))
 
-#!/usr/bin/env python3
+def _split_brf(filename):
+    """Decompose a BRF file for a book into multiple files of chapters"""
 
-# Author: Alexei Kolesnikov
+    # Original author: Alexei Kolesnikov, 2022-05-28
+    # Incorporation into pretext/pretext script: Rob Beezer, 2022-10-28
 
-## 2022-05-28. This is a script to split a long brf document
-## that contains many chapters into shorter brf files with a
-## single chapter each.
-## The script is not comprehensive: it makes a number of assumptions
-## about the brf document.
+    # Comments from original version:
+    # This is a script to split a long brf document
+    # that contains many chapters into shorter brf files with a
+    # single chapter each.  The script is not comprehensive:
+    # it makes a number of assumptions about the brf document.
+    #
+    # Assumptions: Chapter titles are at the top of a page,
+    # The structure of the chapter title is expected to be:
+    # "      ,*apt} #ah ,9tegral ,doma9s" or
+    # ",*apt} #ai ,lattices & ,bool1n ,algebras"
+    #
+    # That is, a number of blank spaces (possibly 0 blank spaces);
+    # followed by ",*apt} ", followed by the number indicator and a number.
+    # The number of the chapter is followed by a space.
+    # The first chapter is Chapter 1; the numbering is consecutive after that.
+    #
+    # There are limited checks to let the user know when something goes wrong.
 
-## Assumptions: Chapter titles are at the top of a page,
-## The structure of the chapter title is expected to be:
-## "      ,*apt} #ah ,9tegral ,doma9s" or
-## ",*apt} #ai ,lattices & ,bool1n ,algebras"
-##
-## That is, a number of blank spaces (possibly 0 blank spaces);
-## followed by ",*apt} ", followed by the number indicator and a number.
-## The number of the chapter is followed by a space.
-## The first chapter is Chapter 1; the numbering is consecutive after that.
+    # Assumes 1000 or fewer chapters
+    # Will fail with a Chapter 0
 
-## There are limited checks to let the user know when something goes wrong.
+    # Utilities to convert BRF digits into ASCII digits
+    brf_numbers = 'abcdefghij'
+    num_numbers = '1234567890'
+    brf_to_num_dict = dict(zip(brf_numbers,num_numbers))
+    num_to_brf_dict = dict(zip(num_numbers,brf_numbers))
 
-brf_numbers = 'abcdefghij'
-num_numbers = '1234567890'
+    def brf_to_num(string):
+        out = ''
+        for char in string:
+            out += brf_to_num_dict[char]
+        return(int(out))
 
-brf_to_num_dict = dict(zip(brf_numbers,num_numbers))
-num_to_brf_dict = dict(zip(num_numbers,brf_numbers))
+    def num_to_brf(num):
+        out = ''
+        for char in str(num):
+            out += num_to_brf_dict[char]
+        return(out)
 
-def brf_to_num(string):
-    out = ''
-    for char in string:
-        out += brf_to_num_dict[char]
-    return(int(out))
+    # When multiple files are produced, their filenames have
+    # "chunk numbers" in them, which should usually be chapter numbers
+    # format specifier: 0 = leading zero, 3 = width, d = integer
+    # Assumes fewer than 1000 chapters
+    # TODO: count chapters w/ lxml, log base 10, replace 3
+    filename_template = "chunk{:03d}.brf"
 
-def num_to_brf(num):
-    out = ''
-    for char in str(num):
-        out += num_to_brf_dict[char]
-    return(out)
-
-
-def split_brf(filename):
     # A stray U+A0 appears in the Table of Contents heading,
     # and would appear to be a liblooius bug.  Once sorted,
     # perhaps the encoding should be "ascii" with a try/except
     # repreating a "UnicodeDecodeError" exception
     f = open(filename,'r', encoding="latin-1")
 
+    # Lines from the big brf file are stored until the next chapter heading is read
+    # When the new chapter heading is read, the stored lines are written in a file.
+
     chunk_counter = 0
     chapter_counter = 0
     out = []
 
-    # Lines from the big brf file are stored until the next chapter heading is read
-    # When the new chapter heading is read, the stored lines are written in a file.
-
     for line in f.readlines():
-        if len(re.findall("\f[ ]{0,10}",line))>0 and \
-           len(re.findall(",\*apt\}",line))>0:
+        if re.findall("\f[ ]{0,10}",line) and re.findall(",\*apt\}",line):
             m = re.search('#(.+?) ',line)
             num = brf_to_num(m.group(1))
 
             if chunk_counter == 0: # If this is the first chapter that we see
-                print(f"Material before Chapter {num} will be in the file chunk0.brf")
+                msg = "Material before Chapter {} will be in the file {}"
+                log.debug(msg.format(num, filename_template.format(chunk_counter)))
                 if num != 1:
-                    print(f"The first chapter is not Chapter 1, it is Chapter {num}.")
+                    log.debug("The first chapter is not Chapter 1, it is Chapter {num}.".format(num))
                     chapter_counter = num - 1 # To make it work with the rest of the code
             else:
-                print(f"Chapter {chapter_counter} will be in the file chunk{chunk_counter}.brf")
+                msg = "Chapter {} will be in the file {}"
+                log.debug(msg.format(chapter_counter, filename_template.format(chunk_counter)))
 
+            # sync chapter counter with text
             if num != chapter_counter + 1:
-                print(f"Expected Chapter {chapter_counter+1}, but have Chapter {num} instead.")
-                print("Either chapters are not consecutively numbered or something did not parse correctly")
+                msg = '\n'.join([
+                                  "Expected Chapter {}, but have Chapter {} instead.",
+                                  "Either chapters are not consecutively numbered or something did not parse correctly"
+                                  ])
+                log.debug(msg(chapter_counter + 1, num))
                 chapter_counter = num
             else:
                 chapter_counter += 1
 
-            if verbose:
-                print(line)
+            # Report the BRF chapter heading that matched here
+            # line seems to have a leading newline (OK)
+            # and a trailing nrewline, which we strip
+            log.debug("Next chapter heading:" + line[:-1])
 
-            out_filename = "chunk"+str(chunk_counter)+".brf"
-
+            # a chapter has ended, write out its accumulation
+            out_filename = filename_template.format(chunk_counter)
             with open(out_filename,'w') as g:
                 g.writelines(out)
+
+            # reinitialize with the current line, which is a chapter heading
             out = [line]
             chunk_counter += 1
         else:
@@ -2227,16 +2258,16 @@ def split_brf(filename):
 
     # And now writing the last chunk to the file:
     if chunk_counter == 0: # If there are no chapters found
-        print("Did not find any chapters, they may be formatted in an unexpected way.")
+        log.warning("Did not find any chapters, they may be formatted in an unexpected way.")
     else:
-        print(f"Chapter {chapter_counter} will be in the file chunk{chunk_counter}.brf")
-    out_filename = "chunk"+str(chunk_counter)+".brf"
+        msg = "Chapter {} will be in the file {}"
+        log.debug(msg.format(chapter_counter, filename_template.format(chunk_counter)))
+
+    out_filename = filename_template.format(chunk_counter)
     with open(out_filename,'w') as g:
         g.writelines(out)
 
     f.close()
-
-verbose = True
 
 
 ####################
