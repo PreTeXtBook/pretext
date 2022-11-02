@@ -72,7 +72,8 @@ import os
 import os.path
 
 # primarily copying entire directory trees of files, also which()
-# TODO: copy() vs copy2()?
+# TODO: copy() vs copy2() vs copyfile() vs copyfileobj()?
+# Study: https://www.techbeamers.com/python-copy-file/
 import shutil
 
 # "shelling out" to run executables
