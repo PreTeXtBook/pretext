@@ -62,6 +62,11 @@
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
 
+<!-- Get a "subtree" xml:id value   -->
+<!-- Then walk the XML source tree  -->
+<!-- applying specializations below -->
+<xsl:import href="./extract-identity.xsl" />
+
 <!-- Override the corresponding param in pretext-assembly so that webwork  -->
 <!-- copies can be made.                                                   -->
 <xsl:variable name="b-extracting-pg" select="true()"/>
@@ -92,7 +97,7 @@
 <!--#######################################################################-->
 
 <!-- Initialize empty dictionaries, then define key-value pairs             -->
-<xsl:template match="/">
+<xsl:template match="*" mode="extraction-wrapper">
     <xsl:text>localization = '</xsl:text>
     <xsl:value-of select="$document-language"/>
     <xsl:text>'&#xa;</xsl:text>
@@ -128,10 +133,10 @@
     <xsl:text>pgdense['hint_no_solution_yes'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_no'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-templates select="$document-root//webwork[statement|task|@source]" mode="dictionaries"/>
+    <xsl:apply-imports/>
 </xsl:template>
 
-<xsl:template match="webwork[@source]" mode="dictionaries">
+<xsl:template match="webwork[@source]" mode="extraction">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
         <xsl:value-of select="@webwork-id"/>
@@ -154,7 +159,7 @@
     <xsl:text>"&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork[statement|task]" mode="dictionaries">
+<xsl:template match="webwork[statement|task]" mode="extraction">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
         <xsl:value-of select="@webwork-id"/>
