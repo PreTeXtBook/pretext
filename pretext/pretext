@@ -638,6 +638,7 @@ def main():
             xml_source,
             publication_file,
             stringparams,
+            args.xmlid,
             args.abort,
             args.server,
             dest_dir,

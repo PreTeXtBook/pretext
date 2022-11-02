@@ -305,7 +305,7 @@
 
         </section>
 
-        <section>
+        <section xml:id="section-the-quadratic-formula">
             <title>The Quadratic Formula</title>
 
             <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems can still behave well.</p>

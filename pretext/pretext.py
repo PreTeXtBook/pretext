@@ -886,7 +886,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 
 def webwork_to_xml(
-    xml_source, pub_file, stringparams, abort_early, server_params, dest_dir
+    xml_source, pub_file, stringparams, xmlid_root, abort_early, server_params, dest_dir
 ):
     import urllib.parse  # urlparse()
     import base64  # b64encode()
@@ -901,9 +901,11 @@ def webwork_to_xml(
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
-    # support publisher file, but not subtree argument
+    # support publisher file, subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
     log.info(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
