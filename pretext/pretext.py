@@ -2048,6 +2048,38 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
         )
     )
 
+    # get chunk level from publisher file, start with sentinel
+    # eventually passed to routine that splits up a BRF
+    chunk_level = ''
+    if pub_file:
+        # parse publisher file, xinclude is conceivable
+        # for multiple similar publisher files with common parts
+        pub_tree = ET.parse(pub_file)
+        pub_tree.xinclude()
+        # "chunking" element => single-item list
+        # no "chunking" element => empty list
+        chunk_elt = pub_tree.xpath("/publication/common/chunking")
+        if chunk_elt:
+            # attribute dictionary
+            attrs = chunk_elt[0].attrib
+            # check for attribute @level
+            if "level" in attrs:
+                chunk_level = chunk_elt[0].attrib['level']
+                # respected values are '0' and '1', as *strings*
+                if chunk_level in ['0', '1']:
+                    msg = 'braille chunking level (from publisher file) set to "{}"'
+                    log.info(msg.format(chunk_level))
+                else:
+                    msg = 'braille chunking level in publisher file should be "0" or "1", not "{}".'
+                    log.warning(msg.format(chunk_level))
+                    chunk_level = ''
+    # never set, or set to an improper value
+    # latter will have issued a warning above
+    if chunk_level == '':
+        msg = 'braille chunking level was never elected properly in a publisher file, using default value, "0".'
+        log.debug(msg)
+        chunk_level = '0'
+
     # Build into a scratch directory
     tmp_dir = get_temporary_directory()
     log.debug("Braille manufacture in temporary directory: {}".format(tmp_dir))
