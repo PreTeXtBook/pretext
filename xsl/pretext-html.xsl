@@ -8671,6 +8671,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- assembly phase, so look elsewhere for that handling.                -->
 <!-- N.B. compare with LaTeX version, could move much to -common         -->
 <xsl:template match="url">
+    <xsl:variable name="uri">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
     <!-- visible portion of HTML is the URL itself,   -->
     <!-- formatted as code, or content of PTX element -->
     <xsl:variable name="visible-text">
@@ -8685,7 +8694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="@visual"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="@href"/>
+                            <xsl:value-of select="$uri"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </code>
@@ -8699,7 +8708,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- class name identifies an external link -->
-            <a class="external" href="{@href}" target="_blank">
+            <a class="external" href="{$uri}" target="_blank">
                 <xsl:copy-of select="$visible-text" />
             </a>
         </xsl:otherwise>
