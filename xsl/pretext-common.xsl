@@ -3179,6 +3179,17 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="@vimeo"/>
 </xsl:template>
 
+<!-- A bit different than above, but same mode -->
+<!-- When a "datafile" is produced in a static -->
+<!-- context, then we append the $baseurl, and -->
+<!-- provide the external directory.           -->
+<xsl:template match="datafile[@source]" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <!-- empty when not using managed directories -->
+    <xsl:value-of select="$external-directory"/>
+    <xsl:apply-templates select="@source" />
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Names of Objects -->
