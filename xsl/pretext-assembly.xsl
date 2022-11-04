@@ -550,6 +550,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
     </xsl:copy>
+    <!-- manufacture a footnote with (private) attribute -->
+    <!-- as a signal to conversions as to its origin     -->
     <xsl:choose>
         <!-- explicitly opt-out, so no footnote -->
         <xsl:when test="@visual = ''"/>
@@ -561,16 +563,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- When an author has not made an effort to provide a visual   -->
             <!-- alternative, then attempt some obvious clean-up of the      -->
             <!-- default, and if not possible, settle for an ugly visual URL -->
+            <!--                                                             -->
+            <!-- We get a candidate visual URI from the @href attribute      -->
+            <xsl:variable name="uri">
+                <xsl:value-of select="@href"/>
+            </xsl:variable>
+            <!-- And clean-up automatically in the prevalent cases -->
             <xsl:variable name="truncated-href">
                 <xsl:choose>
                     <xsl:when test="substring(@href, 1, 8) = 'https://'">
-                        <xsl:value-of select="substring(@href, 9)"/>
+                        <xsl:value-of select="substring($uri, 9)"/>
                     </xsl:when>
                     <xsl:when test="substring(@href, 1, 7) = 'http://'">
-                        <xsl:value-of select="substring(@href, 8)"/>
+                        <xsl:value-of select="substring($uri, 8)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="@href"/>
+                        <xsl:value-of select="$uri"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
