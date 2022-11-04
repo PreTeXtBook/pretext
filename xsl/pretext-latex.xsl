@@ -7730,6 +7730,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- \nolinkurl{} seems to provide line-breaking     -->
 <xsl:template match="url">
+    <xsl:variable name="uri">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
     <!-- form the "clickable" (visible) text -->
     <xsl:variable name="visible-text">
         <xsl:choose>
@@ -7749,7 +7758,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:value-of select="@visual"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="@href"/>
+                                <xsl:value-of select="$uri"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:with-param>
@@ -7774,7 +7783,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\mono{</xsl:text>
-                    <xsl:value-of select="@href"/>
+                    <xsl:value-of select="$uri"/>
                     <xsl:text>}</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -7784,7 +7793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\href{</xsl:text>
             <xsl:call-template name="escape-url-to-latex">
                 <xsl:with-param name="text">
-                    <xsl:value-of select="@href" />
+                    <xsl:value-of select="$uri" />
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:text>}</xsl:text>
