@@ -8670,11 +8670,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.  In "content" case, we get a special footnote from the         -->
 <!-- assembly phase, so look elsewhere for that handling.                -->
 <!-- N.B. compare with LaTeX version, could move much to -common         -->
-<xsl:template match="url">
+<xsl:template match="url|datafile">
+    <!-- link/reference/location may be external -->
+    <!-- (@href) or internal (datafile[@source]) -->
     <xsl:variable name="uri">
         <xsl:choose>
+            <!-- "url" and "datafile" both support external @href -->
             <xsl:when test="@href">
                 <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- a "datafile" might be local, @source is     -->
+            <!-- indication, so prefix with a local path/URI -->
+            <xsl:when test="self::datafile and @source">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="@source"/>
             </xsl:when>
             <!-- empty will be non-functional -->
             <xsl:otherwise/>
