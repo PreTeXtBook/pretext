@@ -545,7 +545,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- adding the footnote element.  This leaves various decisions about      -->
 <!-- formatting to the subsequent conversion.                               -->
 
-<xsl:template match="url[node()]" mode="repair">
+<xsl:template match="url[node()]|datafile[node()]" mode="repair">
     <xsl:copy>
         <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
@@ -565,8 +565,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- default, and if not possible, settle for an ugly visual URL -->
             <!--                                                             -->
             <!-- We get a candidate visual URI from the @href attribute      -->
+            <!-- link/reference/location may be external -->
+            <!-- (@href) or internal (datafile[@source]) -->
             <xsl:variable name="uri">
-                <xsl:value-of select="@href"/>
+                <xsl:choose>
+                    <!-- "url" and "datafile" both support external @href -->
+                    <xsl:when test="@href">
+                        <xsl:value-of select="@href"/>
+                    </xsl:when>
+                    <!-- a "datafile" might be local, @source is        -->
+                    <!-- indication, so prefix with a base URL,         -->
+                    <!-- add "external" directory, via template useful  -->
+                    <!-- also for visual URL formulation in -assembly   -->
+                    <!-- N.B. we are using the base URL, since this is  -->
+                    <!-- the most likely need by employing conversions. -->
+                    <!-- It would eem duplicative in a conversion to    -->
+                    <!-- HTML, so could perhaps be killed in that case. -->
+                    <!-- But it is what we want for LaTeX, and perhaps  -->
+                    <!-- for EPUB, etc.                                 -->
+                    <xsl:when test="self::datafile and @source">
+                        <xsl:apply-templates select="." mode="static-url"/>
+                    </xsl:when>
+                    <!-- empty will be non-functional -->
+                    <xsl:otherwise/>
+                </xsl:choose>
             </xsl:variable>
             <!-- And clean-up automatically in the prevalent cases -->
             <xsl:variable name="truncated-href">
