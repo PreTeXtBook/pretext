@@ -1434,6 +1434,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <idx>stop signs</idx>
                     <statement>
                         <p>What color is a stop sign?</p>
+                        <p>We include a spurious Python <tag>program</tag> element in the <tag>statement</tag> which should never convert this from a multiple-choice question into a programming exercise (on any host), but should still get syntax highlighting as part of rendering the exercise.</p>
+                        <program xml:id="python-in-statement" language="python">
+                            <input>
+                            sum = 0
+                            sum += 6
+                            for i in range(sum):
+                                print("Hello, World!")
+                            </input>
+                        </program>
                     </statement>
                     <choices>
                         <choice>
