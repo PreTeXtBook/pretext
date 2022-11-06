@@ -112,7 +112,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--                                                      -->
     <!-- The file part of the knowl -->
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
         <html>
             <body>
                 <pre>
