@@ -12206,9 +12206,19 @@ TODO:
 -->
 
 <xsl:template match="text()" mode="search-node-text">
-    <xsl:call-template name="escape-json-string">
-        <xsl:with-param name="text" select="."/>
-    </xsl:call-template>
+    <xsl:choose>
+        <!-- collapse authored whitespace, and structural whitespace -->
+        <!-- that is being preserved with whitespace declarations    -->
+        <!-- Replaced by universal addition at end of the template.  -->
+        <!-- Reduces file size by 40%. (sample article)              -->
+        <xsl:when test="normalize-space() = ''"/>
+        <xsl:otherwise>
+            <xsl:call-template name="escape-json-string">
+                <!-- normalize-space adds another 2% reduction -->
+                <xsl:with-param name="text" select="normalize-space(.)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- a space seems necessary to separate some text() nodes, -->
     <!-- like consecutive (simple) list items.  Presumably it   -->
     <!-- can't hurt to have too many?                           -->
