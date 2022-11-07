@@ -12025,7 +12025,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- recursively cruise the *children* of the page for   -->
             <!-- blocks that will be second-level indentation in the -->
             <!-- outline-style of the search results                 -->
-            <xsl:apply-templates select="*" mode="search-block-docs"/>
+            <!-- This is where we adjust our priorities on what      -->
+            <!-- becomes a search document, see descriptions of      -->
+            <!-- the modal templates for those priorities.           -->
+            <xsl:choose>
+                <xsl:when test="$native-search-variant = 'textbook'">
+                    <xsl:apply-templates select="*" mode="search-block-docs-textbook"/>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="&STRUCTURAL;" mode="search-page-docs"/>
@@ -12033,18 +12041,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- The modal "search-block-docs" traverses all nodes (of a page), -->
-<!-- stopping to create a search document for selected blocks.      -->
-<!-- Generally these are elements that admit/display titles. These  -->
-<!-- will be displayed with an indentation (thus, at level 2).      -->
+<!-- Textbook search -->
+<!-- The modal "search-block-docs-textbook" traverses all the elements      -->
+<!-- (of a page), starting with the children of the page's division,        -->
+<!-- stopping to create a search document for selected blocks. Generally    -->
+<!-- these are elements that admit/display titles. These are assigned       -->
+<!-- level 2, so they can be displayed with an indentation.  We do not      -->
+<!-- recurse into blocks.  So only "first-class" paragraphs are considered, -->
+<!-- and only if they have a definition ("term" element) within.            -->
 
-<xsl:template match="*" mode="search-block-docs">
-    <xsl:apply-templates select="*" mode="search-block-docs"/>
+<xsl:template match="*" mode="search-block-docs-textbook">
+    <xsl:apply-templates select="*" mode="search-block-docs-textbook"/>
 </xsl:template>
 
 <!-- Note: could add &STRUCTURAL; here in order to make a    -->
 <!-- search-document for each SUBDIVISION on the page/chunk. -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p[descendant::term]" mode="search-block-docs">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p[descendant::term]" mode="search-block-docs-textbook">
     <!-- build a search document and dead-end -->
     <xsl:apply-templates select="." mode="search-document">
         <xsl:with-param name="level" select="'2'"/>
@@ -12059,6 +12071,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="search-document">
     <xsl:param name="level"/>
+
+    <!-- With "textbook" search, paragraphs using a "term" -->
+    <!-- to make a definition have some exceptions below.  -->
+    <xsl:variable name="b-is-definition-paragraph"
+                  select="($native-search-variant = 'textbook') and self::p and descendant::term"/>
 
     <xsl:text>{&#xa;</xsl:text>
     <!-- string to identify results with original docs -->
@@ -12088,7 +12105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="type-name"/>
         </xsl:with-param>
     </xsl:call-template>
-    <xsl:if test="self::p">
+    <xsl:if test="$b-is-definition-paragraph">
         <xsl:text> (with a defined term)</xsl:text>
     </xsl:if>
     <xsl:text>",&#xa;</xsl:text>
@@ -12116,7 +12133,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>",&#xa;</xsl:text>
     <!-- all text on the page, more or less, duplicates title -->
     <xsl:text>  "body": "</xsl:text>
-    <xsl:apply-templates select="." mode="search-node-text"/>
+    <!-- Some elements need special treatment, for specific forms of   -->
+    <!-- search, when they *are* the search document, rather than when -->
+    <!-- they are *a part of* some other larger search document.  We   -->
+    <!-- intercept them here, most-specific first.                     -->
+    <xsl:choose>
+        <!-- "textbook" search treats first-class -->
+        <!-- paragraphs with a term specially     -->
+        <xsl:when test="$b-is-definition-paragraph">
+            <xsl:apply-templates select="." mode="search-term-paragraph-text"/>
+        </xsl:when>
+        <!-- for most elements, just extract text -->
+        <!-- nodes with various adjustments       -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="search-node-text"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- text here, sanitized -->
     <xsl:text>"&#xa;</xsl:text>
     <!-- NB: final comma AND newline are stripped above -->
@@ -12167,12 +12199,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- A defined term (or several) might appear inside a paragraph.  -->
-<!-- We then isolate just the text of the "term" element(s) as     -->
-<!-- the search document, since we do not want lots of "Paragraph" -->
-<!-- showing up in the search results.                             -->
-
-<xsl:template match="p[descendant::term]" mode="search-node-text">
+<!-- First-class paragraphs (children of divisions or "paragraphs",    -->
+<!-- and not in blocks) containing "term" are considered differently   -->
+<!-- in a textbook search.  Without a "term" they are ignored, while   -->
+<!-- with "term" the search document is just the content of the terms. -->
+<xsl:template match="p[descendant::term]" mode="search-term-paragraph-text">
     <xsl:apply-templates select=".//term" mode="search-node-text"/>
 </xsl:template>
 
