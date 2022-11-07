@@ -144,6 +144,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Paragraaf</localization>
     <localization string-id='blockquote'>Aanhaling</localization>
+    <!-- <localization string-id='pre'>Code Block</localization> -->
     <!-- Literate programming, a chunk of computer code -->
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
