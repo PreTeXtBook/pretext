@@ -567,6 +567,13 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.mathjax4" select="'no'"/>
 <xsl:variable name="mathjax4-testing" select="$debug.mathjax4 = 'yes'"/>
 
+<!-- A permanent string parameter to control the creation of  -->
+<!-- "View Source" knowls, which is a developer task, not a   -->
+<!-- publisher task (though it could be?).  So permanent, but -->
+<!-- undocumented.                                            -->
+<xsl:param name="debug.html.annotate" select="'no'"/>
+<xsl:variable name="b-view-source" select="$debug.html.annotate = 'yes'"/>
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->

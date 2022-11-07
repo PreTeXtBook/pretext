@@ -66,9 +66,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<!-- The template to place into the HTML stylesheet, which is      -->
-<!-- overriding a do-nothing stub in the HTML stylesheet           -->
+<!-- The template to place into the HTML stylesheet, which is        -->
+<!-- overriding a do-nothing stub in the HTML stylesheet.  This is   -->
+<!-- a no-op unless the $b-view-source has been set to true()        -->
+<!-- electively.  Not too much of a performance hit as bailing out   -->
+<!-- is quick, and use is limited to divisions and blocks (roughly). -->
 <xsl:template match="*" mode="view-source-knowl">
+    <xsl:if test="$b-view-source">
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="annotation-knowl-filename"/>
     </xsl:variable>
@@ -120,6 +124,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </body>
         </html>
     </exsl:document>
+    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
