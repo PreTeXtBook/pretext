@@ -73,57 +73,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is quick, and use is limited to divisions and blocks (roughly). -->
 <xsl:template match="*" mode="view-source-knowl">
     <xsl:if test="$b-view-source">
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="annotation-knowl-filename"/>
-    </xsl:variable>
-    <!-- Part 1: drop the clickable for the knowl via placement  -->
-    <!-- of the application of the "view-source-knowl" template -->
-    <div>
-        <a data-knowl="{$filename}">
-            <!-- TODO: internationalize me? -->
-            <xsl:text>View Source</xsl:text>
-        </a>
-    </div>
-    <!-- Part 2: Create the knowl's content file; an inside-out   -->
-    <!-- description.                                             -->
-    <!--   (1) Grab the node *just prior* to the element.         -->
-    <!--   (2) This ends with a newline and then some             -->
-    <!--       indentation, we grab this indentation.             -->
-    <!--   (3) Serialize the element, a photocopy machine         -->
-    <!--       which converts XML nodes into text (originally     -->
-    <!--       built to put HTML into JSON for Jupyter).          -->
-    <!--   (4) Run (2)+(3) through "sanitize-text" mainly to pull -->
-    <!--       the whole stanza left, since it may have a lot of  -->
-    <!--       common indentation (which is why we caught         -->
-    <!--       the preceding indentation).                        -->
-    <xsl:variable name="serialized-html">
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text">
-                <xsl:variable name="lead-in">
-                    <xsl:apply-templates select="preceding-sibling::node()[1]" mode="serialize"/>
-                </xsl:variable>
-                <xsl:call-template name="substring-after-last">
-                    <xsl:with-param name="input" select="$lead-in" />
-                    <xsl:with-param name="substr" select="'&#xa;'" />
-                </xsl:call-template>
-                <xsl:apply-templates select="." mode="serialize"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:variable>
-    <!--                                                      -->
-    <!-- Useful for debugging any source manipulations?       -->
-    <!-- <pre><xsl:value-of select="$serialized-html"/></pre> -->
-    <!--                                                      -->
-    <!-- The file part of the knowl -->
-    <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <html>
-            <body>
-                <pre>
-                    <xsl:value-of select="$serialized-html"/>
-                </pre>
-            </body>
-        </html>
-    </exsl:document>
+        <xsl:variable name="filename">
+            <xsl:apply-templates select="." mode="annotation-knowl-filename"/>
+        </xsl:variable>
+        <!-- Part 1: drop the clickable for the knowl via placement  -->
+        <!-- of the application of the "view-source-knowl" template -->
+        <div>
+            <a data-knowl="{$filename}">
+                <!-- TODO: internationalize me? -->
+                <xsl:text>View Source</xsl:text>
+            </a>
+        </div>
+        <!-- Part 2: Create the knowl's content file; an inside-out   -->
+        <!-- description.                                             -->
+        <!--   (1) Grab the node *just prior* to the element.         -->
+        <!--   (2) This ends with a newline and then some             -->
+        <!--       indentation, we grab this indentation.             -->
+        <!--   (3) Serialize the element, a photocopy machine         -->
+        <!--       which converts XML nodes into text (originally     -->
+        <!--       built to put HTML into JSON for Jupyter).          -->
+        <!--   (4) Run (2)+(3) through "sanitize-text" mainly to pull -->
+        <!--       the whole stanza left, since it may have a lot of  -->
+        <!--       common indentation (which is why we caught         -->
+        <!--       the preceding indentation).                        -->
+        <xsl:variable name="serialized-html">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text">
+                    <xsl:variable name="lead-in">
+                        <xsl:apply-templates select="preceding-sibling::node()[1]" mode="serialize"/>
+                    </xsl:variable>
+                    <xsl:call-template name="substring-after-last">
+                        <xsl:with-param name="input" select="$lead-in" />
+                        <xsl:with-param name="substr" select="'&#xa;'" />
+                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="serialize"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <!--                                                      -->
+        <!-- Useful for debugging any source manipulations?       -->
+        <!-- <pre><xsl:value-of select="$serialized-html"/></pre> -->
+        <!--                                                      -->
+        <!-- The file part of the knowl -->
+        <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+            <html>
+                <body>
+                    <pre>
+                        <xsl:value-of select="$serialized-html"/>
+                    </pre>
+                </body>
+            </html>
+        </exsl:document>
     </xsl:if>
 </xsl:template>
 
