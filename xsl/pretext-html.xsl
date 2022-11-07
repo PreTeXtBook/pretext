@@ -11980,6 +11980,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- is included later in the search page via a script element, -->
     <!-- for use/consumption by the Lunr search() method.           -->
     <exsl:document href="{$lunr-search-file}" method="text" encoding="UTF-8">
+        <xsl:text>var ptx_lunr_search_style = "</xsl:text>
+        <xsl:value-of select="$native-search-variant"/>
+        <xsl:text>";&#xa;</xsl:text>
+        <!-- the actual search documents in one HUGE variable, then a list -->
         <xsl:variable name="json-docs">
             <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
         </xsl:variable>
@@ -11989,6 +11993,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- restore newline just stripped -->
         <xsl:text>&#xa;]&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
+        <!-- the Javascript function to make the index -->
         <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
         <xsl:text>  this.ref('id')&#xa;</xsl:text>
         <xsl:text>  this.field('title')&#xa;</xsl:text>
@@ -12032,6 +12037,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$native-search-variant = 'textbook'">
                     <xsl:apply-templates select="*" mode="search-block-docs-textbook"/>
                 </xsl:when>
+                <xsl:when test="$native-search-variant = 'reference'">
+                    <xsl:apply-templates select="*" mode="search-block-docs-reference"/>
+                </xsl:when>
                 <xsl:otherwise/>
             </xsl:choose>
         </xsl:when>
@@ -12057,6 +12065,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: could add &STRUCTURAL; here in order to make a    -->
 <!-- search-document for each SUBDIVISION on the page/chunk. -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p[descendant::term]" mode="search-block-docs-textbook">
+    <!-- build a search document and dead-end -->
+    <xsl:apply-templates select="." mode="search-document">
+        <xsl:with-param name="level" select="'2'"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Reference search -->
+<!-- The modal "search-block-docs-textbook" traverses all the elements -->
+<!-- (of a page), starting with the children of the page's division,   -->
+<!-- stopping to create a search document for subdivisions, blocks,    -->
+<!-- and first-class paragraphs (plus block quotes and pre-formatted   -->
+<!-- paragraphs.  This relies more on division structure, and *all*    -->
+<!-- of the content.                                                   -->
+
+<xsl:template match="*" mode="search-block-docs-reference">
+    <xsl:apply-templates select="*" mode="search-block-docs-reference"/>
+</xsl:template>
+
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p|blockquote|pre" mode="search-block-docs-reference">
     <!-- build a search document and dead-end -->
     <xsl:apply-templates select="." mode="search-document">
         <xsl:with-param name="level" select="'2'"/>
