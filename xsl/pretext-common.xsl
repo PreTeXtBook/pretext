@@ -4349,6 +4349,9 @@ Book (with parts), "section" at level 3
 <!-- Poems go by their titles, not numbers -->
 <xsl:template match="poem" mode="serial-number" />
 
+<!-- Preformatted ("pre") appear in search results by name -->
+<xsl:template match="pre" mode="serial-number" />
+
 <!-- List items, subordinate to an unordered list, or a description  -->
 <!-- list, will have numbers that are especically ambiguous, perhaps -->
 <!-- even very clsoe within a multi-level list. They are unnumbered  -->
