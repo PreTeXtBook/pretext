@@ -38,8 +38,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl"
 >
 
-<xsl:import href="./pretext-html.xsl" />
-
 <!--                       IMPORTANT                         -->
 <!-- The "sanitize-text" template can be called on sizeable  -->
 <!-- chunks of text, in a recursive manner, and then looks   -->
@@ -74,7 +72,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="annotation-knowl-filename"/>
     </xsl:variable>
-    <!-- Inside-out description. -->
+    <!-- Part 1: drop the clickable for the knowl via placement  -->
+    <!-- of the application of the "view-source-knowl" template -->
+    <div>
+        <a data-knowl="{$filename}">
+            <!-- TODO: internationalize me? -->
+            <xsl:text>View Source</xsl:text>
+        </a>
+    </div>
+    <!-- Part 2: Create the knowl's content file; an inside-out   -->
+    <!-- description.                                             -->
     <!--   (1) Grab the node *just prior* to the element.         -->
     <!--   (2) This ends with a newline and then some             -->
     <!--       indentation, we grab this indentation.             -->
@@ -99,13 +106,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
-    <!-- The clickable part of the knowl -->
-    <div>
-        <a data-knowl="{$filename}">
-            <!-- TODO: internationalize me? -->
-            <xsl:text>View Source</xsl:text>
-        </a>
-    </div>
     <!--                                                      -->
     <!-- Useful for debugging any source manipulations?       -->
     <!-- <pre><xsl:value-of select="$serialized-html"/></pre> -->

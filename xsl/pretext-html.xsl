@@ -62,6 +62,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Likely need not be an "import" (v. "include") -->
 <xsl:import href="./pretext-runestone.xsl"/>
 
+<!-- Routines to provide "View Source" annotations on HTML output   -->
+<!-- as a service on the PreTeXt website. NB: we use an "include"   -->
+<!-- to provide this set of templates.  The included stylesheet has -->
+<!-- radically different "strip-space" and "preserve-space"         -->
+<!-- declarations, which seem to *not* provide overrrides, and are  -->
+<!-- simply "local" to that stylesheet.                             -->
+<xsl:include href="./pretext-view-source.xsl"/>
+
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
 <!-- create a header in the old style that browsers will recognize  -->
 <!-- as signaling HTML5.  However  xsltproc  does one better and    -->
@@ -10325,12 +10333,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
     </xsl:attribute>
 </xsl:template>
-
-<!-- This is a no-op stub, so we can insert annotations at  -->
-<!-- key locations.  To "activate", an importing stylesheet -->
-<!-- needs to define this template.  So in this way we have -->
-<!-- the same effect as if we had a switch.                 -->
-<xsl:template match="*" mode="view-source-knowl"/>
 
 <!-- JSXGraph -->
 <!-- DEPRECATED (2018-04-06)                             -->
