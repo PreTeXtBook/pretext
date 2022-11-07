@@ -12016,10 +12016,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$chunk = 'true'">
+            <!-- stop and build a search document for the page,    -->
+            <!-- as a first-level indentation in the outline-style -->
+            <!-- of the search results                             -->
             <xsl:apply-templates select="." mode="search-document">
                 <xsl:with-param name="level" select="'1'"/>
             </xsl:apply-templates>
-            <xsl:apply-templates select="." mode="search-block-docs"/>
+            <!-- recursively cruise the *children* of the page for   -->
+            <!-- blocks that will be second-level indentation in the -->
+            <!-- outline-style of the search results                 -->
+            <xsl:apply-templates select="*" mode="search-block-docs"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="&STRUCTURAL;" mode="search-page-docs"/>
@@ -12036,6 +12042,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="search-block-docs"/>
 </xsl:template>
 
+<!-- Note: could add &STRUCTURAL; here in order to make a    -->
+<!-- search-document for each SUBDIVISION on the page/chunk. -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p[descendant::term]" mode="search-block-docs">
     <!-- build a search document and dead-end -->
     <xsl:apply-templates select="." mode="search-document">
