@@ -2670,18 +2670,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!-- Possible values for search/@variant are:                      -->
+<!--                                                               -->
+<!--   "none" - self-explanatory, no computation, no interface     -->
+<!--   "textbook" - pages, divisions on pages, blocks, p[term],    -->
+<!--                chronological and indented presentation        -->
+<!--   "reference" - pages, divisions, all children of a division  -->
+<!--                 (blocks, first-class "p")                     -->
+<!--   "default" - historical, equal to "textbook"                 -->
+<!--                                                               -->
+<!-- Resulting variable values are "none", "textbook", "reference" -->
+<!-- Note the boolean variable for the no-search case              -->
 <xsl:variable name="native-search-variant">
     <xsl:variable name="default-native-search" select="'none'"/>
     <xsl:choose>
         <xsl:when test="$publication/html/search/@variant = 'none'">
-            <xsl:value-of select="$publication/html/search/@variant"/>
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'textbook'">
+            <xsl:text>textbook</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'reference'">
+            <xsl:text>reference</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/html/search/@variant = 'default'">
-            <xsl:value-of select="$publication/html/search/@variant"/>
+            <!-- change to default variable once this becomes opt-out -->
+            <xsl:text>textbook</xsl:text>
         </xsl:when>
         <!-- set, but not correct, so inform and use default -->
         <xsl:when test="$publication/html/search/@variant">
-            <xsl:message>PTX:WARNING: HTML search/@variant in publisher file should be "default" or "none", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
+            <xsl:message>PTX:WARNING: HTML search/@variant in publisher file should be "none", "textbook", "reference" or "default", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
             <xsl:value-of select="$default-native-search"/>
         </xsl:when>
         <!-- unset, so use default -->
