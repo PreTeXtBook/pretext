@@ -2679,12 +2679,33 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
-def _runestone_services():
+def _runestone_services(params):
     """Query the very latest Runestone Services file from the RS CDN"""
 
+    # params - string parameter dictionary, just for  debug.rs.version
+
     # Canonical location of file of redirections to absolute-latest
-    # released version of Runestone Services
-    services_url = 'https://runestone.academy/cdn/runestone/latest/webpack_static_imports.xml'
+    # released version of Runestone Services when parameterized by
+    # "latest", otherwise will get a specific previous version
+    services_url_template = 'https://runestone.academy/cdn/runestone/{}/webpack_static_imports.xml'
+
+    # The  debug.rs.version  string parameter is a bit of a poser.  It is
+    # provided via the usual interfaces as if it were really a string parameter
+    # but it gets intercepted here in the Python, and while it is provided to
+    # the HTML stylesheet, there is no definition there to receive it and it
+    # is silently ignored.
+
+    if "debug.rs.version" in params:
+        rs_version = params["debug.rs.version"]
+        services_url = services_url_template.format(rs_version)
+        msg = '\n'.join(["Requested Runestone Services, version {} from the CDN via the  debug.rs.version  string parameter.",
+            "This is strictly for DEBUGGING and not for PRODUCTION.  The requested version may not exist,",
+            "or there could be a network error and you will get the version in the PreTrext repository.",
+            "Subsequent diagnostic messages may be inaccurate.  Verify your HTML output is as intended."
+            ])
+        log.info(msg.format(rs_version))
+    else:
+        services_url = services_url_template.format("latest")
 
     # We assume an online query is a success, until we learn otherwise
     online_success = True
@@ -2770,7 +2791,7 @@ def html(
     # See if we can get the very latest Runestone Services from the Runestone
     # CDN.  A non-empty version (fourth parameter) indicates success
     #  "altrs" = alternate Runestone
-    altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services()
+    altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
     online_success = (altrs_version != '')
     # report repository version always, supersede if newer found
     msg = 'Runestone Services (via PreTeXt repository): version {}'
