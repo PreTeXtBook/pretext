@@ -955,7 +955,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <div class="ptx-runestone-container">
-        <div class="runestone" style="max-width: none;">
+        <div class="runestone parsons_section" style="max-width: none;">
             <div data-component="parsons" class="parsons">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <div class="parsons_question parsons-text" >
