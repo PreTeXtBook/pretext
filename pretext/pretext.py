@@ -2694,6 +2694,7 @@ def _runestone_services(params):
     # but it gets intercepted here in the Python, and while it is provided to
     # the HTML stylesheet, there is no definition there to receive it and it
     # is silently ignored.
+    # (If the HTML stylesheet doesn't like it, it could be removed after recording.)
 
     if "debug.rs.version" in params:
         rs_version = params["debug.rs.version"]
