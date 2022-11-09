@@ -1391,10 +1391,9 @@ def webwork_to_xml(
                 msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
                 raise ValueError(msg.format(image_url) + root_cause)
             # and save the image itself
+            destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
             try:
-                with open(
-                    os.path.join(ww_images_dir, ptx_image_filename), "wb"
-                ) as image_file:
+                with open(destination_image_file, "wb") as image_file:
                     msg = "saving image file {} {} in {}"
                     qualifier = ""
                     if image_extension == ".tgz":
@@ -1405,30 +1404,42 @@ def webwork_to_xml(
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
                 raise ValueError(
-                    msg.format(os.path.join(ww_images_dir, ptx_image_filename))
+                    msg.format(destination_image_file)
                     + root_cause
                 )
             # unpack if it's a tgz
             if image_extension == ".tgz":
-                tgzfile = tarfile.open(os.path.join(ww_images_dir, ptx_image_filename))
+                tgzfile = tarfile.open(destination_image_file)
                 tgzfile.extractall(os.path.join(ww_images_dir))
                 tgzfile.close()
-                os.rename(
-                    os.path.join(ww_images_dir, "image.tex"),
-                    os.path.join(ww_images_dir, ptx_image_name + ".tex"),
-                )
-                os.rename(
-                    os.path.join(ww_images_dir, "image.pdf"),
-                    os.path.join(ww_images_dir, ptx_image_name + ".pdf"),
-                )
-                os.rename(
-                    os.path.join(ww_images_dir, "image.svg"),
-                    os.path.join(ww_images_dir, ptx_image_name + ".svg"),
-                )
-                os.rename(
-                    os.path.join(ww_images_dir, "image.png"),
-                    os.path.join(ww_images_dir, ptx_image_name + ".png"),
-                )
+                try:
+                    os.rename(
+                        os.path.join(ww_images_dir, "image.tex"),
+                        os.path.join(ww_images_dir, ptx_image_name + ".tex"),
+                    )
+                except:
+                    log.warning("{} did not contain a .tex file".format(destination_image_file))
+                try:
+                    os.rename(
+                        os.path.join(ww_images_dir, "image.pdf"),
+                        os.path.join(ww_images_dir, ptx_image_name + ".pdf"),
+                    )
+                except:
+                    log.warning("{} did not contain a .pdf file".format(destination_image_file))
+                try:
+                    os.rename(
+                        os.path.join(ww_images_dir, "image.svg"),
+                        os.path.join(ww_images_dir, ptx_image_name + ".svg"),
+                    )
+                except:
+                    log.warning("{} did not contain a .svg file".format(destination_image_file))
+                try:
+                    os.rename(
+                        os.path.join(ww_images_dir, "image.png"),
+                        os.path.join(ww_images_dir, ptx_image_name + ".png"),
+                    )
+                except:
+                    log.warning("{} did not contain a .png file".format(destination_image_file))
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
         # Start appending XML children
