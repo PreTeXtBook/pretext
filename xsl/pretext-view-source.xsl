@@ -66,6 +66,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
+<!-- Below, we use a purpose-built attribute to match elements which    -->
+<!-- have been through the pre-proccessor with their (nearly-)original  -->
+<!-- progenitors.  So we need this id here, late in the game, but we    -->
+<!-- don't want authors wondering if they should be authoring it in     -->
+<!-- their source.  So at the kast minute, while creating text versions -->
+<!-- of source materil, we kill it.  Any similar leakage could be       -->
+<!-- handled the same way.                                              -->
+<xsl:template match="@original-id" mode="serialize"/>
+
 <!-- The template to place into the HTML stylesheet, which is        -->
 <!-- overriding a do-nothing stub in the HTML stylesheet.  This is   -->
 <!-- a no-op unless the $b-view-source has been set to true()        -->
@@ -73,9 +82,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is quick, and use is limited to divisions and blocks (roughly). -->
 <xsl:template match="*" mode="view-source-knowl">
     <xsl:if test="$b-view-source">
+        <!-- As a variable for consistency -->
         <xsl:variable name="filename">
             <xsl:apply-templates select="." mode="annotation-knowl-filename"/>
         </xsl:variable>
+
         <!-- Part 1: drop the clickable for the knowl via placement  -->
         <!-- of the application of the "view-source-knowl" template -->
         <div>
@@ -84,8 +95,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>View Source</xsl:text>
             </a>
         </div>
-        <!-- Part 2: Create the knowl's content file; an inside-out   -->
-        <!-- description.                                             -->
+
+        <!-- Part 2: Create the knowl's content file -->
+        <!-- Save off the id of the element being annotated -->
+        <xsl:variable name="the-element-id" select="@original-id"/>
+        <!-- Locate the element with the same id, but in a very early -->
+        <!-- pass of the assembly stylesheet, so with as little (no?) -->
+        <!-- extraneous manufactured markup as possible.              -->
+        <xsl:variable name="original-element" select="$original-labeled//*[@original-id = $the-element-id]"/>
+        <!-- Just for convenience, capture highly sanitized text      -->
+        <!-- version of the XML source within a variable.             -->
+        <!--                                                          -->
         <!--   (1) Grab the node *just prior* to the element.         -->
         <!--   (2) This ends with a newline and then some             -->
         <!--       indentation, we grab this indentation.             -->
@@ -96,22 +116,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!--       the whole stanza left, since it may have a lot of  -->
         <!--       common indentation (which is why we caught         -->
         <!--       the preceding indentation).                        -->
+        <!-- NB: the $original-element is used *twice* below, in      -->
+        <!-- order to have the right conteaxt for the manipulations   -->
         <xsl:variable name="serialized-html">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text">
                     <xsl:variable name="lead-in">
-                        <xsl:apply-templates select="preceding-sibling::node()[1]" mode="serialize"/>
+                        <xsl:apply-templates select="$original-element/preceding-sibling::node()[1]" mode="serialize"/>
                     </xsl:variable>
                     <xsl:call-template name="substring-after-last">
                         <xsl:with-param name="input" select="$lead-in" />
                         <xsl:with-param name="substr" select="'&#xa;'" />
                     </xsl:call-template>
-                    <xsl:apply-templates select="." mode="serialize"/>
+                    <xsl:apply-templates select="$original-element" mode="serialize"/>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
         <!--                                                      -->
-        <!-- Useful for debugging any source manipulations?       -->
+        <!-- Useful for debugging any source manipulations, as it -->
+        <!-- can be dropped right in the page for quick visual    -->
+        <!-- examination/comparison.                              -->
         <!-- <pre><xsl:value-of select="$serialized-html"/></pre> -->
         <!--                                                      -->
         <!-- The file part of the knowl -->
