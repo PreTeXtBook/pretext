@@ -555,6 +555,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.  We are only interpreting the "content" form here by simply       -->
 <!-- adding the footnote element.  This leaves various decisions about      -->
 <!-- formatting to the subsequent conversion.                               -->
+<!--                                                                        -->
+<!-- N.B. the automatic "fn/@pi:url" creates a *new* element that is not    -->
+<!-- in an author's source.  When we annotate source (as a form of perfect  -->
+<!-- documentation) we take care to not annotate these elements which  have -->
+<!-- no source to show.                                                     -->
 
 <xsl:template match="url[node()]|datafile[node()]" mode="repair">
     <xsl:copy>

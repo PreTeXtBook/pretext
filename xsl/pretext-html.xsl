@@ -5402,7 +5402,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- sometimes annotate with a knowl showing the source     -->
             <!-- of the current element.  This calls a stub, unless     -->
             <!-- a separate stylesheet is used to define the template,  -->
-            <!-- and the method is defined there.                       -->
+            <!-- and the method is defined there.  An "fn" necessarily  -->
+            <!-- comes through here since it is realized as a knowl,    -->
+            <!-- but it is a silly thing to annotate.  We skip it       -->
+            <!-- promptly on the receiving end, instead of adding       -->
+            <!-- clutter here.                                          -->
             <xsl:apply-templates select="." mode="view-source-knowl"/>
             <!-- Then actual content, respecting b-original flag  -->
             <!-- Pass $block-type for Sage cells to know environs -->

@@ -81,7 +81,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- electively.  Not too much of a performance hit as bailing out   -->
 <!-- is quick, and use is limited to divisions and blocks (roughly). -->
 <xsl:template match="*" mode="view-source-knowl">
-    <xsl:if test="$b-view-source">
+    <!-- Footnotes are silly to annotate, and are also automatically -->
+    <!-- generated for URLs and hence have no original source, so we -->
+    <!-- kill them here.  Careful experiments suggest these are the  -->
+    <!-- only elements without source.                               -->
+    <xsl:variable name="b-banned" select="boolean(self::fn)"/>
+    <xsl:if test="$b-view-source and not($b-banned)">
         <!-- As a variable for consistency -->
         <xsl:variable name="filename">
             <xsl:apply-templates select="." mode="annotation-knowl-filename"/>
