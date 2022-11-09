@@ -155,6 +155,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="original-labels">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="original-labels"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="labeling">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="labeling"/>
@@ -225,8 +231,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="original-labeled-rtf">
+    <xsl:apply-templates select="$version" mode="original-labels"/>
+</xsl:variable>
+<xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
+
 <xsl:variable name="labeled-rtf">
-    <xsl:apply-templates select="$version" mode="labeling"/>
+    <xsl:apply-templates select="$original-labeled" mode="labeling"/>
 </xsl:variable>
 <xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
 
