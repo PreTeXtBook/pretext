@@ -737,6 +737,76 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- This pass adds 100% internal identification for elements after a   -->
+<!-- version has been constructed, but before anything else is added or -->
+<!-- manipulated.  The tree it builds is used for constructing          -->
+<!-- "View Source" knowls in HTML output as a form of always-accurate   -->
+<!-- documentation.  This id might be useful in other scenarios so we   -->
+<!-- build it with some care.  Entirely possible that the final pass of -->
+<!-- this stylesheet will have produced times which in HTML there is no -->
+<!-- real original.  So maybe not perfect.  But good enough?            -->
+<!--                                                                    -->
+<!-- Key properties of the id:                                          -->
+<!--     - built with descent through tree, so fast                     -->
+<!--     - unique (numbers give depth and breadth within subtree)       -->
+<!--     - resets on discovered @xml:id                                 -->
+<!--     - minimal computation (counting siblings)                      -->
+<!--     - somewhat insensitive to source edits far away                -->
+<xsl:template match="*" mode="original-labels">
+    <xsl:param name="parent-id" select="'root-'"/>
+
+    <xsl:copy>
+        <!-- duplicate all existing attributes, -->
+        <xsl:apply-templates select="@*" mode="original-labels"/>
+        <!-- capture the id we will use *and* build upon -->
+        <xsl:variable name="new-id">
+            <xsl:choose>
+                <!-- authored @xml:id, so reset to this subtree -->
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$parent-id"/>
+                    <!-- This particular letter is totally irrelevant, could    -->
+                    <!-- be a dash, it is just a separator.  We don't want the  -->
+                    <!-- numbers (next) to coalesce ( 2,13 = 21,3 = "213" ) and -->
+                    <!-- wreck uniqueness.  But a hint of an element name may   -->
+                    <!-- make some debugging activity easier.                   -->
+                    <xsl:value-of select="substring(local-name(), 1, 1)"/>
+                    <!-- Location *within its level* of the tree, while level    -->
+                    <!-- itself is implicit in the number of separator letters   -->
+                    <!-- accumulated.  This makes this string unique within      -->
+                    <!-- the subtree rooted at the most recent authored @xml:id. -->
+                    <xsl:value-of select="count(preceding-sibling::*) + 1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- Add this id as an attribute -->
+        <xsl:attribute name="original-id">
+            <xsl:value-of select="$new-id"/>
+        </xsl:attribute>
+        <!-- If we have reset to a subtree (due to an authored @xml:id) -->
+        <!-- then we want a dash after the value of @xml:id and the     -->
+        <!-- sequence of letters and numbers (but *not* as part of the  -->
+        <!-- id we just added).  We smoosh this on as a concatenation   -->
+        <!-- in recursion just below.                                   -->
+        <xsl:variable name="lead-separator">
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:text>-</xsl:text>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:variable>
+         <!-- Attributes done, recurse into children  -->
+         <!-- nodes, passing updated id, possible sep -->
+        <xsl:apply-templates select="node()" mode="original-labels">
+            <xsl:with-param name="parent-id" select="concat($new-id, $lead-separator)"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+
 <!-- ############## -->
 <!-- Identification -->
 <!-- ############## -->
