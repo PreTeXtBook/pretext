@@ -1412,34 +1412,17 @@ def webwork_to_xml(
                 tgzfile = tarfile.open(destination_image_file)
                 tgzfile.extractall(os.path.join(ww_images_dir))
                 tgzfile.close()
-                try:
-                    os.rename(
-                        os.path.join(ww_images_dir, "image.tex"),
-                        os.path.join(ww_images_dir, ptx_image_name + ".tex"),
-                    )
-                except:
-                    log.warning("{} did not contain a .tex file".format(destination_image_file))
-                try:
-                    os.rename(
-                        os.path.join(ww_images_dir, "image.pdf"),
-                        os.path.join(ww_images_dir, ptx_image_name + ".pdf"),
-                    )
-                except:
-                    log.warning("{} did not contain a .pdf file".format(destination_image_file))
-                try:
-                    os.rename(
-                        os.path.join(ww_images_dir, "image.svg"),
-                        os.path.join(ww_images_dir, ptx_image_name + ".svg"),
-                    )
-                except:
-                    log.warning("{} did not contain a .svg file".format(destination_image_file))
-                try:
-                    os.rename(
-                        os.path.join(ww_images_dir, "image.png"),
-                        os.path.join(ww_images_dir, ptx_image_name + ".png"),
-                    )
-                except:
-                    log.warning("{} did not contain a .png file".format(destination_image_file))
+                # template for error message(s)
+                msg = "{} did not contain a .{} file"
+                # attempt to recover four file formats, with warnings
+                for ext in ["tex", "pdf", "svg", "png"]:
+                    try:
+                        os.rename(
+                            os.path.join(ww_images_dir, "image.{}".format(ext)),
+                            os.path.join(ww_images_dir, ptx_image_name + ".{}".format(ext)),
+                        )
+                    except:
+                        log.warning(msg.format(destination_image_file, ext))
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
         # Start appending XML children
