@@ -2818,6 +2818,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These two named templates create a space or a      -->
 <!-- period with enough HTML markup to allow for hiding -->
 <!-- them if some other part of a heading is hidden.    -->
+<!-- NB: These are radically simplified in tbe braille  -->
+<!-- conversion, for use in headings (includes exercise -->
+<!-- numbers) so think about where they are used.       -->
 
 <xsl:template name="space-styled">
     <span class="space">

@@ -341,6 +341,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
+<!-- Heading Utilities -->
+
+<!-- We override two templates of the generic HTML conversion.   -->
+<!-- There, spans for styling cause liblouis to insert a space,  -->
+<!-- which is definitely not desirable.  This primarily affects  -->
+<!-- headings and titles of blocks, in addition to the numbers   -->
+<!-- for exercises.  E.g. "5."  These are "span-less" versions.  -->
+
+<xsl:template name="space-styled">
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<xsl:template name="period-styled">
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+
 <!-- ################### -->
 <!-- Environments/Blocks -->
 <!-- ################### -->
