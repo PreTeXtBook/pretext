@@ -1382,12 +1382,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: match is recycled in manifest formation                   -->
 <xsl:template match="*[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
     <xsl:choose>
-        <xsl:when test="$b-host-runestone">
+        <xsl:when test="$b-host-runestone or ($short-answer-responses = 'always')">
             <!-- when "response" has attributes, perhaps they get interpreted here -->
             <div class="ptx-runestone-container">
                 <div class="runestone">
                     <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
                         <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                        <!-- showing a box, but it can't be graded, so warn reader -->
+                        <xsl:if test="not($b-host-runestone)">
+                            <xsl:attribute name="data-placeholder">
+                                <xsl:text>You can write here, and it will be saved on this device, but your response will not be graded.</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="statement"/>
                     </div>
                 </div>
