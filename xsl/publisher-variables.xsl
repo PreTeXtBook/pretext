@@ -1821,6 +1821,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-scratch-activecode" select="not($html-scratch-activecode-language = 'none')"/>
 
+<!--                                      -->
+<!-- HTML Reading Question Response Boxes -->
+<!--                                      -->
+
+<xsl:variable name="short-answer-responses">
+    <xsl:variable name="default-responses" select="'graded'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/@short-answer-responses = 'graded'">
+            <xsl:text>graded</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/@short-answer-responses = 'always'">
+            <xsl:text>always</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/@short-answer-responses">
+            <xsl:message>PTX:WARNING: HTML @short-answer-responses in publisher file should be "graded" or "always", not "<xsl:value-of select="$publication/html/@short-answer-responses"/>". Proceeding with default value: "<xsl:value-of select="$default-responses"/>"</xsl:message>
+            <xsl:value-of select="$default-responses"/>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-responses"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                          -->
 <!-- HTML Index Page Redirect -->
 <!--                          -->
