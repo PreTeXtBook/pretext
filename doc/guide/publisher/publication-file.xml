@@ -536,6 +536,18 @@
             </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-short-answer-responses">
+            <title>Short Answer Responses</title>
+            <idx><h>short answer exercises</h><h>response area</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>short-answer-responses</attr> with values:<ul>
+                <li><c>graded</c>: the default, only show an area for responses when they can be graded or scored (such as when hosted on Runestone,  <xref ref="runestone"/>).</li>
+                <li><c>always</c>: include an editable response area, even if it cannot be submitted for feedback.</li>
+            </ul>See <xref ref="short-answer-exercises"/> for details.</p>
+        </subsection>
+
         <subsection xml:id="html-asymptote-link-options">
             <title><latex/> Asymptote <q>Click to Enlarge</q> Links</title>
             <idx><h>Asymptote links</h><h>HTML</h></idx>
