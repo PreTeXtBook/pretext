@@ -3618,6 +3618,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% http://tex.stackexchange.com/questions/115321&#xa;</xsl:text>
     <xsl:text>%% /how-to-optimize-latin-modern-font-with-xelatex&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not($latex-font-main-regular = '')">
+            <xsl:text>\setmainfont{</xsl:text>
+            <xsl:value-of select="$latex-font-main-regular"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- nothing to do, see comments above -->
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Filenames necessary to be cross-platform -->
