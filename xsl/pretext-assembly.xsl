@@ -155,6 +155,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="original-labels">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="original-labels"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="labeling">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="labeling"/>
@@ -225,8 +231,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="original-labeled-rtf">
+    <xsl:apply-templates select="$version" mode="original-labels"/>
+</xsl:variable>
+<xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
+
 <xsl:variable name="labeled-rtf">
-    <xsl:apply-templates select="$version" mode="labeling"/>
+    <xsl:apply-templates select="$original-labeled" mode="labeling"/>
 </xsl:variable>
 <xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
 
@@ -544,12 +555,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.  We are only interpreting the "content" form here by simply       -->
 <!-- adding the footnote element.  This leaves various decisions about      -->
 <!-- formatting to the subsequent conversion.                               -->
+<!--                                                                        -->
+<!-- N.B. the automatic "fn/@pi:url" creates a *new* element that is not    -->
+<!-- in an author's source.  When we annotate source (as a form of perfect  -->
+<!-- documentation) we take care to not annotate these elements which  have -->
+<!-- no source to show.                                                     -->
 
-<xsl:template match="url[node()]" mode="repair">
+<xsl:template match="url[node()]|datafile[node()]" mode="repair">
     <xsl:copy>
         <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
     </xsl:copy>
+    <!-- manufacture a footnote with (private) attribute -->
+    <!-- as a signal to conversions as to its origin     -->
     <xsl:choose>
         <!-- explicitly opt-out, so no footnote -->
         <xsl:when test="@visual = ''"/>
@@ -561,16 +579,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- When an author has not made an effort to provide a visual   -->
             <!-- alternative, then attempt some obvious clean-up of the      -->
             <!-- default, and if not possible, settle for an ugly visual URL -->
+            <!--                                                             -->
+            <!-- We get a candidate visual URI from the @href attribute      -->
+            <!-- link/reference/location may be external -->
+            <!-- (@href) or internal (datafile[@source]) -->
+            <xsl:variable name="uri">
+                <xsl:choose>
+                    <!-- "url" and "datafile" both support external @href -->
+                    <xsl:when test="@href">
+                        <xsl:value-of select="@href"/>
+                    </xsl:when>
+                    <!-- a "datafile" might be local, @source is        -->
+                    <!-- indication, so prefix with a base URL,         -->
+                    <!-- add "external" directory, via template useful  -->
+                    <!-- also for visual URL formulation in -assembly   -->
+                    <!-- N.B. we are using the base URL, since this is  -->
+                    <!-- the most likely need by employing conversions. -->
+                    <!-- It would eem duplicative in a conversion to    -->
+                    <!-- HTML, so could perhaps be killed in that case. -->
+                    <!-- But it is what we want for LaTeX, and perhaps  -->
+                    <!-- for EPUB, etc.                                 -->
+                    <xsl:when test="self::datafile and @source">
+                        <xsl:apply-templates select="." mode="static-url"/>
+                    </xsl:when>
+                    <!-- empty will be non-functional -->
+                    <xsl:otherwise/>
+                </xsl:choose>
+            </xsl:variable>
+            <!-- And clean-up automatically in the prevalent cases -->
             <xsl:variable name="truncated-href">
                 <xsl:choose>
                     <xsl:when test="substring(@href, 1, 8) = 'https://'">
-                        <xsl:value-of select="substring(@href, 9)"/>
+                        <xsl:value-of select="substring($uri, 9)"/>
                     </xsl:when>
                     <xsl:when test="substring(@href, 1, 7) = 'http://'">
-                        <xsl:value-of select="substring(@href, 8)"/>
+                        <xsl:value-of select="substring($uri, 8)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="@href"/>
+                        <xsl:value-of select="$uri"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
@@ -693,6 +739,76 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
+</xsl:template>
+
+
+<!-- This pass adds 100% internal identification for elements after a   -->
+<!-- version has been constructed, but before anything else is added or -->
+<!-- manipulated.  The tree it builds is used for constructing          -->
+<!-- "View Source" knowls in HTML output as a form of always-accurate   -->
+<!-- documentation.  This id might be useful in other scenarios so we   -->
+<!-- build it with some care.  Entirely possible that the final pass of -->
+<!-- this stylesheet will have produced times which in HTML there is no -->
+<!-- real original.  So maybe not perfect.  But good enough?            -->
+<!--                                                                    -->
+<!-- Key properties of the id:                                          -->
+<!--     - built with descent through tree, so fast                     -->
+<!--     - unique (numbers give depth and breadth within subtree)       -->
+<!--     - resets on discovered @xml:id                                 -->
+<!--     - minimal computation (counting siblings)                      -->
+<!--     - somewhat insensitive to source edits far away                -->
+<xsl:template match="*" mode="original-labels">
+    <xsl:param name="parent-id" select="'root-'"/>
+
+    <xsl:copy>
+        <!-- duplicate all existing attributes, -->
+        <xsl:apply-templates select="@*" mode="original-labels"/>
+        <!-- capture the id we will use *and* build upon -->
+        <xsl:variable name="new-id">
+            <xsl:choose>
+                <!-- authored @xml:id, so reset to this subtree -->
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$parent-id"/>
+                    <!-- This particular letter is totally irrelevant, could    -->
+                    <!-- be a dash, it is just a separator.  We don't want the  -->
+                    <!-- numbers (next) to coalesce ( 2,13 = 21,3 = "213" ) and -->
+                    <!-- wreck uniqueness.  But a hint of an element name may   -->
+                    <!-- make some debugging activity easier.                   -->
+                    <xsl:value-of select="substring(local-name(), 1, 1)"/>
+                    <!-- Location *within its level* of the tree, while level    -->
+                    <!-- itself is implicit in the number of separator letters   -->
+                    <!-- accumulated.  This makes this string unique within      -->
+                    <!-- the subtree rooted at the most recent authored @xml:id. -->
+                    <xsl:value-of select="count(preceding-sibling::*) + 1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- Add this id as an attribute -->
+        <xsl:attribute name="original-id">
+            <xsl:value-of select="$new-id"/>
+        </xsl:attribute>
+        <!-- If we have reset to a subtree (due to an authored @xml:id) -->
+        <!-- then we want a dash after the value of @xml:id and the     -->
+        <!-- sequence of letters and numbers (but *not* as part of the  -->
+        <!-- id we just added).  We smoosh this on as a concatenation   -->
+        <!-- in recursion just below.                                   -->
+        <xsl:variable name="lead-separator">
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:text>-</xsl:text>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:variable>
+         <!-- Attributes done, recurse into children  -->
+         <!-- nodes, passing updated id, possible sep -->
+        <xsl:apply-templates select="node()" mode="original-labels">
+            <xsl:with-param name="parent-id" select="concat($new-id, $lead-separator)"/>
+        </xsl:apply-templates>
+    </xsl:copy>
 </xsl:template>
 
 
@@ -1352,6 +1468,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK problems have been sent to a server and come back as      -->
 <!-- several different representations, all collected in one big file, -->
 <!-- which we mine and duplicate in this pass.                         -->
+
+<!-- NB: when working to improve which parts of the webwork representations -->
+<!-- move on to assembled source, realize that the "static" version meant   -->
+<!-- for non-HTML outputs is also the best thing to provide to the HTML     -->
+<!-- conversion for use as a search document.  Perhaps create the full-on   -->
+<!-- JSON (escaped) string here from "static" and provide it as an internal -->
+<!-- element ("pi:") for later consumption.  Review the destination for     -->
+<!-- similar notes about possible changes.                                  -->
 
 <xsl:template match="webwork[* or @copy or @source]" mode="representations">
     <xsl:variable name="ww-id">

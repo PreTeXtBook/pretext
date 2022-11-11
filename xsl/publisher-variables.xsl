@@ -171,6 +171,75 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Watermarking -->
+<!-- Variables for watermark text (simple!), and a scale factor. -->
+<!-- Boolean variables for existence (one is deprecated LaTeX).  -->
+
+<xsl:variable name="watermark-text">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/common/watermark">
+            <xsl:value-of select="$publication/common/watermark"/>
+        </xsl:when>
+        <!-- string parameter, general -->
+        <xsl:when test="($watermark.text != '')">
+            <xsl:value-of select="$watermark.text"/>
+        </xsl:when>
+        <!-- old LaTeX-specific string parameter -->
+        <xsl:when test="($latex.watermark != '')">
+            <xsl:value-of select="$latex.watermark"/>
+        </xsl:when>
+        <!-- won't get employed if we get here, but... -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Unedited comment, copied from old code:                            -->
+<!-- watermark uses a 5cm font, which can be scaled                     -->
+<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
+<!-- and in the default body width for LaTeX                            -->
+
+<xsl:variable name="watermark-scale">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/common/watermark and $publication/common/watermark/@scale">
+            <xsl:value-of select="$publication/common/watermark/@scale"/>
+        </xsl:when>
+        <!-- string parameter, general -->
+        <xsl:when test="($watermark.text != '') and ($watermark.scale != '')">
+            <xsl:value-of select="$watermark.scale"/>
+        </xsl:when>
+        <!-- old LaTeX-specific string parameter -->
+        <xsl:when test="($latex.watermark != '') and ($latex.watermark.scale != '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <!-- employ (historical) defaults to accompany provided text-->
+        <xsl:otherwise>
+            <xsl:choose>
+                <!-- via publication file -->
+                <xsl:when test="$publication/common/watermark">
+                    <xsl:text>0.5</xsl:text>
+                </xsl:when>
+                <!-- string parameter, general -->
+                <xsl:when test="($watermark.text != '')">
+                    <xsl:text>0.5</xsl:text>
+                </xsl:when>
+                <!-- old LaTeX-specific string parameter -->
+                <xsl:when test="($latex.watermark != '')">
+                    <xsl:text>2.0</xsl:text>
+                </xsl:when>
+                <!-- won't get employed if we get here, but... -->
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- General watermarking, publication file or deprecated stringparam.  Plus  .-->
+<!-- the option of double-deprecated string parameter (indicating LaTeX only). -->
+<xsl:variable name="b-watermark" select="$publication/common/watermark or ($watermark.text != '')"/>
+<xsl:variable name="b-latex-watermark" select="$b-watermark or ($latex.watermark != '')"/>
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
@@ -1752,6 +1821,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-scratch-activecode" select="not($html-scratch-activecode-language = 'none')"/>
 
+<!--                                      -->
+<!-- HTML Reading Question Response Boxes -->
+<!--                                      -->
+
+<xsl:variable name="short-answer-responses">
+    <xsl:variable name="default-responses" select="'graded'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/@short-answer-responses = 'graded'">
+            <xsl:text>graded</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/@short-answer-responses = 'always'">
+            <xsl:text>always</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/@short-answer-responses">
+            <xsl:message>PTX:WARNING: HTML @short-answer-responses in publisher file should be "graded" or "always", not "<xsl:value-of select="$publication/html/@short-answer-responses"/>". Proceeding with default value: "<xsl:value-of select="$default-responses"/>"</xsl:message>
+            <xsl:value-of select="$default-responses"/>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-responses"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                          -->
 <!-- HTML Index Page Redirect -->
 <!--                          -->
@@ -2631,6 +2725,52 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!-- Possible values for search/@variant are:                      -->
+<!--                                                               -->
+<!--   "none" - self-explanatory, no computation, no interface     -->
+<!--   "textbook" - pages, divisions on pages, blocks, p[term],    -->
+<!--                chronological and indented presentation        -->
+<!--   "reference" - pages, divisions, all children of a division  -->
+<!--                 (blocks, first-class "p")                     -->
+<!--   "default" - historical, equal to "textbook"                 -->
+<!--                                                               -->
+<!-- Resulting variable values are "none", "textbook", "reference" -->
+<!-- Note the boolean variable for the no-search case              -->
+<xsl:variable name="native-search-variant">
+    <xsl:variable name="default-native-search" select="'none'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/search/@variant = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'textbook'">
+            <xsl:text>textbook</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'reference'">
+            <xsl:text>reference</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'default'">
+            <!-- change to default variable once this becomes opt-out -->
+            <xsl:text>textbook</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/search/@variant">
+            <xsl:message>PTX:WARNING: HTML search/@variant in publisher file should be "none", "textbook", "reference" or "default", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
+            <xsl:value-of select="$default-native-search"/>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-native-search"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- warn if Google search is also set               -->
+    <!-- TODO: implementation might prefer native search -->
+    <xsl:if test="$b-google-cse and $publication/html/search/@variant and not($publication/html/search/@variant = 'none')">
+        <xsl:message>PTX:WARNING: specifying HTML search/@variant AND search/@google-cx in publisher file is not possible and will lead to unpredictable results</xsl:message>
+    </xsl:if>
+</xsl:variable>
+
+<xsl:variable name="has-native-search" select="not($native-search-variant = 'none')"/>
+
 <!-- Add a boolean variable to toggle "enhanced privacy mode" -->
 <!-- This is an option for embedded YouTube videos            -->
 <!-- and possibly other platforms at a later date.            -->
@@ -2843,6 +2983,166 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
+
+<!-- For historical reasons, this variable has "pt" as part -->
+<!-- of its value.  A change would need to be coordinated   -->
+<!-- with every application in the -latex conversion.       -->
+<xsl:variable name="font-size">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/latex/@font-size">
+            <!-- provisional, convenience -->
+            <xsl:variable name="fs" select="$publication/latex/@font-size"/>
+            <xsl:choose>
+                <xsl:when test="($fs =  '8') or
+                                ($fs =  '9') or
+                                ($fs = '10') or
+                                ($fs = '11') or
+                                ($fs = '12') or
+                                ($fs = '14') or
+                                ($fs = '17') or
+                                ($fs = '20')">
+                    <xsl:value-of select="$fs"/>
+                    <xsl:text>pt</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
+                    <xsl:text>10pt</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- via deprecated stringparam: assumes "pt" as the unit of measure   -->
+        <!-- (this is recycled code, so no real attempt to do better)          -->
+        <xsl:when test="not($latex.font.size = '')">
+            <xsl:choose>
+                <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>10pt</xsl:text>
+                    <xsl:message>PTX:ERROR   the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- no publication file entry, no deprecated  -->
+        <!-- string parameter, so use the default value -->
+        <xsl:otherwise>
+            <xsl:text>10pt</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Simple - just feeds into a LaTeX \geometry{} -->
+<xsl:variable name="latex-page-geometry">
+    <xsl:choose>
+        <!-- prefer publication file entry -->
+        <xsl:when test="$publication/latex/page/geometry">
+            <xsl:value-of select="$publication/latex/page/geometry"/>
+        </xsl:when>
+        <!-- deprecated string parameter in use-->
+        <xsl:when test="($latex.geometry != '')">
+            <xsl:value-of select="$latex.geometry"/>
+        </xsl:when>
+        <!-- empty is the signal to not use -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The default for the use of page references varies, so that  -->
+<!-- particular logic is in the -latex conversion.  Here we just -->
+<!-- sanitize to "yes", "no" or empty (i.e. ignored)             -->
+<xsl:variable name="latex-pageref">
+    <xsl:choose>
+        <!-- given in publication file -->
+        <xsl:when test="$publication/latex/@pageref">
+            <xsl:choose>
+                <xsl:when test="$publication/latex/@pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the publisher file entry  latex/@pageref  should be "yes" or "no" not "<xsl:value-of select="$publication/latex/@pageref"/>".  The value is being ignored.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- given by deprecated string parameter -->
+        <xsl:when test="($latex.pageref != '')">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$latex.pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.pageref  should be "yes" or "no" not "<xsl:value-of select="$latex.pageref"/>".  The value is being ignored.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- empty if no attempt to influence -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Draft Copies                                              -->
+<!-- Various options for working copies for authors            -->
+<!-- (1) LaTeX's draft mode                                    -->
+<!-- (2) Crop marks on letter paper, centered                  -->
+<!--     presuming geometry sets smaller page size             -->
+<!--     with paperheight, paperwidth                          -->
+<xsl:variable name="latex-draft-mode">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@draft">
+            <xsl:choose>
+                <xsl:when test="$publication/latex/@draft = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@draft = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@draft">
+                    <xsl:message>PTX WARNING: LaTeX draft mode in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@draft"/>". Proceeding with default value: "no"</xsl:message>
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- default -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="($latex.draft != '')">
+            <xsl:choose>
+                <xsl:when test="$latex.draft = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$latex.draft = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.draft  should be "yes" or "no" not "<xsl:value-of select="$latex.draft"/>".  The default value of "no" is being used.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+       </xsl:when>
+        <!-- ho effort to specify, default to "no" -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-latex-draft-mode" select="$latex-draft-mode = 'yes'"/>
 
 <!-- LaTeX/Asymptote -->
 
@@ -3184,6 +3484,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- deprecation message, and moved parameter here.            -->
 <xsl:param name="oldids" select="''"/>
 
+<!-- Deprecated on 2022-10-24.  Definition has changed from  -->
+<!-- a default value of "10pt" to an empty string, so we can -->
+<!-- detect use for a deprecation warning.  Default value is -->
+<!-- preserved in other ways as part of the deprecation.     -->
+<xsl:param name="latex.font.size" select="''" />
+
+<!-- Geometry: page shape, margins, etc. Deprecated    -->
+<!--2022-10-24, non-empty triggers deprecation warning -->
+<xsl:param name="latex.geometry" select="''"/>
+
+<!-- Page Numbers in cross-references, deprecated 2022-10-24 -->
+<xsl:param name="latex.pageref" select="''"/>
+
+<!-- Electing LaTeX draft mode, deprecated 2022-10-24 -->
+<xsl:param name="latex.draft" select="''"/>
+
+<!-- These first two are deprecated in favor of watermark.text  -->
+<!-- and watermark.scale, which in turn are deprecated in favor -->
+<!-- of publication file entry.  Double deprecation, second one -->
+<!-- on 2022-10-24.                                             -->
+<xsl:param name="latex.watermark" select="''"/>
+<xsl:param name="latex.watermark.scale" select="''"/>
+<xsl:param name="watermark.text" select="''" />
+<xsl:param name="watermark.scale" select="''" />
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->
@@ -3220,23 +3545,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="exercise.backmatter.hint" select="''" />
 <xsl:param name="exercise.backmatter.answer" select="''" />
 <xsl:param name="exercise.backmatter.solution" select="''" />
-
-<!-- These are deprecated in favor of watermark.text and watermark.scale -->
-<!-- which are now managed in common. These still "work" for now.        -->
-<!-- The default scaling factor of 2.0 is historical.                    -->
-<xsl:param name="latex.watermark" select="''"/>
-<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
-<xsl:param name="latex.watermark.scale" select="''"/>
-<xsl:variable name="latex-watermark-scale">
-    <xsl:choose>
-        <xsl:when test="not($latex.watermark.scale = '')">
-            <xsl:value-of select="$latex.watermark.scale"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>2.0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
 

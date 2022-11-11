@@ -45,7 +45,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Sneak in baseurl as first item, with -->
 <!-- interactive info on subsequent lines -->
-<xsl:template match="/">
+<xsl:template match="*" mode="extraction-wrapper">
     <xsl:value-of select="$baseurl"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-imports />

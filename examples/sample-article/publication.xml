@@ -104,9 +104,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <css banner="default"/>
         <css navbar="default"/>
         <css shell="default"/>
+        <!-- native search via Javascript library -->
+        <search variant="default"/>
     </html>
 
-    <latex print="no" sides="two">
+    <!-- 10pt font is the default   -->
+    <!-- draft mode default is "no" -->
+    <latex print="no" sides="two" font-size="10" draft="no">
         <!-- these are the default alignments, given just as an example -->
         <page right-alignment="flush" bottom-alignment="ragged"/>
         <!-- worksheets are formatted separately by default.   -->

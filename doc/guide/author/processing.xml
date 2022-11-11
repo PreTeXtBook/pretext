@@ -402,13 +402,15 @@
                 <idx><h>CLI</h><h>stringparam</h></idx>
                 <idx><h>xmlid-root</h></idx>
                 <idx><h>CLI</h><h>xmlid-root</h></idx>
-                The above tags are required for each target.  There are also some optional tags that can further customize the behavior of a particular target.  The <tage>stringparam</tage> tag with attributes <attr>key</attr> and <attr>value</attr> can be used to specify stringparameter options (although most of the stringparameters that were previously used to control output are now controlled by the publication file).  The <tag>xmlid-root</tag> element is used to specify the xml:id of a division of a project for building only that subset of the project (useful for quickly testing just one chapter or section).
+                The above tags are required for each target.  There are also some optional tags that can further customize the behavior of a particular target.  The <tage>stringparam</tage> tag with attributes <attr>key</attr> and <attr>value</attr> can be used to specify string parameter options (<xref ref="publisher-string-parameters"/>.  The <tag>xmlid-root</tag> element is used to specify the xml:id of a division of a project for building only that subset of the project (useful for quickly testing just one chapter or section).
             </p>
 
             <p>
                 <idx><h>custom xsl</h></idx>
                 <idx><h>CLI</h><h><c>custom xsl</c></h></idx>
-                The last optional element we will mention is the <tag>xsl</tag> element.  Here you would provide the path to a custom xsl file that itself calls the standard pretext-provided xsl.  To import the standard xsl file (say pretext-common.xsl) near the top of the custom xsl file, import it using <c>&lt;xsl:import href="./core/pretext-common.xsl"/&gt;</c>.  To see an example of this used to build a revealjs slideshow, try <c>pretext new slideshow</c>.  Note that if you use the <q>custom</q> format, the <tag>xsl</tag> element is required, although it can be used on any format.  This is also how you would use the custom latex styles provided by pretext.
+                The last optional element we will mention is the <tag>xsl</tag> element.  Here you would provide the path to a custom xsl file that itself calls the standard pretext-provided xsl.  To import the standard xsl file (say pretext-common.xsl) near the top of the custom xsl file, import it using<cd>
+                    <cline>&lt;xsl:import href="./core/pretext-common.xsl"/&gt;</cline>
+                </cd>To see an example of this used to build a revealjs slideshow, try <c>pretext new slideshow</c>.  Note that if you use the <q>custom</q> format, the <tag>xsl</tag> element is required, although it can be used on any format.  This is also how you would use the custom latex styles provided by pretext.
             </p>
         </subsection>
 
@@ -486,18 +488,12 @@
         <p>We have devoted an entire chapter (<xref ref="schema" />) to amplifying this introduction and providing more details, such as where to find details on installing a validator.</p>
     </section>
 
-    <section xml:id="processing-publisher-stringparam">
-        <title>Customizations, Publication File, String Parameters</title>
+    <section xml:id="processing-customizations">
+        <title>Customizations</title>
 
-        <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your source.</p>
+        <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your writing, nor a concern while you concentrating on your writing.</p>
 
-        <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publication file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publication-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> since that is the name used to call them using <c>xsltproc</c>. The <pretext />-CLI can set these stringparams easily as well.</p>
-
-        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl" visual="github.com/PreTeXtBook/pretext/blob/dev/xsl/mathbook-latex.xsl"><c>xsl/pretext-latex.xsl</c></url> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported. To pass this parameter to the CLI, you would specify them inside your project manifest.  Inside a particular <tag>target</tag>, include <tage>stringparam key="latex.font.size" value="20pt"</tage>, for example.  Each stringparam you want to set gets its own <tage>stringparam key="" value=""</tage> element.</p>
-
-        <p>These parameters are documented in the <init>XSL</init> files themselves, available in <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl" visual="github.com/PreTeXtBook/pretext/tree/dev/xsl"><c>xsl</c> folder in the <pretext /> GitHub repository</url>, principally <c>pretext-common.xsl</c>, <c>pretext-latex.xsl</c> and <c>pretext-html.xsl</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Guide.</p>
-
-        <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
+        <p>Therefore, many aspects of how your writing is <em>presented</em> is accomplished by your publisher.  Note that this is very different from <em>your</em> role as the author of your project.  When your project is mature then you can consult with your publisher about how to best present your project to your audience.  An entire part of this guide is devoted to this process (<xref ref="part-publisher"/>), but if you are curious, the first part of <xref ref="conversions"/> can serve as an introduction.</p>
     </section>
 
     <section xml:id="processing-directory-management">
@@ -665,46 +661,6 @@
         </subsection>
     </section>
 
-    <section xml:id="processing-thin-xsl">
-        <title>Customizations, Thin XSL Stylesheets</title>
-
-        <p>Stringparams (<xref ref="processing-publisher-stringparam"/>) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
-
-        <p>You may also wish to customize your output in some stylistic way.  This might be especially true for <latex />/PDF/print output.  For example, you might wish to have every chapter heading of your book in a nice shade of light blue, with the title flush right to the margin, countered by a thick solid rule extending all the way right, to the edge of the paper.  Notice that this does not affect your content, it is strictly presentation.</p>
-
-        <p>We have done several things to encourage such customizations.  We have tried to put as much stylistic information as possible in the <latex /> preamble and keep as much as possible out of the body.  (There is always room for improvement on this score, please be in touch if you have a need.)  For small adjustments the <c>latex.preamble.early</c> and <c>latex.preamble.late</c> stringparam are possible vehicles, though all the <latex /> code to make light blue, flush-right rules is going to be messy on the command-line.</p>
-
-        <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>.  You can then tell the <pretext />-CLI to use that <init>XSL</init> file instead of the standard one provided by <pretext /> through the <tag>xsl</tag> element in a <tag>target</tag> of the project manifest.</p>
-
-        <p>
-            Assume that you have an <init>XSL</init> file called <c>custom-latex.xsl</c> located in the folder <c>xsl</c> inside the root of your project.  In your <c>project.ptx</c> manifest file, use <c>&lt;xsl&gt;xsl/custom-latex.xsl&lt;/xsl&gt;</c> as an element in the corresponding <tag>target</tag>.
-        </p>
-
-        <p>
-            The custom <init>XSL</init> file should import the stock <pretext /> file for the type of output you want to create.  This is done using the line <tage>xsl:import href="./core/pretext-latex.xsl"</tage>, which should be placed near the top of the file; everything after it will redefine the various rules imported from the stock <init>XSL</init>.  Note the <attr>href</attr> attribute's value starts with <c>./core/</c>.  This works because the CLI copies all the standard <init>XSL</init> to a subfolder <c>core</c> of the temporary directory holding your custom <init>XSL</init> so that you don't need to know the path to its location on your system.
-        </p>
-        <p>
-            See <xref ref="extra-stylesheet"/> to see how to use such a stylesheet with the <c>pretext/pretext</c> script.
-        </p>
-
-        <p>
-            The easiest thing to put in this file is elements like
-            <cd>&lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;</cd> which is functionally equivalent to our example in <xref ref="processing-publisher-stringparam"/>.  Values given on the command-line supersede those given in an XSL file this way.</p>
-
-        <p>You can augment the <latex /> preamble with as much <latex /> code as you like in the following way.</p>
-
-        <pre>
-        &lt;xsl:param name="latex.preamble.late"&gt;
-            &lt;xsl:text&gt;% Proof environment with heading in small caps&amp;#xa;&lt;/xsl:text&gt;
-            &lt;xsl:text&gt;\expandafter\let\expandafter\oldp\csname\string\proof\endcsname&amp;#xa;&lt;/xsl:text&gt;
-            &lt;xsl:text&gt;\let\oldep\endproof&amp;#xa;&lt;/xsl:text&gt;
-            &lt;xsl:text&gt;\renewenvironment{proof}[1][\proofname]{\oldp[\scshape #1]}{\oldep}&amp;#xa;&lt;/xsl:text&gt;
-        &lt;/xsl:param&gt;
-        </pre>
-
-        <p>There are a variety of things you can do generally, by overriding the imported XSL templates to change behavior, but such modifications are beyond the scope of this guide.</p>
-    </section>
-
     <section xml:id="processing-images-inkscape">
         <title>Creating Images with Inkscape</title>
         <idx>Inkscape</idx>
@@ -780,7 +736,7 @@
              <cline>&lt;!-- ToDo: include a section on salamanders and their life-cycle --&gt;</cline>
         </cd>  As an XML comment, you can place this anywhere.  Contents need to be plain characters, no XML will be active here.  Remember to escape the two XML characters, and also be aware that <c>--</c> is banned in comments outside of the delimiters.</p>
 
-        <p>Use the <c>author.tools</c><idx><c>author.tools</c></idx> parameter set equal to <c>yes</c> and your <latex/> and <init>HTML</init> output will be annotated.  (See <xref ref="processing-publisher-stringparam"/> for more on parameters.)  Provisional cross-references and todo-comments will be visible and highlighted, and in particular, the <latex/> output will display an abundance of extra information (maybe too much).  The <latex />-specific parameter <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending, or hidden, in the usual output.</p>
+        <p>Use the <c>author.tools</c><idx><c>author.tools</c></idx> parameter set equal to <c>yes</c> and your <latex/> and <init>HTML</init> output will be annotated.  (See <xref ref="publisher-string-parameters"/> for more on parameters.)  Provisional cross-references and todo-comments will be visible and highlighted, and in particular, the <latex/> output will display an abundance of extra information (maybe too much).  The <latex />-specific publication file entry for draft mode will activate the <latex/> draft option (see <xref ref="latex-draft-mode-options"/>).  The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending, or hidden, in the usual output.</p>
 
         <p>
             For users of <c>xsltproc</c>, the <c>authors-report.xsl</c> stylesheet, found in the <c>xsl/utilities</c> directory, will report all of the provisional cross-references and all of the properly prefixed todo-comments.  See <xref ref="xsltproc-author-tools"/>.

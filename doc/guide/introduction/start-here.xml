@@ -53,7 +53,7 @@
 
                     <li xml:id="principle-open"><pretext /> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</li>
 
-                    <li xml:id="principle-users"><pretext /> recognizes that scholarly documents involve the interaction of authors, publishers, scholars, instructors, students, and readers, with each group having its own needs and goals.</li>
+                    <li xml:id="principle-users"><pretext /> recognizes that scholarly documents involve the interaction of authors, publishers, scholars, curators, instructors, students, and readers, with each group having its own needs and goals.</li>
 
                     <li xml:id="principle-accessibility"><pretext/> recognizes the inherent value in producing material that is accessible to everyone.</li>
                 </ol>

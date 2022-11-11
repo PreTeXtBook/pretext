@@ -365,16 +365,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- text for a watermark that is centered, -->
-<!-- running at a 45 degree angle           -->
-<xsl:param name="watermark.text" select="''" />
-<xsl:variable name="b-watermark" select="not($watermark.text = '')" />
-
-<!-- watermark uses a 5cm font, which can be scaled                     -->
-<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
-<!-- and in the default body width for LaTeX                            -->
-<xsl:param name="watermark.scale" select="'0.5'" />
-
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->
@@ -572,6 +562,17 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 
 <!-- HTML only, a developer must elect to use this CSS file -->
 <xsl:param name="debug.developer.css" select="'no'"/>
+
+<!-- HTML only, testing early-releases of MathJax 4 -->
+<xsl:param name="debug.mathjax4" select="'no'"/>
+<xsl:variable name="mathjax4-testing" select="$debug.mathjax4 = 'yes'"/>
+
+<!-- A permanent string parameter to control the creation of  -->
+<!-- "View Source" knowls, which is a developer task, not a   -->
+<!-- publisher task (though it could be?).  So permanent, but -->
+<!-- undocumented.                                            -->
+<xsl:param name="debug.html.annotate" select="'no'"/>
+<xsl:variable name="b-view-source" select="$debug.html.annotate = 'yes'"/>
 
 <!-- Maybe not debugging, but transitional variables -->
 
@@ -3096,6 +3097,13 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="round($design-width-pixels * $width-fraction div $aspect-ratio)" />
 </xsl:template>
 
+<!-- ###################################### -->
+<!-- Static versions of Interactive Content -->
+<!-- ###################################### -->
+
+<!-- Templates for the pre-processor (and other stylesheets) to use -->
+<!-- for the creation of static versions of interactive content.    -->
+
 <!-- The HTML conversion generates "standalone" pages for videos   -->
 <!-- and other interactives.  Then the LaTeX conversion will make  -->
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
@@ -3108,6 +3116,85 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
+<!-- Static URL's -->
+<!-- Predictable and/or stable URLs for versions         -->
+<!-- of interactives available online.  These are        -->
+<!--                                                     -->
+<!--   (1) "standalone" pages for author/local material, -->
+<!--       as a product of the HTML conversion           -->
+<!--   (2) computable addresses of network resources,    -->
+<!--       eg the YouTube page of a resource             -->
+
+<!-- Point to HTML-produced, and canonically-hosted, standalone page -->
+<!-- NB: baseurl is assumed to have a trailing slash                 -->
+
+<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <xsl:apply-templates select="." mode="standalone-filename" />
+</xsl:template>
+
+<!-- Natural override for YouTube videos               -->
+<!-- Better - standalone page, with "View on You Tube" -->
+
+<!-- NB: ampersand is escaped for LaTeX use, be careful with switch to QR codes via Python! -->
+
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
+    <xsl:apply-templates select="." mode="youtube-view-url" />
+    <xsl:if test="@start">
+        <xsl:text>\&amp;start=</xsl:text>
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <xsl:if test="@end">
+        <xsl:text>\&amp;end=</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
+    <xsl:variable name="youtube">
+        <xsl:choose>
+            <xsl:when test="@youtubeplaylist">
+                <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>https://www.youtube.com/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>playlist?list=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:when>
+        <xsl:when test="contains($youtube, ' ')">
+            <xsl:text>watch_videos?video_ids=</xsl:text>
+            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>watch?v=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Vimeo view URL -->
+<xsl:template match="video[@vimeo]" mode="static-url">
+    <xsl:text>https://vimeo.com/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
+</xsl:template>
+
+<!-- A bit different than above, but same mode -->
+<!-- When a "datafile" is produced in a static -->
+<!-- context, then we append the $baseurl, and -->
+<!-- provide the external directory.           -->
+<xsl:template match="datafile[@source]" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <!-- empty when not using managed directories -->
+    <xsl:value-of select="$external-directory"/>
+    <xsl:apply-templates select="@source" />
 </xsl:template>
 
 
@@ -4261,6 +4348,9 @@ Book (with parts), "section" at level 3
 
 <!-- Poems go by their titles, not numbers -->
 <xsl:template match="poem" mode="serial-number" />
+
+<!-- Preformatted ("pre") appear in search results by name -->
+<xsl:template match="pre" mode="serial-number" />
 
 <!-- List items, subordinate to an unordered list, or a description  -->
 <!-- list, will have numbers that are especically ambiguous, perhaps -->
@@ -10230,18 +10320,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2019-03-07  replace latex.watermark with watermark.text         -->
+    <!-- 2022-10-24  update - to publication file                        -->
     <!-- Still exists and is respected, move to Variable Bad Bank later  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-03-07'" />
-        <xsl:with-param name="message" select="'the  latex.watermark  parameter has been replaced by  watermark.text  which is effective in HTML as well as LaTeX'" />
+        <xsl:with-param name="message" select="'the  latex.watermark  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
             <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale  -->
+    <!-- 2022-10-24  update - to publication file                        -->
     <!-- Still exists and is respected, move to Variable Bad Bank later  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-03-07'" />
-        <xsl:with-param name="message" select="'the  latex.watermark.scale  parameter has been replaced by  watermark.scale  which is effective in HTML as well as LaTeX'" />
+        <xsl:with-param name="message" select="'the  latex.watermark.scale  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
             <xsl:with-param name="incorrect-use" select="($latex.watermark.scale != '')" />
     </xsl:call-template>
     <!--  -->
@@ -10795,6 +10887,48 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//interactive[@wolfram-cdf]" />
         <xsl:with-param name="date-string" select="'2022-08-07'" />
         <xsl:with-param name="message" select="'support for Wolfram CDF &quot;interactive&quot; has been removed'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.font.size" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.font.size  parameter has been replaced by the  latex/@font-size  entry in the publication file.   We will attempt to honor your intent.  Note that possible values are the same, but you no longer provide &quot;pt&quot; as the unit of measure.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.font.size != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.geometry" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.geometry  parameter has been replaced by the  latex/page/geometry  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.geometry != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.pageref" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.pageref string parameter has been replaced by the  latex/@pageref  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.pageref != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.draft" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.draft string parameter has been replaced by the  latex/@draft  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.draft != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.text  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.text  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.text != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.scale  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.scale  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.scale != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

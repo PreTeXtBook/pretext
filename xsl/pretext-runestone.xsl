@@ -26,16 +26,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 ]>
 
 <!-- exsl: necessary to write out Runestone manifest -->
+<!-- str: necessary to tokenize alternate Runestone Services -->
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl str"
 >
 
 <!-- Not documented, for development use only -->
 <xsl:param name="debug.rs.services.file" select="''"/>
+<xsl:variable name="b-debugging-rs-services" select="not($debug.rs.services.file = '')"/>
 
 
 <!-- ######################## -->
@@ -65,7 +68,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be correct.                                                  -->
 <xsl:variable name="runestone-services-filename">
     <xsl:choose>
-        <xsl:when test="not($debug.rs.services.file = '')">
+        <xsl:when test="$b-debugging-rs-services">
             <xsl:value-of select="$debug.rs.services.file"/>
         </xsl:when>
         <xsl:otherwise>
@@ -75,6 +78,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
+
+<!-- Alternate Runestone Services -->
+<!-- We allow for an override of the content of the services file via      -->
+<!-- string parameters passed into this stylesheet. The purpose is to      -->
+<!-- allow the core Pythoon routines to query the Runestone server for     -->
+<!-- the *very latest* services file available online.  This will be       -->
+<!-- used instead of the recent (but not always latest) offline version    -->
+<!-- in the repository. This is meant to be a totally automated operation, -->
+<!-- so parameter names are not always human-friendly.                     -->
+<!--                                                                       -->
+<!-- Priority order                                                        -->
+<!--   1.  Respect debugging parameter                                     -->
+<!--   2.  Accept non-empty parameters (from Python online query, "altrs") -->
+<!--   3.  Offline, standard, use file in repository "support" directory   -->
+<xsl:param name="altrs-js" select="''"/>
+<xsl:param name="altrs-css" select="''"/>
+<xsl:param name="altrs-cdn-url" select="''"/>
+<xsl:param name="altrs-version" select="''"/>
+<!-- We arbitrarily use the version parameter as a flag for the   -->
+<!-- use of alternate services and rely on code to always specify -->
+<!-- all four parameters or none at all.                          -->
+<xsl:variable name="b-altrs-services" select="not($altrs-version = '') and not($b-debugging-rs-services)"/>
 
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
@@ -282,7 +307,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- on the Runestone Server.  But in the "Runestone for All" case,    -->
     <!-- any build/hosting can hit the Runestone site for the necessary    -->
     <!-- Javascript/CSS to power interactive questions in much the same    -->
-    <!-- manner as at Runestone Academy.                                   -->
+    <!-- manner as at Runestone Academy.  Additionally, overrides via      -->
+    <!-- string parameters are supported.                                  -->
     <xsl:variable name="runestone-cdn">
         <xsl:choose>
             <xsl:when test="$b-host-runestone">
@@ -291,22 +317,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <!-- CDN URL should end in a slash, -->
                 <!-- as version has no slashes      -->
-                <xsl:value-of select="$runestone-services/all/cdn-url"/>
-                <xsl:value-of select="$runestone-services/all/version"/>
+                <xsl:choose>
+                    <xsl:when test="$b-altrs-services">
+                        <xsl:value-of select="$altrs-cdn-url"/>
+                        <xsl:value-of select="$altrs-version"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$runestone-services/all/cdn-url"/>
+                        <xsl:value-of select="$runestone-services/all/version"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:text>/</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
 
-    <!-- When building for a Runestone server or when testing -->
-    <!-- Runestone for All, the $runestone-cdn will point to  -->
-    <!-- the right place for the necessary JS.                -->
+    <!-- The Runestone Services file typically contains multiple filenames    -->
+    <!-- for Javascript and CSS (like two or three).  In the alternate case,  -->
+    <!-- we expect the two string parameters to be lists delimited by a colon -->
+    <!-- (':'), so this character should not ever appear in the filenames.    -->
+    <!-- Note: these variables will be vacuous when the string parameters are -->
+    <!-- empty strings, and then will not ever be employed (below).           -->
+    <xsl:variable name="altrs-js-tokens" select="str:tokenize($altrs-js, ':')"/>
+    <xsl:variable name="altrs-css-tokens" select="str:tokenize($altrs-css, ':')"/>
+
+    <!-- The $runestone-cdn variable will point to the right Runestone  -->
+    <!-- Services file: when hosted on Runestone, inside of _static; or -->
+    <!-- when building for arbitrary hosting, inside the repository.    -->
+    <!-- In the case of alternate information provided via string       -->
+    <!-- parameters, the tokenized node sets will be employed.  Note    -->
+    <!-- how the unions of the two node-sets in the "for-each" are more -->
+    <!-- like exclusive-or, as we always get exactly one of the two.    -->
     <!-- N.B. Enclosing "if" goes away if/when $b-needs-runestone    -->
     <!-- just becomes true all the time.  Indentation predicts this. -->
     <xsl:if test="$b-host-runestone or $b-needs-runestone">
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:for-each select="$runestone-services/all/js/item">
+    <xsl:for-each select="$runestone-services/all/js/item[not($b-altrs-services)]|$altrs-js-tokens[$b-altrs-services]">
         <script type="text/javascript">
             <xsl:attribute name="src">
                 <xsl:value-of select="$runestone-cdn"/>
@@ -314,7 +361,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </script>
     </xsl:for-each>
-    <xsl:for-each select="$runestone-services/all/css/item">
+    <xsl:for-each select="$runestone-services/all/css/item[not($b-altrs-services)]|$altrs-css-tokens[$b-altrs-services]">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
                 <xsl:value-of select="$runestone-cdn"/>
@@ -339,6 +386,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <a href="/runestone/assignments/chooseAssignment">Assignments</a>
                 <a href="/runestone/assignments/practice">Practice</a>
                 <hr/>
+                <!-- if reader is not an instructor the next link will be removed by javascript -->
+                <a id="inst_peer_link" href='/{{appname}}/peer/instructor.html'>Peer Instruction (Instructor)</a>
+                <a href='/{{appname}}/peer/student.html'>Peer Instruction (Student)</a>
+                <hr/>
                 <a href="/runestone/default/courses">Change Course</a>
                 <hr/>
                 <a id="ip_dropdown_link" href="/runestone/admin/index">Instructor's Page</a>
@@ -347,12 +398,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>{% endif %}&#xa;</xsl:text>
                 <a href="/runestone/dashboard/studentreport">Progress Page</a>
                 <hr/>
+                <xsl:text>&#xa;{% if is_logged_in %}&#xa;</xsl:text>
                 <a href="/runestone/default/user/profile">Edit Profile</a>
                 <a href="/runestone/default/user/change_password">Change Password</a>
                 <a href="/runestone/default/user/logout">Log Out</a>
+                <xsl:text>&#xa;{% else %}&#xa;</xsl:text>
                 <a href="/runestone/default/user/register">Register</a>
                 <a href="/runestone/default/user/login">Login</a>
-                <a href="/runestone/assignments/index">Progress Page</a>
+                <xsl:text>&#xa;{% endif %}&#xa;</xsl:text>
             </div>
         </div>
     </xsl:if>
@@ -416,7 +469,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- version of Runestone Services used for this build -->
             <runestone-services>
                 <xsl:attribute name="version">
-                    <xsl:value-of select="$runestone-services/all/version"/>
+                    <xsl:choose>
+                        <xsl:when test="$b-altrs-services">
+                            <xsl:value-of select="$altrs-version"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$runestone-services/all/version"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:attribute>
             </runestone-services>
             <!-- mine various bits and pieces of the source for RS metadata  -->
@@ -507,7 +567,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- meet the dead-end monster match below, and the default template will     -->
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
-        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation"  mode="runestone-manifest"/>
+        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -522,6 +582,71 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number"/>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-full"/>
+    </label>
+</xsl:template>
+
+<!-- Runestone tracks engagement with YouTube videos and "stray" -->
+<!-- ActiveCode and CodeLens (i.e. an "inline" "program", not as -->
+<!-- a portion of an "exercise".  As these are atomic elements,  -->
+<!-- there is little to grab onto for a label in a report for an -->
+<!-- instructor.  So we provide examination of an enclosing      -->
+<!-- figure ("video") or listing ("program").                    -->
+
+<xsl:template match="video[@youtube]|program[((@interactive = 'codelens') or (@interactive = 'activecode')) and not(parent::exercise)]" mode="runestone-manifest-label">
+    <label>
+        <!-- three ways to get a type-name -->
+        <xsl:choose>
+            <xsl:when test="self::video[@youtube]">
+                <xsl:apply-templates select="." mode="type-name"/>
+            </xsl:when>
+            <xsl:when test="self::program[@interactive = 'codelens']">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'program-codelens'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="self::program[@interactive = 'activecode']">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'program-activecode'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
+        <!-- "video" can be a "figure", and "program" can be in a -->
+        <!-- "listing", but the two situations are similar enough -->
+        <!-- to combine and work with a generic parent/enclosure. -->
+        <!-- This could well be empty if inline objects.          -->
+        <xsl:variable name="enclosure" select="parent::figure|parent::listing"/>
+        <xsl:variable name="b-title" select="boolean(title)"/>
+        <xsl:variable name="b-enclosure" select="boolean($enclosure)"/>
+        <!-- more coming, use a separator -->
+        <xsl:if test="$b-title or $b-enclosure">
+            <xsl:text>: </xsl:text>
+        </xsl:if>
+        <!-- object's title is "closer" (or may be only  -->
+        <!-- possible identification if standalone) -->
+        <xsl:if test="$b-title">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+        <!-- if an abundance, use a separator -->
+        <xsl:if test="$b-title and $b-enclosure">
+            <xsl:text>; </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-enclosure">
+            <xsl:apply-templates select="$enclosure" mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="$enclosure" mode="number"/>
+            <xsl:if test="$enclosure/title">
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="$enclosure" mode="title-full"/>
+            </xsl:if>
+        </xsl:if>
+        <!-- last ditch effor for a YouTube video -->
+        <xsl:if test="self::video[@youtube] and not($b-title) and not($b-enclosure)">
+            <xsl:text>: </xsl:text>
+            <!-- need to know Runestone CSS to make this code/monospace -->
+            <xsl:value-of select="@youtube"/>
+        </xsl:if>
     </label>
 </xsl:template>
 
@@ -612,6 +737,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <!-- N.B.  Better here to ask for "exercise-components"? -->
         <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
+    </question>
+</xsl:template>
+
+<!-- TODO: by renaming/refactoring the templates inside of   -->
+<!-- "htmlsrc" then perhaps several of these templates with  -->
+<!-- similar structure can be combined via one larger match. -->
+
+<xsl:template match="video[@youtube]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "video", or enclosing "figure" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-youtube-embed"/>
+        </htmlsrc>
+    </question>
+</xsl:template>
+
+<xsl:template match="program[(@interactive = 'codelens') and not(parent::exercise)]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "program", or enclosing "listing" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-codelens"/>
+        </htmlsrc>
+    </question>
+</xsl:template>
+
+<xsl:template match="program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "program", or enclosing "listing" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </htmlsrc>
     </question>
 </xsl:template>
 
@@ -796,7 +955,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <div class="ptx-runestone-container">
-        <div class="runestone" style="max-width: none;">
+        <div class="runestone parsons_section" style="max-width: none;">
             <div data-component="parsons" class="parsons">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <div class="parsons_question parsons-text" >
@@ -1086,8 +1245,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
         </xsl:choose>
     </xsl:variable>
-    <!-- the actual form fill-in, with hint -->
-    <input type="text" placeholder="{$placeholder-hint}"/>
+    <!-- the actual form fill-in, with hint and width -->
+    <input type="text" placeholder="{$placeholder-hint}">
+        <xsl:if test="@width">
+            <xsl:attribute name="size">
+                <xsl:value-of select="@width"/>
+            </xsl:attribute>
+        </xsl:if>
+    </input>
 </xsl:template>
 
 <!-- JSON list-of-list structure -->
@@ -1217,12 +1382,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: match is recycled in manifest formation                   -->
 <xsl:template match="*[@exercise-interactive = 'shortanswer']" mode="runestone-to-interactive">
     <xsl:choose>
-        <xsl:when test="$b-host-runestone">
+        <xsl:when test="$b-host-runestone or ($short-answer-responses = 'always')">
             <!-- when "response" has attributes, perhaps they get interpreted here -->
             <div class="ptx-runestone-container">
                 <div class="runestone">
                     <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
                         <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                        <!-- showing a box, but it can't be graded, so warn reader -->
+                        <xsl:if test="not($b-host-runestone)">
+                            <xsl:attribute name="data-placeholder">
+                                <xsl:text>You can write here, and it will be saved on this device, but your response will not be graded.</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="statement"/>
                     </div>
                 </div>

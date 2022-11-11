@@ -62,6 +62,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Likely need not be an "import" (v. "include") -->
 <xsl:import href="./pretext-runestone.xsl"/>
 
+<!-- Routines to provide "View Source" annotations on HTML output   -->
+<!-- as a service on the PreTeXt website. NB: we use an "include"   -->
+<!-- to provide this set of templates.  The included stylesheet has -->
+<!-- radically different "strip-space" and "preserve-space"         -->
+<!-- declarations, which seem to *not* provide overrrides, and are  -->
+<!-- simply "local" to that stylesheet.                             -->
+<xsl:include href="./pretext-view-source.xsl"/>
+
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
 <!-- create a header in the old style that browsers will recognize  -->
 <!-- as signaling HTML5.  However  xsltproc  does one better and    -->
@@ -338,6 +346,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="runestone-manifest"/>
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
+    <!-- build a search page (in development) -->
+    <xsl:if test="$has-native-search">
+        <xsl:call-template name="search-page-construction"/>
+    </xsl:if>
     <!-- The main event                          -->
     <!-- We process the enhanced source pointed  -->
     <!-- to by $root at  /mathbook  or  /pretext -->
@@ -669,7 +681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-watermark and $heading-level = 2">
             <p class="watermark">
                 <xsl:text>Watermark text: </xsl:text>
-                <xsl:value-of select="$watermark.text"/>
+                <xsl:value-of select="$watermark-text"/>
                 <xsl:text></xsl:text>
             </p>
         </xsl:if>
@@ -2806,6 +2818,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These two named templates create a space or a      -->
 <!-- period with enough HTML markup to allow for hiding -->
 <!-- them if some other part of a heading is hidden.    -->
+<!-- NB: These are radically simplified in tbe braille  -->
+<!-- conversion, for use in headings (includes exercise -->
+<!-- numbers) so think about where they are used.       -->
 
 <xsl:template name="space-styled">
     <span class="space">
@@ -5390,7 +5405,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- sometimes annotate with a knowl showing the source     -->
             <!-- of the current element.  This calls a stub, unless     -->
             <!-- a separate stylesheet is used to define the template,  -->
-            <!-- and the method is defined there.                       -->
+            <!-- and the method is defined there.  An "fn" necessarily  -->
+            <!-- comes through here since it is realized as a knowl,    -->
+            <!-- but it is a silly thing to annotate.  We skip it       -->
+            <!-- promptly on the receiving end, instead of adding       -->
+            <!-- clutter here.                                          -->
             <xsl:apply-templates select="." mode="view-source-knowl"/>
             <!-- Then actual content, respecting b-original flag  -->
             <!-- Pass $block-type for Sage cells to know environs -->
@@ -7008,8 +7027,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Color rgb(204,204,204) matches LaTeX 80% grayscale.                           -->
 <xsl:variable name="watermark-svg">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="600" width="600">
-        <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark.scale}cm;">
-            <xsl:value-of select="$watermark.text"/>
+        <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark-scale}cm;">
+            <xsl:value-of select="$watermark-text"/>
         </text>
     </svg>
 </xsl:variable>
@@ -8048,7 +8067,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and then condition on the location of the    -->
 <!-- actual link, which is sensitive to display   -->
 <!-- math in particular                           -->
-<!-- See xsl/pretext-common.xsl for more info    -->
+<!-- See xsl/pretext-common.xsl for more info     -->
+<!-- NB: for HTML output, the $content variable   -->
+<!-- may have HTML elements in it (e.g. link is a  -->
+<!-- title with emphasis, or a MathJax processing  -->
+<!-- span) so we want a "copy-of" here, not a      -->
+<!-- "value-of".                                   -->
 <!-- TODO: could match on "xref" once link routines  -->
 <!-- are broken into two and other uses are rearranged -->
 <xsl:template match="*" mode="xref-link">
@@ -8061,7 +8085,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- 1st exceptional case, xref in a webwork, or in    -->
         <!-- some sort of title.  Then just parrot the content -->
         <xsl:when test="ancestor::webwork-reps|ancestor::title|ancestor::shorttitle|ancestor::subtitle">
-            <xsl:value-of select="$content" />
+            <xsl:copy-of select="$content"/>
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
         <!--   with Javascript (pure HTML) we can make knowls    -->
@@ -8108,7 +8132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$target" mode="tooltip-text" />
                 </xsl:attribute>
                 <!-- link content from common template -->
-                <xsl:value-of select="$content" />
+                <xsl:copy-of select="$content"/>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -8117,7 +8141,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For pure HTML we can make a true knowl or traditional link -->
 <!-- when an "xref" is authored inside of a display math "mrow" -->
 <!-- Requires https://pretextbook.org/js/lib/mathjaxknowl.js    -->
-<!-- loaded as a MathJax extension for knowls to render         -->
+<!-- loaded as a MathJax extension for knowls to render.        -->
+<!-- See discussion in "xref-link" about "copy-of" necessity.   -->
 <xsl:template match="*" mode="xref-link-display-math">
     <xsl:param name="target"/>
     <xsl:param name="content"/>
@@ -8138,7 +8163,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$content"/>
+    <xsl:copy-of select="$content"/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -8627,7 +8652,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.  In "content" case, we get a special footnote from the         -->
 <!-- assembly phase, so look elsewhere for that handling.                -->
 <!-- N.B. compare with LaTeX version, could move much to -common         -->
-<xsl:template match="url">
+<xsl:template match="url|datafile">
+    <!-- link/reference/location may be external -->
+    <!-- (@href) or internal (datafile[@source]) -->
+    <xsl:variable name="uri">
+        <xsl:choose>
+            <!-- "url" and "datafile" both support external @href -->
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- a "datafile" might be local, @source is     -->
+            <!-- indication, so prefix with a local path/URI -->
+            <xsl:when test="self::datafile and @source">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="@source"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
     <!-- visible portion of HTML is the URL itself,   -->
     <!-- formatted as code, or content of PTX element -->
     <xsl:variable name="visible-text">
@@ -8642,7 +8686,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="@visual"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="@href"/>
+                            <xsl:value-of select="$uri"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </code>
@@ -8656,7 +8700,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- class name identifies an external link -->
-            <a class="external" href="{@href}" target="_blank">
+            <a class="external" href="{$uri}" target="_blank">
                 <xsl:copy-of select="$visible-text" />
             </a>
         </xsl:otherwise>
@@ -9696,13 +9740,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
+<!-- CircuitJS: https://www.falstad.com -->
+<!-- www.bait-consulting.com/publications/circuit_simulator_manual.pdf -->
+<xsl:template match="interactive[@circuitjs]" mode="iframe-interactive">
+    <!-- CircuitJS native language, as a URL-safe string -->
+    <xsl:variable name="url-string">
+        <xsl:choose>
+            <!-- a prepared string is in the signaling attribute -->
+            <xsl:when test="normalize-space(@circuitjs)">
+                <xsl:value-of select="@circuitjs"/>
+            </xsl:when>
+            <!-- Else, a more-friendly version is in a "source" element -->
+            <!-- Note that when a "source" element is used, and then    -->
+            <!-- provided in iframe/@src, the XSL processing itself     -->
+            <!-- will do the necessary escaping to join lines, etc      -->
+            <!-- (such as newlines to "%0A" and spaces to "%20")        -->
+            <!-- So we just strip leading whitespace primarily          -->
+            <xsl:when test="source">
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param  name="text">
+                        <xsl:value-of select="source"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <!-- no code, empty string, still makes a nice widget -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
+        <xsl:apply-templates select="." mode="iframe-id"/>
+        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+    </iframe>
+</xsl:template>
+
 <!-- Arbitrary IFrame -->
 <!-- Almost too easy and trivial, so last, not first -->
 <!-- Assumes a local, "external", HTML file to house -->
 <xsl:template match="interactive[@iframe]" mode="iframe-interactive">
+    <!-- Distinguish netowk location versus (external) file -->
+    <xsl:variable name="b-network-location" select="(substring(@iframe, 1, 7) = 'http://') or
+                                                    (substring(@iframe, 1, 8) = 'https://')"/>
+
     <xsl:variable name="location">
-        <!-- empty when not using managed directories -->
-        <xsl:value-of select="$external-directory"/>
+        <!-- prefix with directory information if not obviously a network location -->
+        <xsl:if test="not($b-network-location)">
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
+        </xsl:if>
         <xsl:value-of select="@iframe"/>
     </xsl:variable>
     <iframe src="{$location}">
@@ -9771,7 +9855,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@iframe]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
@@ -10218,12 +10302,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
-<!-- This is a no-op stub, so we can insert annotations at  -->
-<!-- key locations.  To "activate", an importing stylesheet -->
-<!-- needs to define this template.  So in this way we have -->
-<!-- the same effect as if we had a switch.                 -->
-<xsl:template match="*" mode="view-source-knowl"/>
-
 <!-- JSXGraph -->
 <!-- DEPRECATED (2018-04-06)                             -->
 <!-- Restrict edits to cosmetic, no functional change    -->
@@ -10600,8 +10678,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="syntax-highlight-header"/>
+            <xsl:call-template name="syntax-highlight"/>
             <xsl:call-template name="google-search-box-js" />
+            <xsl:call-template name="native-search-box-js" />
             <xsl:call-template name="pretext-js" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
@@ -10617,7 +10696,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </head>
@@ -10673,8 +10751,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </div>  <!-- title-container -->
                     <!-- accessibility suggests relative ordering of next items -->
-                    <!-- KILLED SEARCH -->
-                    <!-- <xsl:call-template name="google-search-box" /> -->
+                    <xsl:call-template name="google-search-box" />
+                    <xsl:call-template name="native-search-box" />
+                    <xsl:call-template name="native-search-results"/>
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
@@ -10718,7 +10797,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="syntax-highlight-footer" />
             <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </body>
@@ -11806,6 +11884,330 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </title>
 </xsl:template>
 
+<!-- ###### -->
+<!-- Search -->
+<!-- ###### -->
+
+<!-- We build a collection of what Lunr calls "search documents" -->
+<!-- as a Javascript object stored in a file.  For Runestone, it -->
+<!-- needs to go in a different directory than the HTML files.   -->
+<xsl:variable name="lunr-search-file">
+    <xsl:if test="$b-host-runestone">
+        <xsl:text>_static/</xsl:text>
+    </xsl:if>
+    <xsl:text>lunr-pretext-search-index.js</xsl:text>
+</xsl:variable>
+
+<xsl:template name="search-page-construction">
+    <!-- First, a Javascript file, defining the raw "documents"     -->
+    <!-- of the eventual index, and then converted by Lunr into     -->
+    <!-- a Javascript variable , ptx_lunr_idx.  This index variable -->
+    <!-- is included later in the search page via a script element, -->
+    <!-- for use/consumption by the Lunr search() method.           -->
+    <exsl:document href="{$lunr-search-file}" method="text" encoding="UTF-8">
+        <xsl:text>var ptx_lunr_search_style = "</xsl:text>
+        <xsl:value-of select="$native-search-variant"/>
+        <xsl:text>";&#xa;</xsl:text>
+        <!-- the actual search documents in one HUGE variable, then a list -->
+        <xsl:variable name="json-docs">
+            <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
+        </xsl:variable>
+        <xsl:text>var ptx_lunr_docs = [&#xa;</xsl:text>
+        <!-- Strip a trailing comma, and a newline, to be proper JSON -->
+        <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
+        <!-- restore newline just stripped -->
+        <xsl:text>&#xa;]&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <!-- the Javascript function to make the index -->
+        <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
+        <xsl:text>  this.ref('id')&#xa;</xsl:text>
+        <xsl:text>  this.field('title')&#xa;</xsl:text>
+        <xsl:text>  this.field('body')&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
+        <xsl:text>    this.add(doc)&#xa;</xsl:text>
+        <xsl:text>  }, this)&#xa;</xsl:text>
+        <xsl:text>})&#xa;</xsl:text>
+    </exsl:document>
+</xsl:template>
+
+<!-- The modal template "search-page-docs" traverses the structural   -->
+<!-- elements (divisions), stopping when a division is a chunk of the -->
+<!-- HTML ouput (as configured by the publisher).  A search document  -->
+<!-- is created for the content of such HTML output page.  This is    -->
+<!-- one collection of possible search results, in correspondence     -->
+<!-- with the actual pages of the output, and displayed at level 1    -->
+<!-- (no indentation).  Each such page then gives rise to more        -->
+<!-- detailed results, which are primarily "blocks" of the page.      -->
+
+<xsl:template match="&STRUCTURAL;" mode="search-page-docs">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$chunk = 'true'">
+            <!-- stop and build a search document for the page,    -->
+            <!-- as a first-level indentation in the outline-style -->
+            <!-- of the search results                             -->
+            <xsl:apply-templates select="." mode="search-document">
+                <xsl:with-param name="level" select="'1'"/>
+            </xsl:apply-templates>
+            <!-- recursively cruise the *children* of the page for   -->
+            <!-- blocks that will be second-level indentation in the -->
+            <!-- outline-style of the search results                 -->
+            <!-- This is where we adjust our priorities on what      -->
+            <!-- becomes a search document, see descriptions of      -->
+            <!-- the modal templates for those priorities.           -->
+            <xsl:choose>
+                <xsl:when test="$native-search-variant = 'textbook'">
+                    <xsl:apply-templates select="*" mode="search-block-docs-textbook"/>
+                </xsl:when>
+                <xsl:when test="$native-search-variant = 'reference'">
+                    <xsl:apply-templates select="*" mode="search-block-docs-reference"/>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="&STRUCTURAL;" mode="search-page-docs"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Textbook search -->
+<!-- The modal "search-block-docs-textbook" traverses all the elements      -->
+<!-- (of a page), starting with the children of the page's division,        -->
+<!-- stopping to create a search document for selected blocks. Generally    -->
+<!-- these are elements that admit/display titles. These are assigned       -->
+<!-- level 2, so they can be displayed with an indentation.  We do not      -->
+<!-- recurse into blocks.  So only "first-class" paragraphs are considered, -->
+<!-- and only if they have a definition ("term" element) within.            -->
+
+<xsl:template match="*" mode="search-block-docs-textbook">
+    <xsl:apply-templates select="*" mode="search-block-docs-textbook"/>
+</xsl:template>
+
+<!-- Note: could add &STRUCTURAL; here in order to make a    -->
+<!-- search-document for each SUBDIVISION on the page/chunk. -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p[descendant::term]" mode="search-block-docs-textbook">
+    <!-- build a search document and dead-end -->
+    <xsl:apply-templates select="." mode="search-document">
+        <xsl:with-param name="level" select="'2'"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Reference search -->
+<!-- The modal "search-block-docs-textbook" traverses all the elements -->
+<!-- (of a page), starting with the children of the page's division,   -->
+<!-- stopping to create a search document for subdivisions, blocks,    -->
+<!-- and first-class paragraphs (plus block quotes and pre-formatted   -->
+<!-- paragraphs.  This relies more on division structure, and *all*    -->
+<!-- of the content.                                                   -->
+
+<xsl:template match="*" mode="search-block-docs-reference">
+    <xsl:apply-templates select="*" mode="search-block-docs-reference"/>
+</xsl:template>
+
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|exercise|p|blockquote|pre" mode="search-block-docs-reference">
+    <!-- build a search document and dead-end -->
+    <xsl:apply-templates select="." mode="search-document">
+        <xsl:with-param name="level" select="'2'"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- For any node, be it a page or a block, a "search document"  -->
+<!-- data structure is created, the actual content is realized   -->
+<!-- by the "search-node-text" template, which is designed to be -->
+<!-- overridden in some situations.  The level comes in as a     -->
+<!-- parameter and is recorded in the data structure.            -->
+
+<xsl:template match="*" mode="search-document">
+    <xsl:param name="level"/>
+
+    <!-- With "textbook" search, paragraphs using a "term" -->
+    <!-- to make a definition have some exceptions below.  -->
+    <xsl:variable name="b-is-definition-paragraph"
+                  select="($native-search-variant = 'textbook') and self::p and descendant::term"/>
+
+    <xsl:text>{&#xa;</xsl:text>
+    <!-- string to identify results with original docs -->
+    <xsl:text>  "id": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- level 2 indicates need for indentation -->
+    <xsl:text>  "level": "</xsl:text>
+    <xsl:value-of select="$level"/>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- filename relative to search page -->
+    <xsl:text>  "url": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="url"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- the type of the division -->
+    <xsl:text>  "type": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="type-name"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:if test="$b-is-definition-paragraph">
+        <xsl:text> (with a defined term)</xsl:text>
+    </xsl:if>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- the number of the division -->
+    <xsl:text>  "number": "</xsl:text>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- title of division that is a page -->
+    <xsl:text>  "title": "</xsl:text>
+    <!-- title might have HTML markup          -->
+    <!-- e.g. emphasis, span.process-math      -->
+    <!-- RTF -> node-set ->  serialized string -->
+    <xsl:variable name="title-html">
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:variable>
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="exsl:node-set($title-html)" mode="serialize"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>",&#xa;</xsl:text>
+    <!-- all text on the page, more or less, duplicates title -->
+    <xsl:text>  "body": "</xsl:text>
+    <!-- Some elements need special treatment, for specific forms of   -->
+    <!-- search, when they *are* the search document, rather than when -->
+    <!-- they are *a part of* some other larger search document.  We   -->
+    <!-- intercept them here, most-specific first.                     -->
+    <xsl:choose>
+        <!-- "textbook" search treats first-class -->
+        <!-- paragraphs with a term specially     -->
+        <xsl:when test="$b-is-definition-paragraph">
+            <xsl:apply-templates select="." mode="search-term-paragraph-text"/>
+        </xsl:when>
+        <!-- for most elements, just extract text -->
+        <!-- nodes with various adjustments       -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="search-node-text"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- text here, sanitized -->
+    <xsl:text>"&#xa;</xsl:text>
+    <!-- NB: final comma AND newline are stripped above -->
+    <xsl:text>},&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The "search-node-text" templates basically recurses into elements -->
+<!-- with no effect and duplicate the text() nodes, properly escaped   -->
+<!-- for use in a big old JSON data structure.  This is the place to   -->
+<!-- make adjustments by ignoring or modifying certain aspects of the  -->
+<!-- content of an element.                                            -->
+
+<xsl:template match="*" mode="search-node-text">
+    <xsl:apply-templates select="node()" mode="search-node-text"/>
+</xsl:template>
+
+<!-- "Generators" need content, LaTeX and TeX avoid goofy CSS -->
+<xsl:template match="pretext|webwork[not(node())]" mode="search-node-text">
+    <xsl:apply-templates select="."/>
+    <xsl:text> </xsl:text>
+</xsl:template>
+<xsl:template match="latex" mode="search-node-text">
+    <xsl:text>latex </xsl:text>
+</xsl:template>
+<xsl:template match="tex" mode="search-node-text">
+    <xsl:text>tex </xsl:text>
+</xsl:template>
+<xsl:template match="copyright" mode="search-node-text">
+    <xsl:text>copyright </xsl:text>
+</xsl:template>
+<xsl:template match="copyleft" mode="search-node-text">
+    <xsl:text>copyleft </xsl:text>
+</xsl:template>
+
+<!-- tags need angle brackets -->
+<!-- Empty tag version needs JSON escaping, otherwise -->
+<!-- this shouldn't be necessary - but for tag abuse. -->
+<xsl:template match="tag|tage" mode="search-node-text">
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:text>&lt;</xsl:text>
+            <xsl:value-of select="text()"/>
+            <xsl:if test="self::tage">
+                <xsl:text>/</xsl:text>
+            </xsl:if>
+            <xsl:text>&gt; </xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- First-class paragraphs (children of divisions or "paragraphs",    -->
+<!-- and not in blocks) containing "term" are considered differently   -->
+<!-- in a textbook search.  Without a "term" they are ignored, while   -->
+<!-- with "term" the search document is just the content of the terms. -->
+<xsl:template match="p[descendant::term]" mode="search-term-paragraph-text">
+    <xsl:apply-templates select=".//term" mode="search-node-text"/>
+</xsl:template>
+
+<!-- Lots of stuff can make very misleading search documents. -->
+<!-- Examples have included: "\subset" in math and "limits"   -->
+<!-- in a WW problem to specify a domain.  So we kill stuff.  -->
+
+<xsl:template match="m|me|men|md|mdn" mode="search-node-text"/>
+<xsl:template match="latex-image|asymptote|sageplot" mode="search-node-text"/>
+<xsl:template match="sage" mode="search-node-text"/>
+<!-- "slate" in an "interactive" can have JS code, GeoGebra too, etc -->
+<xsl:template match="interactive" mode="search-node-text"/>
+
+<!-- WeBWorK exercises, as output of the pre-processor, include    -->
+<!-- a "webwork-reps" element with three elements:                 -->
+<!--                                                               -->
+<!--   "static": meant for LaTeX, but we *will* index this version -->
+<!--   "server-data": base64 versions, empty element with just     -->
+<!--                  attributes, so harmless for search           -->
+<!--   "pg": native WW version (for problem archives), which will  -->
+<!--         be misleading                                         -->
+<!--                                                               -->
+<!-- NB: ideally the "pg" version will not make it here after some -->
+<!-- pre-processor work.  Parsing "static" in the pre-processor    -->
+<!-- and labeling the result with a "pi:" prefix would make sense. -->
+<xsl:template match="pg" mode="search-node-text"/>
+
+<!--
+TODO:
+  hints, answers, solutions (only if elected by publisher in text)
+-->
+
+<xsl:template match="text()" mode="search-node-text">
+    <xsl:choose>
+        <!-- collapse authored whitespace, and structural whitespace -->
+        <!-- that is being preserved with whitespace declarations    -->
+        <!-- Replaced by universal addition at end of the template.  -->
+        <!-- Reduces file size by 40%. (sample article)              -->
+        <xsl:when test="normalize-space() = ''"/>
+        <xsl:otherwise>
+            <xsl:call-template name="escape-json-string">
+                <!-- normalize-space adds another 2% reduction -->
+                <xsl:with-param name="text" select="normalize-space(.)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- a space seems necessary to separate some text() nodes, -->
+    <!-- like consecutive (simple) list items.  Presumably it   -->
+    <!-- can't hurt to have too many?                           -->
+    <xsl:text> </xsl:text>
+</xsl:template>
+
 
 <!-- Feedback Button goes in page-footer    -->
 <!-- Text from docinfo, or localized string -->
@@ -11956,12 +12358,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
+        <!-- probably should be universal, but only adding for MJ 4    -->
+        <!-- TODO: make a literal "script" element with this attribute -->
+        <xsl:if test="$mathjax4-testing">
+            <xsl:attribute name="type">
+                <xsl:text>text/javascript</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="src">
-            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$mathjax4-testing">
+                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.0.0-alpha.1/es5/</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- CHTML is the default, SVG is for debugging -->
             <xsl:choose>
+                <!-- SVG filename identical for v3, v4 -->
+                <!-- NB: is tex-mml-svg.js new for v4? -->
                 <xsl:when test="$debug.mathjax.svg = 'yes'">
                     <xsl:text>tex-svg.js</xsl:text>
+                </xsl:when>
+                <!-- new filename (default) for v4 -->
+                <xsl:when test="$mathjax4-testing">
+                    <xsl:text>tex-mml-chtml.js</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>tex-chtml.js</xsl:text>
@@ -12142,14 +12564,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Program Listings highlighted by Prism -->
-<xsl:template name="syntax-highlight-header">
+<xsl:template name="syntax-highlight">
     <xsl:if test="$b-has-program">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template name="syntax-highlight-footer">
-    <xsl:if test="$b-has-program">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
     </xsl:if>
@@ -12176,6 +12593,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- ARIA: "search" role for Google Search div/wrapper -->
         <div class="searchwrapper" role="search">
             <div class="gcse-search" />
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- JS for native search -->
+<xsl:template name="native-search-box-js">
+    <xsl:if test="$has-native-search">
+        <script src="https://unpkg.com/lunr/lunr.js"/>
+        <!-- document-specific variables with search documents -->
+        <script src="{$lunr-search-file}"/>
+        <!-- PreTeXt Javascript and CSS to form and render results of a search -->
+        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"></script>
+        <link href="{$html.css.server}/css/{$html.css.version}/pretext_search.css" rel="stylesheet" type="text/css"/>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- Div for native search -->
+<xsl:template name="native-search-box">
+    <xsl:if test="$has-native-search">
+        <div class="searchbox">
+            <div class="searchwidget">
+                <input id="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
+                <button id="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
+            </div>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- Div for native search results -->
+<xsl:template name="native-search-results">
+    <xsl:if test="$has-native-search">
+        <div id="searchresultsplaceholder" style="display: none">
+            <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
+            <h2>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'search-results-heading'" />
+                    <xsl:with-param name="lang" select="$document-language"/>
+                </xsl:call-template>
+                <xsl:text>: </xsl:text>
+                <span id="searchterms"></span>
+            </h2>
+            <!-- div#searchempty is not visible when there are results -->
+            <div id="searchempty">
+                <span>
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'no-search-results'" />
+                        <xsl:with-param name="lang" select="$document-language"/>
+                    </xsl:call-template>
+                    <xsl:text>.</xsl:text>
+                </span>
+            </div>
+            <ol id="searchresults">
+            </ol>
         </div>
     </xsl:if>
 </xsl:template>

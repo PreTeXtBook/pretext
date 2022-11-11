@@ -30,7 +30,7 @@
 
         <p>Begin by creating a file that is a new <init>XSL</init> stylesheet.  You can likely safely copy a mature one from the <c>xsl/latex</c> directory.  Be certain to keep the first few declarations.  The <tag>xsl:import</tag> is critical, since it will <q>pull in</q> all the basic code for the <pretext/> conversion to <latex/>.  You will be overriding and appending to that code (which <pretext/> has made straightforward).  You can start with an absolute path from your filesystem root, but once public a relative path will be necessary.  Remove all of the <tag>xsl:template</tag> elements, leaving a hollow shell to begin working with.</p>
 
-        <p>What we are doing here is similar to the discussion of <q>thin <init>XSL</init> stylesheets</q> in <xref ref="processing-thin-xsl"/>, only thicker.  String parameters are also described in this Guide, at <xref ref="processing-parameters"/>.</p>
+        <p>What we are doing here is similar to the discussion of <q>extra <init>XSL</init> stylesheets</q> in <xref ref="publisher-extra-stylesheet"/>, only thicker.  String parameters are also described in this Guide, at <xref ref="publisher-string-parameters"/>.</p>
     </section>
 
     <section>
@@ -64,7 +64,7 @@
         </table>
     </section>
 
-    <section xml:id="page-shape">
+    <section xml:id="page-shape-styling">
         <title>Page Shape</title>
 
         <p>Various dimensions of a printed page, including the page itself, may be adjusted using the <c>geometry</c> package, so study the documentation of this package to explore possibilities.  The options of this package may be also set on the command line.  To make options part of your style, place the <tag>xsl:param</tag> declaration in your stylesheet as follows (note the two sets of quotes):<cd>
@@ -143,6 +143,14 @@
         </cd>.  This would affect <tag>example</tag>, <tag>question</tag>, and <tag>problem</tag>, and future-proof your style when there is a demand for <tag>illustration</tag> as a new kind of <q>example-like.</q></p>
 
         <p>There is only one mode, but it can handle a variety of <pretext/> elements in the <attr>match</attr>.  The text produced by the template will be supplied in a named <c>tcolorbox</c> style via a <c>\tcbset{}</c> command.  It is marginally more complicated than that.  <pretext/> will manage certain aspects of creating a <c>tcolorbox</c>, such as forming the <c>tcolorbox</c> <c>title</c> to be a string like <q>Example 4.5 The Chain Rule.</q>, or just <q>Example 4.6</q> when an author does not include a <pretext/> <tag>title</tag>.  As a style writer, you can change the font, color and placement of that string, but not the use of the type-name, the number, the title, or their order.  The text of your template is additive, meaning it is in addition to what the stock <pretext/> conversion provides.  Your options come last, so will be new and effective, or will replace what the base conversion to <latex/> does.  So in the example above, the base conversion to <latex/> has <c>colback=white</c> (rather than the default gray!), and this will be overridden since pink will come later.</p>
+    </section>
+
+    <section>
+        <title>Preamble and Experimentation</title>
+
+        <p>Two hooks are provided to allow for arbitrary additions to the <latex/> preamble.  It should go without saying that this is for experimenting with new features and is no way supported, including, but not limited to, interactions with current <latex/> packages in use, or those added in the future.</p>
+
+        <p>Arbitrary text (<latex/>) used as the values of the string parameters <c>latex.preamble.early</c> and <c>latex.preamble.late</c> will be added to the very beginning, or very end (respectively), of the generated preamble.</p>
     </section>
 
     <section xml:id="style-xsl-101">

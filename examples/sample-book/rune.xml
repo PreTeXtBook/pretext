@@ -66,8 +66,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A Java program will only be interactive if hosted on a Runestone server.</p>
 
         <listing xml:id="program-activecode-java">
+            <title>Informal Java <q>Hello, World</q></title>
             <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
             <program xml:id="java-hello-world" interactive='activecode' language="java">
+                <title>"hi" in Java</title>
                 <input>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
@@ -394,7 +396,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Runestone uses a YouTube API that broadcasts events when a reader interacts with a video.  In this way, Runestone can record video-watching as an activity.  As <pretext/> output we concede better behavior on small screens (<q>responsiveness</q>) to enable this feature in a Runestone version.  A <attr>label</attr> attribute is necessary for persistence in the Runestone database.  Various <pretext/> features, such as playlists, are not yet supported<mdash/>make a request.</p>
 
-        <video xml:id="yt-list-vars" label="youtube-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png"/>
+        <video xml:id="yt-list-vars" label="youtube-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png">
+            <title>A List Variable Video</title>
+        </video>
 
         <p>The margins here are asymmetric just as a test.  And this text is here to see where the video ends.</p>
     </section>
@@ -1096,7 +1100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Fill-In, Integer Answer</title>
 
             <statement>
-                <p>The game of bowling uses <var/> pins that you try to knock down.</p>
+                <p>The game of bowling uses <var width="28"/> pins that you try to knock down. (This answer blank has been set to be very wide.)</p>
             </statement>
             <setup>
                 <var>
@@ -1123,8 +1127,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Fill-In, String and Number Answers</title>
 
             <statement>
-                <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
-                <p><var/> <c>age = </c> <var/><c>;</c></p>
+                <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>. (These two answer blanks have been set to be very short.)</p>
+                <p><var width="2"/> <c>age = </c> <var width="3"/><c>;</c></p>
             </statement>
             <setup>
                 <var>
@@ -1430,6 +1434,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <idx>stop signs</idx>
                     <statement>
                         <p>What color is a stop sign?</p>
+                        <p>We include a spurious Python <tag>program</tag> element in the <tag>statement</tag> which should never convert this from a multiple-choice question into a programming exercise (on any host), but should still get syntax highlighting as part of rendering the exercise.</p>
+                        <program xml:id="python-in-statement" language="python">
+                            <input>
+                            sum = 0
+                            sum += 6
+                            for i in range(sum):
+                                print("Hello, World!")
+                            </input>
+                        </program>
                     </statement>
                     <choices>
                         <choice>
@@ -1518,6 +1531,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <response/>
         </exercise>
     </reading-questions>
+
+    <section xml:id="atomic-video">
+        <title>YouTube Video Embedding</title>
+
+        <p>An <tag>video</tag> can be placed in five different ways:<ol>
+            <li>all by itself, as a peer of <tag>p</tag> typically, with layout control,</li>
+            <li>inside a <tag>figure</tag>, earning a number and caption,</li>
+            <li>inside a <tag>sidebyside</tag>, with size and layout configured,</li>
+            <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag>, with size and layout configured, with a number and caption, and</li>
+            <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+        </ol>Examples of each, and more.</p>
+
+        <p>A YouTube video is embedded much differently when hosted on a Runestone server, so that an <init>API</init> is available to report reader (student) interactions.  We are testing here the various possibilities.</p>
+
+
+
+        <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
+
+        <video xml:id="yt-list-vars-one" label="youtube-list-vars-one" youtube="X1-UNHUajfk"/>
+
+        <p>Width set at 40%, so equal margins and thus centered.  Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non.</p>
+
+        <video xml:id="yt-list-vars-two" label="youtube-list-vars-two" youtube="X1-UNHUajfk" width="40%"/>
+
+        <p>Asymmetric margins of 20% and 40% given, implying 40% width, equal to previous instance.  Vivamus suscipit diam eget mi cursus viverra.</p>
+
+        <video xml:id="yt-list-vars-three" label="youtube-list-vars-three" youtube="X1-UNHUajfk" margins="20% 40%" />
+
+        <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
+
+        <sidebyside widths="20% 30%">
+            <video xml:id="yt-list-vars-four" label="youtube-list-vars-four" youtube="X1-UNHUajfk"/>
+            <video xml:id="yt-list-vars-five" label="youtube-list-vars-five" youtube="X1-UNHUajfk"/>
+        </sidebyside>
+
+        <p>Inside a <tag>figure</tag> with no adjustments, so default behavior.  Note how a <tag>figure</tag> occupies the entire width of the page, so then does the caption.</p>
+
+        <figure>
+            <caption>List Variables</caption>
+            <video xml:id="yt-list-vars-six" label="youtube-list-vars-six" youtube="X1-UNHUajfk"/>
+        </figure>
+
+        <p>Inside a <tag>figure</tag> with asymmetric (large) margins of 30% and 60%.  Quisque finibus augue sit amet facilisis fringilla. Aenean faucibus augue tellus, et sollicitudin tortor finibus non.</p>
+
+        <figure>
+            <caption>List Variables</caption>
+            <video xml:id="yt-list-vars-seven" label="youtube-list-vars-seven" youtube="X1-UNHUajfk" margins="30% 60%"/>
+        </figure>
+
+        <p>Inside figures inside a <tag>sidebyside</tag>.  Same widths as previous <tag>sidebyside</tag> but alignment on bottoms of the panels, to partially align captions.  Note how the captions are constrained in width by the width of the panels of the side-by-side.</p>
+
+        <sidebyside widths="20% 30%" valign="bottom">
+            <figure>
+                <caption>List Variables</caption>
+                <video xml:id="yt-list-vars-eight" label="youtube-list-vars-eight" youtube="X1-UNHUajfk"/>
+            </figure>
+            <figure>
+                <caption>List Variables (Again)</caption>
+                <video xml:id="yt-list-vars-nine" label="youtube-list-vars-nine" youtube="X1-UNHUajfk"/>
+            </figure>
+        </sidebyside>
+
+        <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="ups-video" text="type-global"/>.</p>
+
+        <figure>
+            <caption>Amalgamation of Videos</caption>
+            <sidebyside widths="20% 30%" valign="bottom">
+                <figure>
+                    <caption>List Variables</caption>
+                    <video xml:id="yt-list-vars-ten" label="youtube-list-vars-ten" youtube="X1-UNHUajfk"/>
+                </figure>
+                <figure xml:id="ups-video">
+                    <caption>List Variables</caption>
+                    <title>List Variables</title>
+                    <video xml:id="yt-list-vars-eleven" label="youtube-list-vars-eleven" youtube="X1-UNHUajfk"/>
+                </figure>
+            </sidebyside>
+        </figure>
+    </section>
 
 </chapter>
 

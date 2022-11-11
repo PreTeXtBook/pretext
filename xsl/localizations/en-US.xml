@@ -149,6 +149,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Paragraph</localization>
     <localization string-id='blockquote'>Quotation</localization>
+    <!-- The "pre" element is short for "preformatted text".  PreTeXt uses it -->
+    <!-- more as paragraph, rendered in monospace, with newlines respected. -->
+    <localization string-id='pre'>Code Block</localization>
     <!-- Literate programming, a chunk of computer code -->
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
@@ -193,6 +196,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Foreword</localization>
     <localization string-id='dedication'>Dedication</localization>
     <localization string-id='colophon'>Colophon</localization>
+    <!-- Runestone Activities -->
+    <!-- These terms will appear in student activity/engagement -->
+    <!-- reports for an instructor of a Runestone course.       -->
+    <!-- Normally they will not be apparent to a reader.        -->
+    <localization string-id='video'>Video</localization>
+    <localization string-id='program'>Program</localization>
+    <!-- "ActiveCode" and "CodeLens" are Runestone-constructs -->
+    <!-- and so really *should not* be translated.            -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
@@ -224,7 +237,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This phrase should suggest that PreTeXt is the source -->
     <!-- language that makes a particular output possible      -->
     <localization string-id='authored'>Authored in PreTeXt</localization>
-    <!-- Parts of memos and letters -->
+    <!-- Search Results display/dialog -->
+    <!-- The result of a search as part of HTML output will throw up       -->
+    <!-- an overlay window with the search results.  "Search Results"      -->
+    <!-- is like a heading.  It renders like "Search Results: algorithm".  -->
+    <!-- When a reader uses a term that produces no results (perhaps they  -->
+    <!-- misspell the search term) then they get a message to that effect. -->
+    <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
+    <localization string-id='search-results-heading'>Search Results</localization>
+    <!-- Short phrase, no punctuation -->
+    <localization string-id='no-search-results'>No results</localization>
+   <!-- Parts of memos and letters -->
     <localization string-id='to'>To</localization>
     <localization string-id='from'>From</localization>
     <localization string-id='subject'>Subject</localization>

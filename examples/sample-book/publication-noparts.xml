@@ -40,7 +40,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </numbering>
 
     <!-- HTML-Specific Options -->
-    <html>
+    <!-- Switch @short-answer-responses to "always" to have writable  -->
+    <!-- text boxes even in output where they cannot be graded.       -->
+    <html short-answer-responses="graded">
         <!-- Turn on a Runestone ActiveCode window, both for show, -->
         <!-- and for testing purposes                              -->
         <calculator activecode="python"/>
@@ -70,7 +72,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    statcounter-security="6e60c510"/>
         <!-- Google search, via masthead textbox is switched on    -->
         <!-- and associated with a Google account via CX number    -->
-        <!-- <search google-cx=""/> -->
+        <search variant="default"/>
     </html>
 
 </publication>

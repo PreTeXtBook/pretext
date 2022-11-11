@@ -56,10 +56,30 @@
         <p>Two-sided layout will have asymmetric margins with the ratio of inner (adjacent to spine) to outer at <c>2:3</c>.  You need some extra space at the spine to compensate for the binding, but when a book is open, the two pages are separated by two inner margins, so these do not need to be as wide as the outer margin to give some distance between the pages.  And readers will want more space to write in the outer margins, perhaps providing simple proofs of important results.  (This ratio may be changed with the <c>hmarginratio</c> key of the <c>geometry</c> package.)  Page headers will have page numbers on the outside of the page, with odd numbers on the right-side page.  Chapters will possibly have a blank page between them, so they begin on a right/odd page.  Behavior is similar in the front matter and back matter.</p>
     </section>
 
-    <section>
+    <section xml:id="font-size">
+        <title>Font Size</title>
+
+        <p>The overall (document-wide) font size may be given as one of eight different values, ranging from 8 points to 20 points.  The default is 10 points.  These values influence multiple settings within <latex/> itself, and <pretext/> will also adjust some default values, such as the line-width (in order to preserve an optimal number of characters per line for reading ease).  See <xref ref="latex-font-size-options"/> for precise details.</p>
+    </section>
+
+    <section xml:id="page-shape">
         <title>Page Shape</title>
 
-        <p>The <c>latex.geometry</c> switch can be used to supply a single string composed of any options to the <c>\geometry{}</c> command of the <latex/> <c>geometry</c> package, and these will override any defaults supplied by <pretext/>.  Resist the temptation to pack in as much text on the page as you can.  <pretext/> varies the width of the text in reaction to the font size and is already very close to the maximum number of characters per line for comfortable reading by humans.</p>
+        <p>The conversion to <latex/> defaults to US Letter paper with reasonable margins.  However, the <latex/> <url href="https://ctan.org/pkg/geometry" visual="ctan.org/pkg/geometry"><c>geometry</c> package</url> has numerous options for paper sizes and margins.  The publication file can be used to insert any configuration the package supports.  See <xref ref="latex-page-options"/> for the exact syntax.</p>
+
+        <p>Note that if you change the paper size, you may want to change the text width computed by <pretext/>, and the more changes you make, the more default settings you may need to adjust.  However, if you are producing your book for print-on-demand (<xref ref="print-on-demand"/>) getting the page size and margins just right is a key step of the process.</p>
+
+        <p>Note also that when you use the <tag>geometry</tag> element of the publication file, the <emc>content</emc> of the element (text between the opening and closing tags) will be duplicated <em>exactly</em> into a <latex/> source file.  Being careless here is a good explanation for the <latex/> compilation step to fail.</p>
+
+        <p>Here is an example:<cd>
+            <cline>&lt;latex&gt;</cline>
+            <cline>  &lt;page&gt;</cline>
+            <cline>    &lt;geometry&gt;a4paper,total={16cm,25cm}&lt;/geometry&gt;</cline>
+            <cline>  &lt;/page&gt;</cline>
+            <cline>&lt;/latex&gt;</cline>
+        </cd>twhich will produce in the <latex/> output<cd>
+            <cline>\geometry{a4paper,total={16cm,25cm}}</cline>
+        </cd></p>
 
         <p>An electronic <init>PDF</init> may be printed on physical paper, but perhaps you want to make a version that works well on a portable device that naturally supports a portrait orientation, such as an Android tablet, an iPad, a Kindle (device or application), smart phone, Sony Digital Paper, or a ReMarkable tablet.  Aspect ratios vary across these devices, but once you settle on a target ratio, we have had good luck with the following algorithm and parameters:<ol>
             <li>Specify 10 point text</li>
@@ -68,6 +88,11 @@
             <li>Use aspect ratio to compute an overall height (about 6.5 inches)</li>
             <li>Subtract quarter-inch top and bottom margins to obtain text height</li>
         </ol>Then you can provide the <c>geometry</c> package the overall size as the <c>papersize</c> and the text width and text height as the <c>total</c> size of the body, resulting in equal (tight) margins all around, and good use of limited screen real estate.  These parameters create a <init>PDF</init> that is very legible on a larger smart phone, and for fine detail, rotating the device to landscape works well.  Really.</p>
+
+        <note xml:id="best-practice-too-much-text">
+            <title>Avoid Too Much Text on a Printed Page</title>
+            <p>With freedom comes responsibility.  Resist the temptation to pack in as much text on the page as you can.  <pretext/> varies the width of the text in reaction to the font size and is already very close to the maximum number of characters per line for comfortable reading by humans.  Similarly, very narrow margins can be uncomfortable for reading (or holding a printed book).</p>
+        </note>
     </section>
 
     <section xml:id="latex-asymptote-links">
@@ -76,18 +101,20 @@
         <p>An image described by an <tag>asymptote</tag> element will produce standalone <init>HTML</init> files as part of the convversion to <init>HTML</init> output.  For 3D images, these are interactive (rotate, scale).  If you set a base <init>URL</init> for your project (<xref ref="online-base-url"/>) and request this feature through a publisher switch, then each image in an electronic <init>PDF</init> (<xref ref="electronic-or-print"/>) will be a link to the <init>HTML</init> version. See <xref ref="latex-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
     </section>
 
-    <section>
+    <section xml:id="latex-xref-page-numbers">
         <title>Cross-References</title>
 
-        <p>In an electronic <init>PDF</init>, cross-references will be hyperlinks that take the reader to the target.  Color is used to make them visible, in addition to whatever indication a <init>PDF</init> viewer will provide on hover.  The parameter <c>latex.pageref</c> is by default <c>no</c> in this case, but may be set to <c>yes</c> to include the page number of the target in the cross-reference.</p>
+        <p>In an electronic <init>PDF</init>, cross-references will be hyperlinks that take the reader to the target.  Color is used to make them visible, in addition to whatever indication a <init>PDF</init> viewer will provide on hover.  The publication file entry controlling the use of numbers in cross-references (<xref ref="latex-xref-page-number-options"/>) is by default <c>no</c> in this case, but may be set to <c>yes</c> to include the page number of the target in the cross-reference.</p>
 
-        <p>In a print <init>PDF</init>, cross-references will not be active hyperlinks and will be the same color as the adjoining text.  The parameter <c>latex.pageref</c> is by default <c>yes</c> in this case, but may be set to <c>no</c> to not include the page number of the target in the cross-reference.</p>
+        <p>In a print <init>PDF</init>, cross-references will not be active hyperlinks and will be the same color as the adjoining text.  The publication file entry controlling the use of numbers in cross-references (<xref ref="latex-xref-page-number-options"/>) is by default <c>yes</c> in this case, but may be set to <c>no</c> to not include the page number of the target in the cross-reference.</p>
+
+        <p>See <xref ref="latex-xref-page-number-options"/> for the syntax of specifying the use of page numbers in cross-references.</p>
     </section>
 
     <section>
         <title>Page Number Fidelity</title>
 
-        <p>If you use a print <init>PDF</init> to produce a physical book, the page numbers may be important to you and your readers.  Thus, you may desire that an electronic <init>PDF</init> have faithful page numbers.  You may have noticed from the discussion about page numbers in cross-references that because the default behavior puts page numbers in the print <init>PDF</init>, and not in the electronic <init>PDF</init>, content will not always appear on the same page for the two conversions.  The solution is simple<mdash/>use <c>latex.pageref</c> to have the two conversions behave identically in this regard.</p>
+        <p>If you use a print <init>PDF</init> to produce a physical book, the page numbers may be important to you and your readers.  Thus, you may desire that an electronic <init>PDF</init> have faithful page numbers.  You may have noticed from the discussion about page numbers in cross-references (<xref ref="latex-xref-page-numbers"/> that because the default behavior puts page numbers in the print <init>PDF</init>, and not in the electronic <init>PDF</init>, content will not always appear on the same page for the two conversions.  The solution is simple<mdash/>use a publication file to have the two conversions behave identically in this regard.</p>
     </section>
 
     <section>
@@ -110,12 +137,6 @@
             <li>Many blocks, such as <tag>example</tag> and <tag>remark</tag>, are implemented with the <latex/> <c>tcolorbox</c> package, to make styling and layout much more capable and reliable.  But footnotes get trapped within these boxes and render at the end of the box (not the bottom of the page) and have a different scheme for the marks (letters, not numbers).  We have mitigated much of this behavior, but the cost is that these footnotes are delayed until the box finishes.  So if you have a 4-page example, and use a footnote early, it may appear at the bottom of a page that is 3 or 4 pages away.</li>
             <li>Another consequence of the above is that hyperlinks in electronic <init>PDF</init>s, from the mark to the text, need to be disabled (they will never work within a <c>tcolorbox</c>).  Cross-references to a footmark's text will still be active in an electronic <init>PDF</init>.</li>
         </ul></p>
-    </section>
-
-    <section>
-        <title>Watermarks</title>
-
-        <p>You can add a watermark to your <init>PDF</init> which will render as large, light grey text, at an angle across the page.  Use <c>latex.watermark</c> to set the text (avoid obscure characters or symbols, and do not use any <init>XML</init> markup).  Use <c>latex.watermark.scale</c> to adjust for long or short text.  The <latex/>-only <q>\\</q> will survive in the text to create multiple lines of text.  Submit a feature request if this is not flexible enough to meet a special need.</p>
     </section>
 
     <section xml:id="latex-cover-images">
@@ -141,72 +162,10 @@
     </section>
 
     <section>
-        <title>Experimentation</title>
-
-        <p>Two hooks are provided to allow for arbitrary additions to the <latex/> preamble.  It should go without saying that this is for experimenting with new features and is no way supported, including, but not limited to, interactions with current <latex/> packages in use, or those added in the future.</p>
-
-        <p>Arbitrary text (<latex/>) used as the values of <c>latex.preamble.early</c> and <c>latex.preamble.late</c> will be added to the very beginning, or very end (respectively), of the generated preamble.</p>
-    </section>
-
-    <section>
         <title>Styling</title>
         <idx><h>style</h><h>print</h></idx>
 
-
         <p>Note that some of these switches are about <em>style</em>.  There are many more ways to influence the style of the <latex/> output, see <xref ref="latex-styles"/>.</p>
-    </section>
-
-    <section>
-        <title>Switch Reference</title>
-
-        <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.  See <xref ref="processing-parameters"/> for more detail.</p>
-
-        <table>
-            <title>Options for <latex/> Conversion</title>
-
-            <tabular>
-                <row bottom="medium">
-                    <cell>Switch</cell>
-                    <cell>Default</cell>
-                    <cell>Values</cell>
-                </row>
-                <row>
-                    <cell><c>latex.font.size</c></cell>
-                    <cell><c>10pt</c></cell>
-                    <cell><c>8pt</c> to <c>20pt</c> (8 steps)</cell>
-                </row>
-                <row>
-                    <cell><c>latex.geometry</c></cell>
-                    <cell></cell>
-                    <cell>Any options to <c>\geometry{}</c></cell>
-                </row>
-                <row>
-                    <cell><c>latex.pageref</c></cell>
-                    <cell>Depends</cell>
-                    <cell><c>yes</c>, <c>no</c></cell>
-                </row>
-                <row>
-                    <cell><c>latex.watermark</c></cell>
-                    <cell></cell>
-                    <cell>Simple text, no markup</cell>
-                </row>
-                <row>
-                    <cell><c>latex.watermark.scale</c></cell>
-                    <cell><c>2.0</c></cell>
-                    <cell>Positive rational number</cell>
-                </row>
-                <row>
-                    <cell><c>latex.preamble.early</c></cell>
-                    <cell></cell>
-                    <cell>Arbitrary <latex/></cell>
-                </row>
-                <row>
-                    <cell><c>latex.preamble.late</c></cell>
-                    <cell></cell>
-                    <cell>Arbitrary <latex/></cell>
-                </row>
-            </tabular>
-        </table>
     </section>
 
     <section xml:id="latex-file">

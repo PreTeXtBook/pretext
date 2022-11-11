@@ -19,27 +19,6 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!--
-To process this file, at the command-line issue:
-
-xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/sample-article.xml
-
-then find  "derivatives.html"  in the current working directory
-and use a web browser to view.  For PDF/print, issue:
-
-xsltproc -o derivatives.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
-
-and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
-the current working directory.
-
-Ignore any warnings, they are part of testing the warning system.
-
-To see images in your results, copy the examples/images directory
-so that your working directory has the images subdirectory.  See
-the  pretextbook.org  website for information on installing
-the xsltproc executable.
--->
-
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
@@ -906,7 +885,7 @@ the xsltproc executable.
 
                         <p>You could grab the <c>minimal.xml</c> file from the <c>examples/minimal</c> directory and experiment with that.</p>
 
-                        <p>Projects get their own independent numbering scheme, since they may be central to your textbook, workbook, or lab manual.  If you process this sample article with <c>--stringparam numbering.projects.level 0</c> then you will get consecutive numbers from the beginning of your book, starting with 1.</p>
+                        <p>Projects get their own independent numbering scheme, since they may be central to your textbook, workbook, or lab manual.  If you process this sample article with level for project numbering set to <c>0</c> then you will get consecutive numbers from the beginning of your book, starting with 1.</p>
                     </project>
 
 
@@ -961,7 +940,7 @@ the xsltproc executable.
                     </note>
 
                     <aside xml:id="an-aside">
-                        <title>An Aside</title>
+                        <title>An Aside with a <em>Formatted</em> Title</title>
                         <idx>aside</idx>
 
                         <p>An <tag>aside</tag> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <tag>historical</tag> or <tag>biographical</tag>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
@@ -2702,7 +2681,7 @@ the xsltproc executable.
             <subsection>
                 <title>Verbatim in titles, <c>\a&amp;b#c%d~e{f}g$h_i^j</c>, OK</title>
 
-                <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents with <c> --stringparam toc.level 2</c>.</p>
+                <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents via the publication file.</p>
             </subsection>
 
             <subsection xml:id="subsection-special-situations">
@@ -3437,14 +3416,14 @@ the xsltproc executable.
             <subsection>
                 <title>Copies of Images</title>
 
-                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> and thus change the caption.  It will get a new number as a new figure, and you will need to assign a unique <attr>xml:id</attr> attribute.  Maybe appending <c>-copy-2</c>, or similar, to the <attr>xml:id</attr> will be helpful.</p>
+                <p>Sometimes you want to use the same image more than once.  Here we just point to a <init>PNG</init> file that we repeat often throughout this sample.</p>
 
                 <figure xml:id="figure-raster-image-copy">
                     <caption>Copy of raster image, in a figure, so now numbered and captioned</caption>
                     <image source="images/cross-square.png" width="30%" />
                 </figure>
 
-                <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>pretext</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (see <xref ref="subsection-xml-escape" text="type-global"/>) and definitely have no need for the often mis-understood <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
+                <p>For images described by code, such as TikZ code in a <tag>latex-image</tag> element, this is a bit subtler.  See the <pretext/> Guide for a complete description.  We also demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
             </subsection>
 
             <subsection>
@@ -3645,7 +3624,7 @@ the xsltproc executable.
             <subsection>
                 <title>Technical Details</title>
 
-                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>pretext</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>pretext</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed using the <c>directory.images</c> stringparam.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
+                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>pretext</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>pretext</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
 
                 <tabular top="medium" bottom="minor">
                     <row bottom="medium">
@@ -5489,7 +5468,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
 
             <table xml:id="table-time-units">
                 <title>Time Units</title>
@@ -7726,8 +7705,38 @@ the xsltproc executable.
 
             </subsection>
 
-            <subsection xml:id="interactive-iframes">
-                <title>IFrames</title>
+            <subsection>
+                <title>CircuitJS</title>
+
+                <p><url href="https://www.falstad.com/circuit/" visual="www.falstad.com/circuit">CircuitJS</url> is an electronic circuit simulator.  A circuit can be described by a language, which PreTeXt will interpret and submit for rendering.  The next two examples are identical, but provided in slightly different ways, see the <pretext/> source for more.  Preview images for PDF will be added later.</p>
+
+                <figure xml:id="figure-circuitjs-attribute">
+                    <caption>CircuitJS Example (source via an encoded attribute)</caption>
+
+                    <interactive xml:id="interactive-circuitjs-attribute" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3"/>
+                </figure>
+
+                <figure xml:id="figure-circuitjs">
+                    <caption>CircuitJS Example (source authored directly)</caption>
+
+                    <interactive xml:id="interactive-circuitjs" circuitjs="" width="90%">
+                        <source>
+                            $ 1 0.000005 10.20027730826997 58 5 50 5e-11
+                            R 464 32 464 -16 0 0 40 3.3 0 0 0.5
+                            g 464 224 464 240 0 0
+                            s 464 32 464 128 0 0 false
+                            s 464 128 464 224 0 1 false
+                            x 274 181 431 184 4 12 bottom\sswitch\s(to\sground)
+                            x 312 85 426 88 4 12 top\sswitch\s(to\sVdd)
+                            O 464 128 544 128 1 0
+                            x 532 110 593 113 4 12 output\spin
+                        </source>
+                    </interactive>
+                </figure>
+            </subsection>
+
+            <subsection xml:id="interactive-iframes-local">
+                <title>IFrames from Files</title>
 
                 <p>An <c>iframe</c> is an <init>HTML</init> element that allows embedding of a complete web page within another one.  Here we use this device to provide interactive 3D diagrams built with other tools.</p>
 
@@ -7745,7 +7754,7 @@ the xsltproc executable.
                 </figure>
                     <!-- preview="preview/threejs-splines.png"  -->
 
-                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.</p>
+                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.  See <xref ref="interactive-iframes-server" text="type-global"/> for the server version.</p>
             </subsection>
 
             <subsection xml:id="interactive-threejs">
@@ -7755,10 +7764,10 @@ the xsltproc executable.
 
                 <p>But it would seem to have become a bit more complicated to embed and our example was not rendering.  As of 2022-08-08, we have removed it.  Of course, you can find it in the git repository, perhaps searching on the date string just mentioned.  It woulld be interesting to see if our <tag>interactive</tag> framework could still support the changes.</p>
 
-                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
+                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes-local" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
 
-                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes" text="type-global"/>:<cd>
+                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes-local" text="type-global"/>:<cd>
                         <cline>var('x,y')</cline>
                         <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
                     </cd></li>
@@ -7873,6 +7882,19 @@ the xsltproc executable.
                 <figure xml:id="figure-calcplot3d">
                     <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m> (full application)</caption>
                     <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="3:2"/>
+                </figure>
+            </subsection>
+
+            <subsection xml:id="interactive-iframes-server">
+                <title>IFrames from Servers</title>
+
+                <p>The <c>iFrame</c> versions of interactives can point to a network location, presuming the endpoint is reasonably well-behaved.  If you are using this sytematically, let us know and perhpas it should become a more dedicated <pretext/> construction.  See <xref ref="interactive-iframes-local" text="type-global"/> for the local file version.</p>
+
+                <p>This example is from <url href="https://phet.colorado.edu/" visual="phet.colorado.edu">PhET Interactive Simulations</url>.</p>
+
+                <figure xml:id="figure-phet-fourier">
+                    <caption>Fourier: Making Waves <c>iframe</c></caption>
+                    <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" aspect="15:10"/>
                 </figure>
             </subsection>
         </section>
@@ -8538,7 +8560,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -8603,7 +8625,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
-                <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" text="title" /></p></li>
+                <li><p>A cross-reference to an aside, by title necessarily, and with some formatting in the title: <xref ref="an-aside" text="title" /></p></li>
                 <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global" /></p></li>
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global" /></p></li>
                 <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
@@ -8650,7 +8672,7 @@ the xsltproc executable.
 
 
 
-            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="hgo.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
+            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
             <p>For a link like the previous one, you might want to provide advice appropriate for your audience about using a context menu to download a file, or how to configure helper/viewer applications.</p>
 
@@ -8658,6 +8680,11 @@ the xsltproc executable.
             <!-- http://templates.openoffice.org/template/download/1203 -->
 
             <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc />) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext /> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="external/data/runningstatisticstemplate.ots" visual="external/data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
+            <p>The next four paragraphs are each a single <tag>datafile</tag> element.  Explore the source and the output from different conversions.  Strictly for testing as of 2022-11-04.</p>
+            <p>Foo <datafile href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</datafile> Bar</p>
+            <p>Foo <datafile source="data/runningstatisticstemplate.ots" visual="http://example.com">Runners Template</datafile> Bar</p>
+            <p>Foo <datafile href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</datafile> Bar</p>
+            <p>Foo <datafile source="data/runningstatisticstemplate.ots">Runners Template</datafile> Bar</p>
         </section>
 
         <section xml:id="section-internationalization">
@@ -8674,7 +8701,9 @@ the xsltproc executable.
 
                     <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut-and-paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <tag>?xml version="1.0" encoding="UTF-8" ?</tag> as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation
+                        <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd>
+                    as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
                     <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
@@ -12372,7 +12401,7 @@ the xsltproc executable.
                 </subsubsection>
 
                 <conclusion>
-                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
+                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, set the level for numbering theorems to <c>3</c>.  See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
 
                     <theorem xml:id="theorem-bad-one">
                         <title>Bad Numbered Theorem One</title>
@@ -12563,9 +12592,7 @@ the xsltproc executable.
         <section xml:id="ancillaries">
             <title>Ancillaries</title>
 
-            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance:<cd>
-                <cline>xsltproc -stringparam commentary yes ...</cline>
-            </cd>Other distinctions are:<ul>
+            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set the string parameter <c>commentary</c> to the value <c>yes</c>. Other distinctions are:<ul>
                 <li>Since it is elective, you need to be careful about cross-references to and from a <tag>commentary</tag>.  It is highly likely that you will want to make cross-references <em>within</em> a <tag>commentary</tag> <em>pointing to</em> other portions of your text, and this is always a good idea.  You will want to avoid making cross-references <em>to</em> a <tag>commentary</tag> from other parts of the text, with the exception of a cross-reference that originates <em>within</em> some <tag>commentary</tag>.</li>
                 <li>Numbered items are prohibited within a <tag>commentary</tag>, such as a <tag>figure</tag> or a <tag>theorem</tag>.  Doing so would disrupt consecutive numbering in different versions, with or without, <tag>commentary</tag> included.  Numbered equations are not prohibited in the schema, but should definitely be avoided anyway.</li>
             </ul></p>
@@ -12596,9 +12623,7 @@ the xsltproc executable.
 
                 <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is a necessary initial <tag>subsection</tag> to the current <tag>section</tag>, since we will have multiple worksheets.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
 
-                <p>If you make PDF output you will notice an increased amount of control over layout.  Also, with the command-line argument<cd>
-                    <cline>-stringparam latex.draft yes</cline>
-                </cd>there will be visual indicators of prescribed whitespace.</p>
+                <p>If you make PDF output you will notice an increased amount of control over layout.  Also, if the publication file elects <latex/> draft mode, then there will be visual indicators of prescribed whitespace.</p>
             </introduction>
 
             <worksheet>

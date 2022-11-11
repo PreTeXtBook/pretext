@@ -449,6 +449,127 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+
+<!-- Sanitize Nemeth Braille -->
+<!-- We receive Nemeth braille from MathJax and Speech Rule Engine (SRE) as -->
+<!--                                                                        -->
+<!--   1. Optional indentation U+2800 for second, and subsequent lines of   -->
+<!--      2D layout display math                                            -->
+<!--   2. Actual content with U+2800 as spaces                              -->
+<!--   3. An optional run of U+2800 to form a uniform right margin for      -->
+<!--      (eventual) 2D physical devices.                                   -->
+<!--                                                                        -->
+<!--  To play nice with liblouis we let U+2800 be an unbreakable space      -->
+<!--  and U+0020 ("regular" space) be a breakable space.  So                -->
+<!--    -->
+<!--   1.  We preserve indentation as unbreakable spaces.                   -->
+<!--   2.  We convert content spaces to "regular" spaces.  In some cases    -->
+<!--       we make convert them back to unbreakable spaces.                 -->
+<!--   3.  We drop trailing (right margin) whitespace, as unnecessary,      -->
+<!--       and even problematic.                                            -->
+
+
+<!-- Break on newlines.  Trim trailing whitespace, massage whitespace in   -->
+<!-- remainder.  Reconstitute with same patter of newlines.  Note: for     -->
+<!-- single-line braille from SRE there is no indentation and no trailing  -->
+<!-- whitespace for a right margin.                                        -->
+<!-- NB: "otherwise" might be simpler if some conditioning was different   -->
+<!-- in the "when.                                                         -->
+
+<xsl:template name="sanitize-nemeth-braille">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="contains($text, '&#xa;')">
+            <xsl:variable name="one-line" select="substring-before($text, '&#xa;')"/>
+            <!-- strip end of a single line of U+2800, a braille empty cell -->
+            <xsl:variable name="end-trimmed">
+                <xsl:call-template name="trim-nemeth-trailing-whitespace">
+                    <xsl:with-param name="text" select="$one-line"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:call-template name="convert-nemeth-whitespace">
+                <xsl:with-param name="text" select="$end-trimmed"/>
+            </xsl:call-template>
+            <!-- restore "split-out" newline -->
+            <xsl:text>&#xa;</xsl:text>
+            <!-- recursively process remainder -->
+            <xsl:call-template name="sanitize-nemeth-braille">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- last line, needs manipulation -->
+            <xsl:variable name="end-trimmed">
+                <xsl:call-template name="trim-nemeth-trailing-whitespace">
+                    <xsl:with-param name="text" select="$text"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:call-template name="convert-nemeth-whitespace">
+                <xsl:with-param name="text" select="$end-trimmed"/>
+            </xsl:call-template>
+            <!-- no newline to restore     -->
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Work in from right margin, dropping consecutive U+2800 -->
+<xsl:template name="trim-nemeth-trailing-whitespace">
+   <xsl:param name="text"/>
+   <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
+   <xsl:choose>
+        <xsl:when test="$last-char = '&#x2800;'">
+            <xsl:call-template name="trim-nemeth-trailing-whitespace">
+                <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
+
+<!-- Work in from the left.  The $b-indentation boolean signals that       -->
+<!-- the last character examined was a U+2800 from the run of indentation  -->
+<!-- (which we simply duplicate).  It begins true as the default value,    -->
+<!-- which is not present in initial call.  Once it flips false, it stays  -->
+<!-- false.  Spaces within content convert to "regular" spaces.            -->
+<!-- Note: once $b-indentation flips false, we could just do a             -->
+<!-- search/replace on the string to output with a "value-of"              -->
+
+<xsl:template name="convert-nemeth-whitespace">
+   <xsl:param name="text"/>
+   <xsl:param name="b-indentation" select="true()"/>
+
+   <xsl:choose>
+        <xsl:when test="$text">
+            <xsl:variable name="first-char" select="substring($text, 1, 1)"/>
+            <xsl:variable name="b-found-indentation" select="$b-indentation and ($first-char = '&#x2800;')"/>
+            <xsl:choose>
+                <!-- echo a leading U+2800 in the indentation-->
+                <xsl:when test="$b-found-indentation">
+                    <xsl:text>&#x2800;</xsl:text>
+                </xsl:when>
+                <!-- convert space in content into a regular space -->
+                <xsl:when test="$first-char = '&#x2800;'">
+                    <xsl:text>&#x0020;</xsl:text>
+                </xsl:when>
+                <!-- echo any other character -->
+                <xsl:otherwise>
+                    <xsl:value-of select="$first-char"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- Recurse with all but the first character -->
+            <xsl:call-template name="convert-nemeth-whitespace">
+                <xsl:with-param name="text" select="substring($text, 2, string-length($text) - 1)"/>
+                <xsl:with-param name="b-indentation" select="$b-found-indentation"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- $text is empty string, done -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Sanitize LaTex -->
 <!-- We allow authors to include whitespace for readability          -->
 <!--                                                                 -->

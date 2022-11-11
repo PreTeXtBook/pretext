@@ -2085,7 +2085,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>The signal for a fill-in problem is a <tag>setup</tag> element containing a sequence of <tag>var</tag> elements.  Each <tag>var</tag> contains a sequence of <tag>condition</tag> elements that describe possible values (via regular expressions) which might appear in a blank.  The first condition describes the correct answer(s), and then the subsequent conditions are descriptions of probable incorrect answers.  Each <tag>condition</tag> has a <tag>feedback</tag>.  So the first condition to match an entry provided via a blank will be noted as correct or incorrect, and its feedback will be relayed.</p>
 
-            <p>The <tag>var</tag> of the statement and the <tag>var</tag> of the setup are in a 1-1 correspondence, which establishes how the setup is associated with a blank.</p>
+            <p>The <tag>var</tag> of the statement and the <tag>var</tag> of the setup are in a 1-1 correspondence, which establishes how the setup is associated with a blank.  The <tag>var</tag> in the statement may have a <attr>width</attr> attribute whose value controls how many characters would be visible in the blank.</p>
 
             <p>A static version will include an automatic <tag>solution</tag> which <q>fills in</q> each blank with a correct answer, and then duplicates the feedback text, in order.</p>
         </subsection>
@@ -2117,7 +2117,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p><term>Short Answer</term> questions might also be known as <term>Free Response</term> questions, or <term>Essay</term> questions.  A <pretext/> <tag>exercise</tag>, or a PROJECT-LIKE that is not structured by <tag>task</tag>, is implicitly of this nature.  But you still need to signal that you wish such a problem to be interactive, typically with a text box where the student can enter an answer.  So, similar to other types of exercises, add a <tage>response</tage> element immediately after the <tag>statement</tag>.  (We expect to add attributes for this element to influence the behavior of the text box.)</p>
 
-            <p>In an online setting, it is a simple matter to provide a place for a reader to type in an answer, response, or essay.  But then what?  Until artificial intelligence is brought to bear, somebody (not something), such as an instructor for a course of enrolled students, will need to read a response and provide a score and/or comments that can be saved and distributed back to the students.  So the first prerequisite is that <init>HTML</init> output is being built for a capable platform.  As of 2022-06-15, this means a Runestone server (<xref ref="runestone"/>), but it could easily also be a <webwork/> server.  Then a publisher might wish some questions to be enabled this way, and others not.</p>
+            <p>In an online setting, it is a simple matter to provide a place for a reader to type in an answer, response, or essay.  But then what?  Until artificial intelligence is brought to bear, somebody (not something), such as an instructor for a course of enrolled students, will need to read a response and provide a score and/or comments that can be saved and distributed back to the students.  So the first prerequisite is that <init>HTML</init> output is being built for a capable platform.  As of 2022-06-15, this means a Runestone server (<xref ref="runestone"/>), but it could easily also be a <webwork/> server.</p>
+
+            <p>A publisher can control when a response area is created in <init>HTML</init> output (<xref ref="online-short-answer-responses"/>).  The default is to only have this area present when it is possible for a response to be graded and scored.  However, an option will cause a response box to be created always.   A reader can reflect on the question by typing in a response, and the text will be saved <em>on that particular device</em> only.  When it is impossible for a response to be graded, placeholder text will warn the reader.</p>
         </subsection>
     </section>
 
@@ -2352,6 +2354,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>There are a variety of <latex/> packages for authoring a diagram, plot, or graph.  Examples include: TikZ, PGF, Xy-pic, and PSTricks.  Generally, the <tag>latex-image</tag> tag allows you to incorporate this code into your source and <pretext/> realizes these descriptions as images in your output.</p>
 
+                <p>For <latex/> output the procedure is transparent<mdash/><pretext/> simply incorporates the preamble information and the image's code in the correct places in the <latex/> output, scaled to fit whatever space is described on the <tag>image</tag> element.  Then traditional <latex/> processing will do the right thing.  For output to other non-<latex/> formats, such as <init>HTML</init> or <init>EPUB</init>, we need some help from the CLI to generate other formats.  This tool will isolate the image's code and bundle it up with the necessary preamble to make a complete single-purpose <latex/> file.  Once converted by <latex/> to a <init>PDF</init> version, other tools can convert the image into other formats, such as <init>SVG</init>.  In this way, you can use <latex/> packages for describing images, use mathematically-correct labels in <latex/> syntax, and use your own macros for consistency in notation, yet also employ the resulting images in more modern output formats.  Note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
+
                 <p>Much like the <tag>asymptote</tag> tag, the <tag>latex-image</tag> tag is used as a child of <tag>image</tag> and can be thought of as an alternative to the <attr>source</attr> attribute of <tag>image</tag>.  The contents need to be a complete specification of the image.  For example, a TikZ image will typically begin with <c>\begin{tikzpicture}</c>.  Inside of your document's <tag>docinfo</tag> you will likely need to employ a <tag>latex-image-preamble</tag> element to hold necessary <c>\usepackage</c> commands and any global settings, such as the style for tick-marks and labels on axes of graphs.  The source code in this next example is greatly abbreviated and mildly edited, see the source for the complete example.</p>
 
                 <pre><![CDATA[
@@ -2408,7 +2412,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>This will result in:</p>
 
-                <figure>
+                <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/" visual="texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url></caption>
                     <image xml:id="rna-codons-table" width="100%">
                         <description>A table of the RNA codons, together with the amino acids they encode.</description>
@@ -2839,10 +2843,111 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         </latex-image>
                     </image>
                 </figure>
+            </subsubsection>
 
-                <p>For <latex/> output the procedure is transparent<mdash/><pretext/> simply incorporates the preamble information and the image's code in the correct places in the <latex/> output.  Then traditional processing (typically with <c>pdflatex</c>) will do the right thing.  For output to other non-<latex/> formats, such as <init>HTML</init> or <init>EPUB</init>, we need some help from the <c>pretext</c> script (<xref ref="pretext-script"/>).  This script will isolate the image's code and bundle it up with the necessary preamble to make a complete single-purpose <latex/> file.  Once converted by <latex/> to a <init>PDF</init> version, other tools can convert the image into other formats, such as <init>SVG</init>.  In this way, you can use <latex/> packages for describing images, use mathematically-correct labels in <latex/> syntax, and use your own macros for consistency in notation, yet also employ the resulting images in more modern output formats.  It takes some work to get the <c>pretext</c> script setup, but it will automate the process and spare you many technical headaches surrounding the conversions.  See <xref ref="pretext-script"/> for details.</p>
+            <subsubsection>
+                <title>Scaling TikZ Images</title>
 
-                <p>Notice that when you produce these images for use with non-<latex/> formats such as <init>HTML</init>, it is your responsibility to move the images into the correct location where your output expects them, typically in a subdirectory named <c>images</c>.  Also note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
+                <p>Images authored in <url href="https://github.com/pgf-tikz/pgf">TikZ</url> are the most popular.   Text (nodes) in a TikZ picture are at whatever the current <latex/> font size is.  The other parts of the picture (lines, circles, rays, etc.; the <q>line art</q>) can be scaled as part of an overall scale factor.  The point being, the scale factor will not scale the text simultaneously.  It is not unlike a map application on your mobile device.  The name of a road is too small to read, so you zoom in on the map, making the street bigger, but the name stays in the same font size and is still unreadable.  This means some manual labor is involved when you place a TikZ picture into a <pretext/> document.</p>
+
+                <p>For many authors, the goal is to have the text in their TikZ picture have the same size as the surrounding text, both in a <init>PDF</init> and in <init>HTML</init>.  We now explain how to accomplish this consistently.</p>
+
+                <paragraphs>
+                    <title>Preparation</title>
+
+                    <p>Well <em>before</em> designing many TikZ images, answer the following questions.<ol>
+                        <li>For your <latex/> output, what will the overall font size be?</li>
+                        <li>For your <latex/> output, what will the width of the text block be?  Note that this will normally be computed by <pretext/>, dependent on your chosen font size.  A larger font will mean a greater width.  You can generate the <latex/> source file and look early in the preamble to see what width is being used.  It is also possible that you may be setting this with yourself (<xref ref="page-shape"/>).  The ratio of line width to font size is always <m>34:1</m>.</li>
+                    </ol></p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>TikZ in <latex/></title>
+
+                    <p>Every image in <pretext/> may be constrained by width and/or margins, or may be restricted to a panel of a <tag>sidebyside</tag> with a certain width.  So the TikZ code you author will create an image that is then scaled by <pretext/> to fit the constraints (much as any other image is scaled).  Except this is done in a way that scales both the font and the line art.  Your main goal is to have this scaling use a scale factor of <m>1.0</m>.  Which, of course, sounds like a waste of effort, but it is critical for how the image behaves in <init>HTML</init> (next).</p>
+
+                    <p>To accomplish this unit scaling, follow this procedure for each TikZ picture.<ol>
+                        <li>Determine the width of the TikZ picture itself, in physical units of length.  Typically, the lengths used for larger portions are described in centimeters.  But note that an overall scale factor is sometimes applied for convenience (or as a result of poor planning!).  Also, the default unit length (centimeters) can be changed.  Note also, that text may <q>push out</q> to the right and left, defining the boundaries on the sides, and these lengths can be hard to compute or predict.</li>
+                        <li>Recall the width of your text (above).  Recognize that list items will be indented (reducing width), and perhaps there are multiple indents if a list has multiple levels.</li>
+                        <li>Now you want the width of your picture as a percentage of the overall available width.  By default, your overall width will be points, and your picture width will be in centimeters.  You may be familiar with a <q>big point</q> (or <q>desktop publishing point</q>) which is <m>72</m> points to the inch.  <tex/> however uses <m>72.27</m> points to the inch, which makes a <tex/> point equal to <m>0.03514598</m> centimeters.  Convert to whatever common unit makes sense to you, since it is the dimension-less ratio you are after.</li>
+                        <li>Use this percentage as the <attr>width</attr> attribute on the <tag>image</tag> (with a percent sign).</li>
+                    </ol>Now produce a <init>PDF</init> and you will find that the font in the surrounding text, and the font in image, will match identically.  I like to check this carefully by zomming in on the <init>PDF</init> and using an on-screen pixel ruler to check the heights of identical letters.  <url href="https://apps.kde.org/kruler/">KRuler</url> is one such example for Linux, suggestions for other operating systems are welcome.</p>
+
+                    <p>Note that in practice you will envision your picture as large or small, and you will begin with some overall physical width in mind, relative to the line width.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>TikZ in <init>HTML</init></title>
+
+                    <p>For <init>HTML</init> output, the goal is to not edit your source.  In other words to not change the <attr>width</attr> attributes that have been so carefully computed and to not edit the TikZ code.  But you will want to maintain fidelity with the surrounding font.</p>
+
+                    <p><init>HTML</init> output is designed to behave very similarly (not identically) to how <latex/> output behaves.  In other words, the ratio of line width to font size is <m>34:1</m>.  In this way, line length and font size are such that a long paragraph will usually have an identical number of lines in <latex/> (at any font size) and in <init>HTML</init>.</p>
+
+                    <p>Our tools produce Scalable Vector Graphics (<init>SVG</init>) versions of TikZ pictures for use in <init>HTML</init> output.  Being scalable means a reader can zoom in without any pixelation of the images.  This is helpful for those with low vision, or if some fine point of a picture needs to be examined closely.  It also means an SVG can be scaled by any factor when placed in <pretext/> <init>HTML</init>.  However, the work done for a unit scaling for <latex/> output will continue to provide the correct scaling for <init>HTML</init>!  (Provided the text width used for the <init>PDF</init> production is the one automatically computed from the font size via the <m>34:1</m> ratio.)</p>
+                </paragraphs>
+
+                <example>
+                    <title>Case Study: Scaling a TikZ picture</title>
+
+                    <p>The <pretext/> source below describes a simple TikZ picture, nd is followed by the picture itself.  The rectangle is 8 centimeters wide.  The Guide is produced as a <init>PDF</init> with 10 point text and a text width of <m>6.5</m> inches.  (This is too wide for comfortable reading, and contrary to our recommendations.  See <xref ref="best-practice-too-much-text"/>.)   Normally, a choice of 10 point text would result in a width of <m>340</m> point, or about <m>4.7</m> inches.</p>
+
+                    <p>So we compute the fraction of the available width required, as a percentage:
+                        <me>\frac{8\text{ cm}}{6.5\text{ in}} = 
+                            \frac{8\text{ cm}\left(\frac{1\text{ in}}{2.54\text{ cm}}\right)}{6.5\text{ in}} =
+                            0.4846 = 48.46\%</me>
+                    and we use that as the width of the image.</p>
+
+                    <pre><![CDATA[
+                    <image xml:id="scaling-tikz" width="48.46%">
+                        <latex-image>
+                        \begin{tikzpicture}
+                        % 1 cm is default unit of length
+                        % a rectangle: 8 cm wide, 6 cm tall
+                        \draw[draw=black, thick] (4,2) rectangle (-4,-2);
+
+                        \node at (-2,  1) {Foo};
+                        \node at ( 2,  1) {Bar};
+                        \node at (-2, -1) {Baz};
+                        \node at ( 2, -1) {Qux};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>]]>
+                    </pre>
+
+                    <p>Some characters for comparison: Foo<nbsp/><nbsp/>Bar<nbsp/><nbsp/>Baz<nbsp/><nbsp/>Qux</p>
+
+                    <image xml:id="scaling-tikz" width="48.46%">
+                        <latex-image>
+                        \begin{tikzpicture}
+                        % 1 cm is default unit of length
+                        % a rectangle: 8 cm wide, 6 cm tall
+                        \draw[draw=black, thick] (4,2) rectangle (-4,-2);
+
+                        \node at (-2,  1) {Foo};
+                        \node at ( 2,  1) {Bar};
+                        \node at (-2, -1) {Baz};
+                        \node at ( 2, -1) {Qux};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+
+                    <p>In the <init>PDF</init> version, the text matches between the image and the surrounding text almost identically.  We could slide the image right and left by adjusting the margins (the default is to be centered).  But if we want the image bigger and smaller, we need to adjust the TikZ code and recompute the <attr>width</attr> attribute.</p>
+
+                    <p>Now for <init>HTML</init> we need to produce an <init>SVG</init> version that is a close match.  The <init>HTML</init> version is a close match for <latex/> built with a computed text width (for any font size).  We do not want to change the percentage of the width devoted to the TikZ picture, and we do not want to change the TikZ code itself.  If we had not chosen a different text width (the <m>6.5</m> inches, versus a computed <m>340</m> point), then we could generate the <init>SVG</init> by supplying the same publication file, so as to use the same font size.  However, our text width is 38% larger in the <latex/> version,
+                        <me>\frac{6.5\text{ in}}{340\text{ pt}} =
+                            \frac{6.5\text{ in}\left(\frac{72.27\text{ pt}}{1\text{ in}}\right)}{340\text{ pt}} = 1.3816</me>
+                    The font size needs to increase by a similar percentage,
+                        <me>10\text{ pt}\times 1.3816 = 13.816\text{ pt}\approx 14\text{ pt}</me>
+                    So we generate the <init>SVG</init> image with a <em>different</em> publication file, giving a font size of 14 point.  The <init>HTML</init> font in the text may be very different from the <latex/> font used in the TikZ picture, but their <em>sizes</em> are nearly identical.  Note that our use of <latex/> only supports 8 different font sizes, so it was fortuitous in this example that the 38% increase was so close to the supported 14 point font size.  Note also, that since we used a different text width for the <init>PDF</init>, the resulting 40% increase in the font size for the <init>SVG</init> could play havoc with text that has been placed carefully not to overlap other components of the picture.</p>
+                </example>
+
+                <p>There are myriad ways to scale and transform a TikZ picture.  You might choose to intentionally use a smaller font size than the surrounding text, as in <xref ref="rna-codons-figure"/>.  Or, fidelity with the surrounding text might not be important to you.  Or you might prefer that images perform better in <init>HTML</init>.  But hopefully the above discussion and example provide enough insight into how the various constructions behave.  The important points are:<ul>
+                    <li>TikZ uses physical units for the overall width of a picture, and nodes have text using the ambient font size of the <pretext/> <latex/> file (unless prescribed otherwise).</li>
+
+                    <li><pretext/> scales a TikZ picture uniformly (text <em>and</em> line art) to fit into constraints given in the source.</li>
+
+                    <li>The <init>SVG</init> version of a TikZ picture is also uniformly scalable and at the same width as the original will have text of the correct font size.  However, when used in <init>HTML</init> output, it is scaled on the assumption that the ratio of the line  width to the font size is 34:1.  This is the default width computed by <pretext/> for all supported font sizes.  Changes in this ratio for <init>PDF</init> production requires an equivalent change in font size during <init>SVG</init> construction, via the publication file.</li>
+                </ul></p>
             </subsubsection>
 
             <subsubsection xml:id="topic-sageplot">
@@ -2977,6 +3082,16 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Notice that this facility does not restrict you to providing files of the same image, or even images at all.  You could choose to make data files available for each data plot you provide, as spreadsheets, or text files, or whatever you have, or whatever you think your readers need.</p>
 
             <p>Finally, <q>archive</q> may be a bit of a misnomer, since there is no historical aspect to any of this.  Maybe <q>repository</q> would be more accurate.  Though for a history textbook, it might be a perfect name.</p>
+        </subsection>
+
+        <subsection>
+            <title>Copies of Images</title>
+
+            <p>Sometimes you want to use the same image more than once.  Putting it in a <tag>figure</tag> and then making a cross-reference (<tag>xref</tag>) can work well in <init>HTML</init> output since it will be available as a knowl.  However in a static format (<init>PDF</init>, print) the reader will need to chase the cross-reference.</p>
+            
+            <p>For a raster image, you can just point to the file again with the <attr>source</attr> attribute.  You are free to wrap it in a <c>figure</c> and thus change the caption.  It will get a new number as a new figure, and you will need to assign a new unique <attr>xml:id</attr> attribute.  Maybe appending <c>-copy-2</c>, or similar, to the <attr>xml:id</attr> will be helpful.</p>
+
+            <p>If you have a figure generated from source code (such as in TikZ) you really do not want to edit and maintain two copies that may not stay in sync.  Instead, you can place the code into a file and <c>xinclude</c> it twice.  Study <xref ref="topic-xinclude"/> carefully, and note that this is an excellent place to take advantage of setting the <attr>parse</attr> attribute to <c>text</c> (no need to escape problematic <init>XML</init> characters).  Notice that when you generate images, you will have two image files with identical contents, but different names.  This is no place for false optimization.  Bits are cheap and your time is valuable.  It is far more important to only maintain a single copy of the source, than to be caught up with the <q>waste</q> of having two copies of the same file (and which are managed for you).  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
         </subsection>
     </section>
 
@@ -4255,6 +4370,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <li>
                 <title>Justified Text</title>
                 <p>Right-justified text (an even right margin) can sometimes lead to spaced-out text that is difficult for some readers.  For print, our use of <latex/> as an intermediate format, leads to <init>PDF</init> output where right-justified text can be superior to the alternative, <term>ragged right</term> text.  For more see <xref ref="print-justification"/> and <xref ref="styling-justification"/>.</p>
+            </li>
+
+            <li>
+                <title>Watermarks</title>
+                <p>If a document has a watermark (<xref ref="watermarks"/>), then a screen reader will announce its presence at the beginning of each page of <init>HTML</init> content.</p>
             </li>
         </dl></p>
 

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2022  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="further-customizations">
+    <title>Further Customizations</title>
+    <idx>customization</idx>
+
+    <introduction>
+        <p>The publication file is our primary vehicle for substantially affecting the way a project is produced, see <xref ref="publication-file"/> for more.  Varying small portions of text (on the order of a phrase) is accomplished with customizations to make different versions, see <xref ref="publisher-customizations"/>.  Producing different versions by including, or excluding, large portions of text, on the order of paragraphs, blocks, and divisions, is accomplished with support for versions, see <xref ref="publisher-versions"/>.  Arranging material in different orders can be accomplished with thoughtful use of modularizing source files, see <xref ref="processing-modular"/>.</p>
+
+        <p>In this chapter we describe two other ways to influence output, which are in some ways are techniques a <pretext/> developer might need to be familiar with (<xref ref="part-developer"/>), though a publisher might also find them useful.  An author should not have any need for these techniques.</p>
+    </introduction>
+
+    <section xml:id="publisher-string-parameters">
+        <title>String Parameters</title>
+        <idx>string parameters</idx>
+        <idx>stringparam</idx>
+
+        <p>The majority of the conversions that <pretext/> supports are accomplished via an Extensible Stylesheet Language (<init>XSL</init>) stylesheet.  This language has a <term>parameter</term> feature which allows an external value (as a small chunk of text) to be provided to the stylesheet externally.  In this way, a single stylesheet can produce small changes in output in reaction to a parameter value, without the need for creating multiple stylesheets.  We say that the stylesheet is <term>parameterized</term> by the parameter.  These are often called <term>stringparam</term> since that is the command-line switch used by the <c>xsltproc</c> executable for the external communication (<xref ref="xsltproc"/>).</p>
+
+        <p>The conversion to <latex/> source, as a precursor of <init>PDF</init> output is a good example.  A string parameter specifies the size of the font, which causes small changes to the <latex/> source file in the appropriate ways.  Similarly, a <init>PDF</init> should be different if it is meant to be become a hardcopy printed book, or if it is meant to be viewed on an electronic screen.  This dichotomy is reflected by a simple string parameter (with values <c>yes</c> or <c>no</c>) and then a single stylesheet can produce two outputs that are different in substantial ways.  Note that a publisher is insulated from any of this discussion for these two examples as the publisher file (<xref ref="publication-file"/>) handles all the logistics.  See the publisher file options at <xref ref="latex-font-size-options"/> and <xref ref="latex-print-options"/>.</p>
+
+        <p>Some string parameters are just for internal use, especially when multiple stylesheets are chained together to accomplish a complicated conversion, such as to <init>EPUB</init> (<xref ref="epub"/>) or braille.  Others are used to allow developers to optionally test-drive some new features<mdash/>these usually have <c>debug</c> in their name.  We once used string parameters directly to accomplish publisher customizations.  As of 2022-10-24 we are well along to moving these to the publication file, though we mention this here since this transition is not 100% complete.</p>
+
+        <p>The method for supplying an (external) string parameter to the processing of a <pretext/> project varies depending on the tool used for processing.<ul>
+            <li><pretext/>-CLI, <xref ref="cli-project-manifest"/></li>
+            <li><c>pretext/pretext</c> Python script, <xref ref="pretext-publisher-stringparam"/></li>
+            <li><c>xsltproc</c> binary executable, <xref ref="xsltproc-string-parameters"/></li>
+        </ul></p>.
+    </section>
+
+    <section xml:id="publisher-extra-stylesheet">
+        <title>Extra Stylesheets</title>
+        <idx>extra stylesheets</idx>
+        <idx><h>stylesheet</h><h>extra</h></idx>
+
+        <p>String parameters (<xref ref="publisher-string-parameters"/>) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
+
+        <p>You may also wish to customize your output in some stylistic way.  This might be especially true for <latex />/PDF/print output.  For example, you might wish to have every chapter heading of your book in a nice shade of light blue, with the title flush right to the margin, countered by a thick solid rule extending all the way right, to the edge of the paper.  Notice that this does not affect your content, it is strictly presentation.  This is our approach for styling <latex/> output, much as <init>CSS</init> is used to style <init>HTML</init> output (<xref ref="latex-styles"/>)</p>
+
+        <p>We have done several things to encourage such customizations.  We have tried to put as much stylistic information as possible in the <latex /> preamble and keep as much as possible out of the body.  (There is always room for improvement on this score, please be in touch if you have a need.)</p>
+
+        <p>You can start with a new small XSL file.  You then tell the <pretext />-CLI to use that <init>XSL</init> file instead of the standard one provided by <pretext /> through the <tag>xsl</tag> element in a <tag>target</tag> of the project manifest.</p>
+
+        <p>
+            Assume that you have an <init>XSL</init> file called <c>custom-latex.xsl</c> located in the folder <c>xsl</c> inside the root of your project.  In your <c>project.ptx</c> manifest file, use <c>&lt;xsl&gt;xsl/custom-latex.xsl&lt;/xsl&gt;</c> as an element in the corresponding <tag>target</tag>.
+        </p>
+
+        <p>
+            The custom <init>XSL</init> file should import the stock <pretext /> file for the type of output you want to create.  This is done using the line<cd>
+                <cline>&lt;xsl:import href="./core/pretext-latex.xsl"/&gt;</cline>
+            </cd>which should be placed near the top of the file; everything after it will redefine the various rules imported from the stock <init>XSL</init>.  Note the <attr>href</attr> attribute's value starts with <c>./core/</c>.  This works because the CLI copies all the standard <init>XSL</init> to a subfolder <c>core</c> of the temporary directory holding your custom <init>XSL</init> so that you do not need to know the path to its location on your system.
+        </p>
+        <p>
+            See <xref ref="extra-stylesheet"/> to see how to use such a stylesheet with the <c>pretext/pretext</c> script.
+        </p>
+
+        <p>
+            The easiest thing to put in this file is elements like<cd>
+                <cline>&lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;</cline>
+            </cd>.  Values given on the command-line supersede those given in an XSL file this way.</p>
+
+        <p>You can augment the <latex /> preamble with as much <latex /> code as you like in the following way.</p>
+
+        <pre>
+        &lt;xsl:param name="latex.preamble.late"&gt;
+            &lt;xsl:text&gt;% Proof environment with heading in small caps&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\expandafter\let\expandafter\oldp\csname\string\proof\endcsname&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\let\oldep\endproof&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\renewenvironment{proof}[1][\proofname]{\oldp[\scshape #1]}{\oldep}&amp;#xa;&lt;/xsl:text&gt;
+        &lt;/xsl:param&gt;
+        </pre>
+
+        <p>There are a variety of things you can do generally, by overriding the imported XSL templates to change behavior, but such modifications are beyond the scope of this guide.</p>
+    </section>
+</chapter>
+

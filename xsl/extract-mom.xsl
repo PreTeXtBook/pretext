@@ -42,10 +42,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<xsl:template match="/">
-    <xsl:apply-imports />
-</xsl:template>
-
 <!-- One problem id per line -->
 <xsl:template match="myopenmath[@problem]" mode="extraction">
     <xsl:value-of select="@problem" />

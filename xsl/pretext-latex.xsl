@@ -47,37 +47,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
 <!--  -->
-<!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
-<!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
-<!-- memoir class offers more, but maybe other changes? -->
-<xsl:param name="latex.font.size" select="'10pt'" />
-<!--  -->
-<!-- Geometry: page shape, margins, etc            -->
-<!-- Pass a string with any of geometry's options  -->
-<!-- Default is empty and thus ineffective         -->
-<!-- Otherwise, happens early in preamble template -->
-<xsl:param name="latex.geometry" select="''"/>
-<!--  -->
-<!-- PDF Watermarking                    -->
-<!-- Non-empty string makes it happen    -->
-<!-- Scale works well for "CONFIDENTIAL" -->
-<!-- or  for "DRAFT YYYY/MM/DD"          -->
-<!-- These are deprecated in favor of watermark.text and watermark.scale -->
-<!-- which are now managed in common. These still "work" for now.        -->
-<xsl:param name="latex.watermark" select="''"/>
-<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
-<xsl:param name="latex.watermark.scale" select="''"/>
-<xsl:variable name="latex-watermark-scale">
-    <xsl:choose>
-        <xsl:when test="not($latex.watermark.scale = '')">
-            <xsl:value-of select="$latex.watermark.scale"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>2.0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<!--  -->
 <!-- Author's Tools                                            -->
 <!-- Set the author-tools parameter to 'yes'                   -->
 <!-- (Documented in pretext-common.xsl)                       -->
@@ -87,17 +56,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (2) LaTeX labels near definition and use                  -->
 <!--     N.B. Some are author-defined; others are internal,    -->
 <!--     and CANNOT be used as xml:id's (will raise a warning) -->
-<!--  -->
-<!-- Draft Copies                                              -->
-<!-- Various options for working copies for authors            -->
-<!-- (1) LaTeX's draft mode                                    -->
-<!-- (2) Crop marks on letter paper, centered                  -->
-<!--     presuming geometry sets smaller page size             -->
-<!--     with paperheight, paperwidth                          -->
-<xsl:param name="latex.draft" select="'no'"/>
-<!--  -->
-<!-- Page Numbers in cross-references -->
-<xsl:param name="latex.pageref" select="''"/>
 <!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
@@ -194,33 +152,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are incorporated in the documentclass[]{}  -->
 <!-- and only if we need the extreme values     -->
 
-<!-- Default is 10pt above, this stupid template     -->
-<!-- provides an error message and also sets a value -->
-<!-- we can condition on for the extsizes package.   -->
-<!-- In predicted order, sort of, so fall out early  -->
-
-<!-- NB: Code using $font-size and latex.geometry is also -->
-<!-- used in the latex-image extraction stylesheet. Until -->
-<!-- we do a better job of ensuring they remain in-sync,  -->
-<!-- please coordinate the two sets of templates by hand  -->
-
-<xsl:variable name="font-size">
-    <xsl:choose>
-        <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:otherwise>
-            <xsl:text>10pt</xsl:text>
-            <xsl:message>PTX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ('10pt')</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- A convenient shortcut/hack that might need expansion later   -->
 <!-- insert "ext" or nothing in front of "regular" document class -->
 <xsl:variable name="document-class-prefix">
@@ -237,16 +168,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Including page numbers in cross-references defaults to      -->
 <!-- 'yes' for an electronic PDF and to 'no' for a print PDF,    -->
 <!-- and of course can be switched away from the default at will -->
+<!-- $latex-pageref is a publisher variable, and so guaranteed   -->
+<!-- to be "yes", "no" or empty.                                 -->
 <!-- NB: upgrade the latex.print variable to something like this -->
 <xsl:variable name="pagerefs-option">
     <xsl:choose>
         <!-- electronic PDF -->
         <xsl:when test="not($b-latex-print)">
             <xsl:choose>
-                <xsl:when test="$latex.pageref = 'yes'">
+                <xsl:when test="$latex-pageref = 'yes'">
                     <xsl:text>yes</xsl:text>
                 </xsl:when>
-                <xsl:when test="($latex.pageref = 'no') or ($latex.pageref = '')">
+                <xsl:when test="($latex-pageref = 'no') or ($latex-pageref = '')">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -254,10 +187,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- print PDF -->
         <xsl:when test="$b-latex-print">
             <xsl:choose>
-                <xsl:when test="$latex.pageref = 'no'">
+                <xsl:when test="$latex-pageref = 'no'">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
-                <xsl:when test="($latex.pageref = 'yes') or ($latex.pageref = '')">
+                <xsl:when test="($latex-pageref = 'yes') or ($latex-pageref = '')">
                     <xsl:text>yes</xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -310,7 +243,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -373,7 +306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -396,7 +329,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -418,7 +351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$b-latex-draft-mode" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -555,10 +488,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$text-height" />
     <xsl:text>}}&#xa;</xsl:text>
-    <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
-    <xsl:if test="$latex.geometry != ''">
+    <xsl:text>%% Custom Page Layout Adjustments (use publisher page-geometry entry)&#xa;</xsl:text>
+    <xsl:if test="$latex-page-geometry != ''">
         <xsl:text>\geometry{</xsl:text>
-        <xsl:value-of select="$latex.geometry" />
+        <xsl:value-of select="$latex-page-geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex-right-alignment = 'ragged'">
@@ -807,7 +740,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% pdfpages package for front and back covers as PDFs&#xa;</xsl:text>
         <xsl:text>\usepackage[</xsl:text>
         <xsl:choose>
-            <xsl:when test="$latex.draft ='yes'">
+            <xsl:when test="$b-latex-draft-mode">
                 <xsl:text>draft</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -1201,7 +1134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
         <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
-            <xsl:when test="$latex.draft ='yes'">
+            <xsl:when test="$b-latex-draft-mode">
                 <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
                 <xsl:text>\setlength{\workspacestrutwidth}{2pt}&#xa;</xsl:text>
             </xsl:when>
@@ -1803,29 +1736,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
     <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
     <!-- was at v1.2, 2015-02-19.                                     -->
-    <!-- latex.watermark and latex.watermark.scale are deprecated,    -->
-    <!-- but effort is made here so they still work for now           -->
     <xsl:if test="$b-watermark or $b-latex-watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-watermark">
-                <xsl:value-of select="$watermark.text" />
-            </xsl:when>
-            <xsl:when test="$b-latex-watermark">
-                <xsl:value-of select="$latex.watermark" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:value-of select="$watermark-text" />
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkScale{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-watermark">
-                <xsl:value-of select="$watermark.scale" />
-            </xsl:when>
-            <xsl:when test="$b-latex-watermark">
-                <xsl:value-of select="$latex-watermark-scale" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:value-of select="$watermark-scale" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$author-tools-new = 'yes'" >
@@ -7356,6 +7273,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that also functions as a link (we color it black locally)   -->
 <!-- It seems that special TeX characters (of a URL) are handled -->
 <!-- A blank URL sends back failure indicator                    -->
+<!-- "static-url" template is in -common, universal              -->
 <!-- TODO: switches for color, nolink in print   -->
 <!-- TODO: size as parameter, defauls to \qrsize -->
 <xsl:template match="*" mode="static-qr">
@@ -7373,44 +7291,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[QR LINK]</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Static URL's -->
-<!-- Predictable and/or stable URLs for versions  -->
-<!-- of interactives available online.  These are -->
-<!--  -->
-<!-- (1) "standalone" pages for author/local material,  -->
-<!-- as a product of the HTML conversion -->
-<!-- (2) computable addresses of network resources, -->
-<!-- eg the YouTube page of a resource -->
-
-<!-- point to HTML-produced, and canonically-hosted, standalone page -->
-<!-- Eventually match on all interactives                            -->
-<!-- NB: baseurl is assumed to have a trailing slash                 -->
-
-<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
-    <xsl:value-of select="$baseurl"/>
-    <xsl:apply-templates select="." mode="standalone-filename" />
-</xsl:template>
-
-<!-- Natural override for YouTube videos               -->
-<!-- Better - standalone page, with "View on You Tube" -->
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
-    <xsl:apply-templates select="." mode="youtube-view-url" />
-    <xsl:if test="@start">
-        <xsl:text>\&amp;start=</xsl:text>
-        <xsl:value-of select="@start" />
-    </xsl:if>
-    <xsl:if test="@end">
-        <xsl:text>\&amp;end=</xsl:text>
-        <xsl:value-of select="@end" />
-    </xsl:if>
-</xsl:template>
-
-<!-- Vimeo view URL -->
-<xsl:template match="video[@vimeo]" mode="static-url">
-    <xsl:text>https://vimeo.com/</xsl:text>
-    <xsl:value-of select="@vimeo"/>
 </xsl:template>
 
 <!-- Static Images -->
@@ -7557,34 +7437,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </c>
     </xsl:variable>
     <xsl:apply-templates select="exsl:node-set($visual-url)/*"/>
-</xsl:template>
-
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
-    <xsl:variable name="youtube">
-        <xsl:choose>
-            <xsl:when test="@youtubeplaylist">
-                <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:text>https://www.youtube.com/</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@youtubeplaylist">
-            <xsl:text>playlist?list=</xsl:text>
-            <xsl:value-of select="$youtube" />
-        </xsl:when>
-        <xsl:when test="contains($youtube, ' ')">
-            <xsl:text>watch_videos?video_ids=</xsl:text>
-            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>watch?v=</xsl:text>
-            <xsl:value-of select="$youtube" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="interactive[@geogebra]" mode="static-caption">
@@ -7877,7 +7729,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B. compare with LaTeX version, could move much to -common -->
 
 <!-- \nolinkurl{} seems to provide line-breaking     -->
-<xsl:template match="url">
+<xsl:template match="url|datafile">
+    <!-- link/reference/location may be external -->
+    <!-- (@href) or internal (datafile[@source]) -->
+    <xsl:variable name="uri">
+        <xsl:choose>
+            <!-- "url" and "datafile" both support external @href -->
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- a "datafile" might be local, @source is       -->
+            <!-- indication, so prefix with a local path/URI,  -->
+            <!-- add "external" directory, via template useful -->
+            <!-- also for visual URL formulation in -assembly  -->
+            <xsl:when test="self::datafile and @source">
+                <xsl:apply-templates select="." mode="static-url"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
     <!-- form the "clickable" (visible) text -->
     <xsl:variable name="visible-text">
         <xsl:choose>
@@ -7897,7 +7768,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:value-of select="@visual"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="@href"/>
+                                <xsl:value-of select="$uri"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:with-param>
@@ -7922,7 +7793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\mono{</xsl:text>
-                    <xsl:value-of select="@href"/>
+                    <xsl:value-of select="$uri"/>
                     <xsl:text>}</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -7932,7 +7803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\href{</xsl:text>
             <xsl:call-template name="escape-url-to-latex">
                 <xsl:with-param name="text">
-                    <xsl:value-of select="@href" />
+                    <xsl:value-of select="$uri" />
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:text>}</xsl:text>

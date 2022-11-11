@@ -109,6 +109,20 @@
                 </li>
             </ul></p>
         </subsection>
+
+        <subsection xml:id="common-watermark-options">
+            <title>Watermarks</title>
+            <idx><h>common option</h><h>watermark</h></idx>
+            <idx><h>watermark</h><h>common option</h></idx>
+
+            <p>The text of a watermark is given as the content of the <cd>
+                <cline>/publication/common/watermark</cline>
+            </cd>element.  An optional scale factor may be given as a positive rational number with the<cd>
+                <cline>/publication/common/watermark/@scale</cline>
+            </cd>attribute.  The default scale is <c>0.5</c>.</p>
+
+            <p>In the text itself avoid obscure characters or symbols, and do not use any markup.   Keep it simple.  When used with <latex/> output the scharacters <c>\\</c> will survive in the text to create multiple lines of text in the watermark.  This feature is implemented for <latex/> and <init>HTML</init> output.  See <xref ref="watermarks"/> for more detail and an example.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">
@@ -159,7 +173,7 @@
 
             <p>The conversion to <latex/> can produce a <init>PDF</init> optimized for print, or optimized for use electronically on a screen.  The<cd>
                 <cline>/publication/latex/@print</cline>
-            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.</p>
+            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.  Note that the use of page numbers in cross-references has different default behavior based on this option (which can be overidden, see <xref ref="latex-xref-page-number-options"/>).</p>
         </subsection>
 
         <subsection xml:id="latex-sides-options">
@@ -173,10 +187,21 @@
             </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
         </subsection>
 
-        <subsection xml:id="latex-page-options">
-            <title><latex/> Page Options</title>
+        <subsection xml:id="latex-font-size-options">
+            <title><latex/> Font Sizes</title>
+            <idx><h>font size options</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>font size option</h></idx>
+            <idx><h>PDF</h><h>font size option</h></idx>
 
-            <p>The following options affect the <q>shape</q> of each page, so are in a way less <q>global</q> than some of the previous options.  These are all attributes of the <cd>
+            <p>The document-wide point size can be specified with the<cd>
+                <cline>/publication/latex/@font-size</cline>
+            </cd>attribute can have the value <c>8</c>, <c>9</c>, <c>10</c>, <c>11</c>, <c>12</c>, <c>14</c>, <c>17</c>, <c>20</c>, which are interpreted in points (<q>pt</q>) as the unit of measure.  The default value is <c>10</c>.  See <xref ref="font-size"/> for details.</p>
+        </subsection>
+
+        <subsection xml:id="latex-page-options">
+            <title><latex/> Page Shape Options</title>
+
+            <p>The following options affect the <q>shape</q> of each page, so are in a way less <q>global</q> than some of the previous options.  These are both attributes of the <cd>
                 <cline>/publication/latex/page</cline>
             </cd>element.<ul>
                 <li>
@@ -193,6 +218,18 @@
                      </cd> to values <c>flush</c> or <c>ragged</c> (default) to influence the bottom edge of the block of text on a page.  See <xref ref="print-justification"/> for more.</p>
                 </li>
             </ul></p>
+
+            <p>The content of the element<cd>
+                <cline>/publication/latex/page/geometry</cline>
+            </cd> element will feed directly into a <latex/> <c>\geometry{}</c> element, with no modifications.  (In other words, all whitespace, such as newlines and indentation, will be preserved.)  Be sure to carefully read the advice, an example, and further detail at <xref ref="page-shape"/>.</p>
+        </subsection>
+
+        <subsection xml:id="latex-xref-page-number-options">
+            <title>Page Numbers in Cross-References</title>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@pageref</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of page numbers in cross-references (typically achieved with the <tag>xref</tag> element).  The default varies, as it is dependent on the print option (<xref ref="latex-print-options"/>).  See <xref ref="latex-xref-page-numbers"/> for more on the defaults.</p>
         </subsection>
 
         <subsection xml:id="latex-worksheet-options">
@@ -213,6 +250,14 @@
             <p>The conversion to <latex/> can provide a link to an <init>HTML</init> version of each Asymptote graphic.  The<cd>
                 <cline>/publication/latex/asymptote/@links</cline>
             </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="latex-draft-mode-options">
+            <title>Draft Mode</title>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@draft</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of the <latex/> draft mode.  The default is <c>no</c>.  See <xref ref="processing-author-tools"/> for more detail.</p>
         </subsection>
     </section>
 
@@ -468,12 +513,15 @@
         <subsection xml:id="online-search-options">
             <title>HTML Search</title>
             <idx>search</idx>
+            <idx><h>search</h><h>native</h></idx>
+            <idx><h>search</h><h>Google</h></idx>
 
             <p>The<cd>
                 <cline>/publication/html/search</cline>
-            </cd>element can have the following attribute:<ul>
-                <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.</li>
-            </ul>Setting this attributes to a non-empty string is the signal to add the relevant code for a search box in the masthead.  See <xref ref="online-search"/> for more.</p>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  This is search provided natively.</li>
+                <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.  Setting this attribute to a non-empty string is the signal to add the relevant code for a search box in the masthead.</li>
+            </ul>Note that if you elect both native search and Google search the two search boxes will overlay each other and one will not be usable.  See <xref ref="native-search"/> and <xref ref="google-search"/> (respectively) for more.</p>
         </subsection>
 
         <subsection xml:id="embedded-video-privacy-options">
@@ -486,6 +534,18 @@
             </cd>element can have the following attribute:<ul>
                 <li><attr>privacy</attr>: allowed values are <c>yes</c> or <c>no</c>.</li>
             </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-short-answer-responses">
+            <title>Short Answer Responses</title>
+            <idx><h>short answer exercises</h><h>response area</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>short-answer-responses</attr> with values:<ul>
+                <li><c>graded</c>: the default, only show an area for responses when they can be graded or scored (such as when hosted on Runestone,  <xref ref="runestone"/>).</li>
+                <li><c>always</c>: include an editable response area, even if it cannot be submitted for feedback.</li>
+            </ul>See <xref ref="short-answer-exercises"/> for details.</p>
         </subsection>
 
         <subsection xml:id="html-asymptote-link-options">

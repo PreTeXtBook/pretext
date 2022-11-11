@@ -142,6 +142,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Odstavec</localization>
     <localization string-id='blockquote'>Citát</localization>
+    <!-- <localization string-id='pre'>Code Block</localization> -->
     <!-- Literate programming, a chunk of computer code -->
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
@@ -172,6 +173,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Předmluva</localization>
     <localization string-id='dedication'>Věnování</localization>
     <localization string-id='colophon'>Kolofon</localization>
+    <!-- Runestone Activities -->
+    <!-- <localization string-id='video'>Video</localization> -->
+    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
@@ -201,6 +207,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='annotations'>Anotace</localization>
     <localization string-id='feedback'>Odezva</localization>
     <localization string-id='authored'>Napsáno v PreTeXt</localization>
+    <!-- Search Results display/dialog -->
+    <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
+    <!-- <localization string-id='no-search-results'>No results</localization> -->
     <!-- Parts of memos and letters -->
     <localization string-id='to'>Komu</localization>
     <localization string-id='from'>Od</localization>
