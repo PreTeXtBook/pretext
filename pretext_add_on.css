@@ -1567,7 +1567,6 @@ from Jiří Lebl */
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
-  zoom: 1;
   /* Disable accidental text-selection */
   user-select: none;
   /* Truncate overflowing text with ellipsis */
@@ -2896,7 +2895,7 @@ label.incorrect .feedback {
 .ptx-content .exercise-wrapper form > div:first-child {
     display: inline-block;
     vertical-align: top;
-    width: 100%; // for live ww to open at 100% wide
+    width: 100%; /* for live ww to open at 100% wide */
 }
 .ptx-content .knowl .exercise-wrapper,
 .ptx-content .knowl .exercise-wrapper form,
