@@ -3191,6 +3191,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
 
+<!-- ########### -->
+<!-- LaTeX Fonts -->
+<!-- ########### -->
+
+<!-- 2022-11-03: experimental, subject to change -->
+
+<xsl:variable name="latex-font-main-regular">
+    <xsl:choose>
+        <!-- having a main font specification *rerquires* a @regular -->
+        <!-- TODO: put in a test here to generate a warning if no @regular -->
+        <xsl:when test="$publication/latex/fonts/main">
+            <xsl:value-of select="$publication/latex/fonts/main/@regular"/>
+        </xsl:when>
+        <!-- empty is signal there is no main font overrride -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
 <!-- ########################### -->
