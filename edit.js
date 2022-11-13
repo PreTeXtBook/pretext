@@ -1557,21 +1557,6 @@ editing_container_for = { "p": 1, "ip": 1, "mp": 1, "fp": 1,
 "proof": [""]  //just a guess
 }
 
-/*
-var url = "https://github.com/oscarlevin/discrete-book/blob/master/ptx/sec_intro-intro.ptx";
-editorLog("first here");
-fetch(url)
-  .then(function(data) {
-    // Here you get the data to modify as you please
-    editorLog("data", data)
-    })
-  .catch(function(error) {
-    // If there is any error you will catch them here
-    errorLog("there was an error")
-  });
-editorLog("then here");
-*/
-
 function make_current_editing_tree_from_id(theid) {
 
 //current_editing keeps track of where we are in the tree.  maybe need a better name?

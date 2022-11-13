@@ -241,15 +241,21 @@ window.addEventListener("load",function(event) {
     for (var n=p_no_id.length - 1; n >= 0; --n) {
         e = p_no_id[n];
         if (e.hasAttribute('id')) {
+/*
             console.log(e, "was id'd in a previous round");
+*/
             continue
         }
+/*
 console.log("this is e", e);
+*/
         if (e.classList.contains('watermark')) {
             console.log(e, "skipping the watermark");
             continue
         }
+/*
         console.log("\n                    XXXXXXXXX  p with no id", e);
+*/
         prev_p = $(e).prevAll("p");
         console.log("prev_p", prev_p, "xx");
         if(prev_p.length == 0) {
@@ -304,7 +310,9 @@ console.log("this is e", e);
                 this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
                 this_item.insertAdjacentElement("afterbegin", this_permalink_container)
             } else {
+/*
                 console.log("      no permalink, because no id", this_item)
+*/
             }
         }
     }
@@ -623,7 +631,6 @@ function loadResource(type, file) {
 
 
 window.addEventListener("load",function(event) {
-//       if($('body').attr('id') == "levin-DMOI") {
        if(false && $('body').attr('id') == "pretext-SA") {
            console.log("            found DMOI");
            if (typeof uname === "undefined") { uname = "" }
@@ -650,25 +657,29 @@ window.addEventListener("load",function(event) {
             loadResource('js', 'login')
             loadResource('js', 'edit');
         } else {
-  var this_source_txt;
-  var source_url = window.location.href;
-  source_url = source_url.replace(/(#|\?).*/, "");
-  source_url = source_url.replace(/html$/, "ptx");
-  fetch(source_url).then(
-        function(u){ return u.text();}
-    ).then(
-        function(text){
-            this_source_txt = text;
-            if (this_source_txt.includes("404 Not")) {
-                console.log("Editing not enabled: source unavailable")
-            } else {
-              loadResource('css', 'features');
-              loadResource('css', 'edit');
-              loadResource('js', 'login')
-              loadResource('js', 'edit');
-            }
-        }
-    );
+            var this_source_txt;
+            var source_url = window.location.href;
+            source_url = source_url.replace(/(#|\?).*/, "");
+            source_url = source_url.replace(/html$/, "ptx");
+            if (typeof sourceeditable !== 'undefined') {
+              fetch(source_url).then(
+                  function(u){ return u.text();}
+                ).then(
+                  function(text){
+                      this_source_txt = text;
+                      if (this_source_txt.includes("404 Not")) {
+                          console.log("Editing not enabled: source unavailable")
+                      } else {
+                        loadResource('css', 'features');
+                        loadResource('css', 'edit');
+                        loadResource('js', 'login')
+                        loadResource('js', 'edit');
+                      }
+                  }
+                );
+              } else {
+                   console.log("Source file unavailable: editing not possible")
+              }
         }
 
 });
