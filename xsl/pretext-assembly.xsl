@@ -390,15 +390,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: employ or remove $b-ww-representations-missing -->
 
 <xsl:template match="webwork[* or @copy or @source]" mode="assembly">
+    <!-- Every "webwork" that is a problem (not a generator) gets a   -->
+    <!-- lifetime identification in both passes through the source.   -->
+    <!-- The first migrates through the "extract-pg.xsl" template,    -->
+    <!-- then the Python communication with the server, and into the  -->
+    <!-- representations file.  The second is then used to align the  -->
+    <!-- source with the representations file on the second pass.     -->
+    <!-- For historical reasons, this ID genertaion is slow and       -->
+    <!-- clumsy, we can improve by using a recursive generation,      -->
+    <!-- which would require parameter passing through all the        -->
+    <!-- "assembly" templates.  Better to perhaps break out a         -->
+    <!-- "webwork" pass just prior to assembly.                       -->
+    <xsl:variable name="ww-id">
+        <xsl:choose>
+            <xsl:when test="@xml:id">
+                <xsl:value-of select="@xml:id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)" />
+                <xsl:text>-</xsl:text>
+                <xsl:number from="book|article|letter|memo" level="any" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
         <!-- "normally" not extracting to build PGML, it -->
         <!-- should be saved off in the representations  -->
         <!-- file and available for making replacements  -->
         <xsl:when test="not($b-extracting-pg)">
-            <!-- the webwork-id from "labeling" that exists here -->
-            <xsl:variable name="ww-id">
-                <xsl:value-of select="@webwork-id"/>
-            </xsl:variable>
             <!-- the "webwork-reps" element from the server for this "webwork" -->
             <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
             <xsl:choose>
@@ -435,9 +454,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- unique identifiers, so grab any other attributes of the     -->
                         <!-- original, but exclude these while formulating a copy/clone. -->
                         <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
-                                                                (not(local-name(.) = 'webwork-id')) and
                                                                 (not(local-name(.) = 'label')) and
                                                                 (not(local-name(.) = 'seed'))]" mode="assembly"/>
+                        <!-- Add a @webwork-id for the trip to the server -->
+                        <xsl:attribute name="webwork-id">
+                            <xsl:value-of select="$ww-id"/>
+                        </xsl:attribute>
                         <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
                         <!-- Perhaps with a param to the assembly modal template.                       -->
                         <!-- Does the contents of the original WW have any @xml:id or @label?           -->
@@ -456,10 +478,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
-        <!-- extracting, but not copying, so xerox author's source -->
+        <!-- extracting, but not copying, so xerox author's source, plus an ID -->
         <xsl:otherwise>
             <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+                <xsl:apply-templates select="@*" mode="assembly"/>
+                <!-- Add a @webwork-id for the trip to the server -->
+                <xsl:attribute name="webwork-id">
+                    <xsl:value-of select="$ww-id"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="node()" mode="assembly"/>
             </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
@@ -880,35 +907,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- authored (crafted) identifier strings, we copy the old over  -->
         <!-- into the new.  This preserves identifiers in output          -->
         <!-- (filenames, fragment identifiers).                           -->
-        <!-- We do this *early*, but crtically, before WW representations -->
-        <!-- get melded in since sometimes we have  webwork/@xml:id  as a -->
-        <!-- target for a copy.                                           -->
+        <!-- We do this *early*, but it should move to be very late       -->
         <!--                                                              -->
         <!-- DELAY: when we replace generated values ("theorem-420") in   -->
         <!-- the "visible-id" template, we will create those new strings  -->
-        <!-- ("good-section-s3t5") here on the fly and the WW problems    -->
-        <!-- will behave (with semi-stable identifiers).                  -->
+        <!-- ("good-section-s3t5") here on the fly.                       -->
         <xsl:if test="@xml:id and not(@label)">
             <xsl:attribute name="label">
                 <xsl:value-of select="@xml:id"/>
-            </xsl:attribute>
-        </xsl:if>
-        <!-- Every "webwork" that is a problem (not a generator) gets a   -->
-        <!-- lifetime identification in both passes through the source.   -->
-        <!-- The first migrates through the "extract-pg.xsl" template,    -->
-        <!-- then the Python communication with the server, and into the  -->
-        <!-- representations file.  The second is then used to align the  -->
-        <!-- source with the representations file on the second pass.     -->
-        <!-- When this present labeling pass provides a default label     -->
-        <!-- on all "webwork" we can just transition to that.             -->
-        <!-- Or maybe this identifier should be manufactured and attached -->
-        <!-- to a "webwork" as part of the "assembly" phase during the    -->
-        <!-- first pass, in concert with making copies.  On the second    -->
-        <!-- pass it gets generated again under identical circumstances   -->
-        <!-- (same look for source). -->
-        <xsl:if test="self::webwork[* or @source or @copy]">
-            <xsl:attribute name="webwork-id">
-                <xsl:apply-templates select="." mode="webwork-id"/>
             </xsl:attribute>
         </xsl:if>
         <!-- Attributes done, recurse into children nodes -->
@@ -1534,31 +1540,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Drop "webwork-reps" children we don't need for problem sets -->
 <xsl:template match="webwork-reps/static" mode="webwork-rep-to-pg"/>
 <xsl:template match="webwork-reps/server-data" mode="webwork-rep-to-pg"/>
-
-
-<!-- ######### -->
-<!-- Utilities -->
-<!-- ######### -->
-
-<!-- This matches the historical version of the "visible-id" template as  -->
-<!-- of 2022-06-10, which means that existing "webwork-representations"   -->
-<!-- files should be unchanged.  Long-term, this could be replaced by     -->
-<!-- simply the value of  @label  or  @xml:id  once we know that defaults -->
-<!-- are in place, and stable during the two passes.  Or maybe we keep    -->
-<!-- this scheme and let labeling be a late pass, for more completeness   -->
-<!-- of the id assignment phases.                                         -->
-<xsl:template match="webwork" mode="webwork-id">
-    <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number from="book|article|letter|memo" level="any" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 
 <!-- ######## -->
