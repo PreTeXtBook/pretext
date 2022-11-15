@@ -378,9 +378,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: "xref" check elsewhere is not        -->
 <!-- performed here since we accept           -->
 <!-- representations at face-value            -->
+
+<!-- NB: when working to improve which parts of the webwork representations -->
+<!-- move on to assembled source, realize that the "static" version meant   -->
+<!-- for non-HTML outputs is also the best thing to provide to the HTML     -->
+<!-- conversion for use as a search document.  Perhaps create the full-on   -->
+<!-- JSON (escaped) string here from "static" and provide it as an internal -->
+<!-- element ("pi:") for later consumption.  Review the destination for     -->
+<!-- similar notes about possible changes.                                  -->
+
+<!-- NB: employ or remove $b-ww-representations-missing -->
+
 <xsl:template match="webwork[* or @copy or @source]" mode="assembly">
     <xsl:choose>
-        <xsl:when test="$b-extracting-pg and @copy">
+        <!-- "normally" not extracting to build PGML, it -->
+        <!-- should be saved off in the representations  -->
+        <!-- file and available for making replacements  -->
+        <xsl:when test="not($b-extracting-pg)">
+            <!-- the webwork-id from "labeling" that exists here -->
+            <xsl:variable name="ww-id">
+                <xsl:value-of select="@webwork-id"/>
+            </xsl:variable>
+            <!-- the "webwork-reps" element from the server for this "webwork" -->
+            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
+            <xsl:choose>
+                <xsl:when test="$exercise-style = 'pg-problems'">
+                    <!-- isolate and edit representations needed for PG problem archives -->
+                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork-rep-to-pg"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$the-webwork-rep" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- Now we are doing a pass to support extraction -->
+        <!-- of PGML, so $b-extracting-pg is true          -->
+        <!--                                               -->
+        <!-- This is where we copy PTX source to prevent   -->
+        <!-- multiple versions foating in around in an     -->
+        <!-- author's source                               -->
+        <xsl:when test="@copy">
             <!-- this sanity-check template could be incorporated here -->
             <xsl:apply-templates select="." mode="webwork-copy-warning"/>
             <xsl:variable name="target" select="id(@copy)"/>
@@ -419,6 +456,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <!-- extracting, but not copying, so xerox author's source -->
         <xsl:otherwise>
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
@@ -1464,51 +1502,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Warn/fail if the file of WW representations is not found -->
 <xsl:variable name="b-ww-representations-missing" select="($webwork-representations-file = '') and not($b-extracting-pg)"/>
-
-<!-- WeBWorK problems have been sent to a server and come back as      -->
-<!-- several different representations, all collected in one big file, -->
-<!-- which we mine and duplicate in this pass.                         -->
-
-<!-- NB: when working to improve which parts of the webwork representations -->
-<!-- move on to assembled source, realize that the "static" version meant   -->
-<!-- for non-HTML outputs is also the best thing to provide to the HTML     -->
-<!-- conversion for use as a search document.  Perhaps create the full-on   -->
-<!-- JSON (escaped) string here from "static" and provide it as an internal -->
-<!-- element ("pi:") for later consumption.  Review the destination for     -->
-<!-- similar notes about possible changes.                                  -->
-
-<xsl:template match="webwork[* or @copy or @source]" mode="representations">
-    <xsl:variable name="ww-id">
-        <xsl:value-of select="@webwork-id"/>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$b-extracting-pg">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="representations"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- not extracting, check on file, drop placeholder -->
-        <xsl:when test="$b-ww-representations-missing">
-            <statement>
-                <p>The WeBWorK problem with ID <q><xsl:value-of select="$ww-id"/></q> will appear here if you provide the file of problems that have been processed by a WeBWorK server (<c>webwork-representations.ptx</c>).</p>
-            </statement>
-        </xsl:when>
-        <!-- get the representations now -->
-        <xsl:otherwise>
-            <!-- the "webwork-reps" element from the server for this "webwork" -->
-            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
-            <xsl:choose>
-                <xsl:when test="$exercise-style = 'pg-problems'">
-                    <!-- isolate and edit representations needed for PG problem archives -->
-                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork-rep-to-pg"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy-of select="$the-webwork-rep" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 <!-- Edit a "webwork-reps" from the server into just PG material -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-pg">
