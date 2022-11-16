@@ -897,32 +897,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- complicated, if it turns out to be insufficient.               -->
 <xsl:variable name="gen-id-sep" select="'_-_'"/>
 
-<xsl:template match="*" mode="labeling">
-    <xsl:copy>
-        <!-- duplicate all attributes, especially  -->
-        <!-- preserve any authored @xml:id, @label -->
-        <xsl:apply-templates select="@*" mode="labeling"/>
-        <!-- The "visible-id" template switched to prefer @label,         -->
-        <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
-        <!-- authored (crafted) identifier strings, we copy the old over  -->
-        <!-- into the new.  This preserves identifiers in output          -->
-        <!-- (filenames, fragment identifiers).                           -->
-        <!-- We do this *early*, but it should move to be very late       -->
-        <!--                                                              -->
-        <!-- DELAY: when we replace generated values ("theorem-420") in   -->
-        <!-- the "visible-id" template, we will create those new strings  -->
-        <!-- ("good-section-s3t5") here on the fly.                       -->
-        <xsl:if test="@xml:id and not(@label)">
-            <xsl:attribute name="label">
-                <xsl:value-of select="@xml:id"/>
-            </xsl:attribute>
-        </xsl:if>
-        <!-- Attributes done, recurse into children nodes -->
-        <xsl:apply-templates select="node()" mode="labeling"/>
-    </xsl:copy>
-</xsl:template>
+<!-- The "visible-id" template switched to prefer @label,         -->
+<!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
+<!-- authored (crafted) identifier strings, we copy the old over  -->
+<!-- into the new.  This preserves identifiers in output          -->
+<!-- (filenames, fragment identifiers).  Subsequent passes        -->
+<!-- should not introduce or remove elements.                     -->
 
-<!-- THIS IS DOING NOTHING, WILL RECYCLE FOR GENERATED XML:ID -->
+<!-- NB: this template is "in progresss".  Likely we will -->
+<!-- generate manufactured @label (recursively) for many  -->
+<!-- elements, which will cause changes in how the        -->
+<!-- "visible-id" template behaves.                       -->
 <xsl:template match="*" mode="identification">
     <xsl:copy>
         <!-- duplicate all attributes, especially  -->
@@ -934,7 +919,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- [Probably unnecessary]                                           -->
         <xsl:choose>
             <xsl:when test="not(@xml:id) and not(@label)"/>
-            <xsl:when test="@xml:id and not(@label)"/>
+            <xsl:when test="@xml:id and not(@label)">
+                <xsl:attribute name="label">
+                    <xsl:value-of select="@xml:id"/>
+                </xsl:attribute>
+            </xsl:when>
             <xsl:when test="not(@xml:id) and @label"/>
             <!-- both thoughtfully authored, nothing to do -->
             <xsl:when test="@xml:id and @label"/>
