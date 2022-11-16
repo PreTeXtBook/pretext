@@ -161,9 +161,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="labeling">
+<xsl:template match="node()|@*" mode="webwork">
     <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="labeling"/>
+        <xsl:apply-templates select="node()|@*" mode="webwork"/>
     </xsl:copy>
 </xsl:template>
 
@@ -236,13 +236,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
-<xsl:variable name="labeled-rtf">
-    <xsl:apply-templates select="$original-labeled" mode="labeling"/>
+<xsl:variable name="webwork-rtf">
+    <xsl:apply-templates select="$original-labeled" mode="webwork"/>
 </xsl:variable>
-<xsl:variable name="labeled" select="exsl:node-set($labeled-rtf)"/>
+<xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
 <xsl:variable name="assembly-rtf">
-    <xsl:apply-templates select="$labeled" mode="assembly"/>
+    <xsl:apply-templates select="$webworked" mode="assembly"/>
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
@@ -389,7 +389,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- NB: employ or remove $b-ww-representations-missing -->
 
-<xsl:template match="webwork[* or @copy or @source]" mode="assembly">
+<xsl:template match="webwork[* or @copy or @source]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
     <!-- The first migrates through the "extract-pg.xsl" template,    -->
@@ -449,13 +449,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- Duplicate attributes, but remove the @copy attribute -->
                         <!-- used as a signal here.  We don't want to copy this   -->
                         <!-- again after we have been to the WW server.           -->
-                        <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                        <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="webwork"/>
                         <!-- The @seed makes the problem different, and there are also   -->
                         <!-- unique identifiers, so grab any other attributes of the     -->
                         <!-- original, but exclude these while formulating a copy/clone. -->
                         <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
                                                                 (not(local-name(.) = 'label')) and
-                                                                (not(local-name(.) = 'seed'))]" mode="assembly"/>
+                                                                (not(local-name(.) = 'seed'))]" mode="webwork"/>
                         <!-- Add a @webwork-id for the trip to the server -->
                         <xsl:attribute name="webwork-id">
                             <xsl:value-of select="$ww-id"/>
@@ -463,7 +463,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
                         <!-- Perhaps with a param to the assembly modal template.                       -->
                         <!-- Does the contents of the original WW have any @xml:id or @label?           -->
-                        <xsl:apply-templates select="$target/node()" mode="assembly"/>
+                        <xsl:apply-templates select="$target/node()" mode="webwork"/>
                     </xsl:copy>
                 </xsl:when>
                 <xsl:otherwise>
@@ -481,12 +481,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- extracting, but not copying, so xerox author's source, plus an ID -->
         <xsl:otherwise>
             <xsl:copy>
-                <xsl:apply-templates select="@*" mode="assembly"/>
+                <xsl:apply-templates select="@*" mode="webwork"/>
                 <!-- Add a @webwork-id for the trip to the server -->
                 <xsl:attribute name="webwork-id">
                     <xsl:value-of select="$ww-id"/>
                 </xsl:attribute>
-                <xsl:apply-templates select="node()" mode="assembly"/>
+                <xsl:apply-templates select="node()" mode="webwork"/>
             </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
