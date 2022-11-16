@@ -88,9 +88,9 @@ ol#searchresults > li > text {
 }
 #searchresultsplaceholder {
     position: fixed;
-    top: 5em;
+    top: 4em;
     left: 10em;
-    padding: 0 1em;
+    padding: 0 1em 3em 1em;
     border: 0.2em solid #009;
     background: aliceblue;
     z-index: 5000;
@@ -135,5 +135,9 @@ ol#searchresults > li > text {
     display: none;
 }
 @media screen and (max-width: 800px) {
+/*
     #secondsearch { display: none; }
+*/
+    #secondsearch { bottom: 38px; }
+
 }

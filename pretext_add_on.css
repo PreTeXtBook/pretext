@@ -136,21 +136,63 @@
     margin: 0;
 }
 
-
-.pretext-content .runestone.ac_section {
-    width: 60em;
-    max-width: unset;
-}
-.pretext-content .runestone.ac_section .ac_section {
-    max-width: unset;
-}
-.pretext-content .runestone.ac_section > div {
+.ptx-content .runestone.parsons_section {
+    display: inline-block;
     max-width: unset;
 }
 
-.pretext-content .runestone > .parsons {
+.ptx-content .runestone.ac_section {
     width: 60em;
     max-width: unset;
+}
+.ptx-content .runestone.ac_section .ac_section {
+    max-width: unset;
+}
+.ptx-content .runestone.ac_section > div {
+    max-width: unset;
+}
+
+.ptx-content .runestone > .parsons {
+    width: 60em;
+    max-width: unset;
+}
+
+.ptx-content .runestone .parsons {
+    margin: 0;
+}
+.ptx-content .runestone.parsons_section > .parsons {
+    width: max-content;
+    padding-right: 1em;
+}
+.ptx-content .runestone .parsons .sortable-code-container {
+    text-align: unset;
+}
+.ptx-content .runestone .parsons .parsons-text,
+.ptx-content .runestone .parsons .parsons-controls {
+    margin-left: 0;
+    margin-right: 0;
+}
+.ptx-content .runestone .parsons .sortable-code + .sortable-code {
+    margin-right: 0;
+}
+
+.ptx-content .runestone .parsons .runestone_caption_text {
+    max-width: 660px;
+}
+
+.runestonebustmenu {
+   position: absolute;
+   right: 0;
+   top: 0;
+}
+.runestonebustmenu .dropdown-content {
+   position: absolute;
+   right: 2em;
+   left: unset;
+   top: 1em;
+}
+@media screen and (min-width: 800px) {
+    .runestonebustmenu { display: none }
 }
 
 
@@ -554,6 +596,7 @@
     display: inline;
 }
 
+/* next disabled accidentally or on purpose? */
 .apretext-content figure.figure-like {
     overflow: auto;
 }

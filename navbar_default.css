@@ -149,6 +149,7 @@
     margin-right: auto;
   }
   #ptx-navbar .index-button,
+  #ptx-navbar .user-preferences-button,
   #ptx-navbar .calculator-button {
     display: none;
   }
@@ -160,7 +161,7 @@
   } 
   #ptx-navbar .toc-toggle .icon {
     position: relative;
-    bottom: 0.15em;
+    bottom: 0.25em;
     padding-left: 0;
     padding-right: 0;
   }
@@ -184,7 +185,7 @@
     justify-content: space-between;
   }
   #ptx-navbar .treebuttons .button {
-    width: 33%;
+    width: 33.3%;
     border-left: none;
   }
 }
