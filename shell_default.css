@@ -254,7 +254,10 @@
   width: 6em;
 }
 .pretext .ptx-page-footer .pretext-link .name {
+/*
   margin-top: 1.5em;
+*/
+  margin-bottom: 0.5em;
   margin-right: 1em;
 }
 .pretext .ptx-page-footer .feedback-link {

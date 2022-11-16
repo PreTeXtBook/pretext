@@ -13,7 +13,7 @@
 #ptx-navbar .treebuttons .next-button { padding-right: 12px; }
 
 #ptx-navbar .toc-toggle {
-    padding: 0 24px 0 24px;
+    padding: 0 10px 0 10px;
 }
 
 
@@ -23,10 +23,12 @@
 
     grid-template-columns:  .76fr 6em 6em 1fr;  /* Even gaps */
     grid-template-areas:
-        "MH-toc-area MH-extras-area1 MH-extras-area2 MH-page-navigation-area";
+        "MH-toc-area MH-extras-area1 MH-extras-area2 MH-preferences-area MH-page-navigation-area";
     
     background-color: #fff; 
+/*
     padding: 20px 0px 0px 0px;
+*/
     align-items: start;
 
     border: 2px solid #ddd;
@@ -38,8 +40,14 @@
     z-index: 200;
 
     position: sticky;
-    top: -20px;
+    top: 1px;
     align-items: end;
+    min-height: unset; /* to thwart navbar.less */
+    margin-bottom: 2px; /* to thwart navbar.less */
+}
+#ptx-navbar::before,
+#ptx-navbar::after {
+    content: none;  /* to thwart clearfix.less */
 }
 
 
@@ -75,7 +83,9 @@
 .toc-toggle {
     grid-area: MH-toc-area;
     justify-self: start;
+/*
     align-self: start;
+*/
 }
 
 /* .ptx-MH-extras-area  */
@@ -87,12 +97,18 @@
     grid-area: MH-extras-area2;
     justify-self: left;
 }
+#user-preferences-button {
+    grid-area: MH-preferences-area;
+    justify-self: left;
+}
 
 /* .ptx-page-navigation-area  */
 .treebuttons {
     grid-area: MH-page-navigation-area;
     justify-self: end;
+/*
     align-self: start;
+*/
 }
 
 
@@ -182,7 +198,7 @@
     font-size: 1.5em;
     position: relative;
     bottom: 0.15em;
-    padding-left: 0.5em;
+    padding-left: 0;
     padding-right: 0.4em;
 }
 #ptx-navbar .toc-toggle .name {
@@ -231,7 +247,12 @@
     margin-left: 0.2em;
     margin-right: 0.3em;
 }
-
+#ptx-navbar .user-preferences-button {
+  padding: 0 0.8em 0 0.8em;
+  margin-left: 2em;
+  border: 1px solid #bababa;
+  width: 6em;
+}
 
 @media screen and (max-width: 800px) {
     #ptx-navbar .index-button,

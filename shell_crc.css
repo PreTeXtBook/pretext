@@ -68,6 +68,10 @@ body.pretext {
         z-index: 100;
     }
 }
+#ptx-masthead .searchbox {
+   bottom: 2px;
+   margin-right: -19px;
+}
 
 /* .ptx-main-wrapper  */
 .ptx-page {
@@ -328,12 +332,18 @@ body.pretext {
 
 .ptx-page-footer  .pretext-link .name {
     display: grid;
+/*
     justify-self: center;
+*/
+    text-align: center;
     font-size: .9em; 
     font-weight: 700;
     letter-spacing: .1rem;
     text-transform: uppercase;
+    margin-bottom: 0.5em;
+/*
     padding-left: 8px;
+*/
 }
 
 .ptx-page-footer  .pretext-link .logo {

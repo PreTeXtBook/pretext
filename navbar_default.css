@@ -11,7 +11,10 @@
   border-bottom: 1px solid #bababa;
   margin: 0;
   z-index: 200;
+  min-height: unset;  /* to combat navbar.less */
+/*
   height: 35.36px;
+*/
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-family: "Open Sans";
   overflow: visible;
@@ -33,6 +36,9 @@
   display: inline-block;
   vertical-align: middle;
   height: 35px;
+/*
+  height: 44px;
+*/
   /* Disable accidental text-selection */
   user-select: none;
   white-space: nowrap;
@@ -77,14 +83,14 @@
 #ptx-navbar .toc-toggle .icon {
   font-size: 1.75em;
   position: relative;
-  bottom: 0.15em;
+  bottom: 0.30em;
   padding-left: 0.5em;
   padding-right: 0.4em;
 }
 #ptx-navbar .toc-toggle .name {
-  font-size: 1.15em;
+  font-size: 1.05em;
   position: relative;
-  bottom: 0.25em;
+  bottom: 0.53em;
 }
 
 #ptx-navbar .up-button {
@@ -124,6 +130,9 @@
 }
 #ptx-navbar .next-button {
   text-align: right;
+}
+#ptx-navbar #theavatarbutton {
+  font-size: 1.0em;
 }
 
 @media screen and (max-width: 800px) {
