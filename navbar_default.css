@@ -19,6 +19,11 @@
   font-family: "Open Sans";
   overflow: visible;
 }
+#ptx-navbar::after {
+  clear: both;  /* necessary, but not sure why */
+  content: " ";
+  display: table;
+}
 @media screen and (max-width: 800px) {
   #ptx-navbar {
     position: fixed;

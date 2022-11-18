@@ -12,8 +12,19 @@
     border-radius: 5px;
     background-color: #eeee;
 */
-  position: relative;
-  bottom: -17px;
+  position: absolute;
+  top: 35px;
+  right: 0;
+}
+#ptxsearch {
+  width: 196px;
+}
+#searchbutton {
+  position: absolute;
+  right: 0;
+}
+#secondsearch {
+    display: none
 }
 
 .searchwidget {
@@ -139,5 +150,8 @@ ol#searchresults > li > text {
     #secondsearch { display: none; }
 */
     #secondsearch { bottom: 38px; }
+    .searchbox {
+        top: -30px;
+    }
 
 }

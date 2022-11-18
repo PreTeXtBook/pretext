@@ -33,22 +33,22 @@ a {
 }
 
 body.pretext > a.assistive {
-        padding:6px;
-        position: absolute;
-        top:-40px;
-        left:0px;
-        color:white;
-        border-right:1px solid white;
-        border-bottom:1px solid white;
-        border-bottom-right-radius:8px;
-        background:transparent;
-    z-index: 100;
+    padding:6px;
+    position: absolute;
+    top:-40px;
+    left:0px;
+    color:white;
+    border-right:1px solid white;
+    border-bottom:1px solid white;
+    border-bottom-right-radius:8px;
+    background:transparent;
+    z-index: 10000;
 }
 
 body.pretext > a.assistive:focus {
-        top:0px;
-        background:#BF1722;
-        outline:0;
+    top:0px;
+    background:#BF1722;
+    outline:0;
     transition: top .1s ease-in, background .5s linear;
 }
 
@@ -525,6 +525,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .ptx-content .frontmatter > .credit {
     margin-top: 2em;
     text-align: center;
+}
+.ptx-content .frontmatter > .author .author-name {
+    font-size: 120%;
 }
 .ptx-content .frontmatter .date {
     display: block;

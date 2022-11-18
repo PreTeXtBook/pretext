@@ -36,7 +36,9 @@
 
 /* .ptx-container  */
 body.pretext {
+/*
     position: relative;
+*/
     max-width: 904px;  /* To match PreTeXt */
     margin: 0 auto 0 auto;  /* centered content */
     padding: 0;
@@ -370,6 +372,10 @@ body.pretext {
 
 
 @media only screen and (max-width: 800px) {
+
+    .pretext #ptx-sidebar {
+        display: none;
+    }
     .ptx-page-footer {
 	grid-template-columns: 1.25fr .9fr 1fr;
 	margin-botton: 80px;
