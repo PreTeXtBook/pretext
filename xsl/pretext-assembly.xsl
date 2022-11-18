@@ -226,7 +226,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 <xsl:variable name="version-rtf">
-    <xsl:call-template name="assembly-warnings"/>
     <xsl:apply-templates select="/" mode="version"/>
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
@@ -387,8 +386,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- element ("pi:") for later consumption.  Review the destination for     -->
 <!-- similar notes about possible changes.                                  -->
 
-<!-- NB: employ or remove $b-ww-representations-missing -->
-
 <xsl:template match="webwork[* or @copy or @source]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
@@ -421,6 +418,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the "webwork-reps" element from the server for this "webwork" -->
             <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
             <xsl:choose>
+                <!-- An empty string for $webwork-representations-file, and      -->
+                <!-- the "document()" still succeeds (returns the source file?). -->
+                <!-- But this is hopeless. So just totally bail out repeatedly   -->
+                <!-- and leave the containing "exercise" hollow.                 -->
+                <xsl:when test="$webwork-representations-file = ''">
+                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
+                    <xsl:message>              but your publication file does not indicate the file</xsl:message>
+                    <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
+                    <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
+                </xsl:when>
+                <!-- This should only fail if the file is missing.  Repeatedly. -->
+                <xsl:when test="not($the-webwork-rep)">
+                    <xsl:message>PTX:ERROR:    The WeBWorK problem with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
+                    <xsl:message>              could not be located in the file of WeBWorK problems from</xsl:message>
+                    <xsl:message>              the server, which your publication file indicates should be located</xsl:message>
+                    <xsl:message>              at "<xsl:value-of select="$webwork-representations-file"/>". </xsl:message>
+                    <xsl:message>              If there are many messages like this, then likely your file is missing. </xsl:message>
+                    <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
+                    <xsl:message>              which should be reported.</xsl:message>
+                </xsl:when>
+                <!-- output varies by the style of exercises we are building -->
                 <xsl:when test="$exercise-style = 'pg-problems'">
                     <!-- isolate and edit representations needed for PG problem archives -->
                     <xsl:apply-templates select="$the-webwork-rep" mode="webwork-rep-to-pg"/>
@@ -428,7 +446,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:otherwise>
                     <xsl:copy-of select="$the-webwork-rep" />
                 </xsl:otherwise>
-            </xsl:choose>
+            </xsl:choose> <!-- end: which rep to choose -->
         </xsl:when>
         <!-- Now we are doing a pass to support extraction -->
         <!-- of PGML, so $b-extracting-pg is true          -->
@@ -1538,9 +1556,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->
 
-<!-- Warn/fail if the file of WW representations is not found -->
-<xsl:variable name="b-ww-representations-missing" select="($webwork-representations-file = '') and not($b-extracting-pg)"/>
-
 <!-- Edit a "webwork-reps" from the server into just PG material -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-pg">
     <xsl:copy>
@@ -1572,25 +1587,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Drop "webwork-reps" children we don't need for problem sets -->
 <xsl:template match="webwork-reps/static" mode="webwork-rep-to-pg"/>
 <xsl:template match="webwork-reps/server-data" mode="webwork-rep-to-pg"/>
-
-
-<!-- ######## -->
-<!-- Warnings -->
-<!-- ######## -->
-
-<!-- A place for warnings about missing files, etc -->
-<!-- and/or temporary/experimental features. These -->
-<!-- should be one-time global problems.           -->
-<xsl:template name="assembly-warnings">
-    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and $b-ww-representations-missing">
-        <xsl:message>PTX:WARNING: Your document has WeBWorK exercises,</xsl:message>
-        <xsl:message>             but your publisher file does not indicate the file</xsl:message>
-        <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>
-        <xsl:message>             Exercises will have a small informative message instead</xsl:message>
-        <xsl:message>             of the intended content.  Not making this file available</xsl:message>
-        <xsl:message>             can cause difficulties when parts of your document get</xsl:message>
-        <xsl:message>             processed by external programs (e.g. graphics, previews)</xsl:message>
-    </xsl:if>
-</xsl:template>
 
 </xsl:stylesheet>
