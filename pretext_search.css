@@ -23,9 +23,6 @@
   position: absolute;
   right: 0;
 }
-#secondsearch {
-    display: none
-}
 
 .searchwidget {
 /*
@@ -138,18 +135,15 @@ ol#searchresults > li > text {
     right: 0;
     position: fixed;
     z-index: 150;
-/*
     display: none;
-*/
 }
 #searchempty {
     display: none;
 }
 @media screen and (max-width: 800px) {
 /*
-    #secondsearch { display: none; }
-*/
     #secondsearch { bottom: 38px; }
+*/
     .searchbox {
         top: -30px;
     }
