@@ -6981,7 +6981,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <main class="ptx-main">
                         <!-- relax the 600px width restriction, so with    -->
                         <!-- responsive videos they grow to be much bigger -->
-                        <div class="ptx-content" style="max-width: 1600px">
+                        <div id="ptx-content" class="ptx-content" style="max-width: 1600px">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
                           </div>
@@ -10762,7 +10762,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="ptx-main">
-                    <div class="ptx-content">
+                    <div id="ptx-content" class="ptx-content">
                         <xsl:if test="$b-watermark">
                             <xsl:attribute name="style">
                                 <xsl:value-of select="$watermark-css" />
@@ -11001,7 +11001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>assistive</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="href">
-            <xsl:text>#content</xsl:text>
+            <xsl:text>#ptx-content</xsl:text>
         </xsl:attribute>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'skip-to-content'" />
