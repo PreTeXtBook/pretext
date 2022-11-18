@@ -10751,9 +10751,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                         </p>
                     </div>  <!-- title-container -->
-                    <!-- accessibility suggests relative ordering of next items -->
-                    <xsl:call-template name="google-search-box" />
-                    <xsl:call-template name="native-search-box" />
                     <xsl:call-template name="native-search-results"/>
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
@@ -11617,6 +11614,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <!-- Annotations button was once here, see GitHub issue -->
         <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+        <!-- Search box at end of ptx-navbar, so it can be sticky -->
+        <xsl:call-template name="google-search-box" />
+        <xsl:call-template name="native-search-box" />
     </nav>
 </xsl:template>
 
