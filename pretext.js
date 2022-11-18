@@ -6,14 +6,15 @@
  * Homepage: pretextbook.org
  * Repository: https://github.com/PreTeXtBook/JS_core
  *
- * Authors: Michael DuBois, David Farmer, Rob Beezer
+ * Authors: David Farmer, Rob Beezer
  *
  *******************************************************************************
  */
 
 function toggletoc() {
    thesidebar = document.getElementById("ptx-sidebar");
-   thesidebar.classList.toggle("hideme");
+   thesidebar.classList.toggle("hidden");
+   console.log("toggled the toc");
 }
 
 window.addEventListener("load",function(event) {
