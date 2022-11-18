@@ -6939,6 +6939,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
                 <xsl:call-template name="latex-macros" />
+                <xsl:call-template name="enable-editing" />
                  <header id="ptx-masthead">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
@@ -10758,6 +10759,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
             <xsl:call-template name="latex-macros"/>
+            <xsl:call-template name="enable-editing"/>
             <div class="ptx-page">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
@@ -12696,6 +12698,7 @@ TODO:
 
 <!-- PreTeXt Javascript header -->
 <xsl:template name="pretext-js">
+    <script>js_version = <xsl:value-of select="$html.js.version"/></script>
     <xsl:choose>
         <xsl:when test="not($b-debug-react)">
             <!-- condition first on toc present? -->
@@ -12865,6 +12868,17 @@ TODO:
         </xsl:call-template>
     </div>
 </xsl:template>
+
+<!-- If editing is enabled, the .ptx source file of each -->
+<!-- HTML page will be created.  We still need to set a  -->
+<!-- JavaScript variable to signal that the .ptx file    -->
+<!-- should be fetched.                                  -->
+<xsl:template name="enable-editing">
+    <xsl:if test="$debug.editable = 'yes'">
+        <script>sourceeditable = true</script>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Brand Logo -->
 <!-- Place image in masthead -->
