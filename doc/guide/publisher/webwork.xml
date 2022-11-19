@@ -102,13 +102,15 @@
       In the course's Course Configuration menu, set all permissions to <c>admin</c>
       (or perhaps set some to the even more restrictive <c>nobody</c>).
       Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.
+      Also if your server is new enough, it has <q>Allowed to view course home page</q> which should
+      also be set to <c>login_proctor</c>.
     </p>
     <p>
       In the Classlist Editor, add a user named <c>anonymous</c> (again, you could use some other name),
       and set that user's permission level to <c>login_proctor</c>, the permission level one higher than <c>student</c>.
       Set that user's password to <c>anonymous</c> (again, you could use some other password).
       Note that because this is public information, anyone will be able to log into this course as this user.
-      This is why setting the permissions earlier is very important. (Especially preventing this user from changing its own password.)
+      This is why restricting permissions in the previous paragraph is very important.
     </p>
     <p>
       Add the following lines to the <c>course.conf</c> file (which lives in the parent folder of the <c>templates/</c> folder.)
@@ -225,7 +227,7 @@
         <title>File Paths</title>
         <p>
           In the previous example and those that follow, you should specify paths as needed.
-          For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
+          For example, the <c>pretext</c> script is typically at <c>~/pretext/pretext/pretext</c>.
           And the <c>-p</c> option is specifying a publication file.
         </p>
       </warning>
@@ -262,7 +264,7 @@
         If unspecified, this will be the current working directory.
       </p>
       <p>
-        There are several string parameters you may include in the project manifest, or pass to <c>pretext/pretext</c> using
+        There are a few string parameters you may include in the project manifest, or pass to <c>pretext/pretext</c> using
         <c>-x stringparam option stringparam option ...</c>. If you use <c>-x</c> with <c>pretext</c>,
         make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
       </p>
@@ -277,13 +279,11 @@
           <cell><c>webwork.inline.static</c></cell>
           <cell>
             <p>
-              <c>'no'</c> (default) means inline exercises render as interactive.
+              <c>'no'</c> (default) means inline exercises render with a static preview,
+              and there is a button that users can click to make them interactive.
             </p>
             <p>
               <c>'yes'</c> means inline exercises render as static.
-            </p>
-            <p>
-              <c>'preview'</c> (planned) means inline exercises render as static until you click to activate them.
             </p>
           </cell>
         </row>
@@ -291,39 +291,39 @@
           <cell><c>webwork.divisional.static</c></cell>
           <cell>
             <p>
-              <c>'no'</c> means divisional exercises render as interactive.
+              <c>'no'</c> means divisional exercises render with a static preview,
+              and there is a button that users can click to make them interactive.
             </p>
             <p>
               <c>'yes'</c> (default) means divisional exercises render as static.
             </p>
+          </cell>
+        </row>
+        <row bottom="minor">
+          <cell><c>webwork.reading.static</c></cell>
+          <cell>
             <p>
-              <c>'preview'</c> (planned) means divisional exercises render as static until you click to activate them.
+              <c>'no'</c> means reading exercises render with a static preview,
+              and there is a button that users can click to make them interactive.
+            </p>
+            <p>
+              <c>'yes'</c> (default) means reading exercises render as static.
             </p>
           </cell>
         </row>
         <row bottom="minor">
-          <cell><c>html.knowl.exercise.inline</c></cell>
+          <cell><c>webwork.worksheet.static</c></cell>
           <cell>
             <p>
-              <c>'no'</c> means inline exercises appear on page load.
+              <c>'no'</c> means worksheet exercises render with a static preview,
+              and there is a button that users can click to make them interactive.
             </p>
             <p>
-              <c>'yes'</c> (default) means inline exercises are hidden in knowls.
+              <c>'yes'</c> (default) means worksheet exercises render as static.
             </p>
           </cell>
         </row>
-        <row bottom="minor">
-          <cell><c>html.knowl.exercise.sectional</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> (default) means divisional exercises appear on page load.
-            </p>
-            <p>
-              <c>'yes'</c> means divisional exercises are hidden in knowls.
-            </p>
-          </cell>
-        </row>
-      </tabular>
+       </tabular>
     </subsection>
 
     <subsection xml:id="webwork-latex-output">
