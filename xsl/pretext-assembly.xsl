@@ -970,6 +970,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- elements, which will cause changes in how the        -->
 <!-- "visible-id" template behaves.                       -->
 <xsl:template match="*" mode="identification">
+    <xsl:param name="parent-id"  select="'root-'"/>
     <xsl:copy>
         <!-- duplicate all attributes, especially  -->
         <!-- preserve any authored @xml:id, @label -->
@@ -989,7 +990,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- both thoughtfully authored, nothing to do -->
             <xsl:when test="@xml:id and @label"/>
         </xsl:choose>
-        <xsl:apply-templates select="node()" mode="identification"/>
+        <!-- The following is experimental as of 2022-11-18, but will likely              -->
+        <!-- become a good model for an auto-generated @label in the absence              -->
+        <!-- of any other authored string.                                                -->
+        <!--                                                                              -->
+        <!-- * Strategy is much like @original-id but maybe needs as much care            -->
+        <!-- * Effectively an @xml:id can be promoted to a @label by the first two "when" -->
+        <!-- * Element counts are used in base 26 via a lower-case alphabet               -->
+        <!-- * Separators are dashes, not initial letters of element names                -->
+        <!-- * Colons as separators might create confusion with namespaces                -->
+        <!-- * Prefixed with a full element name aids debugging                           -->
+        <!-- * Salt (digits) added to authored values may decrease risk of collision      -->
+        <xsl:variable name="new-latex-id">
+            <xsl:choose>
+                <xsl:when test="@label">
+                    <xsl:value-of select="@label"/>
+                    <!-- add SALT to prevent collisions -->
+                </xsl:when>
+                <!-- this mimics the upgrade of an authored xml:id to a label -->
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id"/>
+                    <!-- add SALT to prevent collisions -->
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$parent-id"/>
+                    <!-- With a colon, the value is not an "NCname" - a "non-colonized" name.    -->
+                    <!-- So fails as source material.  Unclear why we can use it in these trees. -->
+                    <!-- Anyway, perhaps good to avoid.                                          -->
+                    <!-- non-alphabetic seprator needed for uniqueness                           -->
+                    <xsl:text>-</xsl:text>
+                    <!-- A base 26 experiment (which is how 27, 28,... seem to be represented).  -->
+                    <!-- Zero is rendered as "0", thus the "+ 1" is necessary.                   -->
+                    <xsl:number value="count(preceding-sibling::*) + 1" format="a"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- aids debugging/portabiity somewhat -->
+        <xsl:variable name="element-name" select="local-name()"/>
+        <xsl:attribute name="latex-id">
+            <xsl:value-of select="concat($element-name, '-', $new-latex-id)"/>
+        </xsl:attribute>
+        <!-- recurse -->
+        <xsl:apply-templates select="node()" mode="identification">
+            <xsl:with-param name="parent-id" select="$new-latex-id"/>
+        </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 

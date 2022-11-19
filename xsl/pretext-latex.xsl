@@ -10288,29 +10288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- without getting duplicates.  The prefixes guarantee    -->
 <!-- that the three uniqueness schemes do not overlap.      -->
 <xsl:template match="*" mode="latex-id">
-    <xsl:choose>
-        <!-- xml:id may be more recognizable -->
-        <xsl:when test="@label">
-            <xsl:text>x:</xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="@label"/>
-        </xsl:when>
-        <!-- permid may be pervasive -->
-        <xsl:when test="@permid">
-            <xsl:text>p:</xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="@permid"/>
-        </xsl:when>
-        <!-- anything else we think of is too slow -->
-        <xsl:otherwise>
-            <xsl:text>g:</xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="generate-id(.)"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="@latex-id"/>
 </xsl:template>
 
 
