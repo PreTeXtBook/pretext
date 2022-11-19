@@ -2403,46 +2403,9 @@
             <title>Deprecations</title>
 
             <p>
-                This section is for testing if deprecated features are still supported
+                This section is for testing if deprecated features are still supported.
+                No such tests are being performed now.
             </p>
-
-            <exercise>
-                <introduction>
-                    <p>
-                        Once upon a time a <tab>latex-image</tab> inside a <tab>webwork</tab>
-                        needed to have an <attr>syntax</attr> attribute with value <c>PGtikz</c>.
-                        This exercise is here to test that we can still honor such exercises in a project's source.
-                    </p>
-                </introduction>
-                <webwork>
-                    <pg-code>
-                        @roots = (-3..3)[NchooseK(7,3)];
-                        @roots = num_sort(@roots);
-                        $answer = List(@roots);
-                        $xmin = min(-1,@roots)-1;
-                        $xmax = max(1,@roots)+1;
-                    </pg-code>
-                    <statement>
-                        <p>
-                            What are the roots of this polynomial?
-                        </p>
-                        <image width="50%">
-                            <description>
-                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
-                                <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
-                            </description>
-                            <latex-image syntax="PGtikz">
-                                \begin{axis}
-                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
-                                \end{axis}
-                            </latex-image>
-                        </image>
-                        <p>
-                            <var name="$answer" width="20"/>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
         </section>
 
         <backmatter>
