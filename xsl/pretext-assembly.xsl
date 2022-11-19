@@ -498,8 +498,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
                                                                 (not(local-name(.) = 'label')) and
                                                                 (not(local-name(.) = 'seed'))]" mode="webwork"/>
-                        <!-- Add a @webwork-id for the trip to the server -->
-                        <xsl:attribute name="webwork-id">
+                        <!-- Add a @ww-id for the trip to the server -->
+                        <xsl:attribute name="ww-id">
                             <xsl:value-of select="$ww-id"/>
                         </xsl:attribute>
                         <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
@@ -514,9 +514,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy>
                         <!-- As for a legitimate copy above , we carry over as much -->
                         <!-- metadata as possible, and in particular include a      -->
-                        <!-- @webwork-id  for tracking through the server           -->
+                        <!-- @ww-id  for tracking through the server                -->
                         <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="webwork"/>
-                        <xsl:attribute name="webwork-id">
+                        <xsl:attribute name="ww-id">
                             <xsl:value-of select="$ww-id"/>
                         </xsl:attribute>
                         <!-- Now a minimal, but correct PreTeXt, WW problem into the       -->
@@ -543,8 +543,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:copy>
                 <xsl:apply-templates select="@*" mode="webwork"/>
-                <!-- Add a @webwork-id for the trip to the server -->
-                <xsl:attribute name="webwork-id">
+                <!-- Add a @ww-id for the trip to the server -->
+                <xsl:attribute name="ww-id">
                     <xsl:value-of select="$ww-id"/>
                 </xsl:attribute>
                 <xsl:apply-templates select="node()" mode="webwork"/>
