@@ -5995,11 +5995,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stage.  We realize each stage in print as a "Part", which    -->
 <!-- has a statement and optionally, hints, answers and solutions.-->
 
-<!-- A "webwork-reps" inside an "exercise" indicates a WeBWorK problem -->
-<!-- originally in the source.  We could try to condition on a bare    -->
-<!-- "static" versus "static/stage" but it seems safer to stick with   -->
-<!-- a "choose" and a straightforward match.                           -->
-<xsl:template match="exercise[webwork-reps]" mode="exercise-components">
+<!-- A "webwork-reps" inside an "exercise" or PROJEXCT-LIKE       -->
+<!-- indicates a WeBWorK problem originally in the source.  We    -->
+<!-- could try to condition on a bare "static" versus             -->
+<!-- "static/stage" but it seems safer to stick with a "choose"   -->
+<!-- and a straightforward match.                                 -->
+<xsl:template match="exercise[webwork-reps]|project[webwork-reps]|activity[webwork-reps]|exploration[webwork-reps]|investigation[webwork-reps]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>

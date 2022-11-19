@@ -46,7 +46,7 @@
         before you will be able to see any <webwork/> content in your output.  For most cases, you should be able to do this by running <c>pretext generate webwork</c> to process <webwork /> exercises.</alert>
       </p>
       <p>
-        A <tag>webwork</tag> tag must be inside an <tag>exercise</tag>,
+        A <tag>webwork</tag> tag must be inside an <tag>exercise</tag> or a PROJECT-LIKE block,
         <em>optionally</em> preceded by an <tag>introduction</tag>,
         and <em>optionally</em> followed by a <tag>conclusion</tag>.
       </p>

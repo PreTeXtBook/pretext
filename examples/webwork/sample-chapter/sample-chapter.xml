@@ -303,6 +303,18 @@
                 </conclusion>
             </exercise>
 
+            <project>
+                <title>Inside a <tag>project</tag></title>
+                <introduction>
+                    <p>
+                        If you like, you can have a <webwork/> inside a PROJECT-LIKE block.
+                        Just like with an <tag>exercise</tag>, it can be preceded with an optional <tag>introduction</tag>
+                        and followed by an optional <tag>conclusion</tag>.
+                    </p>
+                </introduction>
+                <webwork copy="webwork-add-numbers" seed="511"/>
+            </project>
+
         </section>
 
         <section xml:id="section-the-quadratic-formula">
