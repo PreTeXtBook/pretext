@@ -310,6 +310,21 @@
             </ul>The default is <c>none</c>.  See <xref ref="online-embedded-calculator"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-webwork-dynamism">
+            <title>HTML WeBWorK Dynamism</title>
+            <idx><h>WeBWorK</h><h><init>HTML</init>dynamism</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/webwork</cline>
+            </cd>element has the following attributes, each of which can have a value of <c>static</c> or <c>dynamic</c>:<ul>
+                    <li><attr>inline</attr>, default value: <c>dynamic</c></li>
+                    <li><attr>divisional</attr>, default value: <c>static</c></li>
+                    <li><attr>reading</attr>, default value: <c>static</c></li>
+                    <li><attr>worksheet</attr>, default value: <c>static</c></li>
+                    <li><attr>project</attr>, default value: <c>dynamic</c></li>
+            </ul>The attribute names suggest the type of exercise or project-like that will be affected. See <xref ref="webwork-html-output"/> for more details and the rationale for the defaults.</p>
+        </subsection>
+
         <subsection xml:id="online-activecode">
             <title>HTML ActiveCode Programming Window</title>
             <idx><h>ActiveCode</h><h>window in <init>HTML</init></h></idx>

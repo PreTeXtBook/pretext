@@ -264,66 +264,11 @@
         If unspecified, this will be the current working directory.
       </p>
       <p>
-        There are a few string parameters you may include in the project manifest, or pass to <c>pretext/pretext</c> using
-        <c>-x stringparam option stringparam option ...</c>. If you use <c>-x</c> with <c>pretext</c>,
-        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
-      </p>
-      <tabular valign="top">
-        <col />
-        <col width="60%" />
-        <row bottom="major">
-          <cell>stringparam</cell>
-          <cell>options</cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>webwork.inline.static</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> (default) means inline exercises render with a static preview,
-              and there is a button that users can click to make them interactive.
-            </p>
-            <p>
-              <c>'yes'</c> means inline exercises render as static.
-            </p>
-          </cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>webwork.divisional.static</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> means divisional exercises render with a static preview,
-              and there is a button that users can click to make them interactive.
-            </p>
-            <p>
-              <c>'yes'</c> (default) means divisional exercises render as static.
-            </p>
-          </cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>webwork.reading.static</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> means reading exercises render with a static preview,
-              and there is a button that users can click to make them interactive.
-            </p>
-            <p>
-              <c>'yes'</c> (default) means reading exercises render as static.
-            </p>
-          </cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>webwork.worksheet.static</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> means worksheet exercises render with a static preview,
-              and there is a button that users can click to make them interactive.
-            </p>
-            <p>
-              <c>'yes'</c> (default) means worksheet exercises render as static.
-            </p>
-          </cell>
-        </row>
-       </tabular>
+          There are five publisher file entries which  control how a <webwork/> problem is realized within <init>HTML</init> output.  These are divided based on where the exercise (or project-like) resides: inline, within a division of exercises, within a reading questions division, within a worksheet, or if it is a project or similar.  If the class of problems is declared <c>dynamic</c>, then each problem has a button that readers can click to make the problem interactive.  Conversely, if the class of problems is declared <c>static</c>, then the problems render with a static preview.
+        </p>
+        <p>
+          By default, inline exercises and project-like will be dynamic, under the assumption that these are meant to be worked as a reader works through the material.  The others will be static, under the assumption that they will be placed on a WeBWorK server where they will be worked for scores and grades.  See <xref ref="online-webwork-dynamism"/> for the precise syntax for these switches.
+        </p>
     </subsection>
 
     <subsection xml:id="webwork-latex-output">
