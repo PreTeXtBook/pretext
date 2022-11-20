@@ -79,9 +79,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- Pointers to realizations of the actual document -->
-<xsl:param name="address.html" select="''" />
-<xsl:param name="address.pdf" select="''" />
 <!-- Publisher option to surround emdash -->
 <!-- Default is none, option is thin     -->
 <xsl:param name="emdash.space" select="''" />
@@ -272,33 +269,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-number-project-distinct" select="$debug.project.number = ''" />
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
-
-<!-- Document may exist in a variety of formats in  -->
-<!-- various locations.  These parameters can be    -->
-<!-- hard-coded in the docinfo and/or specified on  -->
-<!-- the command line. Command line takes priority. -->
-<!-- TODO: More formats could be implemented.       -->
-<xsl:variable name="address-html">
-    <xsl:choose>
-        <xsl:when test="not($address.html = '')">
-            <xsl:value-of select="$address.html" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$docinfo/address/html" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="address-pdf">
-    <xsl:choose>
-        <xsl:when test="not($address.pdf = '')">
-            <xsl:value-of select="$address.pdf" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$docinfo/address/pdf" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- File extensions can be set globally for a conversion, -->
 <!-- we set it here to something outlandish                -->
