@@ -572,6 +572,20 @@
                 <cline>/publication/html/asymptote/@links</cline>
             </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="html-asymptote-links"/> for more detail.</p>
         </subsection>
+
+        <subsection xml:id="html-navigation-options">
+            <title>HTML Navigation Options</title>
+            <idx><h>HTML</h><h>navigation</h></idx>
+            <idx><h>navigation</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/navigation</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>logic</attr> with values <c>linear</c> (default) and <c>tree</c>.</li>
+                <li><attr>upbutton</attr> with values <c>yes</c> (default) and <c>no</c>.</li>
+                <li><attr>style</attr> with values <c>full</c> (default) and <c>compact</c>.</li>
+            </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">
