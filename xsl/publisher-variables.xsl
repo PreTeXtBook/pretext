@@ -3787,6 +3787,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="webwork.worksheet.static" select="''" />
 <xsl:param name="webwork.project.static" select="''" />
 
+<!-- Navigation options move to the publisher file on 2022-11-20. -->
+<xsl:param name="html.navigation.logic"  select="''"/>
+<xsl:param name="html.navigation.upbutton"  select="''"/>
+<xsl:param name="html.navigation.style"  select="''"/>
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->

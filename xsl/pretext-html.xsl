@@ -116,21 +116,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.annotation" select="''" />
 <xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
 
-<!-- Navigation -->
-<!-- Navigation may follow two different logical models:                     -->
-<!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
-<!--       Previous and Next take you to the adjacent "page"                 -->
-<!--   (b) Tree, Prev/Up/Next - explicitly traverse the document tree        -->
-<!--       Prev and Next remain at same depth/level in tree                  -->
-<!--       Must follow a summary link to descend to finer subdivisions       -->
-<!--   'linear' is the default, 'tree' is an option                          -->
-<xsl:param name="html.navigation.logic"  select="'linear'" />
-<!-- The "up" button is optional given the contents sidebar, default is to have it -->
-<!-- An up button is very desirable if you use the tree-like logic                 -->
-<xsl:param name="html.navigation.upbutton"  select="'yes'" />
-<!-- There are also "compact" versions of the navigation buttons in the top right -->
-<xsl:param name="html.navigation.style"  select="'full'" />
-
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->

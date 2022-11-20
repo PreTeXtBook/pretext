@@ -10966,6 +10966,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:with-param name="incorrect-use" select="($webwork.project.static != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-11-20  html.navigation.logic  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.logic  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.logic != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.upbutton  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.upbutton  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.upbutton != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.style  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.style  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.style != '')" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
