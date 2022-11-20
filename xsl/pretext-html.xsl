@@ -277,25 +277,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK  -->
 <!-- ######## -->
 
-<!-- WeBWorK exercise may be rendered static="yes" or static="no" makes  -->
-<!-- an interactive problem. Also in play here are params from -common:  -->
-<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
-<!-- For a divisional exercise, when static="no", that is an intentional -->
-<!-- decision to show the live problem, which means the statement will   -->
-<!-- be shown, regardless of exercise.text.statement. For webwork-reps   -->
-<!-- version 2 (WW 2.16 and later), we respect the values for            -->
-<!-- exercise.text.hint, exercise.text.answer, exercise.text.solution.   -->
-<!-- For version 1, if the problem was authored in PTX source, we can    -->
-<!-- respect the values for exercise.text.hint, exercise.text.solution.  -->
-<!-- When the problem is static, we can respect exercise.text.answer.    -->
-<!-- When the problem is live, we cannot stop the user from seeing the   -->
-<!-- answers. And if the problem source is on the webwork server, then   -->
-<!-- hints and solutions will show  no matter what.                      -->
-<xsl:param name="webwork.inline.static" select="'no'" />
-<xsl:param name="webwork.divisional.static" select="'yes'" />
-<xsl:param name="webwork.reading.static" select="'yes'" />
-<xsl:param name="webwork.worksheet.static" select="'yes'" />
-<xsl:param name="webwork.project.static" select="'no'" />
+<!-- We mine some values from the first "WW representation" to have been -->
+<!-- inserted into the source by the pre-processor ("assembly") when     -->
+<!-- making dynamic exercises.                                           -->
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
 <xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>

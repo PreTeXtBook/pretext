@@ -3680,6 +3680,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="watermark.text" select="''" />
 <xsl:param name="watermark.scale" select="''" />
 
+<!-- These were yes/no string parameters.  We converted to values -->
+<!-- of "static" or "dynamic" as publisher entries on 2022-11-19. -->
+<xsl:param name="webwork.inline.static" select="''" />
+<xsl:param name="webwork.divisional.static" select="''" />
+<xsl:param name="webwork.reading.static" select="''" />
+<xsl:param name="webwork.worksheet.static" select="''" />
+<xsl:param name="webwork.project.static" select="''" />
+
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->

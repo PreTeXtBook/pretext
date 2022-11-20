@@ -10931,6 +10931,41 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:with-param name="incorrect-use" select="($watermark.scale != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2022-11-19  webwork.inline.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.inline.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.inline.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.divisional.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.divisional.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.divisional.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.reading.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.reading.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.reading.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.worksheet.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.worksheet.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.worksheet.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.project.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.project.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.project.static != '')" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
