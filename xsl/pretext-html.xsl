@@ -178,53 +178,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Local versions of navigation options -->
-<!-- Fatal errors if not recognized       -->
-<xsl:variable name="nav-logic">
-    <xsl:choose>
-        <xsl:when test="$html.navigation.logic='linear'">
-            <xsl:text>linear</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.logic='tree'">
-            <xsl:text>tree</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>linear</xsl:text>
-            <xsl:message>PTX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Using the default instead ('linear').</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="nav-upbutton">
-    <xsl:choose>
-        <xsl:when test="$html.navigation.upbutton='yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.upbutton='no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-            <xsl:message>PTX:ERROR: 'html.navigation.upbutton' must be 'yes' or 'no', not '<xsl:value-of select="$html.navigation.upbutton" />.'  Using the default instead ('yes').</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="nav-style">
-    <xsl:choose>
-        <xsl:when test="$html.navigation.style='full'">
-            <xsl:text>full</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.style='compact'">
-            <xsl:text>compact</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>full</xsl:text>
-            <xsl:message>PTX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Using the default instead ('full').</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
 

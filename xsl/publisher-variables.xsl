@@ -2644,6 +2644,105 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                 -->
+<!-- HTML Navigation -->
+<!--                 -->
+
+<!-- Navigation may follow two different logical models:                     -->
+<!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
+<!--       Previous and Next take you to the adjacent "page"                 -->
+<!--   (b) Tree, Prev/Up/Next - explicitly traverse the document tree        -->
+<!--       Prev and Next remain at same depth/level in tree                  -->
+<!--       Must follow a summary link to descend to finer subdivisions       -->
+<!--   'linear' is the default, 'tree' is an option                          -->
+<xsl:variable name="nav-logic">
+    <xsl:variable name="logic-default" select="'linear'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@logic = 'linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@logic = 'tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@logic">
+            <xsl:message>PTX:WARNING: HTML navigation logic setting in publisher file should be "linear" or "tree", not "<xsl:value-of select="$publication/html/navigation/@logic"/>". Proceeding with default value: "<xsl:value-of select="$logic-default"/>"</xsl:message>
+            <xsl:value-of select="$logic-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.logic='linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.logic='tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$logic-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The "up" button is optional given the contents sidebar, default is to have it -->
+<!-- An up button is very desirable if you use the tree-like logic                 -->
+<xsl:variable name="nav-upbutton">
+    <xsl:variable name="upbutton-default" select="'yes'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@upbutton = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@upbutton = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@upbutton">
+            <xsl:message>PTX:WARNING: HTML navigation up-button setting in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/navigation/@upbutton"/>". Proceeding with default value: "<xsl:value-of select="$upbutton-default"/>"</xsl:message>
+            <xsl:value-of select="$upbutton-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.upbutton='yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.upbutton='no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$upbutton-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- There are also "compact" versions of the navigation buttons in the top right -->
+<xsl:variable name="nav-style">
+    <xsl:variable name="style-default" select="'full'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@style = 'full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@style = 'compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@style">
+            <xsl:message>PTX:WARNING: HTML navigation style setting in publisher file should be "full" or "compact", not "<xsl:value-of select="$publication/html/navigation/@style"/>". Proceeding with default value: "<xsl:value-of select="$style-default"/>"</xsl:message>
+            <xsl:value-of select="$style-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.style='full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.style='compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$style-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!--                              -->
 <!-- HTML CSS Style Specification -->
 <!--                              -->
