@@ -296,12 +296,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="webwork.reading.static" select="'yes'" />
 <xsl:param name="webwork.worksheet.static" select="'yes'" />
 <xsl:param name="webwork.project.static" select="'no'" />
-<!-- We make variables instead of using the params directly, so that in EPUB we can overrule -->
-<xsl:variable name="b-webwork-inline-static" select="$webwork.inline.static = 'yes'" />
-<xsl:variable name="b-webwork-divisional-static" select="$webwork.divisional.static = 'yes'" />
-<xsl:variable name="b-webwork-reading-static" select="$webwork.reading.static = 'yes'" />
-<xsl:variable name="b-webwork-worksheet-static" select="$webwork.worksheet.static = 'yes'" />
-<xsl:variable name="b-webwork-project-static" select="$webwork.project.static = 'yes'" />
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
 <xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>

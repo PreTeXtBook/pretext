@@ -1891,6 +1891,174 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                       -->
+<!-- HTML WeBWorK Dynamism -->
+<!--                       -->
+
+<!-- In HTML output a WeBWorK problem may be static or dynamic.  This  -->
+<!-- is a dichotomy, so we make (historical) boolean variables, where  -->
+<!-- static = True, which get used in the HTML conversion.  But as a   -->
+<!-- publisher setting, we have allowed for possibilities beyond just  -->
+<!-- two.  Inline and project-like default to "dynamic" since they may -->
+<!-- be formative, while the others are "static" since they may be     -->
+<!-- summative.                                                        -->
+
+<xsl:variable name="webwork-inline-capability">
+    <xsl:variable name="ww-default" select="'dynamic'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@inline = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@inline = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@inline">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @inline setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@inline"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.inline.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.inline.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-inline-static" select="$webwork-inline-capability = 'static'" />
+
+<xsl:variable name="webwork-divisional-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@divisional = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@divisional = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@divisional">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @divisional setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@divisional"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.divisional.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.divisional.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-divisional-static" select="$webwork-divisional-capability = 'static'" />
+
+<xsl:variable name="webwork-reading-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@reading = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@reading = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@reading">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @reading setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@reading"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.reading.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.reading.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-reading-static" select="$webwork-reading-capability = 'static'" />
+
+<xsl:variable name="webwork-worksheet-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@worksheet = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@worksheet = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@worksheet">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @worksheet setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@worksheet"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.worksheet.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.worksheet.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-worksheet-static" select="$webwork-worksheet-capability = 'static'" />
+
+<xsl:variable name="webwork-project-capability">
+    <xsl:variable name="ww-default" select="'dynamic'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@project = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@project = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@project">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @project setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@project"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.project.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.project.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-project-static" select="$webwork-project-capability = 'static'" />
+
+
 <!--                   -->
 <!-- HTML Knowlization -->
 <!--                   -->
