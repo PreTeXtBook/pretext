@@ -317,24 +317,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<xsl:variable name="emdash-space">
-    <xsl:choose>
-        <xsl:when test="$emdash.space = ''">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:when test="$emdash.space = 'thin'">
-            <xsl:text>thin</xsl:text>
-        </xsl:when>
-        <xsl:when test="$emdash.space = 'none'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR:   Option for "emdash.space" should be "none" or "thin", not "<xsl:value-of select="$emdash.space" />".  Assuming the default, "none".</xsl:message>
-            <xsl:text>none</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->

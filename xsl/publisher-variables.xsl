@@ -171,6 +171,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Em dash Width -->
+
+<xsl:variable name="emdash-space">
+    <xsl:variable name="default-width" select="'none'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/common/@emdash-space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/@emdash-space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/common/@emdash-space">
+            <xsl:message>PTX:WARNING: em-dash width setting in publisher file should be "none" or "thin", not "<xsl:value-of select="$publication/common/@emdash-space"/>". Proceeding with default value: "<xsl:value-of select="$default-width"/>"</xsl:message>
+            <xsl:value-of select="$default-width"/>
+        </xsl:when>
+        <!-- backwards-compatability -->
+        <xsl:when test="$emdash.space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <xsl:when test="$emdash.space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <!-- no attempt to set -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-width"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Watermarking -->
 <!-- Variables for watermark text (simple!), and a scale factor. -->
 <!-- Boolean variables for existence (one is deprecated LaTeX).  -->
