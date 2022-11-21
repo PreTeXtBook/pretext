@@ -3169,12 +3169,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- guaranteed to be 'flush' or 'ragged'   -->
 <!-- N.B. let HTML be different/independent -->
 <xsl:variable name="latex-right-alignment">
+    <xsl:variable name="default-align" select="'flush'"/>
     <xsl:choose>
         <xsl:when test="$publication/latex/page/@right-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/latex/page/@right-alignment = 'ragged'">
             <xsl:text>ragged</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/latex/page/@right-alignment">
+            <xsl:message>PTX:WARNING: LaTeX right-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@right-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:value-of select="$default-align"/>
         </xsl:when>
         <!-- or respect deprecated stringparam in use, text.alignment -->
         <xsl:when test="$text.alignment = 'justify'">
@@ -3183,9 +3189,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$text.alignment = 'raggedright'">
             <xsl:text>ragged</xsl:text>
         </xsl:when>
-        <!-- default -->
+        <!-- no attempt at all, so default -->
         <xsl:otherwise>
-            <xsl:text>flush</xsl:text>
+            <xsl:value-of select="$default-align"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -3196,6 +3202,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://www.sascha-frank.com/page-break.html    -->
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
+    <xsl:variable name="default-align" select="'ragged'"/>
     <xsl:choose>
         <xsl:when test="$publication/latex/page/@bottom-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
@@ -3203,9 +3210,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
             <xsl:text>ragged</xsl:text>
         </xsl:when>
-        <!-- default -->
+        <xsl:when test="$publication/latex/page/@bottom-alignment">
+            <xsl:message>PTX:WARNING: LaTeX bottom-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@bottom-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:value-of select="$default-align"/>
+        </xsl:when>
+        <!-- no attempt at all, so default -->
         <xsl:otherwise>
-            <xsl:text>ragged</xsl:text>
+            <xsl:value-of select="$default-align"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
