@@ -110,6 +110,16 @@
             </ul></p>
         </subsection>
 
+        <subsection xml:id="common-emdash-width-options">
+            <title>Em Dash Width Options</title>
+            <idx><h>common options</h><h>fillin</h></idx>
+            <idx><h>fillin</h><h>options</h></idx>
+
+            <p>The width of spaces on either side of an em dash (the <tage>mdash</tage> element) is set with the <cd>
+                <cline>/publication/common/@emdash-space</cline>
+            </cd>attribute having values <c>none</c> (the default) or <c>thin</c>.  See <xref ref="topics-separators"/> for more explanation.</p>
+        </subsection>
+
         <subsection xml:id="common-watermark-options">
             <title>Watermarks</title>
             <idx><h>common option</h><h>watermark</h></idx>

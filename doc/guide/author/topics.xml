@@ -584,7 +584,7 @@
                 -->
             </subsubsection>
 
-            <subsubsection>
+            <subsubsection xml:id="topics-separators">
                 <title>Separators</title>
 
                 <paragraphs>
@@ -595,6 +595,8 @@
                 <paragraphs>
                     <title><tage>mdash</tage>, <mdash />, em dash</title>
                     <p>A dash, the width of a lowercase <sq>m</sq>, or twice the width of the en dash.  This is typically used to express a secondary part of a phrase, much like the use of a semi-colon or parentheses.</p>
+
+                    <p>Style guides suggest that there should be no spaces, before or after, an em dash, while some allow for a <q>thin</q> space on either side.  You should always leave no space around an <tage>mdash</tage> element in your <pretext/> source.  Then a publication file entry can be used to elect the automatic addition of a thin space, should your publisher so desire.  See <xref ref="common-emdash-width-options"/> for the syntax of the publisher file entry.</p>
                 </paragraphs>
 
                 <paragraphs>
