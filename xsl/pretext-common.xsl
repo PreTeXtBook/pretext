@@ -360,22 +360,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-commentary" select="$input-commentary = 'yes'" />
 
-<!-- Text alignment options -->
-<xsl:variable name="text-alignment">
-    <xsl:choose>
-        <xsl:when test="($text.alignment = '') or ($text.alignment = 'justify')">
-            <xsl:text>justify</xsl:text>
-        </xsl:when>
-        <xsl:when test="$text.alignment = 'raggedright'">
-            <xsl:text>raggedright</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>justify</xsl:text>
-            <xsl:message>PTX:WARNING: the "text.alignment" stringparam should be "justify" or "raggedright", not "<xsl:value-of select="$text.alignment"/>", so assuming "justify"</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- To forward-reference solutions to exercises, we need       -->
 <!-- to know which ones atually have solutions in place later.  -->
 <!-- So we build 30 node-lists according to the direct product  -->
