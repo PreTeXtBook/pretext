@@ -3197,7 +3197,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
     <xsl:choose>
-        <xsl:when test="$publication/latex/page/@bottom-alignmant = 'flush'">
+        <xsl:when test="$publication/latex/page/@bottom-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
