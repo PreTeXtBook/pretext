@@ -235,6 +235,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
+<!-- A global list of all "webwork" used for       -->
+<!-- efficient backward-compatible indentification -->
+<xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
+
 <xsl:variable name="webwork-rtf">
     <xsl:apply-templates select="$original-labeled" mode="webwork"/>
 </xsl:variable>
@@ -398,6 +402,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- which would require parameter passing through all the        -->
     <!-- "assembly" templates.  Better to perhaps break out a         -->
     <!-- "webwork" pass just prior to assembly.                       -->
+    <!-- 2022-11-21: we are a bit careful to optimize the computation -->
+    <!-- of the identifiers in a backwards-compatible way.  Better to -->
+    <!-- someday switch to a purely recursive descent version as a    -->
+    <!-- one-time jolt to authors. (Remove global $all-webwork.)      -->
     <xsl:variable name="ww-id">
         <xsl:choose>
             <xsl:when test="@xml:id">
@@ -406,7 +414,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>
                 <xsl:value-of select="local-name(.)" />
                 <xsl:text>-</xsl:text>
-                <xsl:number from="book|article|letter|memo" level="any" />
+                <!-- compute the eqivalent of the count of all previous WW:     -->
+                <!-- <xsl:number from="book|article|letter|memo" level="any" /> -->
+                <!-- Save off the WW in question -->
+                <xsl:variable name="the-ww" select="self::*"/>
+                <!-- Run over global list, looking for a match -->
+                <xsl:for-each select="$all-webwork">
+                    <xsl:if test="count($the-ww|.) = 1">
+                        <!-- context is the $all-webwork node-set, so   -->
+                        <!-- position() gives index/location of $the-ww -->
+                        <xsl:value-of select="position()"/>
+                    </xsl:if>
+                </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
