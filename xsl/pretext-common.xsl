@@ -79,9 +79,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- Publisher option to surround emdash -->
-<!-- Default is none, option is thin     -->
-<xsl:param name="emdash.space" select="''" />
 <!-- Publisher option to include "commentary" -->
 <!-- Default will be "no"                     -->
 <xsl:param name="commentary" select="''" />
@@ -10921,6 +10918,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-11-20'" />
         <xsl:with-param name="message" select="'the  html.navigation.style  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
             <xsl:with-param name="incorrect-use" select="($html.navigation.style != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  emdash.space deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  emdash.space  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($emdash.space != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

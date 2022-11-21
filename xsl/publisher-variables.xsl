@@ -3833,6 +3833,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.navigation.upbutton"  select="''"/>
 <xsl:param name="html.navigation.style"  select="''"/>
 
+<!-- Publisher option to surround emdash, deprecated 2022-11-20 -->
+<xsl:param name="emdash.space" select="''" />
+
+
 <!-- ################# -->
 <!-- Variable Bad Bank -->
 <!-- ################# -->
