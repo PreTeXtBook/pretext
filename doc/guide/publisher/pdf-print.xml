@@ -32,6 +32,16 @@
         <p>In this chapter, we describe both of these two conversions together, since they are only slightly dissimilar.</p>
     </section>
 
+    <section xml:id="traditional-publishing">
+        <title>Traditional Publishing</title>
+
+        <p>Suppose that you have engaged a publisher to help you manufacture a physical copy of your book or research article.  Publishers vary greatly in their expectations for what you provide to them.  (And maybe you are your own publisher, see <xref ref="print-on-demand"/>.)</p>
+
+        <p>If your publisher wants to run with <term>camera-ready copy</term> from you as a <init>PDF</init>, you should be in good shape.  With the print option (versus electronic, see <xref ref="electronic-or-print"/>) and a bit of effort to control widows, orphans, and figure placement, you should be able to produce something very good by yourself.</p>
+
+        <p>In mathematics, computer science, physics, or economics, a publisher might want to work from your <latex/> files, which they will assume you have written from scratch.  And they may expect to be able to swap in their house class or style file to achieve the look they want.  A <pretext/> <latex/> file will look a bit unusual, see <xref ref="latex-file"/>.  On 2022-11-22 we have a report of a very extensive <url href="https://arxiv.org/abs/2211.11671">research article</url> written in <pretext/> and uploaded to the <url href="https://arxiv.org/">arXiv</url> preprint server, where it was successfully processed by <c>pdflatex</c> on the server, with only minimal hand-edits to the intermediate <latex/> file.  We can always improve in this area, so we welcome reports, good and bad, about the robustness of our <latex/> output when delivered to publishers.</p>
+    </section>
+
     <section xml:id="print-justification">
         <title>Text Block Alignment</title>
 
