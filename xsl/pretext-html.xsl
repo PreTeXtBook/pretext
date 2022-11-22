@@ -7917,11 +7917,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
                             <xsl:text>px;</xsl:text>
                         </xsl:when>
-                        <!-- If there is no $left-col/@width, terminate -->
+                        <!-- If there is no $left-col/@width, use 20% as default -->
                         <xsl:otherwise>
-                            <xsl:message>PTX:FATAL:   cell with a "p" element has no corresponding col element with width attribute.</xsl:message>
+                            <xsl:message>PTX:ERROR:   cell with p has no corresponding col with @width, using 20% as default</xsl:message>
                             <xsl:apply-templates select="." mode="location-report" />
-                            <xsl:message terminate="yes">Quitting...</xsl:message>
+                            <xsl:value-of select="$design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
