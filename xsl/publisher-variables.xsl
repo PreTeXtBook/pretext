@@ -3513,6 +3513,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
 
+<xsl:variable name="latex-snapshot">
+    <xsl:variable name="default-snapshot" select="'no'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@snapshot = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@snapshot = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- attempt to set, but wrong -->
+        <xsl:when test="$publication/latex/@snapshot">
+            <xsl:message>PTX WARNING: LaTeX snapshot record in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@snapshot"/>". Proceeding with default value: "<xsl:value-of select="$default-snapshot"/>"</xsl:message>
+            <xsl:value-of select="$default-snapshot"/>
+        </xsl:when>
+        <!-- no attempt to set, thus default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-snapshot"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
+
+
 <!-- ########### -->
 <!-- LaTeX Fonts -->
 <!-- ########### -->
