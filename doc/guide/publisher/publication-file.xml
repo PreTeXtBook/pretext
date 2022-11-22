@@ -269,6 +269,15 @@
                 <cline>/publication/latex/@draft</cline>
             </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of the <latex/> draft mode.  The default is <c>no</c>.  See <xref ref="processing-author-tools"/> for more detail.</p>
         </subsection>
+
+        <subsection xml:id="latex-snapshot-record-options">
+            <title>Draft Mode</title>
+            <idx><h>LaTeX</h><h>snapshot</h></idx>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@snapshot</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the generation of a <q>snapshot</q> record of the LaTeX packages in use.  The default is <c>no</c>.  See <xref ref="latex-snapshot-record"/> for more detail.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-online">

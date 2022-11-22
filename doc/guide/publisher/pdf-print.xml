@@ -187,4 +187,13 @@
             <p>Having said all that, you may find it necessary to manually adjust a file to control widows or orphans, or maybe the placement of a graphics file, or similar adjustments.  We view this as the final step before making a new edition, which might be a <init>PDF</init> that you submit to a print-on-demand service (<xref ref="print-on-demand"/>).  So this might be an annual exercise, at the most frequent.</p>
         </note>
     </section>
+
+    <section xml:id="latex-snapshot-record">
+        <title>Snapshot Record</title>
+        <idx><h>LaTeX</h><h>snapshot</h></idx>
+
+        <p>We are careful about which <latex/> packages we use, trying to stick with well-established packages with active maintainers.  But it can be useful to have a record of <em>exactly</em> which packagees are in play, and better still, which versions of those packages are being used.  So you can use a publication entry to request loading the <url href="https://ctan.org/pkg/snapshot"><c>snapshot</c></url> package, which will then automatically generate such a record into a <c>&lt;job&gt;.dep</c> file.  See <xref ref="latex-snapshot-record-options"/> for details on electing this feature.</p>
+
+        <p>If you suspect some packages are not playing well with each other, this record might be helpful for debugging this (rare) situation.  It can aslo be useful if you wish to have a perfect archive of how some publication was produced.  See the package documentation for more on the format and use.</p>
+    </section>
 </chapter>
