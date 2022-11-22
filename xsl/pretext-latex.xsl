@@ -369,9 +369,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- loaded.  Some authors may be able to copy this information out of -->
 <!-- the dep file and use it to make an "archival" version of their    -->
 <!-- LaTeX source with frozen dependencies.                            -->
+<!-- 2022-11-22: Now opt-in since this package is maybe not standard?  -->
+<!-- David Farmer uploaded to the arXiv and this caused an error.      -->
 <xsl:template name="snapshot-package-info">
-    <xsl:text>%% We elect to always write snapshot output into &lt;job&gt;.dep file&#xa;</xsl:text>
-    <xsl:text>\RequirePackage{snapshot}&#xa;</xsl:text>
+    <xsl:if test="$b-latex-snapshot">
+        <xsl:text>%% A publication file entry has requested writing snapshot output into the &lt;job&gt;.dep file&#xa;</xsl:text>
+        <xsl:text>\RequirePackage{snapshot}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- LaTeX preamble is common for both books, articles, memos and letters -->
