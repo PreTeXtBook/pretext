@@ -107,6 +107,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.: if the CSS has a version bump, then be sure to    -->
 <!-- visit the "css" directory and make an update there      -->
 <!-- for the benefit of offline formats                      -->
+<!-- N.B. leave this as parameters.  A developer of a        -->
+<!-- comprehensive approach to new JS and CSS may qwant to   -->
+<!-- point to a totally different server (rather than other  -->
+<!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.4'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
