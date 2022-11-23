@@ -271,7 +271,7 @@
         </subsection>
 
         <subsection xml:id="latex-snapshot-record-options">
-            <title>Draft Mode</title>
+            <title>Snapshot Record</title>
             <idx><h>LaTeX</h><h>snapshot</h></idx>
 
             <p>Set<cd>
