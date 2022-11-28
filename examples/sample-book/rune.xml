@@ -716,6 +716,82 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
+        <exercise label="horizontal-parson-sql-statement-simple" language="sql">
+            <title>Parsons Problem, SQL statement</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-no-randomize" language="sql">
+            <title>Parsons Problem, SQL statement, no randomization</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.  This version of this problem will <em>always</em> present the blocks in the same fixed order (but incorrect, hopefully!), as prescribed by the author in the source.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="no">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-with-db" language="sql" database="sql/test.db">
+            <title>Parsons Problem, SQL statement, automatic feedback</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+            <tests>
+            assert 1,1 == world
+            assert 0,1 == hello
+            assert 2,1 == 42
+            </tests>
+        </exercise>
+
+        <exercise label="horizontal-parson-natural" language="natural">
+            <title>Parsons Problem, SQL statement</title>
+            <idx>even numbers</idx>
+            <statement>
+                <p>Form the sentence often used to show font samples.  You can reuse blocks as needed.</p>
+            </statement>
+            <blocks layout="horizontal" reuse="yes" randomize="yes">
+                <block ref="font-the" order="6"/>
+                <block order="8">quick</block>
+                <block order="2">brown</block>
+                <block order="3">fox</block>
+                <block order="1">jumped</block>
+                <block order="5">over</block>
+                <block xml:id="font-the">the</block>
+                <block order="7">lazy</block>
+                <block order="4">dog</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-reusable" language="sql">
+            <title>Parsons Problem, SQL statement, reusable</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.  Same problem as above, but we allow blocks to be reused (even though the solution does not require that).</p>
+            </statement>
+            <blocks layout="horizontal" reuse="yes" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
         <exercise label="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
             <idx>even numbers</idx>
