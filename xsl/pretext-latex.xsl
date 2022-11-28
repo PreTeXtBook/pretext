@@ -369,9 +369,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- loaded.  Some authors may be able to copy this information out of -->
 <!-- the dep file and use it to make an "archival" version of their    -->
 <!-- LaTeX source with frozen dependencies.                            -->
+<!-- 2022-11-22: Now opt-in since this package is maybe not standard?  -->
+<!-- David Farmer uploaded to the arXiv and this caused an error.      -->
 <xsl:template name="snapshot-package-info">
-    <xsl:text>%% We elect to always write snapshot output into &lt;job&gt;.dep file&#xa;</xsl:text>
-    <xsl:text>\RequirePackage{snapshot}&#xa;</xsl:text>
+    <xsl:if test="$b-latex-snapshot">
+        <xsl:text>%% A publication file entry has requested writing snapshot output into the &lt;job&gt;.dep file&#xa;</xsl:text>
+        <xsl:text>\RequirePackage{snapshot}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- LaTeX preamble is common for both books, articles, memos and letters -->
@@ -3618,6 +3622,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% http://tex.stackexchange.com/questions/115321&#xa;</xsl:text>
     <xsl:text>%% /how-to-optimize-latin-modern-font-with-xelatex&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not($latex-font-main-regular = '')">
+            <xsl:text>\setmainfont{</xsl:text>
+            <xsl:value-of select="$latex-font-main-regular"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- nothing to do, see comments above -->
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Filenames necessary to be cross-platform -->
@@ -5986,11 +5999,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stage.  We realize each stage in print as a "Part", which    -->
 <!-- has a statement and optionally, hints, answers and solutions.-->
 
-<!-- A "webwork-reps" inside an "exercise" indicates a WeBWorK problem -->
-<!-- originally in the source.  We could try to condition on a bare    -->
-<!-- "static" versus "static/stage" but it seems safer to stick with   -->
-<!-- a "choose" and a straightforward match.                           -->
-<xsl:template match="exercise[webwork-reps]" mode="exercise-components">
+<!-- A "webwork-reps" inside an "exercise" or PROJEXCT-LIKE       -->
+<!-- indicates a WeBWorK problem originally in the source.  We    -->
+<!-- could try to condition on a bare "static" versus             -->
+<!-- "static/stage" but it seems safer to stick with a "choose"   -->
+<!-- and a straightforward match.                                 -->
+<xsl:template match="exercise[webwork-reps]|project[webwork-reps]|activity[webwork-reps]|exploration[webwork-reps]|investigation[webwork-reps]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
@@ -9854,10 +9868,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:variable>
                             <xsl:value-of select="substring-before($width, '%') div 100" />
                         </xsl:when>
-                        <!-- If there is no $left-col/@width, terminate -->
+                        <!-- If there is no $left-col/@width, use 20% as default -->
                         <xsl:otherwise>
-                            <xsl:message terminate="yes">PTX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
+                            <xsl:message>PTX:ERROR:   cell with p has no corresponding col with @width, using 20% as default</xsl:message>
                             <xsl:apply-templates select="." mode="location-report" />
+                            <xsl:text>0.2</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                     <xsl:text>\linewidth}</xsl:text>
@@ -10279,29 +10294,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- without getting duplicates.  The prefixes guarantee    -->
 <!-- that the three uniqueness schemes do not overlap.      -->
 <xsl:template match="*" mode="latex-id">
-    <xsl:choose>
-        <!-- xml:id may be more recognizable -->
-        <xsl:when test="@label">
-            <xsl:text>x:</xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="@label"/>
-        </xsl:when>
-        <!-- permid may be pervasive -->
-        <xsl:when test="@permid">
-            <xsl:text>p:</xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="@permid"/>
-        </xsl:when>
-        <!-- anything else we think of is too slow -->
-        <xsl:otherwise>
-            <xsl:text>g:</xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="generate-id(.)"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="@latex-id"/>
 </xsl:template>
 
 

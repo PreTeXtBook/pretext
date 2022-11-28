@@ -37,6 +37,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <!-- native search with Javascript -->
         <search variant="default"/>
+        <!-- for this demonstration, we want all the problems dynamic -->
+        <webwork divisional="dynamic"/>
     </html>
 
 </publication>

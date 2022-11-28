@@ -26,6 +26,12 @@
       for use in the <q>traditional</q> way.
     </p>
     <p>
+      Although we expect that version 2.14 and above are supported,
+      we recommend that you use the <url href="https://github.com/openwebwork/webwork2/blob/main/VERSION">current</url>
+      (or one previous) version of <webwork/> whenever possible.
+      Should bugs be discovered, it may be difficult to address them with older versions of <webwork/>.
+    </p>
+    <p>
       See <xref ref="webwork-publisher"/> for how to configure a <webwork/> course and server to process your <webwork/> problems,
       and then how to process them.
     </p>
@@ -40,7 +46,7 @@
         before you will be able to see any <webwork/> content in your output.  For most cases, you should be able to do this by running <c>pretext generate webwork</c> to process <webwork /> exercises.</alert>
       </p>
       <p>
-        A <tag>webwork</tag> tag must be inside an <tag>exercise</tag>,
+        A <tag>webwork</tag> tag must be inside an <tag>exercise</tag> or a PROJECT-LIKE block,
         <em>optionally</em> preceded by an <tag>introduction</tag>,
         and <em>optionally</em> followed by a <tag>conclusion</tag>.
       </p>
@@ -86,7 +92,7 @@
           We have done this with modern PG macros and macros that are frequently used.
           But still, not every OPL problem (for example) is compatible with <pretext/>.
           In some cases, maybe it would be straightforward to train the macros to give <pretext/> output.
-          But in many cases, older macros are not structured well and <pretext/> is all about good structure.
+          But in many cases, older macros and problem files are not structured well and <pretext/> is all about good structure.
           So it could be a significant project to retrofit <pretext/> compatibility.
         </p>
         <p>
@@ -221,7 +227,7 @@
       <p>
         If you are familiar with code for <webwork/> PG problems, the <tag>pg-code</tag> contains lines of PG code
         that would appear in the <q>setup</q> portion of the problem.
-        Typically, this is the code that follows <c>TEXT(beginproblem());</c> and precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>.
+        Typically, this is the code that precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>.
         If your code needs any special <webwork/> macro libraries,
         you may load them in a <tag>pg-macros</tag> tag prior to <tag>pg-code</tag>,
         with each such <c>.pl</c> file's name inside a <tag>macro-file</tag> tag.
@@ -448,17 +454,6 @@
           then you need to get that preamble content up on the <webwork/> host course.
           In many cases, you will <em>need</em> to get that preamble content up on the host course for the image to even compile.
           See <xref ref="webwork-pg-macros"/>.
-        </p>
-        <p>
-          When the <webwork/> server makes one of these images for the first time,
-          it caches the image. Generally, if you then edit the image source code,
-          the <webwork/> server will not rebuild the image. So while you are developing an image,
-          you may want to put <c>$refreshCachedImages = 1;</c> into your <tag>pg-code</tag>
-          for the problem. This will force the <webwork/> server to rebuild the image.
-          <alert>Once the image is stable, remove that line from the <tag>pg-code</tag>.</alert>
-          Otherwise every time someone views the image in an embedded interactive HTML exercise,
-          the <webwork/> server will rebuild the image. Beyond the extra strain on the server,
-          this will cause a lag for your readers.
         </p>
         <p>
           See the <webwork/> sample chapter for examples.

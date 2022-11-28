@@ -566,11 +566,19 @@ def main():
     # convert list of string parameters into a dictionary
     # routines in module expect a dictionary, so convert here and now
     stringparams = string_parameters_as_dict(args.stringparams)
-    # if 'publisher' is passed as stringparam, pull it out
-    # as 'publication_file' and ensure correct slashes
-    # but do not stomp on a file passed with dedicated switch
-    if ("publisher" in stringparams) and not (publication_file):
-        publication_file = verify_input_file(stringparams["publisher"], "publisher")
+    # if 'publisher' is passed as stringparam, there could be a conflict
+    # since we also have a specification of a publisher file (exclusively)
+    # Here we follow the discouragement of using string parameters
+    # and eventually cast aside a "publisher" string parameter
+    if "publisher" in stringparams:
+        if publication_file:
+            msg = '\n'.join(["publication file specified with a string parameter as '{}',",
+                             "              but instead using additional supplied '-p' argument, '{}'"
+                             ])
+            log.info(msg.format(stringparams["publisher"], publication_file))
+        else:
+            publication_file = verify_input_file(stringparams["publisher"], "publisher")
+        # remove from  stringparams  dictionary, so no confusion
         del stringparams["publisher"]
 
     log.info("Done examining environment and initializing setup info")

@@ -2253,7 +2253,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- 47.266898N -122.596464W, then 505.3 feet to mean tideline -->
                 <p>Simple coordinates with degrees, minutes, seconds, or temperature, or distance in feet and inches.  <q>We parked the car at 36<degree/>16<prime/>0.83<dblprime/>N, 122<degree/>35<prime/>47.27<dblprime/>W, and since it was 93<degree/>F, we walked 505<prime/>3.6<dblprime/> so we could swim in the bay.</q></p>
 
-                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
+                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  A publication file entry can be set to <c>none</c> or <c>thin</c> to control this.</p>
             </subsection>
 
             <subsection>

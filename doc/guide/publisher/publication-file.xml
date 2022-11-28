@@ -110,6 +110,16 @@
             </ul></p>
         </subsection>
 
+        <subsection xml:id="common-emdash-width-options">
+            <title>Em Dash Width Options</title>
+            <idx><h>common options</h><h>fillin</h></idx>
+            <idx><h>fillin</h><h>options</h></idx>
+
+            <p>The width of spaces on either side of an em dash (the <tage>mdash</tage> element) is set with the <cd>
+                <cline>/publication/common/@emdash-space</cline>
+            </cd>attribute having values <c>none</c> (the default) or <c>thin</c>.  See <xref ref="topics-separators"/> for more explanation.</p>
+        </subsection>
+
         <subsection xml:id="common-watermark-options">
             <title>Watermarks</title>
             <idx><h>common option</h><h>watermark</h></idx>
@@ -259,6 +269,15 @@
                 <cline>/publication/latex/@draft</cline>
             </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of the <latex/> draft mode.  The default is <c>no</c>.  See <xref ref="processing-author-tools"/> for more detail.</p>
         </subsection>
+
+        <subsection xml:id="latex-snapshot-record-options">
+            <title>Snapshot Record</title>
+            <idx><h>LaTeX</h><h>snapshot</h></idx>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@snapshot</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the generation of a <q>snapshot</q> record of the LaTeX packages in use.  The default is <c>no</c>.  See <xref ref="latex-snapshot-record"/> for more detail.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-online">
@@ -308,6 +327,21 @@
                     </ul></p>
                 </li>
             </ul>The default is <c>none</c>.  See <xref ref="online-embedded-calculator"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-webwork-dynamism">
+            <title>HTML WeBWorK Dynamism</title>
+            <idx><h>WeBWorK</h><h><init>HTML</init>dynamism</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/webwork</cline>
+            </cd>element has the following attributes, each of which can have a value of <c>static</c> or <c>dynamic</c>:<ul>
+                    <li><attr>inline</attr>, default value: <c>dynamic</c></li>
+                    <li><attr>divisional</attr>, default value: <c>static</c></li>
+                    <li><attr>reading</attr>, default value: <c>static</c></li>
+                    <li><attr>worksheet</attr>, default value: <c>static</c></li>
+                    <li><attr>project</attr>, default value: <c>dynamic</c></li>
+            </ul>The attribute names suggest the type of exercise or project-like that will be affected. See <xref ref="webwork-html-output"/> for more details and the rationale for the defaults.</p>
         </subsection>
 
         <subsection xml:id="online-activecode">
@@ -519,7 +553,7 @@
             <p>The<cd>
                 <cline>/publication/html/search</cline>
             </cd>element can have the following attributes:<ul>
-                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  This is search provided natively.</li>
+                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  The default value is<ellipsis/><c>default</c>.  This is search provided natively.</li>
                 <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.  Setting this attribute to a non-empty string is the signal to add the relevant code for a search box in the masthead.</li>
             </ul>Note that if you elect both native search and Google search the two search boxes will overlay each other and one will not be usable.  See <xref ref="native-search"/> and <xref ref="google-search"/> (respectively) for more.</p>
         </subsection>
@@ -556,6 +590,20 @@
             <p>The conversion to <init>HTML</init> can provide a <q>Link to full-sized image</q> link below each Asymptote graphic.  The<cd>
                 <cline>/publication/html/asymptote/@links</cline>
             </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="html-asymptote-links"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="html-navigation-options">
+            <title>HTML Navigation Options</title>
+            <idx><h>HTML</h><h>navigation</h></idx>
+            <idx><h>navigation</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/navigation</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>logic</attr> with values <c>linear</c> (default) and <c>tree</c>.</li>
+                <li><attr>upbutton</attr> with values <c>yes</c> (default) and <c>no</c>.</li>
+                <li><attr>style</attr> with values <c>full</c> (default) and <c>compact</c>.</li>
+            </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
         </subsection>
     </section>
 

@@ -32,6 +32,16 @@
         <p>In this chapter, we describe both of these two conversions together, since they are only slightly dissimilar.</p>
     </section>
 
+    <section xml:id="traditional-publishing">
+        <title>Traditional Publishing</title>
+
+        <p>Suppose that you have engaged a publisher to help you manufacture a physical copy of your book or research article.  Publishers vary greatly in their expectations for what you provide to them.  (And maybe you are your own publisher, see <xref ref="print-on-demand"/>.)</p>
+
+        <p>If your publisher wants to run with <term>camera-ready copy</term> from you as a <init>PDF</init>, you should be in good shape.  With the print option (versus electronic, see <xref ref="electronic-or-print"/>) and a bit of effort to control widows, orphans, and figure placement, you should be able to produce something very good by yourself.</p>
+
+        <p>In mathematics, computer science, physics, or economics, a publisher might want to work from your <latex/> files, which they will assume you have written from scratch.  And they may expect to be able to swap in their house class or style file to achieve the look they want.  A <pretext/> <latex/> file will look a bit unusual, see <xref ref="latex-file"/>.  On 2022-11-22 we have a report of a very extensive <url href="https://arxiv.org/abs/2211.11671">research article</url> written in <pretext/> and uploaded to the <url href="https://arxiv.org/">arXiv</url> preprint server, where it was successfully processed by <c>pdflatex</c> on the server, with only minimal hand-edits to the intermediate <latex/> file.  We can always improve in this area, so we welcome reports, good and bad, about the robustness of our <latex/> output when delivered to publishers.</p>
+    </section>
+
     <section xml:id="print-justification">
         <title>Text Block Alignment</title>
 
@@ -186,5 +196,14 @@
 
             <p>Having said all that, you may find it necessary to manually adjust a file to control widows or orphans, or maybe the placement of a graphics file, or similar adjustments.  We view this as the final step before making a new edition, which might be a <init>PDF</init> that you submit to a print-on-demand service (<xref ref="print-on-demand"/>).  So this might be an annual exercise, at the most frequent.</p>
         </note>
+    </section>
+
+    <section xml:id="latex-snapshot-record">
+        <title>Snapshot Record</title>
+        <idx><h>LaTeX</h><h>snapshot</h></idx>
+
+        <p>We are careful about which <latex/> packages we use, trying to stick with well-established packages with active maintainers.  But it can be useful to have a record of <em>exactly</em> which packagees are in play, and better still, which versions of those packages are being used.  So you can use a publication entry to request loading the <url href="https://ctan.org/pkg/snapshot"><c>snapshot</c></url> package, which will then automatically generate such a record into a <c>&lt;job&gt;.dep</c> file.  See <xref ref="latex-snapshot-record-options"/> for details on electing this feature.</p>
+
+        <p>If you suspect some packages are not playing well with each other, this record might be helpful for debugging this (rare) situation.  It can aslo be useful if you wish to have a perfect archive of how some publication was produced.  See the package documentation for more on the format and use.</p>
     </section>
 </chapter>

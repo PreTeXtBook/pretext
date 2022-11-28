@@ -171,6 +171,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Em dash Width -->
+
+<xsl:variable name="emdash-space">
+    <xsl:variable name="default-width" select="'none'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/common/@emdash-space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/@emdash-space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/common/@emdash-space">
+            <xsl:message>PTX:WARNING: em-dash width setting in publisher file should be "none" or "thin", not "<xsl:value-of select="$publication/common/@emdash-space"/>". Proceeding with default value: "<xsl:value-of select="$default-width"/>"</xsl:message>
+            <xsl:value-of select="$default-width"/>
+        </xsl:when>
+        <!-- backwards-compatability -->
+        <xsl:when test="$emdash.space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <xsl:when test="$emdash.space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <!-- no attempt to set -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-width"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Watermarking -->
 <!-- Variables for watermark text (simple!), and a scale factor. -->
 <!-- Boolean variables for existence (one is deprecated LaTeX).  -->
@@ -1268,22 +1298,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-
-<!-- WeBWork problem representations are formed by the           -->
-<!-- pretext/pretext script communicating with a WeBWorK server. -->
+<!-- WeBWork problem representations are formed by Python routines  -->
+<!-- in the   pretext.py  module that communicates with a WeBWorK   -->
+<!-- server.  So this filename is only relevant for *consumption"   -->
+<!-- of WW representations into final output.   But we need to make -->
+<!-- sure these filenames stay in sync, creation v. consumption.    -->
+<!-- Keep this template silent, since this variable may not be      -->
+<!-- necessary, and it is only needed during consumption.           -->
 <xsl:variable name="webwork-representations-file">
-    <xsl:choose>
-        <!-- XSLT should skip the second condition below if the first is false (boosts efficiency). -->
-        <xsl:when test="$generated-directory-source != '' and $original//webwork[* or @copy or @source]">
-            <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
-        </xsl:when>
-        <xsl:when test="$publication/source/@webwork-problems">
-            <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- Only relevant if there are WW problems present. A version     -->
+    <!-- might remove all WW problems but there is no harm in this     -->
+    <!-- template since the variable created will not be used, and     -->
+    <!-- the template is silent, but for a useful deprecation warning. -->
+    <xsl:if test="$original//webwork[* or @copy or @source]">
+        <xsl:choose>
+            <!-- Note: $generated-directory-source is never empty?    -->
+            <!-- Defaults to the very old "directory.images"?         -->
+            <!-- So testing for the publication file entry is better. -->
+            <xsl:when test="$publication/source/directories/@generated">
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
+            </xsl:when>
+            <xsl:when test="$publication/source/@webwork-problems">
+                <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
+                <xsl:message>PTX:WARNING: the publication file entry  source/@webwork-problems  is</xsl:message>
+                <xsl:message>             deprecated, please move to using managed directories</xsl:message>
+            </xsl:when>
+            <!-- no specification, so empty string for filename -->
+            <!-- this will be noted where it is employed        -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:if>
 </xsl:variable>
 
 <!-- File of  custom/@name  elements, whose content is a custom -->
@@ -1877,6 +1921,174 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                       -->
+<!-- HTML WeBWorK Dynamism -->
+<!--                       -->
+
+<!-- In HTML output a WeBWorK problem may be static or dynamic.  This  -->
+<!-- is a dichotomy, so we make (historical) boolean variables, where  -->
+<!-- static = True, which get used in the HTML conversion.  But as a   -->
+<!-- publisher setting, we have allowed for possibilities beyond just  -->
+<!-- two.  Inline and project-like default to "dynamic" since they may -->
+<!-- be formative, while the others are "static" since they may be     -->
+<!-- summative.                                                        -->
+
+<xsl:variable name="webwork-inline-capability">
+    <xsl:variable name="ww-default" select="'dynamic'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@inline = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@inline = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@inline">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @inline setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@inline"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.inline.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.inline.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-inline-static" select="$webwork-inline-capability = 'static'" />
+
+<xsl:variable name="webwork-divisional-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@divisional = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@divisional = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@divisional">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @divisional setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@divisional"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.divisional.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.divisional.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-divisional-static" select="$webwork-divisional-capability = 'static'" />
+
+<xsl:variable name="webwork-reading-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@reading = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@reading = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@reading">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @reading setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@reading"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.reading.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.reading.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-reading-static" select="$webwork-reading-capability = 'static'" />
+
+<xsl:variable name="webwork-worksheet-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@worksheet = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@worksheet = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@worksheet">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @worksheet setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@worksheet"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.worksheet.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.worksheet.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-worksheet-static" select="$webwork-worksheet-capability = 'static'" />
+
+<xsl:variable name="webwork-project-capability">
+    <xsl:variable name="ww-default" select="'dynamic'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@project = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@project = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@project">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @project setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@project"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.project.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.project.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-project-static" select="$webwork-project-capability = 'static'" />
+
+
 <!--                   -->
 <!-- HTML Knowlization -->
 <!--                   -->
@@ -2462,6 +2674,105 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                 -->
+<!-- HTML Navigation -->
+<!--                 -->
+
+<!-- Navigation may follow two different logical models:                     -->
+<!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
+<!--       Previous and Next take you to the adjacent "page"                 -->
+<!--   (b) Tree, Prev/Up/Next - explicitly traverse the document tree        -->
+<!--       Prev and Next remain at same depth/level in tree                  -->
+<!--       Must follow a summary link to descend to finer subdivisions       -->
+<!--   'linear' is the default, 'tree' is an option                          -->
+<xsl:variable name="nav-logic">
+    <xsl:variable name="logic-default" select="'linear'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@logic = 'linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@logic = 'tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@logic">
+            <xsl:message>PTX:WARNING: HTML navigation logic setting in publisher file should be "linear" or "tree", not "<xsl:value-of select="$publication/html/navigation/@logic"/>". Proceeding with default value: "<xsl:value-of select="$logic-default"/>"</xsl:message>
+            <xsl:value-of select="$logic-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.logic='linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.logic='tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$logic-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The "up" button is optional given the contents sidebar, default is to have it -->
+<!-- An up button is very desirable if you use the tree-like logic                 -->
+<xsl:variable name="nav-upbutton">
+    <xsl:variable name="upbutton-default" select="'yes'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@upbutton = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@upbutton = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@upbutton">
+            <xsl:message>PTX:WARNING: HTML navigation up-button setting in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/navigation/@upbutton"/>". Proceeding with default value: "<xsl:value-of select="$upbutton-default"/>"</xsl:message>
+            <xsl:value-of select="$upbutton-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.upbutton='yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.upbutton='no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$upbutton-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- There are also "compact" versions of the navigation buttons in the top right -->
+<xsl:variable name="nav-style">
+    <xsl:variable name="style-default" select="'full'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@style = 'full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@style = 'compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@style">
+            <xsl:message>PTX:WARNING: HTML navigation style setting in publisher file should be "full" or "compact", not "<xsl:value-of select="$publication/html/navigation/@style"/>". Proceeding with default value: "<xsl:value-of select="$style-default"/>"</xsl:message>
+            <xsl:value-of select="$style-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.style='full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.style='compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$style-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!--                              -->
 <!-- HTML CSS Style Specification -->
 <!--                              -->
@@ -2737,7 +3048,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Resulting variable values are "none", "textbook", "reference" -->
 <!-- Note the boolean variable for the no-search case              -->
 <xsl:variable name="native-search-variant">
-    <xsl:variable name="default-native-search" select="'none'"/>
+    <xsl:variable name="default-native-search" select="'default'"/>
     <xsl:choose>
         <xsl:when test="$publication/html/search/@variant = 'none'">
             <xsl:text>none</xsl:text>
@@ -2918,12 +3229,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- guaranteed to be 'flush' or 'ragged'   -->
 <!-- N.B. let HTML be different/independent -->
 <xsl:variable name="latex-right-alignment">
+    <xsl:variable name="default-align" select="'flush'"/>
     <xsl:choose>
         <xsl:when test="$publication/latex/page/@right-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/latex/page/@right-alignment = 'ragged'">
             <xsl:text>ragged</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/latex/page/@right-alignment">
+            <xsl:message>PTX:WARNING: LaTeX right-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@right-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:value-of select="$default-align"/>
         </xsl:when>
         <!-- or respect deprecated stringparam in use, text.alignment -->
         <xsl:when test="$text.alignment = 'justify'">
@@ -2932,9 +3249,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$text.alignment = 'raggedright'">
             <xsl:text>ragged</xsl:text>
         </xsl:when>
-        <!-- default -->
+        <!-- no attempt at all, so default -->
         <xsl:otherwise>
-            <xsl:text>flush</xsl:text>
+            <xsl:value-of select="$default-align"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -2945,16 +3262,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://www.sascha-frank.com/page-break.html    -->
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
+    <xsl:variable name="default-align" select="'ragged'"/>
     <xsl:choose>
-        <xsl:when test="$publication/latex/page/@bottom-alignmant = 'flush'">
+        <xsl:when test="$publication/latex/page/@bottom-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
             <xsl:text>ragged</xsl:text>
         </xsl:when>
-        <!-- default -->
+        <xsl:when test="$publication/latex/page/@bottom-alignment">
+            <xsl:message>PTX:WARNING: LaTeX bottom-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@bottom-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:value-of select="$default-align"/>
+        </xsl:when>
+        <!-- no attempt at all, so default -->
         <xsl:otherwise>
-            <xsl:text>ragged</xsl:text>
+            <xsl:value-of select="$default-align"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -3220,6 +3542,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
+
+<xsl:variable name="latex-snapshot">
+    <xsl:variable name="default-snapshot" select="'no'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@snapshot = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@snapshot = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- attempt to set, but wrong -->
+        <xsl:when test="$publication/latex/@snapshot">
+            <xsl:message>PTX WARNING: LaTeX snapshot record in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@snapshot"/>". Proceeding with default value: "<xsl:value-of select="$default-snapshot"/>"</xsl:message>
+            <xsl:value-of select="$default-snapshot"/>
+        </xsl:when>
+        <!-- no attempt to set, thus default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-snapshot"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
+
+
+<!-- ########### -->
+<!-- LaTeX Fonts -->
+<!-- ########### -->
+
+<!-- 2022-11-03: experimental, subject to change -->
+
+<xsl:variable name="latex-font-main-regular">
+    <xsl:choose>
+        <!-- having a main font specification *rerquires* a @regular -->
+        <!-- TODO: put in a test here to generate a warning if no @regular -->
+        <xsl:when test="$publication/latex/fonts/main">
+            <xsl:value-of select="$publication/latex/fonts/main/@regular"/>
+        </xsl:when>
+        <!-- empty is signal there is no main font overrride -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
@@ -3508,6 +3872,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.watermark.scale" select="''"/>
 <xsl:param name="watermark.text" select="''" />
 <xsl:param name="watermark.scale" select="''" />
+
+<!-- These were yes/no string parameters.  We converted to values -->
+<!-- of "static" or "dynamic" as publisher entries on 2022-11-19. -->
+<xsl:param name="webwork.inline.static" select="''" />
+<xsl:param name="webwork.divisional.static" select="''" />
+<xsl:param name="webwork.reading.static" select="''" />
+<xsl:param name="webwork.worksheet.static" select="''" />
+<xsl:param name="webwork.project.static" select="''" />
+
+<!-- Navigation options move to the publisher file on 2022-11-20. -->
+<xsl:param name="html.navigation.logic"  select="''"/>
+<xsl:param name="html.navigation.upbutton"  select="''"/>
+<xsl:param name="html.navigation.style"  select="''"/>
+
+<!-- Publisher option to surround emdash, deprecated 2022-11-20 -->
+<xsl:param name="emdash.space" select="''" />
+
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->

@@ -303,6 +303,18 @@
                 </conclusion>
             </exercise>
 
+            <project>
+                <title>Inside a <tag>project</tag></title>
+                <introduction>
+                    <p>
+                        If you like, you can have a <webwork/> inside a PROJECT-LIKE block.
+                        Just like with an <tag>exercise</tag>, it can be preceded with an optional <tag>introduction</tag>
+                        and followed by an optional <tag>conclusion</tag>.
+                    </p>
+                </introduction>
+                <webwork copy="webwork-add-numbers" seed="511"/>
+            </project>
+
         </section>
 
         <section xml:id="section-the-quadratic-formula">
@@ -1482,7 +1494,7 @@
                         <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer1" width="15" category="integer"/></p>
                                     </li>
@@ -1490,7 +1502,7 @@
                             </li>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer2" width="15" category="formula"/></p>
                                     </li>
@@ -1524,7 +1536,7 @@
                         <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer1" width="15" category="formula"/></p>
                                     </li>
@@ -1532,7 +1544,7 @@
                             </li>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer2" width="15" evaluator="$answer2evaluator" category="formula"/></p>
                                     </li>
@@ -1771,7 +1783,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p><ol label="A">
+                                <p><ol marker="A">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1793,7 +1805,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="i">
+                                <p>Text before.<ol marker="i">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1816,7 +1828,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p><ol label="I">
+                                <p><ol marker="I">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1843,7 +1855,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="1">
+                                <p>Text before.<ol marker="1">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1870,7 +1882,7 @@
                                 <p>Second<me>1+1=2</me> paragraph</p>
                             </li>
                             <li>
-                                <p><ol label="a">
+                                <p><ol marker="a">
                                     <li>
                                         <p>Sublist<me>1+1=2</me> Item</p>
                                         <p>Second paragraph<me>1+1=2</me></p>
@@ -1897,7 +1909,7 @@
                                 <p>Second paragraph<me>1+1=2</me></p>
                             </li>
                             <li>
-                                <p><me>1+1=2</me>Text before.<ol label="A">
+                                <p><me>1+1=2</me>Text before.<ol marker="A">
                                     <li>
                                         <p>Sublist<me>1+1=2</me> Item</p>
                                         <p>Second paragraph<me>1+1=2</me></p>
@@ -1933,7 +1945,7 @@
                                 <p><md>
                                     <mrow>1+1\amp=2</mrow>
                                     <mrow>2\amp=2</mrow>
-                                </md>Text before.<ol label="i">
+                                </md>Text before.<ol marker="i">
                                     <li>
                                         <p>Sublist<md>
                                             <mrow>1+1\amp=2</mrow>
@@ -2403,46 +2415,9 @@
             <title>Deprecations</title>
 
             <p>
-                This section is for testing if deprecated features are still supported
+                This section is for testing if deprecated features are still supported.
+                No such tests are being performed now.
             </p>
-
-            <exercise>
-                <introduction>
-                    <p>
-                        Once upon a time a <tab>latex-image</tab> inside a <tab>webwork</tab>
-                        needed to have an <attr>syntax</attr> attribute with value <c>PGtikz</c>.
-                        This exercise is here to test that we can still honor such exercises in a project's source.
-                    </p>
-                </introduction>
-                <webwork>
-                    <pg-code>
-                        @roots = (-3..3)[NchooseK(7,3)];
-                        @roots = num_sort(@roots);
-                        $answer = List(@roots);
-                        $xmin = min(-1,@roots)-1;
-                        $xmax = max(1,@roots)+1;
-                    </pg-code>
-                    <statement>
-                        <p>
-                            What are the roots of this polynomial?
-                        </p>
-                        <image width="50%">
-                            <description>
-                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
-                                <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
-                            </description>
-                            <latex-image syntax="PGtikz">
-                                \begin{axis}
-                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
-                                \end{axis}
-                            </latex-image>
-                        </image>
-                        <p>
-                            <var name="$answer" width="20"/>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
         </section>
 
         <backmatter>

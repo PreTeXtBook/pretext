@@ -79,12 +79,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- Pointers to realizations of the actual document -->
-<xsl:param name="address.html" select="''" />
-<xsl:param name="address.pdf" select="''" />
-<!-- Publisher option to surround emdash -->
-<!-- Default is none, option is thin     -->
-<xsl:param name="emdash.space" select="''" />
 <!-- Publisher option to include "commentary" -->
 <!-- Default will be "no"                     -->
 <xsl:param name="commentary" select="''" />
@@ -273,33 +267,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historically false -->
 <xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
-<!-- Document may exist in a variety of formats in  -->
-<!-- various locations.  These parameters can be    -->
-<!-- hard-coded in the docinfo and/or specified on  -->
-<!-- the command line. Command line takes priority. -->
-<!-- TODO: More formats could be implemented.       -->
-<xsl:variable name="address-html">
-    <xsl:choose>
-        <xsl:when test="not($address.html = '')">
-            <xsl:value-of select="$address.html" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$docinfo/address/html" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="address-pdf">
-    <xsl:choose>
-        <xsl:when test="not($address.pdf = '')">
-            <xsl:value-of select="$address.pdf" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$docinfo/address/pdf" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- File extensions can be set globally for a conversion, -->
 <!-- we set it here to something outlandish                -->
 <!-- This should be overridden in an importing stylesheet  -->
@@ -347,24 +314,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<xsl:variable name="emdash-space">
-    <xsl:choose>
-        <xsl:when test="$emdash.space = ''">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:when test="$emdash.space = 'thin'">
-            <xsl:text>thin</xsl:text>
-        </xsl:when>
-        <xsl:when test="$emdash.space = 'none'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR:   Option for "emdash.space" should be "none" or "thin", not "<xsl:value-of select="$emdash.space" />".  Assuming the default, "none".</xsl:message>
-            <xsl:text>none</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->
@@ -389,22 +338,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:variable name="b-commentary" select="$input-commentary = 'yes'" />
-
-<!-- Text alignment options -->
-<xsl:variable name="text-alignment">
-    <xsl:choose>
-        <xsl:when test="($text.alignment = '') or ($text.alignment = 'justify')">
-            <xsl:text>justify</xsl:text>
-        </xsl:when>
-        <xsl:when test="$text.alignment = 'raggedright'">
-            <xsl:text>raggedright</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>justify</xsl:text>
-            <xsl:message>PTX:WARNING: the "text.alignment" stringparam should be "justify" or "raggedright", not "<xsl:value-of select="$text.alignment"/>", so assuming "justify"</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- To forward-reference solutions to exercises, we need       -->
 <!-- to know which ones atually have solutions in place later.  -->
@@ -10929,6 +10862,69 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2022-10-24'" />
         <xsl:with-param name="message" select="'the  watermark.scale  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
             <xsl:with-param name="incorrect-use" select="($watermark.scale != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.inline.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.inline.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.inline.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.divisional.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.divisional.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.divisional.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.reading.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.reading.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.reading.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.worksheet.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.worksheet.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.worksheet.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.project.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.project.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.project.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.logic  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.logic  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.logic != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.upbutton  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.upbutton  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.upbutton != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.style  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.style  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.style != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  emdash.space deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  emdash.space  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($emdash.space != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

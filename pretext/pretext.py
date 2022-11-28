@@ -910,12 +910,9 @@ def webwork_to_xml(
     log.info(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
-    effective_pub_file = (
-        stringparams["publisher"] if "publisher" in stringparams else pub_file
-    )
 
     # Either we have a "generated" directory, or we must assume placing everything in dest_dir
-    generated_dir, _ = get_managed_directories(xml_source, effective_pub_file)
+    generated_dir, _ = get_managed_directories(xml_source, pub_file)
     if generated_dir:
         ww_reps_dir = os.path.join(generated_dir, "webwork")
         ww_images_dir = os.path.join(ww_reps_dir, "images")
@@ -941,6 +938,9 @@ def webwork_to_xml(
     # where the keys are the internal-ids for the problems
     # origin, copy, seed, source, pghuman, pgdense
     # also get the localization as a string
+    # The XSL gets the problems in document order, and the
+    # Python dictionaries (v3.5+?) will maintain the order
+    # in which the problems are added, which aids in debugging
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-pg.xsl")
 
@@ -1079,7 +1079,7 @@ def webwork_to_xml(
     XML = "http://www.w3.org/XML/1998/namespace"
     webwork_representations = ET.Element("webwork-representations", nsmap=NSMAP)
     # Choose one of the dictionaries to take its keys as what to loop through
-    for problem in sorted(origin):
+    for problem in origin:
 
         # It is more convenient to identify server problems by file path,
         # and PTX problems by internal ID

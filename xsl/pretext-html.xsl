@@ -107,6 +107,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.: if the CSS has a version bump, then be sure to    -->
 <!-- visit the "css" directory and make an update there      -->
 <!-- for the benefit of offline formats                      -->
+<!-- N.B. leave this as parameters.  A developer of a        -->
+<!-- comprehensive approach to new JS and CSS may qwant to   -->
+<!-- point to a totally different server (rather than other  -->
+<!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.6'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
@@ -115,21 +119,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
 <xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
-
-<!-- Navigation -->
-<!-- Navigation may follow two different logical models:                     -->
-<!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
-<!--       Previous and Next take you to the adjacent "page"                 -->
-<!--   (b) Tree, Prev/Up/Next - explicitly traverse the document tree        -->
-<!--       Prev and Next remain at same depth/level in tree                  -->
-<!--       Must follow a summary link to descend to finer subdivisions       -->
-<!--   'linear' is the default, 'tree' is an option                          -->
-<xsl:param name="html.navigation.logic"  select="'linear'" />
-<!-- The "up" button is optional given the contents sidebar, default is to have it -->
-<!-- An up button is very desirable if you use the tree-like logic                 -->
-<xsl:param name="html.navigation.upbutton"  select="'yes'" />
-<!-- There are also "compact" versions of the navigation buttons in the top right -->
-<xsl:param name="html.navigation.style"  select="'full'" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -174,53 +163,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: HTML chunk level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- Local versions of navigation options -->
-<!-- Fatal errors if not recognized       -->
-<xsl:variable name="nav-logic">
-    <xsl:choose>
-        <xsl:when test="$html.navigation.logic='linear'">
-            <xsl:text>linear</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.logic='tree'">
-            <xsl:text>tree</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>linear</xsl:text>
-            <xsl:message>PTX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Using the default instead ('linear').</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="nav-upbutton">
-    <xsl:choose>
-        <xsl:when test="$html.navigation.upbutton='yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.upbutton='no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-            <xsl:message>PTX:ERROR: 'html.navigation.upbutton' must be 'yes' or 'no', not '<xsl:value-of select="$html.navigation.upbutton" />.'  Using the default instead ('yes').</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="nav-style">
-    <xsl:choose>
-        <xsl:when test="$html.navigation.style='full'">
-            <xsl:text>full</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.style='compact'">
-            <xsl:text>compact</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>full</xsl:text>
-            <xsl:message>PTX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Using the default instead ('full').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -277,29 +219,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK  -->
 <!-- ######## -->
 
-<!-- WeBWorK exercise may be rendered static="yes" or static="no" makes  -->
-<!-- an interactive problem. Also in play here are params from -common:  -->
-<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
-<!-- For a divisional exercise, when static="no", that is an intentional -->
-<!-- decision to show the live problem, which means the statement will   -->
-<!-- be shown, regardless of exercise.text.statement. For webwork-reps   -->
-<!-- version 2 (WW 2.16 and later), we respect the values for            -->
-<!-- exercise.text.hint, exercise.text.answer, exercise.text.solution.   -->
-<!-- For version 1, if the problem was authored in PTX source, we can    -->
-<!-- respect the values for exercise.text.hint, exercise.text.solution.  -->
-<!-- When the problem is static, we can respect exercise.text.answer.    -->
-<!-- When the problem is live, we cannot stop the user from seeing the   -->
-<!-- answers. And if the problem source is on the webwork server, then   -->
-<!-- hints and solutions will show  no matter what.                      -->
-<xsl:param name="webwork.inline.static" select="'no'" />
-<xsl:param name="webwork.divisional.static" select="'yes'" />
-<xsl:param name="webwork.reading.static" select="'yes'" />
-<xsl:param name="webwork.worksheet.static" select="'yes'" />
-<!-- We make variables instead of using the params directly, so that in EPUB we can overrule -->
-<xsl:variable name="b-webwork-inline-static" select="$webwork.inline.static = 'yes'" />
-<xsl:variable name="b-webwork-divisional-static" select="$webwork.divisional.static = 'yes'" />
-<xsl:variable name="b-webwork-reading-static" select="$webwork.reading.static = 'yes'" />
-<xsl:variable name="b-webwork-worksheet-static" select="$webwork.worksheet.static = 'yes'" />
+<!-- We mine some values from the first "WW representation" to have been -->
+<!-- inserted into the source by the pre-processor ("assembly") when     -->
+<!-- making dynamic exercises.                                           -->
 
 <xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
 <xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>
@@ -4267,6 +4189,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="block-type"/>
 
     <xsl:choose>
+        <!-- webwork case -->
+        <xsl:when test="webwork-reps">
+            <xsl:apply-templates select="introduction|webwork-reps|conclusion">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:when>
         <xsl:when test="task">
             <xsl:apply-templates select="introduction|task|conclusion">
                 <xsl:with-param name="b-original" select="$b-original"/>
@@ -7961,11 +7889,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
                             <xsl:text>px;</xsl:text>
                         </xsl:when>
-                        <!-- If there is no $left-col/@width, terminate -->
+                        <!-- If there is no $left-col/@width, use 20% as default -->
                         <xsl:otherwise>
-                            <xsl:message>PTX:FATAL:   cell with a "p" element has no corresponding col element with width attribute.</xsl:message>
+                            <xsl:message>PTX:ERROR:   cell with p has no corresponding col with @width, using 20% as default</xsl:message>
                             <xsl:apply-templates select="." mode="location-report" />
-                            <xsl:message terminate="yes">Quitting...</xsl:message>
+                            <xsl:value-of select="$design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
@@ -10389,22 +10317,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- what is born visible under control of a switch -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
-    <xsl:variable name="b-has-hint" select="(ancestor::exercises and $b-has-divisional-hint) or
+    <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
+                                            (ancestor::exercises and $b-has-divisional-hint) or
                                             (ancestor::reading-questions and $b-has-reading-hint) or
                                             (ancestor::worksheet and $b-has-worksheet-hint) or
-                                            (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
-    <xsl:variable name="b-has-answer" select="(ancestor::exercises and $b-has-divisional-answer) or
+                                            (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-answer) or
+                                              (ancestor::exercises and $b-has-divisional-answer) or
                                               (ancestor::reading-questions and $b-has-reading-answer) or
                                               (ancestor::worksheet and $b-has-worksheet-answer) or
-                                              (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
-    <xsl:variable name="b-has-solution" select="(ancestor::exercises and $b-has-divisional-solution) or
+                                              (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-solution) or
+                                                (ancestor::exercises and $b-has-divisional-solution) or
                                                 (ancestor::reading-questions and $b-has-reading-solution) or
                                                 (ancestor::worksheet and $b-has-worksheet-solution) or
-                                                (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
-    <xsl:variable name="b-static" select="(ancestor::exercises and $b-webwork-divisional-static) or
+                                                (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:variable name="b-static" select="(ancestor::*[&PROJECT-FILTER;] and $b-webwork-project-static) or
+                                          (ancestor::exercises and $b-webwork-divisional-static) or
                                           (ancestor::reading-questions and $b-webwork-reading-static) or
                                           (ancestor::worksheet and $b-webwork-worksheet-static) or
-                                          (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-webwork-inline-static)"/>
+                                          (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-webwork-inline-static)"/>
     <xsl:choose>
         <!-- We print the static version when that is explicitly directed. -->
         <xsl:when test="($b-static = 'yes')">

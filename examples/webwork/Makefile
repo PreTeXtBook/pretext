@@ -154,7 +154,7 @@ sample-chapter-html:
 	$(PTX)/pretext/pretext -c latex-image -f svg -p $(SMPCPUB) $(SMPC)
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
-	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x webwork.divisional.static no debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
 
 mini-html:
 	-rm -r $(HTMLOUT)

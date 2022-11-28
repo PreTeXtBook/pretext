@@ -276,5 +276,15 @@
 
           <p>See <xref ref="sage-cell-design"/> for an explanation.</p>
         </li>
+
+        <li>
+          <title>Processing my project takes a long time.  Can I <q>comment out</q> some parts?</title>
+
+          <p>First, we know some aspects of processing are inefficient and therefore slow for large projects.  We <em>are</em> working on it.</p>
+
+          <p>Your <pretext/> source is not a program, nor is it <latex/>, which can also be a program.  So the idea of <q>commenting out</q> code, or mimicking conditional use of <latex/>'s <c>\include{}</c> command, are injurious to your <pretext/> source.  Processing expects to see <em>all</em> of it.  Some aspects of producing output demand it.</p>
+
+          <p>We have the notion of a <term>version</term> which can eliminate some (large) portions of your source in controlled ways (see <xref ref="publisher-versions"/>).  Processing tools, such as the <pretext/>-CLI and the <c>pretext/pretext</c> Python script support the notion of restricting some processing to a subtree of your source, without <em>hiding</em> parts of your source from the processor.  See <xref ref="restrict-pretext-scope"/> for how to do this with the <c>pretext/pretext</c> Python script.</p>
+        </li>
     </ol></p>
 </chapter>
