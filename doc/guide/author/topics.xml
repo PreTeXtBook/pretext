@@ -2040,6 +2040,26 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>As of 2022-06-14 work is underway to relax the strict ordering assumed of the blocks.  So there will be extra markup to specify a poset or directed acyclic graph on the blocks.</p>
         </subsection>
 
+        <subsection xml:id="horizontal-parsons-problems">
+            <title>Horizontal Parsons Problems</title>
+            <idx><h>Parsons problems</h><h>horizontal</h></idx>
+            <idx><h>interactive exercises</h><h>horizontal Parsons problems</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>horizontal Parsons problems</h></idx>
+            <idx><h>mixed-up blocks exercises</h><h>horizontal</h></idx>
+            <idx><h>interactive exercises</h><h>horizontal mixed-up blocks</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>horizontal mixed-up blocks</h></idx>
+
+            <p>A <term>horizontal Parsons problem</term> is very similar to the traditional <em>vertical</em> problems just described in <xref ref="parsons-problems"/>.  Except they are horizontal.  Which means the blocks are very short (a word or symbol) and they are rearranged by the reader to form a horizontal bit of text.  They are ideal for constructing a single line of computer code, such as a regular expression, or a short sentence.  While similar, they have a few features which are different.</p>
+
+            <p>To indicate a horizontal problem, set the <attr>layout</attr> attribute on the <tag>blocks</tag> element to the value <c>horizontal</c>.  The default value is <c>vertical</c> and so is not necessary for the traditional versions.</p>
+
+            <p>The syntax for blocks is the same, and they are authored in an order that yields a correct answer.  The use of an <attr>order</attr> attribute on each <tag>block</tag> indicates a rearrangment to be used for a static version.  Blocks may be reused.  To do this, place an <attr>xml:id</attr> on a single instance of a block to be reused.  Then, to indicate its reuse as part of a correct version, use a <attr>ref</attr> attribute on a <tag>block</tag>.  Since the duplicate instance is not shown to the reader, the use of <attr>order</attr> and <attr>ref</attr> is mutually-exclusive.  You can set the <attr>reuse</attr> attribute on the <attr>blocks</attr> element to the value <c>yes</c> to force the interface to allow the reader to reuse blocks, even if there is no duplication in the correct version.  Otherwise, the interface reacts to the presence or absence of blocks with the <attr>ref</attr> attribute.</p>
+
+            <p>Another option on the <attr>blocks</attr> element is the <attr>randomize</attr> attribute.  The default value is <c>yes</c>.  When the value is set to <c>no</c>, then the blocks are always presented to the reader in the same order, which is the one given by the <attr>order</attr> attribute.</p>
+
+            <p>As of 2022-11-28, the implemenation of these problems assumes that the blocks rearrange to be computer code.  So you <em>can</em> set the <attr>language</attr> attribute on the <tag>exercise</tag> element to <c>natural</c>, but it will not have much effect.  Markup like <tag>em</tag> on the text of a block will be unpredictable, as will attempts to use mathematics.  And the text of blocks will always be in a monospaced font, perhaps with some syntax highlighting if <attr>language</attr> is set properly.</p>
+        </subsection>
+
         <subsection xml:id="matching-exercises">
             <title>Matching Exercises</title>
             <idx>matching exercises</idx>
