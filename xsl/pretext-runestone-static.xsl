@@ -456,6 +456,68 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Parson (Horizontal) -->
+
+<xsl:template match="*[@exercise-interactive = 'parson-horizontal']" mode="runestone-to-static">
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
+    <!-- Statement -->
+    <statement>
+        <xsl:copy-of select="statement/node()"/>
+        <!-- programming language version -->
+        <p>
+            <cd>
+                <cline>
+                    <!-- hard to tell which is last once sorted, -->
+                    <!-- so we just mark front *and* end         -->
+                    <xsl:text> | </xsl:text>
+                    <xsl:for-each select="blocks/block[@order]">
+                        <xsl:sort select="@order"/>
+                        <xsl:apply-templates select="." mode="static-horizontal-block"/>
+                        <xsl:text> | </xsl:text>
+                    </xsl:for-each>
+                </cline>
+            </cd>
+        </p>
+    </statement>
+    <!-- We provide a complete solution below, -->
+    <!-- so no automatic hint or answer        -->
+    <xsl:copy-of select="hint"/>
+    <xsl:copy-of select="answer"/>
+    <!-- Any authored solutions, not derived from problem formulation. -->
+    <!-- *Before* automatic ones, so numbering matches interactive     -->
+    <!-- versions on authored ones.                                   -->
+    <xsl:copy-of select="solution"/>
+    <solution>
+        <!-- programming language version -->
+        <p>
+            <cd>
+                <cline>
+                    <!-- authored in order, but need to follow @ref -->
+                    <xsl:for-each select="blocks/block">
+                        <xsl:apply-templates select="." mode="static-horizontal-block"/>
+                        <xsl:if test="following-sibling::block">
+                            <xsl:text> </xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                </cline>
+            </cd>
+        </p>
+    </solution>
+</xsl:template>
+
+<xsl:template match="blocks/block" mode="static-horizontal-block">
+    <xsl:choose>
+        <!-- follow @ref, copy children -->
+        <xsl:when test="@ref">
+            <xsl:copy-of select="id(@ref)/node()"/>
+        </xsl:when>
+        <!-- otherwisr duplicate children -->
+        <xsl:otherwise>
+            <xsl:copy-of select="node()"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Matching Problems -->
 
 <xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-static">
