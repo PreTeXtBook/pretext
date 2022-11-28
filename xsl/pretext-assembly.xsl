@@ -1453,8 +1453,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and choices">
                 <xsl:text>multiplechoice</xsl:text>
             </xsl:when>
-            <xsl:when test="statement and blocks">
+            <!-- vertical is default/traditional -->
+            <xsl:when test="statement and blocks and not(blocks/@layout = 'horizontal')">
                 <xsl:text>parson</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and blocks and (blocks/@layout = 'horizontal')">
+                <xsl:text>parson-horizontal</xsl:text>
             </xsl:when>
             <xsl:when test="statement and matches">
                 <xsl:text>matching</xsl:text>
@@ -1548,6 +1552,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1557,6 +1562,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                       project[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1566,6 +1572,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                      activity[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1575,6 +1582,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   exploration[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1584,6 +1592,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 investigation[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1593,6 +1602,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                          task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or

@@ -654,6 +654,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every True/False "exercise"                  -->
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
+<!--   - every horizontal Parsons problem "exercise"  -->
 <!--   - every matching problem "exercise"            -->
 <!--   - every clickable area problem "exercise"      -->
 <!--   - every "exercise" with fill-in blanks         -->
@@ -663,6 +664,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -672,6 +674,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                       project[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -681,6 +684,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                      activity[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -691,6 +695,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
@@ -699,6 +704,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 investigation[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -708,6 +714,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                          task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1006,7 +1013,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:choose>
                     </xsl:attribute>
                     <!-- the blocks -->
-                    <xsl:apply-templates select="blocks/block">
+                    <xsl:apply-templates select="blocks/block" mode="vertical-blocks">
                         <xsl:with-param name="b-natural" select="$b-natural"/>
                     </xsl:apply-templates>
                 </pre>
@@ -1015,7 +1022,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<xsl:template match="blocks/block">
+<xsl:template match="blocks/block" mode="vertical-blocks">
     <xsl:param name="b-natural"/>
 
     <xsl:choose>
