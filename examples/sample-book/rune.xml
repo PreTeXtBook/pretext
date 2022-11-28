@@ -477,10 +477,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
-    <exercises xml:id="interactive-exercises">
-        <title>Interactive Exercises</title>
-
-        <p>A sample of interactive problem types.</p>
+    <exercises xml:id="true-false-exercises">
+        <title>True/False Exercises</title>
 
         <exercise label="vector-space-dimension">
             <title>True/False</title>
@@ -495,6 +493,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
             </hint>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="multiple-choice-exercises">
+        <title>Multiple Choice Exercises</title>
 
         <exercise label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
@@ -715,6 +717,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>You can take a derivative on any one of the choices to see if it is correct or not, rather than using techniques of integration to find <em>a single</em> correct answer.</p>
             </hint>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="horizontal-parsons-exercises">
+        <title>Horizontal Parsons Exercises</title>
 
         <exercise label="horizontal-parson-sql-statement-simple" language="sql">
             <title>Parsons Problem, SQL statement</title>
@@ -791,6 +797,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <block order="3">test</block>
             </blocks>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="parsons-exercises">
+        <title>Parsons Exercises</title>
 
         <exercise label="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
@@ -995,6 +1005,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </block>
             </blocks>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="matching-exercises">
+        <title>Matching Exercises</title>
 
         <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
         <exercise label="matching-dates">
@@ -1078,6 +1092,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>For openers, a basis for a subspace must be a <em>subset</em> of the subspace.</p>
             </hint>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="clickable-area-exercises">
+        <title>Clickable Area Exercises</title>
 
         <exercise label="clickable-text">
             <title>Clickable Areas, <q>Regular</q> Text</title>
@@ -1162,6 +1180,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
             </feedback>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="short-answer-exercises">
+        <title>Short Answer Exercises</title>
 
         <exercise label="short-answer-question">
             <title>Short Answer</title>
@@ -1171,6 +1193,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </statement>
             <response/>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="fill-in--exercises">
+        <title>Fill-In Exercises</title>
 
         <exercise label="fillin-integer">
             <title>Fill-In, Integer Answer</title>
@@ -1275,7 +1301,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </var>
             </setup>
         </exercise>
-
     </exercises>
 
     <section xml:id="exercises-timed">
