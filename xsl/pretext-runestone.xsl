@@ -1088,6 +1088,198 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Parsons Problem (Horizontal)-->
+
+<xsl:template  match="exercise[@exercise-interactive = 'parson-horizontal']" mode="runestone-to-interactive">
+    <!-- determine these options before context switches -->
+    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <!-- randomize by default, so must explicitly turn off -->
+    <xsl:variable name="b-randomize" select="not(blocks/@randomize = 'no')"/>
+    <!-- A @ref is automatic indicator, else reuse has been requested on blocks -->
+    <xsl:variable name="b-reuse" select="blocks/block[@ref] or (blocks/@reuse = 'yes')"/>
+    <!-- We loop over blocks, as authored, so this is just a convenience -->
+    <xsl:variable name="authored-blocks" select="blocks/block"/>
+    <!-- A block with @ref indicates reuse of some other block, for answer         -->
+    <!-- specifications we want to treat them as duplicates.  And we do not        -->
+    <!-- write them into the HTML either.  So we make a subset of *unique* blocks. -->
+    <xsl:variable name="unique-blocks" select="blocks/block[not(@ref)]"/>
+
+     <div class="ptx-runestone-container">
+        <div class="runestone" style="max-width: none;">
+            <div data-component="hparsons" class="hparsons_section">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <div class="hp_question col-md-12">
+                    <!-- the prompt -->
+                    <xsl:apply-templates select="statement"/>
+                </div>
+                <!-- empty div seems necessary? -->
+                <div class="hparsons"/>
+                <textarea style="visibility: hidden">
+                    <!-- A SQL database can be provided for automated  -->
+                    <!-- testing of correct answers via unit tests.    -->
+                    <!-- This is a location in the external directory. -->
+                    <!-- NB: sample had paths with a leading backslash -->
+                    <xsl:if test="@database">
+                        <xsl:attribute name="data-dburl">
+                            <xsl:choose>
+                                <xsl:when test="$b-managed-directories">
+                                    <xsl:value-of select="$external-directory"/>
+                                    <xsl:value-of select="@database"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="@database"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <!-- for natural language, just skip attribute -->
+                    <xsl:if test="not($b-natural)">
+                        <xsl:attribute name="data-language">
+                            <xsl:value-of select="@language"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <!-- default is to randomize, so only set -->
+                    <!-- to "false" when explicitly requested -->
+                    <xsl:attribute name="data-randomize">
+                        <xsl:choose>
+                            <xsl:when test="$b-randomize">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>false</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <!-- default is to not allow reuse, so only  -->
+                    <!-- set to "true" when explicitly requested -->
+                    <xsl:attribute name="data-reuse">
+                        <xsl:choose>
+                            <xsl:when test="$b-reuse">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>false</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <!-- the @blockanswer attribute is a space-separated  -->
+                    <!-- list of the block numbers, *in the order listed  -->
+                    <!-- in the HTML* (see below), starting at zero, that -->
+                    <!-- consitutes a correct answer.  But the authored   -->
+                    <!-- order is the corrrect answer, so we loop over    -->
+                    <!-- those blocks as we determine positioos/locations -->
+                    <!-- in the HTML list.                                -->
+                    <xsl:variable name="blockanswer">
+                        <!-- answer is list as long as authored blocks, -->
+                        <!-- so loop over authored in every case        -->
+                        <xsl:for-each select="$authored-blocks">
+                            <!-- save off the block in question before context shifts below -->
+                            <xsl:variable name="the-block" select="."/>
+                            <xsl:choose>
+                                <!-- For the randomized case the answer is list of       -->
+                                <!-- non-negative integers in order, but interrupted     -->
+                                <!-- by duplicates authored as references as references. -->
+                                <xsl:when test="$b-randomize">
+                                    <xsl:choose>
+                                        <!-- placeholder/pointer/resuse, locate origin -->
+                                        <xsl:when test="@ref">
+                                            <xsl:variable name="target" select="id(@ref)"/>
+                                            <!-- error-check $target here? -->
+                                            <xsl:for-each select="$unique-blocks">
+                                                <xsl:if test="count(.|$target) = 1">
+                                                    <xsl:value-of select="position() - 1"/>
+                                                </xsl:if>
+                                            </xsl:for-each>
+                                        </xsl:when>
+                                        <!-- "original" block, count place among originals -->
+                                        <xsl:otherwise>
+                                            <xsl:for-each select="$unique-blocks">
+                                                <xsl:if test="count(.|$the-block) = 1">
+                                                    <xsl:value-of select="position() - 1"/>
+                                                </xsl:if>
+                                            </xsl:for-each>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:when>
+                                <!-- For the fixed rearrangement case, the blocks are    -->
+                                <!-- rearranged in the HTML, so we re-create that        -->
+                                <!-- order when determining the location/number of any   -->
+                                <!-- given block.  The "choose" stanza here is identical -->
+                                <!-- to the above, except the unique blocks are sorted   -->
+                                <!-- into their HTML order.  (Can't see how to vary an   -->
+                                <!-- unsorted list versus a sorted list as a parameter   -->
+                                <!-- to remove duplication.)                             -->
+                                <xsl:otherwise>
+                                    <xsl:choose>
+                                        <!-- placeholder/pointer/resuse, locate origin -->
+                                        <xsl:when test="@ref">
+                                            <xsl:variable name="target" select="id(@ref)"/>
+                                            <!-- error-check $target here? -->
+                                            <xsl:for-each select="$unique-blocks">
+                                                <xsl:sort select="@order"/>
+                                                <xsl:if test="count(.|$target) = 1">
+                                                    <xsl:value-of select="position() - 1"/>
+                                                </xsl:if>
+                                            </xsl:for-each>
+                                        </xsl:when>
+                                        <!-- "original" block, count place among originals -->
+                                        <xsl:otherwise>
+                                            <xsl:for-each select="$unique-blocks">
+                                                <xsl:sort select="@order"/>
+                                                <xsl:if test="count(.|$the-block) = 1">
+                                                    <xsl:value-of select="position() - 1"/>
+                                                </xsl:if>
+                                            </xsl:for-each>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <!-- space-separated list, per block, one extra -->
+                            <xsl:text> </xsl:text>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <!-- strip an extra space separator created just above -->
+                    <xsl:attribute name="data-blockanswer">
+                        <xsl:value-of select="substring($blockanswer, 1, string-length($blockanswer) - 1)"/>
+                    </xsl:attribute>
+                    <!-- blocks themselves, left justified on margin -->
+                    <!-- resued blocks are not presented             -->
+                    <!-- leading newline is just cosmetic            -->
+                    <xsl:text>&#xa;--blocks--&#xa;</xsl:text>
+                    <xsl:choose>
+                        <!-- just go with authored order as canonical -->
+                        <xsl:when test="$b-randomize">
+                            <xsl:apply-templates select="$unique-blocks" mode="horizontal-blocks"/>
+                        </xsl:when>
+                        <!-- sort by the order provided  by author -->
+                        <xsl:otherwise>
+                            <xsl:for-each select="$unique-blocks">
+                                <xsl:sort select="@order"/>
+                                <xsl:apply-templates select="." mode="horizontal-blocks"/>
+                            </xsl:for-each>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <!-- a block of unit tests for automatic feedback (with, say, an SQL database) -->
+                    <xsl:if test="tests">
+                        <xsl:text>--unittest--&#xa;</xsl:text>
+                        <xsl:call-template name="sanitize-text">
+                            <xsl:with-param name="text" select="tests" />
+                        </xsl:call-template>
+                    </xsl:if>
+                </textarea>
+            </div>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- Assumes a "tight" run of text, or a "c", no newlines authored. -->
+<!-- Non-reused block.  Perhaps text should be massaged here?       -->
+<!-- We do not ever dump duplicates into HTML or to the reader      -->
+<xsl:template match="blocks/block[not(@ref)]" mode="horizontal-blocks">
+    <xsl:apply-templates select="."/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Matching Problem -->
 
 <xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
