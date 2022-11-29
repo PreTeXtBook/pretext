@@ -246,14 +246,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-
-<!-- Unnumbered, chapter-level headings, just title text -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
-    <span class="title">
-        <xsl:apply-templates select="." mode="title-full" />
-    </span>
-</xsl:template>
-
 <!-- We override the "section-heading" template to place classes  -->
 <!--                                                              -->
 <!--     fullpage centerpage center cell5 cell7                   -->
@@ -261,7 +253,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- onto the heading so liblouis can style it properly           -->
 <!-- This is greatly simplified, "hX" elements just become "div", -->
 <!-- which is all we need for the  liblouis  semantic action file -->
-
 
 <xsl:template match="*" mode="section-heading">
     <div>
@@ -272,73 +263,112 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Verbatim from -html conversion read about it there -->
-<xsl:template match="book|article" mode="section-heading" />
-<!-- Slideshow is similar, but not present in the -html stylesheet -->
-<xsl:template match="slideshow" mode="section-heading" />
+<!-- Verbatim from -html conversion for book, article, so read -->
+<!-- about it there.  Slideshow doesn't get a heading either.  -->
+<xsl:template match="book|article|slideshow" mode="section-heading" />
 
-<!-- Default is indeterminate (seacrch while debugging) -->
+<!-- Unnumbered, chapter-level headings, just title text -->
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- Heading Classes -->
+
+<!-- Default is indeterminate (search while debugging) -->
 <xsl:template match="*" mode="division-class">
     <xsl:text>none</xsl:text>
 </xsl:template>
 
 <!-- Part is more like a title page -->
 <xsl:template match="part" mode="division-class">
-    <xsl:text>fullpage</xsl:text>
+    <xsl:call-template name="division-class-part-like"/>
 </xsl:template>
 
 <!-- Chapters headings are always centered -->
-<xsl:template match="chapter" mode="division-class">
-    <xsl:text>centerpage</xsl:text>
+<xsl:template match="chapter|appendix" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
 </xsl:template>
 
 <!-- Chapter-level headings are always centered -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="division-class">
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|backmatter/solutions|backmatter/references|index|colophon" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
+</xsl:template>
+
+<xsl:template match="section" mode="division-class">
+    <xsl:call-template name="division-class-section-like"/>
+</xsl:template>
+
+<xsl:template match="subsection" mode="division-class">
+    <xsl:call-template name="division-class-subsection-like"/>
+</xsl:template>
+
+<!-- terminal always, according to schema -->
+<xsl:template match="subsubsection" mode="division-class">
+    <xsl:call-template name="division-class-subsubsection-like"/>
+</xsl:template>
+
+<!-- A "section" in a slideshow is a major division,      -->
+<!-- holding many slides, so much like a "part" of a book -->
+<xsl:template match="slideshow/section" mode="division-class">
+    <xsl:call-template name="division-class-part-like"/>
+</xsl:template>
+
+<!-- New centered pages for each new slide -->
+<xsl:template match="slide" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
+</xsl:template>
+
+
+<!-- Heading Classes Named Templates-->
+
+<!-- These are named templates, hence context-free, intentionally.        -->
+<!-- These templated provide the five classes present in teh semantic     -->
+<!-- file to control the look of headings at various depths.  They do     -->
+<!-- rely on the global boolean  $b-has-subsubsection  variable.          -->
+<!--                                                                      -->
+<!-- The "*-like" names make the most sense in the case of a book with    -->
+<!-- subsubsections, where the hierachy goes right down the line.         -->
+<!-- Absent subsubsections, centering is abandoned sooner for a           -->
+<!-- cell5/cell7  look below a chapter.                                   -->
+<!--                                                                      -->
+<!-- The purpose of isolating these to allow for their use with           -->
+<!-- specialized divisions that occur at many different depths, so a      -->
+<!-- parent can be examined as a clue to depth, and a choice can be made. -->
+
+<xsl:template name="division-class-part-like">
+    <xsl:text>fullpage</xsl:text>
+</xsl:template>
+
+<xsl:template name="division-class-chapter-like">
     <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
-<!-- Section and subsection is complicated, since it depends on -->
-<!-- the depth.  The boolean variable is true with a depth of 4 -->
-<!-- or greater, starting from "chapter".                       -->
-
-<xsl:template match="section" mode="division-class">
+<xsl:template name="division-class-section-like">
     <xsl:choose>
-        <!-- slideshow is exceptional, a major division, -->
-        <!-- but no real content, and only a title       -->
-        <xsl:when test="parent::slideshow">
-            <xsl:text>fullpage</xsl:text>
-        </xsl:when>
-        <!-- routine and *not* generally terminal -->
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>center</xsl:text>
         </xsl:when>
-        <!-- routine and necessarily terminal -->
         <xsl:otherwise>
             <xsl:text>cell5</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-
-<xsl:template match="subsection" mode="division-class">
+<xsl:template name="division-class-subsection-like">
     <xsl:choose>
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>cell5</xsl:text>
         </xsl:when>
-        <!-- terminal -->
         <xsl:otherwise>
             <xsl:text>cell7</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- terminal always, according to schema -->
-<xsl:template match="subsubsection" mode="division-class">
+<xsl:template name="division-class-subsubsection-like">
     <xsl:text>cell7</xsl:text>
-</xsl:template>
-
-<xsl:template match="slide" mode="division-class">
-    <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
 <!-- Heading Utilities -->
