@@ -104,7 +104,7 @@ ol#searchresults > li > text {
     z-index: 5000;
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: 40em;
+    max-height: 80%;
 }
 #searchterms {
     font-weight: normal;

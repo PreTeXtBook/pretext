@@ -64,7 +64,8 @@ body.pretext > a.assistive:focus {
 
 /* we use .para as a wrapper around some "compound" p, so the
    first p in .para is block-like because of the .pare */
-.ptx-content .para > p:first-child {
+.ptx-content .para > p:first-child,
+.ptx-content .para > .para:first-child {
     display: inline;
 }
 
