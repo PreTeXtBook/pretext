@@ -975,8 +975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
 
         <exercise label="horizontal-parson-natural" language="natural">
-            <title>Parsons Problem, SQL statement</title>
-            <idx>even numbers</idx>
+            <title>Parsons Problem, Natural Language</title>
             <statement>
                 <p>Form the sentence often used to show font samples.  You can reuse blocks as needed.</p>
             </statement>
@@ -989,6 +988,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <block order="5">over</block>
                 <block xml:id="font-the">the</block>
                 <block order="7">lazy</block>
+                <block order="4">dog</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-natural-distractor" language="natural">
+            <title>Parsons Problem, Natural Language, with Distractors</title>
+            <statement>
+                <p>Form the sentence often used to show font samples.  Again, but now with distractors.</p>
+            </statement>
+            <blocks layout="horizontal">
+                <block ref="font-the-two" order="7"/>
+                <block order="10" correct="yes">quick</block>
+                <block order="2">brown</block>
+                <block order="3">fox</block>
+                <block order="1">jumped</block>
+                <block order="8" correct="no">foo</block>
+                <block order="6">over</block>
+                <block xml:id="font-the-two">the</block>
+                <block order="9">lazy</block>
+                <block order="5" correct="no">bar</block>
                 <block order="4">dog</block>
             </blocks>
         </exercise>
