@@ -83,8 +83,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- abandoning the chunking templates.                                    -->
 <xsl:variable name="chunk-level" select="0"/>
 
-<!-- NB: This will need to be expanded with terms like //subsection/exercises -->
-<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection)"/>
+<!-- All the ways we can have a division at the subsubsection level.     -->
+<!-- This influences how headings of divisions are indicated (centered,  -->
+<!-- cell5, cell7) when subdivisions go this deep.  Or not.              -->
+<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection |
+                                                         $document-root//subsection/exercises |
+                                                         $document-root//subsection/reading-questions |
+                                                         $document-root//subsection/worksheet |
+                                                         $document-root//subsection/solutions |
+                                                         $document-root//subsection/references |
+                                                         $document-root//subsection/glossary
+                                                        )"/>
 
 <!-- Necessary to get pre-constructed Nemeth braille for math elements. -->
 <xsl:param name="mathfile" select="''"/>
@@ -307,6 +316,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- terminal always, according to schema -->
 <xsl:template match="subsubsection" mode="division-class">
     <xsl:call-template name="division-class-subsubsection-like"/>
+</xsl:template>
+
+<!-- The "look" of a specialized division (not in the backmatter)      -->
+<!-- depends on its depth, which we determine by a look at its parent. -->
+<xsl:template match="exercises|reading-questions|worksheet|references|solutions|glossary" mode="division-class">
+    <xsl:choose>
+        <xsl:when test="parent::chapter|parent::appendix">
+            <xsl:call-template name="division-class-section-like"/>
+        </xsl:when>
+        <xsl:when test="parent::section">
+            <xsl:call-template name="division-class-subsection-like"/>
+        </xsl:when>
+        <xsl:when test="parent::subsection">
+            <xsl:call-template name="division-class-subsubsection-like"/>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A "section" in a slideshow is a major division,      -->
