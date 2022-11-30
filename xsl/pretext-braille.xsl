@@ -276,8 +276,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- about it there.  Slideshow doesn't get a heading either.  -->
 <xsl:template match="book|article|slideshow" mode="section-heading" />
 
+<!-- Heading Content (for divisions) -->
+
+<!-- This is an override of the template in the HTML conversion. -->
+<!-- We drop the names of divisions (which are usually squelced  -->
+<!-- by CSS), except we keep "Chapter" since the chapter-busting -->
+<!-- Python depends on it.  Otherwise, number and title, as      -->
+<!-- recommended by Cantino and Maneki.                          -->
+<xsl:template match="*" mode="heading-content">
+    <!-- retain "Chapter" as a necessary component -->
+    <!-- of the regular-expressions used in the    -->
+    <!-- chapter-busting Python routine            -->
+    <!-- Note: to test without the "Chapter"       -->
+    <!-- string in the heading, replace            -->
+    <!--     "self::chapter" -> "false()"          -->
+    <!-- or "comment-out" the whole "if" stanza    -->
+    <xsl:if test="self::chapter">
+        <span class="type">
+            <xsl:apply-templates select="." mode="type-name" />
+        </span>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <span class="codenumber">
+        <xsl:apply-templates select="." mode="number" />
+    </span>
+    <xsl:text> </xsl:text>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
 <!-- Unnumbered, chapter-level headings, just title text -->
 <xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- This is an override of the template in the HTML conversion, -->
+<!-- but now for specilaized divisions. We drop the names of     -->
+<!-- divisions (which are usually squelced by CSS), especially   -->
+<!-- since this is often a duplicate of the (default) title we   -->
+<!-- provide.  Also, links to HTML worksheets are killed (and a  -->
+<!-- heading is a strange place to have them anyway?).           -->
+<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
+    <!-- be selective about displaying numbers at birth-->
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
+    </xsl:variable>
+    <xsl:if test="($is-numbered = 'true')">
+        <span class="codenumber">
+            <xsl:apply-templates select="." mode="number"/>
+        </span>
+        <xsl:text> </xsl:text>
+    </xsl:if>
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>

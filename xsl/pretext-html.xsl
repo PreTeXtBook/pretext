@@ -836,6 +836,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this is overridden in the conversion to Braille,  -->
 <!-- to center chapter numbers above titles (and appendix, -->
 <!-- preface, etc), so coordinate with those templates.    -->
+<!-- NB: we often squelch type names via CSS, but for the  -->
+<!-- braille conversion it is not so easy, so we instead   -->
+<!-- provide a modified version of this template there.    -->
+<!-- Consider keeping these in-sync.                       -->
 <xsl:template match="*" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -857,6 +861,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *display* a number at birth is therefore more complicated    -->
 <!-- than *having* a number or not.                               -->
 <!-- NB: We sneak in links for standalone versions of worksheets. -->
+<!-- NB: we often squelch type names via CSS, but for the braille -->
+<!-- conversion it is not so easy, so we instead provide a        -->
+<!-- modified version of this template there. Consider keeping    -->
+<!-- these in-sync.                                               -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
