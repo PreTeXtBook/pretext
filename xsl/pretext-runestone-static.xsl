@@ -489,12 +489,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="solution"/>
     <solution>
         <!-- programming language version -->
+        <!-- filter out distractors for the solution -->
+        <xsl:variable name="the-blocks" select="blocks/block[not(@correct = 'no')]"/>
         <p>
             <cd>
                 <cline>
                     <!-- authored in order, but need to follow @ref -->
-                    <xsl:for-each select="blocks/block">
+                    <xsl:for-each select="$the-blocks">
                         <xsl:apply-templates select="." mode="static-horizontal-block"/>
+                        <!-- context shift should handle distractors at the end -->
                         <xsl:if test="following-sibling::block">
                             <xsl:text> </xsl:text>
                         </xsl:if>

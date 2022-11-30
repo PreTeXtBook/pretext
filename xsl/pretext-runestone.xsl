@@ -1167,8 +1167,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- in the HTML* (see below), starting at zero, that -->
                     <!-- consitutes a correct answer.  But the authored   -->
                     <!-- order is the corrrect answer, so we loop over    -->
-                    <!-- those blocks as we determine positioos/locations -->
+                    <!-- those blocks as we determine positions/locations -->
                     <!-- in the HTML list.                                -->
+                    <!-- NB: the "blockanswer" appears to be parsed based  -->
+                    <!-- on *exactly* one space between separating indices -->
                     <xsl:variable name="blockanswer">
                         <!-- answer is list as long as authored blocks, -->
                         <!-- so loop over authored in every case        -->
@@ -1176,6 +1178,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- save off the block in question before context shifts below -->
                             <xsl:variable name="the-block" select="."/>
                             <xsl:choose>
+                                <!-- Randomized or not (below), a distractor is a distractor  -->
+                                <!-- and does not go in the "blockanswer" attribute. -->
+                                <xsl:when test="@correct = 'no'"/>
                                 <!-- For the randomized case the answer is list of       -->
                                 <!-- non-negative integers in order, but interrupted     -->
                                 <!-- by duplicates authored as references as references. -->
@@ -1234,17 +1239,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                     </xsl:choose>
                                 </xsl:otherwise>
                             </xsl:choose>
-                            <!-- space-separated list, per block, one extra -->
-                            <xsl:text> </xsl:text>
+                            <!-- space-separated list, per block, one extra at the very end -->
+                            <!-- when a distractor is skipped, do not place a separator     -->
+                            <xsl:if test="not(@correct= 'no')">
+                                <xsl:text> </xsl:text>
+                            </xsl:if>
                         </xsl:for-each>
                     </xsl:variable>
                     <!-- strip an extra space separator created just above -->
                     <xsl:attribute name="data-blockanswer">
                         <xsl:value-of select="substring($blockanswer, 1, string-length($blockanswer) - 1)"/>
                     </xsl:attribute>
-                    <!-- blocks themselves, left justified on margin -->
-                    <!-- resued blocks are not presented             -->
-                    <!-- leading newline is just cosmetic            -->
+                    <!-- blocks themselves, left justified on margin      -->
+                    <!-- reused blocks are not presented, distractors are -->
+                    <!-- leading newline is just cosmetic                 -->
                     <xsl:text>&#xa;--blocks--&#xa;</xsl:text>
                     <xsl:choose>
                         <!-- just go with authored order as canonical -->
