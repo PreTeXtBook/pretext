@@ -285,9 +285,11 @@
     top: auto;
     bottom: 0;
    }
+/*
   .pretext #ptx-sidebar {
     display: none;
   }
+*/
   .pretext .ptx-content-footer {
     display: none;
   }

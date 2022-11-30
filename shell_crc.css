@@ -373,9 +373,11 @@ body.pretext {
 
 @media only screen and (max-width: 800px) {
 
+/*
     .pretext #ptx-sidebar {
         display: none;
     }
+*/
     .ptx-page-footer {
 	grid-template-columns: 1.25fr .9fr 1fr;
 	margin-botton: 80px;
