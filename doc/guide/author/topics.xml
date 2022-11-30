@@ -4256,6 +4256,33 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
     </section>
 
+    <section xml:id="topic-braille-practices">
+        <title>Braille Best Practices</title>
+        <idx><h>braille</h><h>best practices</h></idx>
+
+        <p>This is an evolving list of best practices for authoring (and publishing) so that a conversion to braille is as useful as possible for the blind reader.</p>
+
+        <p>Many recommendations for mathematics will be useful to any reader, but perhaps even moreso for a blind reader, so read <xref ref="topic-mathematics-practices"/>.  Recommendations here may also improve your project for all readers.</p>
+
+        <paragraphs>
+            <title>Division Numbering</title>
+
+            <p>Braille uses various devices to indicate division headings, since font weight, size, and color are not available.  These include starting on a new page, centering text, preceding with a blank lines, standard levels of indentation (4 or 6 cells), and combinations of these devices.</p>
+
+            <p>In a conversion from <pretext/>, the text of each heading is the number of the division, followed by the title.  So the formatting and the presence of a hierarchical number are together good clues that a new division is starting.  And the number of parts in the hierarchical number will also serve as a precise indicator of the depth of the division.</p>
+
+            <p>As a publisher, you can <q>turn off</q> division numbering below some level (<xref ref="publication-file-numbering"/>).  Think carefully about the impact this will have on a blind reader, since lesser division headings will be harder to recognize without a leading number.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Side-By-Side Layout</title>
+
+            <p>A <tag>sidebyside</tag> can be a very useful device, but think carefully about its suitability.  As of 2022-11-30, we have yet to even handle them carefully in a braille conversion.  And if your panels hold images, that is even harder, since we do not have good support for tactile images yet.</p>
+
+            <p>In any event, we will likely <q>unwind</q> a <tag>sidebyside</tag> into a series of its panels running <em>down</em> the page, rather than <em>across</em>, along with a note about how many panels to expect.  So when you author a <tag>sidebyside</tag>, consider how this alternate presentation in braille will be received by the reader.</p>
+        </paragraphs>
+    </section>
+
     <section xml:id="topic-doctest-sage">
         <title>(*) Testing Sage Examples</title>
         <p></p>
