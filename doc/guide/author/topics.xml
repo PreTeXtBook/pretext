@@ -1655,7 +1655,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <paragraphs>
             <title>Large Numbers</title>
-            <p>Using a separator to aid in reading a large number should avoid using a space as a separator.  So <m>234{,}766{,}544</m> or <m>234.766.544</m> is preferable to <m>234\,766\,544</m>.  (We have used a <latex/> <q>thin space</q>, <c> \, </c>, in the latter.) For <m>234{,}766{,}544</m>, braces around each comma prevents automatic trailing space that would be desirable in a list.</p>
+            <p>Using a separator to aid in reading a large number should avoid using a space as a separator.  So <m>234{,}766{,}544</m> or <m>234.766.544</m> is preferable to <m>234\,766\,544</m>.  We have used braces around the commas in the first instance, and a <latex/> <q>thin space</q>, <c> \, </c>, in the last instance.) For <m>234{,}766{,}544</m>, braces around each comma prevents automatic trailing space that would normally be desirable in a list of numbers.  In other words, author as:<cd>
+                <cline>&lt;m&gt;234{,}766{,}544&lt;/m&gt;</cline>
+            </cd>Here is the version with commas and no effort to distinguish the big number from a list of smaller numbers: <m>234,766,544</m>.</p>
         </paragraphs>
 
         <paragraphs>
