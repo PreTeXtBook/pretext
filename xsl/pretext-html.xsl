@@ -10362,8 +10362,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
+<!-- NB: a grossly simplified version of this      -->
+<!-- template is used as an override for the       -->
+<!-- conversion to braille.  Keep them in sync.    -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
+    <!-- TODO: simplify these variables, much like for LaTeX -->
     <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
                                             (ancestor::exercises and $b-has-divisional-hint) or
                                             (ancestor::reading-questions and $b-has-reading-hint) or

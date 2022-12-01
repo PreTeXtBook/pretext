@@ -548,6 +548,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- ################# -->
+<!-- WeBWorK Exercises -->
+<!-- ################# -->
+
+<!-- The "webwork-reps" element contains a "static" representation in    -->
+<!-- PreTeXt syntax, which we process as if it was a sttic exercise      -->
+<!-- authored as such.  We do need to know if the publisher wants        -->
+<!-- hints, answers, or solutions available where the exercises is born. -->
+<!-- NB: this is a simplified version of the stock HTML conversion which -->
+<!-- avoids having things like an "Activate" button, and similar         -->
+<!-- interactive features.                                               -->
+<xsl:template match="webwork-reps">
+    <xsl:param name="b-original" select="true()"/>
+    <!-- TODO: simplify these variables, much like for LaTeX -->
+    <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
+                                            (ancestor::exercises and $b-has-divisional-hint) or
+                                            (ancestor::reading-questions and $b-has-reading-hint) or
+                                            (ancestor::worksheet and $b-has-worksheet-hint) or
+                                            (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-answer) or
+                                              (ancestor::exercises and $b-has-divisional-answer) or
+                                              (ancestor::reading-questions and $b-has-reading-answer) or
+                                              (ancestor::worksheet and $b-has-worksheet-answer) or
+                                              (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-solution) or
+                                                (ancestor::exercises and $b-has-divisional-solution) or
+                                                (ancestor::reading-questions and $b-has-reading-solution) or
+                                                (ancestor::worksheet and $b-has-worksheet-solution) or
+                                                (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:apply-templates select="static" mode="exercise-components">
+        <xsl:with-param name="b-original"      select="$b-original"/>
+        <xsl:with-param name="b-has-statement" select="true()"/>
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+
 <!-- ################ -->
 <!-- Subsidiary Items -->
 <!-- ################ -->
