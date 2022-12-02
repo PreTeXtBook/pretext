@@ -9570,6 +9570,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Checks for errors that would be time-consuming -->
 <!-- if done repeatedly, so a pre-processing step   -->
 <!-- Calling context could be "mathbook" element    -->
+<!-- NB: this is called early by any author-facing  -->
+<!-- "mainline" conversion (and not by some         -->
+<!-- utilities) where the select attribute is the   -->
+<!-- "$original" tree defined as the author's       -->
+<!-- actual source file.                            -->
 <xsl:template match="mathbook|pretext" mode="generic-warnings">
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
@@ -9754,6 +9759,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- If despearate, concatentate with $apos.       -->
 <!-- A &#xa; can be used if necessary, but only    -->
 <!-- rarely do we bother.                          -->
+<!-- NB: this is called early by any author-facing -->
+<!-- "mainline" conversion (and not by some        -->
+<!-- utilities) where the select attribute is the  -->
+<!-- "$original" tree defined as the author's      -->
+<!-- actual source file.                           -->
 <xsl:template name="deprecation-message">
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />

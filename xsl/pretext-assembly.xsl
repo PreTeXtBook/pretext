@@ -142,7 +142,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to inspect the original in various places  -->
 <!-- We do not know if we have "fixed" the      -->
 <!-- deprecated overall element, so need to     -->
-<!-- try both.                                  -->
+<!-- try both.  For example, this variable is   -->
+<!-- employed by the warnings and deprecation   -->
+<!-- messages that result from analyzing an     -->
+<!-- author's source, since we may "repair"     -->
+<!-- some of them later, so we have to catch    -->
+<!-- them early. -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
 <!-- These modal templates duplicate the source exactly for each -->
