@@ -10399,7 +10399,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$docinfo/html/baseurl/@href" />
         <xsl:with-param name="date-string" select="'2020-11-22'" />
-        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.'"/>
+        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.  If you have multiple values due to multiple &quot;docinfo&quot; controlled by versions, then results will be very unpredictable.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2021-01-03  chunk.level now in publisher file -->

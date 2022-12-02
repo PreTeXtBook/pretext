@@ -2655,9 +2655,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$publication/html/baseurl/@href">
                 <xsl:value-of select="$publication/html/baseurl/@href"/>
             </xsl:when>
-            <!-- reluctantly query the old docinfo version -->
-            <xsl:when test="$assembly-docinfo/html/baseurl/@href">
-                <xsl:value-of select="$assembly-docinfo/html/baseurl/@href"/>
+            <!-- reluctantly query the old docinfo version  -->
+            <!-- If the "version" feature controls multiple -->
+            <!-- "docinfo" then this might query the wrong  -->
+            <!-- one (using $assembly-docinfo here led to a -->
+            <!-- circular variable definition).             -->
+            <xsl:when test="$original/docinfo/html/baseurl/@href">
+                <xsl:value-of select="$original/docinfo/html/baseurl/@href"/>
             </xsl:when>
             <!-- otherwise use the default, is empty as sentinel -->
             <xsl:otherwise/>
