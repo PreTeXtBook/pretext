@@ -9868,10 +9868,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:variable>
                             <xsl:value-of select="substring-before($width, '%') div 100" />
                         </xsl:when>
-                        <!-- If there is no $left-col/@width, use 20% as default -->
+                        <!-- If there is no $left-col/@width, silently use 20% as default -->
+                        <!-- We get some ill-formed WW exercises here, so a less-precise  -->
+                        <!-- warning is given on the author's source.                     -->
                         <xsl:otherwise>
-                            <xsl:message>PTX:ERROR:   cell with p has no corresponding col with @width, using 20% as default</xsl:message>
-                            <xsl:apply-templates select="." mode="location-report" />
                             <xsl:text>0.2</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
