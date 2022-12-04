@@ -77,6 +77,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- recursively defined, variables, this discussion may be        -->
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
+<!--                                                               -->
+<!-- Also, in this stylesheet, we should not be letting "docinfo"  -->
+<!-- directly set variables, as "docinfo" contains                 -->
+<!-- settings/characteristics that are part of the author's source -->
+<!-- and are not changed/influenced by a publisher.  Some uses are -->
+<!-- historical when we we were not so aware of the distinction,   -->
+<!-- and some uses are tangential (such as the type of "part" the  -->
+<!-- author has chosen).                                           -->
 
 <!-- ############## -->
 <!-- Common Options -->
@@ -1370,6 +1378,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering -->
 <!-- ######### -->
 
+<!-- NB: the "$assembly-*" trees are a bit dangerous, being formed  -->
+<!-- partway through the pre-processing phase.  Their purpose, when -->
+<!-- used to query the structure of the document was to be certain  -->
+<!-- that the pre-processing was done building versions, and/or     -->
+<!-- done adding/deleting material.  We want to build numbers as    -->
+<!-- part of pre-processing, and various defaults are a function    -->
+<!-- of structure, hence the intermediate trees. (We are being very -->
+<!-- cautious here, likely the $original trees would suffice for    -->
+<!-- determining gross sructure.                                    -->
 
 <!-- User-supplied Numbering for Maximum Level     -->
 <!-- Respect switch, or provide sensible defaults  -->
@@ -2895,6 +2912,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- String parameters are deprecated, so in -common -->
 <!-- file, and are only consulted secondarily here   -->
+
+<!-- NB: the "$assembly-*" trees are a bit dangerous, being formed  -->
+<!-- partway through the pre-processing phase.  Their previous      -->
+<!-- purpose, when used to query the "docinfo" was to be certain    -->
+<!-- that the pre-processing was done building versions, and/or     -->
+<!-- done adding/deleting material.  They could probably be         -->
+<!-- changed to "$original/docinfo".  The risk is that a project    -->
+<!-- might have multiple "docinfo" for multiple versions (the       -->
+<!-- supported scheme for this) and would be relying on only one    -->
+<!-- "docinfo" surviving.  However, uses below are for deprecated   -->
+<!-- situations, so we can warn about multiple "docinfo" in the     -->
+<!-- deprecation messages (as has been done for html/baseurl/@href. -->
 
 <xsl:variable name="statcounter-project">
     <xsl:choose>
