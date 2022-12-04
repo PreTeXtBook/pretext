@@ -28,6 +28,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- HTML-Specific Options -->
     <html>
+        <!-- links below images to open full-size, must be elected -->
+        <asymptote links="yes"/>
+        <!-- A location for a hosted HTML version, as certain      -->
+        <!-- aspects of the LaTeX/PDF version will link to         -->
+        <!-- corresponding aspects of the HTML version             -->
+        <!-- NB: URL is version hosted to demo oscarlevin style    -->
+        <baseurl href="https://pretextbook.org/examples/sample-article/oscar/"/>
         <!-- Several embedded calculators are available            -->
         <!-- Use "none" to turn this off (or remove the element)   -->
         <calculator model="geogebra-classic"/>
