@@ -280,6 +280,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
+<!-- Once the "repair" tree is formed, any source modifications      -->
+<!-- have been made, and it is on to *augmenting* the source.        -->
+<!-- Various publisher variables are consulted for the augmentation, -->
+<!-- notably the style/depth of numbering.  So this tree needs to    -->
+<!-- be available for creating those variables, notably sensible     -->
+<!-- defaults based on the source.  We refer to this tree as the     -->
+<!-- "assembly" tree.                                                -->
+<xsl:variable name="assembly-root" select="$repair/pretext"/>
+<xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
+<xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
+
 <xsl:variable name="identification-rtf">
     <!-- pass in all elements with authored @xml:id -->
     <!-- to look for authored duplicates            -->
@@ -296,17 +307,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$repair" mode="identification"/>
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
-
-<!-- Once the "repair" tree is formed, any source modifications      -->
-<!-- have been made, and it is on to *augmenting* the source.        -->
-<!-- Various publisher variables are consulted for the augmentation, -->
-<!-- notably the style/depth of numbering.  So this tree needs to    -->
-<!-- be available for creating those variables, notably sensible     -->
-<!-- defaults based on the source.  We refer to this tree as the     -->
-<!-- "assembly" tree.                                                -->
-<xsl:variable name="assembly-root" select="$identification/pretext"/>
-<xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
-<xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="language-rtf">
     <xsl:apply-templates select="$identification" mode="language"/>
