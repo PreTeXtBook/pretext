@@ -3049,9 +3049,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   "default" - historical, equal to "textbook"                 -->
 <!--                                                               -->
 <!-- Resulting variable values are "none", "textbook", "reference" -->
+<!-- and *not* "default", it was an historical fudge.              -->
 <!-- Note the boolean variable for the no-search case              -->
 <xsl:variable name="native-search-variant">
-    <xsl:variable name="default-native-search" select="'default'"/>
+    <xsl:variable name="default-native-search" select="'textbook'"/>
     <xsl:choose>
         <xsl:when test="$publication/html/search/@variant = 'none'">
             <xsl:text>none</xsl:text>
