@@ -63,6 +63,50 @@ body.pretext > a.assistive:focus {
     transition: top .1s ease-in, background .5s linear;
 }
 
+/* over-write bootstrap (in Runestone, for example) */
+nav #ptx-navbar {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  min-height: unset;
+}
+/* next three: runestone hack for the bust nemu */
+#ptx-navbar .dropdown-content {
+  left: 250px;
+  position: absolute;
+  left: unset;
+  min-width: 200px;
+/*
+  right: 150px;
+*/
+}
+#ptx-navbar hr {
+  margin-bottom: 4px;
+  margin-top: 4px;
+  border-width: 3px;
+  border-color: #600;
+}
+/* next for the Activecode popup */
+/*
+.modal-backdrop.fade.in {
+   display: none;
+}
+*/
+#ptx-navbar .activecode-toggle {
+  padding: 3px 5px;
+  float: left;
+  border-right: 1px solid #bababa;
+  border-top: 1px solid #bababa;
+  border-bottom: 1px solid #bababa;
+  background: #eee;
+}
+#ptx-navbar .activecode-toggle .icon {
+  display: inline-block;
+  font-size: larger;
+  transform: rotate(130deg);
+}
+
+
 /* so that we can position things (like .autopermalink) absolutely wrt these items */
 .ptx-content section,
 .ptx-content article,

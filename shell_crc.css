@@ -102,8 +102,10 @@ body.pretext {
     grid-row-start: 1;
     grid-row-end: 3;
 
+/*
     overflow-y: auto;
     overflow-x: hidden;
+*/
     border: 2px solid var(--bluegreen);
     border-radius:5px;
     z-index: 1;

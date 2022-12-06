@@ -191,10 +191,29 @@
    left: unset;
    top: 1em;
 }
-@media screen and (min-width: 800px) {
+@media screen and (max-width: 800px) {
+/*
     .runestonebustmenu { display: none }
-}
+*/
+    nav .dropdown {
+       position: fixed;
+       right: 0;
+       top: 0;
+    }
+    nav .dropdown .dropdown-content {
+       position: absolute;
+       right: 2em;
+       left: unset;
+       top: 1em;
+    }
 
+    .activecode-toggle { display: none }
+}
+/* above may be obsolete because we do not have the runestonebustmenu class in overhaul?
+*/
+.pretext .navbar .dropdown {
+    height: 35px;
+}
 
 .ptx-content .paragraphs .heading {
     display: inline;
@@ -204,7 +223,11 @@
     display: inline;
 }
 
-/* the next are to avoid styping a .para as inline, because
+/* next is for runestone multiple choice */
+.ptx-content  .runestone label > .para {
+    display: inline;
+}
+/* the next are to avoid stlping a .para as inline, because
  * inline styling messes up the meaning of line-height.
  * */
 
