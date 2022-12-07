@@ -67,6 +67,12 @@ heading5 div,class,cell7
 boxline article,class,paragraphs
 
 ###################
+# Transcriber Notes
+###################
+
+transcribernote div,data-braille,transcriber-note
+
+###################
 # Table of Contents
 ###################
 

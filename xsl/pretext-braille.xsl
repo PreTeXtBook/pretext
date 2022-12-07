@@ -1211,11 +1211,56 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
     <xsl:if test="$page-format = 'emboss'">
         <div data-braille="pageeject"/>
-        <xsl:text>Transcriber note: the image with ID </xsl:text>
-        <xsl:apply-templates select="image" mode="visible-id" />
-        <xsl:text> belongs here.  Replace this page with the independently generated tactile image.</xsl:text>
+        <xsl:call-template name="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>Replace this page with image "</xsl:text>
+                <xsl:apply-templates select="." mode="visible-id" />
+                <xsl:text>.</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
         <div data-braille="pageeject"/>
     </xsl:if>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Transcriber Notes -->
+
+<!-- Here code is the transcriber, so we can explain places where we   -->
+<!-- have done something different than it might be realized in print. -->
+<!--                                                                   -->
+<!-- Two three-cell sequences indicate the begin and end of a          -->
+<!-- transcriber note.  Additionally, the indentation is 7-5           -->
+<!-- margins, which we achieve with a div.data-braille attribute       -->
+<!-- set to "transcribernote" (no dash is intentional) for the         -->
+<!-- liblouis semantic action file.  See BANA Formats 3.2.1:           -->
+<!-- www.brailleauthority.org/formats/2016manual-web/section03.html    -->
+<!--                                                                   -->
+<!-- The content provided in the "message" parameter by a calling      -->
+<!-- instance should look like the HTML produced by this stylesheet.   -->
+<!-- For example to get emphasis, code here should provide             -->
+<!-- <em class="emphasis"> so the correct semantic action is applied.  -->
+<!-- No overall root element is necessary.  "xsl:text" can be used to  -->
+<!-- control stray whitespace.  "xsl:apply-templates" can also be used -->
+<!-- to access variable properties, such as identification of objects  -->
+<!-- like images. See examples throughout this stylesheet.             -->
+<!-- Short answer: the value of "message" is made into a deep copy for -->
+<!-- the HTML output (which is next seen by liblouis.                  -->
+<!--                                                                   -->
+<!-- Template is context-free intentionally.                           -->
+<xsl:template name="transcriber-note">
+    <xsl:param name="message"/>
+
+    <div data-braille="transcriber-note">
+        <!-- dot 4, dot 46, dot 126 -->
+        <xsl:text>&#x2808;&#x2828;&#x2823;</xsl:text>
+        <!-- straight duplication of raw HTML provided as a parameter -->
+        <xsl:copy-of select="$message"/>
+        <!-- dot 4, dot 46, dot 345 -->
+        <xsl:text>&#x2808;&#x2828;&#x281C;</xsl:text>
+    </div>
 </xsl:template>
 
 </xsl:stylesheet>
