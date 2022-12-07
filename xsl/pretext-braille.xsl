@@ -1222,6 +1222,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- We write a paragraph with the "description"  -->
+<!-- (authored as a bare string of sorts) and a   -->
+<!-- paragraph with our internal id, which is the -->
+<!-- basis of a filename that would be used to    -->
+<!-- construct any tactile versions.              -->
+<xsl:template match="image" mode="textual-version">
+    <div data-braille="image">
+        <xsl:call-template name="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>Image "</xsl:text>
+                <xsl:apply-templates select="." mode="visible-id" />
+                <xsl:text>" goes here.</xsl:text>
+                <xsl:if test="description">
+                    <xsl:text>  A text description follows.</xsl:text>
+                </xsl:if>
+                <xsl:if test="$page-format = 'emboss'">
+                    <xsl:text> The next page can be replaced with a tactile version.</xsl:text>
+                </xsl:if>
+            </xsl:with-param>
+        </xsl:call-template>
+        <br/>
+        <xsl:if test="description">
+            <xsl:text>Description: </xsl:text>
+            <xsl:apply-templates select="description"/>
+        </xsl:if>
+    </div>
+</xsl:template>
+
+
 <!-- ######### -->
 <!-- Utilities -->
 <!-- ######### -->
