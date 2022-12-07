@@ -1198,22 +1198,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- For an image inside a figure, we replace the image by its -->
+<!-- text version, but we do not follow with a page-eject,     -->
+<!-- since we want to finish the figure.                       -->
+<xsl:template match="image[parent::figure]">
+    <xsl:apply-templates select="." mode="textual-version"/>
+    <!-- The parent figure will always have a caption, and   -->
+    <!-- neither the transcriber note for the image, nor the -->
+    <!-- author-provided description, nor the caption,       -->
+    <!-- provides a separator to force the caption onto its  -->
+    <!-- own line, we so take matters into our own hands.    -->
+    <br/>
+</xsl:template>
+
 <!-- If a "figure" has an "image", we let the image do its thing -->
 <!-- (as just above) and we also let the figure wrap it.  But we -->
 <!-- follow with a (nearly) blank page suggesting a tactile      -->
 <!-- version of the image should be subsituted in.               -->
 <xsl:template match="figure[image]">
     <xsl:apply-imports/>
+    <!-- place the placholder page *after* the figure finishes -->
     <xsl:if test="$page-format = 'emboss'">
         <div data-braille="pageeject"/>
-        <xsl:call-template name="transcriber-note">
-            <xsl:with-param name="message">
-                <xsl:text>Replace this page with image "</xsl:text>
-                <xsl:apply-templates select="." mode="visible-id" />
-                <xsl:text>.</xsl:text>
-            </xsl:with-param>
-        </xsl:call-template>
-        <div data-braille="pageeject"/>
+        <xsl:apply-templates select="image" mode="placeholder-page"/>
     </xsl:if>
 </xsl:template>
 
