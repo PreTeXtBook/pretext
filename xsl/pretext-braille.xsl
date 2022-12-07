@@ -1250,6 +1250,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- We assume the embossable case has been checked, and a -->
+<!-- page-ejection has happened just before this template  -->
+<!-- is applied.  And then we follow with a page ejection. -->
+<xsl:template match="image" mode="placeholder-page">
+    <xsl:call-template name="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>Replace this page with image "</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:text>".</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <div data-braille="pageeject"/>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Utilities -->
