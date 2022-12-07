@@ -766,7 +766,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </image>
             </figure>
 
-            <p>And some text trailing the figure.</p>
+            <p>And some text trailing the figure. And a bare image next.</p>
+
+            <image source="foo.jpg"/>
+
+            <p>More text trailing an image.</p>
         </chapter>
 
         <chapter>
