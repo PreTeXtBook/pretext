@@ -1184,23 +1184,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- We write a paragraph with the "description"  -->
-<!-- (authored as a bare string of sorts) and a   -->
-<!-- paragraph with our internal id, which is the -->
-<!-- basis of a filename that would be used to    -->
-<!-- construct any tactile versions.              -->
-<xsl:template match="image">
-    <div data-braille="image">
-        <xsl:text>Image ID: </xsl:text>
-        <xsl:apply-templates select="." mode="visible-id" />
-        <br/>
-        <xsl:text>Description: </xsl:text>
-        <xsl:apply-templates select="description"/>
-        <br/>
-        <xsl:if test="$page-format = 'electronic'">
-            <xsl:text>Transcriber note: this image should be provided separately for an electronic version.</xsl:text>
-        </xsl:if>
-    </div>
+<!-- An image may be a child of a "figure".  It can also be buried  -->
+<!-- within a "sidebyside", perhaps in a "figure", or in a "stack". -->
+<!-- This is the other case, a "naked" tabular, perhaps just        -->
+<!-- between paragraphs, and thus a child of a division or a block. -->
+<!-- We always replace with the textual version.  In the embossed   -->
+<!-- case, we move to new placeholder page for a tactile version.   -->
+<xsl:template match="image[not(parent::figure|ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="textual-version"/>
+    <xsl:if test="$page-format = 'emboss'">
+        <div data-braille="pageeject"/>
+        <xsl:apply-templates select="." mode="placeholder-page"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- If a "figure" has an "image", we let the image do its thing -->
