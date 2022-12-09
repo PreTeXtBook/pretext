@@ -462,15 +462,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
                     <xsl:message>              which should be reported.</xsl:message>
                 </xsl:when>
-                <!-- output varies by the style of exercises we are building -->
-                <xsl:when test="$exercise-style = 'pg-problems'">
-                    <!-- isolate and edit representations needed for PG problem archives -->
-                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork-rep-to-pg"/>
-                </xsl:when>
+                <!-- Copy the "webwork-reps" in place of the "webwork", so this is  -->
+                <!-- a new signal of a WW problem for the second pass.  This is     -->
+                <!-- also temporary, since we will subset and slim this down later. -->
                 <xsl:otherwise>
-                    <xsl:copy-of select="$the-webwork-rep" />
+                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork"/>
                 </xsl:otherwise>
-            </xsl:choose> <!-- end: which rep to choose -->
+            </xsl:choose>
         </xsl:when>
         <!-- Now we are doing a pass to support extraction -->
         <!-- of PGML, so $b-extracting-pg is true          -->
@@ -1647,6 +1645,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->
+
+<!-- PG Code from webwork-reps for problem sets -->
+
+<!-- Matching with the filter means this will only happen on     -->
+<!-- the non-extraction pass, since the 'webwork-reps' value     -->
+<!-- is placed after the WW representations file has been built. -->
+<!-- NB: including "task" though this may not be supported.      -->
+<xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
+                   | project[(@exercise-interactive = 'webwork-reps')]
+                   | activity[(@exercise-interactive = 'webwork-reps')]
+                   | exploration[(@exercise-interactive = 'webwork-reps')]
+                   | investigation[(@exercise-interactive = 'webwork-reps')]
+                   | task[(@exercise-interactive = 'webwork-reps')]" mode="representations">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'pg-problems'">
+            <!-- duplicate exercise, task, PROJECT-LIKE -->
+            <xsl:copy>
+                <!-- and duplicate the associated attributes, while moving to new mode -->
+                <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
+                <!-- for building problem sets, we do not need much metadata,      -->
+                <!-- nor the connecting "introduction" or "conclusion", we just    -->
+                <!-- want to make the PG code available in a predictable way       -->
+                <!-- (see templates following).  But we do need a title for naming -->
+                <!-- files and building the set definition files pointing to them. -->
+                <xsl:apply-templates select="title" mode="webwork-rep-to-pg"/>
+                <xsl:apply-templates select="webwork-reps" mode="webwork-rep-to-pg"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- dynamic and static are just a copy of what was retrieved above -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="@*" mode="representations"/>
+                <!-- will need split later, as migrates to "when" -->
+                <xsl:apply-templates select="node()" mode="representations"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Edit a "webwork-reps" from the server into just PG material -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-pg">
