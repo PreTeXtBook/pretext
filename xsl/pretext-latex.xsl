@@ -79,7 +79,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These may duplicate variables in disjoint conversions.          -->
 
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
-<xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)" />
+<xsl:variable name="b-has-webwork-reps" select="boolean($document-root//var[@form])" />
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
 <xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
@@ -1604,7 +1604,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
         <xsl:if test="$b-has-webwork-reps">
-            <xsl:if test="$document-root//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
+            <xsl:if test="$document-root//statement//var[@form='checkboxes' or @form='popup']">
                 <xsl:text>[inline]</xsl:text>
             </xsl:if>
         </xsl:if>
@@ -6078,7 +6078,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: gradually eliminate "var"'s presence from static  -->
 <!-- coming from a WeBWorK server, similar to how the above  -->
 <!-- replaced var with fillin for quantitative answers.      -->
-<xsl:template match="webwork-reps/static//statement//var[@form]">
+<xsl:template match="statement//var[@form]">
     <xsl:choose>
         <!-- TODO: make semantic list style in preamble -->
         <xsl:when test="@form='popup'" >
