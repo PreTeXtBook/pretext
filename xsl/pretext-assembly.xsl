@@ -1659,6 +1659,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | investigation[(@exercise-interactive = 'webwork-reps')]
                    | task[(@exercise-interactive = 'webwork-reps')]" mode="representations">
     <xsl:choose>
+        <!-- destined for creating problem sets, really just need PG code -->
         <xsl:when test="$exercise-style = 'pg-problems'">
             <!-- duplicate exercise, task, PROJECT-LIKE -->
             <xsl:copy>
@@ -1673,12 +1674,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="webwork-reps" mode="webwork-rep-to-pg"/>
             </xsl:copy>
         </xsl:when>
-        <!-- dynamic and static are just a copy of what was retrieved above -->
+        <!-- static, for multiple conversions, but primarily LaTeX -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
+        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
+        <!-- to/for HTML conversion                                         -->
         <xsl:otherwise>
             <xsl:copy>
-                <xsl:apply-templates select="@*" mode="representations"/>
-                <!-- will need split later, as migrates to "when" -->
-                <xsl:apply-templates select="node()" mode="representations"/>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
             </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
@@ -1715,5 +1722,68 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Drop "webwork-reps" children we don't need for problem sets -->
 <xsl:template match="webwork-reps/static" mode="webwork-rep-to-pg"/>
 <xsl:template match="webwork-reps/server-data" mode="webwork-rep-to-pg"/>
+
+
+<!-- Static from webwork-reps as a generic exercise  -->
+<!-- Edit a "webwork-reps" from the server into guts -->
+<!-- of a static exercise or PROJECT-LIKE            -->
+
+<!-- Kill author's lead-in/lead-out material on sight, we recreate -->
+<!-- their children with "node()" in main reorganization template  -->
+<xsl:template match="introduction[following-sibling::webwork-reps]" mode="webwork-rep-to-static"/>
+<xsl:template match="conclusion[preceding-sibling::webwork-reps]" mode="webwork-rep-to-static"/>
+
+<!-- Meld an author's "introduction" and "conclusion" into          -->
+<!-- (a) the similarly-named items of a task-structured object      -->
+<!-- (b) the statement of an object with a simpler structure        -->
+<!-- We recurse into (many, principal) selected components of       -->
+<!-- webwork-reps/static which effectively ignores  webwork-reps/pg -->
+<!-- and  webwork-reps/server  so these pieces never make it into   -->
+<!-- the assembled source.                                          -->
+<!--                                                                -->
+<!-- NB: we lose some attributes attached above to                  -->
+<!-- "introduction" and "conclusion" (not "exercise"), BUT          -->
+<!--   (i) we cannot point *into* a WW problem (no targets)         -->
+<!--   (ii) we do not have numbered items (eg Figure)               -->
+<!--   (iii) by removing them, we just disrupt any                  -->
+<!--         sequences, and uniqueness is preserved                 -->
+<!--   (iv) we could figure out which ones to copy where, if needed -->
+<xsl:template match="webwork-reps" mode="webwork-rep-to-static">
+    <xsl:choose>
+        <!-- a WW "staged" exercise, may have an top-level introduction and -->
+        <!-- conclusion already, and does not have a top-level statement    -->
+        <xsl:when test="static/task">
+            <xsl:if test=".//introduction|static/introduction">
+                <introduction>
+                    <xsl:apply-templates select="../introduction/node()" mode="webwork-rep-to-static"/>
+                    <xsl:apply-templates select="static/introduction/node()" mode="webwork-rep-to-static"/>
+                </introduction>
+            </xsl:if>
+            <xsl:apply-templates select="static/task" mode="webwork-rep-to-static"/>
+            <xsl:if test="../conclusion|static/conclusion">
+                <conclusion>
+                    <xsl:apply-templates select="../conclusion/node()" mode="webwork-rep-to-static"/>
+                    <xsl:apply-templates select="static/conclusion/node()" mode="webwork-rep-to-static"/>
+                </conclusion>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <statement>
+                <xsl:apply-templates select="../introduction/node()" mode="webwork-rep-to-static"/>
+                <xsl:apply-templates select="static/statement/node()" mode="webwork-rep-to-static"/>
+                <xsl:apply-templates select="../conclusion/node()" mode="webwork-rep-to-static"/>
+            </statement>
+            <xsl:apply-templates select="static/hint" mode="webwork-rep-to-static"/>
+            <xsl:apply-templates select="static/answer" mode="webwork-rep-to-static"/>
+            <xsl:apply-templates select="static/solution" mode="webwork-rep-to-static"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="node()|@*" mode="webwork-rep-to-static">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+    </xsl:copy>
+</xsl:template>
 
 </xsl:stylesheet>
