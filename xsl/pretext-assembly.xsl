@@ -1446,6 +1446,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="exercise-interactive-attribute">
     <xsl:attribute name="exercise-interactive">
         <xsl:choose>
+            <!-- This is defensive, so statement//var below does not   -->
+            <!-- match for WW.  Ancestor varies on extraction, or not. -->
+            <xsl:when test="self::task and (ancestor::webwork|ancestor::webwork-reps)">
+                <xsl:text>webwork-task</xsl:text>
+            </xsl:when>
+            <!-- WeBWorK next, signal is clear.  Again, -->
+            <!-- two passes and we identify which one.  -->
+            <xsl:when test="webwork and $b-extracting-pg">
+                <xsl:text>webwork-authored</xsl:text>
+            </xsl:when>
+            <xsl:when test="webwork-reps and not(b-extracting-pg)">
+                <xsl:text>webwork-reps</xsl:text>
+            </xsl:when>
             <!-- hack for temporary demo HTML versions -->
             <xsl:when test="@runestone">
                 <xsl:text>htmlhack</xsl:text>
@@ -1471,7 +1484,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
             </xsl:when>
-            <xsl:when test="statement//var and not(webwork) and not(self::task//ancestor::webwork)">
+            <!-- noted WeBWork earlier, so this is Runestone fillin -->
+            <xsl:when test="statement//var">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
             <!-- new dynamic fillin goes here, perhaps:                     -->

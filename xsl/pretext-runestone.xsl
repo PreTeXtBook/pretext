@@ -50,7 +50,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- values of @exercise-interactive are added in the        -->
 <!-- pre-processing phase.  program/@interactive takes on    -->
 <!-- values of 'activecode' and 'codelens'.                  -->
-<xsl:variable name="b-needs-runestone" select="boolean($document-root//*[@exercise-interactive and not(@exercise-interactive='container') and not(@exercise-interactive='static')]|$document-root//program[@interactive])"/>
+<xsl:variable name="b-needs-runestone" select="boolean($document-root//*[@exercise-interactive and not(@exercise-interactive='container') and not(@exercise-interactive='static') and not(@exercise-interactive='webwork-reps') and not(@exercise-interactive='webwork-task')]|$document-root//program[@interactive])"/>
 
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
