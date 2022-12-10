@@ -773,6 +773,9 @@
     opacity: 0.05;
     margin-top: 0.1em;
 }
+.ptx-content .autopermalink a {
+    color: #a00;
+}
 .ptx-content .autopermalink > * {
     padding-left: 0.2em;
     padding-right: 0.2em;
@@ -2944,6 +2947,11 @@ label.incorrect .feedback {
     background-color: #5cb85c;
 }
 */
+/* to undo Runestone's presentermode.css */
+.ptx-content .bottom {
+    position: unset;
+}
+
 .ptx-content .exercise-wrapper form button:hover {
     cursor: pointer;
     background-color: #e0e0ff;

@@ -37,7 +37,7 @@
     border-bottom-right-radius: 5px;
 
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    z-index: 200;
+    z-index: 20;
 
     position: sticky;
     top: 1px;

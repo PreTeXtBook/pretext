@@ -63,6 +63,11 @@
   background: white;
   border-left: 1px solid #ccc;
 }
+.pretext .ptx-page > .ptx-main.notoc {
+  margin-left: 0;
+  transition-property: margin-left;
+  transition-duration: 0.3s;
+}
 @media screen and (max-width: 800px) {
   .pretext .ptx-page > .ptx-main {
     margin-left: 0;
@@ -341,7 +346,7 @@
   .pretext #ptx-navbar .previous-button,
   .pretext #ptx-navbar .up-button,
   .pretext #ptx-navbar .next-button {
-    width: 33.3%;
+    width: 33.2%;
   }
   .pretext .ptx-page > .ptx-page-footer {
     margin-left: 5em;
