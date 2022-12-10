@@ -14,6 +14,8 @@
 function toggletoc() {
    thesidebar = document.getElementById("ptx-sidebar");
    thesidebar.classList.toggle("hidden");
+   themain = document.getElementsByClassName("ptx-main")[0];
+   themain.classList.toggle("notoc");
    console.log("toggled the toc");
 }
 

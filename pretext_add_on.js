@@ -291,7 +291,7 @@ console.log("this is e", e);
     } else {
         console.log("                       adding permalinks");
         /* add permalinks to all sections and articles */
-        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
+        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > .para, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > .para, main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
         //   items_needing_permalinks = document.querySelectorAll('body section article');
         this_url = window.location.href.split('#')[0];
         permalink_word = "&#x1F517;";
