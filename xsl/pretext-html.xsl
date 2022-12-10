@@ -836,6 +836,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this is overridden in the conversion to Braille,  -->
 <!-- to center chapter numbers above titles (and appendix, -->
 <!-- preface, etc), so coordinate with those templates.    -->
+<!-- NB: we often squelch type names via CSS, but for the  -->
+<!-- braille conversion it is not so easy, so we instead   -->
+<!-- provide a modified version of this template there.    -->
+<!-- Consider keeping these in-sync.                       -->
 <xsl:template match="*" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -857,6 +861,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *display* a number at birth is therefore more complicated    -->
 <!-- than *having* a number or not.                               -->
 <!-- NB: We sneak in links for standalone versions of worksheets. -->
+<!-- NB: we often squelch type names via CSS, but for the braille -->
+<!-- conversion it is not so easy, so we instead provide a        -->
+<!-- modified version of this template there. Consider keeping    -->
+<!-- these in-sync.                                               -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
@@ -4607,6 +4615,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="(@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -7889,10 +7898,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
                             <xsl:text>px;</xsl:text>
                         </xsl:when>
-                        <!-- If there is no $left-col/@width, use 20% as default -->
+                        <!-- If there is no $left-col/@width, silently use 20% as default -->
+                        <!-- We get some ill-formed WW exercises here, so a less-precise  -->
+                        <!-- warning is given on the author's source.                     -->
                         <xsl:otherwise>
-                            <xsl:message>PTX:ERROR:   cell with p has no corresponding col with @width, using 20% as default</xsl:message>
-                            <xsl:apply-templates select="." mode="location-report" />
                             <xsl:value-of select="$design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
                         </xsl:otherwise>
                     </xsl:choose>
@@ -10315,8 +10324,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
+<!-- NB: a grossly simplified version of this      -->
+<!-- template is used as an override for the       -->
+<!-- conversion to braille.  Keep them in sync.    -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
+    <!-- TODO: simplify these variables, much like for LaTeX -->
     <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
                                             (ancestor::exercises and $b-has-divisional-hint) or
                                             (ancestor::reading-questions and $b-has-reading-hint) or
@@ -10339,7 +10352,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                           (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-webwork-inline-static)"/>
     <xsl:choose>
         <!-- We print the static version when that is explicitly directed. -->
-        <xsl:when test="($b-static = 'yes')">
+        <xsl:when test="$b-static">
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original"      select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()"/>

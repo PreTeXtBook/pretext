@@ -1655,7 +1655,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <paragraphs>
             <title>Large Numbers</title>
-            <p>Using a separator to aid in reading a large number should avoid using a space as a separator.  So <m>234,766,544</m> or <m>234.766.544</m> is preferable to <m>234\,766\,544</m>.  (We have used a <latex/> <q>thin space</q>, <c> \, </c>, in the latter.)</p>
+            <p>Using a separator to aid in reading a large number should avoid using a space as a separator.  So <m>234{,}766{,}544</m> or <m>234.766.544</m> is preferable to <m>234\,766\,544</m>.  We have used braces around the commas in the first instance, and a <latex/> <q>thin space</q>, <c> \, </c>, in the last instance.) For <m>234{,}766{,}544</m>, braces around each comma prevents automatic trailing space that would normally be desirable in a list of numbers.  In other words, author as:<cd>
+                <cline>&lt;m&gt;234{,}766{,}544&lt;/m&gt;</cline>
+            </cd>Here is the version with commas and no effort to distinguish the big number from a list of smaller numbers: <m>234,766,544</m>.</p>
         </paragraphs>
 
         <paragraphs>
@@ -2038,6 +2040,28 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>There is no provision for a <tag>feedback</tag> element.  Further explanation may be provided in a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.  Also, a good interactive interface can provide assistance to a reader by telling them if they have too few or too many blocks, or combining or removing blocks, and so on.</p>
 
             <p>As of 2022-06-14 work is underway to relax the strict ordering assumed of the blocks.  So there will be extra markup to specify a poset or directed acyclic graph on the blocks.</p>
+        </subsection>
+
+        <subsection xml:id="horizontal-parsons-problems">
+            <title>Horizontal Parsons Problems</title>
+            <idx><h>Parsons problems</h><h>horizontal</h></idx>
+            <idx><h>interactive exercises</h><h>horizontal Parsons problems</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>horizontal Parsons problems</h></idx>
+            <idx><h>mixed-up blocks exercises</h><h>horizontal</h></idx>
+            <idx><h>interactive exercises</h><h>horizontal mixed-up blocks</h></idx>
+            <idx><h>exercise</h><h>interactive</h><h>horizontal mixed-up blocks</h></idx>
+
+            <p>A <term>horizontal Parsons problem</term> is very similar to the traditional <em>vertical</em> problems just described in <xref ref="parsons-problems"/>.  Except they are horizontal.  Which means the blocks are very short (a word or symbol) and they are rearranged by the reader to form a horizontal bit of text.  They are ideal for constructing a single line of computer code, such as a regular expression, or a short sentence.  While similar, they have a few features which are different.</p>
+
+            <p>To indicate a horizontal problem, set the <attr>layout</attr> attribute on the <tag>blocks</tag> element to the value <c>horizontal</c>.  The default value is <c>vertical</c> and so is not necessary for the traditional versions.</p>
+
+            <p>The syntax for blocks is the same, and they are authored in an order that yields a correct answer.  The use of an <attr>order</attr> attribute on each <tag>block</tag> indicates a rearrangment to be used for a static version.  Blocks may be reused.  To do this, place an <attr>xml:id</attr> on a single instance of a block to be reused.  Then, to indicate its reuse as part of a correct version, use a <attr>ref</attr> attribute on a <tag>block</tag>.  Since the duplicate instance is not shown to the reader, the use of <attr>order</attr> and <attr>ref</attr> is mutually-exclusive.  You can set the <attr>reuse</attr> attribute on the <attr>blocks</attr> element to the value <c>yes</c> to force the interface to allow the reader to reuse blocks, even if there is no duplication in the correct version.  Otherwise, the interface reacts to the presence or absence of blocks with the <attr>ref</attr> attribute.</p>
+
+            <p>Distractors may be included in the same manner as for vertical Parsons problems, by setting the <attr>correct</attr> attribute on a <tag>block</tag> to the value <c>no</c>.  The default is <c>yes</c>.  It does not make much sense to indicate a reusable block (in either form) as a distractor, so don't.</p>
+
+            <p>Another option on the <attr>blocks</attr> element is the <attr>randomize</attr> attribute.  The default value is <c>yes</c>.  When the value is set to <c>no</c>, then the blocks are always presented to the reader in the same order, which is the one given by the <attr>order</attr> attribute.</p>
+
+            <p>As of 2022-11-28, the implemenation of these problems assumes that the blocks rearrange to be computer code.  So you <em>can</em> set the <attr>language</attr> attribute on the <tag>exercise</tag> element to <c>natural</c>, but it will not have much effect.  Markup like <tag>em</tag> on the text of a block will be unpredictable, as will attempts to use mathematics.  And the text of blocks will always be in a monospaced font, perhaps with some syntax highlighting if <attr>language</attr> is set properly.</p>
         </subsection>
 
         <subsection xml:id="matching-exercises">
@@ -4234,6 +4258,33 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <title>(*) Unicode Support in Windows</title>
             <p></p>
         </subsection>
+    </section>
+
+    <section xml:id="topic-braille-practices">
+        <title>Braille Best Practices</title>
+        <idx><h>braille</h><h>best practices</h></idx>
+
+        <p>This is an evolving list of best practices for authoring (and publishing) so that a conversion to braille is as useful as possible for the blind reader.</p>
+
+        <p>Many recommendations for mathematics will be useful to any reader, but perhaps even moreso for a blind reader, so read <xref ref="topic-mathematics-practices"/>.  Recommendations here may also improve your project for all readers.</p>
+
+        <paragraphs>
+            <title>Division Numbering</title>
+
+            <p>Braille uses various devices to indicate division headings, since font weight, size, and color are not available.  These include starting on a new page, centering text, preceding with a blank lines, standard levels of indentation (4 or 6 cells), and combinations of these devices.</p>
+
+            <p>In a conversion from <pretext/>, the text of each heading is the number of the division, followed by the title.  So the formatting and the presence of a hierarchical number are together good clues that a new division is starting.  And the number of parts in the hierarchical number will also serve as a precise indicator of the depth of the division.</p>
+
+            <p>As a publisher, you can <q>turn off</q> division numbering below some level (<xref ref="publication-file-numbering"/>).  Think carefully about the impact this will have on a blind reader, since lesser division headings will be harder to recognize without a leading number.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Side-By-Side Layout</title>
+
+            <p>A <tag>sidebyside</tag> can be a very useful device, but think carefully about its suitability.  As of 2022-11-30, we have yet to even handle them carefully in a braille conversion.  And if your panels hold images, that is even harder, since we do not have good support for tactile images yet.</p>
+
+            <p>In any event, we will likely <q>unwind</q> a <tag>sidebyside</tag> into a series of its panels running <em>down</em> the page, rather than <em>across</em>, along with a note about how many panels to expect.  So when you author a <tag>sidebyside</tag>, consider how this alternate presentation in braille will be received by the reader.</p>
+        </paragraphs>
     </section>
 
     <section xml:id="topic-doctest-sage">

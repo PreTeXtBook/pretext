@@ -83,8 +83,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- abandoning the chunking templates.                                    -->
 <xsl:variable name="chunk-level" select="0"/>
 
-<!-- NB: This will need to be expanded with terms like //subsection/exercises -->
-<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection)"/>
+<!-- All the ways we can have a division at the subsubsection level.     -->
+<!-- This influences how headings of divisions are indicated (centered,  -->
+<!-- cell5, cell7) when subdivisions go this deep.  Or not.              -->
+<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection |
+                                                         $document-root//subsection/exercises |
+                                                         $document-root//subsection/reading-questions |
+                                                         $document-root//subsection/worksheet |
+                                                         $document-root//subsection/solutions |
+                                                         $document-root//subsection/references |
+                                                         $document-root//subsection/glossary
+                                                        )"/>
 
 <!-- Necessary to get pre-constructed Nemeth braille for math elements. -->
 <xsl:param name="mathfile" select="''"/>
@@ -246,14 +255,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-
-<!-- Unnumbered, chapter-level headings, just title text -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
-    <span class="title">
-        <xsl:apply-templates select="." mode="title-full" />
-    </span>
-</xsl:template>
-
 <!-- We override the "section-heading" template to place classes  -->
 <!--                                                              -->
 <!--     fullpage centerpage center cell5 cell7                   -->
@@ -261,7 +262,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- onto the heading so liblouis can style it properly           -->
 <!-- This is greatly simplified, "hX" elements just become "div", -->
 <!-- which is all we need for the  liblouis  semantic action file -->
-
 
 <xsl:template match="*" mode="section-heading">
     <div>
@@ -272,73 +272,180 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Verbatim from -html conversion read about it there -->
-<xsl:template match="book|article" mode="section-heading" />
-<!-- Slideshow is similar, but not present in the -html stylesheet -->
-<xsl:template match="slideshow" mode="section-heading" />
+<!-- Verbatim from -html conversion for book, article, so read -->
+<!-- about it there.  Slideshow doesn't get a heading either.  -->
+<xsl:template match="book|article|slideshow" mode="section-heading" />
 
-<!-- Default is indeterminate (seacrch while debugging) -->
+<!-- Heading Content (for divisions) -->
+
+<!-- This is an override of the template in the HTML conversion. -->
+<!-- We drop the names of divisions (which are usually squelced  -->
+<!-- by CSS), except we keep "Chapter" since the chapter-busting -->
+<!-- Python depends on it.  Otherwise, number and title, as      -->
+<!-- recommended by Cantino and Maneki.                          -->
+<xsl:template match="*" mode="heading-content">
+    <!-- retain "Chapter" as a necessary component -->
+    <!-- of the regular-expressions used in the    -->
+    <!-- chapter-busting Python routine            -->
+    <!-- Note: to test without the "Chapter"       -->
+    <!-- string in the heading, replace            -->
+    <!--     "self::chapter" -> "false()"          -->
+    <!-- or "comment-out" the whole "if" stanza    -->
+    <xsl:if test="self::chapter">
+        <span class="type">
+            <xsl:apply-templates select="." mode="type-name" />
+        </span>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <span class="codenumber">
+        <xsl:apply-templates select="." mode="number" />
+    </span>
+    <xsl:text> </xsl:text>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- Unnumbered, chapter-level headings, just title text -->
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- This is an override of the template in the HTML conversion, -->
+<!-- but now for specilaized divisions. We drop the names of     -->
+<!-- divisions (which are usually squelced by CSS), especially   -->
+<!-- since this is often a duplicate of the (default) title we   -->
+<!-- provide.  Also, links to HTML worksheets are killed (and a  -->
+<!-- heading is a strange place to have them anyway?).           -->
+<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
+    <!-- be selective about displaying numbers at birth-->
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
+    </xsl:variable>
+    <xsl:if test="($is-numbered = 'true')">
+        <span class="codenumber">
+            <xsl:apply-templates select="." mode="number"/>
+        </span>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- Heading Classes -->
+
+<!-- Default is indeterminate (search while debugging) -->
 <xsl:template match="*" mode="division-class">
     <xsl:text>none</xsl:text>
 </xsl:template>
 
 <!-- Part is more like a title page -->
 <xsl:template match="part" mode="division-class">
-    <xsl:text>fullpage</xsl:text>
+    <xsl:call-template name="division-class-part-like"/>
 </xsl:template>
 
 <!-- Chapters headings are always centered -->
-<xsl:template match="chapter" mode="division-class">
-    <xsl:text>centerpage</xsl:text>
+<xsl:template match="chapter|appendix" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
 </xsl:template>
 
 <!-- Chapter-level headings are always centered -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="division-class">
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|backmatter/solutions|backmatter/references|index|colophon" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
+</xsl:template>
+
+<xsl:template match="section" mode="division-class">
+    <xsl:call-template name="division-class-section-like"/>
+</xsl:template>
+
+<xsl:template match="subsection" mode="division-class">
+    <xsl:call-template name="division-class-subsection-like"/>
+</xsl:template>
+
+<!-- terminal always, according to schema -->
+<xsl:template match="subsubsection" mode="division-class">
+    <xsl:call-template name="division-class-subsubsection-like"/>
+</xsl:template>
+
+<!-- The "look" of a specialized division (not in the backmatter)      -->
+<!-- depends on its depth, which we determine by a look at its parent. -->
+<xsl:template match="exercises|reading-questions|worksheet|references|solutions|glossary" mode="division-class">
+    <xsl:choose>
+        <xsl:when test="parent::chapter|parent::appendix">
+            <xsl:call-template name="division-class-section-like"/>
+        </xsl:when>
+        <xsl:when test="parent::section">
+            <xsl:call-template name="division-class-subsection-like"/>
+        </xsl:when>
+        <xsl:when test="parent::subsection">
+            <xsl:call-template name="division-class-subsubsection-like"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A "section" in a slideshow is a major division,      -->
+<!-- holding many slides, so much like a "part" of a book -->
+<xsl:template match="slideshow/section" mode="division-class">
+    <xsl:call-template name="division-class-part-like"/>
+</xsl:template>
+
+<!-- New centered pages for each new slide -->
+<xsl:template match="slide" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
+</xsl:template>
+
+
+<!-- Heading Classes Named Templates-->
+
+<!-- These are named templates, hence context-free, intentionally.        -->
+<!-- These templated provide the five classes present in teh semantic     -->
+<!-- file to control the look of headings at various depths.  They do     -->
+<!-- rely on the global boolean  $b-has-subsubsection  variable.          -->
+<!--                                                                      -->
+<!-- The "*-like" names make the most sense in the case of a book with    -->
+<!-- subsubsections, where the hierachy goes right down the line.         -->
+<!-- Absent subsubsections, centering is abandoned sooner for a           -->
+<!-- cell5/cell7  look below a chapter.                                   -->
+<!--                                                                      -->
+<!-- The purpose of isolating these to allow for their use with           -->
+<!-- specialized divisions that occur at many different depths, so a      -->
+<!-- parent can be examined as a clue to depth, and a choice can be made. -->
+
+<xsl:template name="division-class-part-like">
+    <xsl:text>fullpage</xsl:text>
+</xsl:template>
+
+<xsl:template name="division-class-chapter-like">
     <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
-<!-- Section and subsection is complicated, since it depends on -->
-<!-- the depth.  The boolean variable is true with a depth of 4 -->
-<!-- or greater, starting from "chapter".                       -->
-
-<xsl:template match="section" mode="division-class">
+<xsl:template name="division-class-section-like">
     <xsl:choose>
-        <!-- slideshow is exceptional, a major division, -->
-        <!-- but no real content, and only a title       -->
-        <xsl:when test="parent::slideshow">
-            <xsl:text>fullpage</xsl:text>
-        </xsl:when>
-        <!-- routine and *not* generally terminal -->
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>center</xsl:text>
         </xsl:when>
-        <!-- routine and necessarily terminal -->
         <xsl:otherwise>
             <xsl:text>cell5</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-
-<xsl:template match="subsection" mode="division-class">
+<xsl:template name="division-class-subsection-like">
     <xsl:choose>
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>cell5</xsl:text>
         </xsl:when>
-        <!-- terminal -->
         <xsl:otherwise>
             <xsl:text>cell7</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- terminal always, according to schema -->
-<xsl:template match="subsubsection" mode="division-class">
+<xsl:template name="division-class-subsubsection-like">
     <xsl:text>cell7</xsl:text>
-</xsl:template>
-
-<xsl:template match="slide" mode="division-class">
-    <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
 <!-- Heading Utilities -->
@@ -440,6 +547,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
     </xsl:if>
 </xsl:template>
+
+<!-- ################# -->
+<!-- WeBWorK Exercises -->
+<!-- ################# -->
+
+<!-- The "webwork-reps" element contains a "static" representation in    -->
+<!-- PreTeXt syntax, which we process as if it was a sttic exercise      -->
+<!-- authored as such.  We do need to know if the publisher wants        -->
+<!-- hints, answers, or solutions available where the exercises is born. -->
+<!-- NB: this is a simplified version of the stock HTML conversion which -->
+<!-- avoids having things like an "Activate" button, and similar         -->
+<!-- interactive features.                                               -->
+<xsl:template match="webwork-reps">
+    <xsl:param name="b-original" select="true()"/>
+    <!-- TODO: simplify these variables, much like for LaTeX -->
+    <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
+                                            (ancestor::exercises and $b-has-divisional-hint) or
+                                            (ancestor::reading-questions and $b-has-reading-hint) or
+                                            (ancestor::worksheet and $b-has-worksheet-hint) or
+                                            (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-answer) or
+                                              (ancestor::exercises and $b-has-divisional-answer) or
+                                              (ancestor::reading-questions and $b-has-reading-answer) or
+                                              (ancestor::worksheet and $b-has-worksheet-answer) or
+                                              (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-solution) or
+                                                (ancestor::exercises and $b-has-divisional-solution) or
+                                                (ancestor::reading-questions and $b-has-reading-solution) or
+                                                (ancestor::worksheet and $b-has-worksheet-solution) or
+                                                (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:apply-templates select="static" mode="exercise-components">
+        <xsl:with-param name="b-original"      select="$b-original"/>
+        <xsl:with-param name="b-has-statement" select="true()"/>
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+    </xsl:apply-templates>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Subsidiary Items -->
@@ -1038,23 +1184,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- We write a paragraph with the "description"  -->
-<!-- (authored as a bare string of sorts) and a   -->
-<!-- paragraph with our internal id, which is the -->
-<!-- basis of a filename that would be used to    -->
-<!-- construct any tactile versions.              -->
-<xsl:template match="image">
-    <div data-braille="image">
-        <xsl:text>Image ID: </xsl:text>
-        <xsl:apply-templates select="." mode="visible-id" />
-        <br/>
-        <xsl:text>Description: </xsl:text>
-        <xsl:apply-templates select="description"/>
-        <br/>
-        <xsl:if test="$page-format = 'electronic'">
-            <xsl:text>Transcriber note: this image should be provided separately for an electronic version.</xsl:text>
-        </xsl:if>
-    </div>
+<!-- An image may be a child of a "figure".  It can also be buried  -->
+<!-- within a "sidebyside", perhaps in a "figure", or in a "stack". -->
+<!-- This is the other case, a "naked" tabular, perhaps just        -->
+<!-- between paragraphs, and thus a child of a division or a block. -->
+<!-- We always replace with the textual version.  In the embossed   -->
+<!-- case, we move to new placeholder page for a tactile version.   -->
+<xsl:template match="image[not(parent::figure|ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="textual-version"/>
+    <xsl:if test="$page-format = 'emboss'">
+        <div data-braille="pageeject"/>
+        <xsl:apply-templates select="." mode="placeholder-page"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- For an image inside a figure, we replace the image by its -->
+<!-- text version, but we do not follow with a page-eject,     -->
+<!-- since we want to finish the figure.                       -->
+<xsl:template match="image[parent::figure]">
+    <xsl:apply-templates select="." mode="textual-version"/>
+    <!-- The parent figure will always have a caption, and   -->
+    <!-- neither the transcriber note for the image, nor the -->
+    <!-- author-provided description, nor the caption,       -->
+    <!-- provides a separator to force the caption onto its  -->
+    <!-- own line, we so take matters into our own hands.    -->
+    <br/>
 </xsl:template>
 
 <!-- If a "figure" has an "image", we let the image do its thing -->
@@ -1063,13 +1217,95 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- version of the image should be subsituted in.               -->
 <xsl:template match="figure[image]">
     <xsl:apply-imports/>
+    <!-- place the placholder page *after* the figure finishes -->
     <xsl:if test="$page-format = 'emboss'">
         <div data-braille="pageeject"/>
-        <xsl:text>Transcriber note: the image with ID </xsl:text>
-        <xsl:apply-templates select="image" mode="visible-id" />
-        <xsl:text> belongs here.  Replace this page with the independently generated tactile image.</xsl:text>
-        <div data-braille="pageeject"/>
+        <xsl:apply-templates select="image" mode="placeholder-page"/>
     </xsl:if>
+</xsl:template>
+
+<!-- We write a paragraph with the "description"  -->
+<!-- (authored as a bare string of sorts) and a   -->
+<!-- paragraph with our internal id, which is the -->
+<!-- basis of a filename that would be used to    -->
+<!-- construct any tactile versions.              -->
+<xsl:template match="image" mode="textual-version">
+    <div data-braille="image">
+        <xsl:call-template name="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>Image "</xsl:text>
+                <xsl:apply-templates select="." mode="visible-id" />
+                <xsl:text>" goes here.</xsl:text>
+                <xsl:if test="description">
+                    <xsl:text>  A text description follows.</xsl:text>
+                </xsl:if>
+                <xsl:if test="$page-format = 'emboss'">
+                    <xsl:text> The next page can be replaced with a tactile version.</xsl:text>
+                </xsl:if>
+            </xsl:with-param>
+        </xsl:call-template>
+        <br/>
+        <xsl:if test="description">
+            <xsl:text>Description: </xsl:text>
+            <xsl:apply-templates select="description"/>
+        </xsl:if>
+    </div>
+</xsl:template>
+
+<!-- We assume the embossable case has been checked, and a -->
+<!-- page-ejection has happened just before this template  -->
+<!-- is applied.  And then we follow with a page ejection. -->
+<xsl:template match="image" mode="placeholder-page">
+    <xsl:call-template name="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>Replace this page with image "</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:text>".</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <div data-braille="pageeject"/>
+</xsl:template>
+
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Transcriber Notes -->
+
+<!-- Here code is the transcriber, so we can explain places where we   -->
+<!-- have done something different than it might be realized in print. -->
+<!--                                                                   -->
+<!-- Two three-cell sequences indicate the begin and end of a          -->
+<!-- transcriber note.  Additionally, the indentation is 7-5           -->
+<!-- margins, which we achieve with a div.data-braille attribute       -->
+<!-- set to "transcribernote" (no dash is intentional) for the         -->
+<!-- liblouis semantic action file.  See BANA Formats 3.2.1:           -->
+<!-- www.brailleauthority.org/formats/2016manual-web/section03.html    -->
+<!--                                                                   -->
+<!-- The content provided in the "message" parameter by a calling      -->
+<!-- instance should look like the HTML produced by this stylesheet.   -->
+<!-- For example to get emphasis, code here should provide             -->
+<!-- <em class="emphasis"> so the correct semantic action is applied.  -->
+<!-- No overall root element is necessary.  "xsl:text" can be used to  -->
+<!-- control stray whitespace.  "xsl:apply-templates" can also be used -->
+<!-- to access variable properties, such as identification of objects  -->
+<!-- like images. See examples throughout this stylesheet.             -->
+<!-- Short answer: the value of "message" is made into a deep copy for -->
+<!-- the HTML output (which is next seen by liblouis.                  -->
+<!--                                                                   -->
+<!-- Template is context-free intentionally.                           -->
+<xsl:template name="transcriber-note">
+    <xsl:param name="message"/>
+
+    <div data-braille="transcriber-note">
+        <!-- dot 4, dot 46, dot 126 -->
+        <xsl:text>&#x2808;&#x2828;&#x2823;</xsl:text>
+        <!-- straight duplication of raw HTML provided as a parameter -->
+        <xsl:copy-of select="$message"/>
+        <!-- dot 4, dot 46, dot 345 -->
+        <xsl:text>&#x2808;&#x2828;&#x281C;</xsl:text>
+    </div>
 </xsl:template>
 
 </xsl:stylesheet>

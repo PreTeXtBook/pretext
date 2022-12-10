@@ -477,10 +477,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
-    <exercises xml:id="interactive-exercises">
-        <title>Interactive Exercises</title>
-
-        <p>A sample of interactive problem types.</p>
+    <exercises xml:id="true-false-exercises">
+        <title>True/False Exercises</title>
 
         <exercise label="vector-space-dimension">
             <title>True/False</title>
@@ -495,6 +493,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
             </hint>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="multiple-choice-exercises">
+        <title>Multiple Choice Exercises</title>
 
         <exercise label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
@@ -715,6 +717,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>You can take a derivative on any one of the choices to see if it is correct or not, rather than using techniques of integration to find <em>a single</em> correct answer.</p>
             </hint>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="parsons-exercises">
+        <title>Parsons Exercises</title>
 
         <exercise label="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
@@ -919,6 +925,109 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </block>
             </blocks>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="horizontal-parsons-exercises">
+        <title>Horizontal Parsons Exercises</title>
+
+        <exercise label="horizontal-parson-sql-statement-simple" language="sql">
+            <title>Parsons Problem, SQL statement</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-no-randomize" language="sql">
+            <title>Parsons Problem, SQL statement, no randomization</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.  This version of this problem will <em>always</em> present the blocks in the same fixed order (but incorrect, hopefully!), as prescribed by the author in the source.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="no">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-with-db" language="sql" database="sql/test.db">
+            <title>Parsons Problem, SQL statement, automatic feedback</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+            <tests>
+            assert 1,1 == world
+            assert 0,1 == hello
+            assert 2,1 == 42
+            </tests>
+        </exercise>
+
+        <exercise label="horizontal-parson-natural" language="natural">
+            <title>Parsons Problem, Natural Language</title>
+            <statement>
+                <p>Form the sentence often used to show font samples.  You can reuse blocks as needed.</p>
+            </statement>
+            <blocks layout="horizontal" reuse="yes" randomize="yes">
+                <block ref="font-the" order="6"/>
+                <block order="8">quick</block>
+                <block order="2">brown</block>
+                <block order="3">fox</block>
+                <block order="1">jumped</block>
+                <block order="5">over</block>
+                <block xml:id="font-the">the</block>
+                <block order="7">lazy</block>
+                <block order="4">dog</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-natural-distractor" language="natural">
+            <title>Parsons Problem, Natural Language, with Distractors</title>
+            <statement>
+                <p>Form the sentence often used to show font samples.  Again, but now with distractors.</p>
+            </statement>
+            <blocks layout="horizontal">
+                <block ref="font-the-two" order="7"/>
+                <block order="10" correct="yes">quick</block>
+                <block order="2">brown</block>
+                <block order="3">fox</block>
+                <block order="1">jumped</block>
+                <block order="8" correct="no">foo</block>
+                <block order="6">over</block>
+                <block xml:id="font-the-two">the</block>
+                <block order="9">lazy</block>
+                <block order="5" correct="no">bar</block>
+                <block order="4">dog</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-reusable" language="sql">
+            <title>Parsons Problem, SQL statement, reusable</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.  Same problem as above, but we allow blocks to be reused (even though the solution does not require that).</p>
+            </statement>
+            <blocks layout="horizontal" reuse="yes" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="matching-exercises">
+        <title>Matching Exercises</title>
 
         <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
         <exercise label="matching-dates">
@@ -1002,6 +1111,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>For openers, a basis for a subspace must be a <em>subset</em> of the subspace.</p>
             </hint>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="clickable-area-exercises">
+        <title>Clickable Area Exercises</title>
 
         <exercise label="clickable-text">
             <title>Clickable Areas, <q>Regular</q> Text</title>
@@ -1086,6 +1199,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
             </feedback>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="short-answer-exercises">
+        <title>Short Answer Exercises</title>
 
         <exercise label="short-answer-question">
             <title>Short Answer</title>
@@ -1095,6 +1212,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </statement>
             <response/>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="fill-in--exercises">
+        <title>Fill-In Exercises</title>
 
         <exercise label="fillin-integer">
             <title>Fill-In, Integer Answer</title>
@@ -1199,7 +1320,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </var>
             </setup>
         </exercise>
-
     </exercises>
 
     <section xml:id="exercises-timed">

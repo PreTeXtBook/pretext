@@ -496,7 +496,9 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- HTML only, a developer must elect to use this CSS file -->
 <xsl:param name="debug.developer.css" select="'no'"/>
 
-<!-- HTML only, testing early-releases of MathJax 4 -->
+<!-- HTML only, testing early-releases of MathJax 4                    -->
+<!-- See: https://github.com/mathjax/MathJax/releases                  -->
+<!-- https://github.com/mathjax/MathJax-src/releases/tag/4.0.0-alpha.1 -->
 <xsl:param name="debug.mathjax4" select="'no'"/>
 <xsl:variable name="mathjax4-testing" select="$debug.mathjax4 = 'yes'"/>
 
@@ -9568,12 +9570,18 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Checks for errors that would be time-consuming -->
 <!-- if done repeatedly, so a pre-processing step   -->
 <!-- Calling context could be "mathbook" element    -->
+<!-- NB: this is called early by any author-facing  -->
+<!-- "mainline" conversion (and not by some         -->
+<!-- utilities) where the select attribute is the   -->
+<!-- "$original" tree defined as the author's       -->
+<!-- actual source file.                            -->
 <xsl:template match="mathbook|pretext" mode="generic-warnings">
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="identifier-warning"/>
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
+    <xsl:apply-templates select="." mode="table-paragraph-cells-warning" />
 </xsl:template>
 
 <!-- Literate Programming support is half-baked, 2017-07-21 -->
@@ -9729,6 +9737,17 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:for-each>
 </xsl:template>
 
+<xsl:template match="mathbook|pretext" mode="table-paragraph-cells-warning">
+    <xsl:for-each select=".//tabular">
+        <xsl:if test="row/cell/p and not(col/@width)">
+            <xsl:message>PTX:ERROR:   a &lt;tabular&gt; has at least one paragraph (&lt;p&gt;) inside a &lt;cell&gt;, yet there are no &lt;col&gt; elements with a @width attribute.  Default widths will be supplied.</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+
+
 <!-- ############ -->
 <!-- Deprecations -->
 <!-- ############ -->
@@ -9740,6 +9759,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- If despearate, concatentate with $apos.       -->
 <!-- A &#xa; can be used if necessary, but only    -->
 <!-- rarely do we bother.                          -->
+<!-- NB: this is called early by any author-facing -->
+<!-- "mainline" conversion (and not by some        -->
+<!-- utilities) where the select attribute is the  -->
+<!-- "$original" tree defined as the author's      -->
+<!-- actual source file.                           -->
 <xsl:template name="deprecation-message">
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
@@ -10375,7 +10399,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$docinfo/html/baseurl/@href" />
         <xsl:with-param name="date-string" select="'2020-11-22'" />
-        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.'"/>
+        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.  If you have multiple values due to multiple &quot;docinfo&quot; controlled by versions, then results will be very unpredictable.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2021-01-03  chunk.level now in publisher file -->

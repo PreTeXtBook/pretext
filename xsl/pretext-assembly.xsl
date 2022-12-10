@@ -142,7 +142,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to inspect the original in various places  -->
 <!-- We do not know if we have "fixed" the      -->
 <!-- deprecated overall element, so need to     -->
-<!-- try both.                                  -->
+<!-- try both.  For example, this variable is   -->
+<!-- employed by the warnings and deprecation   -->
+<!-- messages that result from analyzing an     -->
+<!-- author's source, since we may "repair"     -->
+<!-- some of them later, so we have to catch    -->
+<!-- them early. -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
 <!-- These modal templates duplicate the source exactly for each -->
@@ -275,6 +280,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
+<!-- Once the "repair" tree is formed, any source modifications      -->
+<!-- have been made, and it is on to *augmenting* the source.        -->
+<!-- Various publisher variables are consulted for the augmentation, -->
+<!-- notably the style/depth of numbering.  So this tree needs to    -->
+<!-- be available for creating those variables, notably sensible     -->
+<!-- defaults based on the source.  We refer to this tree as the     -->
+<!-- "assembly" tree.                                                -->
+<xsl:variable name="assembly-root" select="$repair/pretext"/>
+<xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
+<xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
+
 <xsl:variable name="identification-rtf">
     <!-- pass in all elements with authored @xml:id -->
     <!-- to look for authored duplicates            -->
@@ -291,17 +307,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$repair" mode="identification"/>
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
-
-<!-- Once the "repair" tree is formed, any source modifications      -->
-<!-- have been made, and it is on to *augmenting* the source.        -->
-<!-- Various publisher variables are consulted for the augmentation, -->
-<!-- notably the style/depth of numbering.  So this tree needs to    -->
-<!-- be available for creating those variables, notably sensible     -->
-<!-- defaults based on the source.  We refer to this tree as the     -->
-<!-- "assembly" tree.                                                -->
-<xsl:variable name="assembly-root" select="$identification/pretext"/>
-<xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
-<xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="language-rtf">
     <xsl:apply-templates select="$identification" mode="language"/>
@@ -1453,8 +1458,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and choices">
                 <xsl:text>multiplechoice</xsl:text>
             </xsl:when>
-            <xsl:when test="statement and blocks">
+            <!-- vertical is default/traditional -->
+            <xsl:when test="statement and blocks and not(blocks/@layout = 'horizontal')">
                 <xsl:text>parson</xsl:text>
+            </xsl:when>
+            <xsl:when test="statement and blocks and (blocks/@layout = 'horizontal')">
+                <xsl:text>parson-horizontal</xsl:text>
             </xsl:when>
             <xsl:when test="statement and matches">
                 <xsl:text>matching</xsl:text>
@@ -1548,6 +1557,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1557,6 +1567,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                       project[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1566,6 +1577,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                      activity[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1575,6 +1587,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   exploration[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1584,6 +1597,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 investigation[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1593,6 +1607,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                          task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
+                               (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or

@@ -77,6 +77,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- recursively defined, variables, this discussion may be        -->
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
+<!--                                                               -->
+<!-- Also, in this stylesheet, we should not be letting "docinfo"  -->
+<!-- directly set variables, as "docinfo" contains                 -->
+<!-- settings/characteristics that are part of the author's source -->
+<!-- and are not changed/influenced by a publisher.  Some uses are -->
+<!-- historical when we we were not so aware of the distinction,   -->
+<!-- and some uses are tangential (such as the type of "part" the  -->
+<!-- author has chosen).                                           -->
 
 <!-- ############## -->
 <!-- Common Options -->
@@ -1370,6 +1378,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering -->
 <!-- ######### -->
 
+<!-- NB: the "$assembly-*" trees are a bit dangerous, being formed  -->
+<!-- partway through the pre-processing phase.  Their purpose, when -->
+<!-- used to query the structure of the document was to be certain  -->
+<!-- that the pre-processing was done building versions, and/or     -->
+<!-- done adding/deleting material.  We want to build numbers as    -->
+<!-- part of pre-processing, and various defaults are a function    -->
+<!-- of structure, hence the intermediate trees. (We are being very -->
+<!-- cautious here, likely the $original trees would suffice for    -->
+<!-- determining gross sructure.                                    -->
 
 <!-- User-supplied Numbering for Maximum Level     -->
 <!-- Respect switch, or provide sensible defaults  -->
@@ -2655,9 +2672,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$publication/html/baseurl/@href">
                 <xsl:value-of select="$publication/html/baseurl/@href"/>
             </xsl:when>
-            <!-- reluctantly query the old docinfo version -->
-            <xsl:when test="$assembly-docinfo/html/baseurl/@href">
-                <xsl:value-of select="$assembly-docinfo/html/baseurl/@href"/>
+            <!-- reluctantly query the old docinfo version  -->
+            <!-- If the "version" feature controls multiple -->
+            <!-- "docinfo" then this might query the wrong  -->
+            <!-- one (using $assembly-docinfo here led to a -->
+            <!-- circular variable definition).             -->
+            <xsl:when test="$original/docinfo/html/baseurl/@href">
+                <xsl:value-of select="$original/docinfo/html/baseurl/@href"/>
             </xsl:when>
             <!-- otherwise use the default, is empty as sentinel -->
             <xsl:otherwise/>
@@ -2922,6 +2943,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- String parameters are deprecated, so in -common -->
 <!-- file, and are only consulted secondarily here   -->
 
+<!-- NB: the "$assembly-*" trees are a bit dangerous, being formed  -->
+<!-- partway through the pre-processing phase.  Their previous      -->
+<!-- purpose, when used to query the "docinfo" was to be certain    -->
+<!-- that the pre-processing was done building versions, and/or     -->
+<!-- done adding/deleting material.  They could probably be         -->
+<!-- changed to "$original/docinfo".  The risk is that a project    -->
+<!-- might have multiple "docinfo" for multiple versions (the       -->
+<!-- supported scheme for this) and would be relying on only one    -->
+<!-- "docinfo" surviving.  However, uses below are for deprecated   -->
+<!-- situations, so we can warn about multiple "docinfo" in the     -->
+<!-- deprecation messages (as has been done for html/baseurl/@href. -->
+
 <xsl:variable name="statcounter-project">
     <xsl:choose>
         <xsl:when test="$publication/html/analytics/@statcounter-project">
@@ -3046,9 +3079,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   "default" - historical, equal to "textbook"                 -->
 <!--                                                               -->
 <!-- Resulting variable values are "none", "textbook", "reference" -->
+<!-- and *not* "default", it was an historical fudge.              -->
 <!-- Note the boolean variable for the no-search case              -->
 <xsl:variable name="native-search-variant">
-    <xsl:variable name="default-native-search" select="'default'"/>
+    <xsl:variable name="default-native-search" select="'textbook'"/>
     <xsl:choose>
         <xsl:when test="$publication/html/search/@variant = 'none'">
             <xsl:text>none</xsl:text>
