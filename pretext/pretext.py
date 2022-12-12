@@ -2836,11 +2836,9 @@ def html(
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
-    # Only produce a file of directory locations when requested
-    if (file_format == "html-with-mapping"):
-        map_path_to_xml_id(xml, tmp_dir)
+    map_path_to_xml_id(xml, tmp_dir)
 
-    if file_format in ["html", "html-with-mapping"]:
+    if file_format =="html":
         # with multiple files, we need to copy a tree, and
         # shutil.copytree() will balk at overwriting directories
         # before Python 3.8.  The  distutils  module is old
@@ -2871,10 +2869,8 @@ def html(
 
 
 # Following is an experimental routine to support online two-panel
-# editing with Bryan Jones' CodeChat tool.  Look to see where it is
-# called, and chase your way backward to an undocumented switch/format
-# in  pretext/pretext  that enables this
-
+# editing with Bryan Jones' CodeChat tool.
+#
 # Build a mapping between XML IDs and the resulting generated HTML files. The goal: map from source files to the resulting HTML files produced by the pretext build. The data structure is:
 #
 # .. code::
@@ -2896,16 +2892,24 @@ def map_path_to_xml_id(
 ) -> None:
     import collections  # defaultdict
     import glob  # glob
-    import json
+    import json  # dumps
     import pathlib  # Path
     import urllib.parse  # urlparse
 
     # We assume a previous call to ``xsltproc`` has already verified that lxml is installed.
     import lxml.ElementInclude
 
+    # Import from the CLI; otherwise, give up on trying to produce the mapping.
+    try:
+        from pretext import utils  # project_path
+    except ImportError:
+        return
+
+    # Make insertions easy by specifying that newly-created entries in ``path_to_xml_id`` contain an empty list.
     path_to_xml_id = collections.defaultdict(list)
 
-    xml = str(pathlib.Path(xml).resolve()) # normalize path separators to current OS
+    # Normalize path separators to current OS.
+    xml = str(pathlib.Path(xml).resolve())
 
     # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
     is_win = sys.platform == "win32"
@@ -2914,6 +2918,9 @@ def map_path_to_xml_id(
     html_files = set(
         pathlib.Path(html_file).stem for html_file in glob.glob(dest_dir + "/*.html")
     )
+
+    # Use the absolute path to the project directory to make source files relative (see later code).
+    project_path = utils.project_path()
 
     # lxml turns ``xml:id`` into the string below.
     xml_ns = "{http://www.w3.org/XML/1998/namespace}"
@@ -2949,9 +2956,11 @@ def map_path_to_xml_id(
             if is_win:
                 path = path[1:]
             # Use ``resolve()`` to standardize capitalization on Windows.
-            path = str(pathlib.Path(path).resolve())
+            stdpath = pathlib.Path(path).resolve()
+            # Make this path relative to the project directory, to avoid writing potentially confidential information (username / local filesystem paths) to the mapping file, which might be published to the web.
+            relpath = stdpath.relative_to(project_path)
             # Add this XML ID to others for this path.
-            path_to_xml_id[path].append(xml_id)
+            path_to_xml_id[str(relpath)].append(xml_id)
 
     # Save the result as a JSON file in the ``dest_dir``.
     (pathlib.Path(dest_dir) / "mapping.json").write_text(json.dumps(path_to_xml_id))
@@ -3520,7 +3529,7 @@ def release_temporary_directories():
     global __temps
 
     # log.level is 10 for debug, greater for all other levels.
-    if log.level > 10: 
+    if log.level > 10:
         for td in __temps:
             log.info("Removing temporary directory {}".format(td))
             # conservatively, raise exception on errors
