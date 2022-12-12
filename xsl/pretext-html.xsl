@@ -1172,22 +1172,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <table class="notation-list">
         <tr>
             <th>
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'symbol'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'symbol'"/>
+                </xsl:apply-templates>
             </th>
             <th>
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'description'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'description'"/>
+                </xsl:apply-templates>
             </th>
             <th>
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'location'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'location'"/>
+                </xsl:apply-templates>
             </th>
         </tr>
         <xsl:apply-templates select="$document-root//notation" mode="backmatter" />
@@ -1750,36 +1747,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- One-time, global variables provide index terms -->
 <!-- Localization file should provide upper-case versions -->
 <xsl:variable name="upper-see">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'see'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'see'"/>
+    </xsl:apply-templates>
 </xsl:variable>
 
 <xsl:variable name="lower-see">
     <xsl:variable name="upper">
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'see'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'see'"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
     <xsl:value-of select="substring($upper, 2)"/>
 </xsl:variable>
 
 <xsl:variable name="upper-seealso">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'also'" />
-        <xsl:with-param name="lang" select="$document-language"/>
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'also'"/>
+    </xsl:apply-templates>
 </xsl:variable>
 
 <xsl:variable name="lower-seealso">
     <xsl:variable name="upper">
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'also'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'also'"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
     <xsl:value-of select="substring($upper, 2)"/>
@@ -2194,10 +2187,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:variable>
                     <span class="incontext">
                         <a href="{$href}" class="internal">
-                            <xsl:call-template name="type-name">
-                                <xsl:with-param name="string-id" select="'incontext'" />
-                                <xsl:with-param name="lang" select="$document-language"/>
-                            </xsl:call-template>
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'incontext'"/>
+                            </xsl:apply-templates>
                         </a>
                     </span>
                 </xsl:if>
@@ -10421,52 +10413,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="static/@seed"/>
         </xsl:attribute>
         <xsl:attribute name="data-localize-correct">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'correct'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-incorrect">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'incorrect'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-blank">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'blank'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-submit">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'submit'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-check-responses">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'check-responses'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-reveal">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'reveal'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-randomize">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'randomize'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:attribute name="data-localize-reset">
-            <xsl:call-template name="type-name">
+            <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'reset'"/>
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:attribute>
         <xsl:choose>
             <xsl:when test="server-data/@problemSource">
@@ -10503,10 +10487,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </div>
         <div class="problem-buttons">
             <button class="webwork-button" onclick="handleWW('{@ww-id}')">
-                <xsl:call-template name="type-name">
+                <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'activate'"/>
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                </xsl:apply-templates>
             </button>
         </div>
     </xsl:element>
@@ -10967,10 +10950,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="href">
             <xsl:text>#ptx-content</xsl:text>
         </xsl:attribute>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'skip-to-content'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'skip-to-content'"/>
+        </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 
@@ -11180,17 +11162,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$previous-url" />
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'previous'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'previous'"/>
+                    </xsl:apply-templates>
                 </xsl:attribute>
                 <span class="icon">&lt;</span>
                 <span class="name">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'previous-short'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'previous-short'"/>
+                    </xsl:apply-templates>
                 </span>
             </xsl:element>
         </xsl:when>
@@ -11199,10 +11179,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">previous-button button disabled</xsl:attribute>
                 <span class="icon">&lt;</span>
                 <span class="name">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'previous-short'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'previous-short'"/>
+                    </xsl:apply-templates>
                 </span>
             </xsl:element>
         </xsl:otherwise>
@@ -11222,16 +11201,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$url" />
             </xsl:attribute>
             <xsl:attribute name="title">
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'index-part'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'index-part'"/>
+                </xsl:apply-templates>
             </xsl:attribute>
             <span class="name">
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'index-part'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'index-part'"/>
+                </xsl:apply-templates>
             </span>
         </xsl:element>
     </xsl:if>
@@ -11241,10 +11218,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="index-jump-nav">
     <div class="indexnav">
         <span class="mininav">
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'jump-to'" />
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'jump-to'"/>
+            </xsl:apply-templates>
         </span>
         <span class="indexjump">
             <a href="#indexletter-a">A </a>
@@ -11298,16 +11274,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$next-url" />
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'next'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'next'"/>
+                    </xsl:apply-templates>
                 </xsl:attribute>
                 <span class="name">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'next-short'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'next-short'"/>
+                    </xsl:apply-templates>
                 </span>
                 <span class="icon">&gt;</span>
             </xsl:element>
@@ -11316,10 +11290,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:element name="span">
                 <xsl:attribute name="class">next-button button disabled</xsl:attribute>
                 <span class="name">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'next-short'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'next-short'"/>
+                    </xsl:apply-templates>
                 </span>
                 <span class="icon">&gt;</span>
             </xsl:element>
@@ -11341,17 +11314,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$up-url" />
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'up'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'up'"/>
+                    </xsl:apply-templates>
                 </xsl:attribute>
                 <span class="icon">^</span>
                 <span class="name">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'up-short'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'up-short'"/>
+                    </xsl:apply-templates>
                 </span>
             </xsl:element>
         </xsl:when>
@@ -11360,10 +11331,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">up-button button disabled</xsl:attribute>
                 <span class="icon">^</span>
                 <span class="name">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'up-short'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'up-short'"/>
+                    </xsl:apply-templates>
                 </span>
             </xsl:element>
         </xsl:otherwise>
@@ -11525,10 +11495,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <button class="toc-toggle button" aria-label="Show or hide table of contents">
             <span class="icon">☰</span>
             <span class="name">
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'toc'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'toc'"/>
+                </xsl:apply-templates>
             </span>
         </button>
         <!-- Prev/Up/Next buttons on top, according to options -->
@@ -12193,10 +12162,9 @@ TODO:
                 <xsl:apply-templates select="$docinfo/feedback/text" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'feedback'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'feedback'"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
     </a>
@@ -12209,10 +12177,9 @@ TODO:
 <xsl:template name="pretext-link">
     <a class="pretext-link" href="https://pretextbook.org">
         <div class="name">
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'authored'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'authored'"/>
+            </xsl:apply-templates>
         </div>
         <div class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="338 3000 8772 6866">
@@ -12419,10 +12386,9 @@ TODO:
             <xsl:value-of select="$language-attribute" />
         <xsl:text>'],&#xa;</xsl:text>
         <xsl:text>                       evalButtonText: '</xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'" />
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'evaluate'"/>
+            </xsl:apply-templates>
             <xsl:text> (</xsl:text>
             <xsl:value-of select="$language-text" />
             <xsl:text>)</xsl:text>
@@ -12450,10 +12416,9 @@ TODO:
         <xsl:text>                       linked: true,&#xa;</xsl:text>
         <xsl:text>                       languages: sagecell.allLanguages,&#xa;</xsl:text>
         <xsl:text>                       evalButtonText: '</xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'" />
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'evaluate'"/>
+            </xsl:apply-templates>
         <xsl:text>'});&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
@@ -12622,20 +12587,18 @@ TODO:
         <div id="searchresultsplaceholder" style="display: none">
             <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
             <h2>
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'search-results-heading'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'search-results-heading'"/>
+                </xsl:apply-templates>
                 <xsl:text>: </xsl:text>
                 <span id="searchterms"></span>
             </h2>
             <!-- div#searchempty is not visible when there are results -->
             <div id="searchempty">
                 <span>
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'no-search-results'" />
-                        <xsl:with-param name="lang" select="$document-language"/>
-                    </xsl:call-template>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'no-search-results'"/>
+                    </xsl:apply-templates>
                     <xsl:text>.</xsl:text>
                 </span>
             </div>
@@ -12655,10 +12618,9 @@ TODO:
         <script>
             <!-- button text, internationalized -->
             <xsl:text>sagecellEvalName='</xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'" />
-                <xsl:with-param name="lang" select="$document-language"/>
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'evaluate'"/>
+            </xsl:apply-templates>
             <xsl:text> (</xsl:text>
             <!-- $language-text hard-coded since language  -->
             <!-- support within knowls is not yet settled -->
