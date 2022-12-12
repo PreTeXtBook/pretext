@@ -330,10 +330,9 @@
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
         <xsl:text>COMMENT('</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'authored'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'authored'"/>
+        </xsl:apply-templates>
         <xsl:text>');&#xa;</xsl:text>
         <xsl:apply-templates select="description"/>
     </xsl:if>
@@ -375,10 +374,9 @@
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
         <xsl:text>COMMENT('</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'authored'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'authored'"/>
+        </xsl:apply-templates>
         <xsl:text>');&#xa;</xsl:text>
         <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
         <xsl:apply-templates select="description"/>

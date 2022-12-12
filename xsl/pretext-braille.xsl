@@ -227,10 +227,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A marker for generating the Table of Contents,      -->
     <!-- content of the element is the title of the new page -->
     <div data-braille="tableofcontents">
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'toc'" />
-            <xsl:with-param name="lang" select="$document-language"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'toc'"/>
+        </xsl:apply-templates>
     </div>
 </xsl:template>
 

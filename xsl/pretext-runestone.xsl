@@ -600,16 +600,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="type-name"/>
             </xsl:when>
             <xsl:when test="self::program[@interactive = 'codelens']">
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'program-codelens'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'program-codelens'"/>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="self::program[@interactive = 'activecode']">
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'program-activecode'" />
-                    <xsl:with-param name="lang" select="$document-language"/>
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'program-activecode'"/>
+                </xsl:apply-templates>
             </xsl:when>
         </xsl:choose>
         <!-- "video" can be a "figure", and "program" can be in a -->
