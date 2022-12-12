@@ -1544,12 +1544,6 @@ def webwork_to_xml(
                             solution.append(chcopy)
 
         static_webwork_level(static, response_root)
-        # Remove elements we'd rather not keep
-        # p with only a single fillin, not counting those inside an li without preceding siblings
-        for unwanted in static.xpath(
-            "//p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]"
-        ):
-            unwanted.getparent().remove(unwanted)
 
         # Add elements for interactivity
         if ww_reps_version == "2":
