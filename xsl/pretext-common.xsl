@@ -3139,6 +3139,27 @@ Book (with parts), "section" at level 3
 
 <!-- 2022-04-15: transitional, code comments may not match reality -->
 
+<!-- The  xsl/localizations/localizations.xml  file contains the base -->
+<!-- filenames for the individual (per-language) files.  We form a    -->
+<!-- node-set of these filenames in the  $locale-files  variable.     -->
+<!-- Then the  document()  function will read multiple files and      -->
+<!-- form one grand node-set with all of the translations for         -->
+<!-- all languages.  The  xi:include  device is possible within the   -->
+<!-- localizations  directory, but would require activating that      -->
+<!-- feature (e.g.  xsltproc -xinclude) for even the simplest         -->
+<!-- (non-modular) documents.  Better to accomplish the consolidation -->
+<!-- with standard XSLT.                                              -->
+<!-- NB: the $localizations variable has multiple root nodes, so when -->
+<!-- used in a context-switch before looking up a key, the "for-each" -->
+<!-- is actually looping over multiple root nodes.  Perhaps a single  -->
+<!-- "for-each" here should do a "copy-of" without the root node, all -->
+<!-- captured in a variable, then converted back to a node-set with   -->
+<!-- just one root.                                                   -->
+<xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/filename" />
+<xsl:variable name="localizations" select="document($locale-files)" />
+<!-- Key to lookup a particular localization -->
+<xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
+
 <!-- Ultimately translations are all contained in the files of  -->
 <!-- the xsl/localizations directory, which provides            -->
 <!-- upper-case, singular versions.  In this way, we only ever  -->
@@ -3234,27 +3255,6 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="string-id">
     <xsl:value-of select="local-name(.)"/>
 </xsl:template>
-
-<!-- The  xsl/localizations/localizations.xml  file contains the base -->
-<!-- filenames for the individual (per-language) files.  We form a    -->
-<!-- node-set of these filenames in the  $locale-files  variable.     -->
-<!-- Then the  document()  function will read multiple files and      -->
-<!-- form one grand node-set with all of the translations for         -->
-<!-- all languages.  The  xi:include  device is possible within the   -->
-<!-- localizations  directory, but would require activating that      -->
-<!-- feature (e.g.  xsltproc -xinclude) for even the simplest         -->
-<!-- (non-modular) documents.  Better to accomplish the consolidation -->
-<!-- with standard XSLT.                                              -->
-<!-- NB: the $localizations variable has multiple root nodes, so when -->
-<!-- used in a context-switch before looking up a key, the "for-each" -->
-<!-- is actually looping over multiple root nodes.  Perhaps a single  -->
-<!-- "for-each" here should do a "copy-of" without the root node, all -->
-<!-- captured in a variable, then converted back to a node-set with   -->
-<!-- just one root.                                                   -->
-<xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/filename" />
-<xsl:variable name="localizations" select="document($locale-files)" />
-<!-- Key to lookup a particular localization -->
-<xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
 
 <!-- This utility *named* template *requires* a "string-id" and a "lang" -->
 <!-- in order to look up a localization provided by contributors in the  -->
