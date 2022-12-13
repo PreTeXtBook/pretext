@@ -1419,6 +1419,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- of eventual xref/cross-references, since we use a   -->
     <!-- for-each and context changes.  Not strictly         -->
     <!-- necessary, but correct.                             -->
+    <!-- We also pass this node down into the construction   -->
+    <!-- of headings, to provide context for the             -->
+    <!-- localization of words like "see" and "see also" in  -->
+    <!-- the index.  (So it is an @xml:lang on the           -->
+    <!-- "index-list" generator which dictates this,         -->
+    <!-- allowing for indices in two different languages.)   -->
+    <!-- TODO: perhaps the originating "index-list" should   -->
+    <!-- be the context of this chain of templates, moving   -->
+    <!-- later ones away from named templates?               -->
     <xsl:variable name="the-index-list" select="."/>
     <!-- "idx" as mixed content (replaces "index").          -->
     <!-- Or, "idx" structured with up to three "h"           -->
@@ -1629,6 +1638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <div class="indexletter" id="indexletter-{$current-letter}">
             <!-- send to group-by-headings, which is vestigal -->
             <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
+                <xsl:with-param name="the-index-list" select="$the-index-list"/>
                 <xsl:with-param name="heading-group" select="/.." />
                 <xsl:with-param name="letter-group" select="$letter-group" />
             </xsl:apply-templates>
@@ -1642,6 +1652,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output the (3-part) heading and locators before restarting. -->
 <!-- TODO: investigate reworking this via Muenchian Method       -->
 <xsl:template match="index" mode="group-by-heading">
+    <xsl:param name="the-index-list"/>
     <!-- Empty node list from parent of root node -->
     <xsl:param name="heading-group"/>
     <xsl:param name="letter-group"/>
@@ -1655,6 +1666,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- same heading, accumulate and iterate -->
             <xsl:when test="($next-index/text[1] = ./text[1]) and ($next-index/text[2] = ./text[2]) and ($next-index/text[3] = ./text[3])">
                 <xsl:apply-templates select="$next-index" mode="group-by-heading">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
                     <xsl:with-param name="heading-group" select="$new-heading-group" />
                     <xsl:with-param name="letter-group" select="$letter-group"/>
                 </xsl:apply-templates>
@@ -1663,10 +1675,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- write and restart heading accumulation -->
             <xsl:otherwise>
                 <xsl:call-template name="output-one-heading">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
                     <xsl:with-param name="heading-group" select="$new-heading-group" />
                 </xsl:call-template>
                 <!-- restart grouping by heading, pass through letter-group -->
                 <xsl:apply-templates select="$next-index" mode="group-by-heading">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
                     <xsl:with-param name="heading-group" select="/.." />
                     <xsl:with-param name="letter-group" select="$letter-group"/>
                 </xsl:apply-templates>
@@ -1680,6 +1694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Do not duplicate prior components that   -->
 <!-- match, do not write an empty heading.    -->
 <xsl:template name="output-one-heading">
+    <xsl:param name="the-index-list"/>
     <xsl:param name="heading-group" />
 
     <xsl:if test="$heading-group/see and $heading-group/cross-reference">
@@ -1709,6 +1724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the next outermost tests will fail so no duplication -->
             <xsl:if test="$empty2">
                 <xsl:call-template name="knowl-list">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
                     <xsl:with-param name="heading-group" select="$heading-group" />
                 </xsl:call-template>
             </xsl:if>
@@ -1723,6 +1739,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the next outermost test will fail so no duplication -->
             <xsl:if test="$empty3">
                 <xsl:call-template name="knowl-list">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
                     <xsl:with-param name="heading-group" select="$heading-group" />
                 </xsl:call-template>
             </xsl:if>
@@ -1735,6 +1752,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="$pattern/text[3]/node()" />
             <!-- last chance to write xref list -->
             <xsl:call-template name="knowl-list">
+                <xsl:with-param name="the-index-list" select="$the-index-list"/>
                 <xsl:with-param name="heading-group" select="$heading-group" />
             </xsl:call-template>
         </div>
@@ -1743,40 +1761,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Place all the locators into the div for -->
 <!-- the final (sub)item in its own span.    -->
-
-<!-- One-time, global variables provide index terms -->
-<!-- Localization file should provide upper-case versions -->
-<xsl:variable name="upper-see">
-    <xsl:apply-templates select="." mode="type-name">
-        <xsl:with-param name="string-id" select="'see'"/>
-    </xsl:apply-templates>
-</xsl:variable>
-
-<xsl:variable name="lower-see">
-    <xsl:variable name="upper">
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'see'"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
-    <xsl:value-of select="substring($upper, 2)"/>
-</xsl:variable>
-
-<xsl:variable name="upper-seealso">
-    <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'also'"/>
-    </xsl:apply-templates>
-</xsl:variable>
-
-<xsl:variable name="lower-seealso">
-    <xsl:variable name="upper">
-        <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'also'"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
-    <xsl:value-of select="substring($upper, 2)"/>
-</xsl:variable>
 
 <!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22  -->
 <!-- "see", following main entry, 18.16                    -->
@@ -1798,6 +1782,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- generic references, 18.22                             -->
 <!--   TODO: use content of "see" and "seealso"            -->
 <xsl:template name="knowl-list">
+    <xsl:param name="the-index-list"/>
     <xsl:param name="heading-group" />
 
     <!-- Some formatting depends on presence of subentries -->
@@ -1841,10 +1826,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <em>
                                 <xsl:choose>
                                     <xsl:when test="$b-has-subentry">
-                                        <xsl:value-of select="$lower-see"/>
+                                        <!-- lower-case "see" -->
+                                        <xsl:variable name="upper">
+                                            <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                <xsl:with-param name="string-id" select="'see'"/>
+                                            </xsl:apply-templates>
+                                        </xsl:variable>
+                                        <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+                                        <xsl:value-of select="substring($upper, 2)"/>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:value-of select="$upper-see"/>
+                                        <!-- upper-case "See" -->
+                                        <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                            <xsl:with-param name="string-id" select="'see'"/>
+                                        </xsl:apply-templates>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </em>
@@ -1878,12 +1873,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         <xsl:text> </xsl:text>
                                         <xsl:text>(</xsl:text>
                                         <em>
-                                            <xsl:value-of select="$lower-seealso"/>
+                                            <!-- lower-case "see also" -->
+                                            <xsl:variable name="upper">
+                                                <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                        <xsl:with-param name="string-id" select="'also'"/>
+                                                </xsl:apply-templates>
+                                            </xsl:variable>
+                                            <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+                                            <xsl:value-of select="substring($upper, 2)"/>
                                         </em>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <em>
-                                            <xsl:value-of select="$upper-seealso"/>
+                                            <!-- upper-case "See also" -->
+                                            <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                    <xsl:with-param name="string-id" select="'also'"/>
+                                            </xsl:apply-templates>
                                         </em>
                                     </xsl:otherwise>
                                 </xsl:choose>
