@@ -3182,10 +3182,22 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
 
-    <!-- Transitional: this is old global behavior,  -->
-    <!-- to be replaced by multi-lingual support     -->
-    <xsl:variable name="lang" select="$document-language"/>
+    <!-- Look up the tree for the "closest" indication of a language  -->
+    <!-- for localization. The  @locale-lang  attribute is set by the -->
+    <!-- -assembly  stylesheet, and guarantees the language is        -->
+    <!-- supported by an extant localization file.                    -->
+    <!--                                                              -->
+    <!-- Tip: To get the "document-language" as the in-force          -->
+    <!-- language, *only* for the case of setting a string-id         -->
+    <!-- override, set the context to $root in the employing @select, -->
+    <!-- then $lang-element *will* be $root and $lang *will* be the   -->
+    <!-- overall, document-wide, language (set by -assembly).         -->
+    <xsl:variable name="lang-element" select="ancestor-or-self::*[@locale-lang][1]"/>
+    <xsl:variable name="lang">
+        <xsl:value-of select="$lang-element/@locale-lang"/>
+    </xsl:variable>
 
+    <!-- Now, build the actual translation -->
     <xsl:variable name="translation">
         <xsl:choose>
             <!-- First, look in docinfo for document-specific rename with correct language -->
