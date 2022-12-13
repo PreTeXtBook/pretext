@@ -10734,6 +10734,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:call-template name="feedback-link" />
                 </xsl:if>
                 <xsl:call-template name="pretext-link" />
+                <xsl:call-template name="runestone-link"/>
                 <xsl:call-template name="powered-by-mathjax" />
             </div>
             <!-- analytics services, if requested -->
@@ -12178,6 +12179,8 @@ TODO:
 
 <!-- Branding in page-footer, mostly hard-coded     -->
 <!-- HTTPS for authors delivering from secure sites -->
+<!-- TODO: internationalize "Authored with"         -->
+<!-- (a change), "Powered by", "Hosted on"          -->
 <xsl:template name="pretext-link">
     <a class="pretext-link" href="https://pretextbook.org">
         <div class="name">
@@ -12193,6 +12196,25 @@ TODO:
             </g>
             </svg>
         </div>
+    </a>
+</xsl:template>
+
+<xsl:template name="runestone-link">
+    <xsl:variable name="text-version">
+        <xsl:choose>
+            <xsl:when test="$b-host-runestone">
+                <xsl:text>Hosted on Runestone</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>Powered by Runestone</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <a class="runestone-link" href="https://runestone.academy">
+        <div class="name">
+            <xsl:value-of select="$text-version"/>
+        </div>
+        <img class="logo" title="{$text-version}" src="https://runestone.academy/runestone/static/rectangle_badge.png" alt="{$text-version}"/>
     </a>
 </xsl:template>
 
