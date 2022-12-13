@@ -3430,7 +3430,7 @@ def release_temporary_directories():
     global __temps
 
     # log.level is 10 for debug, greater for all other levels.
-    if log.level > 10: 
+    if log.level > 10:
         for td in __temps:
             log.info("Removing temporary directory {}".format(td))
             # conservatively, raise exception on errors

@@ -24,15 +24,15 @@
 
 import pretext as ptx
 
-# Set up logging (replacing _verbose/_debug).  
-# Use log.info(<string>) or log.debug(<string>).  
-# Also available now are log.critical(), log.error(), and log.warning(). 
+# Set up logging (replacing _verbose/_debug).
+# Use log.info(<string>) or log.debug(<string>).
+# Also available now are log.critical(), log.error(), and log.warning().
 # 0-level verbosity will be set to only show log.critical() messages.
 import logging
 #ptxlogger will be compatible with the CLI logger.
 log = logging.getLogger('ptxlogger')
 log.setLevel(logging.DEBUG)
-# Create stream handler for console output.  
+# Create stream handler for console output.
 # Later we will set the level with log.setLevel(logging.[level])
 console_log = logging.StreamHandler()
 log_format = logging.Formatter('PTX:%(levelname)-8s: %(message)s')
