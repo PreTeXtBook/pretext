@@ -11399,4 +11399,141 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Uninteresting Code, aka the Bad Bank                    -->
 <!-- Deprecated, unmaintained, etc, parked here out of sight -->
 
+<!-- This is NEW, meant to be introduced, then a massive  -->
+<!-- rename of the mode to go back to the real new version in -common -->
+<xsl:template match="*" mode="type-name-new">
+    <xsl:param name="string-id" select="''"/>
+
+    <!-- The $string-id parameter allows for an override on        -->
+    <!-- semi-automatic determination of the object being named    -->
+    <!-- (see the modal "string-id" templates).  This is necessary -->
+    <!-- for items like the names of interface buttons that are    -->
+    <!-- not associated closely with a certain PreTeXt element.    -->
+    <xsl:variable name="str-id">
+        <xsl:choose>
+            <xsl:when test="not($string-id = '')">
+                <xsl:value-of select="$string-id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="string-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- Look up the tree for the "closest" indication of a language  -->
+    <!-- for localization. The  @locale-lang  attribute is set by the -->
+    <!-- -assembly  stylesheet, and guarantees the language is        -->
+    <!-- supported by an extant localization file.                    -->
+    <!--                                                              -->
+    <!-- Tip: To get the "document-language" as the in-force          -->
+    <!-- language, *only* for the case of setting a string-id         -->
+    <!-- override, set the context to $root in the employing @select, -->
+    <!-- then $lang-element *will* be $root and $lang *will* be the   -->
+    <!-- overall, document-wide, language (set by -assembly).         -->
+    <xsl:variable name="lang-element" select="ancestor-or-self::*[@locale-lang][1]"/>
+    <xsl:variable name="lang">
+        <xsl:value-of select="$lang-element/@locale-lang"/>
+    </xsl:variable>
+
+    <!-- Now, build the actual translation -->
+    <xsl:variable name="translation">
+        <xsl:choose>
+            <!-- First, look in docinfo for document-specific rename with correct language -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and @xml:lang=$lang]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @xml:lang=$lang]"/>
+            </xsl:when>
+            <!-- Second, look in docinfo for document-specific rename with correct language, -->
+            <!-- but with @lang attribute which was deprecated on 2019-02-23                 -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and @lang=$lang]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @lang=$lang]"/>
+            </xsl:when>
+            <!-- Third, look in docinfo for document-specific rename, but now explicitly language-agnostic -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]"/>
+            </xsl:when>
+            <!-- Finally, default to a lookup from the localization file's nodes -->
+            <!-- Use a "for-each" to effect a context switch for the look-up     -->
+            <xsl:otherwise>
+                <xsl:for-each select="$localizations">
+                    <xsl:value-of select="key('localization-key', concat($lang,$str-id) )"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$translation != ''">
+            <xsl:value-of select="$translation" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$str-id" />
+            <xsl:text>]</xsl:text>
+            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- This OLD, meant to slowly be phased out and go away -->
+<xsl:template match="*" mode="type-name">
+    <xsl:param name="string-id" select="''"/>
+
+    <!-- The $string-id parameter allows for an override on        -->
+    <!-- semi-automatic determination of the object being named    -->
+    <!-- (see the modal "string-id" templates).  This is necessary -->
+    <!-- for items like the names of interface buttons that are    -->
+    <!-- not associated closely with a certain PreTeXt element.    -->
+    <xsl:variable name="str-id">
+        <xsl:choose>
+            <xsl:when test="not($string-id = '')">
+                <xsl:value-of select="$string-id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="string-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- Transitional: this is old global behavior,  -->
+    <!-- to be replaced by multi-lingual support     -->
+    <xsl:variable name="lang" select="$document-language"/>
+
+    <!-- Now, build the actual translation -->
+    <xsl:variable name="translation">
+        <xsl:choose>
+            <!-- First, look in docinfo for document-specific rename with correct language -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and @xml:lang=$lang]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @xml:lang=$lang]"/>
+            </xsl:when>
+            <!-- Second, look in docinfo for document-specific rename with correct language, -->
+            <!-- but with @lang attribute which was deprecated on 2019-02-23                 -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and @lang=$lang]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @lang=$lang]"/>
+            </xsl:when>
+            <!-- Third, look in docinfo for document-specific rename, but now explicitly language-agnostic -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]"/>
+            </xsl:when>
+            <!-- Finally, default to a lookup from the localization file's nodes -->
+            <!-- Use a "for-each" to effect a context switch for the look-up     -->
+            <xsl:otherwise>
+                <xsl:for-each select="$localizations">
+                    <xsl:value-of select="key('localization-key', concat($lang,$str-id) )"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$translation != ''">
+            <xsl:value-of select="$translation" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$str-id" />
+            <xsl:text>]</xsl:text>
+            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 </xsl:stylesheet>
