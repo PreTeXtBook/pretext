@@ -1667,20 +1667,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$author-tools-new = 'no'">
             <xsl:text>%% imakeidx package does not require extra pass (as with makeidx)&#xa;</xsl:text>
             <xsl:text>%% Title of the "Index" section set via a keyword&#xa;</xsl:text>
-            <xsl:text>%% Language support for the "see" and "see also" phrases&#xa;</xsl:text>
+            <xsl:text>%% Language support for the "see" and "see also" phrases,&#xa;</xsl:text>
+            <xsl:text>%% but to do so presumes exactly one "index-list" generator is present&#xa;</xsl:text>
             <xsl:text>\usepackage{imakeidx}&#xa;</xsl:text>
+            <!-- context for localization is single extant $document-root//index-list -->
+            <!-- Restrict to just a single instance, multiple may be unpredictable    -->
+            <xsl:variable name="the-index" select="($document-root/backmatter/index-part|$document-root//index-list)[1]"/>
+            <!-- NB: multiple indices will require major adjustments here             -->
             <xsl:text>\makeindex[title=</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
+            <xsl:apply-templates select="$the-index" mode="type-name-new">
                 <xsl:with-param name="string-id" select="'index'"/>
             </xsl:apply-templates>
             <xsl:text>, intoc=true]&#xa;</xsl:text>
             <xsl:text>\renewcommand{\seename}{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
+            <xsl:apply-templates select="$the-index" mode="type-name-new">
                 <xsl:with-param name="string-id" select="'see'"/>
             </xsl:apply-templates>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>\renewcommand{\alsoname}{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
+            <xsl:apply-templates select="$the-index" mode="type-name-new">
                 <xsl:with-param name="string-id" select="'also'"/>
             </xsl:apply-templates>
            <xsl:text>}&#xa;</xsl:text>
@@ -3876,9 +3881,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="personname" />
     <xsl:if test="self::editor">
         <xsl:text>, </xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'editor'"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="type-name-new"/>
     </xsl:if>
     <xsl:text>}\\</xsl:text>
     <xsl:if test="institution">
@@ -3959,7 +3962,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bfseries </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name" />
+        <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name-new"/>
         <xsl:text>}: </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/edition" />
         <xsl:text>\par\medskip&#xa;</xsl:text>
@@ -3967,7 +3970,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:if test="frontmatter/colophon/website" >
         <xsl:text>\noindent{\bfseries </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/website" mode="type-name" />
+        <xsl:apply-templates select="frontmatter/colophon/website" mode="type-name-new"/>
         <xsl:text>}: </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/website" />
         <xsl:text>\par\medskip&#xa;</xsl:text>
@@ -4045,9 +4048,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="editor" mode="article-info">
     <xsl:apply-templates select="personname" />
     <xsl:text>, </xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
-        <xsl:with-param name="string-id" select="'editor'"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="type-name-new"/>
     <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />
@@ -4092,7 +4093,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
+        <xsl:apply-templates select="." mode="type-name-new">
             <xsl:with-param name="string-id" select="'toc'"/>
         </xsl:apply-templates>
         <xsl:text>}&#xa;</xsl:text>
@@ -4142,7 +4143,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
+        <xsl:apply-templates select="." mode="type-name-new">
             <xsl:with-param name="string-id" select="'toc'"/>
         </xsl:apply-templates>
         <xsl:text>}&#xa;</xsl:text>
@@ -4178,12 +4179,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="title-string">
         <xsl:choose>
             <xsl:when test="$number-authors > 1">
-                <xsl:apply-templates select="." mode="type-name">
+                <xsl:apply-templates select="frontmatter" mode="type-name-new">
                     <xsl:with-param name="string-id" select="'about-authors'"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="." mode="type-name">
+                <xsl:apply-templates select="frontmatter" mode="type-name-new">
                     <xsl:with-param name="string-id" select="'about-author'"/>
                 </xsl:apply-templates>
             </xsl:otherwise>
@@ -4415,7 +4416,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="article/backmatter">
     <xsl:variable name="appendices-name">
-        <xsl:apply-templates select="." mode="type-name">
+        <xsl:apply-templates select="." mode="type-name-new">
             <xsl:with-param name="string-id" select="'appendices'"/>
         </xsl:apply-templates>
     </xsl:variable>
@@ -4450,14 +4451,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- make sure we are on a fresh page and drop a target -->
                 <xsl:text>\clearpage\phantomsection%&#xa;</xsl:text>
                 <xsl:text>\addcontentsline{toc}{part}{</xsl:text>
-                <xsl:apply-templates select="." mode="type-name">
+                <xsl:apply-templates select="." mode="type-name-new">
                     <xsl:with-param name="string-id" select="'appendices'"/>
                 </xsl:apply-templates>
                 <xsl:text>}%&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>\part*{</xsl:text>
-                <xsl:apply-templates select="." mode="type-name">
+                <xsl:apply-templates select="." mode="type-name-new">
                     <xsl:with-param name="string-id" select="'appendices'"/>
                 </xsl:apply-templates>
                 <xsl:text>}%&#xa;</xsl:text>
@@ -4474,9 +4475,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\clearpage\phantomsection%&#xa;</xsl:text>
         <!-- We only *enhance* the ToC, parts or not -->
         <xsl:text>\addcontentsline{toc}{part}{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'backmatter'"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="type-name-new"/>
         <xsl:text>}%&#xa;</xsl:text>
         <xsl:apply-templates select="*[not(self::appendix|self::solutions)]"/>
     </xsl:if>
@@ -4560,35 +4559,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{longtable}[l]{lp{0.60\textwidth}r}&#xa;</xsl:text>
     <xsl:text>\addtocounter{table}{-1}&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'symbol'"/>
     </xsl:apply-templates>
     <xsl:text>}&amp;\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'description'"/>
     </xsl:apply-templates>
     <xsl:text>}&amp;\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'page'"/>
     </xsl:apply-templates>
     <xsl:text>}\\[1em]&#xa;</xsl:text>
     <xsl:text>\endfirsthead&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'symbol'"/>
     </xsl:apply-templates>
     <xsl:text>}&amp;\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'description'"/>
     </xsl:apply-templates>
     <xsl:text>}&amp;\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'page'"/>
     </xsl:apply-templates>
     <xsl:text>}\\[1em]&#xa;</xsl:text>
     <xsl:text>\endhead&#xa;</xsl:text>
     <xsl:text>\multicolumn{3}{r}{(</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'continued'"/>
     </xsl:apply-templates>
     <xsl:text>)}\\&#xa;</xsl:text>
@@ -4721,7 +4720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\endfirsthead&#xa;</xsl:text>
     <xsl:text>\endhead&#xa;</xsl:text>
     <xsl:text>\multicolumn{2}{r}{(</xsl:text>
-    <xsl:apply-templates select="." mode="type-name">
+    <xsl:apply-templates select="." mode="type-name-new">
         <xsl:with-param name="string-id" select="'continued'"/>
     </xsl:apply-templates>
     <xsl:text>)}\\&#xa;</xsl:text>
@@ -4739,7 +4738,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="list-of-heading">
     <xsl:text>\multicolumn{2}{l}{\null}\\[1.5ex] </xsl:text>
     <xsl:text>\multicolumn{2}{l}{\large </xsl:text>
-    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:apply-templates select="." mode="type-name-new"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text> </xsl:text>
@@ -4753,7 +4752,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="xref-link">
         <xsl:with-param name="target" select="." />
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="." mode="type-name-new"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="number" />
         </xsl:with-param>
@@ -6175,7 +6174,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:with-param name="suffix" select="'main'"/>
                                 </xsl:apply-templates>
                                 <xsl:text>}{[</xsl:text>
-                                <xsl:apply-templates select="." mode="type-name"/>
+                                <xsl:apply-templates select="." mode="type-name-new"/>
                                 <xsl:text>]}</xsl:text>
                             </xsl:when>
                             <xsl:when test="count(.|$solutions-backmatter) = count($solutions-backmatter)">
@@ -6185,7 +6184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:with-param name="suffix" select="'back'"/>
                                 </xsl:apply-templates>
                                 <xsl:text>}{[</xsl:text>
-                                <xsl:apply-templates select="." mode="type-name"/>
+                                <xsl:apply-templates select="." mode="type-name-new"/>
                                 <xsl:text>]}</xsl:text>
                             </xsl:when>
                         </xsl:choose>
@@ -6334,7 +6333,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$b-component-heading">
             <xsl:text>\noindent\textbf{\blocktitlefont </xsl:text>
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="." mode="type-name-new"/>
             <xsl:if test="not($the-number = '')">
                 <xsl:text> </xsl:text>
                 <xsl:apply-templates select="." mode="serial-number" />
@@ -6499,7 +6498,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Following is not consistent, might be better to    -->
     <!-- opt for a default title of one is not provided     -->
     <!-- Then maybe integrate with "block-options" template -->
-    <xsl:apply-templates select="." mode="type-name"/>
+    <!-- 2022-12-14: now more consistent, as in-context     -->
+    <xsl:apply-templates select="." mode="type-name-new"/>
     <xsl:if test="title">
         <xsl:text>: </xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
