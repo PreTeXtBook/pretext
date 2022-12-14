@@ -327,10 +327,15 @@ body.pretext {
 }
 
 .ptx-page-footer  .pretext-link{
+/*
     grid-area: page-footer-pretext;
+*/
     align-self: center;
     margin-top: 30px;
     color: var(--bodytitle);
+}
+.ptx-page-footer .feedback-link + .pretext-link{
+    grid-area: page-footer-pretext;
 }
 
 
@@ -382,7 +387,7 @@ body.pretext {
 */
     .ptx-page-footer {
 	grid-template-columns: 1.25fr .9fr 1fr;
-	margin-botton: 80px;
+	margin-bottom: 80px;
     }
 
 
@@ -401,16 +406,3 @@ body.pretext {
 
 }
 
-   
-
-
-
-
-    
-   
-
-
-
-
-    
-   

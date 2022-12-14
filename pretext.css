@@ -709,6 +709,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 #ptx-navbar .button.user-preferences-button {
   overflow: visible;
+  display: none;
 }
 #preferences_menu_holder {
   z-index: 30;
