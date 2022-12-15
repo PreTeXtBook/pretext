@@ -1601,6 +1601,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:text>You can write here, and it will be saved on this device, but your response will not be graded.</xsl:text>
                             </xsl:attribute>
                         </xsl:if>
+                        <!-- Author can indicate problem expects an  -->
+                        <!-- attachment. Effectively, default is no. -->
+                        <xsl:if test="(@attachment = 'yes') and $b-host-runestone">
+                            <xsl:attribute name="data-attachment"/>
+                        </xsl:if>
                         <xsl:apply-templates select="statement"/>
                     </div>
                 </div>
