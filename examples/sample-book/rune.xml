@@ -1644,7 +1644,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise label="second-reading-question">
+        <exercise label="second-reading-question" attachment="yes">
             <statement>
                 <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
             </statement>
