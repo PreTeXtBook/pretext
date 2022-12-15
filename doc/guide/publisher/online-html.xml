@@ -160,22 +160,31 @@
         <title>Styling</title>
         <idx><h>style</h><h>HTML</h></idx>
 
+        <p>The <pretext/> conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).  This section describes ways that a publisher can influence the style by using the publication file to specify the use of alternate CSS files. See <xref ref="online-style-options"/> for exact syntax for the following options.</p>
 
-        <introduction>
-            <p>The <pretext/> conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).  This section describes ways that a publisher can influence the style.</p>
-        </introduction>
-
-        <subsection>
+        <paragraphs>
             <title>Colors</title>
 
-            <p>The publication file may be used to specify alternate CSS files.  See the reference material for how to do this (<xref ref="online-style-options"/>).  The default file, <c>colors_default.css</c> contains documentation on how to design a theme.</p>
-        </subsection>
+            <p>The default file, <c>colors_default.css</c> contains documentation on how to design a color theme.</p>
+        </paragraphs>
 
-        <subsection>
-            <title>Table of Contents, Knowls, and Banner</title>
+        <paragraphs>
+            <title>Style</title>
 
-            <p>In a manner analagous to how colors may be adjusted, so may other parts of the HTML UI, see <xref ref="online-style-options"/>).  As of 2019-12-08, replacing more than one of these at a time should be considered experimental.</p>
-        </subsection>
+            <p>A file may be used to control the look of content, such as consistently putting a colored box with a border around certain blocks.  As of 2022-12-15, the two options are <c>default</c> and <c>oscarlevin</c>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Table of Contents, Knowls, Banner, Navigation Bar, and Shell</title>
+
+            <p>These user-interface (<init>UI</init>) elements can be styled with their own CSS.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Development</title>
+
+            <p>Please join us on the <c>pretext-dev</c> discussion group if you want to create alternate styles.</p>
+        </paragraphs>
     </section>
 
     <section xml:id="online-analytics">

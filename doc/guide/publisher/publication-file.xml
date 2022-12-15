@@ -533,15 +533,17 @@
             <p>The<cd>
                 <cline>/publication/html/css</cline>
             </cd>element can have the following attributes:<ul>
-                <li><attr>colors</attr>: used to construct filename for CSS controlling colors.</li>
-                <li><attr>knowls</attr>: used to construct filename for CSS controlling knowls.</li>
-                <li><attr>toc</attr>: used to construct filename for CSS controlling the Table of Contents.</li>
-                <li><attr>banner</attr>: used to construct filename for CSS controlling the banner (masthead).</li>
+                <li><attr>colors</attr>: used to construct the filename for CSS controlling colors.</li>
+                <li><attr>style</attr>:  used to construct the filename for CSS controlling content appearance.</li>
+                <li><attr>knowls</attr>: used to construct the filename for CSS controlling knowls.</li>
+                <li><attr>toc</attr>:    used to construct the filename for CSS controlling the Table of Contents.</li>
+                <li><attr>banner</attr>: used to construct the filename for CSS controlling the banner (masthead).</li>
+                <li><attr>navbar</attr>: used to construct the filename for CSS controlling the navigation bar.</li>
+                <li><attr>shell</attr>:  used to construct the filename for CSS controlling the shell.</li>
             </ul>In each case the default file is replaced and instead a new filename is formed from the attributes value.  For example, the specification<cd>
                 <cline>&lt;css colors='bright_red'/&gt;</cline>
-            </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
+            </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  Possible values for the last four attributes are <c>default</c> and <c>crc</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
 
-            <p>2019-12-08: at this time we recommend experimenting with only one file at a time.</p>
         </subsection>
 
         <subsection xml:id="online-search-options">
