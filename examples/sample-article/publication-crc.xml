@@ -46,7 +46,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
-        <css style="oscarlevin" colors="blue_red" toc="default" banner="default" navbar="default" shell="default"/>
+        <css style="default" colors="bluegreen_grey" toc="crc" banner="crc" navbar="crc" shell="crc"/>
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->

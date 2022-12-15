@@ -86,8 +86,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
-        <!-- @colors currently unimplementd.                       -->
-        <css style="default" colors="blue_red"/>
+        <css style="default" colors="blue_red" toc="default" banner="default" navbar="default" shell="default"/>
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->
@@ -100,10 +99,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Request fewer tracking cookies for YouTube videos     -->
         <!-- This is the default, here for documentation/testing   -->
         <video privacy="yes"/>
-        <css toc="default"/>
-        <css banner="default"/>
-        <css navbar="default"/>
-        <css shell="default"/>
         <!-- native search via Javascript library -->
         <search variant="default"/>
     </html>
