@@ -3509,12 +3509,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[\pagefont\thepage]%&#xa;</xsl:text>
             <xsl:text>[]&#xa;</xsl:text>
             <xsl:text>[\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}]%&#xa;</xsl:text>
-            <xsl:text>{\pagefont\slshape\MakeUppercase{\ifthesection{</xsl:text>
-            <!-- LaTeX book style lacks  \sectionname, which could be internationalized globally -->
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'section'"/>
-            </xsl:apply-templates>
-            <xsl:text>\space\thesection.\space\sectiontitle}{}}}%&#xa;</xsl:text>
+            <!-- LaTeX book style lacks  \sectionname                                                -->
+            <!-- 2022-12-14: we tried our own \sectionnameptx but it was not satisfactory            -->
+            <!--   (a) need to handle specialized divisions at the section level                     -->
+            <!--   (b) still got mismatches like running head with "References 2.6 Exercises"        -->
+            <!--       (where the 2.6 is for the Exercises, but 2.7 on the same page is "references" -->
+            <xsl:text>{\pagefont\slshape\MakeUppercase{\ifthesection{\thesection.\space\sectiontitle}{}}}%&#xa;</xsl:text>
             <xsl:text>{}%&#xa;</xsl:text>
             <xsl:text>{\pagefont\thepage}%&#xa;</xsl:text>
             <xsl:text>}%&#xa;</xsl:text>
