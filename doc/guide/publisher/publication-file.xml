@@ -330,7 +330,7 @@
         </subsection>
 
         <subsection xml:id="online-webwork-dynamism">
-            <title>HTML WeBWorK Dynamism</title>
+            <title>HTML <webwork/> Dynamism</title>
             <idx><h>WeBWorK</h><h><init>HTML</init>dynamism</h></idx>
 
             <p>The<cd>
@@ -712,7 +712,7 @@
     </section>
 
     <section xml:id="publication-file-webwork">
-        <title>WeBWorK Options</title>
+        <title><webwork/> Options</title>
         <idx>WeBWorK publisher options</idx>
         <idx><h>publisher options</h><h>WeBWorK</h></idx>
 
@@ -721,6 +721,9 @@
                 A <webwork/> host course on a <webwork/> server somewhere does the processing of a project's <tag>webwork</tag> elements.
                 These are the details needed to specify where that course is and how <pretext/> will access it.
                 These are discussed again in <xref ref="webwork-representations"/>.
+            </p>
+            <p>
+                See <xref ref="online-webwork-dynamism"/> for publisher file attributes that control <webwork/>'s dynamic behavior in HTML.
             </p>
         </introduction>
 
@@ -773,6 +776,23 @@
                 <cd>
                     <cline>/publication/webwork/@userpassword</cline>
                 </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-task-reveal">
+            <title>Task Reveal</title>
+
+            <p>The
+                <cd>
+                    <cline>/publication/webwork/@task-reveal</cline>
+                </cd>
+                attribute: is used to control how tasks in a multi-task exercise are made available to the reader.
+                This applies to live interactive renderings of the exercises, either in HTML, in <webwork/>,
+                or otherwise. Possible values are:
+                <ul>
+                    <li><c>preceding-correct</c> (all preceding tasks must be correctly answered before the next is available)</li>
+                    <li><c>all</c> (all tasks are available)</li>
+                </ul>
             </p>
         </subsection>
     </section>
