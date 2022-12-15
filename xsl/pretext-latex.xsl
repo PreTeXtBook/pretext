@@ -1144,49 +1144,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
-    <!-- Localize various standard names in use         -->
-    <!-- Many environments addressed upon creation above -->
-    <!-- Index, table of contents done elsewhere        -->
-    <!-- http://www.tex.ac.uk/FAQ-fixnam.html           -->
-    <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
-    <xsl:text>%% Localize LaTeX supplied names (possibly none)&#xa;</xsl:text>
-    <xsl:if test="$document-root//appendix">
-        <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'appendix'"/>
-        </xsl:apply-templates>
+    <!-- Publishers can start chapter numbering at will.  Chapter 0 for -->
+    <!-- the computer scientists, and perhaps a certain chapter number  -->
+    <!-- for a book spread across multiple physical valumes.            -->
+    <xsl:if test="$document-root//chapter and not($chapter-start = 1)">
+        <xsl:text>%% Publisher file requests an alternate chapter numbering&#xa;</xsl:text>
+        <xsl:text>\setcounter{chapter}{</xsl:text>
+        <xsl:value-of select="$chapter-start - 1" />
         <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$root/book">
-        <xsl:if test="$document-root//part">
-            <xsl:text>\renewcommand*{\partname}{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'part'"/>
-            </xsl:apply-templates>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$document-root//chapter">
-            <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'chapter'"/>
-            </xsl:apply-templates>
-            <xsl:text>}&#xa;</xsl:text>
-            <!-- We only adjust when necessary -->
-            <xsl:if test="not($chapter-start = 1)">
-                <xsl:text>\setcounter{chapter}{</xsl:text>
-                <xsl:value-of select="$chapter-start - 1" />
-                <xsl:text>}&#xa;</xsl:text>
-            </xsl:if>
-        </xsl:if>
-    </xsl:if>
-    <xsl:if test="$root/article">
-        <xsl:if test="$document-root//abstract">
-            <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'abstract'"/>
-            </xsl:apply-templates>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
     </xsl:if>
     <!-- Numbering Equations -->
     <!-- See numbering-equations variable being set in pretext-common.xsl         -->
@@ -4112,8 +4077,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Articles may have an abstract in the frontmatter -->
+<!-- Articles may have an abstract in the frontmatter. We -->
+<!-- accept the LaTeX article class approach and switch   -->
+<!-- to a localization of the heading just prior to use.  -->
 <xsl:template match="article/frontmatter/abstract">
+    <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{abstract}&#xa;</xsl:text>
@@ -5022,6 +4992,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
+    <!-- Various LaTeX classes and packages define various names, see   -->
+    <!-- two links below.  The ones redefined here seem critical for    -->
+    <!-- how the "titleps" package makes heads and foots, in concert    -->
+    <!-- with the "titlesec" package.  We want these to change to the   -->
+    <!-- right language when a division indicates a different language. -->
+    <!-- NB: not clear if this should be after, or before, the \begin{} -->
+    <!-- of the environment.  In other words, when is the head/foot     -->
+    <!-- manufactured?                                                  -->
+    <!-- https://texfaq.org/FAQ-fixnam -->
+    <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
+    <!-- https://tex.stackexchange.com/questions/82993/how-to-change-the-name-of-document-elements-like-figure-contents-bibliogr -->
+    <xsl:if test="self::part">
+        <xsl:text>\renewcommand*{\partname}{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name-new"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="self::chapter">
+        <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name-new"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="self::appendix">
+        <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name-new"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Exceptional, for a worksheet only, we clear the page  -->
