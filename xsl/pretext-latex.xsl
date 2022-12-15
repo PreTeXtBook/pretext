@@ -2600,17 +2600,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$second-trip">
         <xsl:text>-numberless</xsl:text>
     </xsl:if>
-    <xsl:text>}{mmmmmm}&#xa;</xsl:text>
+    <xsl:text>}{mmmmmmm}&#xa;</xsl:text>
     <xsl:text>{%&#xa;</xsl:text>
     <!-- load 6 macros with values, for style writer use -->
-    <xsl:text>\renewcommand{\divisionnameptx}{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>}%&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\titleptx}{#1}%&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\subtitleptx}{#2}%&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\shortitleptx}{#3}%&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\authorsptx}{#4}%&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\epigraphptx}{#5}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\divisionnameptx}{#1}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\titleptx}{#2}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\subtitleptx}{#3}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\shortitleptx}{#4}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\authorsptx}{#5}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\epigraphptx}{#6}%&#xa;</xsl:text>
     <!-- invoke the right LaTeX division, causes title format -->
     <!-- and spacing, along with setting running heads        -->
     <xsl:text>\</xsl:text>
@@ -2622,20 +2620,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and manually add short version to ToC            -->
         <xsl:when test="$second-trip or boolean(self::acknowledgement|self::foreword|self::preface|self::index)">
             <xsl:text>*</xsl:text>
-            <xsl:text>{#1}%&#xa;</xsl:text>
+            <xsl:text>{#2}%&#xa;</xsl:text>
             <xsl:text>\addcontentsline{toc}{</xsl:text>
             <xsl:value-of select="$div-name"/>
-            <xsl:text>}{#3}&#xa;</xsl:text>
+            <xsl:text>}{#4}&#xa;</xsl:text>
         </xsl:when>
         <!-- optional short title, and the real title  -->
         <!-- NB: the short title (#3) needs a group to -->
         <!-- protect a right square bracket "]" from   -->
         <!-- prematurely ending the optional argument  -->
         <xsl:otherwise>
-            <xsl:text>[{#3}]{#1}%&#xa;</xsl:text>
+            <xsl:text>[{#4}]{#2}%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>\label{#6}%&#xa;</xsl:text>
+    <xsl:text>\label{#7}%&#xa;</xsl:text>
     <!-- close the environment definition, no finish -->
     <xsl:text>}{}%&#xa;</xsl:text>
     <!-- send specialized division back through a second time -->
@@ -4967,6 +4965,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="division-environment-name" />
     <!-- possibly numberless -->
     <xsl:apply-templates select="." mode="division-environment-name-suffix" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
