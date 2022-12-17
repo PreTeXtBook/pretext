@@ -219,7 +219,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='todo'>À Faire</localization>
     <localization string-id='editor'>Éditeur</localization>
     <localization string-id='edition'>Édition</localization>
-    <localization string-id='website'>Site web</localization>
+    <localization string-id='website'>Site Web</localization>
     <localization string-id='copyright'>Copyright</localization>
     <localization string-id='incontext'>Contexte</localization>
     <!-- Sage Cell evaluate button      -->
