@@ -201,8 +201,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='feedback'>Commentaires</localization>  <!--e.g., in case there is a link for feedback.  Will appear in HTML.-->
     <localization string-id='authored'>Rédigé avec PreTeXt</localization> <!--e.g., authored in PreTeXt.  Will appear in HTML.-->
     <!-- Search Results display/dialog -->
-    <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
-    <!-- <localization string-id='no-search-results'>No results</localization> -->
+    <localization string-id='search-results-heading'>Résultats de rechercher</localization>
+    <localization string-id='no-search-results'>Aucun résultat</localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'>À</localization>
     <localization string-id='from'>De</localization>
