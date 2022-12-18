@@ -3149,9 +3149,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p><term>ActiveCode</term> is an interactive environment where a reader may work on code through repeated edit-compile-test cycles.  Code can be provided by an author as a complete program to be modified, a partial program to be completed, or nothing at all.  One good example is that maybe header files, import statement, and similar are provided, and a skeleton of a main entry-point procedure is also provided.  Then a reader can concentrate on the more conceptual parts of the programming.  Some languages will be executable <q>in browser</q> on any old generic web server, while others must be on a Runestone server (<xref ref="runestone"/>) where a <url href="https://github.com/trampgeek/jobe" visual="github.com/trampgeek/jobe">Jobe Server</url> is running to support the execution.</p>
 
-            <p>Place the <tag>interactive</tag> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
+            <p>Place the <attr>interactive</attr> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
 
             <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
+            
+            <p>If you want to include code from one or more preceding <tag>program</tag> elements, use the <attr>include</attr> attribute. Its value is a whitespace-separated list of <attr>id</attr>s of the code you want included.</p>
         </subsection>
 
         <subsection>

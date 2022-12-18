@@ -1734,6 +1734,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:attribute>
+                            <!-- allow @include attribute on <program> -->
+                            <xsl:if test="@include">
+                                <xsl:attribute name="data-include">
+                                    <xsl:value-of select="@include"/>
+                                </xsl:attribute>
+                            </xsl:if>
                             <!-- SQL (only) needs an attribute so it can find some code -->
                             <xsl:if test="$active-language = 'sql'">
                                 <xsl:attribute name="data-wasm">
