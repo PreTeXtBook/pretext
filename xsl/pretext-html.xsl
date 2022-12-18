@@ -10410,6 +10410,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="aria-live">
             <xsl:value-of select="'polite'"/>
         </xsl:attribute>
+        <button id="{@ww-id}-button" class="webwork-button activate" onclick="handleWW('{@ww-id}')" aria-labelledby="{@ww-id}-button-label">
+            <span id="{@ww-id}-button-label" hidden="hidden">
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'activate'"/>
+                </xsl:apply-templates>
+            </span>
+        </button>
         <div class="problem-contents">
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original"      select="$b-original"/>
@@ -10420,11 +10427,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </div>
         <div class="problem-buttons">
-            <button class="webwork-button" onclick="handleWW('{@ww-id}')">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'activate'"/>
-                </xsl:apply-templates>
-            </button>
         </div>
     </xsl:element>
 </xsl:template>
