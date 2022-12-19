@@ -142,3 +142,10 @@ the margin on top of sections being used to space out adjacent sections) */
 #ptx-toc .toc-item {
   position: relative;
 }
+
+/* depth1 trerated like depth2, because depth1 is usually
+   a bad idea.  Awaiting fallout. */
+#ptx-toc.depth1 ul.structural ul.structural ul.structural,
+#ptx-toc.depth2 ul.structural ul.structural ul.structural {
+    display: none;
+}

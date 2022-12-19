@@ -287,9 +287,16 @@ body.pretext {
 .ptx-page-footer {
     display: grid;
     max-width: 100%;
+/*
     grid-template-columns: 1.1fr .68fr 1fr;
+*/
+    grid-template-columns: 1fr 1fr 0.7fr;
+/*
     grid-template-areas:
-        "page-footer-feedback page-footer-pretext  page-footer-mathjax";
+        "page-footer-feedback page-footer-pretext page-footer-runestone  page-footer-mathjax";
+*/
+    grid-template-areas:
+        "page-footer-pretext page-footer-runestone  page-footer-mathjax";
     margin-top: 30px;
     margin-bottom: 40px;
     border-top: 2px solid var(--bodytitle);
@@ -326,7 +333,8 @@ body.pretext {
     color: #888;
 }
 
-.ptx-page-footer  .pretext-link{
+.ptx-page-footer  .pretext-link,
+.ptx-page-footer  .runestone-link{
 /*
     grid-area: page-footer-pretext;
 */
@@ -334,12 +342,17 @@ body.pretext {
     margin-top: 30px;
     color: var(--bodytitle);
 }
+.ptx-page-footer .pretext-link,
 .ptx-page-footer .feedback-link + .pretext-link{
     grid-area: page-footer-pretext;
 }
+.ptx-page-footer .pretext-link + .runestone-link {
+    grid-area: page-footer-runestone;
+}
 
 
-.ptx-page-footer  .pretext-link .name {
+.ptx-page-footer  .pretext-link .name,
+.ptx-page-footer  .runestone-link .name {
     display: grid;
 /*
     justify-self: center;
@@ -355,10 +368,14 @@ body.pretext {
 */
 }
 
-.ptx-page-footer  .pretext-link .logo {
+.ptx-page-footer  .pretext-link .logo,
+.ptx-page-footer  .runestone-link .logo {
     display: grid;
     justify-item: center;
+    align-items: center;
     height: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -376,22 +393,23 @@ body.pretext {
     /* No luck resizing */
 }
 
-
+.pretext #ptx-sidebar.visible {
+  display: block;
+}
 
 @media only screen and (max-width: 800px) {
 
-/*
-    .pretext #ptx-sidebar {
-        display: none;
-    }
-*/
+  .pretext #ptx-sidebar {
+    display: none;
+  }
     .ptx-page-footer {
 	grid-template-columns: 1.25fr .9fr 1fr;
 	margin-bottom: 80px;
     }
 
 
-    .ptx-page-footer  .pretext-link .name {
+    .ptx-page-footer  .pretext-link .name,
+    .ptx-page-footer  .runestone-link .name {
 	display: grid;
 	justify-self: center;
 	font-size: .9em; 
@@ -399,7 +417,8 @@ body.pretext {
 	text-transform: uppercase;
     }
 
-    .ptx-page-footer  .pretext-link .logo {
+    .ptx-page-footer  .pretext-link .logo,
+    .ptx-page-footer  .runestone-link .logo {
 	display: none;
     }
 
