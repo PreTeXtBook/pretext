@@ -4263,7 +4263,7 @@ Book (with parts), "section" at level 3
 <!-- (eg prefaces, colophons), elements.  Other elements -->
 <!-- are meant as local commentary, and may also carry   -->
 <!-- a title for identification and cross-referencing.   -->
-<xsl:template match="book|article|letter|memo|paragraphs|blockquote|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|paragraphs|blockquote|preface|abstract|acknowledgement|biography|foreword|dedication|contributors|index-part|index[index-list]|colophon|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
 <!-- Some divisions, like "exercises", "solutions", "references",     -->
 <!-- are part of the hierarchical numbering scheme, and look simply   -->
