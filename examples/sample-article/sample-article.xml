@@ -808,12 +808,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </subsubsection>
 
                 <subsubsection>
-                    <title></title>
-
-                    <p>This subsubsection has a title in the source, but it is empty.  That's OK, but not advisable since titles get used lots of places (such as page headers and the table of contents).</p>
-                </subsubsection>
-
-                <subsubsection>
                     <title>Advice</title>
 
                     <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign xml:lang="fr-FR">fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
