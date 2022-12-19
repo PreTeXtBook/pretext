@@ -27,6 +27,8 @@
   background: #fafafa;
   min-height: inherit;
   border: none;
+  position: relative;
+  z-index: 100;
 }
 
 .pretext #ptx-navbar {
@@ -42,6 +44,7 @@
 .pretext #ptx-sidebar {
   position: sticky;
   top: 41px;
+  left: 0;
   float: left;
   width: 240px;
 }
@@ -239,7 +242,7 @@
 
 .pretext .ptx-page-footer {
     background: #e8f4ff;
-    margin-top: 1em;
+    margin-top: 2em;
     padding-top: 0;
     max-width: 900px;
     border-top: 2px solid var(--sectiontoctext);
@@ -247,6 +250,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+    position: relative;
+    z-index: 100;
 }
 .pretext .ptx-page-footer > a > div {
   display: inline-block;
@@ -300,17 +305,19 @@
   height: 2.5em;
 }
 
+.pretext #ptx-sidebar.visible {
+  display: block;
+}
+
 @media screen and (max-width: 800px) {
   .pretext #ptx-navbar {
     position: fixed;
     top: auto;
     bottom: 0;
    }
-/*
   .pretext #ptx-sidebar {
     display: none;
   }
-*/
   .pretext .ptx-content-footer {
     display: none;
   }
@@ -363,6 +370,7 @@
   .pretext #ptx-navbar .up-button,
   .pretext #ptx-navbar .next-button {
     width: 33.2%;
+    width: calc(33.3% - 1px);
   }
   .pretext .ptx-page > .ptx-page-footer {
     margin-left: 5em;

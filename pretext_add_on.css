@@ -2941,6 +2941,17 @@ label.incorrect .feedback {
     color: black;
     background-color: #ffffff;
 }
+.ptx-content .webwork-button.activate {
+    width: 22px;
+    height: 22px;
+    background-image:
+    url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
+    background-size: contain;
+    position: absolute;
+    right: -35px;
+}
+
+
 /* hack for runestone */
 /*
 .ptx-content .exercise-wrapper form button.btn-success {
