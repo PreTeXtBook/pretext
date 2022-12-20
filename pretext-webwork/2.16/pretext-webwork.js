@@ -29,6 +29,8 @@ function handleWW(ww_id, action) {
     const localize_check_responses = (ww_container.dataset.localizeCheckResponses ? ww_container.dataset.localizeCheckResponses : "Check Responses");
     const localize_randomize = (ww_container.dataset.localizeRandomize ? ww_container.dataset.localizeRandomize : "Randomize");
     const localize_reset = (ww_container.dataset.localizeReset ? ww_container.dataset.localizeReset : "Reset");
+    // will be null on pages generated prior to late December 2022
+    const activate_button = document.getElementById(ww_id + '-button')
 
     // Set the current seed
     if (!action) ww_container.dataset.current_seed = ww_container.dataset.seed;
@@ -181,13 +183,20 @@ function handleWW(ww_id, action) {
         let buttonContainer = ww_container.querySelector('.problem-buttons.webwork');
         // Create the submission buttons if they have not yet been created.
         if (!buttonContainer) {
-            // Hide the original div that contains the make active button.
+            // Hide the original div that contains the old make active button.
             ww_container.querySelector('.problem-buttons').classList.add('hidden-content');
+            // And the newer activate button if it is there
+            if (activate_button != null) {activate_button.classList.add('hidden-content');};
 
             // Create a new div for the webwork buttons.
             buttonContainer = document.createElement('div');
             buttonContainer.classList.add('problem-buttons', 'webwork');
-            ww_container.prepend(buttonContainer);
+            if (activate_button != null) {
+                // Make sure the button container follows the activate button in the DOM
+                activate_button.after(buttonContainer);
+            } else {
+                ww_container.prepend(buttonContainer);
+            }
 
             // Check button
             const check = document.createElement("button");
@@ -481,7 +490,12 @@ function handleWW(ww_id, action) {
             // Hide the static problem
             ww_container.querySelector('.problem-contents').classList.add('hidden-content');
 
-            ww_container.prepend(iframe);
+            if (activate_button != null) {
+                // Make sure the iframe follows the activate button in the DOM
+                activate_button.after(iframe);
+            } else {
+                ww_container.prepend(iframe);
+            }
 
             iFrameResize({ checkOrigin: false, scrolling: 'omit', heightCalculationMethod: 'lowestElement' }, iframe);
 
@@ -635,6 +649,7 @@ function WWshowCorrect(ww_id, answers) {
 
 function resetWW(ww_id) {
     const ww_container = document.getElementById(ww_id);
+    const activate_button = document.getElementById(ww_id + '-button');
 
     ww_container.dataset.current_seed = ww_container.dataset.seed;
 
@@ -645,6 +660,8 @@ function resetWW(ww_id) {
 
     ww_container.querySelector('.problem-buttons.webwork').remove();
     ww_container.querySelector('.problem-buttons').classList.remove('hidden-content');
+    // if the newer activate button is there (but hidden) bring it back too
+    if (activate_button != null) {activate_button.classList.remove('hidden-content');};
 }
 
 function adjustSrcHrefs(container,ww_domain) {
