@@ -5205,7 +5205,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- See https://github.com/rbeezer/mathbook/issues/300      -->
                     <!-- Totally generic, so by columns, all to right            -->
                     <row>
-                        <cell>[First</cell>
+                        <cell>First</cell>
                         <cell>Second</cell>
                         <cell>Third</cell>
                         <cell>Fourth</cell>
