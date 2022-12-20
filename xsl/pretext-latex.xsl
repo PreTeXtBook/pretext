@@ -1888,6 +1888,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% For a print PDF, no surrounding boxes, so simply textcolor (but still active to preserve spacing)&#xa;</xsl:text>
         <xsl:text>\hypersetup{hidelinks=true}&#xa;</xsl:text>
     </xsl:if>
+    <!-- Hyperref gives names to destinations for links that look like      -->
+    <!-- "section*.5.2" which you can guess is the second section of        -->
+    <!-- Chapter 5.  But if you have structural parts and chapter names     -->
+    <!-- do not incorporate part numbers, then you can get two "chapter*.3" -->
+    <!-- and things like the Table of Contents do not work as expected.     -->
+    <!-- Instead you can have hyperref use names like "chapter.748" from a  -->
+    <!-- sequential numbering that will always provide unique names.        -->
+    <!-- Short, but concise, explanation:                                   -->
+    <!-- https://tex.stackexchange.com/questions/3188/                      -->
+    <!-- what-does-the-hyperref-option-hypertexnames-do                     -->
+    <!--                                                                    -->
+    <!-- Another approach is to "renewcommand" macros like "\theHchapter"   -->
+    <!-- within respective environments to use our LaTeX label (usually a   -->
+    <!-- final parameter of the environment).  These make very interesting  -->
+    <!-- names in files like "*.out" and "*.toc", a dotted hierachy of very -->
+    <!-- long strings.  For us, the origin of these are 100% unambiguous    -->
+    <!-- (an of course, unique).  But very verbose.  And the environment    -->
+    <!-- changes need to go lots of places to have the same effect.  But a  -->
+    <!-- simple experiment was very effective at resolving just chapters in -->
+     <!-- structural parts.                                                 -->
+    <!--                                                                    -->
+    <!-- For both approaches, see revalatory post:                          -->
+    <!-- https://tex.stackexchange.com/questions/231361/                    -->
+    <!-- table-of-contents-labels-not-directing-hyperlinks-to-correct-page  -->
+    <xsl:text>%% Less-clever names for hyperlinks are more reliable, *especially* for structural parts&#xa;</xsl:text>
+    <xsl:text>%% See comments in the code to learn more about the importance of tnis setting&#xa;</xsl:text>
+    <xsl:text>\hypersetup{hypertexnames=false}&#xa;</xsl:text>
+    <!-- Title goes interesting places in a PDF -->
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="." mode="title-short" />
     <xsl:text>}}&#xa;</xsl:text>
