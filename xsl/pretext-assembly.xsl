@@ -1465,6 +1465,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="webwork-reps and not(b-extracting-pg)">
                 <xsl:text>webwork-reps</xsl:text>
             </xsl:when>
+            <xsl:when test="myopenmath">
+                <xsl:text>myopenmath</xsl:text>
+            </xsl:when>
             <!-- hack for temporary demo HTML versions -->
             <xsl:when test="@runestone">
                 <xsl:text>htmlhack</xsl:text>
@@ -1790,6 +1793,58 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="webwork-rep-to-static">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- MyOpenMath (MOM) to static -->
+
+<!-- Static versions come from a MOM server, and have been stored  -->
+<!-- as a "generated" component of a project.  We meld with a      -->
+<!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
+<!-- format, for any conversion to a static format to use.         -->
+<xsl:template match="exercise[(@exercise-interactive = 'myopenmath')]
+                   | project[(@exercise-interactive = 'myopenmath')]
+                   | activity[(@exercise-interactive = 'myopenmath')]
+                   | exploration[(@exercise-interactive = 'myopenmath')]
+                   | investigation[(@exercise-interactive = 'myopenmath')]" mode="representations">
+    <!-- duplicate the exercise/project -->
+    <xsl:copy>
+        <!-- and preserve attributes on the exercise/project -->
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
+        <xsl:choose>
+            <xsl:when test="$exercise-style = 'static'">
+                <!-- locate the static representation in a file, generated independently -->
+                <xsl:variable name="filename">
+                    <xsl:if test="$b-managed-directories">
+                        <xsl:value-of select="$generated-directory"/>
+                    </xsl:if>
+                    <xsl:text>problems/mom-</xsl:text>
+                    <xsl:value-of select="myopenmath/@problem"/>
+                    <xsl:text>.xml</xsl:text>
+                </xsl:variable>
+                <!-- "myopenmath" child guaranteed by @exercise-interactive value -->
+                <xsl:variable name="mom-static-rep" select="document($filename, $original)/myopenmath"/>
+                <!-- duplicate metadata first -->
+                <xsl:apply-templates select="title|idx" mode="representations"/>
+                <!-- Meld PreTeXt introduction, conclusion with MOM statement. We could -->
+                <!-- duplicate MOM/statement attributes here, if there were any.        -->
+                <statement>
+                    <xsl:apply-templates select="introduction/node()" mode="representations"/>
+                    <xsl:apply-templates select="$mom-static-rep/statement/node()" mode="representations"/>
+                    <xsl:apply-templates select="conclusion/node()" mode="representations"/>
+                </statement>
+                <!-- these might not all be present, ever, but just to be safe -->
+                <xsl:apply-templates select="$mom-static-rep/hint" mode="representations"/>
+                <xsl:apply-templates select="$mom-static-rep/answer" mode="representations"/>
+                <xsl:apply-templates select="$mom-static-rep/solution" mode="representations"/>
+                <!-- NB: the "myopenmath" element has been ignored is now gone -->
+            </xsl:when>
+            <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
+                <!-- duplicate authored content for the non-static conversions -->
+                <xsl:apply-templates select="node()" mode="representations"/>
+            </xsl:when>
+        </xsl:choose>
     </xsl:copy>
 </xsl:template>
 
