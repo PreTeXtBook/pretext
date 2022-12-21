@@ -42,6 +42,9 @@ var mjvers = 0;
 if (window.MathJax !== undefined) {
   mjvers = MathJax.version;
   console.log("mjvers", mjvers);
+  if (typeof mjvers == 'undefined') {
+    mjvers = "2.14159";
+  }
   mjvers = parseFloat(mjvers.substring(0,3));
 }
 console.log("               mjvers", mjvers);
@@ -287,7 +290,8 @@ $(function() {
       }
       var knowlc = knowl_click_handler($knowl, evt);
       console.log("after click handler", knowlc);
-      setTimeout(function () {
+      if (typeof knowlc !== "undefined") {
+        setTimeout(function () {
           if (knowlc[0]["innerHTML"].includes("knowl-output error")) {
             console.log("seem to have a bad knowl")
             var missing_knowl_message = "<div style='padding: 0.5rem 1rem'>";
@@ -302,8 +306,9 @@ $(function() {
             missing_knowl_message += "</div>";
             knowlc[0]["innerHTML"] = missing_knowl_message
           }
-        }, 1000
-      )
+         }, 1000
+        )
+      }
   });
 });
 
