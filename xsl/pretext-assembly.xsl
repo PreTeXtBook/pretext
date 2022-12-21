@@ -1664,8 +1664,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | project[(@exercise-interactive = 'webwork-reps')]
                    | activity[(@exercise-interactive = 'webwork-reps')]
                    | exploration[(@exercise-interactive = 'webwork-reps')]
-                   | investigation[(@exercise-interactive = 'webwork-reps')]
-                   | task[(@exercise-interactive = 'webwork-reps')]" mode="representations">
+                   | investigation[(@exercise-interactive = 'webwork-reps')]" mode="representations">
     <xsl:choose>
         <!-- destined for creating problem sets, really just need PG code -->
         <xsl:when test="$exercise-style = 'pg-problems'">
