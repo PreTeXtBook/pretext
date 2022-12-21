@@ -1582,6 +1582,15 @@
               <ref name="ConclusionStatement"/>
             </optional>
           </group>
+          <group>
+            <optional>
+              <ref name="IntroductionText"/>
+            </optional>
+            <ref name="WebWork"/>
+            <optional>
+              <ref name="ConclusionText"/>
+            </optional>
+          </group>
         </choice>
         <optional>
           <ref name="Postlude"/>

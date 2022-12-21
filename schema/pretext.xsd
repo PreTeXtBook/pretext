@@ -1420,6 +1420,11 @@
               <xs:group maxOccurs="unbounded" ref="Task"/>
               <xs:group minOccurs="0" ref="ConclusionStatement"/>
             </xs:sequence>
+            <xs:sequence>
+              <xs:group minOccurs="0" ref="IntroductionText"/>
+              <xs:group ref="WebWork"/>
+              <xs:group minOccurs="0" ref="ConclusionText"/>
+            </xs:sequence>
           </xs:choice>
           <xs:element minOccurs="0" ref="postlude"/>
         </xs:sequence>
