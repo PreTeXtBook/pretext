@@ -825,6 +825,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this is copied verbatim for Braille      -->
 <xsl:template match="book|article" mode="section-heading" />
 
+<!-- An abstract needs structure, and an ID for a -->
+<!-- link out of the ToC sidebar for an article   -->
+<xsl:template match="abstract">
+    <div class="abstract">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id" />
+        </xsl:attribute>
+        <!-- title or heading?  We go with a default title, which will -->
+        <!-- be localized.  Then ban an author-provided title in the   -->
+        <!-- schema.  This allows for reasonable behavior in a ToC     -->
+        <!-- sidebar.  (This is a non-issue for LaTeX, where a good    -->
+        <!-- "abstract" environment exists.)                           -->
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </span>
+        <xsl:apply-templates/>
+    </div>
+</xsl:template>
+
 <!-- ######## -->
 <!-- Headings -->
 <!-- ######## -->
