@@ -11591,6 +11591,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="sidebars">
     <div id="ptx-sidebar">
         <nav id="ptx-toc" class="depth2">
+            <!-- A class indicates how much of the ToC we want -->
+            <!-- to see, as set in the publication file        -->
+            <xsl:attribute name="class">
+                <xsl:text>depth</xsl:text>
+                <xsl:value-of select="$toc-level"/>
+            </xsl:attribute>
             <xsl:apply-templates select="." mode="toc-items"/>
         </nav>
     </div>
