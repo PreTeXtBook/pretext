@@ -674,7 +674,7 @@
   </define>
   <define name="Abstract">
     <element name="abstract">
-      <ref name="MetaDataTitleOptional"/>
+      <ref name="MetaDataTarget"/>
       <oneOrMore>
         <ref name="BlockText"/>
       </oneOrMore>

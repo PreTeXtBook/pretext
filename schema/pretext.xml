@@ -2226,7 +2226,7 @@
                 }
             Abstract =
                 element abstract {
-                    MetaDataTitleOptional,
+                    MetaDataTarget,
                     BlockText+
                 }
             ColophonFront =
