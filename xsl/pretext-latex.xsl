@@ -5930,6 +5930,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Components of an Exercise -->
 <!-- ######################### -->
 
+<!-- NB: this bit of documentation seems to have hd most of the       -->
+<!-- relevant code near it removed (as variations of exercises have   -->
+<!-- moved to the -assembly stylesheet).  So parts are no longer      -->
+<!-- applicable and maybe none of it is useful.                       -->
+
 <!-- Five components of a "regular" exercise, two components          -->
 <!-- of a "webwork" exercise, two components of a "webwork/stage",    -->
 <!-- and one component of a "myopenmath".  In other words, "hint",    -->
@@ -5948,50 +5953,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- all the same.  For use when an exercise is born the situation    -->
 <!-- is simpler and always has a "statement", necessitating a heading -->
 <!-- on a component.  So we default the parameter to true right here. -->
-
-
-<xsl:template match="exercise[myopenmath]" mode="exercise-components">
-    <xsl:param name="b-original" />
-    <xsl:param name="purpose" />
-    <xsl:param name="b-component-heading"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer"  />
-    <xsl:param name="b-has-solution"  />
-
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="introduction"/>
-    </xsl:if>
-
-    <!-- TODO: Should really do this in the assembly phase, ala WW -->
-    <!-- We only try to open an external file when the source  -->
-    <!-- has a MOM problem (with an id number).  The second    -->
-    <!-- argument of the "document()" function is a node from  -->
-    <!-- the original source, and not the enhanced source, and -->
-    <!-- causes the relative file name to resolve according    -->
-    <!-- to the correct location.   Experiments with the       -->
-    <xsl:variable name="filename">
-        <xsl:if test="$b-managed-directories">
-            <xsl:value-of select="$generated-directory"/>
-        </xsl:if>
-        <xsl:text>problems/mom-</xsl:text>
-        <xsl:value-of select="myopenmath/@problem"/>
-        <xsl:text>.xml</xsl:text>
-    </xsl:variable>
-    <xsl:apply-templates select="document($filename, $original)/myopenmath" mode="exercise-components">
-        <xsl:with-param name="b-original" select="$b-original" />
-        <xsl:with-param name="purpose" select="$purpose" />
-        <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-    </xsl:apply-templates>
-
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="conclusion"/>
-    </xsl:if>
-</xsl:template>
 
 
 <!-- ################ -->
@@ -6197,7 +6158,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hint|answer|solution that might appear somewhere else.  Since there     -->
 <!-- could be multiple targets, we use the heuristic of choosing main matter -->
 <!-- over back matter.  Unclear what happens if there are multiple targets.  -->
-<xsl:template match="exercise|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
+<xsl:template match="exercise|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
