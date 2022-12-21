@@ -120,6 +120,12 @@
   width: unset;
   height: 100vh;
 }
+#ptx-toc::after {
+    content: "";
+    display: block;
+    height: 13em;
+    background: #fff;
+}
 
 
 /**** Use serif font for Roman numerals ****/
@@ -134,9 +140,19 @@
     grid-area: toc-content;
 }
 
-/* depth1 trerated like depth2, because depth1 is usually
-   a bad idea.  Awaiting fallout. */
-#ptx-toc.depth1 ul.structural ul.structural ul.structural,
+#ptx-toc.depth0 ul.structural {
+    display: none;
+}
+#ptx-toc.depth1 ul.structural ul.structural {
+    display: none;
+}
 #ptx-toc.depth2 ul.structural ul.structural ul.structural {
     display: none;
 }
+#ptx-toc.depth3 ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+#ptx-toc.depth4 ul.structural ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+

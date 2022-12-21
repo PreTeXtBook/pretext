@@ -10,7 +10,7 @@
   background: #ededed;
   border-bottom: 1px solid #bababa;
   margin: 0;
-  z-index: 200;
+  z-index: 20;
   min-height: unset;  /* to combat navbar.less */
 /*
   height: 35.36px;

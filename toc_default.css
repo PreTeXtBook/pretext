@@ -7,6 +7,12 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+#ptx-toc::after {
+    content: "";
+    display: block;
+    height: 13em;
+    background: #fff;
+}
 
 /* Aligns toc to the top and side of the allotted space, respectively */
 #ptx-toc ul {
@@ -153,6 +159,9 @@ the margin on top of sections being used to space out adjacent sections) */
     display: none;
 }
 #ptx-toc.depth3 ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+#ptx-toc.depth4 ul.structural ul.structural ul.structural ul.structural ul.structural {
     display: none;
 }
 
