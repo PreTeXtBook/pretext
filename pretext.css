@@ -442,9 +442,23 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     }
 }
 
+.ptx-content .abstract {
+    margin: 4em 2em;
+}
+.ptx-content .abstract > .title {
+    font-size: 1.125em;
+    font-weight: 600;
+    line-height: 1.125em;
+    display: inline;
+}
+.ptx-content .abstract > .title::after {
+    content: ".\2009\2009\2009";
+}
+.ptx-content .abstract > .title + .para {
+    display: inline;
+}
 .ptx-content article > .heading,
-.ptx-content article > a .heading,
-.ptx-content .abstract > .heading {
+.ptx-content article > a .heading {
     font-size: 1.125em;
     line-height: 1.125em;
     margin-top: 0;
@@ -452,8 +466,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 .ptx-content article > .heading::after,
 .ptx-content .paragraphs > .heading::after,
-.ptx-content article > a > .heading::after,
-.ptx-content .abstract > .heading::after {
+.ptx-content article > a > .heading::after {
     content: "\2009";
 }
 /* Currently only for Solution to example */
