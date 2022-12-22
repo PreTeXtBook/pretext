@@ -2647,7 +2647,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ commentarystyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, phantomlabel={#2}, breakable, parbox=false, commentarystyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{commentary}[3]{title={#2}, phantomlabel={#3}, breakable, parbox=false, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- PROOF-LIKE (regular, major) -->
@@ -2756,8 +2756,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>}[2]{title={\notblank{#1}{#1}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#2}, breakable, parbox=false, </xsl:text>
+    <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, parbox=false, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2812,8 +2812,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>}[2]{title={\notblank{#1}{#1}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#2}, breakable, parbox=false, </xsl:text>
+    <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, parbox=false, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2889,38 +2889,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- number of arguments -->
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
-            <xsl:text>[3]</xsl:text>
+            <xsl:text>[4]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[2]</xsl:text>
+            <xsl:text>[3]</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <!-- begin: options -->
     <xsl:text>{</xsl:text>
     <!-- begin: title construction -->
-    <xsl:text>title={{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>~\thetcbcounter</xsl:text>
+    <xsl:text>title={{#1~\thetcbcounter</xsl:text>
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
             <!-- first space of double space -->
-            <xsl:text>\notblank{#1#2}{\space}{}</xsl:text>
-            <xsl:text>\notblank{#1}{\space#1}{}</xsl:text>
-            <xsl:text>\notblank{#2}{\space(#2)}{}</xsl:text>
+            <xsl:text>\notblank{#2#3}{\space}{}</xsl:text>
+            <xsl:text>\notblank{#2}{\space#2}{}</xsl:text>
+            <xsl:text>\notblank{#3}{\space(#3)}{}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>\notblank{#1}{\space\space#1}{}</xsl:text>
+            <xsl:text>\notblank{#2}{\space\space#2}{}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}}, </xsl:text>
     <!-- end: title construction -->
-    <!-- label in argument 2 or argument 3 -->
+    <!-- label in argument 3 or argument 4 -->
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
-            <xsl:text>phantomlabel={#3}, </xsl:text>
+            <xsl:text>phantomlabel={#4}, </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>phantomlabel={#2}, </xsl:text>
+            <xsl:text>phantomlabel={#3}, </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <!-- always breakable -->
@@ -5237,6 +5235,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
