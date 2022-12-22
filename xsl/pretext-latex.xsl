@@ -2665,13 +2665,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$proof-name"/>
-    <xsl:text>}[2]{title={\notblank{#1}{#1}{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.}}, phantom={</xsl:text>
+    <xsl:text>}[3]{title={\notblank{#2}{#2}{#1.}}, phantom={</xsl:text>
     <xsl:if test="$b-pageref">
-        <xsl:text>\label{#2}</xsl:text>
+        <xsl:text>\label{#3}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, </xsl:text>
+    <xsl:text>\hypertarget{#3}{}}, breakable, parbox=false, after={\par}, </xsl:text>
     <xsl:value-of select="$proof-name"/>
     <xsl:text>style }&#xa;</xsl:text>
 </xsl:template>
@@ -2687,10 +2685,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[&PROOF-FILTER;][&SOLUTION-PROOF-FILTER;]" mode="environment">
     <xsl:text>\NewDocumentEnvironment{solution</xsl:text>
     <xsl:value-of select="local-name(.)"/>
-    <xsl:text>}{}&#xa;</xsl:text>
-    <xsl:text>{\par\smallskip\noindent\textit{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par\smallskip}&#xa;</xsl:text>
+    <xsl:text>}{m}&#xa;</xsl:text>
+    <xsl:text>{\par\smallskip\noindent\textit{#1}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par\smallskip}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a PROOF-LIKE) -->
@@ -5293,6 +5289,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:if test="title">
         <xsl:apply-templates select="." mode="title-full"/>
     </xsl:if>
@@ -5323,6 +5322,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$environment-name"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{</xsl:text>
