@@ -2704,14 +2704,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: move implication definitions here, and       -->
 <!-- pass semantic strings out of the construction      -->
 <xsl:template match="case" mode="environment">
-    <xsl:text>\NewDocumentEnvironment{case}{mmm}&#xa;</xsl:text>
-    <xsl:text>{\par\medskip\noindent\notblank{#1}{#1\space{}}{}\textit{\notblank{#2}{#2\space{}}{}\notblank{#1#2}{}{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.\space{}}}</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{case}{mmmm}&#xa;</xsl:text>
+    <xsl:text>{\par\medskip\noindent\notblank{#2}{#2\space{}}{}\textit{\notblank{#3}{#3\space{}}{}\notblank{#2#3}{}{#1.\space{}}}</xsl:text>
     <xsl:if test="$b-pageref">
-        <xsl:text>\label{#3}</xsl:text>
+        <xsl:text>\label{#4}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#3}{}}{}&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#4}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -5342,6 +5340,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The environment combines and styles            -->
 <xsl:template match="case">
     <xsl:text>\begin{case}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <!-- optional direction, given by attribute -->
     <xsl:choose>
