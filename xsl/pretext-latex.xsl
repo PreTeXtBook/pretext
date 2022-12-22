@@ -2991,7 +2991,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}</xsl:text>
     <!-- number of arguments -->
-    <xsl:text>[3]</xsl:text>
+    <xsl:text>[4]</xsl:text>
     <!-- begin: options -->
     <xsl:text>{</xsl:text>
     <!-- begin: title/caption construction -->
@@ -3019,50 +3019,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@block}{}}</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>\space#1</xsl:text>
+            <xsl:text>\space#2</xsl:text>
             <xsl:text>}}, </xsl:text>
         </xsl:when>
         <!-- Only the type-number is bolded, caption in #1 is plain text -->
         <xsl:when test="self::figure|self::listing">
             <xsl:text>lower separated=false, </xsl:text>
             <xsl:text>before lower={{</xsl:text>
-            <xsl:text>\textbf{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>~</xsl:text>
+            <xsl:text>\textbf{#1~</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-latex-hardcode-numbers">
-                    <xsl:text>#3</xsl:text>
+                    <xsl:text>#4</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\thetcbcounter</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>}</xsl:text>
-            <xsl:text>\space#1</xsl:text>
+            <xsl:text>\space#2</xsl:text>
             <xsl:text>}}, </xsl:text>
         </xsl:when>
         <!-- Only the type-number is bolded here, caption in #1 is bold text -->
         <xsl:when test="self::table|self::list">
             <xsl:text>title={{</xsl:text>
-            <xsl:text>\textbf{</xsl:text>
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>~</xsl:text>
+            <xsl:text>\textbf{#1~</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-latex-hardcode-numbers">
-                    <xsl:text>#3</xsl:text>
+                    <xsl:text>#4</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\thetcbcounter</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>}</xsl:text>
-            <xsl:text>\space#1</xsl:text>
+            <xsl:text>\space#2</xsl:text>
             <xsl:text>}}, </xsl:text>
         </xsl:when>
     </xsl:choose>
     <!-- end: title/caption construction -->
     <!-- label in argument 2             -->
-    <xsl:text>phantomlabel={#2}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, </xsl:text>
     <!-- always unbreakable, except for "list"           -->
     <!-- list will be unbreakable once inside sidebyside -->
     <xsl:choose>
@@ -8724,6 +8720,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
+    <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="caption-full"/>
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id"/>
@@ -8758,6 +8756,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="table|list">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new"/>
     <xsl:text>}{</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
