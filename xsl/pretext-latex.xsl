@@ -2741,13 +2741,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ backcolophonstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{backcolophon}[1]{title={</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>}, phantom={</xsl:text>
+    <xsl:text>\newtcolorbox{backcolophon}[2]{title={#1}, phantom={</xsl:text>
     <xsl:if test="$b-pageref">
-        <xsl:text>\label{#1}</xsl:text>
+        <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#1}{}}, breakable, parbox=false, backcolophonstyle}&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, backcolophonstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
@@ -4462,6 +4460,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{backcolophon}</xsl:text>
     <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
@@ -4474,6 +4475,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The back colophon of an article is simpler -->
 <xsl:template match="article/backmatter/colophon">
     <xsl:text>\begin{backcolophon}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name-new" />
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
