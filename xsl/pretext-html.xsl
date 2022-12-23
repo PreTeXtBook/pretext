@@ -12623,7 +12623,7 @@ TODO:
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Tinos:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
     <!-- DejaVu Serif from an alternate CDN -->
-    <link href="http://fonts.cdnfonts.com/css/dejavu-serif" rel="stylesheet"/>
+    <link href="https://fonts.cdnfonts.com/css/dejavu-serif" rel="stylesheet"/>
     <!-- A variable font from Google, with serifs -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wdth,wght@8..144,50..150,100..900&amp;display=swap" rel="stylesheet"/>
     <!-- A variable font from Google, sans serif -->
