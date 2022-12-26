@@ -3773,39 +3773,106 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- String Parameter Bad Bank -->
 <!-- ######################### -->
 
+<!-- 2022-12-26: this list of deprecated, retired, obsolete (string)  -->
+<!-- parameters has evolved over time and the comments are a bit      -->
+<!-- haphazard.  The primary motivation for keeping (most of) these   -->
+<!-- is to allow deprecation warnings to flag (and often react        -->
+<!-- favorably) to attempted uses. Dated, and in chronological        -->
+<!-- order.  Grep, or the git pickaxe (log -S) using the date strings -->
+ <!-- is often effective in locating all the pieces of a deprecation. -->
+
 <!-- Conversion specific parameters that die will   -->
 <!-- live on in warnings, which are isolated in the -->
 <!-- pretext-common stylesheet.  So we need to      -->
 <!-- declare them here for use in the warnings      -->
 
-<!-- DO NOT USE -->
+<!-- Some string parameters have been deprecated without any      -->
+<!-- sort of replacement, fallback, or upgrade.  But for a        -->
+<!-- deprecation message to be effective, they need to exist.     -->
+<!-- If you add something here, make a note by the deprecation    -->
+<!-- message.  These definitions expain why it is *always* best   -->
+<!-- to define a user variable as empty, and then supply defaults -->
+<!-- to an internal variable.                                     -->
+
 <!-- HTML-specific deprecated 2015-06, but still functional -->
 <xsl:param name="html.chunk.level" select="''" />
+
+<!-- DEPRECATED: 2017-12-18, do not use, any value -->
+<!-- besides an empty string will raise a warning  -->
+<xsl:param name="latex.console.macro-char" select="''" />
+<xsl:param name="latex.console.begin-char" select="''" />
+<xsl:param name="latex.console.end-char" select="''" />
+
 <!-- html.knowl.sidebyside is deprecated 2017-07  -->
 <!-- null value necessary for deprecation message -->
 <xsl:param name="html.knowl.sidebyside" select="''" />
+
 <!-- Analytics deprecated 2019-11-28               -->
 <!-- null values necessary for deprecation message -->
 <xsl:param name="html.statcounter.project" select="''"/>
 <xsl:param name="html.statcounter.security" select="''"/>
 <xsl:param name="html.google-classic" select="''"/>
 <xsl:param name="html.google-universal" select="''"/>
+
 <!-- Google search via string parameter deprecated 2019-11-29 -->
 <xsl:param name="html.google-search" select="''"/>
-<!-- DO NOT USE -->
+
+<!-- DEPRECATED: 2020-05-29  In favor of       -->
+<!-- html/calculator/@model  in publisher file -->
+<xsl:param name="html.calculator" select="''" />
+
+<!-- The old (incomplete) methods for duplicating components of -->
+<!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
+<!-- these here as we have tried to preserve their intent, and  -->
+<!-- we are generating warnings if they are ever set.           -->
+<!-- 2020-08-31 exercise.backmatter.* only remain for warnings  -->
+<xsl:param name="exercise.text.statement" select="''" />
+<xsl:param name="exercise.text.hint" select="''" />
+<xsl:param name="exercise.text.answer" select="''" />
+<xsl:param name="exercise.text.solution" select="''" />
+<xsl:param name="project.text.hint" select="''" />
+<xsl:param name="project.text.answer" select="''" />
+<xsl:param name="project.text.solution" select="''" />
+<xsl:param name="task.text.hint" select="''" />
+<xsl:param name="task.text.answer" select="''" />
+<xsl:param name="task.text.solution" select="''" />
+<xsl:param name="exercise.backmatter.statement" select="''" />
+<xsl:param name="exercise.backmatter.hint" select="''" />
+<xsl:param name="exercise.backmatter.answer" select="''" />
+<xsl:param name="exercise.backmatter.solution" select="''" />
 
 <!-- The dashed version is deprecated 2019-02-10,      -->
 <!-- but we still recognize it.  Move to variable bad  -->
 <!-- bank once killed.                                 -->
 <xsl:param name="author-tools" select="''" />
+
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
+
 <!-- 2020-11-22: latex.print to publisher file -->
 <xsl:param name="latex.print" select="''"/>
 <!-- 2020-11-22 sidedness to publisher file -->
 <xsl:param name="latex.sides" select="''"/>
 
+<!-- Replaced by more specific versions, 2019-02-10     -->
+<!-- These are variables, but still react when supplied -->
+<!-- to xsltproc/lxml as command-line arguments         -->
+<xsl:variable name="html.css.file" select="''"/>
+<xsl:variable name="html.permalink" select="''"/>
+
+<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
+<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
+<xsl:param name="latex.engine" select="'pdflatex'" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.media"  select="''" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.knowls"  select="''" />
 
 <!-- Deprecated 2020-11-23 in favor of publisher file -->
 <!-- specification, but will still be respected       -->
@@ -3815,7 +3882,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="chunk.level" select="''" />
 <!-- 2021-01-03 toc.level to publisher file -->
 <xsl:param name="toc.level" select="''" />
-
 
 <!-- Deprecated 2021-01-23, but still respected -->
 <xsl:param name="html.knowl.theorem" select="''" />
@@ -3922,68 +3988,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Publisher option to surround emdash, deprecated 2022-11-20 -->
 <xsl:param name="emdash.space" select="''" />
-
-
-<!-- ################# -->
-<!-- Variable Bad Bank -->
-<!-- ################# -->
-
-<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
-
-<!-- Some string parameters have been deprecated without any      -->
-<!-- sort of replacement, fallback, or upgrade.  But for a        -->
-<!-- deprecation message to be effective, they need to exist.     -->
-<!-- If you add something here, make a note by the deprecation    -->
-<!-- message.  These definitions expain why it is *always* best   -->
-<!-- to define a user variable as empty, and then supply defaults -->
-<!-- to an internal variable.                                     -->
-
-<xsl:variable name="html.css.file" select="''"/>
-<xsl:variable name="html.permalink" select="''"/>
-
-<!-- The old (incomplete) methods for duplicating components of -->
-<!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
-<!-- these here as we have tried to preserve their intent, and  -->
-<!-- we are generating warnings if they are ever set.           -->
-<!-- 2020-08-31 exercise.backmatter.* only remain for warnings  -->
-<xsl:param name="exercise.text.statement" select="''" />
-<xsl:param name="exercise.text.hint" select="''" />
-<xsl:param name="exercise.text.answer" select="''" />
-<xsl:param name="exercise.text.solution" select="''" />
-<xsl:param name="project.text.hint" select="''" />
-<xsl:param name="project.text.answer" select="''" />
-<xsl:param name="project.text.solution" select="''" />
-<xsl:param name="task.text.hint" select="''" />
-<xsl:param name="task.text.answer" select="''" />
-<xsl:param name="task.text.solution" select="''" />
-<xsl:param name="exercise.backmatter.statement" select="''" />
-<xsl:param name="exercise.backmatter.hint" select="''" />
-<xsl:param name="exercise.backmatter.answer" select="''" />
-<xsl:param name="exercise.backmatter.solution" select="''" />
-
-<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
-
-<!-- DEPRECATED: 2017-12-18, do not use, any value -->
-<!-- besides an empty string will raise a warning  -->
-<xsl:param name="latex.console.macro-char" select="''" />
-<xsl:param name="latex.console.begin-char" select="''" />
-<xsl:param name="latex.console.end-char" select="''" />
-
-<!-- DEPRECATED: 2020-05-29  In favor of       -->
-<!-- html/calculator/@model  in publisher file -->
-<xsl:param name="html.calculator" select="''" />
-
-<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
-<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
-<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
-<xsl:param name="latex.engine" select="'pdflatex'" />
-
-<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
-<!-- silently moved here, which should make no real difference -->
-<xsl:param name="directory.media"  select="''" />
-
-<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
-<!-- silently moved here, which should make no real difference -->
-<xsl:param name="directory.knowls"  select="''" />
 
 </xsl:stylesheet>

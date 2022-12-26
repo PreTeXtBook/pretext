@@ -10278,8 +10278,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2018-11-07  obsolete exercise component switches -->
-    <!-- Still exists in "Variable Bad Bank" for use here  -->
+    <!-- 2018-11-07  obsolete exercise component switches          -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2018-11-07'" />
         <xsl:with-param name="message" select="'the  *.text.*  parameters that control the visibility of components of exercises and projects have been removed and replaced by a greater variety of  exercise.*.*  and  project.*  parameters'" />
@@ -10287,41 +10287,41 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2018-11-07  obsolete backmatter exercise component switches -->
-    <!-- Still exists in "Variable Bad Bank" for use here            -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here    -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2018-11-07'" />
         <xsl:with-param name="message" select="'the  exercise.backmatter.*  parameters that control the visibility of components of exercises and projects in the back matter have been removed and replaced by the &quot;solutions&quot; element, which is much more versatile'"/>
             <xsl:with-param name="incorrect-use" select="not(($exercise.backmatter.statement = '') and ($exercise.backmatter.hint = '') and ($exercise.backmatter.answer = '') and ($exercise.backmatter.solution = ''))" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2019-02-10  obsolete  html.css.file  removed -->
-    <!-- Still exists in "Variable Bad Bank" for use here  -->
+    <!-- 2019-02-10  obsolete  html.css.file  removed             -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-02-10'" />
         <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
             <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2019-02-20  replace author-tools with author.tools              -->
-    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <!-- 2019-02-20  replace author-tools with author.tools                       -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-02-20'" />
         <xsl:with-param name="message" select="'the  author-tools  parameter has been replaced by the functionally equivalent  author.tools'" />
             <xsl:with-param name="incorrect-use" select="not($author-tools = '')"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2019-03-07  replace latex.watermark with watermark.text         -->
-    <!-- 2022-10-24  update - to publication file                        -->
-    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <!-- 2019-03-07  replace latex.watermark with watermark.text                  -->
+    <!-- 2022-10-24  update - to publication file                                 -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-03-07'" />
         <xsl:with-param name="message" select="'the  latex.watermark  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
             <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale  -->
-    <!-- 2022-10-24  update - to publication file                        -->
-    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale           -->
+    <!-- 2022-10-24  update - to publication file                                 -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-03-07'" />
         <xsl:with-param name="message" select="'the  latex.watermark.scale  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
