@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
+    <choice>
+      <ref name="Pretext"/>
+      <ref name="DocInfo"/>
+      <ref name="Part"/>
+      <ref name="Chapter"/>
+      <ref name="Section"/>
+      <ref name="Subsection"/>
+      <ref name="Subsubsection"/>
+      <ref name="Paragraphs"/>
+      <ref name="ReadingQuestions"/>
+      <ref name="Exercises"/>
+      <ref name="Subexercises"/>
+      <ref name="Solutions"/>
+      <ref name="BookFrontMatter"/>
+      <ref name="ArticleFrontMatter"/>
+      <ref name="Preface"/>
+      <ref name="Acknowledgement"/>
+      <ref name="ArticleAppendix"/>
+      <ref name="BookAppendix"/>
+      <ref name="IndexDivision"/>
+      <ref name="References"/>
+      <ref name="Glossary"/>
+    </choice>
+  </start>
+  <define name="Pretext">
     <element name="pretext">
       <optional>
         <ref name="XMLLang"/>
@@ -15,7 +40,7 @@
         <ref name="Memorandum"/>
       </choice>
     </element>
-  </start>
+  </define>
   <define name="Article">
     <element name="article">
       <ref name="MetaDataLinedSubtitle"/>

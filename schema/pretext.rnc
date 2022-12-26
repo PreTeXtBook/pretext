@@ -1,7 +1,9 @@
 
             grammar {
             
-            start =
+            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
+            
+            Pretext =
                 element pretext {
                     XMLLang?,
                     DocInfo?,

@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
-  <xs:element name="pretext">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" ref="docinfo"/>
-        <xs:choice>
-          <xs:element ref="book"/>
-          <xs:element ref="article"/>
-          <xs:element ref="letter"/>
-          <xs:element ref="memo"/>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attribute ref="xml:lang"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:group name="Pretext">
+    <xs:sequence>
+      <xs:element name="pretext">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="docinfo"/>
+            <xs:choice>
+              <xs:element ref="book"/>
+              <xs:element ref="article"/>
+              <xs:element ref="letter"/>
+              <xs:element ref="memo"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute ref="xml:lang"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="article">
     <xs:complexType>
       <xs:complexContent>

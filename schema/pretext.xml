@@ -63,14 +63,27 @@
     </introduction>
 
     <section>
+        <title>Start Elements</title>
+
+        <p>To support modular source files, we specify which elements can naturally be the root of a <em>fragment</em> file in a <pretext /> document.  These include the <c>pretext</c> element itself, as well as most divisions.  All of these are defined as elements later in the schema.</p>
+
+        <fragment xml:id="start-elements">
+            <title>Start elements</title>
+            <code>
+            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>Gross Structure</title>
 
-        <p>A <pretext/> document is always a single <c>pretext</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.  <c>start</c> is the way to specify the lone top-level element as part of the schema, so it will not be used again.</p>
+        <p>A <pretext/> document is always a single <c>pretext</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.</p>
 
         <fragment xml:id="gross-structure">
             <title>Gross structure</title>
             <code>
-            start =
+            Pretext =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
@@ -2516,6 +2529,7 @@
             <code>
             grammar {
             </code>
+            <fragref ref="start-elements" />
             <fragref ref="gross-structure" />
             <fragref ref="document-types" />
             <fragref ref="divisions" />
