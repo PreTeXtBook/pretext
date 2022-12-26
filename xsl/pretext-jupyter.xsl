@@ -594,14 +594,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Left Bracket -->
-<xsl:template name="lbracket-character">
-    <xsl:text>\[</xsl:text>
-</xsl:template>
-
 <!-- Right Bracket -->
-<xsl:template name="rbracket-character">
-    <xsl:text>\]</xsl:text>
-</xsl:template>
 
 <!-- Backtick -->
 <!-- This is the rationale for this element. -->

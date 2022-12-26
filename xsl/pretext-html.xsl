@@ -8818,16 +8818,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x201d;</xsl:text>
 </xsl:template>
 
-<!-- Left Bracket -->
-<xsl:template name="lbracket-character">
-    <xsl:text>[</xsl:text>
-</xsl:template>
-
-<!-- Right Bracket -->
-<xsl:template name="rbracket-character">
-    <xsl:text>]</xsl:text>
-</xsl:template>
-
 <!-- Left Double Bracket -->
 <!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
 <xsl:template name="ldblbracket-character">

@@ -2183,14 +2183,6 @@
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<xsl:template name="lbracket-character">
-    <xsl:text>\[</xsl:text>
-</xsl:template>
-
-<xsl:template name="rbracket-character">
-    <xsl:text>\]</xsl:text>
-</xsl:template>
-
 <!-- http://webwork.maa.org/wiki/Special_Characters_-_PGML -->
 <!-- suggests PGML understands the TeX special characters. -->
 <!-- There seems enough exceptions that we will routinely  -->

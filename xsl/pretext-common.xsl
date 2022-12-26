@@ -8969,20 +8969,6 @@ Book (with parts), "section" at level 3
     <xsl:call-template name="rq-character"/>
 </xsl:template>
 
-<!-- Left Bracket -->
-<xsl:template name="lbracket-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'lbracket'"/>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- Right Bracket -->
-<xsl:template name="rbracket-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'rbracket'"/>
-    </xsl:call-template>
-</xsl:template>
-
 <!-- Left Double Bracket -->
 <xsl:template name="ldblbracket-character">
     <xsl:call-template name="warn-unimplemented-character">
@@ -11086,12 +11072,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecated 2019-02-06     -->
 <!-- <, >, [, ], *, /, `,      -->
 <!--   braces and brackets     -->
-<xsl:template match="lbracket">
-    <xsl:call-template name="lbracket-character"/>
-</xsl:template>
-<xsl:template match="rbracket">
-    <xsl:call-template name="rbracket-character"/>
-</xsl:template>
 <xsl:template match="asterisk">
     <xsl:call-template name="asterisk-character"/>
 </xsl:template>
@@ -11100,16 +11080,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 <xsl:template match="backtick">
     <xsl:call-template name="backtick-character"/>
-</xsl:template>
-<xsl:template match="braces">
-    <xsl:call-template name="lbrace-character"/>
-    <xsl:apply-templates />
-    <xsl:call-template name="rbrace-character"/>
-</xsl:template>
-<xsl:template match="brackets">
-    <xsl:call-template name="lbracket-character"/>
-    <xsl:apply-templates />
-    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <!-- ############################## -->

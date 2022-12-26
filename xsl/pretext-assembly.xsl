@@ -957,6 +957,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\</xsl:text>
 </xsl:template>
 
+<!-- Lesser keyboard characters -->
+<!-- [, ], *, /, `,             -->
+
+<xsl:template match="lbracket" mode="repair">
+    <xsl:text>[</xsl:text>
+</xsl:template>
+
+<xsl:template match="rbracket" mode="repair">
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Grouping constructions  -->
+<!-- "braces" and "brackets" -->
+
+<xsl:template match="braces" mode="repair">
+    <xsl:text>{</xsl:text>
+    <!-- attributes will be lost -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="brackets" mode="repair">
+    <xsl:text>[</xsl:text>
+    <!-- attributes will be lost -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
 
 <!-- This pass adds 100% internal identification for elements after a   -->
 <!-- version has been constructed, but before anything else is added or -->
