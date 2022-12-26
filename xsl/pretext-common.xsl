@@ -10258,31 +10258,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2015-06-26  chunking became a general thing -->
     <!-- 2021-01-03  rendered ineffective            -->
-    <xsl:if test="$html.chunk.level != ''">
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2015-06-26'" />
         <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by the common/chunking/@level  entry in the publisher file.  It will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
-            <xsl:with-param name="incorrect-use" select="($html.chunk.level != '')" />
-        </xsl:call-template>
-    </xsl:if>
+        <xsl:with-param name="incorrect-use" select="($html.chunk.level != '')" />
+    </xsl:call-template>
     <!--  -->
     <!-- 2017-07-25  deprecate intentional autoname without new setting -->
-    <xsl:if test="not($autoname = '') and not(//docinfo/cross-references)">
-        <xsl:call-template name="parameter-deprecation-message">
-            <xsl:with-param name="date-string" select="'2017-07-25'" />
-            <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/cross-references/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
-            <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references)" />
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/cross-references/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
+        <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references)" />
+    </xsl:call-template>
     <!--  -->
     <!-- 2017-07-25  deprecate intentional autoname also with new setting -->
-    <xsl:if test="not($autoname = '') and //docinfo/cross-references">
-        <xsl:call-template name="parameter-deprecation-message">
-            <xsl:with-param name="date-string" select="'2017-07-25'" />
-            <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/cross-references/@text&quot;  and so is totally ineffective and can be removed'" />
-                <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/cross-references/@text&quot;  and so is totally ineffective and can be removed'" />
+            <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
+    </xsl:call-template>
     <!--  -->
     <!-- 2018-11-07  obsolete exercise component switches -->
     <!-- Still exists in "Variable Bad Bank" for use here  -->
