@@ -2260,6 +2260,7 @@
 <!-- * \    Always escape backslash.                                 -->
 <!-- #################################################### -->
 
+<!-- 2022-12-26: removing obsolete uses, leaving behind comments before mass removal. -->
 
 <!-- Ampersand -->
 <!-- Not for controlling mathematics -->
@@ -2269,14 +2270,7 @@
 </xsl:template>
 
 <!-- Less Than -->
-<xsl:template name="less-character">
-    <xsl:text>&lt;</xsl:text>
-</xsl:template>
-
 <!-- Greater Than -->
-<xsl:template name="greater-character">
-    <xsl:text>&gt;</xsl:text>
-</xsl:template>
 
 <!-- Percent sign -->
 <xsl:template name="percent-character">

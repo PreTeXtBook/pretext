@@ -8874,16 +8874,12 @@ Book (with parts), "section" at level 3
 <!-- keyboard equivalents which will suffice in most conversions, -->
 <!-- so we implement default versions in U+00-U+7F.               -->
 
+<!-- Necessity of these "character" templates went away with deprecations  -->
+<!-- on 2019-02-06.  Now removing them with a deprecation fix in the       -->
+<!-- -assembly template, as of 2022-12-26.  Then all this will be removed. -->
 
 <!-- Less Than -->
-<xsl:template name="less-character">
-    <xsl:text>&lt;</xsl:text>
-</xsl:template>
-
 <!-- Greater Than -->
-<xsl:template name="greater-character">
-    <xsl:text>&gt;</xsl:text>
-</xsl:template>
 
 <!--       -->
 <!-- LaTeX -->
@@ -11159,12 +11155,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecated 2019-02-06     -->
 <!-- <, >, [, ], *, /, `,      -->
 <!--   braces and brackets     -->
-<xsl:template match="less">
-    <xsl:call-template name="less-character"/>
-</xsl:template>
-<xsl:template match="greater">
-    <xsl:call-template name="greater-character"/>
-</xsl:template>
 <xsl:template match="lbracket">
     <xsl:call-template name="lbracket-character"/>
 </xsl:template>

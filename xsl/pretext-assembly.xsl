@@ -897,6 +897,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Due to naivete, we had empty templates for "keyboard characters"    -->
+<!-- we did not have the skills to handle.  A good example was <dollar/> -->
+<!-- simply because it is a (very) special character in LaTeX.  These    -->
+<!-- were deprecated on 2019-02-06.  Beginning in 2022-12-26, we are     -->
+<!-- providing fixes here, and removing all the (dead) code meant for    -->
+<!-- backward compatibility.                                             -->
+
+<!-- XML characters -->
+
+<xsl:template match="less" mode="repair">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
+
+<xsl:template match="greater" mode="repair">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
+
 
 <!-- This pass adds 100% internal identification for elements after a   -->
 <!-- version has been constructed, but before anything else is added or -->

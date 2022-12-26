@@ -7836,6 +7836,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   3.  \xspace might work after words.             -->
 <!--       Even if followed by punctuation (?).  Ugly. -->
 
+<!-- 2022-12-26: removing obsolete uses, leaving behind comments before mass removal. -->
+
 <!--           -->
 <!-- XML, HTML -->
 <!--           -->
@@ -7848,14 +7850,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Less Than -->
-<xsl:template name="less-character">
-    <xsl:text>\textless{}</xsl:text>
-</xsl:template>
-
 <!-- Greater Than -->
-<xsl:template name="greater-character">
-    <xsl:text>\textgreater{}</xsl:text>
-</xsl:template>
 
 <!--       -->
 <!-- LaTeX -->
