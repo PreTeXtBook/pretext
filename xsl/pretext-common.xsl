@@ -8888,54 +8888,15 @@ Book (with parts), "section" at level 3
 <!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template name="hash-character">
-    <xsl:text>#</xsl:text>
-</xsl:template>
-
 <!-- Dollar sign -->
-<xsl:template name="dollar-character">
-    <xsl:text>$</xsl:text>
-</xsl:template>
-
 <!-- Percent sign -->
-<xsl:template name="percent-character">
-    <xsl:text>%</xsl:text>
-</xsl:template>
-
 <!-- Circumflex  -->
-<xsl:template name="circumflex-character">
-    <xsl:text>^</xsl:text>
-</xsl:template>
-
 <!-- Ampersand -->
-<xsl:template name="ampersand-character">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
-
 <!-- Underscore -->
-<xsl:template name="underscore-character">
-    <xsl:text>_</xsl:text>
-</xsl:template>
-
 <!-- Left Brace -->
-<xsl:template name="lbrace-character">
-    <xsl:text>{</xsl:text>
-</xsl:template>
-
 <!-- Right Brace -->
-<xsl:template name="rbrace-character">
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
 <!-- Tilde -->
-<xsl:template name="tilde-character">
-    <xsl:text>~</xsl:text>
-</xsl:template>
-
 <!-- Backslash -->
-<xsl:template name="backslash-character">
-    <xsl:text>\</xsl:text>
-</xsl:template>
 
 <!-- ################ -->
 <!-- Other Characters -->
@@ -11120,38 +11081,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecated 2019-02-06    -->
 <!-- # $ % ^ & _ { } ~ \      -->
 
-<xsl:template match="hash">
-    <xsl:call-template name="hash-character"/>
-</xsl:template>
-<xsl:template match="ampersand">
-    <xsl:call-template name="ampersand-character"/>
-</xsl:template>
-<xsl:template match="dollar">
-    <xsl:call-template name="dollar-character"/>
-</xsl:template>
-<xsl:template match="percent">
-    <xsl:call-template name="percent-character"/>
-</xsl:template>
-<xsl:template match="circumflex">
-    <xsl:call-template name="circumflex-character"/>
-</xsl:template>
-<xsl:template match="underscore">
-    <xsl:call-template name="underscore-character"/>
-</xsl:template>
-<xsl:template match="lbrace">
-    <xsl:call-template name="lbrace-character"/>
-</xsl:template>
-<xsl:template match="rbrace">
-    <xsl:call-template name="rbrace-character"/>
-</xsl:template>
-<xsl:template match="tilde">
-    <xsl:call-template name="tilde-character"/>
-</xsl:template>
-<xsl:template match="backslash">
-    <xsl:call-template name="backslash-character"/>
-</xsl:template>
-
 <!-- Nine unnecessary elements -->
+
 <!-- Deprecated 2019-02-06     -->
 <!-- <, >, [, ], *, /, `,      -->
 <!--   braces and brackets     -->

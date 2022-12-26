@@ -914,6 +914,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&gt;</xsl:text>
 </xsl:template>
 
+<!-- Ten LaTeX characters -->
+<!-- # $ % ^ & _ { } ~ \  -->
+
+<xsl:template match="hash" mode="repair">
+    <xsl:text>#</xsl:text>
+</xsl:template>
+
+<xsl:template match="ampersand" mode="repair">
+    <xsl:text>&amp;</xsl:text>
+</xsl:template>
+
+<xsl:template match="dollar" mode="repair">
+    <xsl:text>$</xsl:text>
+</xsl:template>
+
+<xsl:template match="percent" mode="repair">
+    <xsl:text>%</xsl:text>
+</xsl:template>
+
+<xsl:template match="circumflex" mode="repair">
+    <xsl:text>^</xsl:text>
+</xsl:template>
+
+<xsl:template match="underscore" mode="repair">
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
+<xsl:template match="lbrace" mode="repair">
+    <xsl:text>{</xsl:text>
+</xsl:template>
+
+<xsl:template match="rbrace" mode="repair">
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="tilde" mode="repair">
+    <xsl:text>~</xsl:text>
+</xsl:template>
+
+<xsl:template match="backslash" mode="repair">
+    <xsl:text>\</xsl:text>
+</xsl:template>
+
 
 <!-- This pass adds 100% internal identification for elements after a   -->
 <!-- version has been constructed, but before anything else is added or -->

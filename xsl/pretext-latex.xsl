@@ -7845,10 +7845,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- & < > -->
 
 <!-- Ampersand -->
-<xsl:template name="ampersand-character">
-    <xsl:text>\&amp;</xsl:text>
-</xsl:template>
-
 <!-- Less Than -->
 <!-- Greater Than -->
 
@@ -7859,53 +7855,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template name="hash-character">
-    <xsl:text>\#</xsl:text>
-</xsl:template>
-
 <!-- Dollar sign -->
-<xsl:template name="dollar-character">
-    <xsl:text>\textdollar{}</xsl:text>
-</xsl:template>
-
 <!-- Percent sign -->
-<xsl:template name="percent-character">
-    <xsl:text>\%</xsl:text>
-</xsl:template>
-
 <!-- Circumflex  -->
-<xsl:template name="circumflex-character">
-    <xsl:text>\textasciicircum{}</xsl:text>
-</xsl:template>
-
 <!-- Ampersand -->
 <!-- Handled above -->
-
 <!-- Underscore -->
-<xsl:template name="underscore-character">
-    <xsl:text>\textunderscore{}</xsl:text>
-</xsl:template>
-
 <!-- Left Brace -->
-<xsl:template name="lbrace-character">
-    <xsl:text>\textbraceleft{}</xsl:text>
-</xsl:template>
-
 <!-- Right  Brace -->
-<xsl:template name="rbrace-character">
-    <xsl:text>\textbraceright{}</xsl:text>
-</xsl:template>
-
 <!-- Tilde -->
-<xsl:template name="tilde-character">
-    <xsl:text>\textasciitilde{}</xsl:text>
-</xsl:template>
-
 <!-- Backslash -->
-<xsl:template name="backslash-character">
-    <xsl:text>\textbackslash{}</xsl:text>
-</xsl:template>
-
 <!-- Other characters -->
 
 <!-- Asterisk -->

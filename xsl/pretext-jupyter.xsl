@@ -576,9 +576,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- two used for financial reasons, they will be         -->
 <!-- interpreted incorrectly.  But they can be escaped.   -->
 <!-- Not a Markdown element, but critical so here anyway. -->
-<xsl:template name="dollar-character">
-    <xsl:text>\$</xsl:text>
-</xsl:template>
 
 <!-- Other than the dollar sign, these are from the -html code.    -->
 <!-- We escape ASCII versions, and leave just comments for         -->
@@ -586,29 +583,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (&, <, >) or as fancier, non-ASCII, Unicode versions.         -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template name="hash-character">
-    <xsl:text>\#</xsl:text>
-</xsl:template>
-
 <!-- Underscore -->
-<xsl:template name="underscore-character">
-    <xsl:text>\_</xsl:text>
-</xsl:template>
-
 <!-- Left Brace -->
-<xsl:template name="lbrace-character">
-    <xsl:text>\{</xsl:text>
-</xsl:template>
-
 <!-- Right  Brace -->
-<xsl:template name="rbrace-character">
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-
 <!-- Backslash -->
-<xsl:template name="backslash-character">
-    <xsl:text>\\</xsl:text>
-</xsl:template>
 
 <!-- Asterisk  -->
 <xsl:template name="asterisk-character">

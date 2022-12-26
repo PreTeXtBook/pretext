@@ -2265,42 +2265,14 @@
 <!-- Ampersand -->
 <!-- Not for controlling mathematics -->
 <!-- or table formatting             -->
-<xsl:template name="ampersand-character">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
-
 <!-- Less Than -->
 <!-- Greater Than -->
-
 <!-- Percent sign -->
-<xsl:template name="percent-character">
-    <xsl:text>%</xsl:text>
-</xsl:template>
-
 <!-- Dollar sign -->
-<xsl:template name="dollar-character">
-    <xsl:text>$</xsl:text>
-</xsl:template>
-
 <!-- Circumflex  -->
-<xsl:template name="circumflex-character">
-    <xsl:text>^</xsl:text>
-</xsl:template>
-
 <!-- Text underscore -->
-<xsl:template name="underscore-character">
-    <xsl:text>\_</xsl:text>
-</xsl:template>
-
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template name="hash-character">
-    <xsl:text>\#</xsl:text>
-</xsl:template>
-
 <!-- Tilde -->
-<xsl:template name="tilde-character">
-    <xsl:text>~</xsl:text>
-</xsl:template>
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
@@ -2314,22 +2286,11 @@
     <xsl:text>...</xsl:text>
 </xsl:template>
 
-
 <!-- Braces -->
 <!-- Individually, or matched            -->
 <!-- All escaped to avoid conflicts with -->
 <!-- use after answer blanks, etc.       -->
-<xsl:template name="lbrace-character">
-    <xsl:text>\{</xsl:text>
-</xsl:template>
-<xsl:template name="rbrace-character">
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-
 <!-- Backslash -->
-<xsl:template name="backslash-character">
-    <xsl:text>\\</xsl:text>
-</xsl:template>
 
 <!-- ############### -->
 <!-- Text Processing -->
