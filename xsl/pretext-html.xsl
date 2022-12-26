@@ -8794,9 +8794,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Was once: Unicode Character 'ASTERISK OPERATOR' (U+2217)  -->
 <!-- which is not quite right.  Now identical to a plain       -->
 <!-- ASCII version, and we hope fonts do not place it too high -->
-<xsl:template name="asterisk-character">
-    <xsl:text>*</xsl:text>
-</xsl:template>
 
 <!-- Left Single Quote -->
 <xsl:template name="lsq-character">
@@ -8906,9 +8903,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus) -->
-<xsl:template name="slash-character">
-    <xsl:text>/</xsl:text>
-</xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
@@ -8939,9 +8933,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text context use this empty element.  For example,    -->
 <!-- this is a character Markdown uses, so we want to      -->
 <!-- provide this safety valve.                            -->
-<xsl:template name="backtick-character">
-    <xsl:text>&#x60;</xsl:text>
-</xsl:template>
 
 <!-- Foreign words/idioms -->
 <!-- Rutter, Web Typography, p.50 advocates a "span" with      -->

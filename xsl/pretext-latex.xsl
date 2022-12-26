@@ -7869,9 +7869,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
-<xsl:template name="asterisk-character">
-    <xsl:text>\textasteriskcentered{}</xsl:text>
-</xsl:template>
 
 <!-- Left Single Quote -->
 <xsl:template name="lsq-character">
@@ -7980,9 +7977,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus)   -->
 <!-- This should allow a linebreak, not tested -->
-<xsl:template name="slash-character">
-    <xsl:text>\slash{}</xsl:text>
-</xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
@@ -8014,9 +8008,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text context use this empty element.  For example,    -->
 <!-- this is a character Markdown uses, so we want to      -->
 <!-- provide this safety valve.                            -->
-<xsl:template name="backtick-character">
-    <xsl:text>\textasciigrave{}</xsl:text>
-</xsl:template>
 
 <!-- All Latin abbreviations are defined in -common    -->
 <!-- since they are largely very simple.  But we       -->

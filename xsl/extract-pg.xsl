@@ -2268,10 +2268,6 @@
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
-<xsl:template name="asterisk-character">
-    <xsl:text>\*</xsl:text>
-</xsl:template>
-
 <!-- Ellipsis -->
 <!-- Just three periods -->
 <xsl:template name="ellipsis-character">

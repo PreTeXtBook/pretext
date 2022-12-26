@@ -8923,11 +8923,6 @@ Book (with parts), "section" at level 3
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
-<xsl:template name="asterisk-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'asterisk'"/>
-    </xsl:call-template>
-</xsl:template>
 
 <!-- Left Single Quote -->
 <xsl:template name="lsq-character">
@@ -9098,11 +9093,6 @@ Book (with parts), "section" at level 3
 
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus) -->
-<xsl:template name="slash-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'slash'"/>
-    </xsl:call-template>
-</xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
@@ -9139,11 +9129,6 @@ Book (with parts), "section" at level 3
 
 <!-- Backtick -->
 <!-- Accent grave, as a text character -->
-<xsl:template name="backtick-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'backtick'"/>
-    </xsl:call-template>
-</xsl:template>
 
 <!-- Copyright -->
 <!-- Bringhurst: on baseline (i.e. not superscript) -->
@@ -11072,15 +11057,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecated 2019-02-06     -->
 <!-- <, >, [, ], *, /, `,      -->
 <!--   braces and brackets     -->
-<xsl:template match="asterisk">
-    <xsl:call-template name="asterisk-character"/>
-</xsl:template>
-<xsl:template match="slash">
-    <xsl:call-template name="slash-character"/>
-</xsl:template>
-<xsl:template match="backtick">
-    <xsl:call-template name="backtick-character"/>
-</xsl:template>
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->

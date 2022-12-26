@@ -589,10 +589,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Backslash -->
 
 <!-- Asterisk  -->
-<xsl:template name="asterisk-character">
-    <xsl:text>\*</xsl:text>
-</xsl:template>
-
 <!-- Left Bracket -->
 <!-- Right Bracket -->
 
@@ -600,9 +596,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the rationale for this element. -->
 <!-- We can use it in a text context,        -->
 <!-- and protect it here from Markdown.      -->
-<xsl:template name="backtick-character">
-    <xsl:text>\`</xsl:text>
-</xsl:template>
 
 <!-- Markdown protection remaining unimplemented?            -->
 <!-- These are symbols we would not want to need to          -->

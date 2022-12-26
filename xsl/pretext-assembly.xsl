@@ -968,6 +968,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<xsl:template match="asterisk" mode="repair">
+    <xsl:text>*</xsl:text>
+</xsl:template>
+
+<xsl:template match="slash" mode="repair">
+    <xsl:text>/</xsl:text>
+</xsl:template>
+
+<xsl:template match="backtick" mode="repair">
+    <xsl:text>`</xsl:text>
+</xsl:template>
+
+
 <!-- Grouping constructions  -->
 <!-- "braces" and "brackets" -->
 
