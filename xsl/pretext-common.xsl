@@ -10212,11 +10212,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Miscellaneous -->
 
-<!-- A "pagebreak" should have limited availability, -->
-<!-- so we explicitly kill it here.                  -->
-<!-- Deprecated 2021-03-17                           -->
-<xsl:template match="pagebreak"/>
-
 <!-- ToDo's are silent unless requested as part of an -->
 <!-- author's report, then marginal.  They exist in   -->
 <!-- source as prefixed comments, and that prefix     -->

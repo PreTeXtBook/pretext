@@ -1015,6 +1015,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2019-02-20  deprecated and killed simultaneously -->
 <xsl:template match="todo" mode="repair"/>
 
+<!-- A "pagebreak" should have had limited -->
+<!-- uptake, so no real care taken,        -->
+<!-- Deprecated 2021-03-17                 -->
+<xsl:template match="pagebreak" mode="repair"/>
+
 
 <!-- This pass adds 100% internal identification for elements after a   -->
 <!-- version has been constructed, but before anything else is added or -->
