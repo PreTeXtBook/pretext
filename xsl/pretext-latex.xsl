@@ -11282,8 +11282,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Uninteresting Code, aka the Bad Bank                    -->
-<!-- Deprecated, unmaintained, etc, parked here out of sight -->
-
 
 </xsl:stylesheet>
