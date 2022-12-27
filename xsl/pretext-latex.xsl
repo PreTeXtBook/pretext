@@ -217,7 +217,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings-latex" />
     <!-- We process the enhanced source pointed  -->
     <!-- to by $root at  /mathbook  or  /pretext -->
     <xsl:apply-templates select="$root"/>
@@ -11280,35 +11279,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$warning" />
         <xsl:text>}}</xsl:text>
     </xsl:if>
-</xsl:template>
-
-<!-- Deprecations -->
-<!-- These are global, LaTeX-only warnings which are not source -->
-<!-- related and not possible in a template once executed       -->
-<xsl:template match="mathbook|pretext" mode="deprecation-warnings-latex">
-    <!-- 2017-12-18  deprecate console macro characters -->
-    <xsl:if test="not($latex.console.macro-char = '')">
-        <xsl:call-template name="parameter-deprecation-message">
-            <xsl:with-param name="date-string" select="'2017-12-18'" />
-            <xsl:with-param name="message" select="'the  latex.console.macro-char  parameter is deprecated, and there is no longer a need to be careful about the backslash (\) character in a console'" />
-                <xsl:with-param name="incorrect-use" select="not($latex.console.macro-char = '')" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="not($latex.console.begin-char = '')">
-        <xsl:call-template name="parameter-deprecation-message">
-            <xsl:with-param name="date-string" select="'2017-12-18'" />
-            <xsl:with-param name="message" select="'the  latex.console.begin-char  parameter is deprecated, and there is no longer a need to be careful about the begin group ({) character in a console'" />
-                <xsl:with-param name="incorrect-use" select="not($latex.console.begin-char = '')" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="not($latex.console.end-char = '')">
-        <xsl:call-template name="parameter-deprecation-message">
-            <xsl:with-param name="date-string" select="'2017-12-18'" />
-            <xsl:with-param name="message" select="'the  latex.console.end-char  parameter is deprecated, and there is no longer a need to be careful about the end group (}) character in a console'" />
-                <xsl:with-param name="incorrect-use" select="not($latex.console.end-char = '')" />
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
 </xsl:template>
 
 <!-- Uninteresting Code, aka the Bad Bank                    -->

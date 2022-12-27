@@ -10278,6 +10278,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2017-12-18  deprecate three console macro characters -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.macro-char  parameter is deprecated, and there is no longer a need to be careful about the backslash (\) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.macro-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.begin-char  parameter is deprecated, and there is no longer a need to be careful about the begin group ({) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.begin-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.end-char  parameter is deprecated, and there is no longer a need to be careful about the end group (}) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.end-char = '')" />
+    </xsl:call-template>
+    <!--  -->
     <!-- 2018-11-07  obsolete exercise component switches          -->
     <!-- Still exists in "String Parameter Bad Bank" for use here  -->
     <xsl:call-template name="parameter-deprecation-message">
