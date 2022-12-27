@@ -10963,36 +10963,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:value-of select="concat($percent,'%')" />
 </xsl:template>
 
-<!-- ######## -->
-<!-- Bad Bank -->
-<!-- ######## -->
-
-<!-- This where old elements go to die.        -->
-<!-- Deprecated, then totally discarded later. -->
-<!-- When discarded, move to Schematron rules. -->
-
-<!-- #################################### -->
-<!-- Deprecations, in Chronological Order -->
-<!-- #################################### -->
-
-<!-- Deprecated 2018-12-30           -->
-<!-- Simultaneously changed to "ca." -->
-<xsl:template match="circa">
- <xsl:text>ca</xsl:text>
-    <xsl:call-template name="abbreviation-period"/>
-</xsl:template>
-
-<!-- ############################## -->
-<!-- Killed, in Chronological Order -->
-<!-- ############################## -->
-
-<!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
-<xsl:template match="paragraph" />
-
-<!-- 2019-02-20  deprecated and killed simultaneously -->
-<xsl:template match="todo"/>
-
-
 <!-- Sometimes this template is useful to see which    -->
 <!-- templates are not implemented at all in some new  -->
 <!-- (basic) conversion building just on this -common. -->

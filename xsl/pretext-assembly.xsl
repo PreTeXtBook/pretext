@@ -897,6 +897,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Deprecated 2018-12-30 in favor of "ca"   -->
+<!-- Copy attributes...because you never know -->
+<xsl:template match="circa" mode="repair">
+    <ca>
+        <xsl:apply-templates select="@*" mode="repair"/>
+    </ca>
+</xsl:template>
+
 <!-- Due to naivete, we had empty templates for "keyboard characters"    -->
 <!-- we did not have the skills to handle.  A good example was <dollar/> -->
 <!-- simply because it is a (very) special character in LaTeX.  These    -->
@@ -996,6 +1004,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()" mode="repair"/>
     <xsl:text>]</xsl:text>
 </xsl:template>
+
+<!-- ############################## -->
+<!-- Killed, in Chronological Order -->
+<!-- ############################## -->
+
+<!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
+<xsl:template match="paragraph" mode="repair"/>
+
+<!-- 2019-02-20  deprecated and killed simultaneously -->
+<xsl:template match="todo" mode="repair"/>
 
 
 <!-- This pass adds 100% internal identification for elements after a   -->
