@@ -3989,4 +3989,614 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher option to surround emdash, deprecated 2022-11-20 -->
 <xsl:param name="emdash.space" select="''" />
 
+<!-- ###################################### -->
+<!-- Parameter Deprecation Warning Messages -->
+<!-- ###################################### -->
+
+<!-- Pass in a condition, true is a problem.       -->
+<!-- A message string like "'foo'" cannot contain  -->
+<!-- a single quote, even if entered as &apos;.    -->
+<!-- If despearate, concatentate with $apos.       -->
+<!-- A &#xa; can be used if necessary, but only    -->
+<!-- rarely do we bother.                          -->
+<xsl:template name="parameter-deprecation-message">
+    <xsl:param name="incorrect-use" select="false()" />
+    <xsl:param name="date-string" />
+    <xsl:param name="message" />
+    <xsl:if test="$incorrect-use">
+        <xsl:message>
+            <xsl:text>PTX:DEPRECATE: (</xsl:text>
+            <xsl:value-of select="$date-string" />
+            <xsl:text>) </xsl:text>
+            <xsl:value-of select="$message" />
+            <!-- once verbosity is implemented -->
+            <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
+        </xsl:message>
+        <xsl:message>
+            <xsl:text>--------------</xsl:text>
+        </xsl:message>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="mathbook|pretext" mode="parameter-deprecation-warnings">
+    <!-- These apparent re-definitions are local to this template -->
+    <!-- Reasons are historical, so to be a convenience           -->
+    <xsl:variable name="docinfo" select="./docinfo"/>
+    <xsl:variable name="document-root" select="./*[not(self::docinfo)]"/>
+
+
+    <!-- 2017-07-05  sidebyside cannot be cross-referenced anymore, so not knowlizable -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-05'" />
+        <xsl:with-param name="message" select="'the  html.knowl.sidebyside  parameter is now obsolete and will be ignored'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.sidebyside != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2015-06-26  chunking became a general thing -->
+    <!-- 2021-01-03  rendered ineffective            -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2015-06-26'" />
+        <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by the common/chunking/@level  entry in the publisher file.  It will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.chunk.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-25  deprecate intentional autoname without new setting -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/cross-references/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
+        <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references)" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-25  deprecate intentional autoname also with new setting -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/cross-references/@text&quot;  and so is totally ineffective and can be removed'" />
+            <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-12-18  deprecate three console macro characters -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.macro-char  parameter is deprecated, and there is no longer a need to be careful about the backslash (\) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.macro-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.begin-char  parameter is deprecated, and there is no longer a need to be careful about the begin group ({) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.begin-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.end-char  parameter is deprecated, and there is no longer a need to be careful about the end group (}) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.end-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-11-07  obsolete exercise component switches          -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-11-07'" />
+        <xsl:with-param name="message" select="'the  *.text.*  parameters that control the visibility of components of exercises and projects have been removed and replaced by a greater variety of  exercise.*.*  and  project.*  parameters'" />
+            <xsl:with-param name="incorrect-use" select="not(($exercise.text.statement = '') and ($exercise.text.hint = '') and ($exercise.text.answer = '') and ($exercise.text.solution = '') and ($project.text.hint = '') and ($project.text.answer = '') and ($project.text.solution = '') and ($task.text.hint = '') and ($task.text.answer = '') and ($task.text.solution = ''))"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-11-07  obsolete backmatter exercise component switches -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here    -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-11-07'" />
+        <xsl:with-param name="message" select="'the  exercise.backmatter.*  parameters that control the visibility of components of exercises and projects in the back matter have been removed and replaced by the &quot;solutions&quot; element, which is much more versatile'"/>
+            <xsl:with-param name="incorrect-use" select="not(($exercise.backmatter.statement = '') and ($exercise.backmatter.hint = '') and ($exercise.backmatter.answer = '') and ($exercise.backmatter.solution = ''))" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-10  obsolete  html.css.file  removed             -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-10'" />
+        <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
+            <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-20  replace author-tools with author.tools                       -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'the  author-tools  parameter has been replaced by the functionally equivalent  author.tools'" />
+            <xsl:with-param name="incorrect-use" select="not($author-tools = '')"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark with watermark.text                  -->
+    <!-- 2022-10-24  update - to publication file                                 -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale           -->
+    <!-- 2022-10-24  update - to publication file                                 -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark.scale  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark.scale != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- And switches for analytics  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-11-28'" />
+        <xsl:with-param name="message" select="'use of string parameters for analytics configuration has been deprecated.  Existing switches are being respected, but please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.&#xa;  * For StatCounter this is a cosmetic change.&#xa;  * Google Classic has been deprecated by Google and will not be supported.&#xa;  * Google Universal has been replaced, your ID may continue to work.&#xa;  * Google Global Site Tag is fully supported, try your Universal ID.&#xa;'" />
+            <xsl:with-param name="incorrect-use" select="($html.statcounter.project != '') or ($html.statcounter.security != '') or ($html.google-classic != '') or ($html.google-universal != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-11-29  deprecated Google search via string parameter -->
+    <!-- see 2019-04-14 for docinfo deprecation                    -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-11-29'" />
+        <xsl:with-param name="message" select="'Google search is no longer specified with a string parameter.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+            <xsl:with-param name="incorrect-use" select="$html.google-search != ''" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-05-10  permalinks (their style actually) are now controlled by Javascript -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-05-10'" />
+        <xsl:with-param name="message" select="'the  html.permalink  parameter is now obsolete and will be ignored as this is now controlled by Javascript'" />
+        <xsl:with-param name="incorrect-use" select="($html.permalink != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-05-29  HTML calculator model controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-05-29'" />
+        <xsl:with-param name="message" select="'the  html.calculator  parameter has been replaced by the  html/calculator/@model  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.calculator != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX print option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.print  parameter has been replaced by the  latex/@print  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.print != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX sideness option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.sides  parameter has been replaced by the  latex/@sides  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.sides != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-01-03  chunk.level now in publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-03'" />
+        <xsl:with-param name="message" select="'the  chunk.level  parameter has been replaced by the  common/chunking/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($chunk.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-01-03  toc.level now in publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-03'"/>
+        <xsl:with-param name="message" select="'the  toc.level  parameter has been replaced by the  common/tableofcontents/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($toc.level != '')" />
+    </xsl:call-template>
+    <!-- 2020-11-23  directory.images replaced by publisher file specification -->
+    <!-- Reverse this soon, hot fix -->
+    <!--
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-23'" />
+        <xsl:with-param name="message" select="'the  directory.images  parameter has been replaced by specification of two directories in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
+    </xsl:call-template>
+ -->
+    <!--  -->
+    <!--                                                  -->
+    <!-- 2021-01-23  Seventeen old knowl-ization switches -->
+    <!--                                                  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.theorem  parameter has been replaced by the  html/knowl/@theorem  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.theorem != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.proof  parameter has been replaced by the  html/knowl/@proof  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.proof != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.definition  parameter has been replaced by the  html/knowl/@definition  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.definition != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.example  parameter has been replaced by the  html/knowl/@example  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.example != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.project  parameter has been replaced by the  html/knowl/@project  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.project != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.task  parameter has been replaced by the  html/knowl/@task  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.task != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.list  parameter has been replaced by the  html/knowl/@list  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.list != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.remark  parameter has been replaced by the  html/knowl/@remark  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.remark != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.objectives  parameter has been replaced by the  html/knowl/@objectives  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.objectives != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.outcomes  parameter has been replaced by the  html/knowl/@outcomes  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.outcomes != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.figure  parameter has been replaced by the  html/knowl/@figure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.figure != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.table  parameter has been replaced by the  html/knowl/@table  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.table != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.listing  parameter has been replaced by the  html/knowl/@listing  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.listing != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.inline  parameter has been replaced by the  html/knowl/@exercise-inline  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.inline != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.sectional  parameter has been replaced by the  html/knowl/@exercise-divisional  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.sectional != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.worksheet  parameter has been replaced by the  html/knowl/@exercise-worksheet  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.worksheet != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.readingquestion  parameter has been replaced by the  html/knowl/@exercise-readingquestion  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.readingquestion != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2014-02-14 Five parameters for numbering level to publisher file -->
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.maximum.level  parameter has been replaced by the  numbering/divisions/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.theorems.level  parameter has been replaced by the  numbering/blocks/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.theorems.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.projects.level  parameter has been replaced by the  numbering/projects/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.projects.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.equations.level  parameter has been replaced by the  numbering/equations/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.equations.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.footnotes.level  parameter has been replaced by the  numbering/footnotes/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.footnotes.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  debug.chapter.start  parameter has been removed entirely and so will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($debug.chapter.start != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-11-04'" />
+        <xsl:with-param name="message" select="'the  text.alignment  parameter has been deprecated, but we will attempt to honor your intent.  Please switch to using the Publishers File for configuration of LaTeX page shape, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($text.alignment != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 1/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 2/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 3/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 4/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 5/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 6/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 7/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 8/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 9/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 10/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 11/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 12/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 13/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 14/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 15/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 16/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 17/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 18/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 19/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 20/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-23  experimental scheme for "fast-id" abandonend -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-23'" />
+        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, was deprecated on 2021-03-03, is now obsolete, there is no replacement, relevant code has been removed, and the parameter is being ignored'" />
+        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-28  "latex.fillin.style" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-28'" />
+        <xsl:with-param name="message" select="'the  latex.fillin.style  parameter has been replaced by the  common/fillin/@textstyle  and  common/fillin/mathstyle  entries in the publication file. The default style for a text fillin is now  underline  and the default style for a math fillin is now  shade .  To use  box  style for either, set values in the publication file.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.font.size" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.font.size  parameter has been replaced by the  latex/@font-size  entry in the publication file.   We will attempt to honor your intent.  Note that possible values are the same, but you no longer provide &quot;pt&quot; as the unit of measure.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.font.size != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.geometry" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.geometry  parameter has been replaced by the  latex/page/geometry  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.geometry != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.pageref" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.pageref string parameter has been replaced by the  latex/@pageref  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.pageref != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.draft" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.draft string parameter has been replaced by the  latex/@draft  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.draft != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.text  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.text  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.text != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.scale  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.scale  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.scale != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.inline.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.inline.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.inline.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.divisional.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.divisional.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.divisional.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.reading.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.reading.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.reading.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.worksheet.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.worksheet.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.worksheet.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.project.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.project.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.project.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.logic  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.logic  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.logic != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.upbutton  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.upbutton  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.upbutton != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.style  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.style  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.style != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  emdash.space deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  emdash.space  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($emdash.space != '')" />
+    </xsl:call-template>
+    <!--  -->
+</xsl:template>
+
 </xsl:stylesheet>
