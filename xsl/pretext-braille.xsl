@@ -137,7 +137,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- the usual warnings, as part of a primary conversion -->
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <!-- One monolithic HTML page, as input to liblouis' file2brl   -->
     <!-- executable.  The HTML templates are engineered to be       -->
     <!-- chunked into multiple pages, however a "chunk level" of    -->

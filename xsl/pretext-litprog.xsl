@@ -58,7 +58,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note that "docinfo" is at the same level and not processed            -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <xsl:apply-templates select="$root" />
 </xsl:template>
 

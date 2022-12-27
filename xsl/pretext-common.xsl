@@ -9662,11 +9662,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="mathbook|pretext" mode="deprecation-warnings">
-    <xsl:apply-templates select="." mode="element-deprecation-warnings"/>
-    <xsl:apply-templates select="." mode="parameter-deprecation-warnings"/>
-</xsl:template>
-
 <xsl:template match="mathbook|pretext" mode="element-deprecation-warnings">
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->
