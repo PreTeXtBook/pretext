@@ -2252,33 +2252,11 @@
 <!-- * \    Always escape backslash.                                 -->
 <!-- #################################################### -->
 
-<!-- 2022-12-26: removing obsolete uses, leaving behind comments before mass removal. -->
-
-<!-- Ampersand -->
-<!-- Not for controlling mathematics -->
-<!-- or table formatting             -->
-<!-- Less Than -->
-<!-- Greater Than -->
-<!-- Percent sign -->
-<!-- Dollar sign -->
-<!-- Circumflex  -->
-<!-- Text underscore -->
-<!-- Number Sign, Hash, Octothorpe -->
-<!-- Tilde -->
-
-<!-- Asterisk -->
-<!-- Centered as a character, not an exponent -->
 <!-- Ellipsis -->
 <!-- Just three periods -->
 <xsl:template name="ellipsis-character">
     <xsl:text>...</xsl:text>
 </xsl:template>
-
-<!-- Braces -->
-<!-- Individually, or matched            -->
-<!-- All escaped to avoid conflicts with -->
-<!-- use after answer blanks, etc.       -->
-<!-- Backslash -->
 
 <!-- ############### -->
 <!-- Text Processing -->

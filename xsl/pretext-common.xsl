@@ -8844,68 +8844,13 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="$emdash-space-char"/>
 </xsl:template>
 
-<!-- ################### -->
-<!-- Reserved Characters -->
-<!-- ################### -->
+<!-- ################## -->
+<!-- Special Characters -->
+<!-- ################## -->
 
-<!-- If a markup languge reserves some characters,        -->
-<!-- then we have to provide special handling.            -->
-<!-- These are the *union* of all these characters        -->
-<!-- implemented in a totally ugly fashion so that if     -->
-<!-- these templates are not overridden we hear about it. -->
-<!-- These are just for "normal" text, not mathematics    -->
-<!-- in LaTeX syntax, nor to function as special          -->
-<!-- characters themselves                                -->
 
-<!-- #################### -->
-<!-- In transition.  Empty elements for simple, ASCII,  -->
-<!-- "first 128", characters will eventually be deprecated  -->
-<!-- in favor of text()-processing which will make  -->
-<!-- replacements as needed, via a per-conversion hook  -->
-<!-- placed into the generic "text()" template. -->
-<!--  -->
-<!-- Otherwise, a conversion only needs to implement a  -->
-<!-- named template for a particular character whn an  -->
-<!-- escaped version, or a better Unicode version, is  -->
-<!-- necessary or desired. -->
-<!-- #################### -->
-
-<!-- These XML and LaTeX reserved characters all have natural     -->
-<!-- keyboard equivalents which will suffice in most conversions, -->
-<!-- so we implement default versions in U+00-U+7F.               -->
-
-<!-- Necessity of these "character" templates went away with deprecations  -->
-<!-- on 2019-02-06.  Now removing them with a deprecation fix in the       -->
-<!-- -assembly template, as of 2022-12-26.  Then all this will be removed. -->
-
-<!-- Less Than -->
-<!-- Greater Than -->
-
-<!--       -->
-<!-- LaTeX -->
-<!--       -->
-
-<!-- # $ % ^ & _ { } ~ \ -->
-
-<!-- Number Sign, Hash, Octothorpe -->
-<!-- Dollar sign -->
-<!-- Percent sign -->
-<!-- Circumflex  -->
-<!-- Ampersand -->
-<!-- Underscore -->
-<!-- Left Brace -->
-<!-- Right Brace -->
-<!-- Tilde -->
-<!-- Backslash -->
-
-<!-- ################ -->
-<!-- Other Characters -->
-<!-- ################ -->
-
-<!-- These are characters which may be reserved in certain          -->
-<!-- conversions (such as star/asterisk/* in Markdown), or          -->
-<!-- have fancier left/right versions (like double quote marks),    -->
-<!-- or look really bad if faked from a keyboard (double brackets), -->
+<!-- These are characters which may look really bad                 -->
+<!-- if faked from a keyboard (double brackets),                    -->
 <!-- or lack an ASCII equivalent (like per-mille).  So we leave     -->
 <!-- them undefined here as named templates with warnings and       -->
 <!-- alarm bells, so that if a new conversion does not have an      -->
@@ -8918,11 +8863,6 @@ Book (with parts), "section" at level 3
      <xsl:value-of select="$char-name"/>
      <xsl:text>]]]</xsl:text>
 </xsl:template>
-
-
-
-<!-- Asterisk -->
-<!-- Centered as a character, not an exponent -->
 
 <!-- Left Single Quote -->
 <xsl:template name="lsq-character">
@@ -9091,9 +9031,6 @@ Book (with parts), "section" at level 3
     <xsl:call-template name="times-character"/>
 </xsl:template>
 
-<!-- Slash -->
-<!-- Forward slash, or virgule (see solidus) -->
-
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
 <xsl:template name="solidus-character">
@@ -9126,9 +9063,6 @@ Book (with parts), "section" at level 3
 <xsl:template match="plusminus">
     <xsl:call-template name="plusminus-character"/>
 </xsl:template>
-
-<!-- Backtick -->
-<!-- Accent grave, as a text character -->
 
 <!-- Copyright -->
 <!-- Bringhurst: on baseline (i.e. not superscript) -->
@@ -11047,16 +10981,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
  <xsl:text>ca</xsl:text>
     <xsl:call-template name="abbreviation-period"/>
 </xsl:template>
-
-<!-- Ten laTeX empty elements -->
-<!-- Deprecated 2019-02-06    -->
-<!-- # $ % ^ & _ { } ~ \      -->
-
-<!-- Nine unnecessary elements -->
-
-<!-- Deprecated 2019-02-06     -->
-<!-- <, >, [, ], *, /, `,      -->
-<!--   braces and brackets     -->
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->

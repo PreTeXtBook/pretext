@@ -980,7 +980,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>`</xsl:text>
 </xsl:template>
 
-
 <!-- Grouping constructions  -->
 <!-- "braces" and "brackets" -->
 

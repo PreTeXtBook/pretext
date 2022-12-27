@@ -7816,14 +7816,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################### -->
-<!-- Reserved Characters -->
-<!-- ################### -->
-
-<!-- Across all possibilities                     -->
-<!-- See pretext-common.xsl for discussion       -->
-<!-- See default LaTeX2e textcomp symbols at:     -->
-<!-- http://hevea.inria.fr/examples/test/sym.html -->
+<!-- ################## -->
+<!-- Special Characters -->
+<!-- ################## -->
 
 <!-- Note: characters given by argument-less macros    -->
 <!-- should finish with an empty group ({}) so that    -->
@@ -7835,40 +7830,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       Breaks when output is edited, lines broken. -->
 <!--   3.  \xspace might work after words.             -->
 <!--       Even if followed by punctuation (?).  Ugly. -->
-
-<!-- 2022-12-26: removing obsolete uses, leaving behind comments before mass removal. -->
-
-<!--           -->
-<!-- XML, HTML -->
-<!--           -->
-
-<!-- & < > -->
-
-<!-- Ampersand -->
-<!-- Less Than -->
-<!-- Greater Than -->
-
-<!--       -->
-<!-- LaTeX -->
-<!--       -->
-
-<!-- # $ % ^ & _ { } ~ \ -->
-
-<!-- Number Sign, Hash, Octothorpe -->
-<!-- Dollar sign -->
-<!-- Percent sign -->
-<!-- Circumflex  -->
-<!-- Ampersand -->
-<!-- Handled above -->
-<!-- Underscore -->
-<!-- Left Brace -->
-<!-- Right  Brace -->
-<!-- Tilde -->
-<!-- Backslash -->
-<!-- Other characters -->
-
-<!-- Asterisk -->
-<!-- Centered as a character, not an exponent -->
 
 <!-- Left Single Quote -->
 <xsl:template name="lsq-character">
@@ -7974,10 +7935,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\texttimes{}</xsl:text>
 </xsl:template>
 
-<!-- Slash -->
-<!-- Forward slash, or virgule (see solidus)   -->
-<!-- This should allow a linebreak, not tested -->
-
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
 <!-- This should not allow a linebreak, not tested -->
@@ -7996,18 +7953,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="plusminus-character">
     <xsl:text>\textpm{}</xsl:text>
 </xsl:template>
-
-<!-- Backtick -->
-<!-- This is the "accent grave" character.                 -->
-<!-- Unicode Character 'GRAVE ACCENT' (U+0060)             -->
-<!-- Really it is a modifier.  But as an ASCII character   -->
-<!-- on most keyboards it gets used in computer languages. -->
-<!-- Normally you would use this in verbatim contexts.     -->
-<!-- It is not a left-quote (see <lsq />0, nor is it a     -->
-<!-- modifier.  If you really want this character in a     -->
-<!-- text context use this empty element.  For example,    -->
-<!-- this is a character Markdown uses, so we want to      -->
-<!-- provide this safety valve.                            -->
 
 <!-- All Latin abbreviations are defined in -common    -->
 <!-- since they are largely very simple.  But we       -->
@@ -8325,9 +8270,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="rq-character"/>
 </xsl:template>
 
-<!-- ################## -->
-<!-- Special Characters -->
-<!-- ################## -->
+<!-- ################-->
+<!-- Other Characters -->
+<!-- ################ -->
 
 <!-- These are specific instances of abstract templates        -->
 <!-- See the similar section of  pretext-common.xsl  for more -->
