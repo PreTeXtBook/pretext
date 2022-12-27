@@ -1990,7 +1990,10 @@ from Jiří Lebl */
 .ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: calc(49% - 1.75em); min-width: 190px}
 */
 .ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: 50%; min-width: 240px}
+/*
 .ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+*/
+.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: 33%; min-width: 160px}
 .ptx-content ol.cols4 > li, .ptx-content ul.cols4 > li { width: calc(24.5% - 1.25em); min-width: 100px}
 .ptx-content ol.cols5 > li, .ptx-content ul.cols5 > li { width: calc(19.5% - 0.75em); min-width: 90px}
 .ptx-content ol.cols6 > li, .ptx-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}

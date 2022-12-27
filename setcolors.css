@@ -113,19 +113,19 @@ body.pretext {
 }
 
 /* next two groups concern accessibility, so check when making changes */
-.ptx-content p > a.internal {
+.ptx-content .para > a.internal {
     color: var(--bodytitle);
 }
-.ptx-content p > a.external {
+.ptx-content .para > a.external {
     color: var(--bodysubtitle);
 }
-.ptx-content p > a.internal:hover, .ptx-content p > a.internal:hover *,
-.ptx-content p > a.internal:focus, .ptx-content p > a.internal:focus * {
+.ptx-content .para > a.internal:hover, .ptx-content .para > a.internal:hover *,
+.ptx-content .para > a.internal:focus, .ptx-content .para > a.internal:focus * {
     color: var(--bodyfontcolorhighlight);
     background-color: var(--bodytitlehighlight);
 }
-.ptx-content p > a.external:hover, .ptx-content p > a.external:hover *,
-.ptx-content p > a.external:focus, .ptx-content p > a.external:focus * {
+.ptx-content .para > a.external:hover, .ptx-content .para > a.external:hover *,
+.ptx-content .para > a.external:focus, .ptx-content .para > a.external:focus * {
     color: var(--bodyfontcolorhighlight);
     background-color: var(--bodysubtitlehighlight);
 }

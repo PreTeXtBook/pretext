@@ -100,7 +100,7 @@
 #ptx-toc ul li {
     list-style-type: none;
     margin: 0px;
-    width: 255px;  /* This one is key to making items menu uniform width */
+/*    width: 255px; */ /* This one is key to making items menu uniform width */
     padding-inline-start: 0px;
 }
 
@@ -108,7 +108,10 @@
 /* undo what is in toc_default.css */
 #ptx-toc ul li a {
     display: grid;
+/*  made titles too wide */
+/*
     width: 240px;
+*/
     grid-gap: 3px;
     grid-template-columns: 1fr 10fr;
     grid-template-areas:

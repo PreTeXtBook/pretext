@@ -272,7 +272,6 @@ END OF STYLE_OSCARLEVIN
 */
     position: absolute;
     margin-left: 45%;
-    z-index: -10;
     overflow-x: hidden;
     max-width: 495px;
     max-height: 7em;
