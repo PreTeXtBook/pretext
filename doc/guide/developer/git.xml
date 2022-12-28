@@ -182,4 +182,15 @@
 
     </section>
 
+    <section xml:id="git-blame">
+        <title>Blame</title>
+
+        <p>The command <c>git blame</c> is simultaneously funny, useful, and powerful.  A line of code you do not understand can be traced back to its originating commit.  We maintain a list of commits (in <c>.git-blame-ignore-revs</c>) that have no real new code and make just cosmetic changes, so you may want to use this feature.  To use:<cd>
+            <cline>git blame --ignore-revs-file .git-blame-ignore-revs birds.xml</cline>
+        </cd>  You can also make this happen every time with a local configuration change, to wit:<cd>
+            <cline>git config blame.ignoreRevsFile .git-blame-ignore-revs</cline>
+        </cd></p>
+
+        <p>To learn more, see <url href="https://akrabat.com/ignoring-revisions-with-git-blame/">Rob Allen's post</url>, and <xref ref="whitespace-code"/>.</p>
+    </section>
 </chapter>

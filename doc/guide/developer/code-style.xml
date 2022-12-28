@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2023                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="code-style">
+    <title>Code Style</title>
+
+    <section xml:id="whitespace-code">
+        <title>Whitespace</title>
+
+        <p>When a change has a lot of whitespace changes, or trivial re-formatting, please isolate those on a separate commit.  Then suggest to the committer that the full 40-character hash of the commit (once finalized) be added to the <c>.git-blame-ignore-revs</c> file to keep <c>git blame</c> functional.  To learn more, see <url href="https://akrabat.com/ignoring-revisions-with-git-blame/">Rob Allen's post</url>, and <xref ref="git-blame"/>.</p>
+    </section>
+</chapter>
+
+
