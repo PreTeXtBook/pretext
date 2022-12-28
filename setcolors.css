@@ -30,7 +30,6 @@ body.pretext {
 #ptx-toc ul.structural li ul.structural a {
   color: #404040;
   color: var(--sectiontoctext);
-  background-color: #ffffff;
   background-color: var(--sectiontoc);
 }
 #ptx-toc ul.structural li ul.structural .toc-chevron-surround svg {
@@ -40,17 +39,12 @@ body.pretext {
 #ptx-toc ul.structural li a.active {
   color: #404040;
   color: var(--chaptertoctextactive);
-  background-color: #fae5b6;
   background-color: var(--chaptertocactive);
-  border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
 #ptx-toc ul.structural li ul.structural a.active {
-  color: #404040;
   color: var(--sectiontoctextactive);
-  background-color: #fae5b6;
   background-color: var(--sectiontocactive);
-  border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
 
@@ -58,7 +52,6 @@ body.pretext {
 #ptx-toc ul.structural li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
-  background-color: #fac793;
   background-color: var(--highlighttoc);
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
@@ -67,9 +60,7 @@ body.pretext {
 #ptx-toc ul.structural li ul.structural a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
-  background-color: #fac793;
   background-color: var(--highlighttoc);
-  border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
 
