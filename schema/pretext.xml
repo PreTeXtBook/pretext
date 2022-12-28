@@ -65,12 +65,12 @@
     <section>
         <title>Start Elements</title>
 
-        <p>To support modular source files, we specify which elements can naturally be the root of a <em>fragment</em> file in a <pretext /> document.  These include the <c>pretext</c> element itself, as well as most divisions and blocks.  All of these are defined as elements below.</p>
+        <p>To support modular source files, we specify which elements can naturally be the root of a <em>fragment</em> file in a <pretext /> document.  These include the <c>pretext</c> element itself, as well as most divisions.  All of these are defined as elements later in the schema.</p>
 
         <fragment xml:id="start-elements">
             <title>Start elements</title>
             <code>
-            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | BlockText | BlockStatementNoCaption | BlockStatement | BlockSolution | BlockDivision
+            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter  Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
             </code>
         </fragment>
     </section>
