@@ -1557,21 +1557,6 @@ editing_container_for = { "p": 1, "ip": 1, "mp": 1, "fp": 1,
 "proof": [""]  //just a guess
 }
 
-/*
-var url = "https://github.com/oscarlevin/discrete-book/blob/master/ptx/sec_intro-intro.ptx";
-editorLog("first here");
-fetch(url)
-  .then(function(data) {
-    // Here you get the data to modify as you please
-    editorLog("data", data)
-    })
-  .catch(function(error) {
-    // If there is any error you will catch them here
-    errorLog("there was an error")
-  });
-editorLog("then here");
-*/
-
 function make_current_editing_tree_from_id(theid) {
 
 //current_editing keeps track of where we are in the tree.  maybe need a better name?
@@ -1937,12 +1922,15 @@ function edit_menu_for(this_obj_or_id, motion) {
         editorLog("which has parent", this_obj_or_id.parentElement)
     }
 
+    console.log("this_obj_or_id", this_obj_or_id, typeof this_obj_or_id);
     if (typeof this_obj_or_id === 'string') {
         this_obj = document.getElementById(this_obj_or_id)
     } else {
         this_obj = this_obj_or_id
     }
+    console.log("this_obj", this_obj);
     var this_id = this_obj.id;
+//    this_obj = document.getElementById(this_obj);  // because is is an id?  Maybe need cases here
 
     if (motion == "entering") {
         menu_location = "afterbegin";
@@ -2469,9 +2457,11 @@ function replace_by_id(theid, format) {
 
     var this_object_new = output_from_id("",theid, format);
 
-    document.getElementById(theid).setAttribute("id", "delete_me");
-    document.getElementById("delete_me").insertAdjacentHTML('beforebegin', this_object_new);
-    document.getElementById("delete_me").remove();
+    console.log("id", theid);
+// GO BACK AND REVISIT THE NEXT 3 LINES
+//    document.getElementById(theid).setAttribute("id", "delete_me");
+//    document.getElementById("delete_me").insertAdjacentHTML('beforebegin', this_object_new);
+//    document.getElementById("delete_me").remove();
 
 // need to also work with MJ3
 //    MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById(theid)]);
@@ -4585,7 +4575,7 @@ fetch(source_url).then(
               } else {
                   edit_choice.innerHTML = "<span id='edit_choice'>Edit this page</span>";
               }
-              document.getElementById("content").insertAdjacentElement("beforeend", edit_choice);
+              document.getElementById("ptx-content").insertAdjacentElement("beforeend", edit_choice);
               console.log("editing choice enabled")
               $("#edit_choice").on("click", function(event){
                   console.log("apparently you want to edit");
@@ -4596,8 +4586,6 @@ fetch(source_url).then(
         }
       );
 
-    // console.log("12345",data, "678910")});
-// console.log("source_as_text", source_as_text.then(body));
 console.log("fetched source");
 
 

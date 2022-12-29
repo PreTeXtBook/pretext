@@ -54,7 +54,12 @@ function getScrollbarWidth() {
 function permalinkDescription(elem) {
     var retStr;
     var typeStr = "";
-    const nodeName = elem.nodeName;
+    var nodeName = elem.nodeName;
+console.log("elem.classList", elem.classList);
+    if (elem.classList.contains("para")) {
+        if (elem.parentElement.nodeName == "LI") { nodeName = 'LI' }
+        else { nodeName = 'P' }
+    }
     var isExerciseGroup = false;
     if ((nodeName == 'P') && (elem.parentElement.parentElement.classList.contains("exercisegroup"))) {
         isExerciseGroup = true;
@@ -83,6 +88,9 @@ function permalinkDescription(elem) {
         } else {
             typeStr = "Paragraph";
         }
+    } else if (nodeName == 'LI') {
+        typeStr = "List item";
+
     } else if (!headerNode) {
         // handles assemblages with no title
         var className = elem.className.split(' ')[0]
@@ -241,15 +249,21 @@ window.addEventListener("load",function(event) {
     for (var n=p_no_id.length - 1; n >= 0; --n) {
         e = p_no_id[n];
         if (e.hasAttribute('id')) {
+/*
             console.log(e, "was id'd in a previous round");
+*/
             continue
         }
+/*
 console.log("this is e", e);
+*/
         if (e.classList.contains('watermark')) {
             console.log(e, "skipping the watermark");
             continue
         }
+/*
         console.log("\n                    XXXXXXXXX  p with no id", e);
+*/
         prev_p = $(e).prevAll("p");
         console.log("prev_p", prev_p, "xx");
         if(prev_p.length == 0) {
@@ -285,7 +299,8 @@ console.log("this is e", e);
     } else {
         console.log("                       adding permalinks");
         /* add permalinks to all sections and articles */
-        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > p, main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
+        /* the main section p is just for legacy pre div.para html */
+        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section .para:not(.logical), main section p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise,  main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
         //   items_needing_permalinks = document.querySelectorAll('body section article');
         this_url = window.location.href.split('#')[0];
         permalink_word = "&#x1F517;";
@@ -293,6 +308,14 @@ console.log("this is e", e);
             this_item = items_needing_permalinks[i];
             var this_anchor = this_item.id;
             if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
+            if (this_item.classList.contains("para")) {
+               if (this_item.id == "") {
+                   // should be .para inside .para.logical 
+                   this_anchor  = this_item.parentElement.id;
+               } else if (this_item.parentElement.nodeName == "LI") {
+                   this_anchor  = this_item.parentElement.id;
+               }
+            }
             if(this_anchor) {
                 this_permalink_url = this_url + "#" + this_anchor;
                 const this_permalink_description = permalinkDescription(this_item);
@@ -304,12 +327,18 @@ console.log("this is e", e);
                 this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
                 this_item.insertAdjacentElement("afterbegin", this_permalink_container)
             } else {
+/*
                 console.log("      no permalink, because no id", this_item)
+*/
             }
         }
     }
 
+  // first of these is for pre-overhaul html.  Delete when possible
     $(".pretext-content .autopermalink a").on("click", function(event){
+        event.preventDefault();
+    });
+    $(".ptx-content .autopermalink a").on("click", function(event){
         event.preventDefault();
     });
 
@@ -623,7 +652,6 @@ function loadResource(type, file) {
 
 
 window.addEventListener("load",function(event) {
-//       if($('body').attr('id') == "levin-DMOI") {
        if(false && $('body').attr('id') == "pretext-SA") {
            console.log("            found DMOI");
            if (typeof uname === "undefined") { uname = "" }
@@ -650,25 +678,29 @@ window.addEventListener("load",function(event) {
             loadResource('js', 'login')
             loadResource('js', 'edit');
         } else {
-  var this_source_txt;
-  var source_url = window.location.href;
-  source_url = source_url.replace(/(#|\?).*/, "");
-  source_url = source_url.replace(/html$/, "ptx");
-  fetch(source_url).then(
-        function(u){ return u.text();}
-    ).then(
-        function(text){
-            this_source_txt = text;
-            if (this_source_txt.includes("404 Not")) {
-                console.log("Editing not enabled: source unavailable")
-            } else {
-              loadResource('css', 'features');
-              loadResource('css', 'edit');
-              loadResource('js', 'login')
-              loadResource('js', 'edit');
-            }
-        }
-    );
+            var this_source_txt;
+            var source_url = window.location.href;
+            source_url = source_url.replace(/(#|\?).*/, "");
+            source_url = source_url.replace(/html$/, "ptx");
+            if (typeof sourceeditable !== 'undefined') {
+              fetch(source_url).then(
+                  function(u){ return u.text();}
+                ).then(
+                  function(text){
+                      this_source_txt = text;
+                      if (this_source_txt.includes("404 Not")) {
+                          console.log("Editing not enabled: source unavailable")
+                      } else {
+                        loadResource('css', 'features');
+                        loadResource('css', 'edit');
+                        loadResource('js', 'login')
+                        loadResource('js', 'edit');
+                      }
+                  }
+                );
+              } else {
+                   console.log("Source file unavailable: editing not possible")
+              }
         }
 
 });
