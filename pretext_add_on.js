@@ -56,7 +56,10 @@ function permalinkDescription(elem) {
     var typeStr = "";
     var nodeName = elem.nodeName;
 console.log("elem.classList", elem.classList);
-    if (elem.classList.contains("para")) { nodeName = 'P' }
+    if (elem.classList.contains("para")) {
+        if (elem.parentElement.nodeName == "LI") { nodeName = 'LI' }
+        else { nodeName = 'P' }
+    }
     var isExerciseGroup = false;
     if ((nodeName == 'P') && (elem.parentElement.parentElement.classList.contains("exercisegroup"))) {
         isExerciseGroup = true;
@@ -85,6 +88,9 @@ console.log("elem.classList", elem.classList);
         } else {
             typeStr = "Paragraph";
         }
+    } else if (nodeName == 'LI') {
+        typeStr = "List item";
+
     } else if (!headerNode) {
         // handles assemblages with no title
         var className = elem.className.split(' ')[0]
@@ -302,9 +308,13 @@ console.log("this is e", e);
             this_item = items_needing_permalinks[i];
             var this_anchor = this_item.id;
             if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
-            if (this_item.classList.contains("para") && this_item.id == "") {
-                // should be .para inside .para.logical 
-                this_anchor  = this_item.parentElement.id;
+            if (this_item.classList.contains("para")) {
+               if (this_item.id == "") {
+                   // should be .para inside .para.logical 
+                   this_anchor  = this_item.parentElement.id;
+               } else if (this_item.parentElement.nodeName == "LI") {
+                   this_anchor  = this_item.parentElement.id;
+               }
             }
             if(this_anchor) {
                 this_permalink_url = this_url + "#" + this_anchor;
