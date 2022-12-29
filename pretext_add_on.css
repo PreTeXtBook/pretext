@@ -605,9 +605,11 @@
     margin-right: 0;
 }
 
+/* why was this ever added ?
 .ptx-content figure.figure-like figcaption {
     overflow: hidden;
 }
+*/
 
 .ptx-content a > tt {
     font-size: 110%;
@@ -745,6 +747,11 @@
     color: #a00;
     opacity: 0.05;
     margin-top: 0.1em;
+}
+
+.ptx-content li > .para > .autopermalink {
+    left: -3.4em;
+    top: 0;
 }
 .ptx-content .autopermalink a {
     color: #a00;
