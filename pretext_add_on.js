@@ -54,7 +54,9 @@ function getScrollbarWidth() {
 function permalinkDescription(elem) {
     var retStr;
     var typeStr = "";
-    const nodeName = elem.nodeName;
+    var nodeName = elem.nodeName;
+console.log("elem.classList", elem.classList);
+    if (elem.classList.contains("para")) { nodeName = 'P' }
     var isExerciseGroup = false;
     if ((nodeName == 'P') && (elem.parentElement.parentElement.classList.contains("exercisegroup"))) {
         isExerciseGroup = true;
@@ -291,7 +293,8 @@ console.log("this is e", e);
     } else {
         console.log("                       adding permalinks");
         /* add permalinks to all sections and articles */
-        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section > .para, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section article.paragraphs > .para, main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
+        /* the main section p is just for legacy pre div.para html */
+        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section .para:not(.logical), main section p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise,  main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like');
         //   items_needing_permalinks = document.querySelectorAll('body section article');
         this_url = window.location.href.split('#')[0];
         permalink_word = "&#x1F517;";
@@ -299,6 +302,10 @@ console.log("this is e", e);
             this_item = items_needing_permalinks[i];
             var this_anchor = this_item.id;
             if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
+            if (this_item.classList.contains("para") && this_item.id == "") {
+                // should be .para inside .para.logical 
+                this_anchor  = this_item.parentElement.id;
+            }
             if(this_anchor) {
                 this_permalink_url = this_url + "#" + this_anchor;
                 const this_permalink_description = permalinkDescription(this_item);
@@ -317,7 +324,11 @@ console.log("this is e", e);
         }
     }
 
+  // first of these is for pre-overhaul html.  Delete when possible
     $(".pretext-content .autopermalink a").on("click", function(event){
+        event.preventDefault();
+    });
+    $(".ptx-content .autopermalink a").on("click", function(event){
         event.preventDefault();
     });
 
