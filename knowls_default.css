@@ -19,7 +19,6 @@
     border-bottom: none;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
-    user-select: none;
     transition-property: background-color;
     transition-duration: 0ms;
 }

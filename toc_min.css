@@ -1,112 +1,144 @@
-:root {
-    --toc-codenumber-width: 18px;
-    --toc-chevron-width: 20px;
-}
 
-#ptx-toc ul {
-    list-style: none;
-    margin: unset;
-    padding: unset;
+#ptx-toc {
+  /* IMPORTANT height must be calculated by javascript. */
+    width: 240px;
+    margin: 0;
     font-size: 14.72px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-#ptx-toc a {
-    font-weight: bold;
-    font-family: "PT Serif", "Times New Roman", Times, serif;
+/* Aligns toc to the top and side of the allotted space, respectively */
+#ptx-toc ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
 }
 
-#ptx-toc li {
-    margin-top: 3px;
-    overflow: hidden;
-    color: var(--chaptertoctext);
-    position: relative;
-}
-#ptx-toc li:first-child {
-    margin-top: unset;
-}
 
-#ptx-toc a {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    padding: 1px 3px;
-}
-
-.toc-item {
-    display: flex;
-    background-color: var(--chaptertoc);
-    border: 1px solid var(--tocborder);
-    border-left: unset;
-    border-right: unset;
-}
-
+/* Places codenumbers */
 #ptx-toc .codenumber {
-    display: block;
-    padding-right: 4px;
-    text-align: end;
-    width: var(--toc-codenumber-width);
-    flex-shrink: 0;
+    position: absolute;
+    margin-right: 0;
+    margin-left: 0em;
+/*
+    margin-top: 0.4px;
+*/
+    left: 0.3em;
+    display: inline-block;
 }
-#ptx-toc .title {
-    flex-grow: 1;
+/* no codenumbers on subsections */
+#ptx-toc ul.structural ul.structural a > .codenumber {
+    display: none;
+}
+#ptx-toc ul.structural .title {
+    margin-left: 1.4em;
+    display: inline-block;
+}
+#ptx-toc ul.structural ul.structural .title {
+    margin-left: 1.5em;
+}
+#ptx-toc ul.structural ul.structural .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+#ptx-toc ul.structural ul.structural ul.structural .title {
+    margin-left: 2.5em;
+    font-size: 90%;
+}
+#ptx-toc ul.structural ul.structural ul.structural ul.structural .title {
+    margin-left: 3.2em;
+    font-size: 90%;
+    font-style: italic;
 }
 
-/* Adjust the display of nested items */
-#ptx-toc li li {
-    margin-top: 0px;
+/* more specific than something in toc_default (obsolete comment?) */
+#ptx-toc ul.structural li ul.structural li ul.structural li:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
 }
-#ptx-toc li li .toc-item {
-    border-bottom: unset;
-    border-color: rgb(209, 209, 209);
-    background-color: var(--sectiontoc);
-    color: var(--sectiontoctext);
+
+#ptx-toc .part > a .codenumber {
+    position: relative;
+    display: block;
+    float: left;
+    margin-right: 0.7em;
 }
-#ptx-toc li li a {
+#ptx-toc .part > a .title {
+    display: block;
+    margin-left: 1em;
+}
+
+#ptx-toc ul.structural li a {
+    position: relative;
+    display: block;
+    padding: 2.86957px;
+    padding: 0.2em;
+//    padding-left: 0.5em;
+    border-top: 1px solid #d1d1d1;
+    border-bottom: 1px solid #d1d1d1;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+#ptx-toc ul.structural ul.structural li a {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
-    padding-left: 30px;
-}
-#ptx-toc li li li a {
-    padding-left: 45px;
-}
-.toc-chevron-surround {
-    padding-left: 4px;
-    display: flex;
-    justify-content: space-around;
-    flex-grow: 0;
-    flex-shrink: 0;
-    align-items: center;
-    width: var(--toc-chevron-width);
-    cursor: pointer;
-}
-.toc-chevron-surround:hover,
-.toc-chevron-surround:focus-visible {
-    background-color: var(--highlighttoc) !important;
-    color: var(--sectiontoctextactive);
-}
-.toc-item a.active ~ .toc-chevron-surround {
-    background-color: var(--sectiontocactive);
-    color: var(--sectiontoctextactive);
-}
-.toc-item a:hover ~ .toc-chevron-surround {
-    background-color: var(--highlighttoc);
-    color: var(--sectiontoctextactive);
-}
-.chevron-rotator {
-    position: relative;
-}
-.chevron-wrapper {
-    box-sizing: border-box;
-    display: block;
-    margin: 0px;
-    text-align: center;
+//    padding-left: 2.0em;
 }
 
-.chevron-wrapper {
-    transform: rotate(0deg);
-    transform-origin: 2px 10px;
-    transition: transform 0.5s;
+/* Sets spacing between section headings*/
+#ptx-toc > ul.structural > li:not(:first-child) {
+    margin-top: 0.3em;
 }
-.toc-chevron-surround.open .chevron-wrapper {
-    transform: rotate(90deg);
+/* But not at the start of a part */
+/* I cannot see that this actually does anything --DF */
+#ptx-toc > ul.structural > li.part + li,
+#ptx-toc > ul.structural > li.frontmatter + li,
+#ptx-toc > ul.structural > li.backmatter + li {
+    margin-top: 0;
+}
+/* Removes underlines from links in toc */
+#ptx-toc ul.structural li a, #ptx-toc ul.structural li a:link, #ptx-toc ul.structural li a:visited, #ptx-toc ul.structural li a:hover, #ptx-toc ul.structural li a:focus, #ptx-toc ul.structural li a:active {
+    text-decoration: none;
+}
+
+/*
+#ptx-toc > ul > li a, #ptx-toc > ul > li a:link, #ptx-toc > ul > li a:visited {
+    font-weight: bold;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    padding-left: 0.2em;
+}
+*/
+
+/* Ensures that there is no double border between subsections */
+#ptx-toc ul.structural li ul.structural a {
+    border-top: none;
+}
+
+/* Allows both "top" and bottom border of a subsection to be highlighted on hover */
+#ptx-toc ul.structural li ul.structural a:hover {
+    border-top: 1px solid #3c110a;
+    margin-top: -1px;
+}
+
+/* Removes the excess space between the last subsection and the next section (caused by
+the margin on top of sections being used to space out adjacent sections) */
+#ptx-toc ul.structural li ul.structural li:last-child {
+    margin-bottom: -0.3em;
+}
+
+/* Removes double border between last subsection and next section */
+#ptx-toc ul.structural li ul.structural li:last-child a {
+    border-bottom: none;
+}
+
+#ptx-toc ul.structural li a:active {
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+
+#ptx-toc ul.structural li a.has-chevron {
+  padding-right: 2em;
+}
+#ptx-toc .toc-item {
+  position: relative;
 }

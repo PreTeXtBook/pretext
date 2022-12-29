@@ -136,48 +136,83 @@
     margin: 0;
 }
 
+.ptx-content .runestone.parsons_section {
+    display: inline-block;
+    max-width: unset;
+}
 
-.pretext-content .runestone.ac_section {
+.ptx-content .runestone.ac_section {
     width: 60em;
     max-width: unset;
 }
-.pretext-content .runestone.ac_section .ac_section {
+.ptx-content .runestone.ac_section .ac_section {
     max-width: unset;
 }
-.pretext-content .runestone.ac_section > div {
+.ptx-content .runestone.ac_section > div {
     max-width: unset;
 }
 
-.pretext-content .runestone > .parsons {
+.ptx-content .runestone > .parsons {
     width: 60em;
     max-width: unset;
 }
 
-
-.ptx-content .paragraphs .heading {
-    display: inline;
+.ptx-content .runestone .parsons {
+    margin: 0;
+}
+.ptx-content .runestone.parsons_section > .parsons {
+    width: max-content;
+    padding-right: 1em;
+}
+.ptx-content .runestone .parsons .sortable-code-container {
+    text-align: unset;
+}
+.ptx-content .runestone .parsons .parsons-text,
+.ptx-content .runestone .parsons .parsons-controls {
+    margin-left: 0;
+    margin-right: 0;
+}
+.ptx-content .runestone .parsons .sortable-code + .sortable-code {
+    margin-right: 0;
 }
 
-.ptx-content .paragraphs .heading + .para {
-    display: inline;
+.ptx-content .runestone .parsons .runestone_caption_text {
+    max-width: 660px;
 }
 
-/* the next are to avoid styping a .para as inline, because
- * inline styling messes up the meaning of line-height.
- * */
-
-.ptx-content .paragraphs .para .title {
-    font-family: "PT Serif", "Times New Roman", Times, serif;
-    font-size: 1.125em;
-    font-weight: 700;
+.runestonebustmenu {
+   position: absolute;
+   right: 0;
+   top: 0;
 }
-
-.ptx-content .paragraphs > .heading {
-    margin-top: 0;
+.runestonebustmenu .dropdown-content {
+   position: absolute;
+   right: 2em;
+   left: unset;
+   top: 1em;
 }
+@media screen and (max-width: 800px) {
+/*
+    .runestonebustmenu { display: none }
+*/
+    nav .dropdown {
+       position: fixed;
+       right: 0;
+       top: 0;
+    }
+    nav .dropdown .dropdown-content {
+       position: absolute;
+       right: 2em;
+       left: unset;
+       top: 1em;
+    }
 
-.ptx-content .paragraphs + .paragraphs {
-    margin-top: 3em;
+    .activecode-toggle { display: none }
+}
+/* above may be obsolete because we do not have the runestonebustmenu class in overhaul?
+*/
+.pretext .navbar .dropdown {
+    height: 35px;
 }
 
 .ptx-content section section + section {
@@ -554,6 +589,7 @@
     display: inline;
 }
 
+/* next disabled accidentally or on purpose? */
 .apretext-content figure.figure-like {
     overflow: auto;
 }
@@ -565,10 +601,15 @@
     margin-left: 30px;
     margin-right: 30px;
 }
+.ptx-content figure.table-like.list {
+    margin-right: 0;
+}
 
+/* why was this ever added ?
 .ptx-content figure.figure-like figcaption {
     overflow: hidden;
 }
+*/
 
 .ptx-content a > tt {
     font-size: 110%;
@@ -706,6 +747,14 @@
     color: #a00;
     opacity: 0.05;
     margin-top: 0.1em;
+}
+
+.ptx-content li > .para > .autopermalink {
+    left: -3.4em;
+    top: 0;
+}
+.ptx-content .autopermalink a {
+    color: #a00;
 }
 .ptx-content .autopermalink > * {
     padding-left: 0.2em;
@@ -1544,6 +1593,9 @@ from Jiří Lebl */
     display: inline-block;
     margin-right: 3px;
 }
+.ptx-content .kbdkey {
+    color: #333;
+}
 
 .ptx-content .sagecell_sessionOutput pre {
     font-family: 'Inconsolata', monospace;
@@ -1567,7 +1619,6 @@ from Jiří Lebl */
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
-  zoom: 1;
   /* Disable accidental text-selection */
   user-select: none;
   /* Truncate overflowing text with ellipsis */
@@ -1915,14 +1966,21 @@ from Jiří Lebl */
 .ptx-content ol > li {
     padding-left: 0.25em;
 }
+/*
 .ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: calc(49% - 1.75em); min-width: 190px}
+*/
+.ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: 50%; min-width: 240px}
+/*
 .ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+*/
+.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: 33%; min-width: 160px}
 .ptx-content ol.cols4 > li, .ptx-content ul.cols4 > li { width: calc(24.5% - 1.25em); min-width: 100px}
 .ptx-content ol.cols5 > li, .ptx-content ul.cols5 > li { width: calc(19.5% - 0.75em); min-width: 90px}
 .ptx-content ol.cols6 > li, .ptx-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}
 /* sample-article sec 5 */
-.ptx-content ul.cols2 > li, .ptx-content ol.cols2 > li {
+.ptx-content ul.cols2 > li:nth-child(odd), .ptx-content ol.cols2 > li:nth-child(odd) {
    padding-right: 1.5em;
+   padding-right: 2em;
 }
 
 .ptx-content .cols2 > li:first-child,
@@ -2873,12 +2931,28 @@ label.incorrect .feedback {
     color: black;
     background-color: #ffffff;
 }
+.ptx-content .webwork-button.activate {
+    width: 22px;
+    height: 22px;
+    background-image:
+    url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
+    background-size: contain;
+    position: absolute;
+    right: -35px;
+}
+
+
 /* hack for runestone */
 /*
 .ptx-content .exercise-wrapper form button.btn-success {
     background-color: #5cb85c;
 }
 */
+/* to undo Runestone's presentermode.css */
+.ptx-content .bottom {
+    position: unset;
+}
+
 .ptx-content .exercise-wrapper form button:hover {
     cursor: pointer;
     background-color: #e0e0ff;
@@ -2896,7 +2970,7 @@ label.incorrect .feedback {
 .ptx-content .exercise-wrapper form > div:first-child {
     display: inline-block;
     vertical-align: top;
-    width: 100%; // for live ww to open at 100% wide
+    width: 100%; /* for live ww to open at 100% wide */
 }
 .ptx-content .knowl .exercise-wrapper,
 .ptx-content .knowl .exercise-wrapper form,

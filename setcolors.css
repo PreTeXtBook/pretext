@@ -30,7 +30,6 @@ body.pretext {
 #ptx-toc ul.structural li ul.structural a {
   color: #404040;
   color: var(--sectiontoctext);
-  background-color: #ffffff;
   background-color: var(--sectiontoc);
 }
 #ptx-toc ul.structural li ul.structural .toc-chevron-surround svg {
@@ -40,17 +39,12 @@ body.pretext {
 #ptx-toc ul.structural li a.active {
   color: #404040;
   color: var(--chaptertoctextactive);
-  background-color: #fae5b6;
   background-color: var(--chaptertocactive);
-  border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
 #ptx-toc ul.structural li ul.structural a.active {
-  color: #404040;
   color: var(--sectiontoctextactive);
-  background-color: #fae5b6;
   background-color: var(--sectiontocactive);
-  border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
 
@@ -58,7 +52,6 @@ body.pretext {
 #ptx-toc ul.structural li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
-  background-color: #fac793;
   background-color: var(--highlighttoc);
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
@@ -67,9 +60,7 @@ body.pretext {
 #ptx-toc ul.structural li ul.structural a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
-  background-color: #fac793;
   background-color: var(--highlighttoc);
-  border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
 
@@ -113,19 +104,19 @@ body.pretext {
 }
 
 /* next two groups concern accessibility, so check when making changes */
-.ptx-content p > a.internal {
+.ptx-content .para > a.internal {
     color: var(--bodytitle);
 }
-.ptx-content p > a.external {
+.ptx-content .para > a.external {
     color: var(--bodysubtitle);
 }
-.ptx-content p > a.internal:hover, .ptx-content p > a.internal:hover *,
-.ptx-content p > a.internal:focus, .ptx-content p > a.internal:focus * {
+.ptx-content .para > a.internal:hover, .ptx-content .para > a.internal:hover *,
+.ptx-content .para > a.internal:focus, .ptx-content .para > a.internal:focus * {
     color: var(--bodyfontcolorhighlight);
     background-color: var(--bodytitlehighlight);
 }
-.ptx-content p > a.external:hover, .ptx-content p > a.external:hover *,
-.ptx-content p > a.external:focus, .ptx-content p > a.external:focus * {
+.ptx-content .para > a.external:hover, .ptx-content .para > a.external:hover *,
+.ptx-content .para > a.external:focus, .ptx-content .para > a.external:focus * {
     color: var(--bodyfontcolorhighlight);
     background-color: var(--bodysubtitlehighlight);
 }

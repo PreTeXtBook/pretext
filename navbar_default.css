@@ -10,11 +10,19 @@
   background: #ededed;
   border-bottom: 1px solid #bababa;
   margin: 0;
-  z-index: 200;
+  z-index: 20;
+  min-height: unset;  /* to combat navbar.less */
+/*
   height: 35.36px;
+*/
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-family: "Open Sans";
   overflow: visible;
+}
+#ptx-navbar::after {
+  clear: both;  /* necessary, but not sure why */
+  content: " ";
+  display: table;
 }
 @media screen and (max-width: 800px) {
   #ptx-navbar {
@@ -33,6 +41,9 @@
   display: inline-block;
   vertical-align: middle;
   height: 35px;
+/*
+  height: 44px;
+*/
   /* Disable accidental text-selection */
   user-select: none;
   white-space: nowrap;
@@ -77,14 +88,14 @@
 #ptx-navbar .toc-toggle .icon {
   font-size: 1.75em;
   position: relative;
-  bottom: 0.15em;
+  bottom: 0.30em;
   padding-left: 0.5em;
   padding-right: 0.4em;
 }
 #ptx-navbar .toc-toggle .name {
-  font-size: 1.15em;
+  font-size: 1.05em;
   position: relative;
-  bottom: 0.25em;
+  bottom: 0.53em;
 }
 
 #ptx-navbar .up-button {
@@ -125,6 +136,9 @@
 #ptx-navbar .next-button {
   text-align: right;
 }
+#ptx-navbar #theavatarbutton {
+  font-size: 1.0em;
+}
 
 @media screen and (max-width: 800px) {
   #ptx-navbar .button {
@@ -140,6 +154,7 @@
     margin-right: auto;
   }
   #ptx-navbar .index-button,
+  #ptx-navbar .user-preferences-button,
   #ptx-navbar .calculator-button {
     display: none;
   }
@@ -151,7 +166,7 @@
   } 
   #ptx-navbar .toc-toggle .icon {
     position: relative;
-    bottom: 0.15em;
+    bottom: 0.25em;
     padding-left: 0;
     padding-right: 0;
   }
@@ -175,7 +190,9 @@
     justify-content: space-between;
   }
   #ptx-navbar .treebuttons .button {
-    width: 33%;
+/*
+    because the Prev is next to the TOC toggle
+*/
     border-left: none;
   }
 }
@@ -207,6 +224,7 @@
     width: 70px;
     text-align: center;
     border-right: 1px solid #bababa;
+    border-bottom: 1px solid #bababa;
 }
 #ptx-navbar .user-preferences-button {
     padding: 0 0.8em 0 0.8em;

@@ -36,7 +36,9 @@
 
 /* .ptx-container  */
 body.pretext {
+/*
     position: relative;
+*/
     max-width: 904px;  /* To match PreTeXt */
     margin: 0 auto 0 auto;  /* centered content */
     padding: 0;
@@ -68,6 +70,10 @@ body.pretext {
         z-index: 100;
     }
 }
+#ptx-masthead .searchbox {
+   bottom: 2px;
+   margin-right: -19px;
+}
 
 /* .ptx-main-wrapper  */
 .ptx-page {
@@ -96,8 +102,10 @@ body.pretext {
     grid-row-start: 1;
     grid-row-end: 3;
 
+/*
     overflow-y: auto;
     overflow-x: hidden;
+*/
     border: 2px solid var(--bluegreen);
     border-radius:5px;
     z-index: 1;
@@ -279,9 +287,16 @@ body.pretext {
 .ptx-page-footer {
     display: grid;
     max-width: 100%;
+/*
     grid-template-columns: 1.1fr .68fr 1fr;
+*/
+    grid-template-columns: 1fr 1fr 0.7fr;
+/*
     grid-template-areas:
-        "page-footer-feedback page-footer-pretext  page-footer-mathjax";
+        "page-footer-feedback page-footer-pretext page-footer-runestone  page-footer-mathjax";
+*/
+    grid-template-areas:
+        "page-footer-pretext page-footer-runestone  page-footer-mathjax";
     margin-top: 30px;
     margin-bottom: 40px;
     border-top: 2px solid var(--bodytitle);
@@ -318,28 +333,49 @@ body.pretext {
     color: #888;
 }
 
-.ptx-page-footer  .pretext-link{
+.ptx-page-footer  .pretext-link,
+.ptx-page-footer  .runestone-link{
+/*
     grid-area: page-footer-pretext;
+*/
     align-self: center;
     margin-top: 30px;
     color: var(--bodytitle);
 }
+.ptx-page-footer .pretext-link,
+.ptx-page-footer .feedback-link + .pretext-link{
+    grid-area: page-footer-pretext;
+}
+.ptx-page-footer .pretext-link + .runestone-link {
+    grid-area: page-footer-runestone;
+}
 
 
-.ptx-page-footer  .pretext-link .name {
+.ptx-page-footer  .pretext-link .name,
+.ptx-page-footer  .runestone-link .name {
     display: grid;
+/*
     justify-self: center;
+*/
+    text-align: center;
     font-size: .9em; 
     font-weight: 700;
     letter-spacing: .1rem;
     text-transform: uppercase;
+    margin-bottom: 0.5em;
+/*
     padding-left: 8px;
+*/
 }
 
-.ptx-page-footer  .pretext-link .logo {
+.ptx-page-footer  .pretext-link .logo,
+.ptx-page-footer  .runestone-link .logo {
     display: grid;
     justify-item: center;
+    align-items: center;
     height: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -357,16 +393,23 @@ body.pretext {
     /* No luck resizing */
 }
 
-
+.pretext #ptx-sidebar.visible {
+  display: block;
+}
 
 @media only screen and (max-width: 800px) {
+
+  .pretext #ptx-sidebar {
+    display: none;
+  }
     .ptx-page-footer {
 	grid-template-columns: 1.25fr .9fr 1fr;
-	margin-botton: 80px;
+	margin-bottom: 80px;
     }
 
 
-    .ptx-page-footer  .pretext-link .name {
+    .ptx-page-footer  .pretext-link .name,
+    .ptx-page-footer  .runestone-link .name {
 	display: grid;
 	justify-self: center;
 	font-size: .9em; 
@@ -374,23 +417,11 @@ body.pretext {
 	text-transform: uppercase;
     }
 
-    .ptx-page-footer  .pretext-link .logo {
+    .ptx-page-footer  .pretext-link .logo,
+    .ptx-page-footer  .runestone-link .logo {
 	display: none;
     }
 
 
 }
 
-   
-
-
-
-
-    
-   
-
-
-
-
-    
-   

@@ -38,7 +38,7 @@
 
 :root {
   --bluegreen: hsl(192, 98%, 23%);
-  --documenttitle: #2a5ea4;
+  --documenttitle: var(--bluegreen);
   --bodytitle: var(--bluegreen);
   --bodysubtitle: var(--bluegreen);
   --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
@@ -51,11 +51,11 @@
 
   --chaptertoc: #ddd; /* #28803f; */
   --chaptertoctext: var(--bluegreen); /* white; */
-  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertocactive: hsl(192, 98%, 19%);
   --chaptertoctextactive: white;
   --sectiontoc: white;   /* can also write it as #ffffff  */
   --sectiontoctext: var(--bluegreen); /* #20477b; */
-  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontocactive: hsl(192, 98%, 19%);
   --sectiontoctextactive: white;
   --tocborder: var(--bluegreen);  /* #152f53; */
 

@@ -185,10 +185,13 @@
     grid-gap: 1em;
     grid-template-columns: 50px 1fr;
     grid-template-areas:
-        "ptx-logobox ptx-title-byline-box";
+        "ptx-logobox ptx-title-byline-box"
+        ". ptx-searchbox";
     background-color: #fff; /* #fafafa;  */
     padding: 0px 20px 0px 20px;
+/*
     justify-self: stretch;
+*/
     
 }
 
@@ -302,3 +305,7 @@
     justify-self: stretch;
 }
 
+/* ptx-searchbox */
+.searchbox {
+    grid-area: ptx-searchbox;
+}
