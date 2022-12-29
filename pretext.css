@@ -417,7 +417,43 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .ptx-content .paragraphs > .heading {
     font-size: 1.125em;
     line-height: 1.125em;
+    display: inline;
 }
+/*
+.ptx-content .paragraphs .heading {
+    display: inline;
+}
+*/
+
+.ptx-content .paragraphs .heading + .para {
+    display: inline;
+}
+.ptx-content .para.logical > .para:first-child {
+    display: inline;
+}
+
+/* next is for runestone multiple choice */
+.ptx-content  .runestone label > .para {
+    display: inline;
+}
+/* the next are to avoid stlping a .para as inline, because
+ * inline styling messes up the meaning of line-height.
+ * */
+
+.ptx-content .paragraphs .para .title {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-size: 1.125em;
+    font-weight: 700;
+}
+
+.ptx-content .paragraphs > .heading {
+    margin-top: 0;
+}
+
+.ptx-content .paragraphs + .paragraphs {
+    margin-top: 3em;
+}
+
 .ptx-content article .paragraphs > .heading {
     font-size: 1.05em;
 }
