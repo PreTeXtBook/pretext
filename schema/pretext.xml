@@ -640,7 +640,13 @@
         <fragment xml:id="fillin-character">
             <title>Fill-in blank character</title>
             <code>
-            FillInText = element fillin {attribute characters {xsd:integer}?, empty}
+            FillInText =
+                element fillin {
+                    attribute characters {xsd:integer}?,
+                    attribute rows {xsd:integer}?,
+                    attribute cols {xsd:integer}?,
+                    empty
+                }
             Generator |=
                 FillInText
             </code>

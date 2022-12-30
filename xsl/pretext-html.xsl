@@ -8553,6 +8553,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>em;</xsl:text>
         </xsl:attribute>
     </span>
+    <xsl:if test="@rows or @cols">
+        <xsl:apply-templates select="." mode="fillin-array"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="var[@form='checkboxes']">

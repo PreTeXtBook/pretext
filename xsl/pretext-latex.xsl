@@ -8065,6 +8065,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\fillintext{</xsl:text>
     <xsl:value-of select="$characters" />
     <xsl:text>}</xsl:text>
+    <xsl:if test="@rows or @cols">
+        <xsl:apply-templates select="." mode="fillin-array"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Implication Symbols -->
