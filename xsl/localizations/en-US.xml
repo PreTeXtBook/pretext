@@ -269,7 +269,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This needs to be defined to *something* (always)       -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <localization string-id='evaluate'>Evaluate</localization>
-    <localization string-id='evaluate'>Evaluate</localization>
     <!-- <localization string-id='code'>Code</localization> -->
     <!-- Interactive exercise feedback messages                   -->
     <!-- These might be part of a feedback message for submitting -->
