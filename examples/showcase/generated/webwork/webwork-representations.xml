@@ -1,384 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-representations>
-  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-12" ww-id="webwork-12">
-    <static seed="12">
-      <statement><p>This Venn Diagram groups animals by certain characteristics.</p>
-<!-- PTX:WARNING: PGML wanted to center align here. -->
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" width="50%" pi:generated="webwork/images/webwork-12-image-1"/>
-<p>Name an animal that belongs in the center region. Spelling counts!</p>
-</statement>
-      <answer>
-        <p>
-          <m>{\text{platypus}}</m>
-        </p>
-      </answer>
-    </static>
-    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJQR3Rpa3oucGwiLCJjb250ZXh0QXJiaXRyYXJ5U3RyaW5nLnBsIiwiUFRYU0MucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTsKQ29udGV4dCgiQXJiaXRyYXJ5U3RyaW5nIik7CiRwbGF0eXB1cyA9IENvbXB1dGUoInBsYXR5cHVzIiktPmNtcChjaGVja2VyID0+IHN1YiB7CiAgbXkgKCRjb3JyZWN0LCRzdHVkZW50LCRhbnMpID0gQF87CiAgJGNvcnJlY3QgPSAkY29ycmVjdC0+dmFsdWU7CiAgJHN0dWRlbnQgPSAkc3R1ZGVudC0+dmFsdWU7CiAgJHN0dWRlbnQgPSBsYygkc3R1ZGVudCk7CiAgJHN0dWRlbnQgPX4gcy8gKy8gLzsKICAkc3R1ZGVudCA9fiBzL14gLy87CiAgJHN0dWRlbnQgPX4gcy8gJC8vOwogIHJldHVybiAoJHN0dWRlbnQgZXEgJGNvcnJlY3QpOwp9KTsKJGltYWdlXzE1ID0gY3JlYXRlVGlrWkltYWdlKCk7CiRpbWFnZV8xNS0+QkVHSU5fVElLWgpcZHJhd1tmaWxsPXJlZCwgb3BhY2l0eT0wLjVdICgwLDApIGNpcmNsZSAoMmNtKSBub2RlW2JlbG93IGxlZnQ9MS41Y20sIG9wYWNpdHk9MV0ge0hhcyBhIEJpbGx9IG5vZGVbYmVsb3cgbGVmdCwgb3BhY2l0eT0xXSB7RHVja307ClxkcmF3W2ZpbGw9Z3JlZW4sIG9wYWNpdHk9MC41XSAoNjA6MmNtKSBjaXJjbGUgKDJjbSkgbm9kZSBbYWJvdmU9Mi4xY20sIG9wYWNpdHk9MV0ge0lzIFZlbmVtb3VzfSBub2RlW2Fib3ZlPTAuNWNtLCBvcGFjaXR5PTFdIHtKZWxseWZpc2h9OwpcZHJhd1tmaWxsPWJsdWUsIG9wYWNpdHk9MC41XSAoMDoyY20pIGNpcmNsZSAoMmNtKSBub2RlIFtiZWxvdyByaWdodD0xLjVjbSwgb3BhY2l0eT0xXSB7SGFzIEZ1cn0gbm9kZVtiZWxvdyByaWdodCwgb3BhY2l0eT0xXSB7QmVhdmVyfTsKCkVORF9USUtaCgpCRUdJTl9QR01MClRoaXMgVmVubiBEaWFncmFtIGdyb3VwcyBhbmltYWxzIGJ5IGNlcnRhaW4gY2hhcmFjdGVyaXN0aWNzLgoKPj4gW0BpbWFnZShpbnNlcnRHcmFwaCgkaW1hZ2VfMTUpLCB3aWR0aD0+MzAwKUBdKiAgPDwKCk5hbWUgYW4gYW5pbWFsIHRoYXQgYmVsb25ncyBpbiB0aGUgY2VudGVyIHJlZ2lvbi4gU3BlbGxpbmcgY291bnRzIQoKW19deyRwbGF0eXB1c317MzB9CgoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
-    <pg><![CDATA[
-#############################################
-###       Generated from PreTeXt source      
-###                                          
-###         https://pretextbook.org          
-###                                          
-#############################################
-## DBsubject()
-## DBchapter()
-## DBsection()
-## Level()
-## KEYWORDS()
-## TitleText1()
-## EditionText1()
-## AuthorText1()
-## Section1(not reported)
-## Problem1(6.3)
-## Author()
-## Institution()
-## Language(en-US)
-
-DOCUMENT();
-
-############################################################
-# Load Macros
-############################################################
-loadMacros(
-  "PGstandard.pl",
-  "MathObjects.pl",
-  "PGML.pl",
-  "AnswerFormatHelp.pl",
-  "PGtikz.pl",
-  "contextArbitraryString.pl",
-  "PTXSC.pl",
-  "PGcourse.pl",
-);
-COMMENT('Authored in PreTeXt');
-
-############################################################
-# Header
-############################################################
-TEXT(beginproblem());
-
-############################################################
-# PG Setup Code
-############################################################
-Context("ArbitraryString");
-$platypus = Compute("platypus")->cmp(checker => sub {
-  my ($correct,$student,$ans) = @_;
-  $correct = $correct->value;
-  $student = $student->value;
-  $student = lc($student);
-  $student =~ s/ +/ /;
-  $student =~ s/^ //;
-  $student =~ s/ $//;
-  return ($student eq $correct);
-});
-$image_15 = createTikZImage();
-$image_15->BEGIN_TIKZ
-\draw[fill=red, opacity=0.5] (0,0) circle (2cm) node[below left=1.5cm, opacity=1] {Has a Bill} node[below left, opacity=1] {Duck};
-\draw[fill=green, opacity=0.5] (60:2cm) circle (2cm) node [above=2.1cm, opacity=1] {Is Venemous} node[above=0.5cm, opacity=1] {Jellyfish};
-\draw[fill=blue, opacity=0.5] (0:2cm) circle (2cm) node [below right=1.5cm, opacity=1] {Has Fur} node[below right, opacity=1] {Beaver};
-
-END_TIKZ
-
-############################################################
-# Body
-############################################################
-
-BEGIN_PGML
-This Venn Diagram groups animals by certain characteristics.
-
->> [@image(insertGraph($image_15), width=>300)@]*  <<
-
-Name an animal that belongs in the center region. Spelling counts!
-
-[_]{$platypus}{30}
-
-END_PGML
-
-############################################################
-# End Problem
-############################################################
-
-ENDDOCUMENT();
-]]></pg>
-  </webwork-reps>
-  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-15" ww-id="webwork-15">
-    <static seed="15" source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg">
-      <statement><p>Find the prime factorization of <m>35</m>.</p>
-<p><m>35={}</m><fillin name="AnSwEr0001" characters="11"/></p>
-</statement>
-      <answer>
-        <p>
-          <m>5\cdot 7</m>
-        </p>
-      </answer>
-      <solution><p>After checking to see if small prime numbers divide <m>35</m>, we find that <m>5</m> is one divisor. So <m>35=5\cdot7</m>.</p>
-<p>Since both <m>5</m> and <m>7</m> are prime, the prime factorization of <m>35</m> is <m>5\cdot7</m>.</p>
-</solution>
-    </static>
-    <server-data sourceFilePath="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
-    <pg source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
-  </webwork-reps>
-  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-18" ww-id="webwork-18">
-    <static seed="18">
-      <task><title>Identify Coefficients</title>
-<statement><p>Consider the equation</p>
-<p><me>{2x^{2}-7x-15} = 0</me></p>
-<p>Identify the coefficients for the quadratic equation using the standard form from Subsection<nbsp/>1.1.</p>
-<p><m>a=</m> <fillin name="AnSwEr0001" characters="4"/>, <m>b=</m> <fillin name="AnSwEr0002" characters="4"/>, <m>c=</m> <fillin name="AnSwEr0003" characters="4"/></p>
-</statement><answer><p><m>2</m></p></answer><answer><p><m>-7</m></p></answer><answer><p><m>-15</m></p></answer><solution><p>Take the coefficient of <m>x^2</m> for the value of <m>a\text{,}</m> the coefficient of <m>x</m> for <m>b\text{,}</m> and the constant for <m>c\text{.}</m> <em>In this case</em>, they are <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> <m>c = -15\text{.}</m></p>
-</solution></task>
-      <task><title>Use the Quadratic Formula</title>
-<statement><p>Use the quadratic formula to find the solution set to</p>
-<p><me>{2x^{2}-7x-15}=0</me></p>
-</statement><answer><p><m>\frac{-3}{2}, 5</m></p></answer><solution><p>Recall that the quadratic formula is given in Subsection<nbsp/>1.1.</p>
-<p>You already identified <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> and <m>c = -15\text{,}</m> and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5\text{.}</m></p>
-</solution></task>
-    </static>
-    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsInNjYWZmb2xkLnBsIiwiQW5zd2VyRm9ybWF0SGVscC5wbCIsImNvbnRleHRGcmFjdGlvbi5wbCIsImNvbnRleHRGaW5pdGVTb2x1dGlvblNldHMucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTsKQ29udGV4dCgiRnJhY3Rpb24iKTsKJHF1YWRyYXRpYyA9IEZvcm11bGEoIjIgeF4yIC0gNyB4IC0gMTUiKS0+cmVkdWNlOwokeDEgPSBGcmFjdGlvbig1LDEpOwokeDIgPSBGcmFjdGlvbigtMywyKTsKQ29udGV4dCgpLT5mbGFncy0+c2V0KHJlZHVjZUNvbnN0YW50cz0+MCxyZWR1Y2VDb25zdGFudEZ1bmN0aW9ucz0+MCk7CkNvbnRleHQoIkZpbml0ZVNvbHV0aW9uU2V0cyIpOwokc29sdXRpb25zID0gRm9ybXVsYSgiLTMvMiw1Iik7ClNjYWZmb2xkOjpCZWdpbihpc19vcGVuID0+ICJjb3JyZWN0X29yX2ZpcnN0X2luY29ycmVjdCIsIG51bWJlcmVkID0+IDEpO1NlY3Rpb246OkJlZ2luKCJJZGVudGlmeSBDb2VmZmljaWVudHMiKTsKQkVHSU5fUEdNTApDb25zaWRlciB0aGUgZXF1YXRpb24KCltgYGBbJHF1YWRyYXRpY10gPSAwYGBgXQoKSWRlbnRpZnkgdGhlIGNvZWZmaWNpZW50cyBmb3IgdGhlIHF1YWRyYXRpYyBlcXVhdGlvbiB1c2luZyB0aGUgc3RhbmRhcmQgZm9ybSBmcm9tIFN1YnNlY3Rpb25bJE5CU1BdKjEuMS4KCltgYT1gXSBbX117Mn17NH0sIFtgYj1gXSBbX117LTd9ezR9LCBbYGM9YF0gW19dey0xNX17NH0KCgpFTkRfUEdNTAoKQkVHSU5fUEdNTF9TT0xVVElPTgpUYWtlIHRoZSBjb2VmZmljaWVudCBvZiBbYHheMmBdIGZvciB0aGUgdmFsdWUgb2YgW2BhXHRleHR7LH1gXSB0aGUgY29lZmZpY2llbnQgb2YgW2B4YF0gZm9yIFtgYlx0ZXh0eyx9YF0gYW5kIHRoZSBjb25zdGFudCBmb3IgW2BjXHRleHR7Ln1gXSBfSW4gdGhpcyBjYXNlXywgdGhleSBhcmUgW2BhID0gMlx0ZXh0eyx9YF0gW2BiID0gLTdcdGV4dHssfWBdIFtgYyA9IC0xNVx0ZXh0ey59YF0KCgpFTkRfUEdNTF9TT0xVVElPTgpTZWN0aW9uOjpFbmQoKTtTZWN0aW9uOjpCZWdpbigiVXNlIHRoZSBRdWFkcmF0aWMgRm9ybXVsYSIpOwpCRUdJTl9QR01MClVzZSB0aGUgcXVhZHJhdGljIGZvcm11bGEgdG8gZmluZCB0aGUgc29sdXRpb24gc2V0IHRvCgpbYGBgWyRxdWFkcmF0aWNdPTBgYGBdCgoKCltfXXskc29sdXRpb25zfXszMH0KCgpFTkRfUEdNTAoKQkVHSU5fUEdNTF9TT0xVVElPTgpSZWNhbGwgdGhhdCB0aGUgcXVhZHJhdGljIGZvcm11bGEgaXMgZ2l2ZW4gaW4gU3Vic2VjdGlvblskTkJTUF0qMS4xLgoKWW91IGFscmVhZHkgaWRlbnRpZmllZCBbYGEgPSAyXHRleHR7LH1gXSBbYGIgPSAtN1x0ZXh0eyx9YF0gYW5kIFtgYyA9IC0xNVx0ZXh0eyx9YF0gYW5kIHRoZSByZXN1bHRzIGZyb20gdXNpbmcgdGhlc2UgaW4gdGhlIHF1YWRyYXRpYyBmb3JtdWxhIGFyZSBbYC1cZnJhY3szfXsyfWBdIGFuZCBbYDVcdGV4dHsufWBdCgoKRU5EX1BHTUxfU09MVVRJT04KU2VjdGlvbjo6RW5kKCk7U2NhZmZvbGQ6OkVuZCgpOwpFTkRET0NVTUVOVCgpOw==" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
-    <pg><![CDATA[
-#############################################
-###       Generated from PreTeXt source      
-###                                          
-###         https://pretextbook.org          
-###                                          
-#############################################
-## DBsubject()
-## DBchapter()
-## DBsection()
-## Level()
-## KEYWORDS()
-## TitleText1()
-## EditionText1()
-## AuthorText1()
-## Section1(not reported)
-## Problem1(6.5)
-## Author()
-## Institution()
-## Language(en-US)
-
-DOCUMENT();
-
-############################################################
-# Load Macros
-############################################################
-loadMacros(
-  "PGstandard.pl",
-  "MathObjects.pl",
-  "PGML.pl",
-  "scaffold.pl",
-  "AnswerFormatHelp.pl",
-  "contextFraction.pl",
-  "contextFiniteSolutionSets.pl",
-  "PGcourse.pl",
-);
-COMMENT('Authored in PreTeXt');
-COMMENT('This problem is scaffolded with multiple parts');
-
-############################################################
-# Header
-############################################################
-TEXT(beginproblem());
-
-############################################################
-# PG Setup Code
-############################################################
-Context("Fraction");
-$quadratic = Formula("2 x^2 - 7 x - 15")->reduce;
-$x1 = Fraction(5,1);
-$x2 = Fraction(-3,2);
-Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
-Context("FiniteSolutionSets");
-$solutions = Formula("-3/2,5");
-
-############################################################
-# Body
-############################################################
-
-############################################################
-# Scaffold
-############################################################
-Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);
-
-############################################################
-# Section
-############################################################
-Section::Begin("Identify Coefficients");
-
-BEGIN_PGML
-Consider the equation
-
-[```[$quadratic] = 0```]
-
-Identify the coefficients for the quadratic equation using the standard form from Subsection[$NBSP]*1.1.
-
-[`a=`] [_]{2}{4}, [`b=`] [_]{-7}{4}, [`c=`] [_]{-15}{4}
-
-END_PGML
-
-############################################################
-# Solution
-############################################################
-
-BEGIN_PGML_SOLUTION
-Take the coefficient of [`x^2`] for the value of [`a\text{,}`] the coefficient of [`x`] for [`b\text{,}`] and the constant for [`c\text{.}`] _In this case_, they are [`a = 2\text{,}`] [`b = -7\text{,}`] [`c = -15\text{.}`]
-
-END_PGML_SOLUTION
-
-Section::End();
-
-############################################################
-# Section
-############################################################
-Section::Begin("Use the Quadratic Formula");
-
-BEGIN_PGML
-Use the quadratic formula to find the solution set to
-
-[```[$quadratic]=0```]
-
-[_]{$solutions}{30}
-
-END_PGML
-
-############################################################
-# Solution
-############################################################
-
-BEGIN_PGML_SOLUTION
-Recall that the quadratic formula is given in Subsection[$NBSP]*1.1.
-
-You already identified [`a = 2\text{,}`] [`b = -7\text{,}`] and [`c = -15\text{,}`] and the results from using these in the quadratic formula are [`-\frac{3}{2}`] and [`5\text{.}`]
-
-END_PGML_SOLUTION
-
-Section::End();
-
-Scaffold::End();
-
-############################################################
-# End Problem
-############################################################
-
-ENDDOCUMENT();
-]]></pg>
-  </webwork-reps>
-  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-20" ww-id="webwork-20">
-    <static seed="20">
-      <statement><p><ol label="a.">
-<li>
-<p>The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?</p>
-</li>
-<li>
-<p>In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?</p>
-</li>
-<li>
-<p>In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?</p>
-</li>
-</ol></p>
-</statement>
-      <answer>
-        <p>
-          <m>7.19424\ {\rm gal}</m>
-        </p>
-      </answer>
-      <answer>
-        <p>
-          <m>26.6\%</m>
-        </p>
-      </answer>
-      <answer>
-        <p>
-          <m>\$3.62</m>
-        </p>
-      </answer>
-    </static>
-    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJwYXJzZXJOdW1iZXJXaXRoVW5pdHMucGwiLCJjb250ZXh0Q3VycmVuY3kucGwiLCJjb250ZXh0UGVyY2VudC5wbCIsIlBHY291cnNlLnBsIiwpO1RFWFQoYmVnaW5wcm9ibGVtKCkpOwokbmV3VW5pdHMgPSBbCiAge25hbWU9PidnYWxsb25zJyxjb252ZXJzaW9uPT57ZmFjdG9yPT4wLjAwMzc4NTQxLG09PjN9fSwKICB7bmFtZT0+J2dhbGxvbicsY29udmVyc2lvbj0+e2ZhY3Rvcj0+MC4wMDM3ODU0MSxtPT4zfX0sCiAge25hbWU9PidnYWwnLGNvbnZlcnNpb249PntmYWN0b3I9PjAuMDAzNzg1NDEsbT0+M319LApdOwpDb250ZXh0KCktPmZsYWdzLT5zZXQodG9sVHlwZT0+J2Fic29sdXRlJyx0b2xlcmFuY2U9PjAuMSk7CiR2b2x1bWUgPSBOdW1iZXJXaXRoVW5pdHMoIjIwLzIuNzggZ2FsIiwge25ld1VuaXQ9PiRuZXdVbml0c30pOwpDb250ZXh0KCJQZXJjZW50Iik7CkNvbnRleHQoKS0+ZmxhZ3MtPnNldCh0b2xlcmFuY2U9PjAuMDEpOwokaW5jcmVhc2UgPSBQZXJjZW50KDM1Mi8yNzgtMSk7CkNvbnRleHQoIkN1cnJlbmN5Iik7CiRjb3N0ID0gQ3VycmVuY3koMy41MioxLjAyOCk7CgpCRUdJTl9QR01MCmEuICBUaGUgYXZlcmFnZSBjb3N0IG9mIGdhc29saW5lIGluIHRoZSBVbml0ZWQgU3RhdGVzIGluIDIwMTAgd2FzICQyLjc4IHBlciBnYWxsb24uIEhvdyBtdWNoIGdhc29saW5lIHdvdWxkICQyMCBnZXQgeW91IGluIDIwMTAsIG9uIGF2ZXJhZ2U/CgogICAgW19deyR2b2x1bWV9ezEwfQoKCmEuICBJbiAyMDExLCB0aGUgYXZlcmFnZSBjb3N0IHdhcyAkMy41MiBwZXIgZ2FsbG9uLiBXaGF0IHBlcmNlbnQgaW5jcmVhc2Ugd2FzIHRoYXQgZnJvbSAyMDEwPwoKICAgIFtfXXskaW5jcmVhc2V9ezEwfQoKCmEuICBJbiAyMDEyLCB0aGUgY29zdCBoYWQgcmlzZW4gMi44JSBmcm9tIHRoZSAyMDExIGNvc3QuIFdoYXQgd2FzIHRoZSBjb3N0IG9mIGEgZ2FsbG9uIG9mIGdhc29saW5lIGluIDIwMTI/CgogICAgW19deyRjb3N0fXsxMH0gICAKCgoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
-    <pg><![CDATA[
-#############################################
-###       Generated from PreTeXt source      
-###                                          
-###         https://pretextbook.org          
-###                                          
-#############################################
-## DBsubject()
-## DBchapter()
-## DBsection()
-## Level()
-## KEYWORDS()
-## TitleText1()
-## EditionText1()
-## AuthorText1()
-## Section1(not reported)
-## Problem1(6.6)
-## Author()
-## Institution()
-## Language(en-US)
-
-DOCUMENT();
-
-############################################################
-# Load Macros
-############################################################
-loadMacros(
-  "PGstandard.pl",
-  "MathObjects.pl",
-  "PGML.pl",
-  "AnswerFormatHelp.pl",
-  "parserNumberWithUnits.pl",
-  "contextCurrency.pl",
-  "contextPercent.pl",
-  "PGcourse.pl",
-);
-COMMENT('Authored in PreTeXt');
-
-############################################################
-# Header
-############################################################
-TEXT(beginproblem());
-
-############################################################
-# PG Setup Code
-############################################################
-$newUnits = [
-  {name=>'gallons',conversion=>{factor=>0.00378541,m=>3}},
-  {name=>'gallon',conversion=>{factor=>0.00378541,m=>3}},
-  {name=>'gal',conversion=>{factor=>0.00378541,m=>3}},
-];
-Context()->flags->set(tolType=>'absolute',tolerance=>0.1);
-$volume = NumberWithUnits("20/2.78 gal", {newUnit=>$newUnits});
-Context("Percent");
-Context()->flags->set(tolerance=>0.01);
-$increase = Percent(352/278-1);
-Context("Currency");
-$cost = Currency(3.52*1.028);
-
-############################################################
-# Body
-############################################################
-
-BEGIN_PGML
-a.  The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?
-
-    [_]{$volume}{10}
-
-a.  In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?
-
-    [_]{$increase}{10}
-
-a.  In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?
-
-    [_]{$cost}{10}   
-
-END_PGML
-
-############################################################
-# End Problem
-############################################################
-
-ENDDOCUMENT();
-]]></pg>
-  </webwork-reps>
-  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-5" ww-id="webwork-5">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="17" xml:id="extracted-webwork-5" ww-id="webwork-5">
     <static seed="5">
       <statement><p>Consider the function <m>f</m> defined by <m>f(x)={\sqrt{x}}\text{.}</m>
 <ol label="a.">
@@ -572,9 +194,10 @@ END_PGML
 ENDDOCUMENT();
 ]]></pg>
   </webwork-reps>
-  <webwork-reps version="2" ww_major_version="2" ww_minor_version="16" xml:id="extracted-webwork-9" ww-id="webwork-9">
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="17" xml:id="extracted-webwork-9" ww-id="webwork-9">
     <static seed="9">
       <statement><p>Simplify the expression <m>{x^{2}x^{5}}\text{.}</m></p>
+<p><fillin name="AnSwEr0001" characters="10"/></p>
 </statement>
       <hint><p>Add the exponents.</p>
 </hint>
@@ -696,6 +319,392 @@ To simplify the product of two powers of the same base, add the exponents.
 ```]
 
 END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="17" xml:id="extracted-webwork-12" ww-id="webwork-12">
+    <static seed="12">
+      <statement><p>This Venn Diagram groups animals by certain characteristics.</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" width="50%" pi:generated="webwork/images/webwork-12-image-1"/>
+<p>Name an animal that belongs in the center region. Spelling counts!</p>
+<p><fillin name="AnSwEr0001" characters="30"/></p>
+</statement>
+      <answer>
+        <p>
+          <m>{\text{platypus}}</m>
+        </p>
+      </answer>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJQR2xhdGV4aW1hZ2UucGwiLCJjb250ZXh0QXJiaXRyYXJ5U3RyaW5nLnBsIiwiUFRYU0MucGwiLCJQR2NvdXJzZS5wbCIsKTskcmVmcmVzaENhY2hlZEltYWdlc0luZXJ0PTE7VEVYVChiZWdpbnByb2JsZW0oKSk7CkNvbnRleHQoIkFyYml0cmFyeVN0cmluZyIpOwokcGxhdHlwdXMgPSBDb21wdXRlKCJwbGF0eXB1cyIpLT5jbXAoY2hlY2tlciA9PiBzdWIgewogIG15ICgkY29ycmVjdCwkc3R1ZGVudCwkYW5zKSA9IEBfOwogICRjb3JyZWN0ID0gJGNvcnJlY3QtPnZhbHVlOwogICRzdHVkZW50ID0gJHN0dWRlbnQtPnZhbHVlOwogICRzdHVkZW50ID0gbGMoJHN0dWRlbnQpOwogICRzdHVkZW50ID1+IHMvICsvIC87CiAgJHN0dWRlbnQgPX4gcy9eIC8vOwogICRzdHVkZW50ID1+IHMvICQvLzsKICByZXR1cm4gKCRzdHVkZW50IGVxICRjb3JyZWN0KTsKfSk7CiRpbWFnZV8xID0gY3JlYXRlTGFUZVhJbWFnZSgpOwokaW1hZ2VfMS0+YWRkVG9QcmVhbWJsZShsYXRleEltYWdlUHJlYW1ibGUoKSk7CiRpbWFnZV8xLT5CRUdJTl9MQVRFWF9JTUFHRQpcYmVnaW57dGlrenBpY3R1cmV9CiAgXGRyYXdbZmlsbD1yZWQsIG9wYWNpdHk9MC41XSAoMCwwKSBjaXJjbGUgKDJjbSkgbm9kZVtiZWxvdyBsZWZ0PTEuNWNtLCBvcGFjaXR5PTFdIHtIYXMgYSBCaWxsfSBub2RlW2JlbG93IGxlZnQsIG9wYWNpdHk9MV0ge0R1Y2t9OwogIFxkcmF3W2ZpbGw9Z3JlZW4sIG9wYWNpdHk9MC41XSAoNjA6MmNtKSBjaXJjbGUgKDJjbSkgbm9kZSBbYWJvdmU9Mi4xY20sIG9wYWNpdHk9MV0ge0lzIFZlbmVtb3VzfSBub2RlW2Fib3ZlPTAuNWNtLCBvcGFjaXR5PTFdIHtKZWxseWZpc2h9OwogIFxkcmF3W2ZpbGw9Ymx1ZSwgb3BhY2l0eT0wLjVdICgwOjJjbSkgY2lyY2xlICgyY20pIG5vZGUgW2JlbG93IHJpZ2h0PTEuNWNtLCBvcGFjaXR5PTFdIHtIYXMgRnVyfSBub2RlW2JlbG93IHJpZ2h0LCBvcGFjaXR5PTFdIHtCZWF2ZXJ9OwpcZW5ke3Rpa3pwaWN0dXJlfQoKRU5EX0xBVEVYX0lNQUdFCgpCRUdJTl9QR01MClRoaXMgVmVubiBEaWFncmFtIGdyb3VwcyBhbmltYWxzIGJ5IGNlcnRhaW4gY2hhcmFjdGVyaXN0aWNzLgoKPj4gW0BpbWFnZShpbnNlcnRHcmFwaCgkaW1hZ2VfMSksIHdpZHRoPT4zMDApQF0qICA8PAoKTmFtZSBhbiBhbmltYWwgdGhhdCBiZWxvbmdzIGluIHRoZSBjZW50ZXIgcmVnaW9uLiBTcGVsbGluZyBjb3VudHMhCgpbX117JHBsYXR5cHVzfXszMH0KCgpFTkRfUEdNTAoKRU5ERE9DVU1FTlQoKTs=" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.3)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGlateximage.pl",
+  "contextArbitraryString.pl",
+  "PTXSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("ArbitraryString");
+$platypus = Compute("platypus")->cmp(checker => sub {
+  my ($correct,$student,$ans) = @_;
+  $correct = $correct->value;
+  $student = $student->value;
+  $student = lc($student);
+  $student =~ s/ +/ /;
+  $student =~ s/^ //;
+  $student =~ s/ $//;
+  return ($student eq $correct);
+});
+$image_1 = createLaTeXImage();
+$image_1->addToPreamble(latexImagePreamble());
+$image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+  \draw[fill=red, opacity=0.5] (0,0) circle (2cm) node[below left=1.5cm, opacity=1] {Has a Bill} node[below left, opacity=1] {Duck};
+  \draw[fill=green, opacity=0.5] (60:2cm) circle (2cm) node [above=2.1cm, opacity=1] {Is Venemous} node[above=0.5cm, opacity=1] {Jellyfish};
+  \draw[fill=blue, opacity=0.5] (0:2cm) circle (2cm) node [below right=1.5cm, opacity=1] {Has Fur} node[below right, opacity=1] {Beaver};
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This Venn Diagram groups animals by certain characteristics.
+
+>> [@image(insertGraph($image_1), width=>300)@]*  <<
+
+Name an animal that belongs in the center region. Spelling counts!
+
+[_]{$platypus}{30}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="17" xml:id="extracted-webwork-15" ww-id="webwork-15">
+    <static seed="15" source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg">
+      <statement><p>Find the prime factorization of <m>35</m>.</p>
+<p><m>35={}</m><fillin name="AnSwEr0001" characters="11"/></p>
+</statement>
+      <answer>
+        <p>
+          <m>5\cdot 7</m>
+        </p>
+      </answer>
+      <solution><p>After checking to see if small prime numbers divide <m>35</m>, we find that <m>5</m> is one divisor. So <m>35=5\cdot7</m>.</p>
+<p>Since both <m>5</m> and <m>7</m> are prime, the prime factorization of <m>35</m> is <m>5\cdot7</m>.</p>
+</solution>
+    </static>
+    <server-data sourceFilePath="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
+  </webwork-reps>
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="17" xml:id="extracted-webwork-18" ww-id="webwork-18">
+    <static seed="18">
+      <task><title>Identify Coefficients</title>
+<statement><p>Consider the equation</p>
+<p><me>{2x^{2}-7x-15} = 0</me></p>
+<p>Identify the coefficients for the quadratic equation using the standard form from Subsection<nbsp/>1.1.</p>
+<p><m>a=</m> <fillin name="AnSwEr0001" characters="4"/>, <m>b=</m> <fillin name="AnSwEr0002" characters="4"/>, <m>c=</m> <fillin name="AnSwEr0003" characters="4"/></p>
+</statement><answer><p><m>2</m></p></answer><answer><p><m>-7</m></p></answer><answer><p><m>-15</m></p></answer><solution><p>Take the coefficient of <m>x^2</m> for the value of <m>a\text{,}</m> the coefficient of <m>x</m> for <m>b\text{,}</m> and the constant for <m>c\text{.}</m> <em>In this case</em>, they are <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> <m>c = -15\text{.}</m></p>
+</solution></task>
+      <task><title>Use the Quadratic Formula</title>
+<statement><p>Use the quadratic formula to find the solution set to</p>
+<p><me>{2x^{2}-7x-15}=0</me></p>
+<p><fillin name="AnSwEr0004" characters="30"/></p>
+</statement><answer><p><m>\frac{-3}{2}, 5</m></p></answer><solution><p>Recall that the quadratic formula is given in Subsection<nbsp/>1.1.</p>
+<p>You already identified <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> and <m>c = -15\text{,}</m> and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5\text{.}</m></p>
+</solution></task>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsInNjYWZmb2xkLnBsIiwiQW5zd2VyRm9ybWF0SGVscC5wbCIsImNvbnRleHRGcmFjdGlvbi5wbCIsImNvbnRleHRGaW5pdGVTb2x1dGlvblNldHMucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTsKQ29udGV4dCgiRnJhY3Rpb24iKTsKJHF1YWRyYXRpYyA9IEZvcm11bGEoIjIgeF4yIC0gNyB4IC0gMTUiKS0+cmVkdWNlOwokeDEgPSBGcmFjdGlvbig1LDEpOwokeDIgPSBGcmFjdGlvbigtMywyKTsKQ29udGV4dCgpLT5mbGFncy0+c2V0KHJlZHVjZUNvbnN0YW50cz0+MCxyZWR1Y2VDb25zdGFudEZ1bmN0aW9ucz0+MCk7CkNvbnRleHQoIkZpbml0ZVNvbHV0aW9uU2V0cyIpOwokc29sdXRpb25zID0gRm9ybXVsYSgiLTMvMiw1Iik7ClNjYWZmb2xkOjpCZWdpbihpc19vcGVuID0+ICJjb3JyZWN0X29yX2ZpcnN0X2luY29ycmVjdCIsIG51bWJlcmVkID0+IDEpO1NlY3Rpb246OkJlZ2luKCJJZGVudGlmeSBDb2VmZmljaWVudHMiKTsKQkVHSU5fUEdNTApDb25zaWRlciB0aGUgZXF1YXRpb24KCltgYGBbJHF1YWRyYXRpY10gPSAwYGBgXQoKSWRlbnRpZnkgdGhlIGNvZWZmaWNpZW50cyBmb3IgdGhlIHF1YWRyYXRpYyBlcXVhdGlvbiB1c2luZyB0aGUgc3RhbmRhcmQgZm9ybSBmcm9tIFN1YnNlY3Rpb25bJE5CU1BdKjEuMS4KCltgYT1gXSBbX117Mn17NH0sIFtgYj1gXSBbX117LTd9ezR9LCBbYGM9YF0gW19dey0xNX17NH0KCgpFTkRfUEdNTAoKQkVHSU5fUEdNTF9TT0xVVElPTgpUYWtlIHRoZSBjb2VmZmljaWVudCBvZiBbYHheMmBdIGZvciB0aGUgdmFsdWUgb2YgW2BhXHRleHR7LH1gXSB0aGUgY29lZmZpY2llbnQgb2YgW2B4YF0gZm9yIFtgYlx0ZXh0eyx9YF0gYW5kIHRoZSBjb25zdGFudCBmb3IgW2BjXHRleHR7Ln1gXSBfSW4gdGhpcyBjYXNlXywgdGhleSBhcmUgW2BhID0gMlx0ZXh0eyx9YF0gW2BiID0gLTdcdGV4dHssfWBdIFtgYyA9IC0xNVx0ZXh0ey59YF0KCgpFTkRfUEdNTF9TT0xVVElPTgpTZWN0aW9uOjpFbmQoKTtTZWN0aW9uOjpCZWdpbigiVXNlIHRoZSBRdWFkcmF0aWMgRm9ybXVsYSIpOwpCRUdJTl9QR01MClVzZSB0aGUgcXVhZHJhdGljIGZvcm11bGEgdG8gZmluZCB0aGUgc29sdXRpb24gc2V0IHRvCgpbYGBgWyRxdWFkcmF0aWNdPTBgYGBdCgoKCltfXXskc29sdXRpb25zfXszMH0KCgpFTkRfUEdNTAoKQkVHSU5fUEdNTF9TT0xVVElPTgpSZWNhbGwgdGhhdCB0aGUgcXVhZHJhdGljIGZvcm11bGEgaXMgZ2l2ZW4gaW4gU3Vic2VjdGlvblskTkJTUF0qMS4xLgoKWW91IGFscmVhZHkgaWRlbnRpZmllZCBbYGEgPSAyXHRleHR7LH1gXSBbYGIgPSAtN1x0ZXh0eyx9YF0gYW5kIFtgYyA9IC0xNVx0ZXh0eyx9YF0gYW5kIHRoZSByZXN1bHRzIGZyb20gdXNpbmcgdGhlc2UgaW4gdGhlIHF1YWRyYXRpYyBmb3JtdWxhIGFyZSBbYC1cZnJhY3szfXsyfWBdIGFuZCBbYDVcdGV4dHsufWBdCgoKRU5EX1BHTUxfU09MVVRJT04KU2VjdGlvbjo6RW5kKCk7U2NhZmZvbGQ6OkVuZCgpOwpFTkRET0NVTUVOVCgpOw==" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "scaffold.pl",
+  "AnswerFormatHelp.pl",
+  "contextFraction.pl",
+  "contextFiniteSolutionSets.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+COMMENT('This problem is scaffolded with multiple parts');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Fraction");
+$quadratic = Formula("2 x^2 - 7 x - 15")->reduce;
+$x1 = Fraction(5,1);
+$x2 = Fraction(-3,2);
+Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+Context("FiniteSolutionSets");
+$solutions = Formula("-3/2,5");
+
+############################################################
+# Body
+############################################################
+
+############################################################
+# Scaffold
+############################################################
+Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);
+
+############################################################
+# Section
+############################################################
+Section::Begin("Identify Coefficients");
+
+BEGIN_PGML
+Consider the equation
+
+[```[$quadratic] = 0```]
+
+Identify the coefficients for the quadratic equation using the standard form from Subsection[$NBSP]*1.1.
+
+[`a=`] [_]{2}{4}, [`b=`] [_]{-7}{4}, [`c=`] [_]{-15}{4}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Take the coefficient of [`x^2`] for the value of [`a\text{,}`] the coefficient of [`x`] for [`b\text{,}`] and the constant for [`c\text{.}`] _In this case_, they are [`a = 2\text{,}`] [`b = -7\text{,}`] [`c = -15\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+############################################################
+# Section
+############################################################
+Section::Begin("Use the Quadratic Formula");
+
+BEGIN_PGML
+Use the quadratic formula to find the solution set to
+
+[```[$quadratic]=0```]
+
+[_]{$solutions}{30}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Recall that the quadratic formula is given in Subsection[$NBSP]*1.1.
+
+You already identified [`a = 2\text{,}`] [`b = -7\text{,}`] and [`c = -15\text{,}`] and the results from using these in the quadratic formula are [`-\frac{3}{2}`] and [`5\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+Scaffold::End();
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+  </webwork-reps>
+  <webwork-reps version="2" ww_major_version="2" ww_minor_version="17" xml:id="extracted-webwork-20" ww-id="webwork-20">
+    <static seed="20">
+      <statement><p><ol label="a.">
+<li>
+<p>The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?</p>
+<p><fillin name="AnSwEr0001" characters="10"/></p>
+</li>
+<li>
+<p>In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?</p>
+<p><fillin name="AnSwEr0002" characters="10"/></p>
+</li>
+<li>
+<p>In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?</p>
+<p><fillin name="AnSwEr0003" characters="10"/></p>
+</li>
+</ol></p>
+</statement>
+      <answer>
+        <p>
+          <m>7.19424\ {\rm gal}</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>26.6\%</m>
+        </p>
+      </answer>
+      <answer>
+        <p>
+          <m>\$3.62</m>
+        </p>
+      </answer>
+    </static>
+    <server-data problemSource="RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIk1hdGhPYmplY3RzLnBsIiwiUEdNTC5wbCIsIkFuc3dlckZvcm1hdEhlbHAucGwiLCJwYXJzZXJOdW1iZXJXaXRoVW5pdHMucGwiLCJjb250ZXh0Q3VycmVuY3kucGwiLCJjb250ZXh0UGVyY2VudC5wbCIsIlBHY291cnNlLnBsIiwpO1RFWFQoYmVnaW5wcm9ibGVtKCkpOwokbmV3VW5pdHMgPSBbCiAge25hbWU9PidnYWxsb25zJyxjb252ZXJzaW9uPT57ZmFjdG9yPT4wLjAwMzc4NTQxLG09PjN9fSwKICB7bmFtZT0+J2dhbGxvbicsY29udmVyc2lvbj0+e2ZhY3Rvcj0+MC4wMDM3ODU0MSxtPT4zfX0sCiAge25hbWU9PidnYWwnLGNvbnZlcnNpb249PntmYWN0b3I9PjAuMDAzNzg1NDEsbT0+M319LApdOwpDb250ZXh0KCktPmZsYWdzLT5zZXQodG9sVHlwZT0+J2Fic29sdXRlJyx0b2xlcmFuY2U9PjAuMSk7CiR2b2x1bWUgPSBOdW1iZXJXaXRoVW5pdHMoIjIwLzIuNzggZ2FsIiwge25ld1VuaXQ9PiRuZXdVbml0c30pOwpDb250ZXh0KCJQZXJjZW50Iik7CkNvbnRleHQoKS0+ZmxhZ3MtPnNldCh0b2xlcmFuY2U9PjAuMDEpOwokaW5jcmVhc2UgPSBQZXJjZW50KDM1Mi8yNzgtMSk7CkNvbnRleHQoIkN1cnJlbmN5Iik7CiRjb3N0ID0gQ3VycmVuY3koMy41MioxLjAyOCk7CgpCRUdJTl9QR01MCmEuICBUaGUgYXZlcmFnZSBjb3N0IG9mIGdhc29saW5lIGluIHRoZSBVbml0ZWQgU3RhdGVzIGluIDIwMTAgd2FzICQyLjc4IHBlciBnYWxsb24uIEhvdyBtdWNoIGdhc29saW5lIHdvdWxkICQyMCBnZXQgeW91IGluIDIwMTAsIG9uIGF2ZXJhZ2U/CgogICAgW19deyR2b2x1bWV9ezEwfQoKCmEuICBJbiAyMDExLCB0aGUgYXZlcmFnZSBjb3N0IHdhcyAkMy41MiBwZXIgZ2FsbG9uLiBXaGF0IHBlcmNlbnQgaW5jcmVhc2Ugd2FzIHRoYXQgZnJvbSAyMDEwPwoKICAgIFtfXXskaW5jcmVhc2V9ezEwfQoKCmEuICBJbiAyMDEyLCB0aGUgY29zdCBoYWQgcmlzZW4gMi44JSBmcm9tIHRoZSAyMDExIGNvc3QuIFdoYXQgd2FzIHRoZSBjb3N0IG9mIGEgZ2FsbG9uIG9mIGdhc29saW5lIGluIDIwMTI/CgogICAgW19deyRjb3N0fXsxMH0gICAKCgoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" course-password="anonymous" language="en-US"/>
+    <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.6)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserNumberWithUnits.pl",
+  "contextCurrency.pl",
+  "contextPercent.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+$newUnits = [
+  {name=>'gallons',conversion=>{factor=>0.00378541,m=>3}},
+  {name=>'gallon',conversion=>{factor=>0.00378541,m=>3}},
+  {name=>'gal',conversion=>{factor=>0.00378541,m=>3}},
+];
+Context()->flags->set(tolType=>'absolute',tolerance=>0.1);
+$volume = NumberWithUnits("20/2.78 gal", {newUnit=>$newUnits});
+Context("Percent");
+Context()->flags->set(tolerance=>0.01);
+$increase = Percent(352/278-1);
+Context("Currency");
+$cost = Currency(3.52*1.028);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?
+
+    [_]{$volume}{10}
+
+a.  In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?
+
+    [_]{$increase}{10}
+
+a.  In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?
+
+    [_]{$cost}{10}   
+
+END_PGML
 
 ############################################################
 # End Problem
