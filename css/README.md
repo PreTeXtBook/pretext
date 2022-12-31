@@ -29,8 +29,8 @@ See existing commit messages for communicating the version
 number when that changes.  At a minimum, change the date and
 commit that as a record of a "no-change" update.
 
-CSS version: 0.31
-Date: 2021-07-10
+CSS version:  0.31   Date: 2021-07-10
+CSS version:  0.6    Date: 2022-12-30
 
 
 Experimental Jupyter Notebook CSS
