@@ -2397,9 +2397,9 @@ def _split_brf(filename):
 
 
     def split_body_into_pages(text_body):
-        # text_body is a list of lines, let's make it into a dictionary of pages
-        # Each element of 'pages' is a list of lines on the same page, indexed by the
-        # number of the page in BRF file
+    # text_body is a list of lines, let's make it into a dictionary of pages
+    # Each element of 'pages' is a list of lines on the same page, indexed by the
+    # number of the page in BRF file
         pages = dict()
         
         if len(re.findall("\f", text_body[0])) == 0:
@@ -2410,12 +2410,12 @@ def _split_brf(filename):
             if line != '': # if we are not at the end
                 if len(re.findall("\f", line)) == 0:
                 # if we are not starting a new page
-                    current_page.append(line)            else: # get the page number of the current page, put it in dict and start a new current page
+                    current_page.append(line)            
+                else: # get the page number of the current page, put it in dict and start a new current page
                     prev_line = text_body[number] # not 'number - 1' because we are starting with text_body[1]
 
                     if len(re.findall("[ ]{2}#([a-j]+?)$",prev_line)) == 0:
                         raise ValueError(f"Page number not found, expected to be on the line\n{prev_line}")
-                        break
                     else:
                         page_num = brf_to_num(re.findall("[ ]{2}#([a-j]+?)$",prev_line)[0])
                         pages[page_num] = current_page
