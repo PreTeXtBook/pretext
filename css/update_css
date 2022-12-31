@@ -19,11 +19,21 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
-import requests, fileinput
+# NOTE: when you use this script to update the CSS, even if
+# there is no actual change, note the date and CSS version
+# in the README.md file in this directory as part of a commit
 
 # Simple Python 3 script to retrieve the PreTeXt book CSS from Github
 # This CSS is used for EPUB and Kindle output. It is not required to
-# exist or be updated for HTML builds. 
+# exist or be updated for HTML builds.
+#
+# History:
+#
+# 2022-12-30:  Added a print statement for progress indication
+
+import requests, fileinput
+
+
 def main():
     # URL to the raw files on Github where the CSS lives
     baseurl = 'https://raw.githubusercontent.com/PreTeXtBook/CSS_core/main/'
@@ -52,6 +62,7 @@ def main():
                          'kindle.css',
                          'epub.css']
     for filename in css_file_list:
+        print("Downloading {}...".format(filename))
         url = baseurl + filename
         r = requests.get(url, allow_redirects=True)
         # requests gets the file as bytes and not text, so need 'wb' here
