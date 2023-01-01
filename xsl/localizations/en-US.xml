@@ -288,5 +288,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Activate</localization>
     <!-- Reset an interactive to its original state               -->
     <localization string-id='reset'>Reset</localization>
+    <!-- Describe an array of fill-in-the-blanks, say for a matrix -->
+    <localization string-id='array'>array</localization>
 
 </locale>
