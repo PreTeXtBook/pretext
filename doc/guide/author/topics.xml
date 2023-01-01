@@ -762,7 +762,11 @@
 
             <paragraphs>
                 <title><tage>fillin</tage>, <fillin characters="5" />, fill-in blank</title>
-                <p>A <q>fill in the blank</q> blank.  May be used in normal text or within mathematics contexts.  The <attr>characters</attr> attribute may be used to hint at how long the line will be.  Here we have set <attr>characters</attr> to the value <c>5</c>. If used inside math, a <attr>fill</attr> attribute (in lieu of <attr>characters</attr>) may be some string of math that will be used to determine width, height, and depth of the blank. In text, the default value of <c>10</c> is used for <attr>characters</attr>. In math, the default value of <c>XXX</c> is used for <attr>fill</attr>.</p>
+                <p>A <q>fill in the blank</q> blank.  May be used in normal text or within mathematics contexts.  The <attr>characters</attr> attribute may be used to hint at how long the line will be.  Here we have set <attr>characters</attr> to the value <c>5</c>.</p>
+
+                <p>If used inside math, a <attr>fill</attr> attribute (in lieu of <attr>characters</attr>) may be some string of math that will be used to determine width, height, and depth of the blank. In text, the default value of <c>10</c> is used for <attr>characters</attr>. In math, the default value of <c>XXX</c> is used for <attr>fill</attr>.</p>
+
+                <p>If used in normal text, a <attr>rows</attr> and/or <attr>cols</attr> attribute may be present, each a positive integer. When either is greater than one, there will be an indication that the expected content to fill in the blank is a <attr>rows</attr><nbsp/><times/><nbsp/><attr>cols</attr> array.</p>
             </paragraphs>
 
             <paragraphs>
