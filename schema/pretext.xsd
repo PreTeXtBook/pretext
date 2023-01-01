@@ -3300,6 +3300,8 @@
       <xs:element name="fillin">
         <xs:complexType>
           <xs:attribute name="characters" type="xs:integer"/>
+          <xs:attribute name="rows" type="xs:integer"/>
+          <xs:attribute name="cols" type="xs:integer"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

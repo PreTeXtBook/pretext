@@ -1443,7 +1443,13 @@
                 element vs {empty} |
                 element viz {empty}
             
-            FillInText = element fillin {attribute characters {xsd:integer}?, empty}
+            FillInText =
+                element fillin {
+                    attribute characters {xsd:integer}?,
+                    attribute rows {xsd:integer}?,
+                    attribute cols {xsd:integer}?,
+                    empty
+                }
             Generator |=
                 FillInText
             
