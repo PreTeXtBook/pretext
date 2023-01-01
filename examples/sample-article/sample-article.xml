@@ -1526,6 +1526,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><fillin characters="5"/></p>
 
+                <p>The following are <tag>fillin</tag> with <attr>rows</attr> and/or <attr>cols</attr> attributes (at least one of which is greater than 1): <fillin rows="2"/>, <fillin cols="3"/>, <fillin rows="2" cols="3"/>.</p>
+
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
 
                 <p>We supply two provisional cross-references for testing purposes only: <xref provisional="a first incomplete cross-reference"/>, <xref provisional="a second incomplete cross-reference"/>.</p>
