@@ -1685,6 +1685,37 @@
 
             </exercise>
 
+            <exercise>
+                <title>Answer Arrays</title>
+                <webwork>
+                  <pg-code>
+                    Context("Point");
+                    $p = Point(0,0);
+                    Context("Vector");
+                    $v = Vector(1,2);
+                    $c = ColumnVector(3,4);
+                    Context("Matrix");
+                    $m = Matrix([[1,2],[3,4]]);
+                  </pg-code>
+                  <statement>
+                    <p>
+                      These answer blanks are all expecting some sort of answer in an array format.
+                    </p>
+                    <p>
+                      <m><var name="$p"/> = {}</m><var name="$p" form="array"/>
+                    </p>
+                    <p>
+                      <m><var name="$v"/> = {}</m><var name="$v" form="array"/>
+                    </p>
+                    <p>
+                      <m><var name="$c"/> = {}</m><var name="$c" form="array"/>
+                    </p>
+                    <p>
+                      <m><var name="$m"/> = {}</m><var name="$m" form="array"/>
+                    </p>
+                  </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
