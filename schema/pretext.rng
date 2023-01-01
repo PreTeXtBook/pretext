@@ -3655,6 +3655,16 @@
           <data type="integer"/>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="rows">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="cols">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <empty/>
     </element>
   </define>

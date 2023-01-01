@@ -229,4 +229,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='correct'>Correct</localization> -->
     <!-- <localization string-id='incorrect'>Incorrect</localization> -->
     <!-- <localization string-id='blank'>Blank</localization> -->
+    <!-- <localization string-id='array'>array</localization> -->
 </locale>

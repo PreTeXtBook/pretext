@@ -1619,6 +1619,44 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- For a fillin (not in math) that describes itself as an array -->
+<xsl:template match="fillin" mode="fillin-array">
+    <xsl:variable name="rows">
+        <xsl:choose>
+            <xsl:when test="@rows">
+                <xsl:value-of select="@rows"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="1"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="cols">
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="1"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$rows &gt; 1 or $cols &gt; 1">
+        <xsl:text> (</xsl:text>
+        <xsl:value-of select="$rows"/>
+        <xsl:call-template name="nbsp-character"/>
+        <xsl:call-template name="times-character"/>
+        <xsl:call-template name="nbsp-character"/>
+        <xsl:value-of select="$cols"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'array'"/>
+        </xsl:apply-templates>
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->
 <!-- Two abstract named templates in other files -->

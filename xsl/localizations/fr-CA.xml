@@ -240,4 +240,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='randomize'>Générer une nouvelle version aléatoire</localization>
     <localization string-id='activate'>Activer</localization>
     <localization string-id='reset'>Réinitialiser</localization>
+    <!-- <localization string-id='array'>array</localization> -->
 </locale>

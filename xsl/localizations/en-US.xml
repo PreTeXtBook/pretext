@@ -269,7 +269,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This needs to be defined to *something* (always)       -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <localization string-id='evaluate'>Evaluate</localization>
-    <localization string-id='evaluate'>Evaluate</localization>
     <!-- <localization string-id='code'>Code</localization> -->
     <!-- Interactive exercise feedback messages                   -->
     <!-- These might be part of a feedback message for submitting -->
@@ -289,5 +288,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Activate</localization>
     <!-- Reset an interactive to its original state               -->
     <localization string-id='reset'>Reset</localization>
+    <!-- Describe an array of fill-in-the-blanks, say for a matrix -->
+    <localization string-id='array'>array</localization>
 
 </locale>
