@@ -30,13 +30,16 @@
 # History:
 #
 # 2022-12-30:  Added a print statement for progress indication
+# 2023-01-03:  Parameterize with branch name
 
 import requests, fileinput
 
+# some situations require getting this from another branch
+branch = 'main'
 
 def main():
     # URL to the raw files on Github where the CSS lives
-    baseurl = 'https://raw.githubusercontent.com/PreTeXtBook/CSS_core/main/'
+    baseurl = 'https://raw.githubusercontent.com/PreTeXtBook/CSS_core/{}/'.format(branch)
     # List of CSS files to retrieve. Add on as more are added upstream.
     css_file_list = ['pretext.css',
                          'pretext_add_on.css',

@@ -21,6 +21,9 @@ To update these files,
 
     $ ./update_css
 
+Note that the script may be easily edited to use a branch
+other than simply `main`, if necessary.
+
 Then update the following record of when this was last done.
 Examine the `xsl/pretext-html.xsl` file if you need to check
 on the latest version number for the CSS.  If there are changes,
