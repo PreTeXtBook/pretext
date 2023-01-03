@@ -40,6 +40,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <locale>fr-FR</locale><filename>fr-FR.xml</filename>
     <locale>hu-HU</locale><filename>hu-HU.xml</filename>
     <locale>it-IT</locale><filename>it-IT.xml</filename>
+    <locale>nl-NL</locale><filename>nl-NL.xml</filename>
     <locale>pt-BR</locale><filename>pt-BR.xml</filename>
     <locale>pt-PT</locale><filename>pt-PT.xml</filename>
 </localizations>

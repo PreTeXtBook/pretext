@@ -49,5 +49,6 @@ Current (partially) implemented language codes and contributors
 * fr-FR, French (France), Thomas W. Judson, Julien Giol, Jean-Sébastien Turcotte
 * hu-HU, Hungarian (Hungary), Sándor Czirbusz
 * it-IT, Italian (Italy), Valerio Monti
+* nl-NL, Dutch (Netherlands), Gosia Wrzesinska
 * pt-BR, Portugese (Brazil), Igor Morgado, Vinicius Monego, Leon Silva
 * pt-PT, Portugese (Portugal), António Pereira
