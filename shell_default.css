@@ -39,7 +39,11 @@
 
 .pretext .ptx-page {
   position: relative;
+  min-height: 100vh;
 }
+.ptx-content {
+  min-height: 60vh;
+} 
 
 .pretext #ptx-sidebar {
   position: sticky;
@@ -65,6 +69,9 @@
   padding: 1px 0 0 0;
   background: white;
   border-left: 1px solid #ccc;
+}
+.pretext .ptx-page #ptx-sidebar.hidden + .ptx-main {
+  margin-left: 0;
 }
 .pretext .ptx-page > .ptx-main.notoc {
   margin-left: 0;
@@ -241,7 +248,7 @@
 }
 
 .pretext .ptx-page-footer {
-    background: #e8f4ff;
+    background: #f4f4f4;
     margin-top: 2em;
     padding-top: 0;
     max-width: 900px;

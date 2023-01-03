@@ -79,12 +79,17 @@ body.pretext {
 .ptx-page {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.0em;
+  min-height: 100vh;
+
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-rows: auto;
     grid-template-areas:
         "toc main-content"
         "toc content-footer";
+}
+.ptx-content {
+  min-height: 50vh;
 }
 
 /* MH-toc dropdown Content (Hidden by Default) */
