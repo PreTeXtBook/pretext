@@ -34,6 +34,7 @@ commit that as a record of a "no-change" update.
 
 CSS version:  0.31   Date: 2021-07-10
 CSS version:  0.6    Date: 2022-12-30
+CSS version:  0.6    Date: 2023-01-03
 
 
 Experimental Jupyter Notebook CSS

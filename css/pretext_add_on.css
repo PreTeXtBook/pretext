@@ -1265,7 +1265,8 @@
 
 /* remove this when MathJax fixes the bug that was setting the width to 0 */
 /* as in  $x=0$.  becomes  $x=0\text{.}$ */
-.ptx-content .knowl mjx-mtext > mjx-utext {
+.ptx-content .knowl mjx-mtext > mjx-utext,
+.ptx-content mjx-mtext > mjx-utext {
     width: revert !important;
 }
 .ptx-content mjx-msup mjx-utext,
@@ -2934,8 +2935,7 @@ label.incorrect .feedback {
 .ptx-content .webwork-button.activate {
     width: 22px;
     height: 22px;
-    background-image:
-    url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
+    /* WW Activate button backgroound removed */
     background-size: contain;
     position: absolute;
     right: -35px;
