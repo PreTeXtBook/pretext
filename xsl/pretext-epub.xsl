@@ -291,7 +291,7 @@
                 </title>
             </head>
             <!-- use class to repurpose HTML CSS work -->
-            <body class="pretext-content epub">
+            <body class="ptx-content epub">
                 <xsl:copy-of select="$content" />
                 <!-- Copy MathJax's font information to the bottom -->
                 <xsl:copy-of select="document($mathfile)/pi:math-representations/svg:svg[@id='font-data']"/>
@@ -844,7 +844,7 @@ width: 100%
                     <xsl:call-template name="epub-kindle-css"/>
                 </xsl:if>
             </head>
-            <body class="pretext-content epub">
+            <body class="ptx-content epub">
                 <xsl:choose>
                     <xsl:when test="$b-has-cover-image">
                         <section epub:type="cover">
@@ -892,7 +892,7 @@ width: 100%
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>Table of Contents</title>
             </head>
-            <body class="pretext-content epub" epub:type="frontmatter">
+            <body class="ptx-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
@@ -1277,7 +1277,7 @@ width: 100%
                     <title>Endnotes</title>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
-                <body class="pretext-content epub">
+                <body class="ptx-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
                     <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint" mode="endnote-content"/>
