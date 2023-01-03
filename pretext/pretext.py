@@ -2608,6 +2608,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     for cssfilename in [
         str(stylefile),
         str(colorfile),
+        "pretext.css",
         "pretext_add_on.css",
         "setcolors.css",
     ]:

@@ -38,7 +38,8 @@ def main():
     # URL to the raw files on Github where the CSS lives
     baseurl = 'https://raw.githubusercontent.com/PreTeXtBook/CSS_core/main/'
     # List of CSS files to retrieve. Add on as more are added upstream.
-    css_file_list = ['pretext_add_on.css', 
+    css_file_list = ['pretext.css',
+                         'pretext_add_on.css',
                          'setcolors.css', 
                          'style_default.css', 
                          'style_oscarlevin.css', 

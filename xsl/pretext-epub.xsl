@@ -279,6 +279,7 @@
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                 <xsl:call-template name="converter-blurb-html" />
+                <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -468,6 +469,7 @@
     <xsl:variable name="discovery-manifest" select="exsl:node-set($discovery)"/>
     <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
+        <item id="css-ptx"    href="{$css-dir}/pretext.css"           media-type="text/css"/>
         <item id="css-addon"  href="{$css-dir}/pretext_add_on.css"    media-type="text/css"/>
         <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
         <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
@@ -833,6 +835,7 @@ width: 100%
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
                 <xsl:if test="not($b-has-cover-image)">
+                    <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -880,6 +883,7 @@ width: 100%
         <html xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
+                <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -1263,6 +1267,7 @@ width: 100%
                 <head>
                     <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                     <xsl:call-template name="converter-blurb-html" />
+                    <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
