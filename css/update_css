@@ -31,6 +31,7 @@
 #
 # 2022-12-30:  Added a print statement for progress indication
 # 2023-01-03:  Parameterize with branch name
+# 2023-01-03:  Update, extend filtering external resources
 
 import requests, fileinput
 
@@ -72,9 +73,12 @@ def main():
         # requests gets the file as bytes and not text, so need 'wb' here
         open(filename, 'wb').write(r.content)
 
-    # Validator does not allow @import in CSS, so let's just remove it
+    # EPUB validator does not allow @import in CSS, so let's just remove it
+    for line in fileinput.input('pretext.css', inplace=1):
+        print(line.replace('@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");', '/* Google font download removed */'), end='')
+    # Likewise, the EPUB validator does not like an image coming from an external site
     for line in fileinput.input('pretext_add_on.css', inplace=1):
-        print(line.replace('@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");', ''), end='')
+        print(line.replace("background-image: url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');", '/* WW Activate button backgroound removed */'), end='')
 
     print("CSS files have been updated in your local copy of the repository")
 
