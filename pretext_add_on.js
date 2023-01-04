@@ -307,6 +307,7 @@ console.log("this is e", e);
         for (var i = 0; i < items_needing_permalinks.length; i++) {
             this_item = items_needing_permalinks[i];
             var this_anchor = this_item.id;
+            if (this_item.parentElement.classList.contains("lines")) { next() }  /* parsons block */
             if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
             if (this_item.classList.contains("para")) {
                if (this_item.id == "") {
