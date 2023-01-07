@@ -4270,7 +4270,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <p>This is an evolving list of best practices for authoring (and publishing) so that a conversion to braille is as useful as possible for the blind reader.</p>
 
-        <p>Many recommendations for mathematics will be useful to any reader, but perhaps even moreso for a blind reader, so read <xref ref="topic-mathematics-practices"/>.  Recommendations here may also improve your project for all readers.</p>
+        <p>Many recommendations for mathematics will be useful to any reader, but perhaps even moreso for a blind reader, so read <xref ref="topic-mathematics-practices"/>.  Recommendations here may also improve your project for all readers.  See <xref ref="publisher-braille"/> for more about the mechanics of producing output as braille.</p>
 
         <paragraphs>
             <title>Division Numbering</title>
