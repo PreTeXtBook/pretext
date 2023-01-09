@@ -32,6 +32,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         coursepassword="anonymous"
         user="anonymous"
         userpassword="anonymous"
+        task-reveal="preceding-correct"
         />
 
     <html>
