@@ -269,6 +269,11 @@
         <p>
           By default, inline exercises and project-like will be dynamic, under the assumption that these are meant to be worked as a reader works through the material.  The others will be static, under the assumption that they will be placed on a WeBWorK server where they will be worked for scores and grades.  See <xref ref="online-webwork-dynamism"/> for the precise syntax for these switches.
         </p>
+      <p>
+        If an exercise is subdivided into tasks, then by default they will only be revealed incrementally
+        as the reader answers each one correctly. If you would like to have all tasks revealed from the start,
+        then this option may be elected in the publication file (see <xref ref="publication-file-webwork-task-reveal"/>).
+      </p>
     </subsection>
 
     <subsection xml:id="webwork-latex-output">
