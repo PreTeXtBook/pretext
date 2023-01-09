@@ -22,9 +22,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl str"
+    xmlns:dyn="http://exslt.org/dynamic"
+    extension-element-prefixes="exsl str dyn"
 >
 
 <!-- ######################### -->
@@ -3767,6 +3769,92 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+
+<!-- ########################################### -->
+<!-- Set Values/Defaults for Publisher Variables -->
+<!-- ########################################### -->
+
+<!-- The pi:publisher tree should mirror the official list of options   -->
+<!-- for publisher file attributes for each attribute that has a finite -->
+<!-- list of options.  The first option in the list is, by convention,  -->
+<!-- the default value.                                                 -->
+
+<pi:publisher>
+    <webwork task-reveal="preceding-correct all"/>
+</pi:publisher>
+
+<!-- global variable for pi:publisher tree above -->
+<xsl:variable name="publisher-attribute-options" select="document('')/xsl:stylesheet/pi:publisher"/>
+
+<!-- context for a match below will be an attribute from the pi:publisher tree -->
+<xsl:template match="@*" mode="set-pubfile-attribute-variable">
+    <!-- get the options that are in pi:publisher -->
+    <xsl:variable name="options" select="str:tokenize(., ' ')"/>
+    <!-- the first option is the default -->
+    <xsl:variable name="default" select="$options[1]"/>
+    <!-- get the path to this attribute -->
+    <xsl:variable name="path">
+        <xsl:apply-templates select="." mode="path"/>
+    </xsl:variable>
+    <!-- get the corresponding attribute from the publisher file -->
+    <!-- which may not exist                                     -->
+    <xsl:variable name="full-path" select="concat('$publication/', $path)"/>
+    <xsl:variable name="pubfile-attribute" select="dyn:evaluate($full-path)"/>
+    <xsl:choose>
+        <!-- test catches when attribute is omitted from pubfile, -->
+        <!-- as well as present but null or only whitepsace       -->
+        <xsl:when test="string($pubfile-attribute) = ''">
+            <xsl:value-of select="$default"/>
+        </xsl:when>
+        <!-- a non-empty, non-whitespace string was used in the pubfile -->
+        <!-- next test checks if it is among the legal options          -->
+        <xsl:when test="$pubfile-attribute = $options">
+            <xsl:value-of select="$pubfile-attribute"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should be <xsl:apply-templates select="$options" mode="quoted-list"/>, not "<xsl:value-of select="$pubfile-attribute"/>".  The default "<xsl:value-of select="$default"/>" will be used instead.</xsl:message>
+            <xsl:value-of select="$default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Recurse back up the tree to get the path to an attribute -->
+<xsl:template match="@*" mode="path">
+    <xsl:apply-templates select=".." mode="path"/>
+    <xsl:value-of select="concat('@', local-name())"/>
+</xsl:template>
+
+<xsl:template match="*" mode="path">
+    <xsl:apply-templates select=".." mode="path"/>
+    <xsl:value-of select="concat(local-name(), '/')"/>
+</xsl:template>
+
+<xsl:template match="pi:publisher" mode="path"/>
+
+<!-- Expects a node set from tokenize()                       -->
+<!-- Produces a string where each token is wrapped in quotes  -->
+<!-- When there are multiple options, separates with a comma  -->
+<!-- Last options preceded by "or" with Oxford comma if 3+    -->
+<xsl:template match="token" mode="quoted-list">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>"</xsl:text>
+    <xsl:choose>
+        <!-- if there are at least two more coming -->
+        <xsl:when test="count(following-sibling::token) &gt;= 2">
+            <xsl:text>, </xsl:text>
+        </xsl:when>
+        <!-- if there is exactly one more coming and we have a list of at least three -->
+        <xsl:when test="preceding-sibling::token and following-sibling::token">
+            <xsl:text>, or </xsl:text>
+        </xsl:when>
+        <!-- if there is exactly one more coming and we have a list of two -->
+        <xsl:when test="following-sibling::token">
+            <xsl:text> or </xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
 
 
 <!-- ######################### -->
