@@ -101,6 +101,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <video privacy="yes"/>
         <!-- native search via Javascript library -->
         <search variant="default"/>
+        <!-- With a <feedback> element, in the HTML version, you get a button     -->
+        <!-- for reporting typos and errors.  You might link to a Google Docs     -->
+        <!-- spreadsheet or something similar.  Default is to get a button        -->
+        <!-- labeled "Feedback", which will be localized to your target language. -->
+        <!-- You can override this with some text of your choosing, but then you  -->
+        <!-- lose the localization feature.                                       -->
+        <!-- (The feedback element could be empty, we place text in a comment to  -->
+        <!-- suggest how the text can be changed/specified.)                      -->
+        <feedback href="http://example.com/not-implemented.html"><!-- My Button Text --></feedback>
     </html>
 
     <!-- 10pt font is the default   -->
