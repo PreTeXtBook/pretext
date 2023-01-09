@@ -1955,6 +1955,62 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!--                      -->
+<!-- HTML Feedback Button -->
+<!--                      -->
+
+<xsl:variable name="feedback-button-href">
+    <!-- internal variable, just for error-checking -->
+    <xsl:variable name="attempted-href">
+        <xsl:choose>
+            <xsl:when test="$publication/html/feedback/@href">
+                <xsl:value-of select="$publication/html/feedback/@href"/>
+            </xsl:when>
+            <!-- deprecated -->
+            <xsl:when test="$assembly-docinfo/feedback/url">
+                <xsl:value-of select="$assembly-docinfo/feedback/url"/>
+            </xsl:when>
+            <!-- default to empty, as a signal of failure -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- we error-check a bad @href *only* as a publisher -->
+    <!-- variable, and not in the deprecated situation    -->
+    <xsl:if test="$publication/html/feedback and ($attempted-href = '')">
+        <xsl:message>PTX:ERROR:  an HTML "feedback" button with an empty, or missing, @href will be ineffective, or worse, non-existent</xsl:message>
+    </xsl:if>
+    <!-- now capture the internal variable -->
+    <xsl:value-of select="$attempted-href"/>
+</xsl:variable>
+
+<!-- Pure text, no markup, no math, etc. -->
+<!-- Empty is a meaningful value         -->
+<xsl:variable name="feedback-button-text">
+    <xsl:variable name="provided-button-text">
+        <xsl:choose>
+            <xsl:when test="$publication/html/feedback">
+                <xsl:value-of select="$publication/html/feedback"/>
+            </xsl:when>
+            <!-- deprecated -->
+            <!-- "apply-templates is historical, may do poorly as -->
+            <!-- markup below in the absence of "copy-of", etc.   -->
+            <xsl:when test="$assembly-docinfo/feedback/text">
+                <xsl:apply-templates select="$assembly-docinfo/feedback/text"/>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Clean-up *and* utilize emptieness as a signal to use -->
+    <!-- default text. If empty, provide default text in      -->
+    <!-- language of the page at implementation time          -->
+    <xsl:value-of select="normalize-space($provided-button-text)"/>
+</xsl:variable>
+
+<!-- Since we capture alternate text easily, and   -->
+<!-- we *need* an @href, we use this as the signal -->
+<!-- for the election of a feedback button         -->
+<xsl:variable name="b-has-feedback-button" select="not($feedback-button-href = '')"/>
+
 <!--                       -->
 <!-- HTML WeBWorK Dynamism -->
 <!--                       -->
