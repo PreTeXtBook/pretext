@@ -10669,9 +10669,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <!-- formerly "extra" -->
             <div class="ptx-page-footer">
-                <xsl:if test="$docinfo/feedback">
-                    <xsl:call-template name="feedback-link" />
-                </xsl:if>
+                <xsl:apply-templates select="." mode="feedback-button"/>
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="runestone-link"/>
                 <xsl:call-template name="powered-by-mathjax" />
@@ -12088,23 +12086,24 @@ TODO:
 </xsl:template>
 
 
-<!-- Feedback Button goes in page-footer    -->
-<!-- Text from docinfo, or localized string -->
-<!-- Target URL from docinfo                -->
-<xsl:template name="feedback-link">
-    <!-- Possibly an empty URL -->
-    <a class="feedback-link" href="{$docinfo/feedback/url}" target="_blank">
-        <xsl:choose>
-            <xsl:when test="$docinfo/feedback/text">
-                <xsl:apply-templates select="$docinfo/feedback/text" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'feedback'"/>
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-    </a>
+<!-- Feedback Button goes in page-footer                -->
+<!-- Values of variables set in publisher-variables.xsl -->
+<!-- Context influences default button text language    -->
+<xsl:template match="*" mode="feedback-button">
+    <xsl:if test="$b-has-feedback-button">
+        <a class="feedback-link" href="{$feedback-button-href}" target="_blank">
+            <xsl:choose>
+                <xsl:when test="not($feedback-button-text = '')">
+                    <xsl:value-of select="$feedback-button-text" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'feedback'"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
+        </a>
+    </xsl:if>
 </xsl:template>
 
 <!-- Branding in page-footer, mostly hard-coded     -->
