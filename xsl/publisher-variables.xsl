@@ -1256,6 +1256,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+
+<!-- ############### -->
+<!-- WeBWorK Options -->
+<!-- ############### -->
+
 <!-- WeBWorK server location and credentials for the daemon course -->
 <xsl:variable name="webwork-server">
     <xsl:choose>
@@ -1267,6 +1272,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
 <xsl:variable name="webwork-course">
     <xsl:choose>
         <xsl:when test="$publication/webwork/@course">
@@ -1277,6 +1283,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
 <xsl:variable name="webwork-coursepassword">
     <xsl:choose>
         <xsl:when test="$publication/webwork/@coursepassword">
@@ -1287,6 +1294,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
 <xsl:variable name="webwork-user">
     <xsl:choose>
         <xsl:when test="$publication/webwork/@user">
@@ -1297,6 +1305,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
 <xsl:variable name="webwork-userpassword">
     <xsl:choose>
         <xsl:when test="$publication/webwork/@userpassword">
@@ -1307,6 +1316,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
 <!-- WeBWorK tasks can be revealed incrementally or all at once -->
 <xsl:variable name="webwork-task-reveal">
     <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/@task-reveal"/>
