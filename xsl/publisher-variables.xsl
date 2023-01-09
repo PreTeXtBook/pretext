@@ -1307,6 +1307,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+<!-- WeBWorK tasks can be revealed incrementally or all at once -->
+<xsl:variable name="webwork-task-reveal">
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/@task-reveal"/>
+</xsl:variable>
+
 
 <!-- WeBWork problem representations are formed by Python routines  -->
 <!-- in the   pretext.py  module that communicates with a WeBWorK   -->

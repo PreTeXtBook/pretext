@@ -407,7 +407,19 @@
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);</xsl:text>
+    <xsl:text>Scaffold::Begin(</xsl:text>
+    <xsl:text>numbered => 1,</xsl:text>
+    <xsl:text>is_open => "correct_or_first_incorrect",</xsl:text>
+    <xsl:text>can_open => </xsl:text>
+    <xsl:choose>
+        <xsl:when test="$webwork-task-reveal = 'all'">
+            <xsl:text>always,</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>when_previous_correct,</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>);</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
