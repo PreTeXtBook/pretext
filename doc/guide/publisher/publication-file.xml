@@ -594,6 +594,16 @@
             </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="html-asymptote-links"/> for more detail.</p>
         </subsection>
 
+        <subsection xml:id="html-feedback-options">
+            <title>HTML Feedback Button</title>
+            <idx><h>HTML</h><h>feedback button</h></idx>
+            <idx><h>feedback button</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/feedback</cline>
+            </cd>element requires an <attr>href</attr> attribute that is a complete <init>URL</init>.  The content of the element is optional, and will provide alternate text for the button.  This alternate text should have no markup<mdash/>just text.  See <xref ref="html-feedback"/> for explanations, details, and a caveat.</p>
+        </subsection>
+
         <subsection xml:id="html-navigation-options">
             <title>HTML Navigation Options</title>
             <idx><h>HTML</h><h>navigation</h></idx>

@@ -92,6 +92,16 @@
             <p>See <xref ref="html-asymptote-link-options"/> for the specifics of this entry.  This feature is off by default.</p>
         </subsection>
 
+        <subsection xml:id="html-feedback">
+            <title>HTML Feedback Button</title>
+            <idx><h>HTML</h><h>feedback button</h></idx>
+            <idx><h>feedback button</h><h>HTML</h></idx>
+
+            <p>You can elect to have a <q>Feedback</q> button in the footer of your <init>HTML</init> pages.  You must provide a <init>URL</init> via an attribute.  But where that <init>URL</init> points, and what happens there, <em>is your responsibility</em>.  In other words, <pretext/> is no more help here, you just get a functional button pointing <em>somewhere</em> of your choosing or design.  An example use case may be that you want to make it very easy for your readers to submit reports of small errors, like <q>typos.</q>  So you setup an online form with a free service, which will help you manage this communication.  Or maybe you want to run a reader survey via a form, so you point to that.</p>
+
+            <p>The default text on the button is <c>Feedback</c>, which will be in the language in effect for the page.  You can override this choice (e.g., <c>Bug Report</c>), but it needs to be raw text (no markup) and then it will not react to language changes for your document.  See <xref ref="html-feedback-options"/> for precise details.</p>
+        </subsection>
+
         <subsection xml:id="html-navigation">
             <title>HTML Navigation</title>
             <idx><h>Asymptote links</h><h>HTML</h></idx>
