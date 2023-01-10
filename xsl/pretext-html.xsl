@@ -11494,10 +11494,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Need to pass node down into "toc-items", which is per-page -->
 <xsl:template match="*" mode="sidebars">
     <div id="ptx-sidebar">
-        <nav id="ptx-toc" class="depth2">
-            <!-- A class indicates how much of the ToC we want -->
-            <!-- to see, as set in the publication file        -->
+        <nav id="ptx-toc">
             <xsl:attribute name="class">
+                <!-- A class indicates how much of the ToC we want   -->
+                <!-- to see, as set in the publication file. Always. -->
                 <xsl:text>depth</xsl:text>
                 <xsl:value-of select="$toc-level"/>
             </xsl:attribute>
