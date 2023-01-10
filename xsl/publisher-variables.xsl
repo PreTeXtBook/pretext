@@ -3672,6 +3672,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
 
+<!-- LaTeX Cover Pages -->
+
+<!-- Front and back, a filename and a flag -->
+
+<xsl:variable name="latex-front-cover-filename">
+    <xsl:choose>
+        <!-- post-managed directories, but $external-directory -->
+        <!-- should preserve backward-compatibilty             -->
+        <xsl:when test="$publication/latex/cover/@front">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$publication/latex/cover/@front"/>
+        </xsl:when>
+        <!-- backward compatibility (from source "docinfo") -->
+        <xsl:when test="$assembly-docinfo/covers/@front">
+            <xsl:value-of select="$assembly-docinfo/covers/@front"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-has-latex-front-cover" select="not($latex-front-cover-filename = '')"/>
+
+<xsl:variable name="latex-back-cover-filename">
+    <xsl:choose>
+        <!-- post-managed directories, but $external-directory -->
+        <!-- should preserve backward-compatibilty             -->
+        <xsl:when test="$publication/latex/cover/@back">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$publication/latex/cover/@back"/>
+        </xsl:when>
+        <!-- backward compatibility (from source "docinfo") -->
+        <xsl:when test="$assembly-docinfo/covers/@back">
+            <xsl:value-of select="$assembly-docinfo/covers/@back"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-has-latex-back-cover" select="not($latex-back-cover-filename = '')"/>
+
 
 <!-- ########### -->
 <!-- LaTeX Fonts -->
