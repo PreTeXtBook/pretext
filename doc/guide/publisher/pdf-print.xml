@@ -151,10 +151,14 @@
 
     <section xml:id="latex-cover-images">
         <title>Cover Images</title>
+        <idx><h>PDF</h><h>covers</h></idx>
+        <idx><h>LaTeX</h><h>covers</h></idx>
+        <idx><h>covers</h><h>PDF</h></idx>
+        <idx><h>covers</h><h>LaTeX</h></idx>
 
-        <p>The <c>docinfo/covers</c> element may be used to specify the filenames (with relative paths) of a front-cover image and a back-cover image via the <attr>front</attr> and <attr>back</attr> attributes.  The image must be a single-page <init>PDF</init>, and it will be scaled to fit an entire page.  So it is your responsibility to supply an image which has the correct aspect ratio and sufficient resolution.  These are only supported for the <latex/> conversion.</p>
+        <p>The publication file may be used to specify the filenames of a front-cover image and a back-cover image.  The image must be a single-page <init>PDF</init>, and it will be scaled to fit an entire page.  So it is your responsibility to supply an image which has the correct aspect ratio and sufficient resolution.  These are only supported for the <latex/> conversion.  See <xref ref="latex-covers-options"/> for exact syntax.  Implementation is via the <latex/> <c>pdfpages</c> package.</p>
 
-        <p>This is meant to help you create a professional electronic <init>PDF</init>.  A print-on-demand service (<xref ref="print-on-demand"/>) will likely want a standalone image (possibly with the front and back, plus a spine, all rolled into one <term>wrap</term> image).  So build your <em>real</em> cover images (<xref ref="cover-design"/>), and then modify them for this use.</p>
+        <p>This is meant to help you create a professional electronic <init>PDF</init>.  A print-on-demand service (<xref ref="print-on-demand"/>) will likely want a standalone image (possibly with the front and back, plus a spine, all rolled into one <term>wrap</term> image).  So build your <em>real</em> cover images first (<xref ref="cover-design"/>), and then modify them for this use.</p>
     </section>
 
     <section xml:id="latex-icons">

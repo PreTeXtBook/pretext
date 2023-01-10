@@ -251,6 +251,18 @@
             </p>
         </subsection>
 
+        <subsection xml:id="latex-covers-options">
+            <title>Covers</title>
+            <idx><h>PDF</h><h>covers</h></idx>
+            <idx><h>LaTeX</h><h>covers</h></idx>
+            <idx><h>covers</h><h>PDF</h></idx>
+            <idx><h>covers</h><h>LaTeX</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/latex/cover</cline>
+            </cd>element has attributes <attr>front</attr> and <attr>back</attr> whose values can be paths to <init>PDF</init> files to use as the first and last page of the output <init>PDF</init>.  The paths should be relative to your directory of external files, much like a raster image you might bring to your project being given by a <attr>source</attr> attribute.  See <xref ref="processing-directory-management"/> for more about managed directories, and <xref ref="latex-cover-images"/> for more detail about covers.</p>
+        </subsection>
+
         <subsection xml:id="latex-asymptote-link-options">
             <title><latex/> Asymptote Links</title>
             <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>
