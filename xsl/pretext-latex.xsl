@@ -315,6 +315,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
+    <!-- Front cover before \frontmatter is OK,     -->
+    <!-- since we do not number the page (main role -->
+    <!-- of \frontmatter is to use Roman numerals)  -->
+    <xsl:call-template name="front-cover"/>
     <xsl:apply-templates />
     <xsl:call-template name="back-cover"/>
     <xsl:text>\end{document}</xsl:text>
@@ -4083,7 +4087,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book/frontmatter">
     <!-- DTD: does the next line presume <frontmatter> is required? -->
     <xsl:text>\frontmatter&#xa;</xsl:text>
-    <xsl:call-template name="front-cover"/>
     <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
