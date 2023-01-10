@@ -744,7 +744,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:if test="$docinfo/covers">
+    <xsl:if test="$b-has-latex-front-cover or $b-has-latex-back-cover">
         <xsl:text>%% pdfpages package for front and back covers as PDFs&#xa;</xsl:text>
         <xsl:text>\usepackage[</xsl:text>
         <xsl:choose>
@@ -2271,11 +2271,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For a "book" place *before* \frontmatter so  -->
 <!-- as to not disrupt Roman numeral numbering -->
 <xsl:template name="front-cover">
-    <xsl:if test="$docinfo/covers[@front]">
+    <xsl:if test="$b-has-latex-front-cover">
         <xsl:text>%% Cover image, not numbered&#xa;</xsl:text>
         <xsl:text>\setcounter{page}{0}%&#xa;</xsl:text>
         <xsl:text>\includepdf[noautoscale=false]{</xsl:text>
-        <xsl:value-of select="$docinfo/covers/@front"/>
+        <xsl:value-of select="$latex-front-cover-filename"/>
         <xsl:text>}%&#xa;</xsl:text>
         <xsl:if test="$latex-sides= 'two'">
             <xsl:text>%% Blank obverse for 2-sided version&#xa;</xsl:text>
@@ -2285,7 +2285,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="back-cover">
-    <xsl:if test="$docinfo/covers[@back]">
+    <xsl:if test="$b-has-latex-back-cover">
         <xsl:text>%% Back cover image, not numbered&#xa;</xsl:text>
         <xsl:text>\cleardoublepage%&#xa;</xsl:text>
         <xsl:if test="$latex-sides= 'two'">
@@ -2293,7 +2293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\thispagestyle{empty}\hbox{}\newpage%&#xa;</xsl:text>
         </xsl:if>
         <xsl:text>\includepdf[noautoscale=false]{</xsl:text>
-        <xsl:value-of select="$docinfo/covers/@back"/>
+        <xsl:value-of select="$latex-back-cover-filename"/>
         <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
