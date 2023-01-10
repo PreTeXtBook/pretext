@@ -74,4 +74,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <search variant="default"/>
     </html>
 
+    <latex>
+        <cover front="original-front-cover-aata.pdf" back="plain-back-cover-aata.pdf"/>
+    </latex>
+
 </publication>

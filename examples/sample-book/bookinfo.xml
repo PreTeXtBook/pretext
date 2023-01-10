@@ -37,10 +37,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <brandlogo url="http://abstract.pugetsound.edu" source="cover_aata_2014.png" />
 
-    <!-- code does not consult managed directories, maybe these move to publisher file? -->
-    <covers front="external/original-front-cover-aata.pdf"
-            back="external/plain-back-cover-aata.pdf"/>
-
     <document-id edition="2">PTXSB</document-id>
 
     <!-- Prefix to enhance Sage notebook contents -->
