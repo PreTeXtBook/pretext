@@ -11500,7 +11500,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- to see, as set in the publication file. Always. -->
                 <xsl:text>depth</xsl:text>
                 <xsl:value-of select="$toc-level"/>
+                <!-- Optionally place a class name to allow for numbering  -->
+                <!-- parts and chapters, when parts are present (w/ space) -->
+                <xsl:if test="$b-has-parts">
+                    <xsl:text> parts</xsl:text>
+                </xsl:if>
             </xsl:attribute>
+            <!-- now, all the actual ToC entries -->
             <xsl:apply-templates select="." mode="toc-items"/>
         </nav>
     </div>
