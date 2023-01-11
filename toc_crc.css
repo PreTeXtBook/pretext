@@ -26,7 +26,14 @@
 
 /* no codenumbers on subsections */
 #ptx-toc ul ul a > .codenumber {
+    font-size: 80%;
+    padding-top: 0.16em;
     display: none;
+}
+#ptx-toc.parts > ul.structural > li > ul.structural > li > .toc-item > a > .codenumber {
+    font-size: 100%;
+    padding-top: 0;
+    display: inline-block;
 }
 #ptx-toc ul ul a > .title {
     margin-left: 0;

@@ -32,16 +32,16 @@ body.pretext {
   color: var(--sectiontoctext);
   background-color: var(--sectiontoc);
 }
-#ptx-toc.parts > ul.structural > li > ul.structural > li > .toc-item > a {
+#ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a {
   color: var(--chaptertoctextactive);
   background-color: var(--chaptertocactive);
   border-color: var(--highlighttocborder);
 }
-#ptx-toc.parts > ul.structural > li:first-child > ul.structural > li > .toc-item > a {
+#ptx-toc.parts:not(.depth2) > ul.structural > li:first-child > ul.structural > li > .toc-item > a {
   color: var(--sectiontoctext);
   background-color: var(--sectiontoc);
 }
-#ptx-toc.parts > ul.structural > li > ul.structural > li > .toc-item > a:hover {
+#ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a:hover {
   color: var(--sectiontoctextactive);
   background-color: var(--chaptertoc);
 }
