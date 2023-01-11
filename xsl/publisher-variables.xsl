@@ -3252,6 +3252,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
 <xsl:variable name="b-host-aim"       select="$host-platform = 'aim'"/>
 
+
+<!-- ##################### -->
+<!-- EPUB-Specific Options -->
+<!-- ##################### -->
+
+<!-- Cover image filename, once -->
+<!-- May be empty, in which case pretext/pretext will try to build a cover.png -->
+<xsl:variable name="publication-cover-filename">
+    <xsl:value-of select="$publication/epub/@cover"/>
+</xsl:variable>
+<xsl:variable name="b-has-cover-image" select="not($publication-cover-filename = '')"/>
+<xsl:variable name="cover-filename">
+    <xsl:choose>
+        <xsl:when test="$b-has-cover-image">
+            <xsl:value-of select="$publication-cover-filename"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>cover.png</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- ###################### -->
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->

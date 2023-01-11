@@ -145,23 +145,6 @@
 <xsl:variable name="b-webwork-reading-static" select="true()" />
 <xsl:variable name="b-webwork-worksheet-static" select="true()" />
 
-<!-- Cover image filename, once -->
-<!-- May be empty, in which case pretext/pretext will try to build a cover.png -->
-<xsl:variable name="publication-cover-filename">
-    <xsl:value-of select="$publication/epub/@cover"/>
-</xsl:variable>
-<xsl:variable name="b-has-cover-image" select="not($publication-cover-filename = '')"/>
-<xsl:variable name="cover-filename">
-    <xsl:choose>
-        <xsl:when test="$b-has-cover-image">
-            <xsl:value-of select="$publication-cover-filename"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>cover.png</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- Kindle needs various tweaks, way beyond just math as MathML -->
 <!-- and PNG images.  So a misnomer to call it a "math format",  -->
 <!-- but a a boolean sure helps                                  -->
