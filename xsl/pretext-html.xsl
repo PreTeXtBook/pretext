@@ -10651,6 +10651,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:value-of select="$watermark-css" />
                             </xsl:attribute>
                         </xsl:if>
+                        <!-- Alternative to "copy-of": convert $content to a  -->
+                        <!-- node-set, and then hit with an identity template -->
+                        <!-- to duplicate.  Experiment indicates no change in -->
+                        <!-- output. (2023-01-11)                             -->
                         <xsl:copy-of select="$content" />
                     </div>
                     <div class="ptx-content-footer">
