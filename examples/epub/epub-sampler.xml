@@ -230,7 +230,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
-                        <description>A pile of electronic components wired together</description>
+                        <alttext>A pile of electronic components wired together</alttext>
                         <latex-image><!-- CDATA prevents certain LaTeX code from being interpreted as xml --><![CDATA[\tikzset{%
                       block/.style    = {draw, thick, rectangle, minimum height = 3em,
                         minimum width = 3em},
