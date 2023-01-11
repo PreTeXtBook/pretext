@@ -653,15 +653,20 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     white-space: pre;
 }
 
+button {
+   font: inherit;
+}
+
 @media print {
     .pretext #ptx-masthead,
     .pretext #ptx-navbar,
     .pretext .ptx-page > #ptx-sidebar,
-    .pretext .ptx-page > .ptx-page-footer {
+    .pretext > div.ptx-page-footer,
+    .pretext .ptx-main > div.ptx-content-footer {
        display:none;
         border:none;
     }
-    .pretext .ptx-page .ptx-main {
+    .pretext .ptx-page main.ptx-main {
         margin-left:0;
         left:auto;
         border:none;
