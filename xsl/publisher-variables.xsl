@@ -4213,6 +4213,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- 2023-01-11: These warnings are originally about string parameters -->
+<!-- moving to the publisher file.  But they seem to work just as well -->
+<!-- when an option in the publisher file changes.  So "parameter" is  -->
+<!-- the nomenclature, but usage is a bit more broad.                  -->
+
 <xsl:template match="mathbook|pretext" mode="parameter-deprecation-warnings">
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->
