@@ -2621,19 +2621,36 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
         css = os.path.join(get_ptx_xsl_path(), "..", "css", "epub.css")
         shutil.copy2(css, css_dir)
 
-    # directory of images, relative to master source file, given by publisher
-    # build the same directory relative to the XHTML files
+    # EPUB Cover File
 
-    # position cover file
-    cov = packaging_tree.xpath("/packaging/cover/@pubfilename")[0]
-    cover_dest = os.path.join(xhtml_dir, str(cov))
-    if cov != "":
-        cover_source = os.path.join(source_dir, str(cov))
+    # The /packaging/cover/ entry has the (relative) paths for the author's
+    # provided cover image file and where it should land in the XHTML directory
+    # of files, consistent with the manifest, etc.
+    #
+    # @authored-cover is 'yes' or 'no'.  In the latter case most of the
+    # action happens here in the Python
+
+    is_cover_authored = (packaging_tree.xpath("/packaging/cover/@authored-cover")[0] == 'yes')
+    if is_cover_authored:
+        # Build absolute paths and mirror directory structure, except for the
+        # transition from authors name for "external" to the actual use of
+        # "external" in the XHTML.  These details were handled in the creation
+        # of the relevant publisher variables, which then migrated to the
+        # packaging file, and then here
+        cover_source_file = packaging_tree.xpath("/packaging/cover/@source")[0]
+        cover_dest_file = packaging_tree.xpath("/packaging/cover/@dest")[0]
+        cover_source = os.path.join(source_dir, str(cover_source_file))
+        cover_dest = os.path.join(xhtml_dir, str(cover_dest_file))
         # https://stackoverflow.com/questions/2793789, Python 3.2
         os.makedirs(os.path.dirname(cover_dest), exist_ok=True)
         shutil.copy2(cover_source, cover_dest)
     else:
+        # When an author does not provide an image, we try to manufacture one.
+        # The file will be named "cover.png" and will be a top-level file in
+        # the XHTML directory.  A publisher variable maintains consistency as
+        # to what land in the XHTML files themselves (and manifest, etc.)
         cover_source = os.path.join(tmp_dir, "cover.png")
+        cover_dest = os.path.join(xhtml_dir, "cover.png")
         # Get some useful things from the packaging file
         title = packaging_tree.xpath("/packaging/title")[0].xpath("string()").__str__()
         subtitle = (

@@ -431,7 +431,7 @@
             <xsl:value-of select="substring(date:date-time(),1,19)" />
             <xsl:text>Z</xsl:text>
         </xsl:element>
-        <meta name="cover" content="{$xhtml-dir}/{$cover-filename}" />
+        <meta name="cover" content="{$xhtml-dir}/{$epub-cover-dest}" />
     </metadata>
 </xsl:template>
 
@@ -491,11 +491,11 @@
                 </xsl:choose>
             </xsl:attribute>
         </item>
-        <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image">
+        <item id="cover-image" href="{$xhtml-dir}/{$epub-cover-dest}" properties="cover-image">
             <xsl:attribute name="media-type">
                 <xsl:variable name="extension">
                     <xsl:call-template name="file-extension">
-                        <xsl:with-param name="filename" select="$cover-filename" />
+                        <xsl:with-param name="filename" select="$epub-cover-dest" />
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:choose>
@@ -678,8 +678,20 @@
             <!-- for actual EPUB file eventually output -->
             <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
         </filename>
-        <!-- pubfilename maybe empty -->
-        <cover pubfilename="{$publication-cover-filename}"/>
+        <!-- Information about the cover file to transmit to the Python build routine -->
+        <cover source="{$epub-cover-source}" dest="{$epub-cover-dest}">
+            <!-- yes/no on if the authored provided a custom image file -->
+            <xsl:attribute name="authored-cover">
+                <xsl:choose>
+                    <xsl:when test="$b-authored-cover">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>no</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </cover>
         <!-- These may be used in automated creation of a cover image -->
         <title>
             <xsl:apply-templates select="$document-root" mode="title-simple"/>
@@ -830,7 +842,7 @@ width: 100%
                 <title>
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
-                <xsl:if test="not($b-has-cover-image)">
+                <xsl:if test="not($b-authored-cover)">
                     <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
@@ -842,10 +854,10 @@ width: 100%
             </head>
             <body class="ptx-content epub">
                 <xsl:choose>
-                    <xsl:when test="$b-has-cover-image">
+                    <xsl:when test="$b-authored-cover">
                         <section epub:type="cover">
                             <!-- https://ebookflightdeck.com/handbook/coverimage   -->
-                            <img src="{$cover-filename}" alt="cover image"/>
+                            <img src="{$epub-cover-dest}" alt="cover image"/>
                         </section>
                     </xsl:when>
                     <xsl:otherwise>
