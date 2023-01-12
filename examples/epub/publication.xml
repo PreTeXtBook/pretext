@@ -26,8 +26,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </source>
 
     <!-- EPUB-Specific Options -->
-    <!-- cover image file is presumed to be within  media/@external -->
-    <epub cover="ext/Verne_Tour_du_Monde.png"/>
+    <!-- cover image file is specified relative  -->
+    <!-- to the "external" managed directory     -->
+    <epub>
+        <cover front="Verne_Tour_du_Monde.png"/>
+    </epub>
 
     <!-- HTML-Specific Options -->
     <html>
