@@ -1791,10 +1791,10 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # imported here, used only in interior
     # routine to launch browser
     try:
-        import pyppeteer  # launch()
+        import playwright.async_api  # launch()
     except ImportError:
         global __module_warning
-        raise ImportError(__module_warning.format("pyppeteer"))
+        raise ImportError(__module_warning.format("playwright"))
 
     # Interior asynchronous routine to manage the Chromium
     # headless browser and snapshot the desired iframe
@@ -1809,20 +1809,21 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # the HTML id coming in here as "fragment"
         xpath = "//iframe[@id='{}'][1]".format(fragment)
 
-        browser = await pyppeteer.launch()
-        page = await browser.newPage()
-        await page.goto(input_page)
-        await page.waitForXPath(xpath);
-        # wait again, 5 seconds, for more than just splash screens, etc
-        await page.waitFor(5000)
-        # list of locations, need first (and only) one
-        elt = await page.xpath(xpath);
-        await elt[0].screenshot({'path': out_file})
-        await browser.close()
+        async with playwright.async_api.async_playwright() as pw:
+            browser = await pw.chromium.launch()
+            page = await browser.new_page()
+            # goto page and wait for content to load
+            await page.goto(input_page, wait_until='domcontentloaded')
+            # wait again, 5 seconds, for more than just splash screens, etc
+            await page.wait_for_timeout(5000)
+            # list of locations, need first (and only) one
+            elt = page.locator(xpath);
+            await elt.screenshot(path=out_file)
+            await browser.close()
     # End of interior routine
 
     log.info(
-        "using Pyppeteer package to create previews for interactives from {} for placement in {}".format(
+        "using playwright package to create previews for interactives from {} for placement in {}".format(
             xml_source, dest_dir
         )
     )
