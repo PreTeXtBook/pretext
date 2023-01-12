@@ -825,6 +825,19 @@ width: 100%
 <!-- Content files -->
 <!-- ############# -->
 
+<!-- "coverpage.html" comes in two flavors:                            -->
+<!--                                                                   -->
+<!-- 1.  An author provides a cover image via the publication file and -->
+<!--     then this page has no need of any CSS and the body has a      -->
+<!--     very specific (short) form. -->
+<!--                                                                   -->
+<!-- 2.  No cover image is provided by the author.  The core Python    -->
+<!--     routines will try very hard to build a simple generic image,  -->
+<!--     very similar (but not identical) to what we create here.  But -->
+<!--     that process can fail, and when it does, various packaging    -->
+<!--     here is backed out.  More immediately, we build a simple page -->
+<!--     (with CSS) having title, subtitle, and authors.               -->
+
 <xsl:template match="frontmatter" mode="epub">
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
