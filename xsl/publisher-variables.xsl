@@ -4837,6 +4837,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="incorrect-use" select="($emdash.space != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2023-01-11  EPUB cover image publication file entry totally reworked -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2023-01-11'" />
+        <xsl:with-param name="message" select="'the  epub/@cover  publication file entry has been replaced, and likely you will only get a simple generic cover image.  Please read the documentation for how to transition to the new specification'" />
+            <xsl:with-param name="incorrect-use" select="($publication/epub/@cover != '')" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 </xsl:stylesheet>
