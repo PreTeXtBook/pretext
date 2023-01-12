@@ -36,7 +36,7 @@
                     </p>
 
                     <p>
-                        To use a non-generic cover image, the publication file must also have <c>epub/@cover</c> that points to the cover image (<init>JPEG</init> or <init>PNG</init>, 2048 pixels tall, 1280 pixels wide).
+                        To use a non-generic cover image, the publication file must also have <c>epub/cover/@front</c> attribute that points to the cover image (<init>JPEG</init> or <init>PNG</init>, 2048 pixels tall, 1280 pixels wide).  Absent an image provided, there will be an attempt to create a simple, generic cover image.  See <xref ref="epub-cover-image-options"/> for details about specifying a cover image.
                     </p>
                 </li>
             </ul>
@@ -44,7 +44,7 @@
         </p>
 
         <p>
-            Finally, if you are using the <c>pretext/pretext</c> script, you must install a local version of MathJax (the CLI will try to do this for you).  We provide a bash script in <c>scripts/mjsre</c> that automates this process.  See <xref ref="install-mathjax"/> for instructions.  As updates to the <init>EPUB</init> conversion are released, you may occasional want to update your local copy of MathJax.  Simply use the script referenced above.
+            Finally, if you are using the <c>pretext/pretext</c> script, you must install a local version of MathJax (the CLI will try to do this for you).  We provide a bash script in <c>scripts/mjsre</c> that automates this process.  See <xref ref="install-mathjax"/> for instructions.  As updates to the <init>EPUB</init> conversion are released, you may occasionally want to update your local copy of MathJax.  Simply use the script referenced above.
         </p>
 
         <p>

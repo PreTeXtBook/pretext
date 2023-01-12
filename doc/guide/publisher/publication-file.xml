@@ -690,6 +690,26 @@
         </subsection>
     </section>
 
+    <section xml:id="publication-file-epub">
+        <title>EPUB Options</title>
+        <idx>EPUB publisher options</idx>
+        <idx><h>publisher options</h><h>EPUB</h></idx>
+
+        <introduction>
+            <p>These options are specific to a conversion to <init>EPUB</init>.  But because an <init>EPUB</init> file is a compressed archive of <init>HTML</init> files, many of the options in <xref ref="publication-file-online"/> can have an effect.  See <xref ref="online-html"/> for a more general overview of the conversion to <init>HTML</init>.</p>
+        </introduction>
+
+        <subsection xml:id="epub-cover-image-option">
+            <title>EPUB Cover Image</title>
+            <idx><h>EPUB</h><h>cover image</h></idx>
+            <idx><h>cover image</h><h>EPUB</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/epub/cover/@front</cline>
+            </cd>attribute has a value that is a path, relative to the external directory of the managed directories scheme (see <xref ref="processing-directory-management"/>), that is an image to be used as a cover for the <init>EPUB</init>.  See <xref ref="epub"/> for more.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publication-file-source">
         <title>Source Options</title>
         <idx>source publisher options</idx>
