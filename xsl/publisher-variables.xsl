@@ -3257,16 +3257,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EPUB-Specific Options -->
 <!-- ##################### -->
 
-<!-- Cover image filename, once -->
-<!-- May be empty, in which case pretext/pretext will try to build a cover.png -->
-<xsl:variable name="publication-cover-filename">
-    <xsl:value-of select="$publication/epub/@cover"/>
+<!-- Cover image specification -->
+
+<!-- Author-specified relative to source external directory -->
+<xsl:variable name="epub-cover-base-filename">
+    <xsl:value-of select="$publication/epub/cover/@front"/>
 </xsl:variable>
-<xsl:variable name="b-has-cover-image" select="not($publication-cover-filename = '')"/>
-<xsl:variable name="cover-filename">
+
+<!-- If the author does not say, eventually we will try to build a cover -->
+<xsl:variable name="b-authored-cover" select="not(normalize-space($epub-cover-base-filename)) = ''"/>
+
+<!-- This is where the file lives within the author's version of -->
+<!-- the external files, so eventually Python will pick this up  -->
+<xsl:variable name="epub-cover-source">
+    <xsl:value-of select="$external-directory-source"/>
+    <xsl:value-of select="$epub-cover-base-filename"/>
+</xsl:variable>
+
+<!-- This is where the image file lands in the final XHTML directory. -->
+<!-- So this gets written into several constituents of the EPUB files -->
+<!-- as the (special) cover image.  When an author does not provide   -->
+<!-- the file, the Python makes one and it is always placed in the    -->
+<!-- top-level of the EPUB package.                                   -->
+<xsl:variable name="epub-cover-dest">
     <xsl:choose>
-        <xsl:when test="$b-has-cover-image">
-            <xsl:value-of select="$publication-cover-filename"/>
+        <xsl:when test="$b-authored-cover">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$epub-cover-base-filename"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>cover.png</xsl:text>
