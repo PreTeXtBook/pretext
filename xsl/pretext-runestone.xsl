@@ -737,7 +737,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
-<xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
+<!-- exercise and PROJECT-LIKE with WeBWorK guts -->
+<xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
+                   | project[(@exercise-interactive = 'webwork-reps')]
+                   | activity[(@exercise-interactive = 'webwork-reps')]
+                   | exploration[(@exercise-interactive = 'webwork-reps')]
+                   | investigation[(@exercise-interactive = 'webwork-reps')]" mode="runestone-manifest">
     <question>
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <!-- N.B.  Better here to ask for "exercise-components"? -->
