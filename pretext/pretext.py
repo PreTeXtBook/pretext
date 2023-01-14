@@ -1791,38 +1791,54 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # imported here, used only in interior
     # routine to launch browser
     try:
-        import pyppeteer  # launch()
+        import playwright.async_api  # launch()
     except ImportError:
         global __module_warning
-        raise ImportError(__module_warning.format("pyppeteer"))
+        raise ImportError(__module_warning.format("playwright"))
 
     # Interior asynchronous routine to manage the Chromium
     # headless browser and snapshot the desired iframe
-    async def snapshot(input_page, fragment, out_file):
+    async def snapshot(page, input_page, fragment, out_file):
 
+        # page:       browser page object loading the URL
         # input_page: the "standalone" page of the interactive
         #             hosted at the base URL
-        # fragement:  the hash/fragement identifier of the iframe
+        # fragment:  the hash/fragment identifier of the iframe
         # out_file:   resulting image file in scratch directory
 
         # the "standalone" page has one "iframe" known by
         # the HTML id coming in here as "fragment"
         xpath = "//iframe[@id='{}'][1]".format(fragment)
 
-        browser = await pyppeteer.launch()
-        page = await browser.newPage()
-        await page.goto(input_page)
-        await page.waitForXPath(xpath);
+        # goto page and wait for content to load
+        await page.goto(input_page, wait_until='domcontentloaded')
         # wait again, 5 seconds, for more than just splash screens, etc
-        await page.waitFor(5000)
+        await page.wait_for_timeout(5000)
         # list of locations, need first (and only) one
-        elt = await page.xpath(xpath);
-        await elt[0].screenshot({'path': out_file})
-        await browser.close()
+        elt = page.locator(xpath);
+        await elt.screenshot(path=out_file, scale="css")
     # End of interior routine
 
+    # Use the same browser instance for the generation of all interactive previews
+    async def generate_previews(interactives, baseurl, dest_dir):
+        async with playwright.async_api.async_playwright() as pw:
+            browser = await pw.chromium.launch()
+            page = await browser.new_page()
+            # Start after the leading base URL sneakiness
+            for preview in interactives[1:]:
+                # parameters
+                input_page = os.path.join(baseurl, preview + ".html")
+                filename = preview + "-preview.png"
+                # progress report
+                msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
+                log.info(msg.format(preview, input_page, filename))
+                # generate and copy
+                await snapshot(page, input_page, preview, filename)
+                shutil.copy2(filename, dest_dir)
+            await browser.close()
+
     log.info(
-        "using Pyppeteer package to create previews for interactives from {} for placement in {}".format(
+        "using playwright package to create previews for interactives from {} for placement in {}".format(
             xml_source, dest_dir
         )
     )
@@ -1857,17 +1873,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     owd = os.getcwd()
     os.chdir(tmp_dir)
 
-    # Start after the leading base URL sneakiness
-    for preview in interactives[1:]:
-        # parameters
-        input_page = os.path.join(baseurl, preview + ".html")
-        filename = preview + "-preview.png"
-        # progress report
-        msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
-        log.info(msg.format(preview, input_page, filename))
-        # event loop and copy
-        asyncio.get_event_loop().run_until_complete(snapshot(input_page, preview, filename))
-        shutil.copy2(filename, dest_dir)
+    # event loop and copy
+    asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
 
     # restore working directory
     os.chdir(owd)
