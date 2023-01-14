@@ -75,7 +75,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- webwork's iframeResizer needs to come before sage -->
                 <xsl:call-template name="webwork" />
                 <xsl:apply-templates select="." mode="sagecell" />
-                <xsl:call-template name="syntax-highlight-header"/>
+                <xsl:call-template name="syntax-highlight"/>
                 <xsl:call-template name="google-search-box-js" />
                 <xsl:call-template name="pretext-js" />
                 <xsl:call-template name="knowl" />
