@@ -1796,44 +1796,41 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         global __module_warning
         raise ImportError(__module_warning.format("playwright"))
 
-    # Interior asynchronous routine to manage the Chromium
-    # headless browser and snapshot the desired iframe
-    async def snapshot(page, input_page, fragment, out_file):
-
-        # page:       browser page object loading the URL
-        # input_page: the "standalone" page of the interactive
-        #             hosted at the base URL
-        # fragment:  the hash/fragment identifier of the iframe
-        # out_file:   resulting image file in scratch directory
-
-        # the "standalone" page has one "iframe" known by
-        # the HTML id coming in here as "fragment"
-        xpath = "//iframe[@id='{}'][1]".format(fragment)
-
-        # goto page and wait for content to load
-        await page.goto(input_page, wait_until='domcontentloaded')
-        # wait again, 5 seconds, for more than just splash screens, etc
-        await page.wait_for_timeout(5000)
-        # list of locations, need first (and only) one
-        elt = page.locator(xpath);
-        await elt.screenshot(path=out_file, scale="css")
-    # End of interior routine
-
-    # Use the same browser instance for the generation of all interactive previews
+    # Interior asynchronous routine to manage the Chromium headless browser.
+    # Use the same page instance for the generation of all interactive previews
     async def generate_previews(interactives, baseurl, dest_dir):
+
+        # interactives:  list containing the interactive hash/fragment ids [1:]
+        # baseurl:       local server's base url (includes local port)
+        # dest_dir:      folder where images are saved
+
+        # Open playwright's asynchronous api to load a browser and page
         async with playwright.async_api.async_playwright() as pw:
             browser = await pw.chromium.launch()
             page = await browser.new_page()
-            # Start after the leading base URL sneakiness
-            for preview in interactives[1:]:
-                # parameters
-                input_page = os.path.join(baseurl, preview + ".html")
-                filename = preview + "-preview.png"
+            # First index contains original baseurl of hosted site (not used)
+            for preview_fragment in interactives[1:]:
+                # loaded page url containing interactive
+                input_page = os.path.join(baseurl, preview_fragment + ".html")
+                # filename of saved preview image
+                filename = preview_fragment + "-preview.png"
+
+                # the "standalone" page has one "iframe" known by HTML id "preview_fragment"
+                xpath = "//iframe[@id='{}'][1]".format(preview_fragment)
+
                 # progress report
                 msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
-                log.info(msg.format(preview, input_page, filename))
-                # generate and copy
-                await snapshot(page, input_page, preview, filename)
+                log.info(msg.format(preview_fragment, input_page, filename))
+
+                # goto page and wait for content to load
+                await page.goto(input_page, wait_until='domcontentloaded')
+                # wait again, 5 seconds, for more than just splash screens, etc
+                await page.wait_for_timeout(5000)
+                # list of locations, need first (and only) one
+                elt = page.locator(xpath);
+                await elt.screenshot(path=filename, scale="css")
+
+                # copy
                 shutil.copy2(filename, dest_dir)
             await browser.close()
 
@@ -1843,6 +1840,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         )
     )
 
+    # Identify interactives that will be processed
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-interactive.xsl")
     # support publisher file, subtree argument
@@ -1855,17 +1853,54 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     id_filename = os.path.join(tmp_dir, "interactives-ids.txt")
     log.debug("Interactives id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
-
-    # "run" an assignment for the list of problem numbers
+    # read the list of interactive identifiers just generated
     id_file = open(id_filename, "r")
-    # read lines, skipping blank lines
     interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
-    # Cheating a bit, base URL is *always* first item
-    # Presumed to not have a trailing slash
-    # Once this is a publisher option, then the xsltproc
-    # call will need to accept the override as a stringparam
-    baseurl = interactives[0]
+    # Generate individual interactive pages directly and host locally
+    extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-interactives.xsl")
+    host_dir = os.path.join(tmp_dir, "html-interactives")
+    if not (os.path.isdir(host_dir)):
+        os.mkdir(host_dir)
+    # Generate the actual html files
+    log.debug("Interactives html files temporarily in {}".format(host_dir))
+    xsltproc(extraction_xslt, xml_source, None, host_dir, stringparams)
+    # Copy in external resources (e.g., js code)
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+    if external_abs:
+        external_dir = os.path.join(host_dir, "external")
+        shutil.copytree(external_abs, external_dir)
+
+    # Spawn a new process running a local html.server
+    import subprocess
+    import random
+    # Try a standard port and if it fails, try a random port
+    port = 8888
+    looking_for_port = True
+    numAttempt = 0
+    maxAttempts = 10  # In case failure is not due to blocked ports.
+    while looking_for_port and numAttempt < maxAttempts:
+        try:
+            numAttempt = numAttempt + 1
+            log.info(f"Opening subprocess http.server with port={port}")
+            # -u so that stdout and stderr are not cached
+            server = subprocess.Popen(["python", "-u", "-m", "http.server", f"{port}", "-d", host_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            # Check if terminated. Allow 1 second to start-up.
+            try:
+                result = server.wait(1)
+                log.debug(f"Server startup failed")
+                port = random.randint(49152, 65535)
+                log.debug(f"Trying port {port} instead")
+            # The exception is success because process did not terminate.
+            except subprocess.TimeoutExpired:
+                looking_for_port = False
+        except OSError:
+            # Not sure if this will ever trigger b/c Python itself should start
+            log.debug(f"Subprocess to open http.server failed")
+            port = random.randint(49152, 65535)
+            log.debug(f"Trying port {port} instead.\n")
+    if numAttempt >= maxAttempts:
+        log.error("Unable to open http.server for interactive previews")
 
     # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
@@ -1874,7 +1909,16 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     os.chdir(tmp_dir)
 
     # event loop and copy
+    baseurl = "http://localhost:{}".format(port)
     asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
+
+    # close the server and report (debug) results
+    log.info:("Closing http.server subprocess")
+    server.kill()
+    log.debug("Log data from http.server:")
+    server_output = server.stderr.read()
+    for line in server_output.split("\n"):
+        log.debug(line)
 
     # restore working directory
     os.chdir(owd)
