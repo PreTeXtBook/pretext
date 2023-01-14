@@ -72,11 +72,11 @@
 
         <p>In your virtual environment, go<cd>
             <cline>(ptx) $ pip install lxml</cline>
-        </cd>Now you have a collection of Python routines that interface with the same base libraries for <init>XSL</init> processing as the <c>xsltproc</c> executable.  A second library is <c>requests</c> which moderates communications with online servers and is necessary to communicate with WeBWorK servers and with a YouTube server that provides thumbnail images for static versions of videos. The <c>pdfCropMargins</c> package provides a tool that will crop images during their production with the <c>pretext</c> script.  Finally, <c>pyppeteer</c> uses a Chromium headless browser to take static screenshots of interactive elements of your project.</p>
+        </cd>Now you have a collection of Python routines that interface with the same base libraries for <init>XSL</init> processing as the <c>xsltproc</c> executable.  A second library is <c>requests</c> which moderates communications with online servers and is necessary to communicate with WeBWorK servers and with a YouTube server that provides thumbnail images for static versions of videos. The <c>pdfCropMargins</c> package provides a tool that will crop images during their production with the <c>pretext</c> script.  Finally, <c>playwright</c> uses a Chromium headless browser to take static screenshots of interactive elements of your project.</p>
 
-        <p>Note that right after you install <c>pyppeteer</c> then you want to run<cd>
-            <cline>pyppeteer-install</cline>
-        </cd>one time only.  This will install a Chromium browser where it should only be available to this package.  If you already have a Chrome browser installed, then you are suppose to be able to configure <c>pyppeteer</c> to use that instead.  But we have not tried that yet, so please let us know how to do it.</p>
+        <p>Note that right after you install <c>playwright</c> then you want to run<cd>
+            <cline> playwright install</cline>
+        </cd>one time only.  This will install three web browsers (Chromium, Firefox, WebKit) and FFMPEG where they should only be available to this package.</p>
 
         <table>
             <title>PIP-installable Python Packages</title>
@@ -101,7 +101,7 @@
                     <cell><p>Crop images during production</p></cell>
                 </row>
                 <row>
-                    <cell><c>pyppeteer</c></cell>
+                    <cell><c>playwright</c></cell>
                     <cell><p>Automatic screenshots of interactive elements</p></cell>
                 </row>
             </tabular>

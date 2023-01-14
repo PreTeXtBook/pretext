@@ -238,7 +238,7 @@ The script should be run on the entire document, even if all the images are in o
 
                     <p>Note that for all this to work, you need to properly serve your project's <init>HTML</init> output with the interactive content.  (A local server may be a possibility, but we have not tried.  See <xref ref="processing-testing-html"/>.  Or you can try a temporary public server, see <xref ref="processing-testing-html-globally"/>).  Then you need to announce the location of this hosted <init>HTML</init>, which is accomplished via a <q>base URL</q> in a publication file.  Start at <xref ref="online-base-url"/> for details on this publisher variable.  Note that the chunk level in your publication file used in this process <em>must</em> match the chunk level used when you build your <init>HTML</init> output, and mismatches for other publisher variables could have some ill effects.</p>
 
-                    <p>The automatic screenshots will then be managed by the Python <c>pyppeteer</c> package, which you will need to have installed in your Python virtual environment (see <xref ref="pip-install"/>).</p>
+                    <p>The automatic screenshots will then be managed by the Python <c>playwright</c> package, which you will need to have installed in your Python virtual environment (see <xref ref="pip-install"/>).</p>
                 </li>
 
                 <li xml:id="mathematics-representations">
