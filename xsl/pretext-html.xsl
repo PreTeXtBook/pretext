@@ -9959,6 +9959,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="@geogebra" />
                 <xsl:text>",&#xa;</xsl:text>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="@perspective">
+                    <xsl:text>perspective:"</xsl:text>
+                    <xsl:value-of select="@perspective"/>
+                    <xsl:text>",&#xa;</xsl:text>
+                </xsl:if>
+            </xsl:otherwise>
         </xsl:choose>
         <xsl:text>width:</xsl:text><xsl:value-of select="$width" />
         <xsl:text>,&#xa;</xsl:text>

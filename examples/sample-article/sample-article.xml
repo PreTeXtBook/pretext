@@ -7772,8 +7772,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure>
                     <caption>GeoGebra: from scratch</caption>
                     <interactive xml:id="geogebra-seed-head" platform="geogebra" width="50%" aspect="1:1">
-                        <slate xml:id="seed-head" surface="geogebra" aspect="1:1">
-                            setPerspective("G");
+                        <slate xml:id="seed-head" surface="geogebra" aspect="1:1" perspective="G">
                             setRounding("3s");
                             setCoordSystem(-1,1,-1,1);
                             setGridVisible(false);
