@@ -1809,7 +1809,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             browser = await pw.chromium.launch()
             page = await browser.new_page()
             # First index contains original baseurl of hosted site (not used)
-            for preview_fragment in interactives[1:]:
+            for preview_fragment in interactives:
                 # loaded page url containing interactive
                 input_page = os.path.join(baseurl, preview_fragment + ".html")
                 # filename of saved preview image
