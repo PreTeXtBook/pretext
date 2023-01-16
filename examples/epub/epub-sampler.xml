@@ -26,6 +26,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         \newcommand{\doubler}[1]{2#1}
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
         </macros>
+        <latex-image-preamble>
+            \usepackage{tikz}
+            \usetikzlibrary{arrows}
+        </latex-image-preamble>
     </docinfo>
 
     <book>
@@ -220,7 +224,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <sageplot>
                             stnc = 'I am a cool multiedge graph with loops'
                             g = DiGraph({}, loops=True, multiedges=True)
-                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                            for a,b in [(stnc[i], stnc[i+1]) for i in range(len(stnc)-1)]:
                                 g.add_edge(a, b, b)
                             g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
                         </sageplot>
