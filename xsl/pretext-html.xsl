@@ -12247,9 +12247,9 @@ TODO:
                 <xsl:text>      rsMathReady();&#xa;</xsl:text>
                 <xsl:text>      }&#xa;</xsl:text>
                 <xsl:text>    )}&#xa;</xsl:text>
-                <xsl:text>  },&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:text>  },&#xa;</xsl:text>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
             <xsl:text>  options: {&#xa;</xsl:text>
