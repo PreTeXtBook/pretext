@@ -9668,14 +9668,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="width" select="$cell-right" />
             </xsl:call-template>
             <xsl:text>}{</xsl:text>
-            <xsl:apply-templates select="." mode="table-cell-content">
+            <xsl:apply-templates select="." mode="table-cell-wrapper">
                 <xsl:with-param name="halign" select="$cell-halign" />
                 <xsl:with-param name="valign" select="$row-valign" />
             </xsl:apply-templates>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="table-cell-content">
+            <xsl:apply-templates select="." mode="table-cell-wrapper">
                 <xsl:with-param name="halign" select="$cell-halign" />
                 <xsl:with-param name="valign" select="$row-valign" />
             </xsl:apply-templates>
@@ -9936,7 +9936,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="cell" mode="table-cell-content">
+<xsl:template match="cell" mode="table-cell-wrapper">
     <xsl:param name="the-cell" />
     <xsl:param name="halign" />
     <xsl:param name="valign" />
@@ -9974,7 +9974,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%&#xa;</xsl:text>
             <xsl:apply-templates select="p" />
         </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="$b-header">
+                <xsl:text>{\bfseries{}</xsl:text>
+            </xsl:if>
+            <xsl:if test="$b-vertical-header">
+                <xsl:text>\rotatebox{90}{</xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="table-cell-content">
+                <xsl:with-param name="halign" select="$halign" />
+                <xsl:with-param name="valign" select="$valign" />
+            </xsl:apply-templates>
+            <!-- a little space keeps text off a top rule -->
+            <xsl:if test="$b-vertical-header">
+                <xsl:text>\space}</xsl:text>
+            </xsl:if>
+            <xsl:if test="$b-header">
+                <xsl:text>}</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="cell" mode="table-cell-content">
+    <xsl:param name="halign" />
+    <xsl:param name="valign" />
+    <xsl:choose>
         <xsl:when test="line">
+            <!-- macro for multiline cell -->
             <xsl:text>\tablecelllines{</xsl:text>
             <xsl:call-template name="halign-specification">
                 <xsl:with-param name="align" select="$halign" />
@@ -9990,24 +10017,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:if test="$b-header">
-                <xsl:text>\textbf{</xsl:text>
-            </xsl:if>
-            <xsl:if test="$b-vertical-header">
-                <xsl:text>\rotatebox{90}{</xsl:text>
-            </xsl:if>
-            <!-- finally - the content of unstructured cell -->
+            <!-- the content of unstructured cell -->
             <xsl:apply-templates/>
-            <!-- a little space keeps text off a top rule -->
-            <xsl:if test="$b-vertical-header">
-                <xsl:text>\space}</xsl:text>
-            </xsl:if>
-            <xsl:if test="$b-header">
-                <xsl:text>}</xsl:text>
-            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- ########################### -->
 <!-- Labels and Cross-References -->

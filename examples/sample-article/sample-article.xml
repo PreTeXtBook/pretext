@@ -5710,6 +5710,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </table>
 
             <table>
+                <title>One Row Header, Multiline</title>
+                <tabular>
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>
+                            <line>Area</line>
+                            <line>(sq. mi.)</line>
+                        </cell>
+                        <cell>
+                            <line>Statehood</line>
+                            <line>(Year)</line>
+                        </cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
                 <title>Two Row Headers</title>
                 <tabular>
                     <row header="yes">
@@ -5776,6 +5812,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </table>
 
             <table>
+                <title>One Vertical Row Header, Multiline</title>
+                <tabular>
+                    <row header="vertical">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>
+                            <line>Area</line>
+                            <line>(sq. mi.)</line>
+                        </cell>
+                        <cell>
+                            <line>Statehood</line>
+                            <line>(Year)</line>
+                        </cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
                 <title>Two Vertical Row Headers</title>
                 <tabular>
                     <row header="vertical">
@@ -5819,6 +5891,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell>Population</cell>
                         <cell>Area (sq. mi.)</cell>
                         <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>One Row Header, Multiline, with Rules</title>
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>
+                            <line>Area</line>
+                            <line>(sq. mi.)</line>
+                        </cell>
+                        <cell>
+                            <line>Statehood</line>
+                            <line>(Year)</line>
+                        </cell>
                     </row>
                     <row>
                         <cell>Washington</cell>
