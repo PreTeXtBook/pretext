@@ -7279,6 +7279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </sidebyside>
                         </sbsgroup>
                         <instructions>
+                            <title>Flipping Woody</title>
                             <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
                         </instructions>
                     </interactive>
