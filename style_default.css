@@ -260,7 +260,8 @@
   /* previous and next point to the need to rethink asides:  structurally they are
      in the midts of the other elements, so they affect neighbor selectors.
      but visually they often are off to the side */
-  .ptx-content .aside-like + .solutions {
+  .ptx-content .aside-like + .solutions,
+  .ptx-content .aside-like + .instructions {
       margin-top: 0;
   }
 

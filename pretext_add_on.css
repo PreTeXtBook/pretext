@@ -1667,14 +1667,16 @@ from Jiří Lebl */
 }
 
 
-.ptx-content .solutions > a, .ptx-content .solutions > a:hover, .ptx-content .solutions > a.active {
+.ptx-content .solutions > a, .ptx-content .solutions > a:hover, .ptx-content .solutions > a.active,
+.ptx-content .instructions > a, .ptx-content .instructions > a:hover, .ptx-content .instructions > a.active {
     display: inline-block;
     margin-right: 1.5em;
 }
 
 /* When the knowl is a Hint, Answer, or Solution, put a little
    triangle in front of it */
-.ptx-content .solutions > a::before {
+.ptx-content .solutions > a::before,
+.ptx-content .instructions > a::before {
     content: '\25ba';
     font-size: 70%;
     color: #06a;
@@ -1682,13 +1684,15 @@ from Jiří Lebl */
     top: -2px;
     right: 3px;
 }
-.ptx-content .solutions > a.active::before {
+.ptx-content .solutions > a.active::before,
+.ptx-content .instructions > a.active::before {
     content: '\25bc';
     animation-name: solutiontriangle;
     animation-duration: 3s;
     animation-iteration-count: 1;
 }
-.ptx-content .solutions > a[data-knowl]::after {
+.ptx-content .solutions > a[data-knowl]::after,
+.ptx-content .instructions > a[data-knowl]::after {
     left: 12px;
 }
 @keyframes solutiontriangle {
@@ -2367,7 +2371,8 @@ body.standalone.worksheet .ptx-content .onepage > .introduction {
 body.standalone.worksheet .ptx-content .onepage > .introduction > .heading {
     font-size: 1.1em;
 }
-body.standalone.worksheet .ptx-content .onepage .solutions {
+body.standalone.worksheet .ptx-content .onepage .solutions,
+body.standalone.worksheet .ptx-content .onepage .instructions {
     display: none;
 }
 body.standalone .ptx-content .worksheet {
