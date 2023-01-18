@@ -2563,9 +2563,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- A title or the type, with a period -->
-<!-- PROOF-LIKE is the only known case       -->
-<xsl:template match="&PROOF-LIKE;" mode="heading-no-number">
+<!-- A title or the type, with a period   -->
+<!-- PROOF-LIKE. interactive/instructions -->
+<xsl:template match="&PROOF-LIKE;|interactive/instructions" mode="heading-no-number">
     <xsl:variable name="hN">
         <xsl:apply-templates select="." mode="hN"/>
     </xsl:variable>

@@ -2571,7 +2571,7 @@ Book (with parts), "section" at level 3
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|abstract|references|glossary|exercises|worksheet|reading-questions|exercisegroup|solutions|backmatter|index-part|index[index-list]|case" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|abstract|references|glossary|exercises|worksheet|reading-questions|exercisegroup|solutions|backmatter|index-part|index[index-list]|case|interactive/instructions" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -4337,6 +4337,9 @@ Book (with parts), "section" at level 3
 <!-- pointer is not really much in the way of content, -->
 <!-- and we are more interested in its target          -->
 <xsl:template match="fragment[@ref]" mode="serial-number"/>
+
+<!-- We only allow one "instructions" for an "interactive" -->
+<xsl:template match="interactive/instructions" mode="serial-number"/>
 
 <!-- Multi-part WeBWorK problems have PTX elements        -->
 <!-- called "stage" which typically render as "Part..."   -->
