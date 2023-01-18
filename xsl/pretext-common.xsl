@@ -7979,7 +7979,7 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|case|contributor|gi" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 

@@ -1983,7 +1983,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
@@ -2653,7 +2653,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A type, with maybe a serial number to disambiguate -->
 <!-- No hN, optional title                              -->
-<!-- SOLUTION-LIKE (xref-text), biblio/note (xref-text) -->
+<!-- SOLUTION-LIKE (xref-text), biblio/note (xref-text),-->
+<!-- interactive/instructions (xref-text)               -->
 <xsl:template match="*" mode="heading-simple">
     <!-- the name of the object, its "type" -->
     <!-- The <xsl:text> </xsl:text> to produce a space is -->
@@ -5225,6 +5226,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="biblio/note" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
+<xsl:template match="interactive/instructions" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-no-number" />
+</xsl:template>
+
 
 <!-- Primary content of generic "body" template   -->
 <!-- Pass along b-original flag                   -->
