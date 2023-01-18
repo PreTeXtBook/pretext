@@ -7308,7 +7308,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
                             </stack>
                         </sidebyside>
-                        <instructions>
+                        <instructions xml:id="kinematics-instructions">
                             <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
                         </instructions>
                         <static>
@@ -8732,6 +8732,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
                 <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.  Also an <tag>exercise</tag> within an <tag>exercises</tag> which should have a cross-reference employing the number of the containing (unstructured) <tag>section</tag>: <xref ref="duplicate-divisional" text="type-global"/> which is in <xref ref="exercise-collection" text="type-global"/> which is in the (unstructured) <xref ref="exercises-single" text="type-global"/>.</p></li>
                 <li><p>A custom cross-reference: <xref ref="corollary-FTC-derivative" text="custom">Custom</xref></p></li>
+                <!-- Instructions for Interactives are not numbered, so use a simpler @text -->
+                <li><p>Cross-reference to <tag>instructions</tag> of an <tag>interactive</tag>: <xref ref="kinematics-instructions" text="title"/></p></li>
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
