@@ -246,6 +246,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'>Evaluate</localization>
     <!-- <localization string-id='code'>Code</localization> -->
+    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <!-- <localization string-id='instructions'>Instructions</localization> -->
     <!-- Interactive exercise feedback messages -->
     <!-- <localization string-id='correct'>Correct</localization> -->
     <!-- <localization string-id='incorrect'>Incorrect</localization> -->

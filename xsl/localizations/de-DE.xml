@@ -244,6 +244,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Though at least one Sage cell installation uses Auswerten instead -->
     <localization string-id='evaluate'>Ausführen</localization>
 <!--    <localization string-id='code'>Code</localization> -->
+    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <!-- <localization string-id='instructions'>Instructions</localization> -->
     <!-- Interactive exercise feedback messages -->
     <!-- <localization string-id='correct'>Correct</localization> -->
     <!-- <localization string-id='incorrect'>Incorrect</localization> -->
