@@ -57,7 +57,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Build a single page.  Actual use will require copying/placing      -->
 <!-- necessary "external" support files (JS, CSS, iframe HTML content). -->
-<xsl:template match="/">
+<!-- NB: a default template for the root will process it's one lone     -->
+<!-- child, "pretext", and that is where language support begins        -->
+<!-- (ends?), which is necessary for Sage cell construction (in the     -->
+<!-- head) to pick up the text of the "Evaluate" button.                -->
+<xsl:template match="/pretext">
     <exsl:document href="{$main-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
