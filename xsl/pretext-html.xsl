@@ -2832,7 +2832,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|gi|p|li|me|men|md|mdn|fragment">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -5193,29 +5193,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A simple item hanging off others -->
 
 <!-- Always born-hidden, by design -->
-<xsl:template match="biblio/note" mode="is-hidden">
+<xsl:template match="biblio/note|interactive/instructions" mode="is-hidden">
     <xsl:text>true</xsl:text>
 </xsl:template>
 
 <!-- Overall enclosing element -->
-<xsl:template match="biblio/note" mode="body-element">
+<xsl:template match="biblio/note|interactive/instructions" mode="body-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
 <!-- This is a temporary hack, which should go away -->
-<xsl:template match="biblio/note" mode="body-css-class">
+<xsl:template match="biblio/note|interactive/instructions" mode="body-css-class">
     <xsl:text>solution-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, inline-level -->
-<xsl:template match="biblio/note" mode="hidden-knowl-placement">
+<xsl:template match="biblio/note|interactive/instructions" mode="hidden-knowl-placement">
     <xsl:text>inline</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
 <xsl:template match="biblio/note" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-simple" />
+</xsl:template>
+<xsl:template match="interactive/instructions" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-no-number" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
@@ -5227,7 +5230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pass along b-original flag                   -->
 <!-- Simply process contents, could restrict here -->
 <!-- Schema says just paragraphs, "p"             -->
-<xsl:template match="biblio/note" mode="wrapped-content">
+<xsl:template match="biblio/note|interactive/instructions" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select="p" >
         <xsl:with-param name="b-original" select="$b-original" />
@@ -5313,7 +5316,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|fragment" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 
@@ -9538,22 +9541,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   1.  Instructions (paragraphs, etc)  -->
 <!--   2.  An iframe, via modal-template   -->
 <xsl:template match="interactive" mode="interactive-core">
-    <!-- "instructions" first in identical-width div -->
+    <!-- An iframe first -->
+    <xsl:apply-templates select="." mode="iframe-interactive" />
+    <!-- "instructions" next, *always* as a knowl -->
+    <!-- "title" is handled in knowl creation     -->
+    <!-- div.solutions is good, but replacable?   -->
     <xsl:if test="instructions">
-        <div>
-            <xsl:variable name="width">
-                <xsl:apply-templates select="." mode="get-width-pixels" />
-            </xsl:variable>
-            <xsl:attribute name="style">
-                <xsl:text>width:</xsl:text>
-                <xsl:value-of select="$width" />
-                <xsl:text>px;</xsl:text>
-            </xsl:attribute>
+        <div class="solutions">
             <xsl:apply-templates select="instructions" />
         </div>
     </xsl:if>
-    <!-- An iframe follows next -->
-    <xsl:apply-templates select="." mode="iframe-interactive" />
 </xsl:template>
 
 <!-- ################### -->
