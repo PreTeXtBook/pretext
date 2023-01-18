@@ -9552,7 +9552,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "title" is handled in knowl creation     -->
     <!-- div.solutions is good, but replacable?   -->
     <xsl:if test="instructions">
-        <div class="solutions">
+        <div class="instructions">
             <xsl:apply-templates select="instructions" />
         </div>
     </xsl:if>
