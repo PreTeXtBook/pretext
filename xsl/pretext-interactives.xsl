@@ -57,54 +57,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Build a single page.  Actual use will require copying/placing      -->
 <!-- necessary "external" support files (JS, CSS, iframe HTML content). -->
-<!-- NB: a default template for the root will process it's one lone     -->
+<!-- NB: the -html template for the root will process it's one lone     -->
 <!-- child, "pretext", and that is where language support begins        -->
 <!-- (ends?), which is necessary for Sage cell construction (in the     -->
 <!-- head) to pick up the text of the "Evaluate" button.                -->
+<!-- Also, that template begins at $root, etc.                          -->
+
+<!-- But we set $has-native-search to false to squelch generation  of   -->
+<!-- search docvuments, which are not needed.                           -->
+
+<xsl:variable name="has-native-search" select="false()"/>
+
+<!-- Only without an author-supplied preview -->
 <xsl:template match="/pretext">
-    <exsl:document href="{$main-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <html>
-            <!-- Open Graph Protocol only in "meta" elements, within "head" -->
-            <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
-                <meta name="Keywords" content="Authored in PreTeXt" />
-                <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                <!-- more "meta" elements for discovery -->
-                <xsl:call-template name="open-graph-info"/>
-                <!-- favicon -->
-                <xsl:call-template name="favicon"/>
-                <!-- jquery used by sage, webwork, knowls -->
-                <xsl:call-template name="sagecell-code" />
-                <xsl:call-template name="mathjax" />
-                <!-- webwork's iframeResizer needs to come before sage -->
-                <xsl:call-template name="webwork" />
-                <xsl:apply-templates select="." mode="sagecell" />
-                <xsl:call-template name="syntax-highlight"/>
-                <xsl:call-template name="google-search-box-js" />
-                <xsl:call-template name="pretext-js" />
-                <xsl:call-template name="knowl" />
-                <xsl:call-template name="fonts" />
-                <xsl:call-template name="hypothesis-annotation" />
-                <xsl:call-template name="geogebra" />
-                <xsl:call-template name="jsxgraph" />
-                <xsl:call-template name="css" />
-                <xsl:call-template name="aim-login-header" />
-                <xsl:call-template name="runestone-header"/>
-                <xsl:call-template name="font-awesome" />
-            </head>
-            <body>
-                <xsl:apply-templates select="$document-root//interactive"/>
-                <xsl:apply-templates select="$document-root//interactive" mode="create-iframe-page"/>
-            </body>
-        </html>
-    </exsl:document>
+    <xsl:apply-templates select=".//interactive[not(@preview)]"/>
 </xsl:template>
 
-<!-- Make the iframe for each interactive, but add a break just -->
-<!-- for ease of (manually) inspecting the resulting page.      -->
+<!-- Make the iframe for each interactive, these are  -->
+<!-- two of the three steps in the non-modal template -->
+<!-- for "interactive" in pretext-html.xsl            -->
 <xsl:template match="interactive">
-    <xsl:apply-imports/>
-    <br/>
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interactive-core" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- (3) A simple page that can be used in an iframe construction -->
+    <xsl:apply-templates select="." mode="create-iframe-page" />
 </xsl:template>
 
 </xsl:stylesheet>
