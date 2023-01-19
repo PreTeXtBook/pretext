@@ -18,6 +18,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- fr-FR, French (France) -->
+
 <!-- Thomas W. Judson, judsontw@sfasu.edu, 2016-03-23 -->
 <!-- Julien Giol, julien.giol@gmail.com, 2018-02-05   -->
 <!-- Jean-Sébastien Turcotte, js.turcotte@cgodin.qc.ca, 2021-02-19-->
@@ -36,10 +37,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identité</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Démonstration</localization>
-    <!-- <localization string-id='argument'>Argument</localization> -->
-    <!-- <localization string-id='justification'>Justification</localization> -->
-    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
-    <!-- <localization string-id='explanation'>Explanation</localization> -->
+	<localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Justification</localization>
+    <localization string-id='reasoning'>Raisonnement</localization>
+    <localization string-id='explanation'>Explication</localization>
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Cas</localization>
     <!-- Mathematical statements without proofs -->
@@ -90,7 +91,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='references'>Références</localization>
     <localization string-id='backmatter'>Annexes</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
-    <!--<localization string-id='commentary'>Commentaire</localization> -->
+    <localization string-id='commentary'>Commentaire</localization>
     <localization string-id='paragraphs'>Paragraphes</localization>  <!--checked-->
     <localization string-id='subparagraph'>Sous-paragraphe</localization> <!--checked-->
     <!-- Components of the narrative -->
@@ -172,7 +173,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'>Dédicace</localization>
     <localization string-id='colophon'>Colophon</localization>
     <!-- Runestone Activities -->
-    <!-- <localization string-id='video'>Video</localization> -->
+    <localization string-id='video'>Vidéo</localization>
     <!-- <localization string-id='program'>Program</localization> -->
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
@@ -185,6 +186,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'>Index</localization>
     <localization string-id='see'>Visiter</localization>
     <localization string-id='also'>Voir Aussi</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbole</localization>
+    <localization string-id='description'>Description</localization>
+    <localization string-id='location'>Emplacement</localization>
+    <localization string-id='page'>Page</localization>
+    <localization string-id='continued'>Suite à la page suivante</localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
     <localization string-id='skip-to-content'>Sauter au contenu</localization>
@@ -226,10 +233,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='evaluate'>Évaluer</localization>
     <localization string-id='code'>Code</localization>
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
-    <!-- <localization string-id='instructions'>Instructions</localization> -->
+    <localization string-id='instructions'>Instructions</localization>
     <!-- Interactive exercise feedback messages  -->
-    <!-- <localization string-id='correct'>Correct</localization> -->
-    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
-    <!-- <localization string-id='blank'>Blank</localization> -->
+    <localization string-id='correct'>Correct</localization>
+    <localization string-id='incorrect'>Incorrect</localization>
+    <localization string-id='blank'>Vide</localization>
+    <localization string-id='submit'>Soumettre</localization>
+    <localization string-id='check-responses'>Vérifier les réponses</localization>
+    <localization string-id='reveal'>Dévoiler</localization>
+    <localization string-id='randomize'>Générer une nouvelle version aléatoire</localization>
+    <localization string-id='activate'>Activer</localization>
+    <localization string-id='reset'>Réinitialiser</localization>
     <!-- <localization string-id='array'>array</localization> -->
 </locale>
