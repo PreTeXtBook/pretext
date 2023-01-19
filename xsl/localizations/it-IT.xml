@@ -37,10 +37,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identità</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Dimostrazione</localization>
-    <localization string-id='argument'>Argomento</localization> -->
-    <localization string-id='justification'>Giustificazione</localization> -->
-    <localization string-id='reasoning'>Ragionamento</localization> -->
-    <localization string-id='explanation'>Spiegazione</localization> -->
+    <localization string-id='argument'>Argomento</localization>
+    <localization string-id='justification'>Giustificazione</localization>
+    <localization string-id='reasoning'>Ragionamento</localization>
+    <localization string-id='explanation'>Spiegazione</localization>
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Caso</localization>
     <!-- Components of the narrative -->
@@ -174,8 +174,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'>Dedica</localization>
     <localization string-id='colophon'>Colophon</localization>
     <!-- Runestone Activities -->
-    <!-- <localization string-id='video'>Video</localization> -->
-    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='video'>Video</localization>
+    <localization string-id='program'>Programma</localization>
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
@@ -236,7 +236,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='evaluate'>Calcola</localization>
     <!-- <localization string-id='code'>Code</localization> -->
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
-    <!-- <localization string-id='instructions'>Instructions</localization> -->
+    <localization string-id='instructions'>Istruzioni</localization>
     <!-- Interactive exercise feedback messages -->
     <localization string-id='correct'>Giusto</localization>
     <localization string-id='incorrect'>Sbagliato</localization>
