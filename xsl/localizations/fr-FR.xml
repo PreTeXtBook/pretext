@@ -186,12 +186,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'>Index</localization>
     <localization string-id='see'>Visiter</localization>
     <localization string-id='also'>Voir Aussi</localization>
-
-
-
-
-
-
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbole</localization>
+    <localization string-id='description'>Description</localization>
+    <localization string-id='location'>Emplacement</localization>
+    <localization string-id='page'>Page</localization>
+    <localization string-id='continued'>Suite à la page suivante</localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
     <localization string-id='skip-to-content'>Sauter au contenu</localization>
@@ -235,14 +235,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
     <localization string-id='instructions'>Instructions</localization>
     <!-- Interactive exercise feedback messages  -->
-    <!-- <localization string-id='correct'>Correct</localization> -->
-
-
-
+    <localization string-id='correct'>Correct</localization>
     <localization string-id='incorrect'>Incorrect</localization>
-
-
-    <!-- <localization string-id='blank'>Blank</localization> -->
-
+    <localization string-id='blank'>Vide</localization>
+    <localization string-id='submit'>Soumettre</localization>
+    <localization string-id='check-responses'>Vérifier les réponses</localization>
+    <localization string-id='reveal'>Dévoiler</localization>
+    <localization string-id='randomize'>Générer une nouvelle version aléatoire</localization>
+    <localization string-id='activate'>Activer</localization>
+    <localization string-id='reset'>Réinitialiser</localization>
     <!-- <localization string-id='array'>array</localization> -->
 </locale>
