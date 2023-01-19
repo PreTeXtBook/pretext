@@ -254,6 +254,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There is always a "document root" directly under the pretext element,  -->
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
+<!-- TODO: consider moving  manifests, etc to  the "pretext" template,      -->
+<!-- leaving this entry template for derived stylesheets to (a) test        -->
+<!-- source, and (b) set the root                                           -->
 <xsl:template match="/">
     <!-- temporary - while Hypothesis annotation is beta -->
     <xsl:if test="$b-activate-hypothesis">
