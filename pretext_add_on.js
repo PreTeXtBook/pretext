@@ -622,8 +622,8 @@ var newscript = document.createElement('script');
 
 function loadResource(type, file) {
   /* type should be js or css */
-  if (typeof js_version === 'undefined') { js_version = '0.13' }
-  if (typeof css_version === 'undefined') { css_version = '0.31' }
+  if (typeof js_version === 'undefined') { js_version = '0.2' }
+  if (typeof css_version === 'undefined') { css_version = '0.6' }
   var newresource, allresources, s;
   var linktype = "script";
   if (type == "css") { linktype = "link" }
