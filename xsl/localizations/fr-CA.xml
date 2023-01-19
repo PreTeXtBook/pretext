@@ -35,10 +35,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identité</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Démonstration</localization>
-    <localization string-id='argument'>Argument</localization> -->
-    <localization string-id='justification'>Justification</localization> -->
-    <localization string-id='reasoning'>Raisonnement</localization> -->
-    <localization string-id='explanation'>Explication</localization> -->
+    <localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Justification</localization>
+    <localization string-id='reasoning'>Raisonnement</localization>
+    <localization string-id='explanation'>Explication</localization>
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Cas</localization>
     <!-- Mathematical statements without proofs -->
