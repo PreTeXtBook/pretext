@@ -47,10 +47,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="mathfile" select="''"/>
 <xsl:variable name="math-repr"  select="document($mathfile)/pi:math-representations"/>
 
+<xsl:template match="/">
+    <xsl:apply-templates select="$root"/>
+</xsl:template>
+
 <!-- Entry template, and cruiser -->
 <!-- We start here, and at each node, we simply descend, -->
 <!-- *unless* some template below kicks into action      -->
-<xsl:template match="/|node()|@*">
+<xsl:template match="node()|@*">
     <xsl:apply-templates select="node()|@*"/>
 </xsl:template>
 
