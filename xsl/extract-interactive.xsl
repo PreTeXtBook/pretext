@@ -35,6 +35,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
+<xsl:import href="./pretext-html.xsl"/>
 
 <!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
@@ -43,11 +44,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- "visible-id" of each interactive per line -->
-<!-- @preview indicates custom image  -->
+<!-- @preview indicates custom image is present    -->
+<!-- Stylesheet output is text, with "visible-id"  -->
+<!-- of each interactive, one per line, to be      -->
+<!-- captured in a text file to guide snapshotting -->
+<!-- Make the iframe and standalone page for each  -->
+<!-- interactive, these are two of the three steps -->
+<!-- in the non-modal template for "interactive"   -->
+<!-- in pretext-html.xsl.  Results are HTML files  -->
+<!-- (despite this stylesheet having text output). -->
 <xsl:template match="interactive[not(@preview)]" mode="extraction">
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>&#xa;</xsl:text>
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interactive-core" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- (3) A simple page that can be used in an iframe construction -->
+    <xsl:apply-templates select="." mode="create-iframe-page" />
 </xsl:template>
 
 </xsl:stylesheet>
