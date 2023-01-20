@@ -1852,23 +1852,18 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     tmp_dir = get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "interactives-ids.txt")
     log.debug("Interactives id list temporarily in {}".format(id_filename))
-    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    log.debug("Interactives html files temporarily in {}".format(tmp_dir))
+    # This next call may be unique in that the stylesheet outputs the
+    # list of ids *and* produce a pile of files (the "standalone") pages
+    xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
     # read the list of interactive identifiers just generated
     id_file = open(id_filename, "r")
     interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
-    # Generate individual interactive pages directly and host locally
-    extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-interactives.xsl")
-    host_dir = os.path.join(tmp_dir, "html-interactives")
-    if not (os.path.isdir(host_dir)):
-        os.mkdir(host_dir)
-    # Generate the actual html files
-    log.debug("Interactives html files temporarily in {}".format(host_dir))
-    xsltproc(extraction_xslt, xml_source, None, host_dir, stringparams)
     # Copy in external resources (e.g., js code)
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
-        external_dir = os.path.join(host_dir, "external")
+        external_dir = os.path.join(tmp_dir, "external")
         shutil.copytree(external_abs, external_dir)
 
     # Spawn a new process running a local html.server
@@ -1884,7 +1879,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             numAttempt = numAttempt + 1
             log.info(f"Opening subprocess http.server with port={port}")
             # -u so that stdout and stderr are not cached
-            server = subprocess.Popen(["python", "-u", "-m", "http.server", f"{port}", "-d", host_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            server = subprocess.Popen(["python", "-u", "-m", "http.server", f"{port}", "-d", tmp_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             # Check if terminated. Allow 1 second to start-up.
             try:
                 result = server.wait(1)
