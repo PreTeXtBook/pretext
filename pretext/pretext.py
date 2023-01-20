@@ -3289,6 +3289,11 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
     "stringparams" argument must be a complete path, since a relative
     path can be rendered incorrect by the change to an "output_dir"
     different than that at the time of the command-line invocation.
+
+    N.B. A stylesheet may output text to be captured in the "result"
+    file, and it may *also simultaneously* produce many files to be
+    collected in the "output_dir" directory.  An example is in the
+    formation of preview images for interactives.
     """
     import threading  # Thread()
 
