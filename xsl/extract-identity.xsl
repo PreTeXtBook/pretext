@@ -75,10 +75,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry template, allows restriction to a subtree rooted at an element  -->
 <!-- identified by an author-supplied xml:id. This template is not meant   -->
 <!-- to be overridden by an importing stylesheet, though it can be with a  -->
-<!-- use of "apply-imports".  Instead it is meant to be the entry template -->
-<!-- for an importing stylesheet, which will usually mean it should be     -->
-<!-- imported last.  It provides for careful handling of the alternate     -->
-<!-- subtree root.                                                         -->
+<!-- use of "xsl:apply-imports".  Instead it is meant to be the entry      -->
+<!-- template for an importing stylesheet, which will usually mean it      -->
+<!-- should be imported last.  It provides for careful handling of the     -->
+<!-- alternate subtree root.                                               -->
 <xsl:template match="/">
     <!-- Fail if a scratch directory is set -->
     <xsl:if test="not($scratch = '')">
