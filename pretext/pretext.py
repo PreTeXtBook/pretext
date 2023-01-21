@@ -1903,17 +1903,19 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     owd = os.getcwd()
     os.chdir(tmp_dir)
 
-    # event loop and copy
-    baseurl = "http://localhost:{}".format(port)
-    asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
-
-    # close the server and report (debug) results
-    log.info:("Closing http.server subprocess")
-    server.kill()
-    log.debug("Log data from http.server:")
-    server_output = server.stderr.read()
-    for line in server_output.split("\n"):
-        log.debug(line)
+    # event loop and copy, terminating server process even if interrupted
+    try:
+        log.debug("Using http.server subprocess {}".format(server.pid))
+        baseurl = "http://localhost:{}".format(port)
+        asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
+    finally:
+        # close the server and report (debug) results
+        log.info("Closing http.server subprocess")
+        server.kill()
+        log.debug("Log data from http.server:")
+        server_output = server.stderr.read()
+        for line in server_output.split("\n"):
+            log.debug(line)
 
     # restore working directory
     os.chdir(owd)
