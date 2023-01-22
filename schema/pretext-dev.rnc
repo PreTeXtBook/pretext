@@ -1,0 +1,56 @@
+
+            grammar {
+                
+            include "pretext.rnc"
+            
+                    Interactive =
+                    element interactive {
+                    UniqueID?,
+                    PermanentID?,
+                    attribute aspect { text }?,
+                    attribute width { text }?,
+                    attribute platform { text }?,
+                    attribute preview { text }?,
+                    attribute iframe { text }?,
+                    attribute source { text }?,
+                    attribute version { text }?,
+                    (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
+                    element instructions { BlockText* | text }?
+                    }
+
+                    Slate =
+                    element slate {
+                    UniqueID?,
+                    attribute surface { text },
+                    (attribute source { text } | attribute material { text })?,
+                    attribute aspect { text }?,
+                    (Paragraph | Tabular | SideBySideNoCaption)*
+                    }
+
+                    # add Interactives where used
+                    BlockStatement |= Interactive
+
+                    Figure |= element figure { MetaDataCaption, Interactive }
+
+                    SideBySide |= element sidebyside {
+                        SidebySideAttributes,
+                        (Interactive | Slate)+
+                    }
+
+                    SideBySideNoCaption |= element sidebyside {
+                        SidebySideAttributes,
+                        (Interactive | Slate)+
+                    }
+
+                    Exercises |= element exercises {
+                    MetaDataAltTitleOptional,
+                    IntroductionDivision?,
+                    (
+                    (Exercise | ExerciseGroup)+ |
+                    Subexercises+ | Interactive
+                    ),
+                    ConclusionDivision?
+                    }
+            
+            }
+            

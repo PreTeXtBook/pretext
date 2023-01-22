@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <include href="pretext.rng"/>
+  <define name="Interactive">
+    <element name="interactive">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <attribute name="aspect"/>
+      </optional>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="platform"/>
+      </optional>
+      <optional>
+        <attribute name="preview"/>
+      </optional>
+      <optional>
+        <attribute name="iframe"/>
+      </optional>
+      <optional>
+        <attribute name="source"/>
+      </optional>
+      <optional>
+        <attribute name="version"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="Slate"/>
+          <ref name="SideBySideNoCaption"/>
+          <ref name="SideBySideGroupNoCaption"/>
+        </choice>
+      </zeroOrMore>
+      <optional>
+        <element name="instructions">
+          <choice>
+            <zeroOrMore>
+              <ref name="BlockText"/>
+            </zeroOrMore>
+            <text/>
+          </choice>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="Slate">
+    <element name="slate">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <attribute name="surface"/>
+      <optional>
+        <choice>
+          <attribute name="source"/>
+          <attribute name="material"/>
+        </choice>
+      </optional>
+      <optional>
+        <attribute name="aspect"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="Paragraph"/>
+          <ref name="Tabular"/>
+          <ref name="SideBySideNoCaption"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- add Interactives where used -->
+  <define name="BlockStatement" combine="choice">
+    <ref name="Interactive"/>
+  </define>
+  <define name="Figure" combine="choice">
+    <element name="figure">
+      <ref name="MetaDataCaption"/>
+      <ref name="Interactive"/>
+    </element>
+  </define>
+  <define name="SideBySide" combine="choice">
+    <element name="sidebyside">
+      <ref name="SidebySideAttributes"/>
+      <oneOrMore>
+        <choice>
+          <ref name="Interactive"/>
+          <ref name="Slate"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="SideBySideNoCaption" combine="choice">
+    <element name="sidebyside">
+      <ref name="SidebySideAttributes"/>
+      <oneOrMore>
+        <choice>
+          <ref name="Interactive"/>
+          <ref name="Slate"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Exercises" combine="choice">
+    <element name="exercises">
+      <ref name="MetaDataAltTitleOptional"/>
+      <optional>
+        <ref name="IntroductionDivision"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="Exercise"/>
+            <ref name="ExerciseGroup"/>
+          </choice>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Subexercises"/>
+        </oneOrMore>
+        <ref name="Interactive"/>
+      </choice>
+      <optional>
+        <ref name="ConclusionDivision"/>
+      </optional>
+    </element>
+  </define>
+</grammar>

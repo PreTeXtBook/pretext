@@ -1644,11 +1644,11 @@
     </section>
 
     <section>
-        <title>Interactive Elements</title>
+        <title>Legacy Interactive Elements</title>
 
         <p>Some specific interactive goodies.  These are being phased-out in favor of a more general <tag>interactive</tag> element.</p>
 
-        <fragment xml:id="interactive">
+        <fragment xml:id="interactive-musescore">
             <title>Interactives</title>
             <code>
             MuseScore =
@@ -1656,6 +1656,66 @@
                     attribute musescoreuser {text},
                     attribute musescore {text}
                 }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Interactive Elements (experimental)</title>
+        
+        <p>A general <tag>interactive</tag> element.</p>
+        
+        <fragment xml:id="interactive">
+            <title>Interactives</title>
+            <code>
+            Interactive =
+                element interactive {
+                    UniqueID?,
+                    PermanentID?,
+                    attribute aspect { text }?,
+                    attribute width { text }?,
+                    attribute platform { text }?,
+                    attribute preview { text }?,
+                    attribute iframe { text }?,
+                    attribute source { text }?,
+                    attribute version { text }?,
+                    (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
+                    element instructions { BlockText* | text }?
+                }
+
+            Slate =
+                element slate {
+                    UniqueID?,
+                    attribute surface { text },
+                    (attribute source { text } | attribute material { text })?,
+                    attribute aspect { text }?,
+                    (Paragraph | Tabular | SideBySideNoCaption)*
+                }
+
+            # add Interactives where used
+            BlockStatement |= Interactive
+
+            Figure |= element figure { MetaDataCaption, Interactive }
+
+            SideBySide |= element sidebyside {
+                SidebySideAttributes,
+                (Interactive | Slate)+
+            }
+
+            SideBySideNoCaption |= element sidebyside {
+                SidebySideAttributes,
+                (Interactive | Slate)+
+            }
+
+            Exercises |= element exercises {
+                MetaDataAltTitleOptional,
+                IntroductionDivision?,
+                (
+                (Exercise | ExerciseGroup)+ |
+                Subexercises+ | Interactive
+                ),
+                ConclusionDivision?
+            }
             </code>
         </fragment>
     </section>
@@ -2564,7 +2624,7 @@
             <fragref ref="image" />
             <fragref ref="tabular" />
             <fragref ref="sage" />
-            <fragref ref="interactive" />
+            <fragref ref="interactive-musescore" />
             <fragref ref="audiovideo" />
             <fragref ref="exercise" />
             <fragref ref="poetry" />
@@ -2590,6 +2650,25 @@
             <fragref ref="listgenerator" />
             <fragref ref="bad-bank" />
             <fragref ref="docinfo" />
+            <code>
+            }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Development Schema</title>
+        
+        <p>Here we collect all fragments that are still experimental and put them in a rnc file that includes the stable schema.</p>
+
+        <fragment filename="pretext-dev.rnc">
+            <title>Development Schema</title>
+            <code>
+            grammar {
+                
+            include "pretext.rnc"
+            </code>
+            <fragref ref="interactive" />
             <code>
             }
             </code>
