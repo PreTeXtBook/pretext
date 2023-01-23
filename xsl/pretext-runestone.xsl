@@ -196,23 +196,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </script>
             <xsl:text>&#xa;</xsl:text>
 
-            <!-- Google Ads: only on Runestone server, only visible in -->
-            <!-- *non-login* versions of books hosted at Runestone     -->
-            <!--                                                       -->
-            <!-- @data-ad-client attribute of upcoming script tag is   -->
-            <!-- templated for Runestone serving.  We form it as a     -->
-            <!-- variable, so that we can place it using an XSL AVT    -->
-            <xsl:variable name="id-attr">
-                <xsl:value-of select="$rso"/>
-                <xsl:text> settings.adsenseid </xsl:text>
-                <xsl:value-of select="$rsc"/>
-            </xsl:variable>
-            <!--  -->
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>{% if serve_ad and settings.adsenseid %}&#xa;</xsl:text>
-            <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>{% endif %}&#xa;</xsl:text>
+            <!-- Ethical Ads: only on Runestone server, only visible in -->
+            <!-- *non-login* versions of books hosted at Runestone      -->
+            <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"/>
 
             <!-- We only show the Runestone "bust" menu icon if we are building        -->
             <!-- for a Runestone server, so this CSS is only needed in that case.      -->

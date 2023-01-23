@@ -7205,6 +7205,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
+                <xsl:call-template name="runestone-ethical-ads"/>
                 <!-- analytics services, if requested -->
                 <xsl:call-template name="statcounter"/>
                 <xsl:call-template name="google-classic"/>
@@ -10987,6 +10988,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="runestone-link"/>
                 <xsl:call-template name="mathjax-link" />
             </div>
+            <xsl:call-template name="runestone-ethical-ads"/>
             <!-- analytics services, if requested -->
             <xsl:call-template name="statcounter"/>
             <xsl:call-template name="google-classic"/>
@@ -12395,6 +12397,17 @@ TODO:
     <a class="mathjax-link" href="https://www.mathjax.org" title="MathJax">
         <img class="logo" src="https://www.mathjax.org/badge/badge-square-2.png"/>
     </a>
+</xsl:template>
+
+<!-- Runestone build only, revenue generator -->
+<xsl:template name="runestone-ethical-ads">
+    <xsl:if test="$b-host-runestone">
+        <xsl:text>{% if show_ethical_ad %}</xsl:text>
+        <div style="width: 100%">
+            <div data-ea-publisher="runestoneacademy" data-ea-type="image" style="display: flex; justify-content: center"/>
+        </div>
+        <xsl:text>{% endif %}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Tooltip Text -->
