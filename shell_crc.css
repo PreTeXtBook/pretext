@@ -426,6 +426,20 @@ body.pretext {
     .ptx-page-footer  .runestone-link .logo {
 	display: none;
     }
+/* copied from shell_default.css   Wher is ptx-navbar set in the CRC style */
+.pretext #ptx-navbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    z-index: 1100;
+   }
+  .pretext #ptx-sidebar {
+    display: none;
+    position: fixed;
+    top: 10px;
+    z-index: 1000;
+    background: white;
+  }
 
 
 }
