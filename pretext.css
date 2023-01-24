@@ -140,6 +140,12 @@ so that we can set our own later */
     padding: 0;
     border: none;
 }
+/* these are to over-ride "pre" styling in code.less */
+.ptx-content pre {
+    background: inherit;
+    border-radius: 0;
+}
+
 .ptx-content textarea {
     padding: 0;
 }
@@ -162,7 +168,9 @@ so that we can set our own later */
 .ptx-content .para.continuation {
     margin-top: 0;
 }
-.ptx-content pre + .para.continuation {
+.ptx-content pre + .para.continuation,
+.ptx-content pre + form,
+.ptx-content div + form {
     margin-top: 1em;
 }
 .ptx-content ul + .para.continuation,

@@ -1400,6 +1400,9 @@ from Jiří Lebl */
     background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
     background-attachment: local, local, scroll, scroll;
 }
+.ptx-content .runestone .code-box {
+    background-image: none;
+}
 .ptx-content .knowl-output .MJXc-display {
     background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
 }
@@ -1915,15 +1918,20 @@ from Jiří Lebl */
 
 /* These next are for Prism */
 .ptx-content pre.program,
-.ptx-content pre.program code {
+.ptx-content pre.program code,
+.ptx-content pre.code-block,
+.ptx-content pre.code-block code {
     line-height: 1.1;
 }
 .ptx-content section > .code-box,
-.ptx-content .para + .code-box {
+.ptx-content .para + .code-box,
+.ptx-content section > .code-block,
+.ptx-content .para + .code-block {
     margin-top: 1em;
 }
 
-.ptx-content pre.program {
+.ptx-content pre.program,
+.ptx-content pre.code-block {
     margin-top: 0;
     padding-left: 15px;
     border-left: 1px solid #aaa;
@@ -1931,7 +1939,8 @@ from Jiří Lebl */
     overflow: auto;
     background: inherit;  /* over-ride Prism's #f5f2f0 */
 }
-.ptx-content pre.program:before {
+.ptx-content pre.program:before,
+.ptx-content pre.code-block:before {
     content:' ';
     font-size: 50%;
     border-top: 1px solid #aaa;
