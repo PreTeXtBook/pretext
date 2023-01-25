@@ -745,8 +745,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | investigation[(@exercise-interactive = 'webwork-reps')]" mode="runestone-manifest">
     <question>
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <!-- N.B.  Better here to ask for "exercise-components"? -->
-        <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="webwork-core">
+                <xsl:with-param name="b-original" select="true()"/>
+            </xsl:apply-templates>
+        </htmlsrc>
     </question>
 </xsl:template>
 
