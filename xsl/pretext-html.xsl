@@ -4119,6 +4119,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="id">
                         <xsl:apply-templates select="." mode="runestone-id"/>
                     </xsl:attribute>
+                    <!-- 2023-01-25: probably just for AC experiment -->
+                    <xsl:if test="$b-fix-ww-id">
+                        <xsl:attribute name="the-id-on-the-webwork">
+                            <xsl:value-of select="webwork-reps/@ww-id"/>
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:apply-templates select="introduction|webwork-reps|conclusion">
                         <xsl:with-param name="b-original" select="$b-original" />
                     </xsl:apply-templates>
