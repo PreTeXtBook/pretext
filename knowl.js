@@ -140,7 +140,7 @@ function knowl_click_handler($el) {
         // the '.is("p")' is for the first paragraph of a theorem or proof
       } else if ($el.parent().prop("tagName").startsWith("MJX")) {
           where_it_goes = $el.closest("mjx-container")
-      } else if ($el.parent().css('display') == "block" || $el.parent().is("p") || $el.parent().hasClass("hidden-knowl-wrapper") || $el.parent().hasClass("kohere")) {
+      } else if ($el.parent().css('display') == "block" || $el.parent().is("p") || $el.parent().hasClass("para") || $el.parent().hasClass("hidden-knowl-wrapper") || $el.parent().hasClass("kohere")) {
         where_it_goes = $el.parent();
       } else if ($el.parent().parent().css('display') == "block" || $el.parent().parent().is("p") || $el.parent().parent().hasClass("hidden-knowl-wrapper") || $el.parent().parent().hasClass("kohere")) {
         where_it_goes = $el.parent().parent();
