@@ -4101,6 +4101,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-divisional-exercise-typed" />
 </xsl:template>
 
+<!-- An "exercise" or PROJECT-LIKE authored with a "webwork" element -->
+<!-- is always interactive, but for straight HTML output, it has one -->
+<!-- look and for hosting on Runestone it has a slightly different   -->
+<!-- look.  This template isolates this distinction for the core, or -->
+<!-- interior, of such an exercise.                                  -->
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="webwork-core">
+    <xsl:param name="b-original"/>
+
+    <xsl:choose>
+        <xsl:when test="$b-host-runestone">
+            <div class="ptx-runestone-container">
+                <div class="runestone" data-component="webwork">
+                    <!-- Note that this id gets a suffix on div.exercise-wrapper, -->
+                    <!-- so Runestone can coordinate the outer exercise and the   -->
+                    <!-- inner webwork                                            -->
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="introduction|webwork-reps|conclusion">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
+                </div>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="introduction|webwork-reps|conclusion">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
 <!-- Potentially knowled, may have statement     -->
@@ -4114,7 +4147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- webwork case -->
         <xsl:when test="webwork-reps">
-            <xsl:apply-templates select="introduction|webwork-reps|conclusion">
+            <xsl:apply-templates select="." mode="webwork-core">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
@@ -4220,7 +4253,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- webwork case -->
         <xsl:when test="webwork-reps">
-            <xsl:apply-templates select="introduction|webwork-reps|conclusion">
+            <xsl:apply-templates select="." mode="webwork-core">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
