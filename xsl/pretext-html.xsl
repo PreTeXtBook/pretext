@@ -10385,13 +10385,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-hint"/>
     <xsl:param name="b-has-answer"/>
     <xsl:param name="b-has-solution"/>
-    <xsl:element name="div">
-        <xsl:attribute name="id">
-            <xsl:value-of select="@ww-id"/>
-        </xsl:attribute>
-        <xsl:attribute name="class">
-            <xsl:text>exercise-wrapper</xsl:text>
-        </xsl:attribute>
+
+    <!-- For Runestone, the WW problem is handled in isolation, -->
+    <!-- yet capturing and storing student work/results needs   -->
+    <!-- to be associated with the parent/enclosing "exercise"  -->
+    <!-- (or PROJECT-LIKE).  So in this case (only) we place    -->
+    <!-- an id value on the  div.exercise-wrapper that is       -->
+    <!-- derived from the parent.  Otherwise, we use the id     -->
+    <!-- placed on the "webwork-reps" in @ww-id.                -->
+    <xsl:variable name="inner-id">
+        <xsl:choose>
+            <xsl:when test="$b-host-runestone">
+                <xsl:apply-templates select="parent::*" mode="runestone-id"/>
+                <xsl:text>-ww-rs</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@ww-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <div id="{$inner-id}" class="exercise-wrapper">
         <xsl:attribute name="data-domain">
             <xsl:value-of select="$webwork-domain"/>
         </xsl:attribute>
@@ -10478,7 +10491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </button>
         </div>
-    </xsl:element>
+    </div>
 </xsl:template>
 
 <!-- Select the correct URL from four pre-generated choices -->
