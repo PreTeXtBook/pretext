@@ -875,14 +875,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$b-inline-math and (translate($original-content, &DIGIT; ,'') = '')">
                 <xsl:value-of select="$original-content"/>
             </xsl:when>
-            <!-- inline math with one Latin letter  -->
-            <!-- $braille is ignored.  c'est la vie -->
+            <!-- Inline math with just one Latin letter. No formatting,  -->
+            <!-- no italics, according to BANA rules via Michael Cantino -->
+            <!-- (2023-01-26) so $braille is ignored.  C'est la vie.     -->
             <xsl:when test="$b-inline-math and (string-length($original-content) = 1) and
                             contains(&ALPHABET;, $original-content)">
-                <!-- class is signal to liblouis styling rules -->
-                <i class="one-letter">
-                    <xsl:value-of select="$original-content"/>
-                </i>
+                <xsl:value-of select="$original-content"/>
             </xsl:when>
 
             <!-- Fits on one line, including 6 characters of Nemeth -->

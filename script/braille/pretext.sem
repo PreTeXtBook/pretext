@@ -232,14 +232,6 @@ generic td,data-braille,last-cell \*
 # "skip" ignores everything)
 skip div,data-braille,latex-macros
 
-# Single-letter, Latin mathematics, such
-# as a variable "x" is not marked up with
-# Nemeth indicators, but instead gets an
-# HTML italics element ("i") with class
-# .one-letter, and so is converted to
-# Braille italics
-italicx i,class,one-letter
-
 # Inline snippets just pass through unmolested.
 # We are likely getting bad line-breaks here.
 # Nemeth indicators, with non-breaking spaces,
