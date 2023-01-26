@@ -10491,7 +10491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </div>
         <div class="problem-buttons">
-            <button class="webwork-button" onclick="handleWW('{@ww-id}')">
+            <button class="webwork-button" onclick="handleWW('{$inner-id}')">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'activate'"/>
                 </xsl:apply-templates>
