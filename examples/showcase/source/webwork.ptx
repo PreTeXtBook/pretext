@@ -216,15 +216,9 @@
   </exercise>
 
   <exercise>
-    <title>Multiple Stages</title>
-    <idx><h><webwork/></h><h>stages</h></idx>
+    <title>Structured with Tasks</title>
+    <idx><h><webwork/></h><h>tasks</h></idx>
     <idx><h><webwork/></h><h>flexible answer syntax</h></idx>
-    <introduction>
-      <p>
-        This problem has multiple parts that must be completed in order.
-        Try answering the second part with various things you might expect a user to enter.
-      </p>
-    </introduction>
     <webwork>
       <pg-code>
         Context("Fraction");
@@ -235,7 +229,13 @@
         Context("FiniteSolutionSets");
         $solutions = Formula("-3/2,5");
       </pg-code>
-      <stage>
+      <introduction>
+        <p>
+          This problem has multiple parts that must be completed in order.
+          Try answering the second part with various things you might expect a user to enter.
+        </p>
+      </introduction>
+      <task>
         <title>Identify Coefficients</title>
         <statement>
           <p>
@@ -258,8 +258,8 @@
             <m>b = -7</m>, <m>c = -15</m>.
           </p>
         </solution>
-      </stage>
-      <stage>
+      </task>
+      <task>
         <title>Use the Quadratic Formula</title>
         <statement>
           <p>
@@ -279,7 +279,7 @@
             and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5</m>.
           </p>
         </solution>
-      </stage>
+      </task>
     </webwork>
   </exercise>
 
