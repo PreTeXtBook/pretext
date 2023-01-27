@@ -10267,6 +10267,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  We will try to honor your intent'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2023-01-27  deprecate "datafile" in favor of "dataurl" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//datafile" />
+        <xsl:with-param name="date-string" select="'2023-01-27'" />
+        <xsl:with-param name="message" select="'the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.  We will try to honor your intent, but please make the change at your first convenience, as an automatic upgrade will soon become less reliable (or impossible)'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
