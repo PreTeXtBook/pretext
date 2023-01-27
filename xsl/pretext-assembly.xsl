@@ -695,9 +695,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ############# -->
-<!-- Conveniences  -->
-<!-- ############# -->
+<!-- ########## -->
+<!-- Enrichment -->
+<!-- ########## -->
 
 <!-- Certain markup can be translated into more primitive versions using      -->
 <!-- existing markup, so we do a translation of certain forms into more       -->
@@ -731,10 +731,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- documentation) we take care to not annotate these elements which  have -->
 <!-- no source to show.                                                     -->
 
-<xsl:template match="url[node()]|datafile[node()]" mode="repair">
+<xsl:template match="url[node()]|datafile[node()]" mode="enrichment">
     <xsl:copy>
         <!-- we drop the @visual attribute, a decision we might revisit -->
-        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="repair"/>
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="enrichment"/>
     </xsl:copy>
     <!-- manufacture a footnote with (private) attribute -->
     <!-- as a signal to conversions as to its origin     -->
