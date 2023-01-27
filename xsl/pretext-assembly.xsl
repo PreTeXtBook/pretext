@@ -190,6 +190,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="enrichment">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="enrichment"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="identification">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="identification"/>
@@ -280,6 +286,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="repair" select="exsl:node-set($repair-rtf)"/>
 
+<!-- "enrichment" will *add* to the source automatically,  -->
+<!-- such as footnotes with URLs that might not be visible -->
+<!-- in static formats.                                    -->
+<xsl:variable name="enrichment-rtf">
+    <xsl:apply-templates select="$repair" mode="enrichment"/>
+</xsl:variable>
+<xsl:variable name="enrichment" select="exsl:node-set($enrichment-rtf)"/>
+
 <!-- Once the "repair" tree is formed, any source modifications      -->
 <!-- have been made, and it is on to *augmenting* the source.        -->
 <!-- Various publisher variables are consulted for the augmentation, -->
@@ -287,7 +301,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be available for creating those variables, notably sensible     -->
 <!-- defaults based on the source.  We refer to this tree as the     -->
 <!-- "assembly" tree.                                                -->
-<xsl:variable name="assembly-root" select="$repair/pretext"/>
+<xsl:variable name="assembly-root" select="$enrichment/pretext"/>
 <xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
@@ -295,16 +309,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- pass in all elements with authored @xml:id -->
     <!-- to look for authored duplicates            -->
     <xsl:call-template name="duplication-check-xmlid">
-        <xsl:with-param name="nodes" select="$repair//*[@xml:id]"/>
+        <xsl:with-param name="nodes" select="$enrichment//*[@xml:id]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
     <!-- pass in all elements with authored @label -->
     <!-- to look for authored duplicates           -->
     <xsl:call-template name="duplication-check-label">
-        <xsl:with-param name="nodes" select="$repair//*[@label]"/>
+        <xsl:with-param name="nodes" select="$enrichment//*[@label]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
-    <xsl:apply-templates select="$repair" mode="identification"/>
+    <xsl:apply-templates select="$enrichment" mode="identification"/>
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
