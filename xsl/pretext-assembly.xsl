@@ -731,7 +731,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- documentation) we take care to not annotate these elements which  have -->
 <!-- no source to show.                                                     -->
 
-<xsl:template match="url[node()]|datafile[node()]" mode="enrichment">
+<xsl:template match="url[node()]|dataurl[node()]" mode="enrichment">
     <xsl:copy>
         <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="enrichment"/>
@@ -752,14 +752,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!--                                                             -->
             <!-- We get a candidate visual URI from the @href attribute      -->
             <!-- link/reference/location may be external -->
-            <!-- (@href) or internal (datafile[@source]) -->
+            <!-- (@href) or internal (dataurl[@source]) -->
             <xsl:variable name="uri">
                 <xsl:choose>
-                    <!-- "url" and "datafile" both support external @href -->
+                    <!-- "url" and "dataurl" both support external @href -->
                     <xsl:when test="@href">
                         <xsl:value-of select="@href"/>
                     </xsl:when>
-                    <!-- a "datafile" might be local, @source is        -->
+                    <!-- a "dataurl" might be local, @source is         -->
                     <!-- indication, so prefix with a base URL,         -->
                     <!-- add "external" directory, via template useful  -->
                     <!-- also for visual URL formulation in -assembly   -->
@@ -769,7 +769,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- HTML, so could perhaps be killed in that case. -->
                     <!-- But it is what we want for LaTeX, and perhaps  -->
                     <!-- for EPUB, etc.                                 -->
-                    <xsl:when test="self::datafile and @source">
+                    <xsl:when test="self::dataurl and @source">
                         <xsl:apply-templates select="." mode="static-url"/>
                     </xsl:when>
                     <!-- empty will be non-functional -->

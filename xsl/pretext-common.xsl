@@ -3167,7 +3167,7 @@ Book (with parts), "section" at level 3
 <!-- When a "datafile" is produced in a static -->
 <!-- context, then we append the $baseurl, and -->
 <!-- provide the external directory.           -->
-<xsl:template match="datafile[@source]" mode="static-url">
+<xsl:template match="dataurl[@source]" mode="static-url">
     <xsl:value-of select="$baseurl"/>
     <!-- empty when not using managed directories -->
     <xsl:value-of select="$external-directory"/>
