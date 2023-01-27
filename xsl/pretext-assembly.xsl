@@ -1019,6 +1019,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<!-- 2023-01-27: deprecate "datafile" to make way for a better    -->
+<!-- Runestone-powered version.  Cosmetic replacement: "dataurl". -->
+<xsl:template match="datafile" mode="repair">
+    <dataurl>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </dataurl>
+</xsl:template>
+
+
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
 <!-- ############################## -->
