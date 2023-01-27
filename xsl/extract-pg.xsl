@@ -656,21 +656,22 @@
     <xsl:variable name="delimiter">
         <xsl:call-template name="find-unused-character">
             <xsl:with-param name="string" select="."/>
-            <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators      -->
-            <!-- NB: don't use [{(]}), becuase as perl delimiters, closer is allowed to be left/right version; too complicated to check for -->
-            <xsl:with-param name="charset" select="concat($apos,'&quot;|/\?:;.,=+-_~`!@$%^&amp;*',&SIMPLECHAR;)"/>
+            <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators    -->
+            <!-- NB: don't use (), <>, [], {}, because as perl delimiters, closer must be the right version; too complicated to check for -->
+            <!-- Don't use backslash. All other keyboard characters are present below                                                     -->
+            <xsl:with-param name="charset" select="concat($apos, '&quot;:;,./?|`~!@#$%^&amp;*-_=+', &SIMPLECHAR;)"/>
         </xsl:call-template>
     </xsl:variable>
     <!-- If the delimiter is not a single quote, use q operator -->
     <xsl:if test="$delimiter != $apos">
         <xsl:text>q</xsl:text>
     </xsl:if>
-    <!-- If the delimiter is alphanumeric, must be preceded by a space -->
-    <xsl:if test="translate($delimiter,&SIMPLECHAR;,'') = ''">
+    <!-- If the delimiter is alphanumeric (or underscore), it must be preceded by a space -->
+    <xsl:if test="contains(concat('_',&SIMPLECHAR;), $delimiter)">
         <xsl:text> </xsl:text>
     </xsl:if>
     <xsl:value-of select="$delimiter"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:value-of select="$delimiter"/>
 </xsl:template>
 
@@ -752,8 +753,8 @@
             <xsl:variable name="delimiter">
                 <xsl:call-template name="find-unused-character">
                     <xsl:with-param name="string" select="$wrapped-macros"/>
-                    <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators      -->
-                    <!-- NB: don't use [{(]}), becuase as perl delimiters, closer is allowed to be left/right version; too complicated to check for -->
+                    <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators    -->
+                    <!-- NB: don't use (), <>, [], {}, because as perl delimiters, closer must be the right version; too complicated to check for -->
                     <xsl:with-param name="charset" select="concat($apos,'|/?.,+-_~`!@$%^&amp;*')"/>
                 </xsl:call-template>
             </xsl:variable>
@@ -2912,22 +2913,20 @@
     "/>
 
     <xsl:choose>
-        <!-- if the cell only has data and no traits to declare,               -->
-        <!-- simplify the output by leaving off the array reference delimiters -->
-        <!-- Below, &#x00a6; is an extended ASCII character almost guaranteed  -->
-        <!-- not to appear in content, used as a delimiter.                    -->
+        <!-- if the cell only has data and no traits to declare, simplify the  -->
+        <!-- output by leaving off the array reference delimiters (brackets)   -->
         <xsl:when test="not($cell-has-traits)">
-            <xsl:text>PGML(q&#x00a6;</xsl:text>
-            <xsl:apply-templates/>
-            <xsl:text>&#x00a6;),</xsl:text>
+            <xsl:text>PGML(</xsl:text>
+            <xsl:apply-templates select="." mode="delimit"/>
+            <xsl:text>),</xsl:text>
             <xsl:if test="$b-human-readable">
                 <xsl:text>&#xa;</xsl:text>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[PGML(q&#x00a6;</xsl:text>
-            <xsl:apply-templates/>
-            <xsl:text>&#x00a6;),</xsl:text>
+            <xsl:text>[PGML(</xsl:text>
+            <xsl:apply-templates select="." mode="delimit"/>
+            <xsl:text>),</xsl:text>
             <!-- declare bottom if needed; note niceTables.pl does not respect bottom on an individual cell -->
             <xsl:if test="$row-bottom != 'none' and not(preceding-sibling::cell)">
                 <xsl:call-template name="key-value">
