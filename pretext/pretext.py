@@ -2064,7 +2064,6 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     id_file = open(id_filename, "r")
     # read lines, skipping blank lines
     problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
-    xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
     for problem in problems:
         url = "https://www.myopenmath.com/util/mbx.php?id={}".format(problem)
         path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
@@ -2073,7 +2072,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         # removed some settings wrapper from around the URL, otherwise verbatim
         r = requests.get(url, stream=True)
         with open(path, "wb") as f:
-            f.write(xml_header.encode("utf-8"))
+            f.write(__xml_header.encode("utf-8"))
             if r.status_code == 200:
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
@@ -2623,7 +2622,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     #   <?xml version="1.0" encoding="UTF-8"?>
     #   <html xmlns="http://www.w3.org/1999/xhtml">
     orig = "<html"
-    repl = '<?xml version="1.0" encoding="UTF-8"?>\n<html xmlns="http://www.w3.org/1999/xhtml"'
+    repl = __xml_header + '<html xmlns="http://www.w3.org/1999/xhtml"'
     # the inoplace facility of the fileinput module gets
     # confused about temporary backup files if the working
     # directory is not where the file lives
@@ -3807,6 +3806,9 @@ def get_managed_directories(xml_source, pub_file):
 # whose scope is the module, so must be declared
 # by employing routines as non-local ("global")
 #
+#  __xml_header - standard first line of an XML file.
+#                 a convenience here
+#
 #  __ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
@@ -3816,6 +3818,8 @@ def get_managed_directories(xml_source, pub_file):
 #
 #  __module_warning - stock import-failure warning message
 
+# Convenience
+__xml_header = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
 # Discover and set distribution path once at start-up
 __ptx_path = None
