@@ -1021,7 +1021,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2023-01-27: deprecate "datafile" to make way for a better    -->
 <!-- Runestone-powered version.  Cosmetic replacement: "dataurl". -->
-<xsl:template match="datafile" mode="repair">
+<!-- 2023-01-30: refine deprecation repair just after a minor CLI -->
+<!-- release. A "datafile" element may be OK as a "new" use,      -->
+<!-- with the presence of @label indicating use/application with  -->
+<!-- Runestone Javascript.  So only automatically upgrade "old"   -->
+<!-- uses lacking @label.                                         -->
+<xsl:template match="datafile[not(@label)]" mode="repair">
     <dataurl>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
     </dataurl>
