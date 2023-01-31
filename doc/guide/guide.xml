@@ -23,6 +23,7 @@
 
             <xi:include href="introduction/start-here.xml"/>
             <xi:include href="introduction/quickstart-example.xml"/>
+            <xi:include href="introduction/videos.xml"/>
         </part>
 
         <part xml:id="part-author">
