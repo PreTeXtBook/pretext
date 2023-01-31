@@ -316,16 +316,19 @@ function handleWW(ww_id, action) {
 	
 				}
 
-				if (input.type == 'radio' && answers[name]) {
+				if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
 					const score = data.rh_result.answers[name].score;
-					if (input.value == data.rh_result.answers[name].student_value) {
+					const student_ans = data.rh_result.answers[name].student_value || data.rh_result.answers[name].student_ans;
+ 					const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
+					console.log([data.rh_result.answers[name].student_ans, data.rh_result.answers[name].student_value, data.rh_result.answers[name].correct_ans, data.rh_result.answers[name].correct_choice, input.value]);
+ 					if (input.value == student_ans) {
 						if (score == 1) {
 							input.parentNode.classList.add('correct');
 						} else {
 							input.parentNode.classList.add('incorrect');
 						}
 						const feedbackButton = createFeedbackButton(`${ww_id}-${name}`,
-							data.rh_result.answers[name].student_value == data.rh_result.answers[name].correct_choice
+							(student_ans == correct_ans)
 							? `<span class="correct">${localize_correct}</span>` : `<span class="incorrect">${localize_incorrect}.</span>`)
 						feedbackButton.style.marginRight = '0.25rem';
 						input.after(feedbackButton);
@@ -552,6 +555,9 @@ function handleWW(ww_id, action) {
 		input[type="text"].partly-correct, input[type="text"].incorrect {
 			background-size: auto 70%;
 		}
+		label {
+			padding-left: 1.5em;
+		}
 		label.correct::before {
 			color: #060;
 			content: '✓';
@@ -734,14 +740,14 @@ function WWshowCorrect(ww_id, answers) {
 			input.parentElement.insertBefore(show_span, input);
 		}
 
-		if (input.type == 'radio' && answers[name]) {
+		if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
 			const feedbackButton = iframe.contentDocument.getElementById(`${ww_id}-${name}-feedback-button`);
 			if (feedbackButton) {
 				iframe.contentWindow.bootstrap.Popover.getInstance(feedbackButton)?.hide();
 				feedbackButton.remove();
 			}
-			correct_value = answers[name].correct_choice;
-			if (input.value == correct_value) input.checked = true;
+			const correct_ans = answers[name].correct_choice || answers[name].correct_ans;
+ 			if (input.value == correct_ans) input.checked = true;
 		}
 	}
 
