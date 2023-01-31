@@ -106,6 +106,36 @@ nav #ptx-navbar {
   transform: rotate(130deg);
 }
 
+/* Runestone nav for Runestone-wide features */
+.pretext #navbar,
+.pretext #brand-navbar {
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: 1030;
+  height: 50px;
+  border-width: 0 0 1px;
+  top: 0;
+  margin-bottom: 0;
+}
+.pretext #navbar + #ptx-masthead,
+.pretext #brand-navbar + #ptx-masthead {
+  margin-top: 50px;
+}
+.pretext #navbar .navbar-collapse.collapse,
+.pretext #brand-navbar .navbar-collapse.collapse {
+  overflow: hidden !important;
+}
+.pretext #brand-navbar ~ #ptx-navbar,
+.pretext #navbar ~ #ptx-navbar {
+  top: 50px;
+}
+@media screen and (max-width: 800px) {
+  .pretext #brand-navbar ~ #ptx-navbar,
+  .pretext #navbar ~ #ptx-navbar {
+    top: auto;
+  }
+}
 
 /* so that we can position things (like .autopermalink) absolutely wrt these items */
 .ptx-content section,
