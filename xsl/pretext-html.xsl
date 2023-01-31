@@ -10740,11 +10740,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </main>
             </div>
             <!-- formerly "extra" -->
-            <div class="ptx-page-footer">
+            <div id="ptx-page-footer">
                 <xsl:apply-templates select="." mode="feedback-button"/>
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="runestone-link"/>
-                <xsl:call-template name="powered-by-mathjax" />
+                <xsl:call-template name="mathjax-link" />
             </div>
             <!-- analytics services, if requested -->
             <xsl:call-template name="statcounter"/>
@@ -12186,15 +12186,8 @@ TODO:
 
 <!-- Branding in page-footer, mostly hard-coded     -->
 <!-- HTTPS for authors delivering from secure sites -->
-<!-- TODO: internationalize "Authored with"         -->
-<!-- (a change), "Powered by", "Hosted on"          -->
 <xsl:template name="pretext-link">
-    <a class="pretext-link" href="https://pretextbook.org">
-        <div class="name">
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'authored'"/>
-            </xsl:apply-templates>
-        </div>
+    <a class="pretext-link" href="https://pretextbook.org" title="PreTeXt">
         <div class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="338 3000 8772 6866">
                 <g style="stroke-width:.025in; stroke:black; fill:none">
@@ -12219,28 +12212,16 @@ TODO:
 </xsl:template>
 
 <xsl:template name="runestone-link">
-    <xsl:variable name="text-version">
-        <xsl:choose>
-            <xsl:when test="$b-host-runestone">
-                <xsl:text>Hosted on Runestone</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>Powered by Runestone</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <a class="runestone-link" href="https://runestone.academy">
-        <div class="name">
-            <xsl:value-of select="$text-version"/>
-        </div>
-        <img class="logo" title="{$text-version}" src="https://runestone.academy/runestone/static/rectangle_badge.png" alt="{$text-version}"/>
+    <a class="runestone-link" href="https://runestone.academy" title="Runestone Academy">
+        <img class="logo" src="http://staging.runestoneacademy.org/runestone/static/images/RAIcon_cropped.png"/>
+        <!-- Release final version after 2023-02-04                                                        -->
+        <!-- <img class="logo" src="http://runestone.academy/runestone/static/images/RAIcon_cropped.png"/> -->
     </a>
 </xsl:template>
 
-<!-- MathJax Logo for page-footer -->
-<xsl:template name="powered-by-mathjax">
-    <a class="mathjax-logo" href="https://www.mathjax.org">
-        <img title="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" alt="Powered by MathJax" />
+<xsl:template name="mathjax-link">
+    <a class="mathjax-link" href="https://www.mathjax.org" title="MathJax">
+        <img class="logo" src="https://www.mathjax.org/badge/badge-square-2.png"/>
     </a>
 </xsl:template>
 
