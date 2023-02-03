@@ -2770,6 +2770,11 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="."/>
 </xsl:template>
 
+<!-- We do not wrap an "c" element as part of a plain title -->
+<xsl:template match="c" mode="plain-title-edit">
+    <xsl:value-of select="."/>
+</xsl:template>
+
 <!-- We dumb-down quotation marks to "straight" ASCII. -->
 <!-- These behave well in output as attribute values,  -->
 <!-- the HTML serialization seems "smart" enough to    -->
