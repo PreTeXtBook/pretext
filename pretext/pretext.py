@@ -622,6 +622,104 @@ def latex_image_conversion(
         raise ValueError(msg + image_list)
 
 
+#############################################
+#
+# Binary Source Files to Base 64 in XML Files
+#
+#############################################
+
+def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+    """Convert certain  files in source to text representations in XML files"""
+    # stringparams is a dictionary, best for lxml parsing
+
+    import base64
+
+    msg = 'converting data files from {} to text representations in XML files for placement in {}'
+    log.info(msg.format(xml_source, dest_dir))
+
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-datafile.xsl")
+    the_files = os.path.join(tmp_dir, 'datafile-list.txt')
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # no output (argument 3), stylesheet writes out per-image file
+    # outputs a list of ids, but we just loop over created files
+    log.info("extracting source files from {}".format(xml_source))
+    log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
+    xsltproc(extraction_xslt, xml_source, the_files, None, stringparams)
+
+    # Copy in external resources (e.g., js code)
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+
+    # Each file receives a single element as its root
+    # element. These are templates for that entry
+    image_info = '<pi:image-b64 xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:mime-type="{}" pi:base64="{}"/>'
+    text_info  = '<pi:text-file xmlns:pi="http://pretextbook.org/2020/pretext/internal">{}</pi:text-file>'
+
+    # read lines, one-per-binary
+    datafile_list = open(the_files, "r")
+    for df in datafile_list.readlines():
+        visible_id, file_type, relative_path = df.split()
+        data_file = os.path.join(external_abs, relative_path)
+        log.debug("converting data file {} to a text/XML file".format(data_file))
+
+        # Now condition of the "kind" of file given in source
+        # according to the use of certain PTX elements
+        # Each stanza should produce the contents of a UTF-8 XML file
+        if file_type == "image":
+            # best guess of image type, as a MIME type
+            # https://en.wikipedia.org/wiki/Media_type
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+            _, extension = os.path.splitext(data_file)
+            # normalize, drop leading period
+            # in rough popularity order
+            lcext = extension[1:].lower()
+            if lcext in ["jpeg", "jpg"]:
+                mime_type = "image/jpeg"
+            elif lcext == "png":
+                mime_type = "image/png"
+            elif lcext =="gif":
+                mime_type = "image/gif"
+            elif lcext =="webp":
+                mime_type = "image/webp"
+            elif lcext =="avif":
+                mime_type = "image/avif"
+            elif lcext =="apng":
+                mime_type = "image/apng"
+            # Do we want to base64 an XML file???
+            elif lcext =="svg":
+                mime_type = "image/svg+xml"
+            else:
+                log.info("PTX:WARNING : MIME type of image {} not determined".format(data_file))
+                mime_type = "unknown"
+
+            # Open binary file and encode in base64 with standard module
+            with open(data_file, "rb") as f:
+                base64version = base64.b64encode(f.read()).decode("utf8")
+            xml_representation = image_info.format(mime_type, base64version)
+        elif file_type == "pre":
+            with open(data_file, "rb") as f:
+                rawtext = f.read().decode("utf8")
+            xml_representation = text_info.format(rawtext)
+        else:
+            xml_representation = "<oops/>"
+
+        # Open as a text file (i.e. not binary), since we have
+        # built text/XML representations, we know this really is
+        # "straight" ASCII.  The XML header says "UTF-8", which
+        # is not a problem?
+        out_filename = os.path.join(dest_dir, visible_id + '.xml')
+        with open(out_filename, "w") as f:
+            f.write(__xml_header)
+            f.write(xml_representation)
+
+
 #######################
 #
 #  LaTeX Tactile Images
