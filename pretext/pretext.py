@@ -1486,10 +1486,15 @@ def webwork_to_xml(
                     count=0,
                     flags=0,
                 )
+                # the filepath constructed below will be used for web addresses of image files
+                # and filepaths in LaTeX for image inclusion. Even for a Windows user, forward
+                # slashes are in play, not backward slashes. So we inteentionally do not use
+                # os.path.join(). Perhaps in the future we decide to use a posix path constructor.
                 response_text = response_text.replace(
-                    ww_image_full_path, os.path.join("webwork", "images", ptx_image)
+                    ww_image_full_path, "webwork/images/" + ptx_image
                 )
             else:
+                # see note above about posix path construction
                 response_text = response_text.replace(
                     ww_image_full_path, "images/" + ptx_image
                 )
