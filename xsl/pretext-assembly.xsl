@@ -1999,4 +1999,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="datafile" mode="representations">
+    <xsl:choose>
+        <!-- make a static version, in a PreTeXt style -->
+        <!-- for use naturally by most conversions     -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:apply-templates select="." mode="runestone-to-static"/>
+        </xsl:when>
+        <!-- duplicate for a dynamic version -->
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>
