@@ -103,8 +103,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Megfigyelés</localization>
     <localization string-id='warning'>Figyelmeztetés</localization>
     <localization string-id='insight'>Bepillantás</localization>
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Számítás</localization>
     <localization string-id='technology'>Technológia</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Kiegészítés</localization>
     <localization string-id='biographical'>Életrajzi kiegészítés</localization>

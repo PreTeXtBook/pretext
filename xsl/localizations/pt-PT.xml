@@ -104,8 +104,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='observation'>Observation</localization> -->
     <!-- <localization string-id='warning'>Warning</localization> -->
     <!-- <localization string-id='insight'>Insight</localization> -->
+    <!-- COMPUTATION-LIKE blocks -->
     <!-- <localization string-id='computation'>Computation</localization> -->
     <!-- <localization string-id='technology'>Technology</localization> -->
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <!-- <localization string-id='aside'>Aside</localization> -->
     <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
