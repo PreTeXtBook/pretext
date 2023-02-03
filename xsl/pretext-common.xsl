@@ -10267,11 +10267,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  We will try to honor your intent'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2023-01-27  deprecate "datafile" in favor of "dataurl" -->
+    <!-- 2023-01-27  deprecate "datafile" in favor of "dataurl"   -->
+    <!-- 2023-02-01  tightened deprecation to uses without @label -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//datafile" />
+        <xsl:with-param name="occurrences" select="$document-root//datafile[not(@label)]" />
         <xsl:with-param name="date-string" select="'2023-01-27'" />
-        <xsl:with-param name="message" select="'the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.  We will try to honor your intent, but please make the change at your first convenience, as an automatic upgrade will soon become less reliable (or impossible)'"/>
+        <xsl:with-param name="message" select="'the old use of the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.   New uses of &quot;datafile&quot; require a @label attribute.  So you are seeing this warning since your source has a &quot;datafile&quot; without a @label attribute.  We will try to honor your intent, but please make the change at your first convenience, as an automatic conversion might not be desirable in some cases.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
