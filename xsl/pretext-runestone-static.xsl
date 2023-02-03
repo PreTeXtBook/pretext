@@ -28,6 +28,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
+    extension-element-prefixes="pi"
 >
 
 <!-- Conversion of author source for Runestone/interactive exercises  -->
@@ -847,6 +849,58 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="hint"/>
     <xsl:copy-of select="answer"/>
     <xsl:copy-of select="solution"/>
+</xsl:template>
+
+
+<xsl:template match="datafile" mode="runestone-to-static">
+    <!-- Some templates and variables are defined in -common for consistency -->
+
+    <!-- A faux automatic title of sorts, careful about whitespace for mixed content -->
+    <!-- TODO: localize "Data" (or "Data file"?), but too early in pre-processor,  -->
+    <!-- there is no $docinfo to consult for renames, etc. -->
+    <pre>Data: <xsl:value-of select="@filename"/></pre>
+
+    <xsl:choose>
+        <xsl:when test="image">
+            <xsl:copy-of select="image"/>
+        </xsl:when>
+        <xsl:when test="pre">
+            <!-- provide default rows and cols, sync with dynamic version -->
+            <xsl:variable name="desired-rows">
+                <xsl:choose>
+                    <xsl:when test="@rows">
+                        <xsl:value-of select="@rows"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$datafile-default-rows"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="desired-cols">
+                <xsl:choose>
+                    <xsl:when test="@cols">
+                        <xsl:value-of select="@cols"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$datafile-default-cols"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <pre>
+                <!-- form an "upper-left-corner" view -->
+                <xsl:call-template name="text-viewport">
+                    <xsl:with-param name="nrows" select="$desired-rows"/>
+                    <xsl:with-param name="ncols" select="$desired-cols"/>
+                    <xsl:with-param name="text">
+                        <!-- defined in -common -->
+                        <xsl:apply-templates select="." mode="datafile-text-contents"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </pre>
+        </xsl:when>
+        <!-- no other source/PTX element is supported , bail out-->
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -1021,7 +1021,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2023-01-27: deprecate "datafile" to make way for a better    -->
 <!-- Runestone-powered version.  Cosmetic replacement: "dataurl". -->
-<xsl:template match="datafile" mode="repair">
+<!-- 2023-01-30: refine deprecation repair just after a minor CLI -->
+<!-- release. A "datafile" element may be OK as a "new" use,      -->
+<!-- with the presence of @label indicating use/application with  -->
+<!-- Runestone Javascript.  So only automatically upgrade "old"   -->
+<!-- uses lacking @label.                                         -->
+<xsl:template match="datafile[not(@label)]" mode="repair">
     <dataurl>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
     </dataurl>
@@ -1992,6 +1997,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
         </xsl:choose>
     </xsl:copy>
+</xsl:template>
+
+<xsl:template match="datafile" mode="representations">
+    <xsl:choose>
+        <!-- make a static version, in a PreTeXt style -->
+        <!-- for use naturally by most conversions     -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:apply-templates select="." mode="runestone-to-static"/>
+        </xsl:when>
+        <!-- duplicate for a dynamic version -->
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

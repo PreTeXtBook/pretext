@@ -9497,6 +9497,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Data Files -->
+
+<xsl:template match="datafile">
+    <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+</xsl:template>
+
 <xsl:template name="aim-login-header">
     <xsl:if test="$b-host-aim">
         <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>

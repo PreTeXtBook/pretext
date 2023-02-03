@@ -101,8 +101,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Observation</localization>
     <localization string-id='warning'>Mise en garde</localization>
     <!-- <localization string-id='insight'>Insight</localization> -->
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Calcul</localization>
     <localization string-id='technology'>Technologie</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Digression</localization>
     <localization string-id='biographical'>Note biographique</localization> <!-- Knowingly differs from fr-FR, which uses "digression" instead of "note" -->

@@ -102,8 +102,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Postřeh</localization>
     <localization string-id='warning'>Varování</localization>
     <localization string-id='insight'>Nahléd</localization>
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Výpočet</localization>
     <localization string-id='technology'>Technologie</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Poznámka stranou</localization>
     <localization string-id='biographical'>Biografická poznámka</localization>

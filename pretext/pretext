@@ -129,6 +129,7 @@ def get_destination_directory(directory, xml_source, pub_file, component):
         "trace": "trace",
         "youtube": "youtube",
         "qrcode": "qrcode",
+        "datafile": "datafile",
     }
     # if specified, check, sanitize, return absolute path
     if directory:
@@ -326,6 +327,7 @@ def get_cli_arguments():
         ("mom", "MyOpenMath problem files, static versions"),
         ("math", "Math elements for MathJax conversion (only)"),
         ("trace", "Program trace data for CodeLens"),
+        ("datafile", "data files to text representations"),
         (
             "all",
             "Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)",
@@ -680,6 +682,8 @@ def main():
             )
     elif args.component == "trace":
         ptx.tracer(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
+    elif args.component == "datafile":
+        ptx.datafiles_to_xml(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == "all":
         if args.format == "html":
             ptx.html(

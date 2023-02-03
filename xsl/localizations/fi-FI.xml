@@ -98,8 +98,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Havainto</localization>
     <localization string-id='warning'>Varoitus</localization>
     <localization string-id='insight'>Oivallus</localization>
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Lasku</localization>
     <localization string-id='technology'>Teknologia</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Sivuhuomautus</localization>
     <localization string-id='biographical'>Elämäkerrallinen sivuhuomautus</localization>

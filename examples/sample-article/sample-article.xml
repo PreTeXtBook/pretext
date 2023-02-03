@@ -9119,7 +9119,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </section>
 
         <section xml:id="section-programs">
-            <title>Program Listings</title>
+            <title>Program Listings (with <c>code</c> in the title)</title>
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
