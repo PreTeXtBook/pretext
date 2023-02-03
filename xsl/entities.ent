@@ -101,8 +101,8 @@
 <!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning or self::insight">
 
 <!-- about computations or technology -->
-<!ENTITY COMPUTATION-LIKE "computation|technology">
-<!ENTITY COMPUTATION-FILTER "self::computation or self::technology">
+<!ENTITY COMPUTATION-LIKE "computation|technology|data">
+<!ENTITY COMPUTATION-FILTER "self::computation or self::technology or self::data">
 
 <!-- incidental, skippable, lightweight -->
 <!ENTITY ASIDE-LIKE "aside|biographical|historical">

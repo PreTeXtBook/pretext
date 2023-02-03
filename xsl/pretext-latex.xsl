@@ -2075,7 +2075,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- COMPUTATION-LIKE -->
     <xsl:variable name="computation-reps" select="
         ($document-root//computation)[1]|
-        ($document-root//technology)[1]"/>
+        ($document-root//technology)[1]|
+        ($document-root//data)[1]"/>
     <xsl:if test="$computation-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for COMPUTATION-LIKE&#xa;</xsl:text>
@@ -2832,7 +2833,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE: "definition"                     -->
 <!-- REMARK-LIKE: "remark", "convention", "note",      -->
 <!--              "observation", "warning", "insight"  -->
-<!-- COMPUTATION-LIKE: "computation", "technology"     -->
+<!-- COMPUTATION-LIKE: "computation", "technology",    -->
+<!--                    "data"                         -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
 <!-- PROJECT-LIKE: "activity", "exploration",          -->
 <!--               "exploration", "investigation"      -->
@@ -3194,7 +3196,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE: "definition"                     -->
 <!-- REMARK-LIKE: "remark", "convention", "note",      -->
 <!--              "observation", "warning", "insight"  -->
-<!-- COMPUTATION-LIKE: "computation", "technology"     -->
+<!-- COMPUTATION-LIKE: "computation", "technology",    -->
+<!--                    "data"                         -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
 <!-- PROJECT-LIKE: "activity", "exploration",          -->
 <!--               "exploration", "investigation"      -->

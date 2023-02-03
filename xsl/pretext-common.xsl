@@ -108,8 +108,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- remark|convention|note|observation|warning|insight -->
 <xsl:strip-space elements="remark convention note observation warning insight" />
 <!-- List is elements in COMPUTATION-LIKE entity -->
-<!-- computation|technology                      -->
-<xsl:strip-space elements="computation technology" />
+<!-- computation|technology|data                 -->
+<xsl:strip-space elements="computation technology data" />
 <!-- List is elements in EXAMPLE-LIKE entity -->
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
