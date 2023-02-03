@@ -388,7 +388,139 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </program>
             </answer>
         </exercise>
+    </section>
 
+    <section xml:id="data-files">
+        <title>Data Files</title>
+
+        <p>Images: small, not resized in HTML, but will in static.  20x60 default.  Clipped in static.  Text authored, massaged.  Serious not affected.</p>
+
+        <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
+
+        <!-- # Section 11.4 Think Like a Computer Scientist, Runestone 2023-01-23 -->
+        <datafile label="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes">
+
+            <pre>
+            1850    -0.37     2.24E-7
+            1860    -0.34     3.94E-7
+            1870    -0.28     6.6E-7
+            1880    -0.24     1.1
+            1890    -0.42     1.72
+            1900    -0.2      2.38
+            1910    -0.49     3.34
+            1920    -0.25     4.01
+            1930    -0.14     4.53
+            1940     0.01     5.5
+            1950    -0.17     6.63
+            1960    -0.05     10.5
+            1970    -0.03     16
+            1980     0.09     20.3
+            1990     0.3      22.6
+            2000     0.29     24.9
+            2010     0.56     32.7
+            2019     0.74     33.3
+            </pre>
+        </datafile>
+
+        <program label="python-average-climate" interactive='activecode' language="python">
+            <input>
+            ccfile = open("ccdata1.txt", "r")
+
+            for aline in ccfile:
+                values = aline.split()
+                print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
+
+            ccfile.close()
+            </input>
+        </program>
+
+        <!-- # Fundamentals of Python Programming, Stack Overflow Developer Survey, Runestone 2023-02-01 -->
+        <data>
+            <title>Stack Overflow Developer Survey</title>
+
+            <p>[A data file can go lots of places.  But to make it more prominent, and easy to cross-reference, it would be natural to put it into a <tag>data</tag> block.]</p>
+
+            <p>Now that you are experienced with working with files lets look at a bit of the data set. The survey had 98,855 respondents. We will work with a sample of 2000 of those responses for this lab. In addition we have narrowed down the questions from 129 to just 13.  The columns we have included in this data set are:<ol>
+                <li>Respondent</li>
+                <li>Country</li>
+                <li>JobSatisfaction</li>
+                <li>UndergradMajor</li>
+                <li>ConvertedSalary</li>
+                <li>Exercise</li>
+                <li>Gender</li>
+                <li>RaceEthnicity</li>
+                <li>EducationParents</li>
+                <li>HoursOutside</li>
+                <li>Age</li>
+                <li>LastNewJob</li>
+                <li>LanguageWorkedWith</li>
+            </ol></p>
+
+            <datafile label="stack-overflow-survey" filename="so_survey.csv" rows="10" cols="65" editable="no">
+                <pre source="datafiles/stackoverflow.csv"/>
+            </datafile>
+        </data>
+
+        <datafile label="luther-bell" filename="luther-bell.jpg">
+            <image source="datafiles/LutherBellPic.jpg" width="30%"/>
+        </datafile>
+
+        <program label="python-one-pixel" interactive='activecode' language="python">
+            <input>
+            import image
+            img = image.Image("luther-bell.jpg")
+
+            print(img.getWidth())
+            print(img.getHeight())
+
+            p = img.getPixel(45, 55)
+            print(p.getRed(), p.getGreen(), p.getBlue())
+            </input>
+        </program>
+
+        <computation>
+            <title>Golden Gate Bridge Image processing</title>
+
+            <p>This image has a Creative Commons license, but we've lost track of the exact terms.</p>
+
+            <p>[Now a data file and a program to process it, all bundled up inside a <tag>computation</tag>, since an <tag>example</tag> gets knowled and the ActiveCode does not fill.]</p>
+
+
+            <datafile label="golden-gate" filename="golden_gate.png">
+                <image source="datafiles/golden-gate-bridge.png" width="40%"/>
+            </datafile>
+
+            <p>This program changes every pixel of the image.</p>
+
+            <program label="python-change-pixels" interactive='activecode' language="python">
+                <input>
+                import image
+
+                img = image.Image("golden_gate.png")
+                win = image.ImageWin(img.getWidth(), img.getHeight())
+                img.draw(win)
+
+                # img.setDelay(delay, number of pixels between delay)
+                # setDelay(1, 400) will speed up a lot
+                img.setDelay(1,15)
+
+                for row in range(img.getHeight()):
+                    for col in range(img.getWidth()):
+                        p = img.getPixel(col, row)
+
+                        newred = p.red * 1.4
+                        newgreen =  p.green * .75
+                        newblue =  p.blue * 1.1
+
+                        newpixel = image.Pixel(newred, newgreen, newblue)
+
+                        img.setPixel(col, row, newpixel)
+
+                img.draw(win)
+                win.exitonclick()
+                </input>
+            </program>
+        </computation>
     </section>
 
     <section xml:id="videos-in-runestone">
