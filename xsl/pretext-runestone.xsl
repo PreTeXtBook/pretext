@@ -568,7 +568,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- meet the dead-end monster match below, and the default template will     -->
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
-        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest"/>
+        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile" mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -583,6 +583,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number"/>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-full"/>
+    </label>
+</xsl:template>
+
+<!-- Minimal label.  In database for obvious reasons, -->
+<!-- this is best (only?) thing to use as a label.    -->
+<xsl:template match="datafile" mode="runestone-manifest-label">
+    <label>
+        <xsl:value-of select="@filename"/>
     </label>
 </xsl:template>
 
@@ -784,6 +792,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <htmlsrc>
             <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </htmlsrc>
+    </question>
+</xsl:template>
+
+<!-- In database with the same structure as an exercise/question. -->
+<xsl:template match="datafile" mode="runestone-manifest">
+    <question>
+        <!-- label is from the "program", or enclosing "listing" -->
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </htmlsrc>
     </question>
 </xsl:template>
