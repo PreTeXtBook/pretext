@@ -31,9 +31,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl str"
+    extension-element-prefixes="exsl str pi"
 >
 
 <!-- Not documented, for development use only -->
@@ -50,7 +51,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- values of @exercise-interactive are added in the        -->
 <!-- pre-processing phase.  program/@interactive takes on    -->
 <!-- values of 'activecode' and 'codelens'.                  -->
-<xsl:variable name="b-needs-runestone" select="boolean($document-root//*[@exercise-interactive and not(@exercise-interactive='container') and not(@exercise-interactive='static') and not(@exercise-interactive='webwork-reps') and not(@exercise-interactive='webwork-task')]|$document-root//program[@interactive])"/>
+<xsl:variable name="b-needs-runestone" select="boolean($document-root//*[@exercise-interactive and not(@exercise-interactive='container') and not(@exercise-interactive='static') and not(@exercise-interactive='webwork-reps') and not(@exercise-interactive='webwork-task')]|$document-root//program[@interactive]|$document-root//datafile)"/>
 
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
@@ -424,7 +425,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|datafile|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
@@ -1833,6 +1834,104 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$language = 'octave'">      <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:otherwise/>
     </xsl:choose>
+</xsl:template>
+
+<!-- Data Files -->
+<xsl:template match="datafile" mode="runestone-to-interactive">
+    <!-- Some templates and variables are defined in -common for consistency -->
+
+    <!-- If there is a child "pre" element, then we build an un-editable  -->
+    <!-- HTML "pre" in the uneditable case and an editable HTML           -->
+    <!-- "textarea" in the editable case.  This discintion is mirrored in -->
+    <!-- this variable and a subsequent boolean.                          -->
+    <xsl:variable name="pre-element">
+        <xsl:choose>
+            <!-- only a clear "yes" will yield editable, -->
+            <!-- default is "no" (or anything but "yes") -->
+            <xsl:when test="pre and not(@editable = 'yes')">
+                <xsl:text>pre</xsl:text>
+            </xsl:when>
+            <xsl:when test="pre and (@editable = 'yes')">
+                <xsl:text>textarea</xsl:text>
+            </xsl:when>
+            <!-- safeguard, should not ever be queried -->
+            <!-- outside of "pre" in source            -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="b-is-editable" select="$pre-element = 'textarea'"/>
+
+    <!-- The HTML that Runestone expects -->
+    <div class="runestone datafile">
+        <div class="datafile_caption">
+            <code class="code-inline tex2jax_ignore">
+                <!-- Internationalize?  See comments in static conversion -->
+                <xsl:text>Data: </xsl:text>
+                <xsl:value-of select="@filename" />
+            </code>
+        </div>
+        <xsl:choose>
+            <xsl:when test="image">
+                <xsl:variable name="data-filename">
+                    <xsl:apply-templates select="."  mode="datafile-filename"/>
+                </xsl:variable>
+                <xsl:variable name="image-b64-elt" select="document($data-filename, $original)/pi:image-b64"/>
+                <img data-component="datafile" data-isimage="true">
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <xsl:attribute name="data-filename">
+                        <xsl:value-of select="@filename"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="src">
+                        <xsl:text>data:</xsl:text>
+                        <xsl:value-of select="$image-b64-elt/@pi:mime-type"/>
+                        <xsl:text>;base64,</xsl:text>
+                        <xsl:value-of select="$image-b64-elt/@pi:base64"/>
+                    </xsl:attribute>
+                </img>
+            </xsl:when>
+            <!-- text, an authored toy example, or a serious external file -->
+            <xsl:when test="pre">
+                <xsl:element name="{$pre-element}">
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <xsl:attribute name="data-component">
+                        <xsl:text>datafile</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-filename">
+                        <xsl:value-of select="@filename"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-edit">
+                        <!-- conveniently, value is true/false -->
+                        <xsl:value-of select="$b-is-editable"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-rows">
+                        <xsl:choose>
+                            <xsl:when test="@rows">
+                                <xsl:value-of select="@rows"/>
+                            </xsl:when>
+                            <!-- default is 20 rows -->
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-rows"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-cols">
+                        <xsl:choose>
+                            <xsl:when test="@cols">
+                                <xsl:value-of select="@cols"/>
+                            </xsl:when>
+                            <!-- default is 40 columns -->
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-cols"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="." mode="datafile-text-contents"/>
+                </xsl:element>
+            </xsl:when>
+            <!-- no other source/PTX element is supported , bail out-->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </div>
 </xsl:template>
 
 </xsl:stylesheet>
