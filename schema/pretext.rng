@@ -1714,6 +1714,9 @@
       <element name="technology">
         <ref name="ComputationLike"/>
       </element>
+      <element name="data">
+        <ref name="ComputationLike"/>
+      </element>
     </choice>
   </define>
   <define name="AsideLike">

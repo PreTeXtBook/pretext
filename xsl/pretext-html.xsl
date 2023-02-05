@@ -12219,9 +12219,7 @@ TODO:
 
 <xsl:template name="runestone-link">
     <a class="runestone-link" href="https://runestone.academy" title="Runestone Academy">
-        <img class="logo" src="http://staging.runestoneacademy.org/runestone/static/images/RAIcon_cropped.png"/>
-        <!-- Release final version after 2023-02-04                                                        -->
-        <!-- <img class="logo" src="http://runestone.academy/runestone/static/images/RAIcon_cropped.png"/> -->
+        <img class="logo" src="https://runestone.academy/runestone/static/images/RAIcon_cropped.png"/>
     </a>
 </xsl:template>
 

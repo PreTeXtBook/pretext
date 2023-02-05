@@ -1336,7 +1336,8 @@
                 BlockStatement+
             Computation =
                 element computation {ComputationLike} |
-                element technology {ComputationLike}
+                element technology {ComputationLike} |
+                element data {ComputationLike}
             </code>
         </fragment>
     </section>
