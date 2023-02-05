@@ -128,4 +128,71 @@
       </optional>
     </element>
   </define>
+  <define name="ColophonFront" combine="choice">
+    <element name="colophon">
+      <ref name="MetaDataTarget"/>
+      <zeroOrMore>
+        <element name="credit">
+          <element name="role">
+            <ref name="TextShort"/>
+          </element>
+          <element name="entity">
+            <ref name="TextLong"/>
+          </element>
+        </element>
+      </zeroOrMore>
+      <optional>
+        <element name="edition">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <element name="website">
+          <element name="name">
+            <ref name="TextShort"/>
+          </element>
+          <element name="address">
+            <text/>
+          </element>
+        </element>
+      </optional>
+      <optional>
+        <element name="copyright">
+          <element name="year">
+            <ref name="TextShort"/>
+          </element>
+          <element name="holder">
+            <text/>
+          </element>
+          <optional>
+            <element name="minilicense">
+              <ref name="TextShort"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="shortlicense">
+              <interleave>
+                <ref name="TextLong"/>
+                <zeroOrMore>
+                  <ref name="Footnote"/>
+                </zeroOrMore>
+              </interleave>
+            </element>
+          </optional>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="blurb">
+      <attribute name="shelf"/>
+      <text/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="document-id">
+      <attribute name="edition"/>
+      <text/>
+    </element>
+  </define>
 </grammar>

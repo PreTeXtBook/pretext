@@ -1,10 +1,10 @@
 
-            grammar {
+                    grammar {
+
+                    include "pretext.rnc"
                 
-            include "pretext.rnc"
-            
-                    Interactive =
-                    element interactive {
+            Interactive =
+                element interactive {
                     UniqueID?,
                     PermanentID?,
                     attribute aspect { text }?,
@@ -16,41 +16,76 @@
                     attribute version { text }?,
                     (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
                     element instructions { BlockText* | text }?
-                    }
+                }
 
-                    Slate =
-                    element slate {
+            Slate =
+                element slate {
                     UniqueID?,
                     attribute surface { text },
                     (attribute source { text } | attribute material { text })?,
                     attribute aspect { text }?,
                     (Paragraph | Tabular | SideBySideNoCaption)*
-                    }
+                }
 
-                    # add Interactives where used
-                    BlockStatement |= Interactive
+            # add Interactives where used
+            BlockStatement |= Interactive
 
-                    Figure |= element figure { MetaDataCaption, Interactive }
+            Figure |= element figure { MetaDataCaption, Interactive }
 
-                    SideBySide |= element sidebyside {
-                        SidebySideAttributes,
-                        (Interactive | Slate)+
-                    }
+            SideBySide |= element sidebyside {
+                SidebySideAttributes,
+                (Interactive | Slate)+
+            }
 
-                    SideBySideNoCaption |= element sidebyside {
-                        SidebySideAttributes,
-                        (Interactive | Slate)+
-                    }
+            SideBySideNoCaption |= element sidebyside {
+                SidebySideAttributes,
+                (Interactive | Slate)+
+            }
 
-                    Exercises |= element exercises {
-                    MetaDataAltTitleOptional,
-                    IntroductionDivision?,
-                    (
-                    (Exercise | ExerciseGroup)+ |
-                    Subexercises+ | Interactive
-                    ),
-                    ConclusionDivision?
-                    }
-            
+            Exercises |= element exercises {
+                MetaDataAltTitleOptional,
+                IntroductionDivision?,
+                (
+                (Exercise | ExerciseGroup)+ |
+                Subexercises+ | Interactive
+                ),
+                ConclusionDivision?
             }
             
+            ColophonFront |=
+                element colophon {
+                    MetaDataTarget,
+                    element credit {
+                        element role {TextShort},
+                        element entity {TextLong}
+                    }*,
+                    element edition {text}?,
+                    element website {
+                        element name {TextShort},
+                        element address {text}
+                    }?,
+                    element copyright {
+                        element year {TextShort},
+                        element holder {text},
+                        element minilicense {TextShort}?,
+                        element shortlicense {
+                            TextLong &
+                            Footnote*
+                        }?
+                    }?
+                }
+            
+            Configuration |=
+                element blurb {
+                    attribute shelf {text},
+                    text
+                }
+            
+            Configuration |=
+                element document-id {
+                    attribute edition {text},
+                    text
+                }
+            
+                    }
+                

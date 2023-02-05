@@ -2366,6 +2366,42 @@
     </section>
 
     <section>
+        <title>Front matter (experimental)</title>
+
+        <p>A few simple tweaks to frontmatter elements.</p>
+
+        <p>We give an alternative definition of the ColophonFront to include footnotes in the shortlicense.  This is the only change currently.</p>
+
+        <fragment xml:id="frontmatter-dev">
+            <title>Front matter (dev)</title>
+            <code>
+            ColophonFront |=
+                element colophon {
+                    MetaDataTarget,
+                    element credit {
+                        element role {TextShort},
+                        element entity {TextLong}
+                    }*,
+                    element edition {text}?,
+                    element website {
+                        element name {TextShort},
+                        element address {text}
+                    }?,
+                    element copyright {
+                        element year {TextShort},
+                        element holder {text},
+                        element minilicense {TextShort}?,
+                        element shortlicense {
+                            TextLong &amp;
+                            Footnote*
+                        }?
+                    }?
+                }
+            </code>    
+        </fragment>
+    </section>
+
+    <section>
         <title>Contributors</title>
 
         <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.  An AuthorByline is a special instance of acknowledging a contributor on a division.</p>
@@ -2586,15 +2622,56 @@
     </section>
 
     <section>
-        <title>Hierarchical Structure</title>
+        <title>Document Information (experimental)</title>
 
-        <p>We collect all the specifications, roughly in a top-down order, so the generated schema files have a rational ordering to them, even if the order presented here is different.</p>
+        <p>We extend the <c>docinfo</c> to include new elements. We
+                add each to the <c>Configuration</c> group.</p>
+
+        <p>A textbook can have a blurb (roughly what you would expect on the back of the book), and optionally a <attr>shelf</attr> that tells Runestone how to categorize the book.</p>
+
+        <fragment xml:id="blurb">
+            <title>Blurb</title>
+            <code>
+            Configuration |=
+                element blurb {
+                    attribute shelf {text},
+                    text
+                }
+            </code>
+        </fragment>
+
+        <fragment xml:id="document-id">
+            <title>Document ID</title>
+            <code>
+            Configuration |=
+                element document-id {
+                    attribute edition {text},
+                    text
+                }
+            </code>
+        </fragment>
+
+        <p>Now we collect these to add to the dev schema.</p>
+        <fragment xml:id="docinfo-dev">
+            <title>Experimental Document Info</title>
+            <fragref ref="blurb"/>
+            <fragref ref="document-id"/>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Hierarchical
+                Structure</title>
+
+        <p>We collect all the specifications, roughly in a top-down order, so
+                the generated schema files have a rational ordering to them, even if the order
+                presented here is different.</p>
 
         <fragment filename="pretext.rnc">
             <title>Hierarchical Structure</title>
             <code>
-            grammar {
-            </code>
+                    grammar {
+                </code>
             <fragref ref="start-elements" />
             <fragref ref="gross-structure" />
             <fragref ref="document-types" />
@@ -2651,52 +2728,59 @@
             <fragref ref="bad-bank" />
             <fragref ref="docinfo" />
             <code>
-            }
-            </code>
-        </fragment>
-    </section>
+                    }
+                </code>
+            </fragment>
+        </section>
 
     <section>
-        <title>Development Schema</title>
+        <title>Development
+                Schema</title>
         
-        <p>Here we collect all fragments that are still experimental and put them in a rnc file that includes the stable schema.</p>
+        <p>Here we collect all fragments that are still experimental and put them
+                in a rnc file that includes the stable schema.</p>
 
         <fragment filename="pretext-dev.rnc">
             <title>Development Schema</title>
             <code>
-            grammar {
-                
-            include "pretext.rnc"
-            </code>
+                    grammar {
+
+                    include "pretext.rnc"
+                </code>
             <fragref ref="interactive" />
+            <fragref ref="frontmatter-dev"/>
+            <fragref ref="docinfo-dev"/>
+
             <code>
-            }
-            </code>
-        </fragment>
-    </section>
+                    }
+                </code>
+            </fragment>
+        </section>
 
     <section xml:id="badbank">
-        <title>Bad Bank</title>
+        <title>Bad
+                Bank</title>
 
         <fragment xml:id="bad-bank">
             <title>Bad bank</title>
             <code>
-            Demonstration = element demonstration {
-                Title,
-                Paragraph,
-                Sage
-            }
-            </code>
-        </fragment>
-    </section>
+                    Demonstration = element demonstration {
+                    Title,
+                    Paragraph,
+                    Sage
+                    }
+                </code>
+            </fragment>
+        </section>
 
     <backmatter>
         <appendix xml:id="fragment-list">
-            <title>Fragments</title>
+            <title>
+                    Fragments</title>
 
             <list-of elements="fragment"/>
-        </appendix>
-    </backmatter>
+            </appendix>
+        </backmatter>
 
     </article>
 </pretext>
