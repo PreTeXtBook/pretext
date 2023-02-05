@@ -1507,10 +1507,12 @@
     <xs:choice>
       <xs:element ref="computation"/>
       <xs:element ref="technology"/>
+      <xs:element ref="data"/>
     </xs:choice>
   </xs:group>
   <xs:element name="computation" type="ComputationLike"/>
   <xs:element name="technology" type="ComputationLike"/>
+  <xs:element name="data" type="ComputationLike"/>
   <xs:complexType name="AsideLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
