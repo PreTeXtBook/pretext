@@ -3250,7 +3250,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <p>In concert with interactive programs (see <xref ref="topic-program-console"/>) you can define a file of data that may be employed by those programs.  The necessary element is <tag>datafile</tag>.  It requires a <attr>label</attr> attribute.  The <attr>filename</attr> is also required and is the name the file is known by in an ActiveCode program.  Do not try to impose any sort of directory structure on this name.  Just a filename.  In the case of a text file (see below), the <attr>editable</attr> attribute is optional.  The value <c>no</c> is the default, with <c>yes</c> as the other option.  The attributes <attr>rows</attr> and <attr>cols</attr> are optional for text files, and default to <c>20</c> and <c>60</c> respectively.</p>
 
-        <p>Where might you place a <tag>datafile</tag>?  Lots of places are possible, such as in an <tag>example</tag> or a programming <tag>exercise</tag>, close to an ActiveCode <tag>program</tag>.  Or in the purpose-built COMPUTATION-LIKE block <tag>data</tag>, which will get you a heading, number, title, cross-reference target, etc. (see <xref ref="block-summary"/>).</p>
+        <p>Where might you place a <tag>datafile</tag>?  Lots of places are possible, such as in an <tag>example</tag> or a programming <tag>exercise</tag>, close to an ActiveCode <tag>program</tag>.  So in expository material or in activities for readers to work through.  The purpose-built COMPUTATION-LIKE block, <tag>data</tag>, which will get you a heading, number, title, cross-reference target, etc. (see <xref ref="block-summary"/>), is an option if the file itself needs more prominence or dedicated explanation.</p>
 
         <paragraphs>
             <title>Text as Data Files</title>
@@ -3274,8 +3274,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Some notes that apply to each type of data file.<ul>
                 <li>Note that the name of the data file in a <attr>source</attr> attribute need not have any resemblance to the new name given to the file via the <attr>filename</attr> attribute.  In other words, the reader will never know (or care) what <attr>source</attr> was.</li>
 
-                <li>Whenever the <attr>source</attr> attribute is used, there needs to be an advance step performed by the CLI or the <c>pretext/pretext</c> script to generate an auxillary file (yes, a third file!) to aid the transistion from an external file to a file that can be used by the reader in programs.</li>
-
+                <li>Whenever the <attr>source</attr> attribute is used, there needs to be an advance step performed by the CLI <xref ref="processing-CLI"/>
+                or the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) to generate an auxillary file (yes, a third file!) to aid the transistion from an external file to a file that can be used by the reader in programs.</li>
                 <li>
                     <p>In all cases, for an <init>HTML</init> build the contents of the data file live within an <init>HTML</init> page, as text for a text file, and as a base-64 encoding for an image file.  Hence for a non-Runestone build, any employing program must be on the same page, and an author should think ahead about the granularity of how a project might be chunked into pages.</p>
 
