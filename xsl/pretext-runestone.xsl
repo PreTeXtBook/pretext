@@ -101,6 +101,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use of alternate services and rely on code to always specify -->
 <!-- all four parameters or none at all.                          -->
 <xsl:variable name="b-altrs-services" select="not($altrs-version = '') and not($b-debugging-rs-services)"/>
+<!-- The Runestone Services version actually in use is -->
+<!-- needed several places, so we compute it once now. -->
+<!-- Manifest, two "ebookConfig".                      -->
+<xsl:variable name="runestone-version">
+    <xsl:choose>
+        <xsl:when test="$b-altrs-services">
+            <xsl:value-of select="$altrs-version"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$runestone-services/all/version"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- The Runestone platform option requires output that can be used  -->
 <!-- on the server with a templating language/tool.  For books       -->
@@ -171,9 +184,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <!-- end Scratch ActiveCode windows -->
                 <xsl:text>eBookConfig.new_server_prefix = "/ns";&#xa;</xsl:text>
+                <xsl:text>eBookConfig.runestone_version = '</xsl:text>
+                <xsl:value-of select="$runestone-version"/>
+                <xsl:text>';&#xa;</xsl:text>
                 <!-- no .build_info -->
                 <!-- no .python3 -->
-                <!-- no .runestone_version -->
                 <!-- no .jobehost -->
                 <!-- no .proxyuri_runs -->
                 <!-- no .proxyuri_files -->
@@ -294,7 +309,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- end Scratch ActiveCode windows -->
                 <xsl:text>eBookConfig.build_info = "";&#xa;</xsl:text>
                 <xsl:text>eBookConfig.python3 = null;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.runestone_version = '5.0.1';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.runestone_version = '</xsl:text>
+                <xsl:value-of select="$runestone-version"/>
+                <xsl:text>';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.jobehost = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.proxyuri_runs = '';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.proxyuri_files = '';&#xa;</xsl:text>
@@ -321,13 +338,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <xsl:when test="$b-altrs-services">
                         <xsl:value-of select="$altrs-cdn-url"/>
-                        <xsl:value-of select="$altrs-version"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="$runestone-services/all/cdn-url"/>
-                        <xsl:value-of select="$runestone-services/all/version"/>
                     </xsl:otherwise>
                 </xsl:choose>
+                <xsl:value-of select="$runestone-version"/>
                 <xsl:text>/</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
@@ -470,14 +486,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- version of Runestone Services used for this build -->
             <runestone-services>
                 <xsl:attribute name="version">
-                    <xsl:choose>
-                        <xsl:when test="$b-altrs-services">
-                            <xsl:value-of select="$altrs-version"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$runestone-services/all/version"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:value-of select="$runestone-version"/>
                 </xsl:attribute>
             </runestone-services>
             <!-- mine various bits and pieces of the source for RS metadata  -->
