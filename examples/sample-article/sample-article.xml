@@ -9116,6 +9116,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <cline>perfect. Consider other options like &lt;cd&gt; or &lt;pre&gt; below.</cline>
             </pre>
 
+            <p>We use a Unicode right arrow (Unicode Character 'RIGHTWARDS ARROW', U+2192) to sometimes indicate the truncation of long lines in a text file.  It is available in our usual monospace font for <latex/>/PDF, but we include a use here in order to make certain that is always the case.  Here: <c>&#x2192;</c>.</p>
         </section>
 
         <section xml:id="section-programs">
