@@ -46,7 +46,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Are filters here irrelevant?  Just for the implementation of "static-url"? -->
 <xsl:template match="audio[@source|@href]|video[@source|@href|@youtube|@youtubeplaylist|@vimeo]|interactive" mode="extraction">
     <xsl:apply-templates select="." mode="static-url"/>
-    <xsl:text>,</xsl:text>
+    <!-- Do not use a comma, since a YouTube playlist has      -->
+    <!-- commas as separators, and they show up in the URL.    -->
+    <!-- So a space instead.  See comments in Python consumer. -->
+    <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>

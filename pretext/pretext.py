@@ -1864,11 +1864,16 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     id_file = open(id_filename, "r")
-    # read lines, but only lines that are comma delimited
-    interactives = [inter.strip() for inter in id_file.readlines() if "," in inter]
+    interactives = id_file.readlines()
 
     for inter in interactives:
-        inter_pair = inter.split(",")
+        # separator is a space, since a comma can be in a YouTube playlist
+        # no argument here means contiguous whitespace - should always
+        # be a single space coming from the extraction routine.
+        # NB: an audio or video file provided by an author with a URL to
+        # some external location, with a space in it, will be a problem here.
+        # The URL should be percent-encoded so the space is not problematic.
+        inter_pair = inter.split()
         url = inter_pair[0]
         path = os.path.join(dest_dir, inter_pair[1] + ".png")
         log.info('creating URL with content "{}" as {}...'.format(url, path))
