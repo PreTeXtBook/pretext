@@ -291,6 +291,7 @@ def asymptote_conversion(
     )
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # Resulting *.asy files are in tmp_dir, switch there to work
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, "w")
     # simply copy for source file output
@@ -364,7 +365,7 @@ def asymptote_conversion(
                         "             {}".format(asyversion),
                     ]
                 log.warning("\n".join(msg))
-
+    os.chdir(owd)
 
 def sage_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat
@@ -410,6 +411,7 @@ def sage_conversion(
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    owd = ow.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, "w")
     for sageplot in os.listdir(tmp_dir):
@@ -420,7 +422,7 @@ def sage_conversion(
         log.debug("sage conversion {}".format(sage_cmd))
         subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
         shutil.copy2(sageout, dest_dir)
-
+    os.chdir(owd)
 
 def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
@@ -466,6 +468,7 @@ def latex_image_conversion(
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # now work in temporary directory
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     # and maintain a list of failures for later
     failed_images = []
@@ -608,6 +611,8 @@ def latex_image_conversion(
                             )
                         )
                     shutil.copy2(latex_image_eps, dest_dir)
+    # change directories back so the temp directory can be removed later.
+    os.chdir(owd)
     # raise an error if there were *any* failed images
     if failed_images:
         msg = "\n".join(
@@ -840,6 +845,7 @@ def latex_tactile_image_conversion(
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, extraction_params)
 
     # now work in temporary directory for latex runs
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     # files *only*, from top-level
     files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
@@ -883,7 +889,8 @@ def latex_tactile_image_conversion(
             xsltproc(
                 manipulation_xslt, svg_source, svg_result, None, manipulation_params
             )
-
+    # change directory back so the temp directory can be deleted.
+    os.chdir(owd)
 
 #####################
 # Traces for CodeLens
@@ -3343,6 +3350,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     # process with a  latex  engine
     latex_key = get_deprecated_tex_fallback(method)
@@ -3362,7 +3370,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
         shutil.copy2(pdfname, out_file)
     else:
         shutil.copy2(pdfname, dest_dir)
-
+    os.chdir(owd)
 
 #################
 # XSLT Processing
