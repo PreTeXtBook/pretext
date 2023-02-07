@@ -684,6 +684,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                       |
