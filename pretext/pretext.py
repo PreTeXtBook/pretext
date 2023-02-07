@@ -1829,6 +1829,21 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.info("YouTube thumbnail download complete")
 
 
+##########################
+#
+#  Video Play Button Image
+#
+##########################
+
+def play_button(dest_dir):
+    '''Copy generic static video image to a directory'''
+
+    ptx_xsl_dir = get_ptx_xsl_path()
+    play_button_provided_image = os.path.join(ptx_xsl_dir, "support", "play-button", "play-button.png")
+    log.info('Generating generic video preview, aka "play button" into {}'.format(dest_dir))
+    shutil.copy2(play_button_provided_image, dest_dir)
+
+
 ########################
 #
 #  QR Code manufacturing
