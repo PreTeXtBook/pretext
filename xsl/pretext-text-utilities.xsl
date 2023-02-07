@@ -479,9 +479,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$ncols = ''">
                     <xsl:value-of select="$line"/>
                 </xsl:when>
-                <!-- truncate line to value of ncols -->
+                <!-- within length limit: output whole line -->
+                <xsl:when test="string-length($line) &lt;= $ncols">
+                    <xsl:value-of select="$line"/>
+                </xsl:when>
+                <!-- truncate line to value of $ncols-1, and add  -->
+                <!-- a simple right arrow to indicate truncation  -->
                 <xsl:otherwise>
-                    <xsl:value-of select="substring($line, 1, $ncols)"/>
+                    <xsl:value-of select="substring($line, 1, $ncols - 1)"/>
+                    <!-- Unicode Character 'RIGHTWARDS ARROW' -->
+                    <xsl:text>&#x2192;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <!-- restore the missing line-break -->
