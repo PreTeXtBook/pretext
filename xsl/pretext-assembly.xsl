@@ -1809,6 +1809,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- new dynamic fillin goes here, perhaps:                     -->
             <!-- statement//fillin[(@*|node()) and not(@characters|@fill)]? -->
+            <xsl:when test="statement[ancestor::exercise/setup]">
+                <xsl:text>fillin</xsl:text>
+            </xsl:when>
             <!-- only interactive programs make sense after a "statement" -->
             <xsl:when test="statement and program[(@interactive = 'codelens') or (@interactive = 'activecode')]">
                 <xsl:text>coding</xsl:text>
