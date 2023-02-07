@@ -123,6 +123,7 @@ def get_destination_directory(directory, xml_source, pub_file, component):
     # simply listed here in alphabetical order
     component_dirs = {
         "asy": "asymptote",
+        "dynamic": "dynamic_subs",
         "latex-image": "latex-image",
         "mom": "problems",
         "preview": "preview",
@@ -323,6 +324,7 @@ def get_cli_arguments():
             "WeBWorK problems in authored, PG, url, and static representations",
         ),
         ("pg-macros", "Server-side macros for WeBWorK problem generation"),
+        ("dynamic", "Expression subsitutions for dynamically generated exercises"),
         ("youtube", "Thumbnails for YouTube videos (JPEG only)"),
         ("play-button", "generate generic static video image"),
         ("qrcode", "QR codes for static versions of interactive content"),
@@ -697,6 +699,10 @@ def main():
         ptx.tracer(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == "datafile":
         ptx.datafiles_to_xml(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
+    elif args.component == "dynamic":
+        ptx.dynamic_substitutions(
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+        )
     elif args.component == "all":
         if args.format == "html":
             ptx.html(

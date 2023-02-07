@@ -177,7 +177,7 @@
         </xsl:attribute>
         <xsl:apply-templates select="."/>
     </eval-subst>
-    <xsl-text>&#xa;</xsl-text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 

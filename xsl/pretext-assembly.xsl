@@ -188,6 +188,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="dynamic-substitution">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="representations">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="representations"/>
@@ -294,6 +300,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<!-- Make static substitutions for dynamic exercises.  -->
+<xsl:variable name="dynamic-rtf">
+    <xsl:apply-templates select="$assembly" mode="dynamic-substitution"/>
+</xsl:variable>
+<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)"/>
+
 <!-- Exercises are "tagged" as to their nature (division, inline, -->
 <!-- worksheet, reading, project-like) and interactive exercises  -->
 <!-- get more precise categorization.  The latter is used to      -->
@@ -301,7 +313,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="exercise-rtf">
     <!-- initialize with default, 'inline' -->
-    <xsl:apply-templates select="$assembly" mode="exercise">
+    <xsl:apply-templates select="$dynamic" mode="exercise">
         <xsl:with-param name="division" select="'inline'"/>
     </xsl:apply-templates>
 </xsl:variable>
@@ -440,6 +452,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:for-each>
     </xsl:copy>
+</xsl:template>
+
+<!-- ##################################################### -->
+<!-- Dynamic Substitutions                                 -->
+<!-- Cut out dynamic setup and evaluation for static mode. -->
+<!-- ##################################################### -->
+<xsl:template match="setup[de-object|postSetupScript]|evaluation" mode="dynamic-substitution">
+    <xsl:if test="$exercise-style = 'dynamic'">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="eval[@expr]" mode="dynamic-substitution">
+    <xsl:choose>
+        <!-- static, for multiple conversions, but primarily LaTeX -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="parent-id">
+                <xsl:apply-templates select="ancestor::exercise" mode="visible-id" />
+            </xsl:variable>
+            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
+            <xsl:variable name="expression" select="@expr"/>
+            <xsl:variable name="substitution">
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@expr=$expression]"/>
+            </xsl:variable>
+            <xsl:message>
+                <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
+                <xsl:value-of select="$parent-id"/>
+                <xsl:text>$</xsl:text>
+                <xsl:value-of select="$expression"/>
+                <xsl:text>=</xsl:text>
+                <xsl:value-of select="$substitution"/>
+            </xsl:message>
+            <xsl:value-of select="$substitution"/>
+        </xsl:when>
+        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
+        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
+        <!-- to/for HTML conversion                                         -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################### -->
@@ -2442,7 +2499,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="audio|video|interactive" mode="standalone-filename">
+<xsl:template match="audio|video|interactive|exercise[@exercise-interactive='fillin' and setup]" mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>

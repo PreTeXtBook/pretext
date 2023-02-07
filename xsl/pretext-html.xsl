@@ -6780,6 +6780,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
+                <xsl:apply-templates select="." mode="primary-navigation"/>
                 <xsl:call-template name="latex-macros" />
                 <xsl:call-template name="enable-editing" />
                  <header id="ptx-masthead" class="ptx-masthead">

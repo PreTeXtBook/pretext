@@ -1009,6 +1009,157 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 ################################
 #
+#  Dynamic Exercise Static Representations
+#
+################################
+def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+    import asyncio  # get_event_loop()
+
+    # external module, often forgotten
+    # imported here, used only in interior
+    # routine to launch browser
+    try:
+        import playwright.async_api  # launch()
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("playwright"))
+
+    # Interior asynchronous routine to manage the Chromium headless browser.
+    # Use the same page instance for the generation of all interactive previews
+    async def extract_substitutions(dynamic_elements, baseurl, subst_file):
+
+        # dynamic_elements:  list containing the interactive hash/fragment ids [1:]
+        # baseurl:           local server's base url (includes local port)
+        # subst_file:        file containing the substitutions
+
+        # Open playwright's asynchronous api to load a browser and page
+        async with playwright.async_api.async_playwright() as pw:
+            browser = await pw.chromium.launch()
+            page = await browser.new_page()
+
+            msg = 'Storing dynamic substitutions in file {}'
+            log.info(msg.format(subst_file))
+            subst_xml = open(subst_file, "w")
+            subst_xml.write("<xml>")
+            # First index contains original baseurl of hosted site (not used)
+            for dynamic_exercise in dynamic_elements:
+                # loaded page url containing interactive
+                input_page = os.path.join(baseurl, dynamic_exercise + ".html")
+
+                # progress report
+                msg = 'extracting substitutions for exercise with identifier "{}" on page {}'
+                log.info(msg.format(dynamic_exercise, input_page))
+
+                # goto page and wait for content to load
+                await page.goto(input_page, wait_until='domcontentloaded')
+                await page.wait_for_timeout(1000)
+                # see what Runestone substituted into the expressions
+                xpath = "//div[@id='{}-substitutions']".format(dynamic_exercise)
+                elt = page.locator(xpath)
+                exercise_substitutions = await elt.inner_html()
+
+                # add this to the XML of all substitutions
+                # redundancies will be present but don't matter
+                element = '<dynamic-substitution id="{}">'
+                subst_xml.write(element.format(dynamic_exercise))
+                subst_xml.write(exercise_substitutions)
+                subst_xml.write("</dynamic-substitution>")
+
+            subst_xml.write("</xml>")
+            subst_xml.close()
+            await browser.close()
+
+    log.info(
+        "using playwright package to determine substitutions in dynamic exercises from {}".format(
+            xml_source
+        )
+    )
+
+    # Identify dynamic exercises that will be processed
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-dynamic.xsl")
+    # Where to store the results
+    dyn_subs_file = os.path.join(dest_dir, "dynamic_substitutions.xml")
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, "dynamic-ids.txt")
+    log.debug("Dynamic exercise id list temporarily in {}".format(id_filename))
+    log.debug("Dynamic exercise html files temporarily in {}".format(tmp_dir))
+    # This next call outputs the list of ids 
+    # *and* produce a pile of files (the "standalone") pages
+    xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
+    # read the list of exercise identifiers just generated
+    id_file = open(id_filename, "r")
+    dynamic_exercises = [f.strip() for f in id_file.readlines() if not f.isspace()]
+
+    # Copy in external resources (e.g., js code)
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+    if external_abs:
+        external_dir = os.path.join(tmp_dir, "external")
+        shutil.copytree(external_abs, external_dir)
+
+    # Spawn a new process running a local html.server
+    import subprocess
+    import random
+    # Try a standard port and if it fails, try a random port
+    port = 8888
+    looking_for_port = True
+    numAttempt = 0
+    maxAttempts = 10  # In case failure is not due to blocked ports.
+    while looking_for_port and numAttempt < maxAttempts:
+        try:
+            numAttempt = numAttempt + 1
+            log.info(f"Opening subprocess http.server with port={port}")
+            # -u so that stdout and stderr are not cached
+            server = subprocess.Popen(["python", "-u", "-m", "http.server", f"{port}", "-d", tmp_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            # Check if terminated. Allow 1 second to start-up.
+            try:
+                result = server.wait(1)
+                log.debug(f"Server startup failed")
+                port = random.randint(49152, 65535)
+                log.debug(f"Trying port {port} instead")
+            # The exception is success because process did not terminate.
+            except subprocess.TimeoutExpired:
+                looking_for_port = False
+        except OSError:
+            # Not sure if this will ever trigger b/c Python itself should start
+            log.debug(f"Subprocess to open http.server failed")
+            port = random.randint(49152, 65535)
+            log.debug(f"Trying port {port} instead.\n")
+    if numAttempt >= maxAttempts:
+        log.error("Unable to open http.server for interactive previews")
+
+    # filenames lead to placement in current working directory
+    # so change to temporary directory, and copy out
+    # TODO: just write to "dest_dir"?
+    owd = os.getcwd()
+    os.chdir(tmp_dir)
+
+    # event loop and copy, terminating server process even if interrupted
+    try:
+        log.debug("Using http.server subprocess {}".format(server.pid))
+        baseurl = "http://localhost:{}".format(port)
+        asyncio.get_event_loop().run_until_complete(extract_substitutions(dynamic_exercises, baseurl, dyn_subs_file))
+    finally:
+        # close the server and report (debug) results
+        log.info("Closing http.server subprocess")
+        server.kill()
+        log.debug("Log data from http.server:")
+        server_output = server.stderr.read()
+        for line in server_output.split("\n"):
+            log.debug(line)
+
+    # restore working directory
+    os.chdir(owd)
+
+
+################################
+#
 #  WeBWorK Extraction Processing
 #
 ################################
