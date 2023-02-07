@@ -3150,7 +3150,7 @@ Book (with parts), "section" at level 3
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
-<xsl:template match="audio|video|interactive" mode="standalone-filename">
+<xsl:template match="audio|video|interactive|exercise[@exercise-interactive='fillin' and setup]" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id-early" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
