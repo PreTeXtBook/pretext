@@ -771,7 +771,7 @@ Book (with parts), "section" at level 3
                         <xsl:apply-templates select="text()|var" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="text()|fillin" />
+                        <xsl:apply-templates select="text()|eval|fillin" />
                     </xsl:otherwise>
                 </xsl:choose>
                 <!-- look ahead to absorb immediate clause-ending punctuation   -->
@@ -941,7 +941,7 @@ Book (with parts), "section" at level 3
                 <xsl:apply-templates select="text()|xref|var" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="text()|xref|fillin" />
+                <xsl:apply-templates select="text()|xref|eval|fillin" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -1259,7 +1259,7 @@ Book (with parts), "section" at level 3
                 <xsl:apply-templates select="text()|xref|var" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="text()|xref|fillin" />
+                <xsl:apply-templates select="text()|xref|eval|fillin" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>

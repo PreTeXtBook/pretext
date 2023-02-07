@@ -796,6 +796,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>"</xsl:text>
 </xsl:template>
 
+<xsl:template name="quote-strip-string">
+    <xsl:param name="text" />
+    <xsl:text>"</xsl:text>
+    <xsl:call-template name="strip-newlines">
+        <xsl:with-param name="text" select="$text" />
+    </xsl:call-template>
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
 <xsl:template name="escape-quote-string">
     <xsl:param name="text" />
     <xsl:call-template name="quote-string">
