@@ -3151,7 +3151,7 @@ Book (with parts), "section" at level 3
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
 <xsl:template match="audio|video|interactive" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:apply-templates select="." mode="visible-id-early" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="standalone-filename">
