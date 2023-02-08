@@ -12569,13 +12569,18 @@ TODO:
 </xsl:template>
 
 <!-- JS for native search -->
+<!-- The async attribute may help with slow downloads,  -->
+<!-- especially the project-specific search-file which  -->
+<!-- can be as large as several megabytes.              -->
+<!-- NB: async attribute also on Lunr and PTX-JS        -->
+<!-- resulted in console errors (2022-02-08)            -->
 <xsl:template name="native-search-box-js">
     <xsl:if test="$has-native-search">
         <script src="https://unpkg.com/lunr/lunr.js"/>
         <!-- document-specific variables with search documents -->
-        <script src="{$lunr-search-file}"/>
+        <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
-        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"></script>
+        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"/>
         <link href="{$html.css.server}/css/{$html.css.version}/pretext_search.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
 </xsl:template>
