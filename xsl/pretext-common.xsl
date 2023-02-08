@@ -3617,6 +3617,28 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- The "visible-id" version above assumes any (legacy) @xml:id have -->
+<!-- been upgraded by the assembly/pre-processor stylesheet.  But in  -->
+<!-- that stylesheet we sometimes need this identifier **before** the -->
+<!-- upgrade happens.  This matter of timing might be resolved by     -->
+<!-- being more careful about when static representations are         -->
+<!-- substituted into assembled source.                               -->
+<xsl:template match="*" mode="visible-id-early">
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
 <!-- database across courses ("base course") and semesters ("time").      -->
 <!-- And the HTML representation of an interactive exercise, when powered -->
