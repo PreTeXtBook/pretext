@@ -1900,6 +1900,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </div>
         <xsl:choose>
             <xsl:when test="image">
+                <!-- filename is relative to author's source -->
                 <xsl:variable name="data-filename">
                     <xsl:apply-templates select="."  mode="datafile-filename"/>
                 </xsl:variable>

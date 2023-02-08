@@ -3095,9 +3095,12 @@ Book (with parts), "section" at level 3
 <!-- The contents of a datafile may be encoded as text in an XML   -->
 <!-- file within the generated/datafile directory.  The filename   -->
 <!-- has this construction, even if we do not always consult it.   -->
+<!-- NB: these XML files will be read with a "document()" call,    -->
+<!-- with a path relative to the author's main source file, hence  -->
+<!-- the filename uses the directory name in author's source.      -->
 <!-- NB: identical code in static constructions.                   -->
 <xsl:template match="datafile" mode="datafile-filename">
-    <xsl:value-of select="$generated-directory"/>
+    <xsl:value-of select="$generated-directory-source"/>
     <xsl:text>datafile/</xsl:text>
     <!-- context is "datafile", the basis for identifier -->
     <xsl:apply-templates select="." mode="visible-id"/>
@@ -3116,6 +3119,7 @@ Book (with parts), "section" at level 3
         <!--       caused a false infinite recursion warning, and -->
         <!--   (b) the file should be *exactly* what is desired.  -->
         <xsl:when test="pre/@source">
+            <!-- filename is relative to author's source -->
             <xsl:variable name="data-filename">
                 <xsl:apply-templates select="."  mode="datafile-filename"/>
             </xsl:variable>
