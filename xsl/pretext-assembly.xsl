@@ -1966,9 +1966,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="$exercise-style = 'static'">
                 <!-- locate the static representation in a file, generated independently -->
+                <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">
                     <xsl:if test="$b-managed-directories">
-                        <xsl:value-of select="$generated-directory"/>
+                        <xsl:value-of select="$generated-directory-source"/>
                     </xsl:if>
                     <xsl:text>problems/mom-</xsl:text>
                     <xsl:value-of select="myopenmath/@problem"/>
