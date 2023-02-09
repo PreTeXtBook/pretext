@@ -1932,6 +1932,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- conveniently, value is true/false -->
                         <xsl:value-of select="$b-is-editable"/>
                     </xsl:attribute>
+                    <!-- Runestone can only hide non-editable text -->
+                    <xsl:if test="(not(@editable = 'yes')) and (@hide = 'yes')">
+                        <xsl:attribute name="data-hidden"/>
+                    </xsl:if>
                     <xsl:attribute name="data-rows">
                         <xsl:choose>
                             <xsl:when test="@rows">
