@@ -130,7 +130,6 @@
             </p>
 
             <p>Whatever you do, use a style and stick with it.  You could put titles on a new line (indented) after creating a new chapter or section; some people like them on the same line, immediately adjacent.  You could put a single blank line before each new paragraph, but not after the last.  And so on.  The choice is yours, but consistency will pay off when you inevitably come back to edit something.  You have put a lot of work and effort into your source.  You will be rewarded with fewer problems if you keep it neat and tidy.</p>
-            </p>
 
             <p>In some parts of a <pretext /> document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
 
@@ -164,38 +163,29 @@
         <title>Converting Your Source to Output</title>
 
         <p>
-            Once you have content created in <pretext /> files (i.e., XML files), you will want to convert these files into a output format such as HTML, to be viewed in a web browser, or a PDF.  Detailed instructions for doing this, including a plethora of options, will be discussed in <xref ref="processing"/>; here we will give a very brief overview to illustrate the basic ideas.
+            Once you have content created in <pretext /> files (i.e., <init>XML</init> files), you will want to convert these files into a output format such as <init>HTML</init>, to be viewed in a web browser, or a <init>PDF</init>.  Instructions for doing this will be discussed in <xref ref="quickstart-example"/>, and in even more detail in <xref ref="processing"/>.  Here we provide an overview of how the conversion works to help you understand what is possible.
         </p>
 
         <p>
-            Once you have your computer set up correctly, converting <pretext /> <init>XML</init> into a full <init>HTML</init> website can be as simple as typing <c>pretext build html</c> in a terminal, or even hitting <c>Ctrl+Alt+B</c> in VS Code.  Behind-the-scenes, these commands use <term>XSL</term> 1.0 (<term>eXtensiible Stylesheet Language</term>) to <em>transform</em> the XML source using a number of XSL stylesheets that come with <pretext />.
+            With <pretext /> <q>installed</q> (on your computer or in the cloud), converting <pretext /> <init>XML</init> into a full <init>HTML</init> website can be as simple as typing <c>pretext build html</c> in a terminal, or hitting <c>Ctrl+Alt+B</c> in VS Code.  Behind-the-scenes, these commands read through your <init>XML</init> and use <term>XSL</term> 1.0 (<term>eXtensiible Stylesheet Language</term>) to <em>transform</em> the <init>XML</init> source, using a number of <init>XSL</init> stylesheets that come with <pretext />.
         </p>
 
         <p>
-            There are other methods of combining the supplied XSL stylesheets with your XML source, including <c>xsltproc</c>, a command line program that is usually installed by default on Linux systems and MacOS.  For many years, this was the preferred method of converting <pretext /> documents, by entering a command such as:
-        </p>
-
-        <console>
-            <input>xsltproc -xinclude ../pretext/xsl/pretext-html.xsl source/main.ptx</input>
-        </console>
-
-        <p>
-            This workflow is still supported, and for authors who would like more control over their projects, this might still be the best option.  Documentation for how to use <c>xsltproc</c> with <pretext /> can be found in <xref ref="xsltproc"/>.
+            The recommended workflow for processing your source uses a python program we call the <em><pretext/>-CLI</em> (<init>CLI</init> is <term>command line interface</term>). There are also a number of other free tools that can processes <init>XML</init> with <init>XSL</init>.  For example, <c>xsltproc</c> is a command line program that is usually installed by default on Linux systems and MacOS.  
+            This was the recommended method in the early days of <pretext />, and still works.  Documentation for how to use <c>xsltproc</c> with <pretext /> can be found in <xref ref="xsltproc"/>, but unless you are helping with the development of <pretext /> or are trying to do something fancy, you probably don't need it.
         </p>
 
         <p>
-            Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional Python script, also shipped with <pretext />.  Instructions for using this script can be found in <xref ref="pretext-script"/>.
+            Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional processing, done in python.  The <pretext />-CLI does this using the <c>pretext generate</c> command. 
+            There is also a python script that can accesses these functions directly for use in development.  See <xref ref="pretext-script"/> if you are curious.
         </p>
 
-        <p>
-            For the majority of authors who are starting out with <pretext />, a simpler workflow is available: the PreTeXt-CLI (CLI is <em>Command Line Interface</em>).  This is a Python program that implements the most common conversion tasks that previously required <c>xsltproc</c> and the pretext script.  If you are ready to install and get started see <xref ref="quickstart-getting-pretext" />.
-        </p>
     </section>
 
     <section xml:id="start-next">
         <title>Where Next?</title>
 
-        <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example"/> should be next, where we walk through the steps to construct and convert a couple short examples and then expand them slightly with several additions.</p>
+        <p>To start playing with <pretext /> right away, work through the <xref ref="quickstart-example"/>.  It will guide you through a cloud-based setup (no software install required) and you will create, edit, convert, and deploy your first document.</p>
 
         <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview"/>.</p>
 
