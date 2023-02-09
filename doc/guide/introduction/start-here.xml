@@ -64,26 +64,85 @@
     </section>
 
     <section xml:id="introduction-to-source-formatting">
-        <title>Formatting Your Source</title>
+        <title>Understanding Your Source</title>
 
-        <p>There are a lot of details related to how you prepare your <term>source</term><idx>source</idx>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
+        <p>Almost all of your time authoring in <pretext /> will be spent editing your <term>source</term><idx>source</idx> files.  We now briefly describe what these files will look like and how to edit them.</p>
 
         <paragraphs>
-            <title>File Format</title>
+            <title>File Format and Text Editors</title>
 
-            <p>Your source should be plain <term>ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, Visual Studio Code, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
+            <p>Your source will be plain text <term>ASCII files</term><idx>ASCII file</idx>, which you create and edit with any number of text editors. Files can be saved with the <c>.ptx</c> extension, which might tell your text editor what sort of file you are editing and will provide syntax highlighting and code completion, among other features.  If your editor does not recognize <c>.ptx</c>, then you can use the <c>.xml</c> extension which has wider editor support (but with fewer <pretext />-specific features).</p>
+                
+            <p>Popular text editors include Visual Studio Code, Sublime Text, vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  But in particular, you should not use word processing programs like Word, LibreOffice, Google Docs, WordPerfect, AbiWord, Pages, or similar programs.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
 
-            <p>There are <term>XML editors</term><idx>XML editor</idx>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
+            <p>
+                Visual Studio Code has support for PreTeXt documents via a free extension, and the editor is open source and cross-platform (Windows, OS X, and Linux).  The developers of <pretext /> have also had a very good experience with Sublime Text, which is cross-platform, and can be used for free,
+                though it has a very liberal paid license if you want to avoid nagging.  
+            </p>
 
-            <p>We have one recommendation for a spell checker, which you can read about later in <xref ref="aspell"/>.</p>
+            <p>There are <term>XML editors</term><idx>XML editor</idx>, which might be too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that you might find useful.</p>
+
+            <p>Some text editors (like VS Code) have spell checking extensions.  More generally, recommendations for a spell checker can be found in <xref ref="aspell"/>.</p>
+        </paragraphs>
+
+
+        <paragraphs>
+            <title>Structure of your Source</title>
+            <p>
+                If you start to think about the structure of a document (like an article or book) you will quickly realize that components are like blocks, stacked inside or next to other blocks.  From the <em>outside</em> to <em>inside</em>, a book will have a number of chapters (next to each other, but all inside the book), and each might have sections (adjacent but inside the chapter).  In the section, there will be a title, paragraphs, images, examples, theorems, and so on.  Examples will themselves contain paragraphs.  A theorem might contain a statement, which contains some paragraphs, which might contain some displayed math, and adjacent to the statement, there could be a proof, itself containing paragraphs, etc. 
+            </p>
+
+            <p>The hierarchical nature of <init>XML</init> is perfect to capture the hierarchical nature of a scholarly document.  Consider the start of a <pretext /> document shown in <xref ref="listing-simple"/>.</p>
+
+            <listing xml:id="listing-simple">
+                <caption>Source of a simple <pretext /> book project.</caption>
+                <program language="xml">
+                    <input>
+                    <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<pretext>
+    <book>
+        <title>Hello world!</title>
+        <chapter>
+            <title>Getting Started</title>
+            <p>Welcome to PreTeXt!</p>
+            <!-- TODO: find something more to say... -->
+        </chapter>
+    </book>
+</pretext>
+                        ]]>
+                    </input>
+                </program>
+            </listing>
+
+            <p>
+                The first line is boilerplate that lets various programs know the rest of the file is XML, and the line start <c>&lt;!--</c>  is an example of a comment that won't appear in the output.  Besides this, you can start to see how the structure of the book is layed out.
+            </p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Whitespace and Indentation</title>
+
+            <p>The term <term>whitespace</term><idx>whitespace</idx> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
+            
+            <p>
+                However, it can be useful to use whitespace to indent the different levels of the <init>XML</init> (and document) hierarchy. Use two (or four) spaces for indentation; a good editor will visually respect this indentation, and help you with maintaining the right indentation with each new line.  Line up opening and closing tags at the same level of indentation, and your editor should let you <q>fold</q> the code to visually hide blocks.
+            </p>
+
+            <p>Whatever you do, use a style and stick with it.  You could put titles on a new line (indented) after creating a new chapter or section; some people like them on the same line, immediately adjacent.  You could put a single blank line before each new paragraph, but not after the last.  And so on.  The choice is yours, but consistency will pay off when you inevitably come back to edit something.  You have put a lot of work and effort into your source.  You will be rewarded with fewer problems if you keep it neat and tidy.</p>
+            </p>
+
+            <p>In some parts of a <pretext /> document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
+
+            <p>Never use tabs, they can only cause problems.  You should be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  Most editors have a setting that will show whitespace as a small faint dots or arrows, so you can be certain there is no stray whitespace <em>anywhere</em>.</p>
         </paragraphs>
 
         <paragraphs>
             <title>Learn to Use Your Editor</title>
 
-            <p>Because XML requires a closing tag for every opening tag, it feels like a lot of typing.  Your editor should know what tag to close next and there should be a simple command to do that.  Discover this first and consider switching editors if it is not available.  For me, in Sublime Text on Linux, I just press <c>Alt-Period</c> and get a closing tag.  Not only is this quick and easy, I often recognize that I am not getting the tag I expected since I forgot to close one earlier.  This one shortcut can pretty much cut your authoring overhead in half.</p>
+            <p>Because XML requires a closing tag for every opening tag, it feels like a lot of typing.  The VS Code <pretext /> extension comes with many <term>snippets</term> (code completions) that can fill out lots of the markup for you.  More generally, any editor should know what tag to close next and there should be a simple command to do that (for example, in Sublime Text on Linux, <c>Alt-Period</c> gives a closing tag).  Not only is this quick and easy, it can help spot errors when you forget to close an earlier tag.</p>
 
-            <p>If your editor can predict your opening tag, all the better.  Sublime Text recognizes that I already have a <tag>section</tag> elsewhere, so when I start my second section, I very quickly (and automatically) get a short list of choices as I type, with the one I want at the top of the list, or close to it.</p>
+            <p>If your editor can predict your opening tag, all the better.  VS Code can recognize what tags are allowed at a given position.    Sublime Text recognizes if you already have a <tag>section</tag> elsewhere, so when you start a second section, you very quickly (and automatically) get a short list of choices as you type, with the one you want at the top of the list, or close to it.</p>
 
             <p>Invest a little time early on to learn, and configure, your editor and you can be even more efficient about capturing your ideas with a minimum of overhead and interference.</p>
         </paragraphs>
@@ -91,28 +150,14 @@
         <paragraphs>
             <title>Revision Control</title>
 
-            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <pubtitle>Git For Authors</pubtitle>.</p>
+            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext /> since the source is just text files.  The hands-down favorite is <c>git</c>.  To fully understand it is beyond the scope of this guide but some information is provided in <xref ref="git-author" /> which has hints on how to best use <c>git</c> together with a <pretext /> project.</p>
+
+            <p>If you use the workflow recommended in the <xref ref="quickstart-example"/> using GitHub's codespaces, you will get revision control via git automatically, and VS Code provides a graphical user interface for all the basic operations you need.</p>
         </paragraphs>
 
-        <paragraphs>
-            <title>Whitespace</title>
 
-            <p>The term <term>whitespace</term><idx>whitespace</idx> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
 
-            <p>In some parts of a <pretext /> document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
-
-            <p>In other parts of a <pretext /> document, every single whitespace character is ignored, and you have the freedom to use indentation and blank lines to help you understand the logical structure of your document.  An example is that you can add as much whitespace as you like between the paragraphs of a section, such as a preceding blank line and indentation, and none of it will affect your output in any way.</p>
-
-            <p>Never use tabs, they can only cause problems.  You may be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  I have Sublime Text configured to show me every single space as a small faint dot, since I like to be certain I have no stray whitespace <em>anywhere</em>.</p>
-        </paragraphs>
-
-        <paragraphs>
-            <title>Structure of your Source</title>
-
-            <p>XML is hierarchical, like a family tree.  Books contain chapters, chapters contain sections, sections contain paragraphs, <etc />  I like to reflect each new level of containment by consistently indenting four spaces (you might prefer two spaces).  A good editor will visually respect this indentation, and help you with maintaining the right indentation with each new line, so much so, that you will forget how much assistance it is providing.</p>
-
-            <p>Develop a style and stick with it.  I put titles on a new line (indented) after I create a new chapter or section, some people like them on the same line, immediately adjacent.  I put a single blank line before each new paragraph, but not after the last.  And so on.  The choice is yours, but consistency will pay off when you inevitably come back to edit something.  You have put a lot of work and effort into your source.  You will be rewarded with fewer problems if you keep it neat and tidy, and you will also get very clean output.</p>
-        </paragraphs>
+ 
     </section>
 
     <section xml:id="start-source-to-output">
@@ -123,7 +168,7 @@
         </p>
 
         <p>
-            Once you have your computer set up correctly, converting <pretext /> <init>XML</init> into a full <init>HTML</init> website can be as simple as typing <c>pretext build html</c> in a terminal, or even hitting <c>Ctrl+B</c> in Visual Studio Code.  Behind-the-scenes, these commands use <term>XSL</term> 1.0 (<term>eXtensiible Stylesheet Language</term>) to <em>transform</em> the XML source using a number of XSL stylesheets that come with <pretext />.
+            Once you have your computer set up correctly, converting <pretext /> <init>XML</init> into a full <init>HTML</init> website can be as simple as typing <c>pretext build html</c> in a terminal, or even hitting <c>Ctrl+Alt+B</c> in VS Code.  Behind-the-scenes, these commands use <term>XSL</term> 1.0 (<term>eXtensiible Stylesheet Language</term>) to <em>transform</em> the XML source using a number of XSL stylesheets that come with <pretext />.
         </p>
 
         <p>
@@ -131,7 +176,7 @@
         </p>
 
         <console>
-            <input>xsltproc -xinclude ../mathbook/xsl/pretext-html.xsl source/main.ptx</input>
+            <input>xsltproc -xinclude ../pretext/xsl/pretext-html.xsl source/main.ptx</input>
         </console>
 
         <p>
