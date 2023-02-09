@@ -3250,7 +3250,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <p>In concert with interactive programs (see <xref ref="topic-program-console"/>) you can define a file of data that may be employed by those programs.  The necessary element is <tag>datafile</tag>.  It requires a <attr>label</attr> attribute.  The <attr>filename</attr> is also required and is the name the file is known by in an ActiveCode program.  Do not try to impose any sort of directory structure on this name.  Just a filename.  In the case of a text file (see below), the <attr>editable</attr> attribute is optional.  The value <c>no</c> is the default, with <c>yes</c> as the other option.  The attributes <attr>rows</attr> and <attr>cols</attr> are optional for text files, and default to <c>20</c> and <c>60</c> respectively.</p>
 
-        <p>Where might you place a <tag>datafile</tag>?  Lots of places are possible, such as in an <tag>example</tag> or a programming <tag>exercise</tag>, close to an ActiveCode <tag>program</tag>.  So in expository material or in activities for readers to work through.  The purpose-built COMPUTATION-LIKE block, <tag>data</tag>, which will get you a heading, number, title, cross-reference target, etc. (see <xref ref="block-summary"/>), is an option if the file itself needs more prominence or dedicated explanation.</p>
+        <p>Where might you place a <tag>datafile</tag>?  Lots of places are possible, such as in an <tag>example</tag> or a programming <tag>exercise</tag>, close to an ActiveCode <tag>program</tag>.  So in expository material or in activities for readers to work through.  The purpose-built COMPUTATION-LIKE block, <tag>data</tag>, which will get you a heading, number, title, cross-reference target, etc. (see <xref ref="block-summary"/>), is an option if the file itself needs more prominence or dedicated explanation.  Notice that this feature is very powerful, and thus requires a bit of machinery to support.  If you just want to point your reader to a file (and leave them to work with it), either globally or locally, the read about the <tag>dataurl</tag> element at <xref ref="topic-datafile"/>.</p>
 
         <paragraphs>
             <title>Text as Data Files</title>
@@ -4080,6 +4080,18 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>As with the rest of <pretext/> we have taken care to handle all of the exceptional characters that might arise in a <tag>url</tag>.  So author normally, using the necessary keyboard characters, only taking care with the two <init>XML</init> characters, <c>&lt;</c> and <c>&amp;</c>, which need escaping (see <xref ref="overview-exceptional-characters"/>).  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attr>href</attr> attribute, if necesary, to include special characters, such as spaces.  See <xref ref="topic-url-characters"/> below for a common need for the ampersand character, and a further caution  about percent-encoding of <init>URL</init>s.</p>
 
             <p>Finally, for conversion to <latex/>/PDF output it gets extremely tricky to handle all the various meanings of certain escape characters in <init>URL</init>s in more complicated contexts (such as tables, footnotes, and titles), so there may be some special cases where the formatting is off or you get an error when compiling your <latex/>.  We have anticipated most of these situations, but we always appreciate reports of missed cases.</p>
+        </subsection>
+
+        <subsection xml:id="topic-dataurl">
+            <title>Data <init>URL</init>s</title>
+            <idx><h>URL</h><h>data</h></idx>
+            <idx>data URL</idx>
+
+            <p>A <tag>dataurl</tag> element is very similar to the <tag>url</tag> element just described.  The purpose is to point to an actual file that will be of use to your readers.  What actual happens when a reader clicks on it is dependent on the format of the <pretext/> output and that reader's environment.  Maybe the file will be downloaded, or maybe a particular application will open the file.  That part is out of our hands.  Use an <attr>href</attr> attribute in the same way as for <tag>url</tag>, and the content and the <attr>visual</attr> attribute also behave similarly.</p>
+
+            <p>The one key differerence is that you can also use a <attr>source</attr> attribute in place of <attr>href</attr> and point to a file that you provide as part of your project (not unlike providing a photographic image via the <tag>image</tag> element).  Place the file in your collection of external files (see <xref ref="processing-directory-management"/>) and provide the path to your file from below the directory of external files in the <attr>source</attr> attribute.  For <init>HTML</init> output, <pretext/> will do the rest.  For more static formats, you can set a base <init>URL</init> (see <xref ref="online-baseurl"/>) and you will get a complete <init>URL</init> that points to the instance of your file hosted with the rest of your <init>HTML</init> output.</p>
+
+            <p>Notice that this element provides limited functionality, at best just a hyperlink to a file.  For data files that you want a reader's in-browser computer program to process, read about the <tag>datafile</tag> element at <xref ref="topic-datafile"/>.</p>
         </subsection>
 
         <subsection xml:id="topic-visual-urls">

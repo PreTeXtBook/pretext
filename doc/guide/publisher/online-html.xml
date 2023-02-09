@@ -54,9 +54,10 @@
 
         <subsection xml:id="online-base-url">
             <title>Base URL</title>
-            <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
+            <idx>base URL</idx>
+            <idx><h>URL</h><h>base</h></idx>
 
-            <p>The base <init>URL</init> of a hosted version of <init>HTML</init> output may be specified as an entry in a publication file.  Then certain aspects of other output (typically <init>PDF</init>/<latex/>) will link to corresponding aspects of the <init>HTML</init> output.  See <xref ref="online-baseurl"/> for the specifics of this entry.  Examples of use include links from Asymptote graphics (<xref ref="latex-asymptote-links"/>).</p>
+            <p>The base <init>URL</init> of a hosted version of <init>HTML</init> output may be specified as an entry in a publication file.  Then certain aspects of other output (typically <init>PDF</init>/<latex/>) will link to corresponding aspects of the <init>HTML</init> output.  See <xref ref="online-baseurl"/> for the specifics of this entry.  Examples of use include links from Asymptote graphics (<xref ref="latex-asymptote-links"/>), and <init>URL</init>s pointing to locally-hosted data files (<xref ref="topic-datafile"/>).</p>
         </subsection>
 
         <subsection xml:id="video-embedding">
