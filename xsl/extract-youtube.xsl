@@ -43,8 +43,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
+<!-- Avoid Catch-22: default assembly/pre-processor providews output     -->
+<!-- for a conversion to a static format, but that format will *replace* -->
+<!-- "video" by a static version (a "sidebyside") and it will not be     -->
+<!-- available for extraction.                                           -->
+<xsl:variable name="exercise-style" select="'dynamic'"/>
+
 <!-- YouTube ID, and internal id as a comma-separated pair per line -->
-<xsl:template match="video[@youtube]" mode="extraction">
+<xsl:template match="video[@youtube and not(@preview)]" mode="extraction">
     <!-- replace commas with spaces, then normalize space,                       -->
     <!-- then tack on a space at the end, then grab content prior to first space -->
     <xsl:variable name="first-video-id" select="substring-before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />

@@ -28,10 +28,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl date str"
+    extension-element-prefixes="pi exsl date str"
     xmlns:mb="https://pretextbook.org/"
     exclude-result-prefixes="mb"
 >
@@ -108,8 +109,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- remark|convention|note|observation|warning|insight -->
 <xsl:strip-space elements="remark convention note observation warning insight" />
 <!-- List is elements in COMPUTATION-LIKE entity -->
-<!-- computation|technology                      -->
-<xsl:strip-space elements="computation technology" />
+<!-- computation|technology|data                 -->
+<xsl:strip-space elements="computation technology data" />
 <!-- List is elements in EXAMPLE-LIKE entity -->
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
@@ -2769,6 +2770,11 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="."/>
 </xsl:template>
 
+<!-- We do not wrap an "c" element as part of a plain title -->
+<xsl:template match="c" mode="plain-title-edit">
+    <xsl:value-of select="."/>
+</xsl:template>
+
 <!-- We dumb-down quotation marks to "straight" ASCII. -->
 <!-- These behave well in output as attribute values,  -->
 <!-- the HTML serialization seems "smart" enough to    -->
@@ -3074,6 +3080,64 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="round($design-width-pixels * $width-fraction div $aspect-ratio)" />
 </xsl:template>
 
+<!-- ################################## -->
+<!-- Runestone Services General Support -->
+<!-- ################################## -->
+
+<!-- Some items that are in play relative to Runestone Services -->
+<!-- that are independendt of dynamic/static and which can      -->
+<!-- promote consistence if defined only once.                  -->
+
+<!-- Datafiles have default rows and columns -->
+<xsl:variable name="datafile-default-rows" select="20"/>
+<xsl:variable name="datafile-default-cols" select="60"/>
+
+<!-- The contents of a datafile may be encoded as text in an XML   -->
+<!-- file within the generated/datafile directory.  The filename   -->
+<!-- has this construction, even if we do not always consult it.   -->
+<!-- NB: these XML files will be read with a "document()" call,    -->
+<!-- with a path relative to the author's main source file, hence  -->
+<!-- the filename uses the directory name in author's source.      -->
+<!-- NB: identical code in static constructions.                   -->
+<xsl:template match="datafile" mode="datafile-filename">
+    <xsl:value-of select="$generated-directory-source"/>
+    <xsl:text>datafile/</xsl:text>
+    <!-- context is "datafile", the basis for identifier -->
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>.xml</xsl:text>
+</xsl:template>
+
+<!-- The actual text contents of a "datafile", specified in a "pre" element.  -->
+<!-- We assume (enforce) a "pre" child.  Then actual text comes authored in   -->
+<!-- the source "pre" element or in an author-provided external file.         -->
+<xsl:template match="datafile[pre]" mode="datafile-text-contents">
+    <xsl:choose>
+        <!-- via an external file -->
+        <!-- Once upon a time, we hit the text from a file with   -->
+        <!-- "sanitize-text".  This was a bad idea because        -->
+        <!--   (a) the manipulations (especially pad-length (?) ) -->
+        <!--       caused a false infinite recursion warning, and -->
+        <!--   (b) the file should be *exactly* what is desired.  -->
+        <xsl:when test="pre/@source">
+            <!-- filename is relative to author's source -->
+            <xsl:variable name="data-filename">
+                <xsl:apply-templates select="."  mode="datafile-filename"/>
+            </xsl:variable>
+            <xsl:variable name="text-file-elt" select="document($data-filename, $original)/pi:text-file"/>
+            <xsl:value-of select="$text-file-elt"/>
+        </xsl:when>
+        <!-- via source "pre" element content -->
+        <xsl:otherwise>
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="pre"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ###################################### -->
 <!-- Static versions of Interactive Content -->
 <!-- ###################################### -->
@@ -3087,7 +3151,7 @@ Book (with parts), "section" at level 3
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
 <xsl:template match="audio|video|interactive" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:apply-templates select="." mode="visible-id-early" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="standalone-filename">
@@ -3553,6 +3617,28 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- The "visible-id" version above assumes any (legacy) @xml:id have -->
+<!-- been upgraded by the assembly/pre-processor stylesheet.  But in  -->
+<!-- that stylesheet we sometimes need this identifier **before** the -->
+<!-- upgrade happens.  This matter of timing might be resolved by     -->
+<!-- being more careful about when static representations are         -->
+<!-- substituted into assembled source.                               -->
+<xsl:template match="*" mode="visible-id-early">
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
 <!-- database across courses ("base course") and semesters ("time").      -->
 <!-- And the HTML representation of an interactive exercise, when powered -->
@@ -3562,7 +3648,7 @@ Book (with parts), "section" at level 3
 <!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
-<xsl:template match="exercise|program|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id">
+<xsl:template match="exercise|program|datafile|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id">
     <!-- Once we generate labels, we can warn an author that they should   -->
     <!-- be committing to a long-term @label value for database entries.   -->
     <!-- We do this by checking for the $gen-id-sep string being present   -->
@@ -10267,11 +10353,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  We will try to honor your intent'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2023-01-27  deprecate "datafile" in favor of "dataurl" -->
+    <!-- 2023-01-27  deprecate "datafile" in favor of "dataurl"   -->
+    <!-- 2023-02-01  tightened deprecation to uses without @label -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//datafile" />
+        <xsl:with-param name="occurrences" select="$document-root//datafile[not(@label)]" />
         <xsl:with-param name="date-string" select="'2023-01-27'" />
-        <xsl:with-param name="message" select="'the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.  We will try to honor your intent, but please make the change at your first convenience, as an automatic upgrade will soon become less reliable (or impossible)'"/>
+        <xsl:with-param name="message" select="'the old use of the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.   New uses of &quot;datafile&quot; require a @label attribute.  So you are seeing this warning since your source has a &quot;datafile&quot; without a @label attribute.  We will try to honor your intent, but please make the change at your first convenience, as an automatic conversion might not be desirable in some cases.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

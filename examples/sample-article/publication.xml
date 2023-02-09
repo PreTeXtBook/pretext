@@ -44,7 +44,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- we use customizations-two for the oscarlevin style example -->
     <source customizations="customizations-one.xml">
-        <directories external="media" generated="generated"/>
+        <directories external="media" generated="gen"/>
         <!-- this is an example of placing @generated *outside* of revision control -->
         <!-- <directories external="media" generated="../../../altgen"/> -->
     </source>

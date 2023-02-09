@@ -111,13 +111,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='convention'>Convention</localization>
 -->
     <localization string-id='note'>Забележка</localization>
-<!--
-    <localization string-id='observation'>Observation</localization>
-    <localization string-id='warning'>Warning</localization>
-    <localization string-id='insight'>Insight</localization>
-    <localization string-id='computation'>Computation</localization>
-    <localization string-id='technology'>Technology</localization>
--->
+    <!-- <localization string-id='observation'>Observation</localization> -->
+    <!-- <localization string-id='warning'>Warning</localization> -->
+    <!-- <localization string-id='insight'>Insight</localization> -->
+    <!-- COMPUTATION-LIKE blocks -->
+    <!-- <localization string-id='computation'>Computation</localization> -->
+    <!-- <localization string-id='technology'>Technology</localization> -->
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Странична бележка</localization>
     <localization string-id='biographical'>Библиографична бележка</localization>

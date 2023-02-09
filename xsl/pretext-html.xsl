@@ -7013,6 +7013,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- License text:  This image only consists of simple geometric shapes or text.       -->
     <!-- It does not meet the threshold of originality needed for copyright protection,    -->
     <!-- and is therefore in the public domain.                                            -->
+    <!-- See  xsl/support/play-button/README.md  for a description of the static version   -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" style="cursor:pointer; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" preserveAspectRatio="none">
         <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
     </svg>
@@ -9497,6 +9498,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Data Files -->
+
+<xsl:template match="datafile">
+    <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+</xsl:template>
+
 <xsl:template name="aim-login-header">
     <xsl:if test="$b-host-aim">
         <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
@@ -10740,11 +10747,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </main>
             </div>
             <!-- formerly "extra" -->
-            <div class="ptx-page-footer">
+            <div id="ptx-page-footer">
                 <xsl:apply-templates select="." mode="feedback-button"/>
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="runestone-link"/>
-                <xsl:call-template name="powered-by-mathjax" />
+                <xsl:call-template name="mathjax-link" />
             </div>
             <!-- analytics services, if requested -->
             <xsl:call-template name="statcounter"/>
@@ -12186,48 +12193,40 @@ TODO:
 
 <!-- Branding in page-footer, mostly hard-coded     -->
 <!-- HTTPS for authors delivering from secure sites -->
-<!-- TODO: internationalize "Authored with"         -->
-<!-- (a change), "Powered by", "Hosted on"          -->
 <xsl:template name="pretext-link">
-    <a class="pretext-link" href="https://pretextbook.org">
-        <div class="name">
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'authored'"/>
-            </xsl:apply-templates>
-        </div>
+    <a class="pretext-link" href="https://pretextbook.org" title="PreTeXt">
         <div class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="338 3000 8772 6866">
-            <g style="stroke-width:.025in; stroke:black; fill:none">
-            <polyline points="472,3590 472,9732 " style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/> <path style="stroke:#000000;stroke-width:126;stroke-linecap:butt;" d="M 4724,9448 A 4660 4660  0  0  1  8598  9259 " /> <path style="stroke:#000000;stroke-width:174;stroke-linecap:butt;" d="M 4488,9685 A 4228 4228  0  0  0  472  9732 " /> <path style="stroke:#000000;stroke-width:126;stroke-linecap:butt;" d="M 4724,3590 A 4241 4241  0  0  1  8598  3496 " /> <path style="stroke:#000000;stroke-width:126;stroke-linecap:round;" d="M 850,3496 A 4241 4241  0  0  1  4724  3590 " /> <path style="stroke:#000000;stroke-width:126;stroke-linecap:round;" d="M 850,9259 A 4507 4507  0  0  1  4724  9448 " /> <polyline points="5385,4299 4062,8125 " style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; "/> <polyline points="8598,3496 8598,9259 " style="stroke:#000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; "/> <polyline points="850,3496 850,9259 " style="stroke:#000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; "/> <polyline points="4960,9685 4488,9685 " style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/><polyline points="3070,4582 1889,6141 3070,7700 " style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; "/> <polyline points="6418,4582 7600,6141 6418,7700 " style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; "/> <polyline points="8976,3590 8976,9732 " style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/> <path style="stroke:#000000;stroke-width:174;stroke-linecap:butt;" d="M 4960,9685 A 4228 4228  0  0  1  8976  9732 " />
-            </g>
+                <g style="stroke-width:.025in; stroke:black; fill:none">
+                    <polyline points="472,3590 472,9732 " style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/>
+                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:butt;"  d="M 4724,9448 A 4660 4660  0  0  1  8598  9259"/>
+                    <path style="stroke:#000000;stroke-width:174;stroke-linecap:butt;"  d="M 4488,9685 A 4228 4228  0  0  0   472  9732"/>
+                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:butt;"  d="M 4724,3590 A 4241 4241  0  0  1  8598  3496"/>
+                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:round;" d="M 850,3496  A 4241 4241  0  0  1  4724  3590"/>
+                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:round;" d="M 850,9259  A 4507 4507  0  0  1  4724  9448"/>
+                    <polyline points="5385,4299 4062,8125"           style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="8598,3496 8598,9259"           style="stroke:#000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="850,3496 850,9259"             style="stroke:#000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="4960,9685 4488,9685"           style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="3070,4582 1889,6141 3070,7700" style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="6418,4582 7600,6141 6418,7700" style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="8976,3590 8976,9732"           style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <path style="stroke:#000000;stroke-width:174;stroke-linecap:butt;" d="M 4960,9685 A 4228 4228  0  0  1  8976  9732"/>
+                </g>
             </svg>
         </div>
     </a>
 </xsl:template>
 
 <xsl:template name="runestone-link">
-    <xsl:variable name="text-version">
-        <xsl:choose>
-            <xsl:when test="$b-host-runestone">
-                <xsl:text>Hosted on Runestone</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>Powered by Runestone</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <a class="runestone-link" href="https://runestone.academy">
-        <div class="name">
-            <xsl:value-of select="$text-version"/>
-        </div>
-        <img class="logo" title="{$text-version}" src="https://runestone.academy/runestone/static/rectangle_badge.png" alt="{$text-version}"/>
+    <a class="runestone-link" href="https://runestone.academy" title="Runestone Academy">
+        <img class="logo" src="https://runestone.academy/runestone/static/images/RAIcon_cropped.png"/>
     </a>
 </xsl:template>
 
-<!-- MathJax Logo for page-footer -->
-<xsl:template name="powered-by-mathjax">
-    <a class="mathjax-logo" href="https://www.mathjax.org">
-        <img title="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" alt="Powered by MathJax" />
+<xsl:template name="mathjax-link">
+    <a class="mathjax-link" href="https://www.mathjax.org" title="MathJax">
+        <img class="logo" src="https://www.mathjax.org/badge/badge-square-2.png"/>
     </a>
 </xsl:template>
 
@@ -12571,13 +12570,18 @@ TODO:
 </xsl:template>
 
 <!-- JS for native search -->
+<!-- The async attribute may help with slow downloads,  -->
+<!-- especially the project-specific search-file which  -->
+<!-- can be as large as several megabytes.              -->
+<!-- NB: async attribute also on Lunr and PTX-JS        -->
+<!-- resulted in console errors (2022-02-08)            -->
 <xsl:template name="native-search-box-js">
     <xsl:if test="$has-native-search">
         <script src="https://unpkg.com/lunr/lunr.js"/>
         <!-- document-specific variables with search documents -->
-        <script src="{$lunr-search-file}"/>
+        <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
-        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"></script>
+        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"/>
         <link href="{$html.css.server}/css/{$html.css.version}/pretext_search.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
 </xsl:template>

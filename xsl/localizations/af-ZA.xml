@@ -104,8 +104,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Waarneming</localization>
     <localization string-id='warning'>Waarskuwing</localization>
     <localization string-id='insight'>Insig</localization>
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Berekening</localization>
     <localization string-id='technology'>Tegnologie</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Ter Syde</localization>
     <localization string-id='biographical'>Biografiese Ter Syde</localization>

@@ -291,6 +291,7 @@ def asymptote_conversion(
     )
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # Resulting *.asy files are in tmp_dir, switch there to work
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, "w")
     # simply copy for source file output
@@ -364,7 +365,7 @@ def asymptote_conversion(
                         "             {}".format(asyversion),
                     ]
                 log.warning("\n".join(msg))
-
+    os.chdir(owd)
 
 def sage_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat
@@ -410,6 +411,7 @@ def sage_conversion(
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    owd = ow.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, "w")
     for sageplot in os.listdir(tmp_dir):
@@ -420,7 +422,7 @@ def sage_conversion(
         log.debug("sage conversion {}".format(sage_cmd))
         subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
         shutil.copy2(sageout, dest_dir)
-
+    os.chdir(owd)
 
 def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
@@ -466,6 +468,7 @@ def latex_image_conversion(
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # now work in temporary directory
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     # and maintain a list of failures for later
     failed_images = []
@@ -608,6 +611,8 @@ def latex_image_conversion(
                             )
                         )
                     shutil.copy2(latex_image_eps, dest_dir)
+    # change directories back so the temp directory can be removed later.
+    os.chdir(owd)
     # raise an error if there were *any* failed images
     if failed_images:
         msg = "\n".join(
@@ -620,6 +625,104 @@ def latex_image_conversion(
         # 2-space indentation
         image_list = "\n  " + "\n  ".join(failed_images)
         raise ValueError(msg + image_list)
+
+
+#############################################
+#
+# Binary Source Files to Base 64 in XML Files
+#
+#############################################
+
+def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+    """Convert certain  files in source to text representations in XML files"""
+    # stringparams is a dictionary, best for lxml parsing
+
+    import base64
+
+    msg = 'converting data files from {} to text representations in XML files for placement in {}'
+    log.info(msg.format(xml_source, dest_dir))
+
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-datafile.xsl")
+    the_files = os.path.join(tmp_dir, 'datafile-list.txt')
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # no output (argument 3), stylesheet writes out per-image file
+    # outputs a list of ids, but we just loop over created files
+    log.info("extracting source files from {}".format(xml_source))
+    log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
+    xsltproc(extraction_xslt, xml_source, the_files, None, stringparams)
+
+    # Copy in external resources (e.g., js code)
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+
+    # Each file receives a single element as its root
+    # element. These are templates for that entry
+    image_info = '<pi:image-b64 xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:mime-type="{}" pi:base64="{}"/>'
+    text_info  = '<pi:text-file xmlns:pi="http://pretextbook.org/2020/pretext/internal">{}</pi:text-file>'
+
+    # read lines, one-per-binary
+    datafile_list = open(the_files, "r")
+    for df in datafile_list.readlines():
+        visible_id, file_type, relative_path = df.split()
+        data_file = os.path.join(external_abs, relative_path)
+        log.debug("converting data file {} to a text/XML file".format(data_file))
+
+        # Now condition of the "kind" of file given in source
+        # according to the use of certain PTX elements
+        # Each stanza should produce the contents of a UTF-8 XML file
+        if file_type == "image":
+            # best guess of image type, as a MIME type
+            # https://en.wikipedia.org/wiki/Media_type
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+            _, extension = os.path.splitext(data_file)
+            # normalize, drop leading period
+            # in rough popularity order
+            lcext = extension[1:].lower()
+            if lcext in ["jpeg", "jpg"]:
+                mime_type = "image/jpeg"
+            elif lcext == "png":
+                mime_type = "image/png"
+            elif lcext =="gif":
+                mime_type = "image/gif"
+            elif lcext =="webp":
+                mime_type = "image/webp"
+            elif lcext =="avif":
+                mime_type = "image/avif"
+            elif lcext =="apng":
+                mime_type = "image/apng"
+            # Do we want to base64 an XML file???
+            elif lcext =="svg":
+                mime_type = "image/svg+xml"
+            else:
+                log.info("PTX:WARNING : MIME type of image {} not determined".format(data_file))
+                mime_type = "unknown"
+
+            # Open binary file and encode in base64 with standard module
+            with open(data_file, "rb") as f:
+                base64version = base64.b64encode(f.read()).decode("utf8")
+            xml_representation = image_info.format(mime_type, base64version)
+        elif file_type == "pre":
+            with open(data_file, "rb") as f:
+                rawtext = f.read().decode("utf8")
+            xml_representation = text_info.format(rawtext)
+        else:
+            xml_representation = "<oops/>"
+
+        # Open as a text file (i.e. not binary), since we have
+        # built text/XML representations, we know this really is
+        # "straight" ASCII.  The XML header says "UTF-8", which
+        # is not a problem?
+        out_filename = os.path.join(dest_dir, visible_id + '.xml')
+        with open(out_filename, "w") as f:
+            f.write(__xml_header)
+            f.write(xml_representation)
 
 
 #######################
@@ -742,6 +845,7 @@ def latex_tactile_image_conversion(
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, extraction_params)
 
     # now work in temporary directory for latex runs
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     # files *only*, from top-level
     files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
@@ -785,7 +889,8 @@ def latex_tactile_image_conversion(
             xsltproc(
                 manipulation_xslt, svg_source, svg_result, None, manipulation_params
             )
-
+    # change directory back so the temp directory can be deleted.
+    os.chdir(owd)
 
 #####################
 # Traces for CodeLens
@@ -1388,10 +1493,15 @@ def webwork_to_xml(
                     count=0,
                     flags=0,
                 )
+                # the filepath constructed below will be used for web addresses of image files
+                # and filepaths in LaTeX for image inclusion. Even for a Windows user, forward
+                # slashes are in play, not backward slashes. So we inteentionally do not use
+                # os.path.join(). Perhaps in the future we decide to use a posix path constructor.
                 response_text = response_text.replace(
-                    ww_image_full_path, os.path.join("webwork", "images", ptx_image)
+                    ww_image_full_path, "webwork/images/" + ptx_image
                 )
             else:
+                # see note above about posix path construction
                 response_text = response_text.replace(
                     ww_image_full_path, "images/" + ptx_image
                 )
@@ -1719,6 +1829,21 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.info("YouTube thumbnail download complete")
 
 
+##########################
+#
+#  Video Play Button Image
+#
+##########################
+
+def play_button(dest_dir):
+    '''Copy generic static video image to a directory'''
+
+    ptx_xsl_dir = get_ptx_xsl_path()
+    play_button_provided_image = os.path.join(ptx_xsl_dir, "support", "play-button", "play-button.png")
+    log.info('Generating generic video preview, aka "play button" into {}'.format(dest_dir))
+    shutil.copy2(play_button_provided_image, dest_dir)
+
+
 ########################
 #
 #  QR Code manufacturing
@@ -1754,11 +1879,16 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     id_file = open(id_filename, "r")
-    # read lines, but only lines that are comma delimited
-    interactives = [inter.strip() for inter in id_file.readlines() if "," in inter]
+    interactives = id_file.readlines()
 
     for inter in interactives:
-        inter_pair = inter.split(",")
+        # separator is a space, since a comma can be in a YouTube playlist
+        # no argument here means contiguous whitespace - should always
+        # be a single space coming from the extraction routine.
+        # NB: an audio or video file provided by an author with a URL to
+        # some external location, with a space in it, will be a problem here.
+        # The URL should be percent-encoded so the space is not problematic.
+        inter_pair = inter.split()
         url = inter_pair[0]
         path = os.path.join(dest_dir, inter_pair[1] + ".png")
         log.info('creating URL with content "{}" as {}...'.format(url, path))
@@ -2064,7 +2194,6 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     id_file = open(id_filename, "r")
     # read lines, skipping blank lines
     problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
-    xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
     for problem in problems:
         url = "https://www.myopenmath.com/util/mbx.php?id={}".format(problem)
         path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
@@ -2073,7 +2202,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         # removed some settings wrapper from around the URL, otherwise verbatim
         r = requests.get(url, stream=True)
         with open(path, "wb") as f:
-            f.write(xml_header.encode("utf-8"))
+            f.write(__xml_header.encode("utf-8"))
             if r.status_code == 200:
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
@@ -2623,7 +2752,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     #   <?xml version="1.0" encoding="UTF-8"?>
     #   <html xmlns="http://www.w3.org/1999/xhtml">
     orig = "<html"
-    repl = '<?xml version="1.0" encoding="UTF-8"?>\n<html xmlns="http://www.w3.org/1999/xhtml"'
+    repl = __xml_header + '<html xmlns="http://www.w3.org/1999/xhtml"'
     # the inoplace facility of the fileinput module gets
     # confused about temporary backup files if the working
     # directory is not where the file lives
@@ -3241,6 +3370,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     # process with a  latex  engine
     latex_key = get_deprecated_tex_fallback(method)
@@ -3260,7 +3390,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
         shutil.copy2(pdfname, out_file)
     else:
         shutil.copy2(pdfname, dest_dir)
-
+    os.chdir(owd)
 
 #################
 # XSLT Processing
@@ -3807,6 +3937,9 @@ def get_managed_directories(xml_source, pub_file):
 # whose scope is the module, so must be declared
 # by employing routines as non-local ("global")
 #
+#  __xml_header - standard first line of an XML file.
+#                 a convenience here
+#
 #  __ptx_path - root directory of installed PreTeXt distribution
 #              necessary to locate stylesheets and other support
 #
@@ -3816,6 +3949,8 @@ def get_managed_directories(xml_source, pub_file):
 #
 #  __module_warning - stock import-failure warning message
 
+# Convenience
+__xml_header = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
 # Discover and set distribution path once at start-up
 __ptx_path = None

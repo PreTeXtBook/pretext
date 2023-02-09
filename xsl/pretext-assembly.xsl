@@ -1021,7 +1021,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2023-01-27: deprecate "datafile" to make way for a better    -->
 <!-- Runestone-powered version.  Cosmetic replacement: "dataurl". -->
-<xsl:template match="datafile" mode="repair">
+<!-- 2023-01-30: refine deprecation repair just after a minor CLI -->
+<!-- release. A "datafile" element may be OK as a "new" use,      -->
+<!-- with the presence of @label indicating use/application with  -->
+<!-- Runestone Javascript.  So only automatically upgrade "old"   -->
+<!-- uses lacking @label.                                         -->
+<xsl:template match="datafile[not(@label)]" mode="repair">
     <dataurl>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
     </dataurl>
@@ -1961,9 +1966,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="$exercise-style = 'static'">
                 <!-- locate the static representation in a file, generated independently -->
+                <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">
                     <xsl:if test="$b-managed-directories">
-                        <xsl:value-of select="$generated-directory"/>
+                        <xsl:value-of select="$generated-directory-source"/>
                     </xsl:if>
                     <xsl:text>problems/mom-</xsl:text>
                     <xsl:value-of select="myopenmath/@problem"/>
@@ -1993,5 +1999,143 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
+
+<xsl:template match="datafile" mode="representations">
+    <xsl:choose>
+        <!-- make a static version, in a PreTeXt style -->
+        <!-- for use naturally by most conversions     -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:apply-templates select="." mode="runestone-to-static"/>
+        </xsl:when>
+        <!-- duplicate for a dynamic version -->
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Static versions of Audio, Video, Interactives -->
+
+<!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
+
+<xsl:template match="audio|video|interactive[not(static)]" mode="representations">
+    <xsl:variable name="the-url">
+        <xsl:apply-templates select="." mode="static-url"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
+                <xsl:choose>
+                    <!-- @preview present, so author provides a static image  -->
+                    <!--                                                      -->
+                    <!-- "video" is exceptional, we allow for a generic image -->
+                    <xsl:when test="self::video and (@preview = 'generic')">
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>play-button/play-button.png</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:when test="@preview">
+                        <image>
+                            <xsl:attribute name="source">
+                                <xsl:value-of select="@preview"/>
+                            </xsl:attribute>
+                        </image>
+                    </xsl:when>
+                    <!-- semi-automatic images vary by format     -->
+                    <!--                                          -->
+                    <!-- interactive: screenshots with playwright -->
+                    <!-- video: we scrape YouTube, only           -->
+                    <!--        YouTube playlist gets generic     -->
+                    <!-- audio: immature                          -->
+                    <xsl:when test="self::interactive">
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>preview/</xsl:text>
+                                <xsl:apply-templates select="." mode="visible-id-early"/>
+                                <xsl:text>-preview.png</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:when test="self::video and @youtube">
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>youtube/</xsl:text>
+                                <xsl:apply-templates select="." mode="visible-id-early"/>
+                                <xsl:text>.jpg</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:when test="self::video and @youtubeplaylist">
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>play-button/play-button.png</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:when test="self::audio">
+                        <p>No static image provided via <c>@preview</c> attribute</p>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:otherwise>
+                        <p>BUG: PREVIEW NOT HANDLED</p>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <stack>
+                    <!-- 2023-02-07: wrapping in a URL failed    -->
+                    <!-- for a LaTeX build of the sample article -->
+                    <image>
+                        <xsl:attribute name="pi:generated">
+                            <xsl:text>qrcode/</xsl:text>
+                            <xsl:apply-templates select="." mode="visible-id-early"/>
+                            <xsl:text>.png</xsl:text>
+                        </xsl:attribute>
+                    </image>
+                    <p>
+                        <url>
+                            <xsl:attribute name="href">
+                                <xsl:apply-templates select="." mode="static-url"/>
+                            </xsl:attribute>
+                            <!-- Kill the automatic footnote    -->
+                            <!-- <xsl:attribute name="visual"/> -->
+                            <xsl:text>Interactive</xsl:text>
+                        </url>
+                    </p>
+                </stack>
+            </sidebyside>
+        </xsl:when>
+        <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
+            <!-- duplicate authored content for the non-static conversions -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- If a "static" is given, just copy it's children -->
+<xsl:template match="interactive[static]" mode="representations">
+    <xsl:choose>
+        <!-- duplicate the contents of an alternative "static" element -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:apply-templates select="static" mode="representations"/>
+        </xsl:when>
+        <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
+            <!-- duplicate authored content for the non-static conversions -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+
 
 </xsl:stylesheet>

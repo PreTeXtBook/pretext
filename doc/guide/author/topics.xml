@@ -902,8 +902,8 @@
 
                     <li>
                         <title>COMPUTATION-LIKE</title>
-                        <p><tag>computation</tag>, <tag>technology</tag></p>
-                        <p>For descriptions of activities using computers, calculators, or other devices.</p>
+                        <p><tag>computation</tag>, <tag>technology</tag>, <tag>data</tag></p>
+                        <p>For descriptions of activities or data for use with computers, calculators, or other devices.</p>
                     </li>
 
                     <li>
@@ -3156,6 +3156,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Place the <tag>interactive</tag> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
 
             <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
+
+            <p>Note also that a data file may be provided independently for consumption by an ActiveCode program.  See <xref ref="topic-datafile"/>.</p>
         </subsection>
 
         <subsection>
@@ -3241,6 +3243,46 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 </tabular>
             </table>
         </subsection>
+    </section>
+
+    <section xml:id="topic-datafile">
+        <title>Data Files</title>
+
+        <p>In concert with interactive programs (see <xref ref="topic-program-console"/>) you can define a file of data that may be employed by those programs.  The necessary element is <tag>datafile</tag>.  It requires a <attr>label</attr> attribute.  The <attr>filename</attr> is also required and is the name the file is known by in an ActiveCode program.  Do not try to impose any sort of directory structure on this name.  Just a filename.  In the case of a text file (see below), the <attr>editable</attr> attribute is optional.  The value <c>no</c> is the default, with <c>yes</c> as the other option.  The attributes <attr>rows</attr> and <attr>cols</attr> are optional for text files, and default to <c>20</c> and <c>60</c> respectively.</p>
+
+        <p>Where might you place a <tag>datafile</tag>?  Lots of places are possible, such as in an <tag>example</tag> or a programming <tag>exercise</tag>, close to an ActiveCode <tag>program</tag>.  So in expository material or in activities for readers to work through.  The purpose-built COMPUTATION-LIKE block, <tag>data</tag>, which will get you a heading, number, title, cross-reference target, etc. (see <xref ref="block-summary"/>), is an option if the file itself needs more prominence or dedicated explanation.</p>
+
+        <paragraphs>
+            <title>Text as Data Files</title>
+
+            <p>Inside of a <tag>datafile</tag> place an <tag>pre</tag> element.  There are then two options: provide the contents of the text file right in your source <pretext/> file, as you might for other preformatted text, or supply a <attr>source</attr> attribute whose value is the name of an external text file you provide.  The former is appropriate for <q>toy</q> examples, while the latter may be used for <q>serious</q> files with many lines, or with long lines.  Note that if you provide the file as the content of the <tag>pre</tag> element, it can be indented to match your source file indentation, and will undergo some manipulation, such as removing leading whitespace, and ensuring a final newline, but preserving any <em>relative</em> indentation.  If provided via a <attr>source</attr> attribute, there is no manipulation.</p>
+
+            <p>Such a text file may be declared editable by the reader, presumably to allow them to witness the resulting behavior of a some employing program.  The <attr>rows</attr> and <attr>cols</attr> attributes describe the viewport into the file provided in the <init>HTML</init> output.  Typically scrollbars will allow the reader to survey all of a large file.  In static outputs, the first few lines are shown, given by the value of <attr>rows</attr>, and lines are truncated according to the value of <attr>cols</attr>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Images as Data Files</title>
+
+            <p>Inside of a <tag>datafile</tag> place an <tag>image</tag> element with a <attr>source</attr> attribute.  As usual, this attribute should be the name of an external file you provide.  Most common formats are supported, but it is important to use standard extensions, so the format can be discerned.  Now this file may be explored programmatically by opening the file using the name provided in <attr>filename</attr>.</p>
+
+            <p>Keep the size of the image small, say 300<ndash/>400 pixels in each direction.  It will be displayed in an <init>HTML</init> output format at its native resolution.  You may also supply the usual layout controls, such as <attr>width</attr>, and these will be consulted in the formation of other output formats.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Notes on Data Files</title>
+
+            <p>Some notes that apply to each type of data file.<ul>
+                <li>Note that the name of the data file in a <attr>source</attr> attribute need not have any resemblance to the new name given to the file via the <attr>filename</attr> attribute.  In other words, the reader will never know (or care) what <attr>source</attr> was.</li>
+
+                <li>Whenever the <attr>source</attr> attribute is used, there needs to be an advance step performed by the CLI <xref ref="processing-CLI"/>
+                or the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) to generate an auxillary file (yes, a third file!) to aid the transistion from an external file to a file that can be used by the reader in programs.</li>
+                <li>
+                    <p>In all cases, for an <init>HTML</init> build the contents of the data file live within an <init>HTML</init> page, as text for a text file, and as a base-64 encoding for an image file.  Hence for a non-Runestone build, any employing program must be on the same page, and an author should think ahead about the granularity of how a project might be chunked into pages.</p>
+
+                    <p>In a build for use on Runestone Academy, the file will be in the Runestone database and usuable throughout.</p>
+                </li>
+            </ul></p>
+        </paragraphs>
     </section>
 
     <section xml:id="topic-figure">

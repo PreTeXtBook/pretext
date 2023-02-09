@@ -111,8 +111,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Observatie</localization>
     <localization string-id='warning'>Waarschuwing</localization>
     <localization string-id='insight'>Inzicht</localization>
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Berekiening</localization>
     <localization string-id='technology'>Technologie</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <!--
     <localization string-id='aside'>Aside</localization>

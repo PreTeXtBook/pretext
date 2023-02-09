@@ -449,6 +449,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Get a "view" of a chunk of text, from the "upper-left corner".  -->
+<!-- Motivation is a static version of a (large) datafile of text    -->
+<!-- for interactive programs to consume.                            -->
+<!--   text: the text, we provide a version hit by "santitize-tex"   -->
+<!--         above, which pulls left, and drops leading blank lines. -->
+<!--   nrows: the number of (initial) lines output                   -->
+<!--   ncols: the number of (initial) characters on each line        -->
+<!--          if not provided, the entire line is output             -->
+<!--                                                                 -->
+<!-- NB: there can be excess blank lines (nrows in not a maximum)    -->
+<!-- TODO: could be extended to have a "start" location other than   -->
+<!-- upper left corner.  Consume initial lines with no action,       -->
+<!-- decrementing start line, then switch to outputing lines         -->
+<!-- themselves.  Substring selection should be obvious.             -->
+<xsl:template name="text-viewport">
+    <xsl:param name="text"/>
+    <xsl:param name="nrows"/>
+    <xsl:param name="ncols" select="''"/>
+
+    <xsl:choose>
+        <!-- decremented (or initialized) to zero or below -->
+        <xsl:when test="$nrows &lt; 1"/>
+        <!-- produce a line and recurse -->
+        <xsl:otherwise>
+            <xsl:variable name="line" select="substring-before($text, '&#xa;')"/>
+            <xsl:choose>
+                <!-- sentinel: output whole line -->
+                <xsl:when test="$ncols = ''">
+                    <xsl:value-of select="$line"/>
+                </xsl:when>
+                <!-- within length limit: output whole line -->
+                <xsl:when test="string-length($line) &lt;= $ncols">
+                    <xsl:value-of select="$line"/>
+                </xsl:when>
+                <!-- truncate line to value of $ncols-1, and add  -->
+                <!-- a simple right arrow to indicate truncation  -->
+                <xsl:otherwise>
+                    <xsl:value-of select="substring($line, 1, $ncols - 1)"/>
+                    <!-- Unicode Character 'RIGHTWARDS ARROW' -->
+                    <xsl:text>&#x2192;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- restore the missing line-break -->
+            <xsl:value-of select="'&#xa;'"/>
+            <!-- rceurse, with remainder of text, requesting  -->
+            <!-- one less row, and simply passing along ncols -->
+            <xsl:call-template name="text-viewport">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+                <xsl:with-param name="nrows" select="$nrows - 1"/>
+                <xsl:with-param name="ncols" select="$ncols"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Sanitize Nemeth Braille -->
 <!-- We receive Nemeth braille from MathJax and Speech Rule Engine (SRE) as -->

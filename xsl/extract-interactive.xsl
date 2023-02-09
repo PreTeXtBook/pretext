@@ -44,6 +44,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
+<!-- Avoid Catch-22: default assembly/pre-processor providews output     -->
+<!-- for a conversion to a static format, but that format will *replace* -->
+<!-- "video" by a static version (a "sidebyside") and it will not be     -->
+<!-- available for extraction.                                           -->
+<xsl:variable name="exercise-style" select="'dynamic'"/>
+
 <!-- @preview indicates custom image is present    -->
 <!-- Stylesheet output is text, with "visible-id"  -->
 <!-- of each interactive, one per line, to be      -->
