@@ -21,7 +21,8 @@
           <li><p>Created a free GitHub account.</p></li>
           <li><p>Created a GitHub Codespace for authoring <pretext/> in your web browser.</p></li>
           <li><p>Learned the first steps to editing a <pretext/> document.</p></li>
-          <li><p>Converted your document to both HTML and <m>\LaTeX</m>.</p></li>
+          <li><p>Converted your document to both <m>\LaTeX</m> and accessible HTML.</p></li>
+          <li><p>Deployed your HTML to the web.</p></li>
         </ul>
       </objectives>
     </introduction>
@@ -81,41 +82,56 @@
           Follow the instructions at <url href="https://github.com/PreTeXtBook/pretext-codespace" />
           to get started. You'll have the option to make your work public (recommended if you want
           support from the rest of the <pretext/> community) or private.
-          Then you'll be ready for <xref ref="tutorial-first-build"/>.
+          Then you'll be ready for <xref ref="tutorial-first-document"/>.
         </p>
       </subsection>
     </section>
 
     <section xml:id="tutorial-first-document">
-      <title>Your First Document</title>
+      <title>Your First PreTeXt Document</title>
       <subsection>
-        <title>Building</title>
+        <title>Building for web</title>
         <p>
-          Inside the VS Code window you opened through Codespaces, open <c>main.ptx</c>. You can build your entire project in a few different ways.
+          Inside the VS Code window you opened through Codespaces, open <c>main.ptx</c>. 
+          You can build your entire project in a few different ways.
           <ul>
             <li>
               <p>
-                Click the green triangle in the top-right corner of the window (hovering will show <c>Build (select target)</c>).  A window will pop up asking for a <term>target</term> to build.  To start just select <q>web</q>.
+                Click the green triangle in the top-right corner of the window 
+                (hovering will show <c>Build (select target)</c>).  A window will pop 
+                up asking for a <term>target</term> to build: choose <q>web</q>.
               </p>
             </li>
             <li>
               <p>
-                In the <q>Explorer</q> panel on the left-hand side of the window, you can expand the <q>PreTeXt Commands</q> menu and select the <c>Build</c> option.
+                In the <q>Explorer</q> panel on the left-hand side of the window, 
+                you can expand the <q>PreTeXt Commands</q> menu and select the
+                <c>Build default target</c> option, or the <c>Build ...</c> option
+                and choose <c>web</c>.
               </p>
             </li>
             <li>
               <p>
-                You can use the keyboard shortcut <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>b</kbd> (replacing <kbd>CTRL</kbd> with <kbd>CMD</kbd> if you have a Mac).
+                You can use the keyboard shortcut <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>b</kbd>
+                (replacing <kbd>CTRL</kbd> with <kbd>CMD</kbd> if you have a Mac).
               </p>
             </li>
           </ul>
+          The resulting HTML files will be available in the <c>output/web</c> directory of your project.
         </p>
+
+        <figure xml-id="tutorial-figure-codespaces-pretext">
+          <caption>PreTeXt commands in Codespaces</caption>
+          <image width="50%" source="codespaces-pretext.png">
+            <description>Screenshot of VS Code PreTeXt palette in Codespaces</description>
+          </image>
+        </figure>
       </subsection>
     
       <subsection xml:id="tutorial-previewing">
         <title>Viewing</title>
         <p>
-          You can check the output of what you built using the <term>View</term> command. 
+          You can preview these HTML files you just built using the <term>View</term> command. 
           Again, you can access this in multiple ways: top-right icon or PreTeXt Commands menu.
           When you use either of these, you may be given options on how to view the document,
           depending on what VS Code plugins you have available to you. Try one or another until
@@ -124,8 +140,37 @@
         </p>
     
         <p>
-          When you make edits to your source files, you will need to build again, and then refresh
-          the preview window to see the changes.
+          Now is a great time to try to make edits to your source files (maybe change the title).
+          Note that these changes aren't updated live in your preview:
+          you will need to build again, and then refresh the preview window to see them.
+        </p>
+      </subsection>
+
+      <subsection>
+        <title>Building <m>\LaTeX</m> and PDF</title>
+        <p>
+          The instructions above can be repeated to produce <m>\LaTeX</m> code:
+          just choose <c>print-latex</c> instead of <c>web</c> as your target.
+          The resulting files are available in <c>output/print-latex</c>.
+        </p>
+        <p>
+          Of course, it'd be even more convenient to produce a PDF directly.
+          This requires software that can process <m>\LaTeX</m>, which is not installed
+          in the <pretext/> Codespace by default. This can be accomplished by copy-pasting
+          the following line into a <q>terminal</q> and pressing <kbd>Enter</kbd> to run
+          the command. (Use <kbd>Ctrl</kbd>+<kbd>`</kbd> to make
+          a terminal appear below the text editor if it's not already on screen.)
+        </p>
+        <program language="bash">
+          <input>
+            sudo bash ./.devcontainer/postCreateCommand.sh
+          </input>
+        </program>
+        <p>
+          After everything is installed, repeat the above instructions
+          with the <c>print</c> target to produce a PDF. It can be downloaded by right-clicking
+          <c>output/print/main.pdf</c> in the VS Code file explorer, or previewed using
+          a View command.
         </p>
       </subsection>
     
@@ -133,52 +178,43 @@
       <subsection xml:id="tutorial-saving">
         <title>Saving your work</title>
         <p>
-          Using codespaces will keep all your files <q>in the cloud</q> on GitHub's server.  As long as you don't delete your codespace, your files will be saved there.  However, you will want to <term>push</term> these files to your <term>git repository</term> on GitHub to make this save perminent.  This has the benefit of allowing collaborators to access your files as well (your codespace is unique to your account).
+          Using Codespaces will keep all your files <q>in the cloud</q> on GitHub's server,
+          saved automatically as you edit.
+          As long as your Codespace is active, your files will be saved there
+          for your private use.
+        </p>
+
+        <p>
+          However, you will want to periodically <term>commit &amp; sync</term> these files to your
+          <term>git repository</term> on GitHub. This creates a backup of your work, and has the added benefit of
+          allowing collaborators to access your files as well.
         </p>
     
         <p>
-          There is a <em>lot</em> to learn about git, but luckily using VS Code lets you do everything you need using menus (you don't need to use the command line, unless you want to).  Everything can be controlled using the <term>Source Control</term> view: it should be third from the top on the very left of the window, an icon with splitting paths, and likely a badge showing how many files you have changed.
+          While Git and GitHub have a lot of features, fortunately there's a very simple way to use them
+          via Codespaces. As you edit files, you'll notice that their filenames will turn orange, and new
+          files will appear green. Likewise, a blue number will appear in the left sidebar.
         </p>
+
+        <figure xml-id="tutorial-figure-codespaces-sidebar">
+          <caption>Filenames changing color as they are edited in Codespaces</caption>
+          <image width="50%" source="codespaces-sidebar.png">
+            <description>Screenshot of VS Code sidebar in Codespaces</description>
+          </image>
+        </figure>
     
         <p>
-          Here are the basic concepts you need to understand.
-          <ul>
-            <li>
-              <p>
-                The program <term>git</term> keeps track of all the changes you make to files inside of your <term>repository</term> (in this case, the folder containing your project). 
-              </p>
-            </li>
-            <li>
-              <p>
-                Once you have edited your files and are happy with all of them, you tell git to track the set of changes as a <term>commit</term>.  This creates a handy <em>breakpoint</em> you could return to if you want to go back to an earlier version.
-               </p> 
-                
-               <p>
-                There are two steps to creating a commit (which you can often do all at once in practice):
-                <ol>
-                  <li>
-                    <p>
-                      You <term>stage</term> the files you want to update in the commit.
-                    </p>
-                    <p>
-                      You <term>commit</term> the stage files including a <term>commit message</term>.
-                    </p>
-                  </li>
-                </ol>
-                Doing this in two steps can be helpful if you want to commit only some of the files that have changed.
-              </p>
-            </li>
-            <li>
-              <p>
-                Once you have one or more commits, you need to sync these changes with GitHub.  To <q>upload</q> your changes, you <term>push</term> the repository.  To download changes that you are someone else made, you <term>pull</term> the repository.
-              </p>
-            </li>
-          </ul>
+          This blue badge is next to the Source Control view.
+          You will notice a list of files that were changed;
+          you can click on any of these to see what the changes are.
         </p>
-    
-        <p>
-          Now, how do we do these things in VS Code?  Start by looking at the Source Control view.  You will notice a list of files that were changed.  You can click on any of these to see what the changes are (you will see a side-by-side view of the original and updated version).
-        </p>
+
+        <figure xml-id="tutorial-figure-codespaces-sidebar">
+          <caption>A <q>Git diff</q> showing changes in a file</caption>
+          <image width="100%" source="codespaces-diff.png">
+            <description>Screenshot of VS Code Git diff in Codespaces</description>
+          </image>
+        </figure>
     
         <p>
           If you are comfortable staging and committing in one step, you can simply write yourself a short message in the textbox above the big green <q>Commit</q> button, and click the button.  If you want to stage first, click the + next to each file under <q>changes</q> to stage them.
