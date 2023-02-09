@@ -4110,7 +4110,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <note xml:id="best-practice-urls">
                 <title>Craft URLs Carefully</title>
 
-                <p>Your writing will be smoother, and easier on your readers, if you do not interrupt a sentence with a long <init>URL</init>, unless somehow it is really of interest and relevant right there.  So provide content (the <q>clickable</q> text) when you use the <tag>url</tag> element (rather than an empty <tage>url</tage>).  This obligates you to provide a <attr>visual</attr> attribute, which feels a little like a tedious exercise.  But this will be very welcome to some of your readers, those who are unable or prefer not to use electronic formats.  Just above (<xref ref="topic-visual-urls"/>, we provide suggestions for crafting these more pleasing, but still useful, versions of <init>URL</init>s.</p>
+                <p>Your writing will be smoother, and easier on your readers, if you do not interrupt a sentence with a long <init>URL</init>, unless somehow it is really of interest and relevant right there.  So provide content (the <q>clickable</q> text) when you use the <tag>url</tag> element (rather than an empty <tage>url</tage>).  This obligates you to provide a <attr>visual</attr> attribute, which feels a little like a tedious exercise.  But this will be very welcome to some of your readers, those who are unable or prefer not to use electronic formats.  Just above (<xref ref="topic-visual-urls"/>), we provide suggestions for crafting these to be more pleasing, but still useful, versions of <init>URL</init>s.</p>
             </note>
         </subsection>
 
