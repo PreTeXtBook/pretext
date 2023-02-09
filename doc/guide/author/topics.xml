@@ -4386,13 +4386,14 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
           <title>Localization Files</title>
 
-          <p>The prerequisite is that a localization file for your language exists.  A number are already supported, such as <c>es-ES</c> (Peninsular Spanish), <c>pt-BR</c> (Brazilian Portuguese), and <c>hu-HU</c> (Hungarian/Magyar); the default language code is <c>en-US</c> (American English).  For a up-to-date list of which languages are available, see <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl/localizations" visual="xsl/localizations">the localization stylesheet folder on GitHub</url>.</p>
+          <!-- 2023-02-07: 15 languages -->
+          <p>The prerequisite is that a localization file for your language exists.  Fifteen languages are already supported, such as <c>es-ES</c> (Peninsular Spanish), <c>pt-BR</c> (Brazilian Portuguese), and <c>hu-HU</c> (Hungarian/Magyar); the default language code is <c>en-US</c> (American English).  For a up-to-date list of which languages are available, see <url href="https://github.com/PreTeXtBook/pretext/tree/dev/xsl/localizations" visual="xsl/localizations">the localization stylesheet folder on GitHub</url>.</p>
 
           <p>If such a file does not exist, you will need to create one or find someone to help you do so. Brief instructions for this <url href="https://github.com/PreTeXtBook/pretext/blob/dev/xsl/localizations/README.md" visual="xsl/localizations/README.md">are in the README file</url> for this directory.  These instructions suggest using the <c>en-US</c> file as a template and as a source of more detailed instructions.  We highly encourage anyone who creates such a file to contribute it to our growing list of localization stylesheets; see <xref ref="contributing"/> in the Appendices for details.</p>
         </subsection>
 
         <subsection>
-          <title>Changing the Language</title>
+          <title>Changing the Document Language</title>
 
           <p>In order to use a localization, simply place <c>xml:lang="es-ES"</c> (with language code as appropriate for your project) as an attribute on your <tag>pretext</tag> element.  For example:<cd>
             <cline>&lt;pretext xml:lang="hu-HU"/></cline>
@@ -4404,6 +4405,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
           </cd>In this case, the localization stylesheet is missing a translation for this tag, and it will remain in <c>en-US</c>.  We welcome contributions to keep stylesheets fully complete; see <xref ref="contributing"/> for details.</p>
         </subsection>
 
+        <subsection>
+          <title>Multilingual Documents</title>
+
+          <p>As of the start of 2023, we are improving support to allow for <em>parts</em> of a document to be in different languages.  Much as you place an <attr>xml:lang</attr> attribute on the overall <tag>pretext</tag> element, you can place this attribute, <em>with a different supported language</em> onto any element, and all of the content within that element should react according to the new language.  A division would be most natural, but perhaps also a block or a paragraph?  Development continues, and in particular not every part of an <init>HTML</init> page always reacts.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-accessibility">
