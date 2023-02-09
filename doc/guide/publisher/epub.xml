@@ -36,7 +36,7 @@
                     </p>
 
                     <p>
-                        To use a non-generic cover image, the publication file must also have <c>epub/cover/@front</c> attribute that points to the cover image (<init>JPEG</init> or <init>PNG</init>, 2048 pixels tall, 1280 pixels wide).  Absent an image provided, there will be an attempt to create a simple, generic cover image.  See <xref ref="epub-cover-image-options"/> for details about specifying a cover image.
+                        To use a non-generic cover image, the publication file must also have <c>epub/cover/@front</c> attribute that points to the cover image (<init>JPEG</init> or <init>PNG</init>, 2048 pixels tall, 1280 pixels wide).  Absent an image provided, there will be an attempt to create a simple, generic cover image.  See <xref ref="epub-cover-image-option"/> for details about specifying a cover image.
                     </p>
                 </li>
             </ul>
