@@ -4120,20 +4120,6 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (&amp;), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about exceptional characters in <init>XML</init> source can be found in <xref ref="overview-exceptional-characters"/>.</p>
         </subsection>
-
-        <subsection xml:id="topic-external-data-file">
-            <title><init>URL</init>s to External Data Files</title>
-
-            <p>The <tag>url</tag> element can be used to make data files available to your reader.  Consider the example of a spreadsheet containing a large data set that a reader needs to analyze as part of an exercise.  Here are our recommendations on how to accomplish this:<ul>
-                <li><p>If the file is hosted on some server unassociated with your project, and does not have a license compatible with your project, then just set the <attr>href</attr> to the complete address.  Be sure to include enough of the address for the reader of a a print version to be able to type in the <init>URL</init>, either as the content of the <tag>url</tag> or in close vicinity.</p></li>
-
-                <li><p>If you authored the spreadsheet, or you are allowed to legally copy and distribute it, then place it on your server where you host your book project.  Then do as above and use the full <init>URL</init> for the <attr>href</attr> attribute, with a visible version available for <init>PDF</init> and print versions.</p></li>
-
-                <li><p>If you have control over the placement of the file, you can host it on your server, and use a <init>URL</init> relative to the location of your <init>HTML</init>, <init>PDF</init>, or other files that comprise your document.  This might be a good choice if your book will be posted many places and you can give it to others as an archive, like a <c>*.zip</c> file.  It is a bad idea if a reader downloads a PDF without the data file following along and remaining in the same relative location.  It is an impossible idea if your document gets printed on paper and there is no idea what a relative <init>URL</init> means and there is not even a link to click on.</p></li>
-            </ul></p>
-
-            <p>Consider your audience and think about how much guidance they need about using context menus or helper/viewer applications to make use of the file formats you are providing. This advice may be different depending on the type of files and the types of output for your document.</p>
-        </subsection>
     </section>
 
     <section xml:id="topic-video">
