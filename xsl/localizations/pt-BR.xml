@@ -61,14 +61,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='mrow'>Equação</localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- Display Mathematics -->
-    <!-- <localization string-id='md'>Display Mathematics</localization> -->
-    <!-- <localization string-id='mdn'>Display Mathematics</localization> -->
+    <localization string-id='md'>Matemática em Destaque</localization> -->
+    <localization string-id='mdn'>Matemática em Destaque</localization> -->
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Volume</localization>
     <localization string-id='book'>Livro</localization>
     <localization string-id='article'>Artigo</localization>
     <!-- Translation needed for Brazilian Portugese -->
-    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='slideshow'>Apresentação de Slides</localization> -->
     <localization string-id='letter'>Carta</localization>
     <localization string-id='memo'>Memorando</localization>
     <localization string-id='presentation'>Apresentação</localization>
@@ -88,8 +88,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Conclusão</localization>
     <localization string-id='exercises'>Exercícios</localization>
     <!-- Translation needed for Brazilian Portugese -->
-    <!-- <localization string-id='worksheet'>Worksheet</localization> -->
-    <!-- <localization string-id='reading-questions'>Reading Questions</localization> -->
+    <localization string-id='worksheet'>Lista de Exercícios</localization> -->
+    <localization string-id='reading-questions'>Exercícios de Interpretação</localization> -->
     <localization string-id='solutions'>Soluções</localization>
     <localization string-id='glossary'>Glossário</localization>
     <localization string-id='references'>Referêcias</localization>
@@ -108,15 +108,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Observação</localization>
     <localization string-id='warning'>Atenção</localization>
     <!-- Translation needed for Brazilian Portugese -->
-    <!-- <localization string-id='insight'>Insight</localization> -->
+    <localization string-id='insight'>Ideia</localization>
     <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Cálculo</localization>
     <localization string-id='technology'>Tecnologia</localization>
-    <!-- <localization string-id='data'>Data</localization> -->
+    <localization string-id='data'>Dados</localization>
     <!-- ASIDE-LIKE blocks -->
-    <!-- <localization string-id='aside'>Aside</localization> -->
-    <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
-    <!-- <localization string-id='historical'>Historical Aside</localization> -->
+    <localization string-id='aside'>Nota</localization>
+    <localization string-id='biographical'>Nota Biográfica Aside</localization>
+    <localization string-id='historical'>Nota Histórica</localization>
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'>Exemplo</localization>
     <localization string-id='question'>Questão</localization>
@@ -131,7 +131,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Brazilian Portugese -->
     <!-- assemblages are collections of minimally structured material -->
     <localization string-id='assemblage'>Coleção</localization>
-    <!-- <localization string-id='poem'>Poem</localization> -->
+    <localization string-id='poem'>Poema</localization>
     <!-- Objectives is the block, objective is a list item within -->
     <localization string-id='objectives'>Objetivos</localization>
     <localization string-id='objective'>Objetivo</localization>
@@ -152,17 +152,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Parágrafo</localization>
     <localization string-id='blockquote'>Citação</localization>
-    <!-- <localization string-id='pre'>Code Block</localization> -->
+    <localization string-id='pre'>Bloco de Código</localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <localization string-id='fragment'>Fragmento</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Exercício</localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <localization string-id='inlineexercise'>Autoavaliação</localization>
-    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
-    <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
+    <localization string-id='inlineexercise'>Exercício de Verificação</localization>
+    <localization string-id='worksheetexercise'>Exercício da Lista</localization>
+    <localization string-id='readingquestion'>Exercício de Interpretação</localization> -->
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Dica</localization>
     <localization string-id='answer'>Resposta</localization>
@@ -184,8 +184,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'>Dedicatória</localization>
     <localization string-id='colophon'>Ficha técnica</localization>
     <!-- Runestone Activities -->
-    <!-- <localization string-id='video'>Video</localization> -->
-    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='video'>Vídeo</localization>
+    <localization string-id='program'>Programa</localization>
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
@@ -246,16 +246,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='evaluate'>Executar</localization>
     <localization string-id='code'>Código</localization>
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
-    <!-- <localization string-id='instructions'>Instructions</localization> -->
+    <localization string-id='instructions'>Instruções</localization>
     <!-- Interactive exercise feedback messages -->
-    <!-- <localization string-id='correct'>Correct</localization> -->
-    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
-    <!-- <localization string-id='blank'>Blank</localization> -->
-    <!-- <localization string-id='submit'>Submit</localization> -->
-    <!-- <localization string-id='check-responses'>Check Responses</localization> -->
-    <!-- <localization string-id='reveal'>Reveal</localization> -->
-    <!-- <localization string-id='randomize'>Randomize</localization> -->
-    <!-- <localization string-id='activate'>Activate</localization> -->
-    <!-- <localization string-id='reset'>Reset</localization> -->
-    <!-- <localization string-id='array'>array</localization> -->
+    <localization string-id='correct'>Correto</localization>
+    <localization string-id='incorrect'>Incorreto</localization>
+    <localization string-id='blank'>Em brancoBlank</localization>
+    <localization string-id='submit'>Enviar</localization>
+    <localization string-id='check-responses'>Conferir Respostas</localization>
+    <localization string-id='reveal'>Revelar</localization>
+    <localization string-id='randomize'>Aleatoriza</localization>
+    <localization string-id='activate'>Ativar</localization>
+    <localization string-id='reset'>Redefinir</localization>
+    <localization string-id='array'>lista</localization>
 </locale>
