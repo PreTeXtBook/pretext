@@ -11,7 +11,7 @@
     <title>Processing, Tools and Workflow</title>
 
     <introduction>
-        <p>This chapter explains in full detail how to convert your source into various output formats, using both the simple <pretext />-CLI as well as other methods to combine your source file with an XSL stylesheet that might provide greater flexibility and control.  It expands on the simple example in <xref ref="quickstart-example" /> and should also be read in conjunction with the chapter on the <c>pretext</c> script (<xref ref="pretext-script" />).</p>
+        <p>This chapter explains in full detail how to convert your source into various output formats, using both the simple <pretext />-CLI as well as other methods to combine your source file with an XSL stylesheet that might provide greater flexibility and control.  It expands on the simple example in <xref ref="tutorial" /> and should also be read in conjunction with the chapter on the <c>pretext</c> script (<xref ref="pretext-script" />).</p>
     </introduction>
 
     <section xml:id="processing-basic">
@@ -39,7 +39,7 @@
         </p>
 
         <p>
-            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="quickstart-getting-pretext"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext" visual="github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
+            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="processing-CLI"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext" visual="github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
         </p>
 
         <p>
@@ -52,7 +52,7 @@
         <idx><h>CLI</h></idx>
         <introduction>
         <p>
-            Here we will outline the functionality of the <pretext />-CLI.  Instructions for installing this command line interface can be found in <xref ref="quickstart-getting-pretext"/>.
+            Here we will outline the functionality of the <pretext />-CLI.  Instructions for installing this command line interface can be found in <xref ref="processing-CLI"/>.
         </p>
 
         <p>

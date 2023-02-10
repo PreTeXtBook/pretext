@@ -151,7 +151,7 @@
 
             <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext /> since the source is just text files.  The hands-down favorite is <c>git</c>.  To fully understand it is beyond the scope of this guide but some information is provided in <xref ref="git-author" /> which has hints on how to best use <c>git</c> together with a <pretext /> project.</p>
 
-            <p>If you use the workflow recommended in the <xref ref="quickstart-example"/> using GitHub's codespaces, you will get revision control via git automatically, and VS Code provides a graphical user interface for all the basic operations you need.</p>
+            <p>If you use the workflow recommended in the <xref ref="tutorial"/> using GitHub's codespaces, you will get revision control via git automatically, and VS Code provides a graphical user interface for all the basic operations you need.</p>
         </paragraphs>
 
     </section>
@@ -160,7 +160,7 @@
         <title>Converting Your Source to Output</title>
 
         <p>
-            Once you have content created in <pretext /> files (i.e., <init>XML</init> files), you will want to convert these files into a output format such as <init>HTML</init>, to be viewed in a web browser, or a <init>PDF</init>.  Instructions for doing this will be discussed in <xref ref="quickstart-example"/>, and in even more detail in <xref ref="processing"/>.  Here we provide an overview of how the conversion works to help you understand what is possible.
+            Once you have content created in <pretext /> files (i.e., <init>XML</init> files), you will want to convert these files into a output format such as <init>HTML</init>, to be viewed in a web browser, or a <init>PDF</init>.  Instructions for doing this will be discussed in <xref ref="tutorial"/>, and in even more detail in <xref ref="processing"/>.  Here we provide an overview of how the conversion works to help you understand what is possible.
         </p>
 
         <p>
@@ -182,7 +182,7 @@
     <section xml:id="start-next">
         <title>Where Next?</title>
 
-        <p>To start playing with <pretext /> right away, work through the <xref ref="quickstart-example"/>.  It will guide you through a cloud-based setup (no software install required) and you will create, edit, convert, and deploy your first document.</p>
+        <p>To start playing with <pretext /> right away, work through the <xref ref="tutorial"/>.  It will guide you through a cloud-based setup (no software install required) and you will create, edit, convert, and deploy your first document.</p>
 
         <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview"/>.</p>
 
