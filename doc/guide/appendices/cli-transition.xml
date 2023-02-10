@@ -25,7 +25,7 @@
       <ul>
         <li>An existing <pretext/> project, in a folder called <c>PROJECT</c>.</li>
         <li>A Python installation at version 3.8 or newer.</li>
-        <li>The PreTeXt-CLI, installed using the instructions in <xref ref="quickstart-getting-pretext"/>.</li>
+        <li>The PreTeXt-CLI, installed using the instructions in <xref ref="processing-CLI"/>.</li>
       </ul>
     </p>
 
