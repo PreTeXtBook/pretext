@@ -17,8 +17,8 @@
     <section xml:id="philosophy">
         <title>Philosophy</title>
 
-        <p><pretext /> is a <term>markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.</p>  
-        
+        <p><pretext /> is a <term>markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.</p>
+
         <p>This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
 
         <p>You are also freed from the technical details of presenting your ideas in the plethora of new formats available as a consequence of the advances in computers (including tablets and smartphones) and networks (global and wireless).  Your output <q>just works</q> and the software keeps up with technical advances and the introduction of new formats, while you concentrate on the content of your book (or article, or report, or proposal, or<nbsp /><ellipsis />).</p>
@@ -72,12 +72,12 @@
             <title>File Format and Text Editors</title>
 
             <p>Your source will be plain text <term>ASCII files</term><idx>ASCII file</idx>, which you create and edit with any number of text editors. Files can be saved with the <c>.ptx</c> extension, which might tell your text editor what sort of file you are editing and will provide syntax highlighting and code completion, among other features.  If your editor does not recognize <c>.ptx</c>, then you can use the <c>.xml</c> extension which has wider editor support (but with fewer <pretext />-specific features).</p>
-                
+
             <p>Popular text editors include Visual Studio Code, Sublime Text, vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  But in particular, you should not use word processing programs like Word, LibreOffice, Google Docs, WordPerfect, AbiWord, Pages, or similar programs.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
 
             <p>
                 Visual Studio Code has support for PreTeXt documents via a free extension, and the editor is open source and cross-platform (Windows, OS X, and Linux).  The developers of <pretext /> have also had a very good experience with Sublime Text, which is cross-platform, and can be used for free,
-                though it has a very liberal paid license if you want to avoid nagging.  
+                though it has a very liberal paid license if you want to avoid nagging.
             </p>
 
             <p>There are <term>XML editors</term><idx>XML editor</idx>, which might be too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that you might find useful.</p>
@@ -89,7 +89,7 @@
         <paragraphs>
             <title>Structure of your Source</title>
             <p>
-                If you start to think about the structure of a document (like an article or book) you will quickly realize that components are like blocks, stacked inside or next to other blocks.  From the <em>outside</em> to <em>inside</em>, a book will have a number of chapters (next to each other, but all inside the book), and each might have sections (adjacent but inside the chapter).  In the section, there will be a title, paragraphs, images, examples, theorems, and so on.  Examples will themselves contain paragraphs.  A theorem might contain a statement, which contains some paragraphs, which might contain some displayed math, and adjacent to the statement, there could be a proof, itself containing paragraphs, etc. 
+                If you start to think about the structure of a document (like an article or book) you will quickly realize that components are like blocks, stacked inside or next to other blocks.  From the <em>outside</em> to <em>inside</em>, a book will have a number of chapters (next to each other, but all inside the book), and each might have sections (adjacent but inside the chapter).  In the section, there will be a title, paragraphs, images, examples, theorems, and so on.  Examples will themselves contain paragraphs.  A theorem might contain a statement, which contains some paragraphs, which might contain some displayed math, and adjacent to the statement, there could be a proof, itself containing paragraphs, etc.
             </p>
 
             <p>The hierarchical nature of <init>XML</init> is perfect to capture the hierarchical nature of a scholarly document.  Consider the start of a <pretext /> document shown in <xref ref="listing-simple"/>.</p>
@@ -124,7 +124,7 @@
             <title>Whitespace and Indentation</title>
 
             <p>The term <term>whitespace</term><idx>whitespace</idx> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
-            
+
             <p>
                 However, it can be useful to use whitespace to indent the different levels of the <init>XML</init> (and document) hierarchy. Use two (or four) spaces for indentation; a good editor will visually respect this indentation, and help you with maintaining the right indentation with each new line.  Line up opening and closing tags at the same level of indentation, and your editor should let you <q>fold</q> the code to visually hide blocks.
             </p>
@@ -154,9 +154,6 @@
             <p>If you use the workflow recommended in the <xref ref="quickstart-example"/> using GitHub's codespaces, you will get revision control via git automatically, and VS Code provides a graphical user interface for all the basic operations you need.</p>
         </paragraphs>
 
-
-
- 
     </section>
 
     <section xml:id="start-source-to-output">
@@ -171,12 +168,12 @@
         </p>
 
         <p>
-            The recommended workflow for processing your source uses a python program we call the <em><pretext/>-CLI</em> (<init>CLI</init> is <term>command line interface</term>). There are also a number of other free tools that can processes <init>XML</init> with <init>XSL</init>.  For example, <c>xsltproc</c> is a command line program that is usually installed by default on Linux systems and MacOS.  
+            The recommended workflow for processing your source uses a python program we call the <em><pretext/>-CLI</em> (<init>CLI</init> is <term>command line interface</term>). There are also a number of other free tools that can processes <init>XML</init> with <init>XSL</init>.  For example, <c>xsltproc</c> is a command line program that is usually installed by default on Linux systems and MacOS.
             This was the recommended method in the early days of <pretext />, and still works.  Documentation for how to use <c>xsltproc</c> with <pretext /> can be found in <xref ref="xsltproc"/>, but unless you are helping with the development of <pretext /> or are trying to do something fancy, you probably don't need it.
         </p>
 
         <p>
-            Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional processing, done in python.  The <pretext />-CLI does this using the <c>pretext generate</c> command. 
+            Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional processing, done in python.  The <pretext />-CLI does this using the <c>pretext generate</c> command.
             There is also a python script that can accesses these functions directly for use in development.  See <xref ref="pretext-script"/> if you are curious.
         </p>
 
