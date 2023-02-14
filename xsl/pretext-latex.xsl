@@ -6305,7 +6305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Each component has a similar look, so we combine here -->
 <!-- Separators depend on possible trailing items, so no   -->
 <!-- vertical spacing beforehand is present here           -->
-<xsl:template match="hint|answer|solution" mode="solution-heading">
+<xsl:template match="&SOLUTION-LIKE;" mode="solution-heading">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
@@ -9791,7 +9791,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
-<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
@@ -9844,7 +9844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- version of an exercise to point to solutions elsewhere.           -->
 <!-- The suffix is general-purpose, but is intended now to be          -->
 <!-- "main" or "back", depending on where the solution is located.     -->
-<xsl:template match="hint|answer|solution" mode="latex-id-duplicate">
+<xsl:template match="&SOLUTION-LIKE;" mode="latex-id-duplicate">
     <xsl:param name="suffix" select="'bad-suffix'"/>
     <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>-</xsl:text>
@@ -9933,7 +9933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: objectives are one-per-subdivision, and precede the              -->
 <!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
 <!-- number - that of the enclosing subdivision                             -->
-<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|exercisegroup|fn" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
     <xsl:apply-templates select="." mode="xref-number-hardcoded">

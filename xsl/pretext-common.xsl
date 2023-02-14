@@ -4189,7 +4189,7 @@ Book (with parts), "section" at level 3
 
 <!-- Serial Numbers: Solutions -->
 <!-- Hints, answers, solutions may be numbered (for cross-reference knowls) -->
-<xsl:template match="hint|answer|solution" mode="serial-number">
+<xsl:template match="&SOLUTION-LIKE;" mode="serial-number">
     <xsl:number />
 </xsl:template>
 
@@ -4208,7 +4208,7 @@ Book (with parts), "section" at level 3
 <!-- returns an empty string.  Employing templates will need    -->
 <!-- to check if they want to react accordingly, or they should -->
 <!-- just ask for the serial number itself if they don't care.  -->
-<xsl:template match="hint|answer|solution|biblio/note" mode="non-singleton-number">
+<xsl:template match="&SOLUTION-LIKE;|biblio/note" mode="non-singleton-number">
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="serial-number" />
     </xsl:variable>
@@ -4720,7 +4720,7 @@ Book (with parts), "section" at level 3
 
 <!-- Hints, answers, solutions get structure number from parent       -->
 <!-- exercise's number. Identical for inline and divisional exercises -->
-<xsl:template match="hint|answer|solution" mode="structure-number">
+<xsl:template match="&SOLUTION-LIKE;" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 

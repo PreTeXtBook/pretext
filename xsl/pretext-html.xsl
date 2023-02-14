@@ -1986,7 +1986,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
@@ -2282,7 +2282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- subtract 1 more if chunk level is 0, since we quash overall title  -->
 <!-- subtract the backmatter and frontmatter                            -->
 <!-- add block ancestors that definitely have an hN                     -->
-<!-- but subtract 1 for a solution|hint|answer because the statement is -->
+<!-- but subtract 1 for a hint|answer|solution because the statement is -->
 <!--   not an HTML heading ancestor                                     -->
 <!-- also subtract 1 for a PROOF-LIKE inside a THEOREM-LIKE             -->
 <!-- add block ancestors that have an hN if they had a @title           -->
