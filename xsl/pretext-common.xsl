@@ -82,8 +82,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="author.tools" select="''" />
 <!-- Publisher option to include "commentary" -->
 <!-- Default will be "no"                     -->
+<!-- 2023-02-13: to be *removed* 2024-02-13    -->
+<!-- See plan near current deprecation warning -->
 <xsl:param name="commentary" select="''" />
-
 <!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
 <!-- Describes source expectations, DO NOT override in subsequent conversions -->
 <!-- Strip whitespace text nodes from container elements                      -->
@@ -10359,6 +10360,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//datafile[not(@label)]" />
         <xsl:with-param name="date-string" select="'2023-01-27'" />
         <xsl:with-param name="message" select="'the old use of the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.   New uses of &quot;datafile&quot; require a @label attribute.  So you are seeing this warning since your source has a &quot;datafile&quot; without a @label attribute.  We will try to honor your intent, but please make the change at your first convenience, as an automatic conversion might not be desirable in some cases.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2023-02-13   initiate warnings about deprecation/removal of "commentary" string parameter-->
+    <!-- Plan - to prevent inadvertent publication                                 -->
+    <!--   2024-02-13:                                                             -->
+    <!--     * Remove string parameter from the code                               -->
+    <!--     * Add a warning here on attempted use (which will typically be "yes") -->
+    <!--       Perhaps make this warning fatal as well?                            -->
+    <!--     * Convert component-less "commentary" warning to a fatal error        -->
+    <!--   Much later:                                                             -->
+    <!--     * Relax component-less "commentary" warning, fatal warnings           -->
+    <!-- NB: search entire code base on "2024-02-13" (or "-02-13")                 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//commentary[not(@component)]" />
+        <xsl:with-param name="date-string" select="'2023-02-13'" />
+        <xsl:with-param name="message" select="'the string parameter &quot;commentary&quot; will be removed on, or after, 2024-02-13 (but not yet).  Any &quot;commentary&quot; elements present should be adjusted to have their visibility controlled by version support, specifically by first being placed in a &quot;component&quot;, and then controlled by entries of a publisher file.  Then &quot;commentary&quot; elements can be hidden just with version support.  To be visible you will need to use version support AND continue to use the string parameter.  On, or after, 2024-02-13, this warning will become a fatal error.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
