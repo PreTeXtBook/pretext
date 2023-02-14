@@ -12696,7 +12696,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam odio orci, ullamcorper eget quam et, viverra tristique magna. Integer auctor arcu a sapien pulvinar elementum. Mauris porta, nulla id molestie dignissim, urna dolor rutrum ligula, eu elementum odio nisl sed libero. Nulla nec libero sem.</p>
 
-            <commentary>
+            <!-- control visibility with version support, but until -->
+            <!-- 2024-02-13 we also need to use a string parameter  -->
+            <commentary component="instructor">
                 <title>Some Commentary</title>
                 <idx>commentary</idx>
 
