@@ -576,7 +576,7 @@
                 <xsl:apply-templates select="variable" mode="evaluation-binding" >
                     <xsl:with-param name="setupMode" select="$setupMode" />
                 </xsl:apply-templates>
-            <xsl:text>}).reduce()</xsl:text>
+            <xsl:text>})</xsl:text>
         </xsl:when>
         <xsl:when test="@mode='random'">
             <!-- Different types of random number generation -->
@@ -586,6 +586,17 @@
                         <xsl:choose>
                             <xsl:when test="options/@min">
                                 <xsl:value-of select="options/@min"/>
+                            </xsl:when>
+                            <xsl:when test="options/min">
+                                <xsl:choose>
+                                    <xsl:when test="options/min/@name">
+                                        <xsl:value-of select="$prefix"/>
+                                        <xsl:value-of select="options/min/@name"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="options/min"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:text>0</xsl:text>
@@ -597,6 +608,17 @@
                             <xsl:when test="options/@max">
                                 <xsl:value-of select="options/@max"/>
                             </xsl:when>
+                            <xsl:when test="options/max">
+                                <xsl:choose>
+                                    <xsl:when test="options/max/@name">
+                                        <xsl:value-of select="$prefix"/>
+                                        <xsl:value-of select="options/max/@name"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="options/max"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
                             <xsl:otherwise>
                                 <xsl:text>1</xsl:text>
                             </xsl:otherwise>
@@ -606,6 +628,17 @@
                         <xsl:choose>
                             <xsl:when test="options/@by">
                                 <xsl:value-of select="options/@by"/>
+                            </xsl:when>
+                            <xsl:when test="options/by">
+                                <xsl:choose>
+                                    <xsl:when test="options/max/@by">
+                                        <xsl:value-of select="$prefix"/>
+                                        <xsl:value-of select="options/by/@name"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="options/by"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:text>1</xsl:text>

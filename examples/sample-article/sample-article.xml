@@ -8311,14 +8311,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <de-object name="x1" context="number" mode="random">
                             <options distribution="discrete" min="-8" max="-4" by="1"/>
                         </de-object>
-                        <de-object name="d1" context="number" mode="random">
-                            <options distribution="discrete" min="1" max="4" by="1"/>
+                        <de-object name="a1" context="number" mode="formula">{{x1}}+1</de-object>
+                        <de-object name="b1" context="number" mode="formula">{{x1}}+5</de-object>
+                        <de-object name="x2" context="number" mode="random">
+                            <options distribution="discrete" by="1" nonzero="yes">
+                                <min name="a1"/>
+                                <max name="b1"/>
+                            </options>
                         </de-object>
-                        <de-object name="d2" context="number" mode="random">
-                            <options distribution="discrete" min="1" max="4" by="1"/>
-                        </de-object>
-                        <de-object name="x2" context="number" mode="formula">{{x1}}+{{d1}}</de-object>
-                        <de-object name="x3" context="number" mode="formula">{{x2}}+{{d2}}</de-object>
+                        <de-object name="a2" context="number" mode="formula">{{x2}}+1</de-object>
+                        <de-object name="b2" context="number" mode="formula">{{x2}}+5</de-object>
+                        <de-object name="x3" context="number" mode="random">
+                            <options distribution="discrete" by="1" nonzero="yes">
+                                <min name="a2"/>
+                                <max name="b2"/>
+                            </options>
+                        </de-object>        
                         <de-object name="base_cubic" context="formula" mode="formula">
                             (x-{{x1}})*(x-{{x2}})*(x-{{x3}})
                         </de-object>
