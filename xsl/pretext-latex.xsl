@@ -6103,27 +6103,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
  <!-- a "task" itself, since we nest them.  Each produces a single line, -->
  <!-- with a trailing newline. -->
 
-<xsl:template match="*" mode="begin-task-list">
+<xsl:template match="exercise|&PROJECT-LIKE;|&EXAMPLE-LIKE;|task" mode="begin-task-list">
     <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
     <xsl:choose>
-        <!-- three deep -->
+        <!-- parent is a "task", so context/container is a "task"   -->
+        <!-- and it's children are "task" three deep in the nesting -->
         <xsl:when test="parent::task">
             <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
         </xsl:when>
-        <!-- two deep -->
-        <xsl:when test="self::task and not(parent::task)">
+        <!-- container/context is a "task" (but it's parent is not), so -->
+        <!-- the children that are "task" are two deep in the nesting   -->
+        <xsl:when test="self::task">
             <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
         </xsl:when>
-        <!-- one deep -->
+        <!-- container/context is *not* a "task", it is something else,  -->
+        <!-- and so children that are "task" are one deep in the nesting -->
         <xsl:otherwise>
             <xsl:text>(\alph*),ref=\alph*</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>]&#xa;</xsl:text>
+    <xsl:text>]%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" mode="end-task-list">
-    <xsl:text>\end{enumerate}&#xa;</xsl:text>
+<xsl:template match="exercise|&PROJECT-LIKE;|&EXAMPLE-LIKE;|task" mode="end-task-list">
+    <xsl:text>\end{enumerate}%&#xa;</xsl:text>
 </xsl:template>
 
 
