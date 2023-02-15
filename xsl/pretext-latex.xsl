@@ -6419,7 +6419,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Only EXAMPLE-LIKE has hint, answer, solution -->
 <xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;">
     <!-- structured version may contain a prelude -->
-    <xsl:if test="statement">
+    <!-- no structure => don't even consider it   -->
+    <xsl:if test="statement or task">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
     <!-- environment, title, label string, newline -->
@@ -6456,7 +6457,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- structured version may contain a postlude -->
-    <xsl:if test="statement">
+    <!-- no structure => don't even consider it    -->
+    <xsl:if test="statement or task">
         <xsl:apply-templates select="postlude" />
     </xsl:if>
 </xsl:template>
