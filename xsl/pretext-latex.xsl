@@ -6013,7 +6013,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:if test="$b-has-task-list">
         <xsl:apply-templates select="." mode="begin-task-list"/>
-    </xsl:if>
 
     <xsl:for-each select="task">
         <!-- just for this particular task -->
@@ -6026,6 +6025,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:variable>
 
+        <!-- The entire task list is non-empty, so some particular task -->
+        <!-- must be non-empty, ensuring we never create a list without -->
+        <!-- at least one \item inside it.                              -->
         <xsl:if test="not($dry-run = '')">
             <!-- always a list item -->
             <xsl:text>\item</xsl:text>
@@ -6084,8 +6086,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:for-each>
 
-    <!-- End the liast, if started -->
-    <xsl:if test="$b-has-task-list">
         <xsl:apply-templates select="." mode="end-task-list"/>
     </xsl:if>
 
