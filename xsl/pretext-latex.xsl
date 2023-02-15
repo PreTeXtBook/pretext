@@ -6012,24 +6012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-has-task-list" select="not($task-list-dry-run = '')"/>
 
     <xsl:if test="$b-has-task-list">
-        <!-- set the label style of this list       -->
-        <!-- using features of the enumitem package -->
-        <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
-        <xsl:choose>
-            <!-- three deep -->
-            <xsl:when test="parent::task">
-                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
-            </xsl:when>
-            <!-- two deep -->
-            <xsl:when test="self::task and not(parent::task)">
-                <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
-            </xsl:when>
-            <!-- one deep -->
-            <xsl:otherwise>
-                <xsl:text>(\alph*),ref=\alph*</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>]&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="begin-task-list"/>
     </xsl:if>
 
     <xsl:for-each select="task">
@@ -6103,12 +6086,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- End the liast, if started -->
     <xsl:if test="$b-has-task-list">
-        <xsl:text>\end{enumerate}&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="end-task-list"/>
     </xsl:if>
 
     <xsl:if test="$b-has-statement">
         <xsl:apply-templates select="conclusion"/>
     </xsl:if>
+</xsl:template>
+
+<!-- These two templates construct the infrastructure around a sequence  -->
+<!-- of "task" realized as a LaTeX list, with help from the "enumitem"   -->
+<!-- package to set the label style.  Might be better as a wrapper, but  -->
+<!-- since LaTeX is text we can use different templates for the          -->
+<!-- beginning and ending.  Note that the context is a *container*       -->
+<!-- which has a sequence of "task" children, and the container could be -->
+ <!-- a "task" itself, since we nest them.  Each produces a single line, -->
+ <!-- with a trailing newline. -->
+
+<xsl:template match="*" mode="begin-task-list">
+    <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
+    <xsl:choose>
+        <!-- three deep -->
+        <xsl:when test="parent::task">
+            <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
+        </xsl:when>
+        <!-- two deep -->
+        <xsl:when test="self::task and not(parent::task)">
+            <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
+        </xsl:when>
+        <!-- one deep -->
+        <xsl:otherwise>
+            <xsl:text>(\alph*),ref=\alph*</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="end-task-list">
+    <xsl:text>\end{enumerate}&#xa;</xsl:text>
 </xsl:template>
 
 
