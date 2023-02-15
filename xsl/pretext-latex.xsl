@@ -6014,77 +6014,77 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-has-task-list">
         <xsl:apply-templates select="." mode="begin-task-list"/>
 
-    <xsl:for-each select="task">
-        <!-- just for this particular task -->
-        <xsl:variable name="dry-run">
-            <xsl:apply-templates select="." mode="dry-run">
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:variable>
-
-        <!-- The entire task list is non-empty, so some particular task -->
-        <!-- must be non-empty, ensuring we never create a list without -->
-        <!-- at least one \item inside it.                              -->
-        <xsl:if test="not($dry-run = '')">
-            <!-- always a list item -->
-            <xsl:text>\item</xsl:text>
-            <!-- We use the ref/label mechanism for tasks where born. -->
-            <!-- But if in a "solutions" division, we may be skipping -->
-            <!-- some and need to hard-code the task label/number.    -->
-            <xsl:choose>
-                <xsl:when test="$b-original">
-                    <!-- \label{} will separate content, if   -->
-                    <!-- employed, else we use an empty group -->
-                    <xsl:choose>
-                        <!-- not quite tight for modal "optional-label" -->
-                        <xsl:when test="@xml:id">
-                            <xsl:apply-templates select="." mode="label" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>{}</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <!-- hard-code the number when duplicating, since some items -->
-                    <!-- are absent, and then automatic numbering would be wrong -->
-                    <xsl:text>[(</xsl:text>
-                    <xsl:apply-templates select="." mode="list-number" />
-                    <xsl:text>)]</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- Something is being output, so include an (optional) title  -->
-            <!-- Semantic macro defined in preamble, mostly for font change -->
-            <xsl:if test="title">
-                <xsl:text>\lititle{</xsl:text>
-                <xsl:apply-templates select="." mode="title-full"/>
-                <xsl:text>}\par%&#xa;</xsl:text>
-            </xsl:if>
-            <!-- Identification in place, we can write the generic guts -->
-            <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="purpose" select="$purpose" />
-                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-            <!-- possibly add some workspace for items from a worksheet     -->
-            <!-- an empty result is a signal there is no workspace authored -->
-            <xsl:variable name="vertical-space">
-                <xsl:apply-templates select="." mode="sanitize-workspace"/>
+        <xsl:for-each select="task">
+            <!-- just for this particular task -->
+            <xsl:variable name="dry-run">
+                <xsl:apply-templates select="." mode="dry-run">
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                </xsl:apply-templates>
             </xsl:variable>
-            <xsl:if test="not($vertical-space = '')">
-                <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
-                <xsl:value-of select="$vertical-space"/>
-                <xsl:text>}%&#xa;</xsl:text>
+
+            <!-- The entire task list is non-empty, so some particular task -->
+            <!-- must be non-empty, ensuring we never create a list without -->
+            <!-- at least one \item inside it.                              -->
+            <xsl:if test="not($dry-run = '')">
+                <!-- always a list item -->
+                <xsl:text>\item</xsl:text>
+                <!-- We use the ref/label mechanism for tasks where born. -->
+                <!-- But if in a "solutions" division, we may be skipping -->
+                <!-- some and need to hard-code the task label/number.    -->
+                <xsl:choose>
+                    <xsl:when test="$b-original">
+                        <!-- \label{} will separate content, if   -->
+                        <!-- employed, else we use an empty group -->
+                        <xsl:choose>
+                            <!-- not quite tight for modal "optional-label" -->
+                            <xsl:when test="@xml:id">
+                                <xsl:apply-templates select="." mode="label" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>{}</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- hard-code the number when duplicating, since some items -->
+                        <!-- are absent, and then automatic numbering would be wrong -->
+                        <xsl:text>[(</xsl:text>
+                        <xsl:apply-templates select="." mode="list-number" />
+                        <xsl:text>)]</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- Something is being output, so include an (optional) title  -->
+                <!-- Semantic macro defined in preamble, mostly for font change -->
+                <xsl:if test="title">
+                    <xsl:text>\lititle{</xsl:text>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                    <xsl:text>}\par%&#xa;</xsl:text>
+                </xsl:if>
+                <!-- Identification in place, we can write the generic guts -->
+                <xsl:apply-templates select="." mode="exercise-components">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="purpose" select="$purpose" />
+                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                </xsl:apply-templates>
+                <!-- possibly add some workspace for items from a worksheet     -->
+                <!-- an empty result is a signal there is no workspace authored -->
+                <xsl:variable name="vertical-space">
+                    <xsl:apply-templates select="." mode="sanitize-workspace"/>
+                </xsl:variable>
+                <xsl:if test="not($vertical-space = '')">
+                    <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+                    <xsl:value-of select="$vertical-space"/>
+                    <xsl:text>}%&#xa;</xsl:text>
+                </xsl:if>
             </xsl:if>
-        </xsl:if>
-    </xsl:for-each>
+        </xsl:for-each>
 
         <xsl:apply-templates select="." mode="end-task-list"/>
     </xsl:if>
