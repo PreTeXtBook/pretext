@@ -1144,10 +1144,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </postlude>
                     </project>
 
-                    <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
-
                     <example xml:id="example-structured-with-task">
                         <title>Notation mathématique 2</title>
+                        <prelude>
+                            <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
+                        </prelude>
                         <introduction>
                             <p>Écrivez chacun des exemples suivants avec les conditions pertinentes.</p>
                         </introduction>
