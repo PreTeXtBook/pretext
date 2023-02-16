@@ -3814,14 +3814,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="." mode="exercise-components">
-        <xsl:with-param name="b-original" select="$b-original"/>
-        <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="b-has-statement" select="true()" />
-        <xsl:with-param name="b-has-hint"      select="true()" />
-        <xsl:with-param name="b-has-answer"    select="true()" />
-        <xsl:with-param name="b-has-solution"  select="true()" />
-    </xsl:apply-templates>
+    <xsl:choose>
+        <!-- structured by "task" so let templates for tasks work -->
+        <!-- down to terminal task with SOLUTION-LIKE appendages  -->
+        <xsl:when test="task">
+            <xsl:apply-templates select="introduction|task|conclusion">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- structured with "statement" and SOLUTION-LIKE, -->
+        <!-- or just bare content for a statement           -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
+                <xsl:with-param name="b-has-hint"      select="true()"/>
+                <xsl:with-param name="b-has-answer"    select="true()"/>
+                <xsl:with-param name="b-has-solution"  select="true()"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
