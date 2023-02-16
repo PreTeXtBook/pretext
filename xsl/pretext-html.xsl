@@ -4459,7 +4459,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="block-type"/>
 
     <xsl:choose>
-        <!-- introduction?, task+, conclusion? -->
+        <!-- structured by "task" so let templates for tasks work -->
+        <!-- down to terminal task with SOLUTION-LIKE appendages  -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction|task|conclusion">
                 <xsl:with-param name="b-original" select="$b-original"/>
@@ -4467,6 +4468,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <!-- then terminal task, may have solutions to optionally display -->
+        <!--                                                              -->
+        <!-- NB: a "task" rediscovers its context in order to decide      -->
+        <!-- if SOLUTION-LIKE appendages are displayed at birth or not.   -->
+        <!-- A refactor could pass this information down from the         -->
+        <!-- containing object or examine attributes placed by the        -->
+        <!-- pre-processor/assembly pass.                                 -->
+        <!--                                                              -->
         <xsl:otherwise>
             <!-- We identify the container, in order to classify the    -->
             <!-- group of switches that will control visibility of      -->
