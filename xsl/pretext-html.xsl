@@ -4177,6 +4177,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
+        <!-- structured by "task" so let templates for tasks work -->
+        <!-- down to terminal task with SOLUTION-LIKE appendages  -->
+        <xsl:when test="task">
+            <xsl:apply-templates select="introduction|task|conclusion">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!--  -->
+        <!-- structured with "statement" and SOLUTION-LIKE, -->
+        <!-- or just bare content for a statement           -->
+        <!--  -->
         <!-- inline                                        -->
         <!-- only possibility to be knowled, so only time  -->
         <!-- we pass block-type for Sage cells to react to -->
