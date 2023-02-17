@@ -4589,10 +4589,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--                                                              -->
         <!-- NB: a "task" rediscovers its context in order to decide      -->
         <!-- if SOLUTION-LIKE appendages are displayed at birth or not.   -->
-        <!-- A refactor could pass this information down from the         -->
-        <!-- containing object or examine attributes placed by the        -->
+        <!-- A refactor could examine attributes placed by the            -->
         <!-- pre-processor/assembly pass.                                 -->
         <!--                                                              -->
+        <!-- It is tempting to think the context could be passed down     -->
+        <!-- through parameters, but each level of "task" goes through a  -->
+        <!-- default template, a "body" template, and a "wrapped-content" -->
+        <!-- template, which would require cluttering those with four     -->
+        <!-- *-has-* parameters, which are not relevant most of the time. -->
         <xsl:otherwise>
             <!-- We identify the container, in order to classify the    -->
             <!-- group of switches that will control visibility of      -->
