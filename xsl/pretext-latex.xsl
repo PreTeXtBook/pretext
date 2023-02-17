@@ -2040,6 +2040,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$computation-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- OPENPROBLEM-LIKE -->
+    <xsl:variable name="openproblem-reps" select="
+        ($document-root//openproblem)[1]|
+        ($document-root//openquestion)[1]|
+        ($document-root//openconjecture)[1]"/>
+    <xsl:if test="$openproblem-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for OPENPROBLEM-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$openproblem-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- EXAMPLE-LIKE -->
     <xsl:variable name="example-reps" select="
         ($document-root//example)[1]|
@@ -2790,6 +2803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--              "observation", "warning", "insight"  -->
 <!-- COMPUTATION-LIKE: "computation", "technology",    -->
 <!--                    "data"                         -->
+<!-- OPENPROBLEM-LIKE: "openproblem", "openquestion"   -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
 <!-- PROJECT-LIKE: "activity", "exploration",          -->
 <!--               "exploration", "investigation"      -->
@@ -2798,7 +2812,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       \begin{inlineexercise}{title}{label}        -->
 <!-- Type, number, optional title                      -->
 <!-- Title comes without new punctuation.              -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="environment">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="environment">
     <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
@@ -3153,6 +3167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--              "observation", "warning", "insight"  -->
 <!-- COMPUTATION-LIKE: "computation", "technology",    -->
 <!--                    "data"                         -->
+<!-- OPENPROBLEM-LIKE: "openproblem", "openquestion"   -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
 <!-- PROJECT-LIKE: "activity", "exploration",          -->
 <!--               "exploration", "investigation"      -->
@@ -3171,7 +3186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, </xsl:text>
 </xsl:template>
 
@@ -5195,7 +5210,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  the "latex-id", which suffices for                  -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}</xsl:text>
@@ -6103,7 +6118,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
  <!-- a "task" itself, since we nest them.  Each produces a single line, -->
  <!-- with a trailing newline. -->
 
-<xsl:template match="exercise|&PROJECT-LIKE;|&EXAMPLE-LIKE;|task" mode="begin-task-list">
+<xsl:template match="exercise|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|task" mode="begin-task-list">
     <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
     <xsl:choose>
         <!-- parent is a "task", so context/container is a "task"   -->
@@ -6125,7 +6140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise|&PROJECT-LIKE;|&EXAMPLE-LIKE;|task" mode="end-task-list">
+<xsl:template match="exercise|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|task" mode="end-task-list">
     <xsl:text>\end{enumerate}%&#xa;</xsl:text>
 </xsl:template>
 
@@ -6417,7 +6432,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Definition Like, Remark Like, Computation Like, Example Like  -->
 <!-- Simpler than theorems, definitions, etc      -->
 <!-- Only EXAMPLE-LIKE has hint, answer, solution -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;">
     <!-- structured version may contain a prelude -->
     <!-- no structure => don't even consider it   -->
     <xsl:if test="statement or task">
@@ -6445,6 +6460,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer" select="true()" />
                 <xsl:with-param name="b-has-solution" select="true()" />
             </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="&OPENPROBLEM-FILTER;">
+            <xsl:apply-templates select="." mode="openproblem-components"/>
         </xsl:when>
         <!-- unstructured, just a bare statement          -->
         <!-- no need to avoid dangerous misunderstandings -->
@@ -6529,6 +6547,94 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
+
+<!-- DISCUSSION-LIKE -->
+
+<!-- DISCUSSION-LIKE are appendages of OPENPROBLEM-LIKE, or an        -->
+<!-- OPENPROBLEM-LIKE can be structured with "task" and then the      -->
+<!-- appendages are the content of *terminal* "task".  So we always   -->
+<!-- have the OPEN-PROBLEMLIKE as an overall container (giving rise   -->
+<!-- to a LaTeX environment) and perhaps "task" as a container at     -->
+<!-- the leaves of the tree of "task".                                -->
+<!--                                                                  -->
+<!-- This is very similar to "exercise" (and similar) and appendages  -->
+<!-- that are SOLUTION-LIKE.  However, it is much simpler since we do -->
+<!-- not have varieties of options for visibility and "dry-run"       -->
+<!-- templates to see if enclosing structures are needed or not.      -->
+<!--                                                                  -->
+<!-- The modal "openproblem-components" template is modeled after     -->
+<!-- the earlier-implemented "exercise-components".  It is recursive  -->
+<!-- in the case of (nested) "task".  And it is much simpler.  As a   -->
+<!-- modal template, this will maintain a separation with the modal   -->
+<!-- "exercise-components", especially as it pertains to              -->
+<!-- intermediate "task".                                             -->
+
+ <!-- The case of terminal containers.  We do not entertain bare content   -->
+ <!-- as a "statement", though a pre-processor might allow that in source. -->
+<xsl:template match="&OPENPROBLEM-LIKE;|task" mode="openproblem-components">
+    <xsl:apply-templates select="statement|&DISCUSSION-LIKE;"/>
+</xsl:template>
+
+<xsl:template match="openproblem[task]|openquestion[task]|openconjecture[task]|task[task]" mode="openproblem-components">
+    <xsl:apply-templates select="introduction"/>
+
+    <xsl:apply-templates select="." mode="begin-task-list"/>
+    <xsl:for-each select="task">
+        <xsl:text>\item</xsl:text>
+        <!-- We use the ref/label mechanism       -->
+        <!-- \label{} will separate content, if   -->
+        <!-- employed, else we use an empty group -->
+        <xsl:choose>
+            <xsl:when test="@xml:id">
+                <xsl:apply-templates select="." mode="label" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>{}</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- Semantic macro defined in preamble, mostly for font change -->
+        <xsl:if test="title">
+            <xsl:text>\lititle{</xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>}\par%&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Note: context is *child* task due to context switch via "for-each" -->
+        <xsl:apply-templates select="." mode="openproblem-components"/>
+    </xsl:for-each>
+    <xsl:apply-templates select="." mode="end-task-list"/>
+
+    <xsl:apply-templates select="conclusion"/>
+</xsl:template>
+
+<!-- DISCUSSION-LIKE proper are fairly simple and hard-coded to a  -->
+<!-- large extent, since using tcolorbox for these might lead to a -->
+<!-- breakable/unbreakable mess.  Still, these could have their    -->
+<!-- matches split out to provide finer distinctions.              -->
+
+<xsl:template match="&DISCUSSION-LIKE;">
+    <!-- break *before* the appendage -->
+    <xsl:text>\par%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="discussion-heading"/>
+    <!-- DISCUSSION-LIKE assumed to be structured -->
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<xsl:template match="&DISCUSSION-LIKE;" mode="discussion-heading">
+    <xsl:text>\noindent\textbf{\blocktitlefont </xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="serial-number" />
+    <xsl:text>}</xsl:text> <!-- end bold type/number -->
+    <xsl:if test="title">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:text>.\space\space</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Paragraphs -->
 <!-- \par *separates* paragraphs So look backward for          -->
@@ -10444,7 +10550,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
 <!-- "wait" and pop all interior footnotes later.                  -->
 <!-- NB: these templates could be improved with an entity          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|commentary|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|commentary|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
     <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
         <xsl:for-each select=".//fn">
             <xsl:text>\footnotetext[</xsl:text>
