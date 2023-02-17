@@ -4278,6 +4278,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with Sage, so pass block type              -->
 <!-- Process according to structure              -->
 <!-- Mirror changes here into "solutions" below  -->
+<!-- NB: we explicitly ignore "prelude" and      -->
+<!-- "postlude" by being very careful about what -->
+<!-- we process.  A more general template will   -->
+<!-- pick them up *only* when it is original     -->
+<!-- content, and place outside the block.       -->
 <xsl:template match="&PROJECT-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
