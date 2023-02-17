@@ -127,6 +127,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='outcomes'>Lopputulokset</localization>
     <localization string-id='outcome'>Lopputulos</localization>
     <!--  -->
+    <!-- "Open" means unsolved, a research question/problem -->
+    <!-- <localization string-id='openquestion'>Open Question</localization> -->
+    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
+    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <!-- "discussion" on open problems -->
+    <!-- <localization string-id='context'>Context</localization> -->
+    <!-- <localization string-id='discussion'>Discussion</localization> -->
+    <!-- <localization string-id='opinion'>Opinion</localization> -->
+    <!-- <localization string-id='status'>Status</localization> -->
+    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <!--  -->
     <localization string-id='figure'>Kuva</localization>
     <localization string-id='table'>Taulukko</localization>
     <localization string-id='listing'>Lista</localization>

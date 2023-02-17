@@ -124,6 +124,10 @@
 <!ENTITY GOAL-LIKE "objectives|outcomes">
 <!ENTITY GOAL-FILTER "self::objectives or self::outcomes">
 
+<!-- Open = research question/problem/conjecture -->
+<!ENTITY OPENPROBLEM-LIKE "openproblem|openquestion|openconjecture">
+<!ENTITY OPENPROBLEM-FILTER "self::openproblem or self::openquestion or self::openconjecture">
+
 <!-- displays with captions -->
 <!ENTITY FIGURE-LIKE "figure|table|listing|list">
 <!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::list">
@@ -131,6 +135,10 @@
 <!-- appendages of examples, exercises, tasks -->
 <!ENTITY SOLUTION-LIKE "hint|answer|solution">
 <!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">
+
+<!-- appendages of OPENPROBLEM-LIKE -->
+<!ENTITY DISCUSSION-LIKE "context|discussion|opinion|status|suggestion">
+<!ENTITY DISCUSSION-FILTER "self::context or self::discussion or self::opinion or self::status or self::suggestion">
 
 <!-- When context is an inline "exercise", then this condition is      -->
 <!-- true. We are positive, so as new locations of "exercise"          -->
