@@ -2318,7 +2318,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), outcomes (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
+<!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), outcomes (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, OPENPROBLEM-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
 <!-- E.g. Corollary 4.1 (Leibniz, Newton).  The fundamental theorem of calculus. -->
 <xsl:template match="*" mode="heading-full">
     <xsl:param name="heading-level"/>
@@ -2836,7 +2836,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -3178,6 +3178,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- OPENPROBLEM-LIKE -->
+<!-- A simple block with full titles, but more substantial contents -->
+
+<!-- Born-hidden behavior is configurable -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="is-hidden">
+    <xsl:value-of select="false()"/>
+    <!-- <xsl:value-of select="$knowl-remark = 'yes'" /> -->
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="body-css-class">
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> openproblems-like</xsl:text>
+</xsl:template>
+
+<!-- When born hidden, block-level -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="hidden-knowl-placement">
+    <xsl:text>block</xsl:text>
+</xsl:template>
+
+<!-- When born use this heading -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<!-- Heading for interior of xref-knowl content -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<!-- Primary content of generic "body" template  -->
+<!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type               -->
+<!-- Simply process contents, could restict here -->
+
+<!-- NB: we explicitly ignore "prelude" and      -->
+<!-- "postlude" by being very careful about what -->
+<!-- we process.  A more general template will   -->
+<!-- pick them up *only* when it is original     -->
+<!-- content, and place outside the block.       -->
+
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
+    <xsl:choose>
+        <!-- structured by "task" so let templates for tasks work -->
+        <!-- down to terminal task with SOLUTION-LIKE appendages  -->
+        <xsl:when test="task">
+            <xsl:apply-templates select="introduction|task|conclusion">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- structured with "statement" and DISCUSSION-LIKE  -->
+        <!-- (We don't entertain bare content for a statement -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="statement|&DISCUSSION-LIKE;">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -4489,11 +4561,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
+    <!-- There are two types of "task".  Those in "exercise", PROJECT-LIKE, -->
+    <!-- or EXAMPLE-LIKE, have appendages that are SOLUTION-LIKE, with      -->
+    <!-- variable behavior.  Those in OPENPROBLEM-LIKE have appendages that -->
+    <!-- are DISCUSSION-LIKE with very predictable behavior.  Easier to     -->
+    <!-- switch on being inside OPENPROBLEM-LIKE.                           -->
+    <xsl:variable name="openproblem-container" select="ancestor::*[&OPENPROBLEM-FILTER;]"/>
+
     <xsl:choose>
-        <!-- structured by "task" so let templates for tasks work -->
-        <!-- down to terminal task with SOLUTION-LIKE appendages  -->
+        <!-- structured by "task" so let templates for tasks work down to   -->
+        <!-- terminal task with SOLUTION-LIKE or DISCUSSION-LIKE appendages -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction|task|conclusion">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- then terminal task, may have DISCUSSION-LIKE to display -->
+        <!-- we do not entertain bare content as a "statement" here  -->
+        <xsl:when test="$openproblem-container">
+            <xsl:apply-templates select="statement|&DISCUSSION-LIKE;">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
             </xsl:apply-templates>
@@ -4677,6 +4764,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with Sage, so pass block type                -->
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="&SOLUTION-LIKE;" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
+    <xsl:apply-templates>
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- DISCUSSION-LIKE -->
+<!-- A simple item hanging off others -->
+
+<!-- Always born-hidden, by design -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="body-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="body-css-class">
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> discussion-like</xsl:text>
+</xsl:template>
+
+<!-- When born hidden, inline-level -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="hidden-knowl-placement">
+    <xsl:text>inline</xsl:text>
+</xsl:template>
+
+<!-- When born use this heading -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-full"/>
+</xsl:template>
+
+<!-- Heading for interior of xref-knowl content -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<!-- Primary content of generic "body" template   -->
+<!-- Pass along b-original flag                   -->
+<!-- Potentially knowled, may have statement      -->
+<!-- with Sage, so pass block type                -->
+<!-- Simply process contents, could restrict here -->
+<xsl:template match="&DISCUSSION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
@@ -5402,7 +5539,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 
