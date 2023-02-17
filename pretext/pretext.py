@@ -411,7 +411,7 @@ def sage_conversion(
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
-    owd = ow.getcwd()
+    owd = os.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, "w")
     for sageplot in os.listdir(tmp_dir):
