@@ -4449,6 +4449,20 @@ Book (with parts), "section" at level 3
     <xsl:number count="stage" from="static" />
 </xsl:template>
 
+<!-- TEMPORARY -->
+<!-- 2023-02-16: placeholder numbers for OPENPROBLEM-LIKE, DISCUSSION-LIKE -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="serial-number">
+    <xsl:text>N</xsl:text>
+</xsl:template>
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="structure-number">
+    <xsl:text>M</xsl:text>
+</xsl:template>
+<xsl:template match="&DISCUSSION-LIKE;" mode="serial-number">
+    <xsl:number select="parent::*" count="&DISCUSSION-LIKE;"/>
+</xsl:template>
+<xsl:template match="&DISCUSSION-LIKE;" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="number"/>
+</xsl:template>
 
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="serial-number">
