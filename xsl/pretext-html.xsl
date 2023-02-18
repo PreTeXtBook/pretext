@@ -3198,7 +3198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And its CSS class -->
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
-    <xsl:text> openproblems-like</xsl:text>
+    <xsl:text> openproblem-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
