@@ -6227,7 +6227,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Very simple containiers, to help with movement, use -->
 <xsl:template match="prelude|interlude|postlude">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates>
+    <!-- assume these containers are structured -->
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
