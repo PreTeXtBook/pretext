@@ -5669,6 +5669,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{$body-element}">
         <xsl:attribute name="class">
             <xsl:text>para</xsl:text>
+            <!-- acknowledge prelude/interlude/postlude parents -->
+            <xsl:apply-templates select="." mode="add-lude-parent-class"/>
         </xsl:attribute>
         <!-- label original -->
         <xsl:if test="$b-original">
@@ -6231,6 +6233,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- Indicate if a routine element/object is from a LUDE-LIKE, -->
+<!-- by looking to the parent.  This is meant for use where an -->
+<!-- HTML element is already placing a @class attribute, so a  -->
+<!-- space is included to separate it away.                    -->
+<!-- NB: look to schema for all allowed elements within a "prelude", -->
+<!-- etc. and extend implementation beyond just "p" if desired.      -->
+<xsl:template match="p" mode="add-lude-parent-class">
+    <xsl:if test="parent::prelude|parent::interlude|parent::postlude">
+        <!-- space off from existing class name(s) -->
+        <xsl:text> </xsl:text>
+        <!-- class name is parent PTX name -->
+        <xsl:value-of select="local-name(parent::*)"/>
+    </xsl:if>
 </xsl:template>
 
 
