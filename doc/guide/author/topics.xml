@@ -3265,7 +3265,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Inside of a <tag>datafile</tag> place an <tag>image</tag> element with a <attr>source</attr> attribute.  As usual, this attribute should be the name of an external file you provide.  Most common formats are supported, but it is important to use standard extensions, so the format can be discerned.  Now this file may be explored programmatically by opening the file using the name provided in <attr>filename</attr>.</p>
 
-            <p>Keep the size of the image small, say 300<ndash/>400 pixels in each direction.  It will be displayed in an <init>HTML</init> output format at its native resolution.  You may also supply the usual layout controls, such as <attr>width</attr>, and these will be consulted in the formation of other output formats.</p>
+            <p>Keep the size of the image small, say 300<ndash/>400 pixels in each direction.  It will be displayed in an <init>HTML</init> output format at its native resolution.  You may also supply the usual layout controls, such as <attr>width</attr>, and these will be consulted in the formation of other output formats.  Ideally, you should use a width that scales the image to look something like its <q>native</q> resolution, since part of an image-processing exercise may depend on this aspect of the input.  <init>HTML</init> output uses a 600 pixel overall width, so a percentage can be computed based on this parameter.</p>
         </paragraphs>
 
         <paragraphs>
@@ -3277,7 +3277,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <li>Whenever the <attr>source</attr> attribute is used, there needs to be an advance step performed by the CLI <xref ref="processing-CLI"/>
                 or the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) to generate an auxillary file (yes, a third file!) to aid the transistion from an external file to a file that can be used by the reader in programs.</li>
                 <li>
-                    <p>In all cases, for an <init>HTML</init> build the contents of the data file live within an <init>HTML</init> page, as text for a text file, and as a base-64 encoding for an image file.  Hence for a non-Runestone build, any employing program must be on the same page, and an author should think ahead about the granularity of how a project might be chunked into pages.</p>
+                    <p>In all cases, for an <init>HTML</init> build the contents of the data file live within an <init>HTML</init> page, as text for a text file, and as a base-64 encoding for an image file.  Hence for a non-Runestone build, any employing program <em>must</em> be on the same page, and an author should think ahead about the granularity of how a project might be chunked into pages (<xref ref="publication-file-common"/>).</p>
 
                     <p>In a build for use on Runestone Academy, the file will be in the Runestone database and usuable throughout.</p>
                 </li>
