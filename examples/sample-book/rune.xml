@@ -393,8 +393,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="data-files">
         <title>Data Files</title>
 
-        <p>Images: small, not resized in HTML, but will in static.  20x60 default.  Clipped in static.  Text authored, massaged.  Serious not affected.</p>
-
         <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
 
         <!-- # Section 11.4 Think Like a Computer Scientist, Runestone 2023-01-23 -->
@@ -461,8 +459,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </datafile>
         </data>
 
+        <!-- 400px wide, so 400/600 = 66% -->
         <datafile label="luther-bell" filename="luther-bell.jpg">
-            <image source="datafiles/LutherBellPic.jpg" width="30%"/>
+            <image source="datafiles/LutherBellPic.jpg" width="66%"/>
         </datafile>
 
         <program label="python-one-pixel" interactive='activecode' language="python">
@@ -485,9 +484,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>[Now a data file and a program to process it, all bundled up inside a <tag>computation</tag>, since an <tag>example</tag> gets knowled and the ActiveCode does not fill.]</p>
 
-
+            <!-- 300px wide so 300/600 = 50% -->
             <datafile label="golden-gate" filename="golden_gate.png">
-                <image source="datafiles/golden-gate-bridge.png" width="40%"/>
+                <image source="datafiles/golden-gate-bridge.png" width="50%"/>
             </datafile>
 
             <p>This program changes every pixel of the image.</p>
