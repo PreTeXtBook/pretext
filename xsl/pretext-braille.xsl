@@ -768,6 +768,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- block as the corresponding (a 1-1 map) BRF ASCII characters.  -->
 <!-- Wrap using classes to signal liblouis.                        -->
 
+
+
+<!-- We have three liblouis styles at our disposal, which is a   -->
+<!-- bit restrictive, but it is the most control we can muster.  -->
+<!--                                                             -->
+<!-- data-braille="nemeth-inline"                                -->
+<!--   Uses "generic" so Unicode braille becomes BRF.  Used      -->
+<!--   when a chunk of math, plus opening and closing Nemeth     -->
+<!--   indicators, will fit in current maximum width.  (With     -->
+<!--   non-braking spaces, it may get wrapped to the next line.) -->
+<!--                                                             -->
+<!-- data-braille="nemeth-oneline"                               -->
+<!--   Uses "generic" so Unicode braille becomes BRF, and        -->
+<!--   allows us to use HTML "br" elements to control some       -->
+<!--   line breaks.  Usually a portion of some larger display,   -->
+<!--   such as a Nemeth indicator on its own line.               -->
+<!--                                                             -->
+<!-- data-braille="nemeth-display"                               -->
+<!--   Math we get back from SRE with at least one newline,      -->
+<!--   which we use as a signal that the math is spatial.        -->
+<!--   So we use a style that indents two spaces, and we add     -->
+<!--   a blank line before and after.  Further, we never place   -->
+<!--   this where it gets a page break.                          -->
+<!--   DANGER: Long lines are a disaster, we  can't help it yet. -->
+
+
 <!-- First, authored as inline, but maybe becomes multiline. -->
 <xsl:template match="m|me|men|md|mdn">
     <!-- We connect source location with representations via id -->
@@ -853,20 +879,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-inline-math">
         <!-- Ready: various situations, more specific first -->
         <xsl:choose>
-            <!-- Multi-line first, SRE has done layout on inline math. -->
-            <!-- Mimic display math as in next template.               -->
+            <!-- Multi-line first, SRE has done layout on inline math.   -->
+            <!-- Mimic display math as in display math stanza.           -->
+            <!-- ASSUMPTION: "m" has become multi-line, so is spatial.   -->
+            <!-- If we were to know otherwise, we might have open-Nemeth -->
+            <!-- immediately after last literary word, and the           -->
+            <!-- close-Nemeth immediately after last bit of math.        -->
             <xsl:when test="$b-multiline">
+                <!-- open on new line as a "div" -->
                 <div data-braille="nemeth-display">
                     <span data-braille="nemeth-oneline">
                         <xsl:value-of select="$nemeth-open"/>
                     </span>
+                    <!-- isolate open-Nemeth on its own line -->
+                    <br/>
+                    <!-- blank line for spatial content -->
                     <br/>
                     <xsl:call-template name="wrap-multiline-math">
                         <xsl:with-param name="braille" select="$braille"/>
                     </xsl:call-template>
+                    <!-- blank line for spatial content -->
+                    <br/>
                     <span data-braille="nemeth-oneline">
                         <xsl:value-of select="$nemeth-close"/>
                     </span>
+                    <!-- isolate close-Nemeth on its own line -->
                     <br/>
                 </div>
             </xsl:when>
@@ -900,25 +937,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$nemeth-close"/>
                 </span>
             </xsl:when>
-            <!-- In a grey zone where Nemeth indicators are just too much -->
-            <!-- Open on current line, braille on its own line, close on  -->
-            <!-- the next line and immediately pick up with remainder.    -->
+            <!-- In a grey zone where Nemeth indicators are just too much.    -->
+            <!-- Open on current line, *all* of the braille on its own line,  -->
+            <!-- close as best we can and immediately pick up with remainder. -->
+            <!-- DANGER: could occupy three lines and cross a page break.     -->
+            <!-- TODO: refine into a 2-line output case, 3-line output case?  -->
             <xsl:when test="(($line-width - 6) &lt; $braille-length) and ($braille-length &lt; ($line-width + 1))">
                 <span data-braille="nemeth-inline">
                     <xsl:value-of select="$nemeth-open"/>
                 </span>
+                <!-- line break after open-Nemeth to move to a new line -->
                 <br/>
                 <!-- Now onto a new line, do the actual Nemeth, which  -->
                 <!-- will (a) fill much of the line, (b) always fit.   -->
-                <!-- Then afterwards, always go to a new line.         -->
                 <span data-braille="nemeth-inline">
                     <xsl:value-of select="$no-break-braille"/>
                 </span>
-                <br/>
-                <!-- Now onto a new line (again).  Drop the closing marker, -->
-                <!-- with no prior space, and then let following literary   -->
-                <!-- text fill that line.                                   -->
+                <!-- Drop the closing marker, preceeded by a space, which might -->
+                <!-- fit on current line, or may wrap/push to next line. In any -->
+                <!-- event, let following literary text immediately follow.     -->
                 <span data-braille="nemeth-inline">
+                    <xsl:text> </xsl:text>
                     <xsl:value-of select="$nemeth-close"/>
                 </span>
             </xsl:when>
@@ -927,6 +966,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- (drop to new line for opening Nemeth with an unbreakable -->
             <!-- space, then let the expression break as it wants to,     -->
             <!-- however liblouis does it (since spaces are breakable).   -->
+            <!-- ASSUMPTION: breaking on spaces, under liblouis control,  -->
+            <!-- is the best we can do here.                              -->
             <xsl:otherwise>
                 <div data-braille="nemeth-display">
                     <span data-braille="nemeth-inline">
@@ -943,7 +984,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Mutually exclusive, now authored as display -->
     <xsl:if test="$b-display-math">
         <xsl:choose>
-            <!-- single line, authored as such, and converted by SRE as such -->
+            <!-- single line, authored as such, and converted by SRE as such. -->
+            <!-- Gets its own line in output, at least.  Won't page-break.    -->
+            <!-- Any wrapping is simply opportunistic on spaces.              -->
             <xsl:when test="(self::me or self::men) and not($b-multiline)">
                 <!-- Similarly, but div puts onto a newline, and breaks after -->
                 <div data-braille="nemeth-display">
@@ -966,13 +1009,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <span data-braille="nemeth-oneline">
                         <xsl:value-of select="$nemeth-open"/>
                     </span>
+                    <!-- isolate open-Nemeth on its own line -->
+                    <br/>
+                    <!-- blank line for spatial content -->
                     <br/>
                     <xsl:call-template name="wrap-multiline-math">
                         <xsl:with-param name="braille" select="$braille"/>
                     </xsl:call-template>
+                    <!-- blank line for spatial content -->
+                    <br/>
                     <span data-braille="nemeth-oneline">
                         <xsl:value-of select="$nemeth-close"/>
                     </span>
+                    <!-- isolate open-Nemeth on its own line -->
                     <br/>
                 </div>
             </xsl:otherwise>
@@ -993,9 +1042,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   2.  Braille spaces (U+2800) are converted to ASCII non-breaking     -->
 <!--       spaces. This is necessary to preserve leading spaces.           -->
 <!--       Note: if this indentation is too long, liblouis will line-break -->
-<!--      at these spaces with a hyphen, which is highly undesirable.      -->
+<!--       at these spaces with a hyphen, which is highly undesirable.     -->
 <!--   3.  A "br" element is needed so we can convince liblouis to         -->
 <!--       create a newline.                                               -->
+<!--   4.  Unbreakable spaces are necessary to preserve leading spaces     -->
+<!--       to align expressions (eg. fractions) from one line to the next. -->
+<!-- DANGER: no notion of optimal line breaks means long lines get         -->
+<!-- wrapped, and with unbreakable spaces there are hyphens at breaks.     -->
 
 <xsl:template name="wrap-multiline-math">
     <xsl:param name="braille"/>
@@ -1004,7 +1057,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not(contains($braille, '&#xa;'))">
             <!-- finished, output, don't recurse -->
             <span data-braille="nemeth-oneline">
-                <xsl:value-of select="$braille"/>
+                <xsl:value-of select="translate($braille, '&#x2800;', '&#x00a0;')"/>
             </span>
             <br/>
         </xsl:when>
@@ -1019,7 +1072,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </span>
             <br/>
             <xsl:call-template name="wrap-multiline-math">
-                <xsl:with-param name="braille" select="translate($trailing, '&#x2800;', '&#x00a0;')"/>
+                <xsl:with-param name="braille" select="$trailing"/>
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
