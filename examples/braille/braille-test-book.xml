@@ -798,8 +798,64 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <attribution>Dr. Seuss</attribution>
                 </blockquote>
             </paragraphs>
-
         </chapter>
-    </book>
 
+        <backmatter>
+            <!-- copied/edited from Judson Chapter 8 -->
+            <references xml:id="algcodes-references">
+                <title>References and Suggested Readings</title>
+
+                <biblio type="raw">
+                Blake, I. F. <q>Codes and Designs,</q>
+                <title>Mathematics Magazine</title>
+                <volume>52</volume>
+                (1979), 81<ndash/>95.
+                </biblio>
+
+                <biblio type="raw">
+                Hill, R.
+                <title>A First Course in Coding Theory</title>. Oxford University Press, Oxford, 1990.
+                </biblio>
+
+                <biblio type="raw">
+                Levinson, N. <q>Coding Theory: A Counterexample to G. H. Hardy's Conception of Applied Mathematics,</q>
+                <title>American Mathematical Monthly</title>
+                <volume>77</volume>
+                (1970), 249<ndash/>58.
+                </biblio>
+
+                <biblio type="raw">
+                Lidl, R. and Pilz, G.
+                <title>Applied Abstract Algebra</title>. 2nd ed. Springer, New York, 1998.
+                </biblio>
+
+                <biblio type="raw">
+                MacWilliams, F. J. and Sloane, N. J. A.
+                <title>The Theory of Error-Correcting Codes</title>. North-Holland Mathematical Library, 16, Elsevier, Amsterdam, 1983.
+                </biblio>
+
+                <biblio type="raw">
+                Roman, S.
+                <title>Coding and Information Theory</title>. Springer-Verlag, New York, 1992.
+                </biblio>
+
+                <biblio type="raw">
+                Shannon, C. E. <q>A Mathematical Theory of Communication,</q>
+                <title>Bell System Technical Journal</title>
+                <volume>27</volume>
+                (1948), 379<ndash/>423, 623<ndash/>56.
+                </biblio>
+
+                <biblio type="raw">
+                Thompson, T. M.
+                <title>From Error-Correcting Codes through Sphere Packing to Simple Groups</title>. Carus Monograph Series, No. 21. Mathematical Association of America, Washington, DC, 1983.
+                </biblio>
+
+                <biblio type="raw">
+                van Lint, J. H.
+                <title>Introduction to Coding Theory</title>. Springer, New York, 1999.
+                </biblio>
+            </references>
+        </backmatter>
+    </book>
 </pretext>
