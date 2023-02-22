@@ -14,6 +14,8 @@
       <p>
         This chapter serves as a tutorial for quickly getting started with <pretext /> in your web browser
         using the free <url href="https://github.com/features/codespaces">GitHub Codespaces service</url>.
+        (Advanced users who'd prefer to install our free and open-source software
+        to their own machine may choose to skip ahead to <xref ref="quickstart-example"/>.)
       </p>
       <objectives>
         <introduction><p>At the end of this tutorial you will have...</p></introduction>
@@ -43,13 +45,16 @@
           software for version management.
         </p>
         <p>
-          There are other similar products such as
-          <url href="https://about.gitlab.com/">GitLab</url> for managing <pretext/> documents,
-          as well as other ways to write <pretext/> that don't require anything
-          besides installing the free and open-source <pretext/> software onto your own device.
-          However, we will use GitHub for this tutorial as it the most popular way to share and disseminate <pretext/>
-          documents, and provides the easiest pathway to getting started to actually write in the <pretext/>
-          language.
+          There are other services such as <url href="https://cocalc.com">CoCalc</url> and
+          <url href="https://about.gitlab.com/">GitLab</url> for managing <pretext/> documents
+          online, as well as other ways to write <pretext/> that don't require anything
+          besides installing the free and open-source <pretext/> software onto your own device
+          (see <xref ref="quickstart-example"/> to learn more).
+        </p>
+        <p>
+          We will use GitHub's service for this tutorial as it the most popular way to share and disseminate
+          <pretext/> documents, and provides the easiest pathway to getting started writing in the 
+          <pretext/> language.
         </p>
         <p>
           To create your free GitHub account,
@@ -88,6 +93,11 @@
           Follow the instructions at <url href="https://github.com/PreTeXtBook/pretext-codespace" />
           to get started. You'll have the option to make your work public (recommended if you want
           support from the rest of the <pretext/> community) or private.
+        </p>
+        <p>
+          Either way, this is a one-time process. Take note of the URL your new repository lives at
+          (something like <c>https://github.com/user-name/repository-name</c>) so you can find it
+          the next time you want to work on your project.
           Then you'll be ready for <xref ref="tutorial-first-document"/>.
         </p>
       </subsection>
@@ -200,8 +210,12 @@
 
         <p>
           However, you will want to periodically <term>commit &amp; sync</term> these files to your
-          <term>git repository</term> on GitHub. This creates a backup of your work, and has the added benefit of
-          allowing collaborators to access your files as well.
+          <term>git repository</term> on GitHub (located on the web somewhere like
+          <c>https://github.com/user-name/repository-name</c>).
+          This creates a backup of your work, and has the added benefit of
+          allowing collaborators (not to mention members of the PreTeXt community who watch
+          the <url href="https://groups.google.com/g/pretext-support">PreTeXt-support</url>
+          Google group) to access your files as well.
         </p>
 
         <p>
@@ -315,4 +329,52 @@
           <video xml:id="gsv-2023-jan-video" youtube="y-33Ube-Rhk"/>
       </figure>
     </section>
+
+  <section xml:id="quickstart-example">
+    <title>For Advanced Users New to PreTeXt</title>
+
+    <p>
+      This section is intended for users who have read
+      <xref ref="start-here"/>
+      and are already experienced
+      with other markup languages and command-line tools. If you're
+      interested in a more turnkey workflow to getting started with
+      PreTeXt, check out <xref ref="tutorial-github"/>.
+    </p>
+
+    <p>
+      PreTeXt is an open-source
+      <url href="https://en.wikipedia.org/wiki/XML">XML</url> language
+      primarily powered by
+      <url href="https://en.wikipedia.org/wiki/XSLT">XSLT</url> and
+      <url href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</url>
+      tools.
+    </p>
+
+    <p>
+      For new authors working on the commandline who want to use their
+      favorite text editor or IDE, we recommend <c>pip install</c>ing the PreTeXt-CLI
+      from the Python Package Index. <xref ref="processing-CLI"/> has these details,
+      and <c>pretext -h</c> and <c>pretext CMD -h</c> are at your disposal as well
+      after installation.
+    </p>
+
+    <p>
+      Some context for experienced Python developers: PreTeXt development is primarily
+      split over two GitHub repositories:
+      <url href="https://github.com/PreTeXtBook/pretext">PreTeXtBook/pretext</url>
+      for the <q>core</q> functionality of PreTeXt, and the more recent
+      <url href="https://github.com/PreTeXtBook/pretext-cli">PreTeXtBook/pretext-cli</url>
+      that packages up these resources into a Python package with several UX enhancements
+      such as a simplified command line interface and project management that does not require
+      the use of custom makefiles.
+    </p>
+
+    <p>
+      If you're interested in potentially contributing back to PreTeXt someday, please
+      feel free to request to join
+      <url href="https://groups.google.com/g/pretext-dev">our developer Google Group</url>
+      and say hello!
+    </p>
+  </section>
 </chapter>
