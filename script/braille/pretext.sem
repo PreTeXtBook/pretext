@@ -167,6 +167,15 @@ no dl
 listitem li
 no first-li-block
 
+######################
+# Bibliography Entries
+######################
+
+# An element of the "references" division is a "biblio".
+# Standard HTML provides a bracketed number and the
+# content, all wrapped up inside  article.bib
+bibentry article,class,bib
+
 
 ########
 # Tables
