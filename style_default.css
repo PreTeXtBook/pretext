@@ -35,6 +35,8 @@
 .ptx-content article.example-like,
 .ptx-content article.project-like,
 .ptx-content article.remark-like,
+.ptx-content article.openproblem-like,
+.ptx-content article.openproblems-like,  /* delete once markup is fixed */
 .ptx-content article.computation-like {
     padding-left: 0.4em;
     border-left: 1px solid #569;
@@ -45,6 +47,8 @@
 .ptx-content.epub article.example-like,
 .ptx-content.epub article.project-like,
 .ptx-content.epub article.remark-like,
+.ptx-content article.openproblem-like,
+.ptx-content article.openproblems-like,  /* delete once markup is fixed */
 .ptx-content.epub article.computation-like {
     margin-left: 1px;
 }
@@ -55,6 +59,8 @@
 .ptx-content article.example-like::after,
 .ptx-content article.project-like::after,
 .ptx-content article.remark-like::after,
+.ptx-content article.openproblem-like::after,
+.ptx-content article.openproblems-like::after,  /* delete once markup is fixed */
 .ptx-content article.computation-like::after {
     content:'';
     border-bottom: 1px solid #569;

@@ -440,7 +440,42 @@ body.pretext {
     z-index: 1000;
     background: white;
   }
+}
 
+.pretext #ptx-page-footer .feedback-link {
+  cursor: pointer;
+  text-align: center;
+  color: #333333;
+  background-color: #ededed;
+  border: 1px solid #bababa;
+  margin: 1.5em 0 0 0;
+  padding: 0 1em 0 1em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+}
+.pretext #ptx-page-footer {
+    background: #f4f4f4;
+    margin-top: 2em;
+    padding-top: 0;
+    max-width: 900px;
+    border-top: 2px solid var(--sectiontoctext);
+    border-bottom: 2px solid var(--sectiontoctext);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+    position: relative;
+/*
+    z-index: 100;
+*/
+}
 
+.pretext #ptx-page-footer > a {
+  margin: 1em 0;
+}
+.pretext #ptx-page-footer > a > .logo:first-child {
+    height: 3em;
+    width: unset;
+    margin: 0;
 }
 

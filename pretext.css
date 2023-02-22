@@ -107,7 +107,6 @@ nav #ptx-navbar {
 }
 
 /* Runestone nav for Runestone-wide features */
-.pretext #navbar,
 .pretext #brand-navbar {
   left: 0;
   position: fixed;
@@ -118,21 +117,21 @@ nav #ptx-navbar {
   top: 0;
   margin-bottom: 0;
 }
-.pretext #navbar + #ptx-masthead,
+.pretext #brand-navbar > .container::before,
+.pretext #brand-navbar > .container::after {
+  display: none;
+}
 .pretext #brand-navbar + #ptx-masthead {
   margin-top: 50px;
 }
-.pretext #navbar .navbar-collapse.collapse,
 .pretext #brand-navbar .navbar-collapse.collapse {
   overflow: hidden !important;
 }
-.pretext #brand-navbar ~ #ptx-navbar,
-.pretext #navbar ~ #ptx-navbar {
+.pretext #brand-navbar ~ #ptx-navbar {
   top: 50px;
 }
 @media screen and (max-width: 800px) {
-  .pretext #brand-navbar ~ #ptx-navbar,
-  .pretext #navbar ~ #ptx-navbar {
+  .pretext #brand-navbar ~ #ptx-navbar {
     top: auto;
   }
 }
@@ -143,6 +142,7 @@ nav #ptx-navbar {
 .ptx-content figure,
 .ptx-content figcaption,
 .ptx-content .exercisegroup,
+.ptx-content .discussion-like,
 .ptx-content .para {
     position: relative;
 }
@@ -381,6 +381,13 @@ so that we can set our own later */
     margin-top: 1em;
 }
 
+.ptx-content section article > .discussion-like {
+    margin-top: 1em;
+}
+.ptx-content section article > .discussion-like .para {
+    margin-top: 1em;
+}
+
 .ptx-content article + .posterior {
     margin-top: 0.5em;
 }
@@ -538,7 +545,33 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-top: 0;
     display: inline;
 }
+.ptx-content .discussion-like > .heading {
+    font-size: 1.0em;
+    line-height: 1.125em;
+    margin-top: 0;
+    display: inline;
+}
+.ptx-content .discussion-like.discussion > .heading .codenumber,
+.ptx-content .discussion-like.discussion > .heading .space,
+.ptx-content .discussion-like.discussion > .heading .period {
+    display: none;
+}
+.ptx-content .discussion-like.discussion > .heading .type::after {
+    content: ". ";
+}
+.ptx-content .discussion-like.status > .heading {
+    display: none;
+}
+.ptx-content .discussion-like.status > .heading + .para,
+.ptx-content .discussion-like.status > .para {
+    font-style: italic;
+    display: block;
+    padding-left: 1em;
+}
+
+
 .ptx-content article > .heading::after,
+.ptx-content .discussion-like > .heading::after,
 .ptx-content .paragraphs > .heading::after,
 .ptx-content article > a > .heading::after {
     content: "\2009";
@@ -555,6 +588,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
  * Contents of articles
  */
 .ptx-content article > .heading + .para,
+.ptx-content .discussion-like > .heading + .para,
 .ptx-content article > .heading + .introduction,
 .ptx-content article > .heading + .introduction > .para:first-child {
     display: inline;
