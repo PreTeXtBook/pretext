@@ -521,6 +521,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </input>
             </program>
         </computation>
+
+        <p>The examples above all use Python, which will run in your browser.   Other languages will only run when a project is hosted on Runestone Academy servers.  And in this case there is a small twist.  You need to indicate which existing <tag>datafile</tag> your program needs, even if that seems obvious by reading the code.  Use a <attr>datafile</attr> attribute on <tag>program</tag> that has a list of filenames.  These are the filenames you set via the <attr>filename</attr> attribute of the <tag>datafile</tag> element, and are the names you use in your program's code.  As before, no path information is neede, nor allowed.</p>
+
+        <p>[2023-02-21: testing for single files first, list of several not yet implemented.]</p>
+
+        <p>When the <attr>language</attr> attribute of a <tag>program</tag> is set to <c>python3</c> that means in-browser Python is not good enough, and you want the greater power and flexibility of having your code run on a Runestone Academy server.  So this is our first example of using the <attr>datafile</attr> attribute.</p>
+
+        <p>The data file is an abbreviated version of the example above, just to be different.  And is not editable.</p>
+
+        <datafile label="file-global-climate-two" filename="ccdata2.txt" rows="4" cols="40" editable="no">
+            <pre>
+            1900    -0.2      2.38
+            1910    -0.49     3.34
+            1920    -0.25     4.01
+            1930    -0.14     4.53
+            1940     0.01     5.5
+            1950    -0.17     6.63
+            1960    -0.05     10.5
+            1970    -0.03     16
+            1980     0.09     20.3
+            1990     0.3      22.6
+            2000     0.29     24.9
+            2010     0.56     32.7
+            2019     0.74     33.3
+            </pre>
+        </datafile>
+
+        <p>The program is identical to the above, but we specify <c>python3</c> as the language, and use the smaller file.  So this example is only active when this content is hosted on a Runestone Academy server.</p>
+
+        <program label="python-average-climate-two" interactive='activecode' language="python3">
+            <input>
+            ccfile = open("ccdata2.txt", "r")
+
+            for aline in ccfile:
+                values = aline.split()
+                print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
+
+            ccfile.close()
+            </input>
+        </program>
+
+        <!-- Multi-file, Java -->
+        <!-- https://runestone.academy/ns/books/published/csawesome/Unit8-2DArray/pictureLabA8.html -->
     </section>
 
     <section xml:id="videos-in-runestone">
