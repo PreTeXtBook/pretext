@@ -338,7 +338,8 @@
       This section is intended for users who have read
       <xref ref="start-here"/>
       and are already experienced
-      with other open-source software projects. If you're more
+      with other open-source software projects
+      or command-line tools. If you're more
       interested in a browser-based workflow to getting started with
       PreTeXt, check out <xref ref="tutorial-github"/>.
     </p>
