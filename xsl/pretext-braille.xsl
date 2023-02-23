@@ -480,56 +480,69 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- A hook in the HTML conversion allows for the addition of a @data-braille attribute to the "body-element".  Then liblouis can select on these values to apply the "boxline" style which delimits the blocks.  Here we define these values.  The stub in the HTML conversion does nothing (empty text) and so is a signal to not employ this attribute at all.  So a non-empty definition here also activates the attribute's existence. -->
+<!-- A hook in the HTML conversion allows for the addition of a    -->
+<!-- @data-braille attribute to the "body-element".  Then liblouis -->
+<!-- can select on these values to apply the "boxline" style which -->
+<!-- delimits the blocks.  Here we define these values.  The stub  -->
+<!-- in the HTML conversion does nothing (empty text) and so is a  -->
+<!-- signal to not employ this attribute at all.  So a non-empty   -->
+<!-- definition here also activates the attribute's existence.     -->
 
-<xsl:template match="&REMARK-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;" mode="data-braille-attribute-value">
+    <xsl:apply-templates select="." mode="base-block-string"/>
+</xsl:template>
+
+<!-- Absent an implementation, empty text signals  -->
+<!-- that the @data-braille attribute is not desired.    -->
+<xsl:template match="*" mode="data-braille-attribute-value"/>
+
+<!-- We map blocks to strings used in attribute values -->
+<!-- to denote the various types of blocks             -->
+
+<xsl:template match="&REMARK-LIKE;" mode="base-block-string">
     <xsl:text>remark-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&COMPUTATION-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&COMPUTATION-LIKE;" mode="base-block-string">
     <xsl:text>computation-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&DEFINITION-LIKE;" mode="base-block-string">
     <xsl:text>definition-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&ASIDE-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&ASIDE-LIKE;" mode="base-block-string">
     <xsl:text>aside-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&FIGURE-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&FIGURE-LIKE;" mode="base-block-string">
     <xsl:text>figure-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="assemblage" mode="data-braille-attribute-value">
+<xsl:template match="assemblage" mode="base-block-string">
     <xsl:text>assemblage-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&GOAL-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&GOAL-LIKE;" mode="base-block-string">
     <xsl:text>goal-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&EXAMPLE-LIKE;" mode="base-block-string">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&PROJECT-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&PROJECT-LIKE;" mode="base-block-string">
     <xsl:text>project-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="base-block-string">
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
 <!-- NB: could edit to "proof-like" and adjust styles -->
-<xsl:template match="&PROOF-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&PROOF-LIKE;" mode="base-block-string">
     <xsl:text>proof</xsl:text>
 </xsl:template>
-
-<!-- Absent an implementation above, empty text signals  -->
-<!-- that the @data-braille attribute is not desired.    -->
-<xsl:template match="*" mode="data-braille-attribute-value"/>
 
 <!-- The HTML conversion has a "block-data-braille-attribute" -->
 <!-- hook with a no-op stub template.  Here we activate the   -->
