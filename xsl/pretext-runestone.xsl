@@ -1771,8 +1771,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:attribute>
                             <!-- allow @datafile attribute on <program> -->
                             <xsl:if test="@datafile">
+                                <!-- multiple files, coma- or space- separated -->
+                                <xsl:variable name="tokens" select="str:tokenize(@datafile, ', ')"/>
                                 <xsl:attribute name="data-datafile">
-                                    <xsl:value-of select="@datafile"/>
+                                    <xsl:for-each select="$tokens">
+                                        <xsl:value-of select="."/>
+                                        <!-- n - 1 separators, required by receiving Javascript -->
+                                        <xsl:if test="following-sibling::token">
+                                            <xsl:text>,</xsl:text>
+                                        </xsl:if>
+                                    </xsl:for-each>
                                 </xsl:attribute>
                             </xsl:if>
                             <!-- SQL (only) needs an attribute so it can find some code -->
