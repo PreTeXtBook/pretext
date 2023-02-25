@@ -549,7 +549,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The program is identical to the above, but we specify <c>python3</c> as the language, and use the smaller file.  So this example is only active when this content is hosted on a Runestone Academy server.</p>
 
-        <program label="python-average-climate-two" interactive='activecode' language="python3">
+        <program label="python-average-climate-two" interactive='activecode' language="python3" datafile="ccdata2.txt">
             <input>
             ccfile = open("ccdata2.txt", "r")
 
