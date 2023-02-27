@@ -3176,6 +3176,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
 
             <p>Note also that a data file may be provided independently for consumption by an ActiveCode program.  See <xref ref="topic-datafile"/>.</p>
+            
+            <p>If you want to include code from one or more preceding <tag>program</tag> elements, use the <attr>include</attr> attribute. Its value is a whitespace-separated list of <attr>id</attr>s of the code you want included.</p>
         </subsection>
 
         <subsection>
