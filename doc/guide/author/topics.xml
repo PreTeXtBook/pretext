@@ -261,6 +261,7 @@
             generator:            today, timeofday, tex, latex, pretext, webwork,
                                   eg, ie, circa, etc
             arithmetic-character: minus, solidus, times, obelus, plusminus
+                                  degree, prime, dblprime
             siunit:               (deferred to its own section)
             music-character:      (deferred to its own section)
             -->
@@ -547,6 +548,8 @@
 
                 <p>Note also that the plus sign, <c>+</c> and the equals sign, <c>=</c>, can be provided in text as the unambiguous keyboard characters.</p>
 
+                <p>The <tage>degree</tage>, <tage>prime</tage>, <tage>dblprime</tage> elements support simple coordinates with degrees, minutes, seconds, or temperature, or distance in feet and inches.  <q>We parked the car at 36<degree/>16<prime/>0.83<dblprime/>N, 122<degree/>35<prime/>47.27<dblprime/>W, and since it was 93<degree/>F, we walked 505<prime/>3.6<dblprime/> so we could swim in the bay.</q></p>
+
                 <paragraphs>
                     <title><tage>minus</tage>, <minus/>, minus, subtraction, negation</title>
                     <p>For simple arithmetic expressions in text, this symbol may be used.  Note that the keyboard hyhpen (or dash) might be acceptable for your purposes, but they are different.</p>
@@ -570,6 +573,21 @@
                 <paragraphs>
                     <title><tage>plusminus</tage>, <plusminus/>, plus-minus sign</title>
                     <p>For simple arithmetic expressions in text, this symbol may be used to indicate a tolerance or a choice of two values, one the negative of the other.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>degree</tage>, <degree/>, degree symbol</title>
+                    <p>A raised open circle for temperature or for angles used in coordinates.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>prime</tage>, <prime/>, prime symbol</title>
+                    <p>A straight mark that is placed like an exponent.  For use in coordinates or statements of linear measure in feet and inches.  Not an apostrophe, and not mathematics (like, say, not to denote a derivative).</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>dblprime</tage>, <dblprime/>, double prime symbol</title>
+                    <p>Two straight marks that are placed like an exponent.  For use in coordinates or statements of linear measure in feet and inches.  Not an apostrophe, and not mathematics (like, say, not to denote a second derivative).</p>
                 </paragraphs>
 
                 <!--

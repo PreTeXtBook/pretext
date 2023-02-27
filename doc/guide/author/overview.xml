@@ -385,6 +385,18 @@
                     <cell><tage>obelus</tage></cell>
                 </row>
                 <row>
+                    <cell><degree/></cell>
+                    <cell><tage>degree</tage></cell>
+                    <cell/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell><prime/></cell>
+                    <cell><tage>prime</tage></cell>
+                    <cell><dblprime/></cell>
+                    <cell><tage>dblprime</tage></cell>
+                </row>
+                <row>
                     <cell>&amp;</cell>
                     <cell><c>&amp;amp;</c></cell>
                     <cell>&lt;</cell>
