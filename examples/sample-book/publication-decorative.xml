@@ -56,6 +56,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- NB: the "noparts" version, for no particular reason   -->
         <!--     could migrate to different versions               -->
         <baseurl href="https://pretextbook.org/examples/noparts/decorative/html/"/>
+        <!-- As of 2023-02-27 inline exercises with ActiveCode,    -->
+        <!-- etc would not render correctly, so we turn off their  -->
+        <!-- default knowlization.                                 -->
+        <knowl exercise-inline="no"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
