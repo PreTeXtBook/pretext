@@ -40,7 +40,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-python">
             <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="python-hello-world" interactive='activecode' language="python">
+            <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world">
                 <input>
                 print("Hello, World!")
                 </input>
@@ -145,6 +145,83 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </input>
             </program>
         </listing>
+
+        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output.</p>
+
+        <listing xml:id="listing-python-included">
+            <caption>A Python program that defines some statistics</caption>
+            <program xml:id="python-statistics" interactive='activecode' language="python" label="statistics">
+                <input>
+                loan_amount = [1250.0, 500.0, 1450.0, 200.0, 700.0, 100.0, 250.0, 225.0, 1200.0, 150.0, 600.0, 300.0, 700.0, 125.0, 650.0, 175.0, 1800.0, 1525.0, 575.0, 700.0, 1450.0, 400.0, 200.0, 1000.0, 350.0]
+
+                country_name = ['Azerbaijan', 'El Salvador', 'Bolivia', 'Paraguay', 'El Salvador', 'Philippines', 'Philippines', 'Nicaragua', 'Guatemala', 'Philippines', 'Paraguay', 'Philippines', 'Bolivia', 'Philippines', 'Philippines', 'Madagascar', 'Georgia', 'Uganda', 'Kenya', 'Tajikistan', 'Jordan', 'Kenya', 'Philippines', 'Ecuador', 'Kenya']
+
+                time_to_raise = [193075.0, 1157108.0, 1552939.0, 244945.0, 238797.0, 1248909.0, 773599.0, 116181.0, 2288095.0, 51668.0, 26717.0, 48030.0, 1839190.0, 71117.0, 580401.0, 800427.0, 1156218.0, 1166045.0, 2924705.0, 470622.0, 24078.0, 260044.0, 445938.0, 201408.0, 2370450.0]
+
+                num_lenders_total = [38, 18, 51, 3, 21, 1, 10, 8, 42, 1, 18, 6, 28, 5, 16, 7, 54, 1, 18, 22, 36, 12, 8, 24, 8]
+                </input>
+            </program>
+        </listing>
+
+        <p>Now a programming exercise.  The program upcoming is going to <term>include</term> all the code of the program preceding.  This is accomplished with an <attr>include</attr> attribute on the <em>including</em> program whose value is the <attr>xml:id</attr> of the <em>included</em> program.  So by running the next program, it should pass all of its three tests (for example another example using unit tests, see <xref ref="unit-test-example"/>).  Now reload the page, do not run the program in the listing, and then see that the program in the exercise still runs correctly.</p>
+
+        <p>You'll see nothing that tells the reader that the one chunk of code is prefacing the other.  And in static formats it might be even less obvious.  So you will want to say <em>something</em> to alert the reader.  Here it is easy: <xref ref="exercise-python-including"/> includes all the code from <xref ref="listing-python-included"/>.</p>
+
+        <exercise xml:id="exercise-python-including">
+            <title>A Python program, including another</title>
+            <statement>
+                <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
+            </statement>
+            <program xml:id="python-summation" interactive='activecode' language="python" label="pyton-sum-total" include="python-statistics">
+                <input>
+                loan_total = 0
+                for loan in loan_amount:
+                    loan_total += loan
+                print(loan_total)
+                </input>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class MyTests(TestCaseGui):
+
+                    def testOne(self):
+                        self.assertTrue('loan_total' in self.getEditorText(), "you need a loan_total variable")
+                        self.assertEqual(loan_total, sum(loan_amount), "Use the accumulator pattern to add up all the loans")
+                        self.assertFalse('sum(' in self.getEditorText(), "you may not use sum()")
+
+                MyTests().main()
+                </tests>
+            </program>
+        </exercise>
+
+        <p>Exact same exercise again, but now we include <em>two</em> programs.  We first get the simple <q>Hello, world!</q> program at <xref ref="program-activecode-python"/> and then the same program defining the variables with lists of statistics at <xref ref="listing-python-included"/>.  So the output just includes the extra result from the <c>print()</c> statement.</p>
+
+        <exercise xml:id="exercise-python-including-two">
+            <title>A Python program, including two others</title>
+            <statement>
+                <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
+            </statement>
+            <program xml:id="python-summation-two" interactive='activecode' language="python" label="pyton-sum-total-two" include=" python-hello-world python-statistics ">
+                <input>
+                loan_total = 0
+                for loan in loan_amount:
+                    loan_total += loan
+                print(loan_total)
+                </input>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class MyTests(TestCaseGui):
+
+                    def testOne(self):
+                        self.assertTrue('loan_total' in self.getEditorText(), "you need a loan_total variable")
+                        self.assertEqual(loan_total, sum(loan_amount), "Use the accumulator pattern to add up all the loans")
+                        self.assertFalse('sum(' in self.getEditorText(), "you may not use sum")
+
+                MyTests().main()
+                </tests>
+            </program>
+        </exercise>
 
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
@@ -277,7 +354,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </input>
             </program>
         </listing>
-
     </section>
 
     <section xml:id="coding-exercises">
@@ -353,7 +429,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <solution>We're not really sure. Still.</solution>
         </exercise>
 
-        <exercise label="coding-exercise-python-unit-test">
+        <exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
             <title>Coding Exercise, with Unit Tests</title>
 
             <statement>
