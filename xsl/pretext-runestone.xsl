@@ -1777,6 +1777,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:for-each select="$tokens">
                                         <xsl:value-of select="."/>
                                         <!-- n - 1 separators, required by receiving Javascript -->
+                                        <!-- comma-separated this time                          -->
                                         <xsl:if test="following-sibling::token">
                                             <xsl:text>,</xsl:text>
                                         </xsl:if>
@@ -1785,8 +1786,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                             <!-- allow @include attribute on <program> -->
                             <xsl:if test="@include">
+                                <xsl:variable name="tokens" select="str:tokenize(@include, ', ')"/>
                                 <xsl:attribute name="data-include">
-                                    <xsl:value-of select="@include"/>
+                                    <xsl:for-each select="$tokens">
+                                        <!-- attribute value is an xml:id, get target "program" -->
+                                        <xsl:variable name="the-id">
+                                            <xsl:value-of select="."/>
+                                        </xsl:variable>
+                                        <xsl:for-each select="$original">
+                                            <xsl:variable name="target" select="id($the-id)"/>
+                                            <xsl:if test="not($target)">
+                                                <xsl:message>PTX:ERROR:   an included "program" with @xml:id value <xsl:value-of select="$the-id"/> was not found</xsl:message>
+                                            </xsl:if>
+                                            <!-- build database id of the target -->
+                                            <xsl:apply-templates select="$target" mode="runestone-id"/>
+                                            <!-- n - 1 separators, required by receiving Javascript -->
+                                        </xsl:for-each>
+                                        <!-- space-separated this time -->
+                                        <xsl:if test="following-sibling::token">
+                                            <xsl:text> </xsl:text>
+                                        </xsl:if>
+                                    </xsl:for-each>
                                 </xsl:attribute>
                             </xsl:if>
                             <!-- SQL (only) needs an attribute so it can find some code -->
