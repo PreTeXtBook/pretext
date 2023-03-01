@@ -28,7 +28,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Stelling</localization>
-    <localization string-id='corollary'>Corollarium</localization>
+    <localization string-id='corollary'>Gevolg</localization>
     <localization string-id='lemma'>Lemma</localization>
     <localization string-id='algorithm'>Algoritme</localization>
     <localization string-id='proposition'>Propositie</localization>
@@ -112,7 +112,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='warning'>Waarschuwing</localization>
     <localization string-id='insight'>Inzicht</localization>
     <!-- COMPUTATION-LIKE blocks -->
-    <localization string-id='computation'>Berekiening</localization>
+    <localization string-id='computation'>Berekening</localization>
     <localization string-id='technology'>Technologie</localization>
     <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
