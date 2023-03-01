@@ -561,6 +561,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- We "hardcode" box lines to delineate blocks in ways that are -->
+<!-- super-obvious to the reader.  A blank line before and after  -->
+<!-- help with spacing.  The lines themselves are runs of Unicode -->
+<!-- braille cells, and so pass through unfettered.               -->
+
+<!-- These two templates are hooks in the main "block-creation"   -->
+<!-- template in the stock HTML conversion.  So they should do    -->
+<!-- nothing when                                                 -->
+<!--     (a) a "block" is not a major one                         -->
+<!--         (see catch-all templates in HTML conversion),        -->
+<!--       or                                                     -->
+<!--     (b) we are not building braille in the first place.      -->
+
+<!-- Proofs: are treated as they are in HTML (since they come     -->
+<!-- from there).  They become peers of their statements, and     -->
+<!-- hence go in boxes (regular or exterior).  Unless they are    -->
+<!-- the "lightweight" ones inside SOLUTION-LIKE.                 -->
+
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&AXIOM-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;" mode="braille-top-box-line">
+    <div data-braille="blankline"/>
+    <div>
+        <xsl:call-template name="boxline">
+            <!-- U+2836 is dot-2356 is BRF 7-->
+            <xsl:with-param name="character" select="'&#x2836;'"/>
+            <xsl:with-param name="width" select="40"/>
+        </xsl:call-template>
+    </div>
+</xsl:template>
+
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&AXIOM-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;" mode="braille-bottom-box-line">
+    <div>
+        <xsl:call-template name="boxline">
+            <!-- U+2818 is dot-1245 is BRF g-->
+            <xsl:with-param name="character" select="'&#x281B;'"/>
+            <xsl:with-param name="width" select="40"/>
+        </xsl:call-template>
+    </div>
+    <div data-braille="blankline"/>
+</xsl:template>
+
+<!-- Catch-all templates to do nothing when the HTML "body" template is -->
+<!-- building things like list items that do not need boxline treatment -->
+<xsl:template match="*" mode="braille-top-box-line"/>
+<xsl:template match="*" mode="braille-bottom-box-line"/>
+
+<!-- Utility template to string out a boxline character -->
+<xsl:template name="boxline">
+    <xsl:param name="character"/>
+    <xsl:param name="width"/>
+
+    <span>
+        <xsl:call-template name="duplicate-string">
+             <xsl:with-param name="text" select="$character"/>
+             <xsl:with-param name="count" select="$width" />
+        </xsl:call-template>
+    </span>
+</xsl:template>
+
+
 <!-- ################# -->
 <!-- WeBWorK Exercises -->
 <!-- ################# -->

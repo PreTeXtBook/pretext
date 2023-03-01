@@ -5577,6 +5577,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
             </xsl:if>
+            <!-- obvious marker of a block's beginning, often produces nothing -->
+            <xsl:if test="$b-braille">
+                <xsl:apply-templates select="." mode="braille-top-box-line"/>
+            </xsl:if>
             <!-- If visible, heading interior to article -->
             <xsl:if test="$block-type = 'visible'">
                 <xsl:apply-templates select="." mode="heading-birth" />
@@ -5601,6 +5605,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
                 <xsl:with-param name="block-type" select="$block-type" />
             </xsl:apply-templates>
+            <!-- obvious marker of a block's ending, often produces nothing -->
+            <xsl:if test="$b-braille">
+                <xsl:apply-templates select="." mode="braille-bottom-box-line"/>
+            </xsl:if>
         </xsl:element>
     </xsl:if>
     <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
@@ -5619,7 +5627,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
-
 
 <!-- The following feed into the same framework,   -->
 <!-- but have their own specific "body" templates  -->
