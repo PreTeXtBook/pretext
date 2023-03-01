@@ -312,6 +312,9 @@ htmltarget a,name
 # 2023-03-01: This is a collection of more basic semantic actions meant
 # to utilize  liblouisutdml  in simpler and more predictable ways
 
+# Useful for necessary spacing
+blankline div,data-braille,blankline
+
 
 
 # Necessary to have a newline following
