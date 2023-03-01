@@ -734,6 +734,7 @@ button {
     .pretext #ptx-navbar,
     .pretext .ptx-page > #ptx-sidebar,
     .pretext > div.ptx-page-footer,
+    .pretext  #ptx-page-footer,
     .pretext .ptx-main > div.ptx-content-footer {
        display:none;
         border:none;
@@ -748,15 +749,24 @@ button {
     .pretext .ptx-page .ptx-main .ptx-content { margin-top:0 }
     .pretext .ptx-page .ptx-main .ptx-content.ptx-content section { margin-top:1em }
     .pretext .ptx-page .ptx-main .ptx-content.ptx-content section .heading { margin-top:0 }
+
+    /* over-ride print.less */
+    .pretext a[href]::after {
+         content: "";
+     }
 }
 
 /* printing for one-page worksheets */
 
 @media print {
-    body.standalone .ptx-content .worksheet {
+    body.standalone.worksheet {
+        margin: 0;
+    }
+    body.standalone .ptx-content section.worksheet {
         border: none;
     }
-    body.standalone.worksheet #ptx-masthead {
+    body.standalone.worksheet #ptx-masthead,
+    body.standalone.worksheet #ptx-page-footer {
         display: none;
     }
 
@@ -767,7 +777,7 @@ button {
     body.standalone.worksheet .ptx-page > .ptx-main .ptx-content {
         margin: 0;
     }
-    body.standalone.worksheet .ptx-content .onepage {
+    body.standalone.worksheet .ptx-content section.onepage {
         max-height: 100%;
         max-width: 100%;
         overflow: hidden;
@@ -778,7 +788,8 @@ button {
         border: none;
         page-break-inside: avoid;
      }
-     body.standalone.worksheet .ptx-content .onepage.lastpage {
+    body.standalone.worksheet .ptx-content .onepage.lastpage {
+        margin-bottom: -2em;  /* to avoid blank space overflow causing an extra blank page */
         page-break-after: auto;
      }
     body.standalone.worksheet.a4 .ptx-content .onepage {
@@ -786,8 +797,8 @@ button {
         height: 1320px;
 */
     }
-    body.standalone.worksheet .ptx-content .onepage .workspace,
-    body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
+    body.standalone.worksheet .ptx-content .onepage div.workspace,
+    body.standalone.worksheet .ptx-content .onepage div.workspace.squashed.tight {
         border: none;
         padding: 0;
         background: none !important;
