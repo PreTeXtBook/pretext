@@ -799,7 +799,9 @@
     margin-top: 1.4em;
 }
 
-.ptx-content .subsubsection > .autopermalink,
+.ptx-content .subsubsection > .autopermalink {
+    margin-top: 0;
+}
 .ptx-content .exercisegroup > .autopermalink {
 /*
     margin-top: 0.3em;
