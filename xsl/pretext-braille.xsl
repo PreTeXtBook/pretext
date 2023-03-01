@@ -579,27 +579,62 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hence go in boxes (regular or exterior).  Unless they are    -->
 <!-- the "lightweight" ones inside SOLUTION-LIKE.                 -->
 
+<!-- TODO: top and bottom templates are parameterized by 7/g characters only -->
+
+<!-- U+2836 is dot-2356 is BRF 7 for interior top   -->
+<!-- U+283F is dot-123465 is BRF = for exterior top -->
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&AXIOM-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;" mode="braille-top-box-line">
+    <xsl:variable name="boxline-character">
+        <xsl:choose>
+            <!-- "child-ish" FIGURE-LIKE demands exterior box lines for parent        -->
+            <!-- don't use "descendant::* or a "theorem" can be fooled by its "proof" -->
+            <xsl:when test="*[&FIGURE-FILTER;] or statement/*[&FIGURE-FILTER;] or case/*[&FIGURE-FILTER;]">
+                <xsl:text>&#x283F;</xsl:text>
+            </xsl:when>
+            <!-- default to "regular" (interior) box -->
+            <xsl:otherwise>
+                <xsl:text>&#x2836;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <div data-braille="blankline"/>
     <div>
         <xsl:call-template name="boxline">
-            <!-- U+2836 is dot-2356 is BRF 7-->
-            <xsl:with-param name="character" select="'&#x2836;'"/>
+            <xsl:with-param name="character" select="$boxline-character"/>
             <xsl:with-param name="width" select="40"/>
         </xsl:call-template>
     </div>
 </xsl:template>
 
+<!-- U+281B is dot-1245 is BRF g for interior bottom   -->
+<!-- U+283F is dot-123465 is BRF = for exterior bottom -->
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&AXIOM-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;" mode="braille-bottom-box-line">
+    <xsl:variable name="boxline-character">
+        <xsl:choose>
+            <!-- "child-ish" FIGURE-LIKE demands exterior box lines for parent        -->
+            <!-- don't use "descendant::* or a "theorem" can be fooled by its "proof" -->
+            <xsl:when test="*[&FIGURE-FILTER;] or statement/*[&FIGURE-FILTER;] or case/*[&FIGURE-FILTER;]">
+                <xsl:text>&#x283F;</xsl:text>
+            </xsl:when>
+            <!-- default to "regular" (interior) box -->
+            <xsl:otherwise>
+                <xsl:text>&#x281B;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <div>
         <xsl:call-template name="boxline">
-            <!-- U+2818 is dot-1245 is BRF g-->
-            <xsl:with-param name="character" select="'&#x281B;'"/>
+            <xsl:with-param name="character" select="$boxline-character"/>
             <xsl:with-param name="width" select="40"/>
         </xsl:call-template>
     </div>
     <div data-braille="blankline"/>
 </xsl:template>
+
+<!-- Proofs in SOLUTION-LIKE *never" get boxed.  These take -->
+<!-- precedence over the general match on PROOF-LIKE above. -->
+<xsl:template match="*[&SOLUTION-PROOF-FILTER;]" mode="braille-top-box-line"/>
+<xsl:template match="*[&SOLUTION-PROOF-FILTER;]" mode="braille-bottom-box-line"/>
 
 <!-- Catch-all templates to do nothing when the HTML "body" template is -->
 <!-- building things like list items that do not need boxline treatment -->

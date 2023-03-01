@@ -206,6 +206,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>A <term>right triangle</term> has one of its three angles subtending a quarter of a circle.</p>
                     <p>And this second paragraph is part of the definition.</p>
+                    <figure>
+                        <caption>An interior boxline figure</caption>
+                        <p>This figure has a paragraph in it.  It is just forcing an <q>exterior</q> boxline on teh enclosing definition.</p>
+                    </figure>
+                    <p>And a last paragraph to disentangle the end of the definition.</p>
                 </statement>
             </definition>
 
