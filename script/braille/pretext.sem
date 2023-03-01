@@ -3,6 +3,7 @@
 # History:
 #   2019-02-17: Initiated
 #   2019-05-30: No longer extends stock "html.sem"
+#   2023-03-01: Make HTML and liblouisutdml styling more primitive
 
 # [LUPM] Liblouisutdml User's and Programmer's Manual
 
@@ -304,9 +305,14 @@ changetable div,sage-code
 htmllink a,href
 htmltarget a,name
 
+############
+# Primitives
+############
+
+# 2023-03-01: This is a collection of more basic semantic actions meant
+# to utilize  liblouisutdml  in simpler and more predictable ways
 
 
 
 # Necessary to have a newline following
 # last directive, or it is not processed
-
