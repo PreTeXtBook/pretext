@@ -511,10 +511,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.html.annotate" select="'no'"/>
 <xsl:variable name="b-view-source" select="$debug.html.annotate = 'yes'"/>
 
-<!-- 2023-01-25 for AC experiment -->
-<xsl:param name="debug.fixwwid" select="''"/>
-<xsl:variable name="b-fix-ww-id" select="$debug.fixwwid = 'yes'"/>
-
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->
