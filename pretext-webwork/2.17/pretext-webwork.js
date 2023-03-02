@@ -848,13 +848,14 @@ function translateHintSol(ww_id, body_div, ww_domain, b_ptx_has_hint, b_ptx_has_
 	for (const hintSol of hintSols) {
 		const hintsolp = hintSol.parentNode;
 		if (!hintsolp) continue;
+		const hintsolpp = hintsolp.parentNode;  //the div that contains each p with a knowl anchor
 		const hintSolType = hintSol.dataset.type;
 
-		if (hintSol == hintSols[0])
+		if (hintsolpp.querySelectorAll(".webwork.solutions").length == 0)
 		{
 			solutionlikewrapper = document.createElement('div');
 			solutionlikewrapper.classList.add('webwork', 'solutions');
-			hintsolp.parentNode.insertBefore(solutionlikewrapper, hintsolp);
+			hintsolpp.insertBefore(solutionlikewrapper, hintsolp);
 		}
 
 		if ((hintSolType == 'solution' && !b_ptx_has_solution) ||
