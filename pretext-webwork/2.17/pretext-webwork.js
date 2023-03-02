@@ -536,20 +536,25 @@ function handleWW(ww_id, action) {
 			background-color: #CDF;
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%230049DB' text-anchor='end'>🡄</text></svg>");
 		}
-		input[type="text"].correct, select.correct {
+		input[type="text"].correct, select.correct, input[type="text"].correct + span.mq-editable-field {
 			background-color: #8F8;
 		}
-		input[type="text"].correct {
+		input[type="text"].correct, input[type="text"].correct + span.mq-editable-field {
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%23060' text-anchor='end'>✓</text></svg>");
 		}
-		input[type="text"].partly-correct {
+		input[type="text"].correct + span.mq-editable-field, input[type="text"].partly-correct + span.mq-editable-field, input[type="text"].incorrect + span.mq-editable-field {
+			padding-left: 2rem;
+			background-repeat: no-repeat;
+			background-position-y: center;
+		}
+		input[type="text"].partly-correct, input[type="text"].partly-correct + span.mq-editable-field {
 			background-color: #CDF;
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='22px' width='30px'><text x='28' y='18' fill='%235C5C00' text-anchor='end'>⚠</text></svg>");
 		}
-		input[type="text"].incorrect, select.incorrect {
+		input[type="text"].incorrect, select.incorrect, input[type="text"].incorrect + span.mq-editable-field {
 			background-color: #DAA;
 		}
-		input[type="text"].incorrect {
+		input[type="text"].incorrect, input[type="text"].incorrect + span.mq-editable-field {
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='22px' width='30px'><text x='28' y='18' fill='%23943D3D' text-anchor='end'>⚠</text></svg>");
 		}
 		input[type="text"].partly-correct, input[type="text"].incorrect {
