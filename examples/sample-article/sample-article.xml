@@ -4834,7 +4834,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </li>
                     <li>
                         <title>Aqua</title>
-                        <p>The color of shallow tropical waters.</p>
+                        <p>The color of shallow tropical waters.<fn>On a sunny day! (Testing footnotes in description lists for <latex/> output.)</fn></p>
                     </li>
                     <li xml:id="description-list-math-title">
                         <title>Math <m>x^2</m></title>
