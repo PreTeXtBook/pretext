@@ -1772,7 +1772,7 @@ from Jiří Lebl */
     max-width: 650px;
 }
 
-.ptx-content .tabular-box table {
+.ptx-content .tabular-box.natural-width table {
     margin-left: auto;
     margin-right: auto;
 }
