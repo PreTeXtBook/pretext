@@ -293,7 +293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates />
     <xsl:call-template name="back-cover"/>
-   <xsl:text>\end{document}</xsl:text>
+   <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A book, LaTeX structure -->
@@ -322,7 +322,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="front-cover"/>
     <xsl:apply-templates />
     <xsl:call-template name="back-cover"/>
-    <xsl:text>\end{document}</xsl:text>
+    <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A letter, LaTeX structure -->
@@ -344,7 +344,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
     <xsl:apply-templates />
-    <xsl:text>\end{document}</xsl:text>
+    <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A memo, LaTeX structure -->
