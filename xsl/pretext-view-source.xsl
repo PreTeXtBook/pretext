@@ -127,13 +127,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text">
                     <xsl:variable name="lead-in">
-                        <xsl:apply-templates select="$original-element/preceding-sibling::node()[1]" mode="serialize"/>
+                        <xsl:apply-templates select="$original-element/preceding-sibling::node()[1]" mode="serialize">
+                            <xsl:with-param name="as-authored-source" select="'yes'"/>
+                        </xsl:apply-templates>
                     </xsl:variable>
                     <xsl:call-template name="substring-after-last">
                         <xsl:with-param name="input" select="$lead-in" />
                         <xsl:with-param name="substr" select="'&#xa;'" />
                     </xsl:call-template>
-                    <xsl:apply-templates select="$original-element" mode="serialize"/>
+                    <xsl:apply-templates select="$original-element" mode="serialize">
+                        <xsl:with-param name="as-authored-source" select="'yes'"/>
+                    </xsl:apply-templates>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
