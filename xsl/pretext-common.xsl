@@ -1856,16 +1856,40 @@ Book (with parts), "section" at level 3
 <!-- improvements to be fully general.                    -->
 <!-- (See https://stackoverflow.com/a/6698849)            -->
 
+<!-- For embedding HTML into a text environment, such as  -->
+<!-- placing PreTeXt HTML output into a Jupyter worksheet -->
+<!-- cell, the text() nodes and the attribute values are  -->
+<!-- copied directly and we presume "dangerous" characters-->
+<!-- are adequately escaped by the XSLT routines creating -->
+<!-- the HTML in the first place.  For example, an        -->
+<!-- ampersand is &amp; in HTML for HTML's sake.  But if  -->
+<!-- we are duplicating PreTeXt source, for instructive   -->
+<!-- purposes and displayed online in an HTML output      -->
+<!-- setting, we do not want the "&amp;" string to become -->
+<!-- a bare & - we want it to look like how an author     -->
+<!-- would have authored it.  So it should be "&amp;amp;" -->
+<!-- in order to be rendered in the instruction as        -->
+<!-- "&amp;". The "yes" option will escape the escape     -->
+<!-- characters, breaking their effect and giving the     -->
+<!-- look an author would need to provide in their source -->
+<!-- to obtain that literal character.                    -->
 
 <xsl:template match="*" mode="serialize">
+    <!-- default as "no" is just historical initial/primary use -->
+    <xsl:param name="as-authored-source" select="'no'"/>
+
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:apply-templates select="." mode="serialize-namespace" />
-    <xsl:apply-templates select="@*" mode="serialize" />
+    <xsl:apply-templates select="@*" mode="serialize">
+        <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
+    </xsl:apply-templates>
     <xsl:choose>
         <xsl:when test="node()">
             <xsl:text>&gt;</xsl:text>
-            <xsl:apply-templates mode="serialize" />
+            <xsl:apply-templates mode="serialize">
+                <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
+            </xsl:apply-templates>
             <xsl:text>&lt;/</xsl:text>
             <xsl:value-of select="name()"/>
             <xsl:text>&gt;</xsl:text>
@@ -1877,10 +1901,14 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template match="@*" mode="serialize">
+    <xsl:param name="as-authored-source"/>
+
     <xsl:text> </xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:text>="</xsl:text>
-    <xsl:value-of select="."/>
+    <xsl:apply-templates mode="serialize-content">
+        <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
+    </xsl:apply-templates>
     <xsl:text>"</xsl:text>
 </xsl:template>
 
@@ -1906,8 +1934,34 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template match="text()" mode="serialize">
-    <xsl:value-of select="."/>
+    <xsl:param name="as-authored-source"/>
+
+    <xsl:apply-templates select="." mode="serialize-content">
+        <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
+    </xsl:apply-templates>
 </xsl:template>
+
+<!-- When trying to represent XML source as it would have been authored, -->
+<!-- we "break" the escape characters to result in their authored form.  -->
+<!-- TODO: add &apos; and &quot; (which we *never* author,               -->
+<!-- since just necessary for attributes).                               -->
+<xsl:template match="node()" mode="serialize-content">
+    <xsl:param name="as-authored-source"/>
+
+    <xsl:choose>
+        <xsl:when test="$as-authored-source = 'no'">
+            <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- fix raw ampersands before introducing more -->
+            <xsl:variable name="fix-ampersand"    select="str:replace(.,              '&amp;', '&amp;amp;')"/>
+            <xsl:variable name="fix-lessthan"     select="str:replace($fix-ampersand, '&lt;',  '&amp;lt;' )"/>
+            <xsl:variable name="fix-greaterthan"  select="str:replace($fix-lessthan,  '&gt;',  '&amp;gt;' )"/>
+            <xsl:value-of select="$fix-greaterthan"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ################## -->
 <!-- LaTeX Shortcomings -->
