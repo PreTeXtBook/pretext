@@ -27,9 +27,16 @@
     <section>
         <title>Notes and Commentary</title>
 
-        <p>The <tag>commentary</tag> element is designed primarily for the purpose of adding material to a document to make an enhanced version.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance:<cd>
-                <cline>xsltproc -stringparam commentary yes ...</cline>
-        </cd>Other distinctions are:<ul>
+        <p>The <tag>commentary</tag> element is designed primarily for the purpose of adding material to a document to make an enhanced version.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance.  In the project manifest inside your desired target, add the following.
+        </p>
+        <pre>
+        <![CDATA[
+            <stringparam key="commentary" value="yes"/>
+            ]]>
+        </pre>
+
+        <p>
+        Other distinctions are:<ul>
             <li>Since it is elective, you need to be careful about cross-references to and from a <tag>commentary</tag>.  It is highly likely that you will want to make cross-references <em>within</em> a <tag>commentary</tag> <em>pointing to</em> other portions of your text, and this is always a good idea.  You will want to avoid making cross-references <em>to</em> a <tag>commentary</tag> from other parts of the text, with the exception of a cross-reference that originates <em>within</em> some <tag>commentary</tag>.</li>
             <li>Numbered items are prohibited within a <tag>commentary</tag>, such as a <tag>figure</tag> or a <tag>theorem</tag>.  Doing so would disrupt consecutive numbering in different versions, with or without, <tag>commentary</tag> included.  Numbered equations are not prohibited in the schema, but should definitely be avoided anyway.</li>
         </ul></p>
@@ -40,11 +47,11 @@
 
         <p>For an Instructor's Version you might wish to add additional material into the front matter (a specialized <tag>preface</tag> perhaps), or remove some material from the back matter (an <tag>appendix</tag> with solutions that duplicates solutions now placed within the exercises themselves).  There may also be parts of each chapter you do not find necessary to include.</p>
 
-        <p>Modularizing your source files would allow for a different <q>master</q> <init>XML</init> source file to include different portions of the <tag>frontmatter</tag> or <tag>backmatter</tag>, perhaps just making a different title page.  See the Author's Guide for more on modularization.</p>
+        <p>Modularizing your source files would allow for a different top-level <init>XML</init> source file to include different portions of the <tag>frontmatter</tag> or <tag>backmatter</tag>, perhaps just making a different title page.  See <xref ref="processing-modular"/> for more on modularization.</p>
 
-        <p>Additional, minimal, <init>XSLT</init> stylesheets can be used to selectively <q>kill</q> portions of your source, such as every <q>Additional Reading</q> at the end of each <tag>chapter</tag> residing in a <tag>references</tag>.  Consistent use of elements, leading strings in <attr>xml:id</attr>, and/or leading strings in <tag>title</tag>, can make it a single-line exercise to selectively remove multiple portions of your source without removing other portions.  see the Author's Guide for more about additional <init>XSLT</init> stylesheets.</p>
+        <p>Additional, minimal, <init>XSLT</init> stylesheets can be used to selectively <q>kill</q> portions of your source, such as every <q>Additional Reading</q> at the end of each <tag>chapter</tag> residing in a <tag>references</tag>.  Consistent use of elements, leading strings in <attr>xml:id</attr>, and/or leading strings in <tag>title</tag>, can make it a single-line exercise to selectively remove multiple portions of your source without removing other portions.  See <xref ref="publisher-extra-stylesheet"/> for more about additional <init>XSLT</init> stylesheets.</p>
 
-        <p>Think carefully about the effect of removals and additions on numbering.  In <init>HTML</init> output all numbering is hard-coded and will be based on counts of the entire <init>XML</init> source file.  So selectively killing content will not change numbering, but cross-references may point to divisions for which there is no content to serve as the target.  Using a different <q>master</q> file can impact numbering throughout.  Significant portions of the <latex /> output rely on <latex />'s automatic numbering via mechanisms like <c>\label{}</c> and <c>\ref{}</c>.  So if portions of the text are killed, then the <c>\label{}</c> of a cross-reference may never be defined.  A technical solution would be to provide an option to hard-code all numbering in <latex /> output.</p>
+        <p>Think carefully about the effect of removals and additions on numbering.  In <init>HTML</init> output all numbering is hard-coded and will be based on counts of the entire <init>XML</init> source file.  So selectively killing content will not change numbering, but cross-references may point to divisions for which there is no content to serve as the target.  Using a different top-level file can impact numbering throughout.  Significant portions of the <latex /> output rely on <latex />'s automatic numbering via mechanisms like <c>\label{}</c> and <c>\ref{}</c>.  So if portions of the text are killed, then the <c>\label{}</c> of a cross-reference may never be defined.  A technical solution would be to provide an option to hard-code all numbering in <latex /> output.</p>
 
         <p>Generally, removing portions of each division will have the least ill-effects on numbering if the portions removed are at the end of a division and no cross-references point there.  So, for example, a <tag>references</tag> at the end of each <tag>chapter</tag> can be safely killed with no ill-effects if there are no cross-references elsewhere to the particular <tag>biblio</tag> contained in that <tag>references</tag>.</p>
 

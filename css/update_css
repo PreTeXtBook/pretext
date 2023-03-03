@@ -19,16 +19,31 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
-import requests, fileinput
+# NOTE: when you use this script to update the CSS, even if
+# there is no actual change, note the date and CSS version
+# in the README.md file in this directory as part of a commit
 
 # Simple Python 3 script to retrieve the PreTeXt book CSS from Github
 # This CSS is used for EPUB and Kindle output. It is not required to
-# exist or be updated for HTML builds. 
+# exist or be updated for HTML builds.
+#
+# History:
+#
+# 2022-12-30:  Added a print statement for progress indication
+# 2023-01-03:  Parameterize with branch name
+# 2023-01-03:  Update, extend filtering external resources
+
+import requests, fileinput
+
+# some situations require getting this from another branch
+branch = 'main'
+
 def main():
     # URL to the raw files on Github where the CSS lives
-    baseurl = 'https://raw.githubusercontent.com/PreTeXtBook/CSS_core/main/'
+    baseurl = 'https://raw.githubusercontent.com/PreTeXtBook/CSS_core/{}/'.format(branch)
     # List of CSS files to retrieve. Add on as more are added upstream.
-    css_file_list = ['pretext_add_on.css', 
+    css_file_list = ['pretext.css',
+                         'pretext_add_on.css',
                          'setcolors.css', 
                          'style_default.css', 
                          'style_oscarlevin.css', 
@@ -52,14 +67,18 @@ def main():
                          'kindle.css',
                          'epub.css']
     for filename in css_file_list:
+        print("Downloading {}...".format(filename))
         url = baseurl + filename
         r = requests.get(url, allow_redirects=True)
         # requests gets the file as bytes and not text, so need 'wb' here
         open(filename, 'wb').write(r.content)
 
-    # Validator does not allow @import in CSS, so let's just remove it
+    # EPUB validator does not allow @import in CSS, so let's just remove it
+    for line in fileinput.input('pretext.css', inplace=1):
+        print(line.replace('@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");', '/* Google font download removed */'), end='')
+    # Likewise, the EPUB validator does not like an image coming from an external site
     for line in fileinput.input('pretext_add_on.css', inplace=1):
-        print(line.replace('@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");', ''), end='')
+        print(line.replace("background-image: url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');", '/* WW Activate button backgroound removed */'), end='')
 
     print("CSS files have been updated in your local copy of the repository")
 

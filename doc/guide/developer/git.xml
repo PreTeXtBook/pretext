@@ -31,7 +31,7 @@
             <li>Do not repeat information available by examining the commit itself.  Bad: <q>Changes in foo.xsl</q></li>
             <li>No longer than roughly 60 to 70 characters, and never onto multiple lines.</li>
             <li>You can find lots of advice about phrasing commit messages with action words, or in ways that describe how the code will be different.  These make for good reading, but we do not adhere slavishly to any one formulation.</li>
-            <li>For whatever reason, we isolate and prefix messages with <q>Author's Guide:<nbsp/></q>, <q>Publisher's Guide:<nbsp/></q>, <q>Developer's Guide:<nbsp/></q>, and <q>Schema:<nbsp/></q>.</li>
+            <li>For whatever reason, we isolate and prefix messages with the name of a relevant conversion such as <q>HTML:<nbsp/></q>, or other areas, such as <q>Guide:<nbsp/></q> or <q>Schema:<nbsp/></q>.  Scroll the list of commit messages to see the range.</li>
             <li>For pull requests we will append <q><nbsp/>(PR #nnnn)</q>. You can try to predict this in advance of creating your PR.  (This provides a permanent record somewhat independent of GitHub, and GitHub will utilize this number.)  </li>
         </ul></p>
     </section>
@@ -45,7 +45,7 @@
             <title>One-Time Initial Setup</title>
 
             <p><ol>
-                <li>Make an account on <url href="https://github.com/">GitHub</url><fn><c>github.com</c></fn> if you do not have one already.  A username that bears some correspondence to your real name or favorite email name is helpful.</li>
+                <li>Make an account on <url href="https://github.com/" visual="github.com">GitHub</url> if you do not have one already.  A username that bears some correspondence to your real name or favorite email name is helpful.</li>
 
                 <li>Log into your (new) account.</li>
 
@@ -134,6 +134,12 @@
             </ol></p>
         </paragraphs>
 
+        <paragraphs xml:id="pull-request-verification">
+            <title>Pull Request Verification</title>
+
+            <p>It is often advisable to add an example of any new markup, new situation, or bug-provoking content into the sample article as part of a pull request.  Please do so, as appropriate.  However, because we do rolling releases, all code gets thoroughly tested.  For this reason <em>please</em> put all changes to the sample article, and only changes to the sample article, onto a first commit.  Code should then follow on subsequent commits.  This makes a big difference in our ability to test quickly and accurately.  Thanks.  (Ask if you need help rearranging your commits to achieve this.)</p>
+        </paragraphs>
+
         <paragraphs>
             <title>Modifications to a Pull Request</title>
 
@@ -176,4 +182,15 @@
 
     </section>
 
+    <section xml:id="git-blame">
+        <title>Blame</title>
+
+        <p>The command <c>git blame</c> is simultaneously funny, useful, and powerful.  A line of code you do not understand can be traced back to its originating commit.  We maintain a list of commits (in <c>.git-blame-ignore-revs</c>) that have no real new code and make just cosmetic changes, so you may want to use this feature.  To use:<cd>
+            <cline>git blame --ignore-revs-file .git-blame-ignore-revs birds.xml</cline>
+        </cd>  You can also make this happen every time with a local configuration change, to wit:<cd>
+            <cline>git config blame.ignoreRevsFile .git-blame-ignore-revs</cline>
+        </cd></p>
+
+        <p>To learn more, see <url href="https://akrabat.com/ignoring-revisions-with-git-blame/">Rob Allen's post</url>, and <xref ref="whitespace-code"/>.</p>
+    </section>
 </chapter>

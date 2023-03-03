@@ -60,17 +60,11 @@
     stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term>
     <idx>command-line</idx> inside of a <term>terminal</term>
     <idx>terminal</idx> or <term>console</term>
-    <idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url>
-    <fn>
-      <c>ryanstutorials.net/linuxtutorial/</c>
-    </fn> and certainly others exist.</p>
-
+    <idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/" visual="ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
     <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />
     ,<xref ref="windows-subsystem-linux" />
-    ).  One alternative is <url href="https://cocalc.com/">CoCalc</url>
-    <fn>
-    <c>cocalc.com</c>
-    </fn> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />
+    ).  One alternative is <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>
+     which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />
     ).</p>
 
     <paragraphs>
@@ -86,9 +80,9 @@
     <mdash />
     meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="custom">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
-    <p>See the <url href="https://pretextbook.org/">
+    <p>See the <url href="https://pretextbook.org/" visual="pretextbook.org">
     <pretext/>
-    site</url> at <c>pretextbook.org</c> for details and commands for this step, right on the main page.</p>
+    site</url> for details and commands for this step, right on the main page.</p>
     </paragraphs>
 
     <paragraphs>
@@ -141,7 +135,7 @@
       If you use the <tag>xi:include</tag> mechanism for modular source files, you must process your source slightly differently.
     </p>
 
-    <p>Add the switch <c>-xinclude</c> to your invocation of <c>xsltproc</c>, just after <c>xsltproc</c>, but before the filenames for the stylesheet and the master source file.  Note that for some versions of <c>xsltproc</c> it might be necessary to use two dashes for the switch, <c>--xinclude</c>.
+    <p>Add the switch <c>-xinclude</c> to your invocation of <c>xsltproc</c>, just after <c>xsltproc</c>, but before the filenames for the stylesheet and the top-level source file.  Note that for some versions of <c>xsltproc</c> it might be necessary to use two dashes for the switch, <c>--xinclude</c>.
                 So now a typical invocation (using one dash) might look like
     <cd>
     <cline>xsltproc -xinclude xsl/pretext-html.xsl ~/books/aota/animals.xml</cline>
@@ -150,10 +144,10 @@
     <p>It is easy to forget the <c>-xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p>
     </section>
 
-    <section>
-    <title>stringparams</title>
+    <section xml:id="xsltproc-string-parameters">
+    <title>String Parameters</title>
     <p>
-                    To pass stringparams to xsltproc, use a command like the following (possibly with <c>--xinclude</c>).
+                    To pass string parameters to <c>xsltproc</c>, use a command like the following (possibly with <c>--xinclude</c>).
     </p>
 
     <console>
@@ -162,14 +156,13 @@
     </console>
 
     <p>
-                    You can use as many stringparam as you like on the command-line (or in your scripts).  The quotation marks are not strictly needed in this example, but if the value of the parameter has spaces, slashes, <etc />
-    , then you need to quote-protect the string from the command-line processor, and either single or double quotes will work (and protect the other kind).
+                    You can use as many <c>stringparam</c> as you like on the command-line (or in your scripts).  The quotation marks are not strictly needed in this example, but if the value of the parameter has spaces, slashes, etc., then you need to quote-protect the string from the command-line processor, and either single or double quotes will work (and protect the other kind).
     </p>
     </section>
     <section>
-    <title>Thin XSL Stylesheets</title>
+    <title>Extra XSL Stylesheets</title>
     <p>
-                    If you want to use a custom <init>XSL</init> stylesheet, as described in <xref ref="processing-thin-xsl"/>
+                    If you want to use a custom <init>XSL</init> stylesheet, as described in <xref ref="publisher-extra-stylesheet"/>
     , it is a simple matter of using that custom as the <init>XSL</init> file fed to <c>xsltproc</c>.  That is, enter something like the following.
     </p>
 
@@ -180,6 +173,13 @@
     <p>
                     Note that using this method, it is necessary to import the stock <init>XSL</init> using the <attr>href</attr> instead of <attr>pretext-href</attr>, as in <tage>xsl:import href="path/to/mathbook/xsl/pretext-latex.xsl"</tage>.  You need to specify the full path to the <c>mathbook/xsl</c> directory, or else put your custom <init>XSL</init> in the <c>mathbook/user</c> directory and use a relative path (<c>../xsl/pretext-latex.xsl</c>).
     </p>
+    </section>
+    <section>
+        <title>Publication File</title>
+
+        <p>To employ a publication file using <c>xsltproc</c> you use a string parameter (<xref ref="publisher-string-parameters"/>) named <c>publisher</c>.  This should have a path that is relative to the main file for the document.  For example, assuming <c>pod.xml</c> and <c>fauna.xml</c> are in the same directory<cd>
+            <cline>xsltproc -stringparam publisher pod.xml pretext-html.xsl aota.xml</cline>
+        </cd>This file should reduce the many other string parameters in use, and reduce the need for extra <init>XSL</init> files (<xref ref="publisher-extra-stylesheet"/>).</p>
     </section>
     <section>
     <title>Images Described in Source</title>
@@ -230,7 +230,7 @@
     <p>Here are some notes:<ol>
     <li>
     <p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control. (See <pubtitle>
-    <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>
+    <url href="https://pretextbook.org/gfa/html/" visual="pretextbook.org/gfa/html/">Git for Authors</url>
     </pubtitle>.)
     </p>
     </li>
@@ -304,7 +304,7 @@
     </console>
 
     <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle>
-    <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>
+    <url href="https://pretextbook.org/gfa/html/" visual="pretextbook.org/gfa/html/">Git for Authors</url>
     </pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
     </section>
 
@@ -317,7 +317,7 @@
       <paragraphs>
         <title>Source</title>
 
-        <p>I am fond of describing my own books with an initialism formed from the title.  So <pubtitle>A First Course in Linear Algebra</pubtitle> becomes <acro>FCLA</acro>, and in file and directory names becomes <c>fcla</c>.  So I have a top-level directory <c>books</c> and then <c>books/fcla</c>, but this directory is not the book itself, this is all the extra stuff that goes along with writing a book, much of it in <c>books/fcla/local</c>.  The actual book, the part everybody sees with an open license, lives in <c>books/fcla/fcla</c>.  This subdirectory has files like <c>COPYING</c>, which is a free software standard for license information, and <c>README.md</c> which is a file in the simplistic Markdown format that is picked up automatically by GitHub and displayed nicely at the book's repository's main page.  Subdirectories include <c>src</c> for the actual XML files, <c>xsl</c> for any customizing XSL (<xref ref="processing-thin-xsl" />), and <c>script</c> for shell scripts used to process the book (see below).</p>
+        <p>I am fond of describing my own books with an initialism formed from the title.  So <pubtitle>A First Course in Linear Algebra</pubtitle> becomes <acro>FCLA</acro>, and in file and directory names becomes <c>fcla</c>.  So I have a top-level directory <c>books</c> and then <c>books/fcla</c>, but this directory is not the book itself, this is all the extra stuff that goes along with writing a book, much of it in <c>books/fcla/local</c>.  The actual book, the part everybody sees with an open license, lives in <c>books/fcla/fcla</c>.  This subdirectory has files like <c>COPYING</c>, which is a free software standard for license information, and <c>README.md</c> which is a file in the simplistic Markdown format that is picked up automatically by GitHub and displayed nicely at the book's repository's main page.  Subdirectories include <c>src</c> for the actual XML files, <c>xsl</c> for any customizing XSL (<xref ref="publisher-extra-stylesheet" />), and <c>script</c> for shell scripts used to process the book (see below).</p>
 
       <p>I do not use any additional directory structure below <c>src</c> to manage modular files for a book, since the XML and the <c>--xinclude</c> mechanism manage that just fine.  I see little benefit to extra subdirectories for organization and some resulting inconvenience.  I do typically have a single subdirectory <c>src/images</c> for raster images and other graphics files.</p>
 
@@ -344,7 +344,7 @@
 
     <p>My use of <c>make</c> is a bit of an abuse, since it is really designed for large software projects, with the aim of reducing duplicative compilations and that is not at all the purpose.  You could likely have exactly the same effect with a shell script and a case (or switch) statement.</p>
 
-    <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>pretext</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a master file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
+    <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>pretext</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a top-level file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
 
     <p>A good example of this general strategy is the use and placement of image files for HTML output.  It is your responsibility to place images into the location your resulting HTML files expect to locate them.  By default, this is a subdirectory of the directory holding the HTML files, named <c>images</c>.  You will want to copy images, such as photographs, out of your main source directory (<c>src/images</c>?). But you may be actively modifying source code for diagrams, and you want to re-run the <c>pretext</c> script for each run, and make sure the output of the script is directed to the correct subdirectory for the HTML output.  Running the <c>pretext</c> script frequently can get tiresome, so maybe you have a makefile target <c>make diagrams</c> that updates a permanent directory, outside of your tracked files in the repository, and you copy those files into the correct subdirectory for the output.  That way, you can update images only when you are actively editing them, or when you are producing a draft that you want to be as up-to-date as possible.  As a project matures, you can add images into the directory tracked by <c>git</c> so they are available to others without getting involved with the <c>pretext</c> script.</p>
 

@@ -2,7 +2,7 @@
   <figure>
     <caption>Small graph with the caption only associated to the
     image. </caption>
-    <image source="images/small_graph" />
+    <image source="small-graph" />
   </figure>
 
   <p>

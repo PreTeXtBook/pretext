@@ -46,8 +46,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xi:include href="./bookinfo.xml" /> <!-- ISBN, website, other metadata -->
 
     <book xml:id="sample-book">
-        <title>Abstract Algebra</title>
-        <subtitle>PRETEXT XML SAMPLE ONLY</subtitle>
+        <title><pretext/> Sample Book</title>
+        <subtitle>Abstract Algebra (SAMPLE ONLY)</subtitle>
 
         <xi:include href="./frontmatter-noparts.xml" />     <!-- Title Page, Preface, etc. -->
 
@@ -55,6 +55,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xi:include href="./integers.xml" />                <!-- Integers -->
         <xi:include href="./groups.xml" />                  <!-- Groups -->
         <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
+        <xi:include href="./rune.xml" />                    <!-- Runestone -->
 
         <!-- Many chapters removed from original AATA, here -->
 

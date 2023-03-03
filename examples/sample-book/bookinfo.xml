@@ -30,13 +30,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- entire front matter section with more headings   -->
     <author-biographies length="short" />
 
-    <brandlogo url="http://abstract.pugetsound.edu" source="images/cover_aata_2014.png" />
+    <!-- A blurb like this should be authored with no markup whatsoever, -->
+    <!-- since it may migrate to unexpected places, like the back cover  -->
+    <!-- of a printed version.  Keep it simple.                          -->
+    <blurb shelf="Author/Instructor Help">This is a book written in PreTeXt, in order to provide testing for a variety of purposes, not least a conversion to Runestone Academy.</blurb>
 
-    <covers front="images/original-front-cover-aata.pdf"
-            back="images/plain-back-cover-aata.pdf"/>
+    <brandlogo url="http://abstract.pugetsound.edu" source="cover_aata_2014.png" />
+
+    <document-id edition="2">PTXSB</document-id>
 
     <!-- Prefix to enhance Sage notebook contents -->
-    <initialism>AATA</initialism>
+    <initialism>SB</initialism>
 
     <!-- Math-related macros from "macros.tex" in previous LaTeX version -->
     <!-- \notdivide replaces \notmid to avoid conflict with tikz - TWJ 5/6/2010 -->

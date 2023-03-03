@@ -350,7 +350,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <output>[5, 2, 6, 4, 1, 8, 3, 7]</output>
         </sage>
 
-        <p>As a demonstration of reusing chunks of Sage code, we duplicate the previous example.  But in each case the code lives in an external file, just once.  So if you wanted to use setup code in more than one division, you could put it in a file and incorporate it similarly.  Here we do not test the second instance, and so do not include expected output either.  Typically, you would do this copy somewhere further away.</p>
+        <p>As a demonstration of reusing chunks of Sage code, we duplicate the previous example.  But in each case the code lives in an external file, just once.  So if you wanted to use setup code in more than one division, you could put it in a file and incorporate it similarly.  Here we do not test the second instance, and so do not include expected output either.  Typically, you would do this copy somewhere further away.  Note that need to supply a path for the file that is relative to the location of teh source file containing the <tag>pretext</tag> element, since the repeated material is source <init>XML</init>.</p>
 
         <sage doctest="not tested">
             <input><xi:include href="../code/symmetric-group-8.sage" parse="text" /></input>

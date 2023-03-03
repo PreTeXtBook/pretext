@@ -3,6 +3,7 @@
 # History:
 #   2019-02-17: Initiated
 #   2019-05-30: No longer extends stock "html.sem"
+#   2023-03-01: Make HTML and liblouisutdml styling more primitive
 
 # [LUPM] Liblouisutdml User's and Programmer's Manual
 
@@ -65,6 +66,12 @@ heading5 div,class,cell7
 # Always terminal, can be anywhere.  We fashion
 # them with "box lines", identical to blocks
 boxline article,class,paragraphs
+
+###################
+# Transcriber Notes
+###################
+
+transcribernote div,data-braille,transcriber-note
 
 ###################
 # Table of Contents
@@ -161,6 +168,15 @@ no dl
 listitem li
 no first-li-block
 
+######################
+# Bibliography Entries
+######################
+
+# An element of the "references" division is a "biblio".
+# Standard HTML provides a bracketed number and the
+# content, all wrapped up inside  article.bib
+bibentry article,class,bib
+
 
 ########
 # Tables
@@ -226,14 +242,6 @@ generic td,data-braille,last-cell \*
 # "skip" ignores everything)
 skip div,data-braille,latex-macros
 
-# Single-letter, Latin mathematics, such
-# as a variable "x" is not marked up with
-# Nemeth indicators, but instead gets an
-# HTML italics element ("i") with class
-# .one-letter, and so is converted to
-# Braille italics
-italicx i,class,one-letter
-
 # Inline snippets just pass through unmolested.
 # We are likely getting bad line-breaks here.
 # Nemeth indicators, with non-breaking spaces,
@@ -297,9 +305,17 @@ changetable div,sage-code
 htmllink a,href
 htmltarget a,name
 
+############
+# Primitives
+############
+
+# 2023-03-01: This is a collection of more basic semantic actions meant
+# to utilize  liblouisutdml  in simpler and more predictable ways
+
+# Useful for necessary spacing
+blankline div,data-braille,blankline
 
 
 
 # Necessary to have a newline following
 # last directive, or it is not processed
-

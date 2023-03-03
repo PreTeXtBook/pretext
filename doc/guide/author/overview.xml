@@ -21,7 +21,15 @@
 
         <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term><idx><h>division</h><seealso>structural division</seealso></idx> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
 
-        <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.  Either version may have a single <tag>exercises</tag> division at the end.  The structured version may have more than one <tag>exercises</tag>.  Finally, there may be a single <tag>references</tag> within a division.</p>
+        <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like the following:
+        <ul>
+        <li>An optional <tag>introduction</tag> </li>
+        <li>One or more divisions of the next finer granularity</li>
+        <li>An optional <tag>conclusion</tag>.</li>
+        </ul>
+        Either version may have a single <tag>exercises</tag> division at the end, or other <q>specialized</q> divisions. The structured version may have more than one <tag>exercises</tag>, and more than one of each of the types of specialized divisions.  For example a <tag>references</tag> is a second example of a specialized division.  (See <xref ref="topic-specialized-divisions"/>.)</p>
+
+        <p>The <tag>introduction</tag> and <tag>conclusion</tag> divisions are meant to be short, and may not contain any other numbered tag.  No exercises, theorems, listings, etc. If you want to have an introductory division with any of the numbered elements you are free to omit the <tag>introduction</tag> and use the next finer subdivision with a <tag>title</tag> of <q>Introduction</q>.</p>
 
         <p>Every division tag can carry an <attr>xml:id</attr> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
 
@@ -81,9 +89,9 @@
 
         <p>With experience, you may realize that <pretext /> utilizes three principal languages.  One is the narrative of everyday sentences and paragraphs.  Most of what you write in a paragraph, or a table cell, or a title, or a caption, or an index heading, is in this language.  Then there is the structural language, which is the majority of the elements in <pretext />, such as <tag>chapter</tag>, <tag>theorem</tag>, or <tag>figure</tag>.  Then finally, there is the language of mathematical symbols and notation.</p>
 
-        <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
+        <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/" visual="www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML" visual="en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
 
-        <p>The symbols and macros supported by MathJax can be found at their <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">Supported <latex/> commands</url><fn><c>docs.mathjax.org/en/latest/tex.html#supported-latex-commands</c></fn> documentation.  Look here to see which parts of <latex/> may be used in your mathematical expressions.</p>
+        <p>The symbols and macros supported by MathJax can be found at their <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands" visual="docs.mathjax.org/en/latest/tex.html#supported-latex-commands">Supported <latex/> commands</url> documentation.  Look here to see which parts of <latex/> may be used in your mathematical expressions.</p>
 
         <p>For <term>inline</term> mathematics<idx><h>mathematics</h><h>inline mathematics</h></idx>, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag> or <tag>caption</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>
 
@@ -94,7 +102,9 @@
         <title>Images</title>
         <idx>image</idx>
 
-        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag.  You can use the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
+        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag, using the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path from the top-level of the appropriate directory. Read <xref ref="processing-directory-management"/> for details on how to set these directories correctly.  If you are starting a new project, using the <pretext />-CLI (with the command <c>pretext new book</c>, for example), then most of the setup portion is done for you and the top-level folder for images that are created external to the project is called <c>assests</c>, and it is a sibling of the <c>source</c> directory. It is your responsibility to locate that file properly relative to this directory, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="ch2-images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>c2-images</c> below wherever you set the <attr>external</attr> top-level directory, and you would place the <c>butterflies.jpg</c> inside of it.</p>
+
+        <p>The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
 
         <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
 
@@ -145,6 +155,8 @@
 
         <p>If an <tag>exercise</tag> is simply a statement of the question, then it may be authored with paragraphs (<tag>p</tag>) and similar elements.  If an <tag>exercise</tag> has hints, answers, or solutions, then it must be structured with a <tag>statement</tag>, followed by (possibly several) optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.  A title is strongly encouraged for inline exercises, and nearly-mandatory if you plan to have inline exercises rendered in knowls in a conversion to <init>HTML</init>.</p>
 
+        <p>There is a wide variety of interactive exercise types you may specify, such as multiple choice, Parson problems, matching, and more.  See <xref ref="topic-interactive-exercises"/> for descriptions of each type and the details of markup for each.</p>
+
         <p>You need (and want) to have the hints, answers and solutions grouped with the statement as you author, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
 
         <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A divisional exercise (including reading questions and worksheet exercises) only gets a sequential number, though this can be overridden with the <attr>number</attr> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
@@ -157,7 +169,7 @@
         <idx>program</idx>
         <idx>console</idx>
 
-        <p>If you are writing about scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.  A <tag>program</tag> will contain a complete computer program, or a portion of the code from a program.  A <tag>console</tag> holds a command-line session.  These elements feature monospace fonts, preservation of whitespace, and syntax highlighting.  See <xref ref="topic-program-console"/> for details.</p>
+        <p>If you are writing about computer science, or more general scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.  A <tag>program</tag> will contain a complete computer program, or a portion of the code from a program.  Some <tag>program</tag> can execute in an online output format, while others are both editable and executable.  This behavior depends on the language used and the host employed.  A <tag>console</tag> holds a command-line session.  These elements feature monospace fonts, preservation of whitespace, and syntax highlighting.  These may also be placed in a <tag>listing</tag> to be more prominent, or as the target of a cross-reference.  See <xref ref="topic-program-console"/> for details.</p>
     </section>
 
     <section xml:id="overview-worksheet">
@@ -373,6 +385,18 @@
                     <cell><tage>obelus</tage></cell>
                 </row>
                 <row>
+                    <cell><degree/></cell>
+                    <cell><tage>degree</tage></cell>
+                    <cell/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell><prime/></cell>
+                    <cell><tage>prime</tage></cell>
+                    <cell><dblprime/></cell>
+                    <cell><tage>dblprime</tage></cell>
+                </row>
+                <row>
                     <cell>&amp;</cell>
                     <cell><c>&amp;amp;</c></cell>
                     <cell>&lt;</cell>
@@ -420,7 +444,7 @@
         <title>Mathematical Results</title>
         <idx><h>mathematics</h><h>mathematical results</h></idx>
         <idx><h>mathematics</h><h>mathematical results</h><seealso>theorem-like elements</seealso></idx>
-        
+
         <p>Definitions, theorems, corollaries, <etc /> are supported by the tags:  <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>definition</tag>, <tag>conjecture</tag>, <tag>axiom</tag>, and <tag>principle</tag>.  Each may have a <tag>title</tag> (strongly encouraged), and then contains a <tag>statement</tag> which is a sequence of paragraphs and other elements.  As appropriate, some of these elements (such as a <tag>lemma</tag>) may contain an optional <tag>proof</tag> (or several), while other elements may not have a <tag>proof</tag> (such as a <tag>conjecture</tag>).</p>
 
         <p>A <tag>definition</tag> is a natural place to define notation as well (see <xref ref="overview-index-notation" />), and to use the <tag>term</tag> tag to identify the terminology being defined.</p>
@@ -477,9 +501,9 @@
 
         <p>The <tag>url</tag> tag always requires an <attr>href</attr> attribute.  Usually this will be a complete address for some external web page, or other external resource.  The <attr>@visual</attr> attribute is sometimes mandatory, but sometimes optional.  It should provide a simplified version of the <init>URL</init> for use in print, or similar situations.  Finally, you can provide content for the <tag>url</tag> element, which will become the clickable text in most realizations.</p>
 
-        <p>If the <tag>url</tag> element is empty (no content), then the value of the <attr>href</attr> attribute or the optional <attr>visual</attr> attribute will be the link text, with a preference for the latter.  When you instead provide content, you can use <pretext/> elements much like any other piece of text that would occur in a paragraph.  In this case, a <attr>visual</attr> attribute is now mandatory, as an alternative to the content, providing information about the actual <init>URL</init> for non-electronic formats like print.  It will appear in a footnote.</p>
+        <p>If the <tag>url</tag> element is empty (no content), then the value of the <attr>href</attr> attribute or the optional <attr>visual</attr> attribute will be the link text, with a preference for the latter.  When you instead provide content, you can use <pretext/> elements much like any other piece of text that would occur in a paragraph.  In this case, a <attr>visual</attr> attribute is now highly recommended, as an alternative to the content, providing information about the actual <init>URL</init> for non-electronic formats like print.  A default version of the value of the <attr>href</attr> attribute will be used in its absence.  This visual version of the <init>URL</init> will appear in a footnote.</p>
 
-        <p>See <xref ref="topic-url"/> for an example and full details.</p>
+        <p>See <xref ref="topic-url"/> for an example and full details.  There is a similar <tag>dataurl</tag> element for pointing to supporting files, see <xref ref="topic-dataurl"/>.</p>
     </section>
 
     <section xml:id="overview-video">
@@ -514,7 +538,7 @@
         <idx>localization</idx>
         <idx>internationalization</idx>
 
-        <p>We are interested in helping authors produce documents with open licenses around the entirety of the world.  <pretext/> provides infrastructure for doing so (or <term>internationalization</term>) in accordance with guidelines of the <url href="https://www.w3.org/International/">W3C Internationalization (I18n) Activity</url><fn><c>www.w3.org/International/</c></fn> at <init>W3C</init> (<c>www.w3.org</c>).</p>
+        <p>We are interested in helping authors produce documents with open licenses around the entirety of the world.  <pretext/> provides infrastructure for doing so (or <term>internationalization</term>) in accordance with guidelines of the <url href="https://www.w3.org/International/" visual="www.w3.org/International/">W3C Internationalization (I18n) Activity</url> at <init>W3C</init> (<c>www.w3.org</c>).</p>
 
         <p>In order to actually adapt <pretext /> to another language (<term>localization</term>), there are two requirements:
           <ul>
@@ -530,7 +554,7 @@
         <idx>web accessibility</idx>
 
 
-        <p>The <url href="https://www.w3.org/standards/webdesign/accessibility">Web Accessibility Initiative</url> at <init>W3C</init> (<c>www.w3.org</c>) says:</p>
+        <p>The <url href="https://www.w3.org/standards/webdesign/accessibility" visual="www.w3.org/standards/webdesign/accessibility">Web Accessibility Initiative</url> at <init>W3C</init> (<c>www.w3.org</c>) says:</p>
 
         <blockquote>
             <p>The Web is fundamentally designed to work for all people, whatever their hardware, software, language, culture, location, or physical or mental ability. When the Web meets this goal, it is accessible to people with a diverse range of hearing, movement, sight, and cognitive ability.</p>
@@ -548,8 +572,8 @@
         but is experimental (so tags and attributes are subject to change).
       </p>
       <p>
-        Currently, support for producing <url href="https://revealjs.com">Reveal.js</url><fn><c>revealjs.com</c></fn>
-        and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <latex/></url><fn><c>en.wikipedia.org/wiki/Beamer_(LaTeX)</c></fn>
+        Currently, support for producing <url href="https://revealjs.com" visual="revealjs.com">Reveal.js</url>
+        and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)" visual="en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <latex/></url>
         slideshows is available. Details on authoring may be found in <xref ref="topic-slides"/>,
         and publishing details are in <xref ref="publisher-slides"/>.
       </p>
@@ -567,6 +591,6 @@
 
         <p>If you have never heard of literate programming, it is a way to mix code and documentation for a computer program in a single file.  But rather than typographically simple code comments, you have the full power of every other feature in <pretext/> and all of the possible output formats.  Furthermore, you can arrange your code in an order that might make more sense to a human (top-down, bottom-up, a mixture, or <ellipsis/>) and <pretext/> will rearrange the code into an order that the compiler or interpreter understands.</p>
 
-        <p>So the idea is that from one file you get a program for the compiler, and a beautiful, typeset explanation for a human reader in any format <pretext/> supports.  An accessible introduction is Knuth's description of his <c>WEB</c> system for the Pascal programming language <xref ref="knuth-literate-programming"/>, or many more resources are at <url href="http://www.literateprogramming.com/">the literate programming site</url><fn><c>www.literateprogramming.com</c></fn>.  Full details on the <pretext/> implementation are at <xref ref="topic-literate-programming"/>.</p>
+        <p>So the idea is that from one file you get a program for the compiler, and a beautiful, typeset explanation for a human reader in any format <pretext/> supports.  An accessible introduction is Knuth's description of his <c>WEB</c> system for the Pascal programming language <xref ref="knuth-literate-programming"/>, or many more resources are at <url href="http://www.literateprogramming.com/" visual="www.literateprogramming.com">the literate programming site</url>.  Full details on the <pretext/> implementation are at <xref ref="topic-literate-programming"/>.</p>
     </section>
 </chapter>

@@ -19,27 +19,6 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!--
-To process this file, at the command-line issue:
-
-xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/sample-article.xml
-
-then find  "derivatives.html"  in the current working directory
-and use a web browser to view.  For PDF/print, issue:
-
-xsltproc -o derivatives.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
-
-and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
-the current working directory.
-
-Ignore any warnings, they are part of testing the warning system.
-
-To see images in your results, copy the examples/images directory
-so that your working directory has the images subdirectory.  See
-the  pretextbook.org  website for information on installing
-the xsltproc executable.
--->
-
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
@@ -141,18 +120,6 @@ the xsltproc executable.
             <!-- possibly in external images directory, when specified in publisher file -->
             <favicon/>
         </html>
-        <!--
-        With a <feedback> element, in the HTML version, you get a button
-        for reporting typos and errors.  You might link to a Google Docs
-        spreadsheet or something similar.  Default is to get a button
-        labeled "Feedback", which will be localized to your target language.
-        You can override this with some text of your choosing, but then you
-        lose the localization feature.
-        -->
-        <feedback>
-            <url>not-implemented.html</url>
-             <!-- <text>My Button Text</text>  -->
-        </feedback>
 
         <!--
         "Names" for various parts of a document are determined exactly
@@ -533,11 +500,32 @@ the xsltproc executable.
                 </input>
             </sage>
 
+            <!-- https://github.com/sagemath/sagecell/blob/master/contrib/vm/container_manager.py#L260 -->
+            <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
+
+            <sage language="r">
+                <input>
+                # load package and data
+                library(ggplot2)
+                data(mpg, package="ggplot2")
+
+                mpg_select &lt;- mpg[mpg$manufacturer %in% c("audi", "ford", "honda", "hyundai"), ]
+
+                # Scatterplot
+                g &lt;- ggplot(mpg_select, aes(displ, cty)) +
+                  labs(subtitle="mpg: Displacement vs City Mileage",
+                       title="Bubble chart")
+
+                g + geom_jitter(aes(col=manufacturer, size=hwy)) +
+                  geom_smooth(aes(col=manufacturer), method="lm", se=F)
+                </input>
+            </sage>
+
             <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitioons from other cells.</p>
 
             <sage type="practice" />
 
-            <p>On the other hand a <tag>sage</tag> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.  (The linking seems a bit buggy, as it repeats the boxplot in the output, as of 2016-06-13).</p>
+            <p>On the other hand a <tag>sage</tag> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.</p>
 
             <sage language="r" />
 
@@ -659,6 +647,9 @@ the xsltproc executable.
                             <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
                         </mdn>.</p>
                     </proof>
+                    <justification>
+                        <p>A justification, which is one of the variants of a proof.</p>
+                    </justification>
                     <proof>
                         <title>Alternate Proof</title>
                         <p>You can have multiple proofs, and they can have titles which replace the word <q>Proof</q> as a heading.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.<md>
@@ -805,12 +796,6 @@ the xsltproc executable.
                 </subsubsection>
 
                 <subsubsection>
-                    <title></title>
-
-                    <p>This subsubsection has a title in the source, but it is empty.  That's OK, but not advisable since titles get used lots of places (such as page headers and the table of contents).</p>
-                </subsubsection>
-
-                <subsubsection>
                     <title>Advice</title>
 
                     <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign xml:lang="fr-FR">fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
@@ -882,7 +867,7 @@ the xsltproc executable.
 
                         <p>You could grab the <c>minimal.xml</c> file from the <c>examples/minimal</c> directory and experiment with that.</p>
 
-                        <p>Projects get their own independent numbering scheme, since they may be central to your textbook, workbook, or lab manual.  If you process this sample article with <c>--stringparam numbering.projects.level 0</c> then you will get consecutive numbers from the beginning of your book, starting with 1.</p>
+                        <p>Projects get their own independent numbering scheme, since they may be central to your textbook, workbook, or lab manual.  If you process this sample article with level for project numbering set to <c>0</c> then you will get consecutive numbers from the beginning of your book, starting with 1.</p>
                     </project>
 
 
@@ -937,7 +922,7 @@ the xsltproc executable.
                     </note>
 
                     <aside xml:id="an-aside">
-                        <title>An Aside</title>
+                        <title>An Aside with a <em>Formatted</em> Title</title>
                         <idx>aside</idx>
 
                         <p>An <tag>aside</tag> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <tag>historical</tag> or <tag>biographical</tag>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
@@ -1159,10 +1144,11 @@ the xsltproc executable.
                         </postlude>
                     </project>
 
-                    <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
-
                     <example xml:id="example-structured-with-task">
                         <title>Notation mathématique 2</title>
+                        <prelude>
+                            <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
+                        </prelude>
                         <introduction>
                             <p>Écrivez chacun des exemples suivants avec les conditions pertinentes.</p>
                         </introduction>
@@ -1523,7 +1509,13 @@ the xsltproc executable.
 
                 <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <tag>insert</tag> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <tag>delete</tag>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <tag>stale</tag>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
-                <p>If you need a <q>fill-in blank</q>, like this<fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+                <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+
+                <p>This paragraph is intended to make a <tag>fillin</tag> appear right at the start of <fillin chacaters="20"/> the second line  in print and then the next paragraph has nothing but a <tag>fillin</tag>. Both are for testing purposes.</p>
+
+                <p><fillin characters="5"/></p>
+
+                <p>The following are <tag>fillin</tag> with <attr>rows</attr> and/or <attr>cols</attr> attributes (at least one of which is greater than 1): <fillin rows="2"/>, <fillin cols="3"/>, <fillin rows="2" cols="3"/>.</p>
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
 
@@ -1587,13 +1579,13 @@ the xsltproc executable.
 
             <p>Because of the Fundamental Theorem<fn>First test footnote</fn>, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus<fn>Second test footnote</fn>, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
                 <li>
-                    <p>Derivatives<ol label="(a)">
+                    <p>Derivatives<ol marker="(a)">
                         <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
                         <li><m>\frac{d}{dx}e^x = e^x</m></li>
                         <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
                     </ol></p>
                 </li>
-                <li><p>Antiderivatives<ol label="i)">
+                <li><p>Antiderivatives<ol marker="i)">
                         <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
                         <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
                         <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
@@ -1790,7 +1782,7 @@ the xsltproc executable.
 
                 <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
 
-                <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+                <p><pretext/> provides modest built-in support for <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the pre-defined <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.  (The presentation in HTML output could be improved.  Please make suggestions if your skills with <latex/> macros and knowledge of MathJax's supported commands warrant.)</p>
 
                 <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
                     <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
@@ -2246,7 +2238,7 @@ the xsltproc executable.
                 <!-- 47.266898N -122.596464W, then 505.3 feet to mean tideline -->
                 <p>Simple coordinates with degrees, minutes, seconds, or temperature, or distance in feet and inches.  <q>We parked the car at 36<degree/>16<prime/>0.83<dblprime/>N, 122<degree/>35<prime/>47.27<dblprime/>W, and since it was 93<degree/>F, we walked 505<prime/>3.6<dblprime/> so we could swim in the bay.</q></p>
 
-                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
+                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  A publication file entry can be set to <c>none</c> or <c>thin</c> to control this.</p>
             </subsection>
 
             <subsection>
@@ -2622,14 +2614,14 @@ the xsltproc executable.
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
 
-                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute must be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
+                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
 
                 <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape" text="type-global"/>). </p>
 
-                <p>A <tag>url</tag> element with content will get a footnote, containing the (simplified) URL in the mandatory <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you are using a construction that was deprecated on 2020-01-05.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
+                <p>A <tag>url</tag> element with content will get a footnote, by containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/" visual="http://example.com/">With a duplicate <attr>visual</attr> attribute</url></li>
-                    <li><url href="http://example.com/">Without a <attr>visual</attr> attribute (deprecated)</url></li>
+                    <li><url href="http://example.com/">With no <attr>visual</attr> attribute</url>, so an edited one is formulated (no protocol)</li>
                 </ul></p>
 
                 <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version</p>
@@ -2674,7 +2666,7 @@ the xsltproc executable.
             <subsection>
                 <title>Verbatim in titles, <c>\a&amp;b#c%d~e{f}g$h_i^j</c>, OK</title>
 
-                <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents with <c> --stringparam toc.level 2</c>.</p>
+                <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents via the publication file.</p>
             </subsection>
 
             <subsection xml:id="subsection-special-situations">
@@ -3409,14 +3401,14 @@ the xsltproc executable.
             <subsection>
                 <title>Copies of Images</title>
 
-                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> and thus change the caption.  It will get a new number as a new figure, and you will need to assign a unique <attr>xml:id</attr> attribute.  Maybe appending <c>-copy-2</c>, or similar, to the <attr>xml:id</attr> will be helpful.</p>
+                <p>Sometimes you want to use the same image more than once.  Here we just point to a <init>PNG</init> file that we repeat often throughout this sample.</p>
 
                 <figure xml:id="figure-raster-image-copy">
                     <caption>Copy of raster image, in a figure, so now numbered and captioned</caption>
                     <image source="images/cross-square.png" width="30%" />
                 </figure>
 
-                <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>pretext</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (see <xref ref="subsection-xml-escape" text="type-global"/>) and definitely have no need for the often mis-understood <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
+                <p>For images described by code, such as TikZ code in a <tag>latex-image</tag> element, this is a bit subtler.  See the <pretext/> Guide for a complete description.  We also demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
             </subsection>
 
             <subsection>
@@ -3617,7 +3609,7 @@ the xsltproc executable.
             <subsection>
                 <title>Technical Details</title>
 
-                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>pretext</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>pretext</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed using the <c>directory.images</c> stringparam.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
+                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>pretext</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>pretext</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
 
                 <tabular top="medium" bottom="minor">
                     <row bottom="medium">
@@ -4070,20 +4062,23 @@ the xsltproc executable.
                 <exercise>
                     <statement>
                         <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" text="type-global" /><ndash />the use is identical within mathematics.<ul>
-                            <li><p>Inside inline math (short, 4 characters): <m>\sin(<fillin characters="4" />)</m></p></li>
+                            <li><p>Inside inline math (short, space for <m>x</m>): <m>\sin(<fillin fill="x" />)</m></p></li>
 
-                            <li><p>Inside inline math (default, 10 characters): <m>\sin(<fillin characters="10" />)</m></p></li>
+                            <li><p>Inside inline math (default, space for <m>XXX</m>): <m>\sin(<fillin />)</m></p></li>
 
-                            <li><p>Inside exponents and subscripts (2 characters each).  In this case, be sure to wrap your exponents and subscripts in braces, as would be good <latex /> practice anyway: <m>x^{5+<fillin characters="2" />}\,y_{<fillin characters="2" />}</m></p></li>
+                            <li><p>Inside exponents and subscripts (each is space for the string <q>12</q>).  In this case, be sure to wrap your exponents and subscripts in braces, as would be good <latex /> practice anyway: <m>x^{5+<fillin fill="12" />}\,y_{<fillin fill="12" />}</m></p></li>
 
-                            <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin characters="40" />)</m></p></li>
+                            <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin fill="Mxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />)</m></p></li>
 
-                            <li><p>So use inside a displayed equation<me>16\log\space<fillin characters="8" /></me>like this one.</p></li>
+                            <li><p>So use inside a displayed equation<me>16\log\space<fillin fill="1-x^2" /></me>like this one.</p></li>
 
                             <li><p>Inside the second line of a multi-line display:<md>
                                 <mrow>y &amp;= x^7\,x^8</mrow>
-                                <mrow>  &amp;= x^{<fillin characters="3" />}</mrow>
+                                <mrow>  &amp;= x^{<fillin fill="15" />}</mrow>
                             </md></p></li>
+                            <li><p>
+                                This fillin has the historical <attr>characters</attr> attribute for a fillin inside math: <m>1+<fillin characters="5"/>+4=10</m>, which may be more convenient, but may not side properly in places like subscripts, superscripts, fractions, limits of integrals, and so on.
+                            </p></li>
                         </ul></p>
                     </statement>
                 </exercise>
@@ -4205,6 +4200,48 @@ the xsltproc executable.
                     <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.  With long exercises, or exercises with long hints, answers, or solutions, there is a risk that the <latex/> output will have bad page breaks in the vicinity (just before) such an exercise that occupies too much vertical space.  Edit, rearrange, or use fewer columns to see if the situation improves.</p></conclusion>
                 </exercisegroup>
 
+                <exercise>
+                    <statement>
+                        <p>
+                            Make a table and a graph for the function <m>f(x)=x^2</m>.
+                        </p>
+                    </statement>
+                    <answer>
+                        <sidebyside>
+                            <tabular halign="center">
+                                <row header="yes" bottom="medium">
+                                    <cell><m>x</m></cell>
+                                    <cell><m>f(x)</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>0</m></cell>
+                                    <cell><m>0</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>1</m></cell>
+                                    <cell><m>1</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>2</m></cell>
+                                    <cell><m>4</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>9</m></cell>
+                                </row>
+                            </tabular>
+                            <image xml:id="x-squared">
+                                <latex-image>
+                                \begin{tikzpicture}
+                                    \begin{axis}
+                                        \addplot[domain=-1.5:4, blue, thick, {stealth}-{stealth}] {x^2};
+                                    \end{axis}
+                                \end{tikzpicture}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                    </answer>
+                </exercise>
             </exercises>
 
             <references xml:id="references-section">
@@ -4218,12 +4255,12 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
 
                 <biblio type="bibtex" xml:id="CF">
-                <author>J. B. Conrey and D. W. Farmer</author>
-                <title>Mean values of <m>L</m>-functions and symmetry</title>
-                <journal>Internat. Math. Res. Notices</journal>
-                <number>17</number>
-                <year>2000</year>
-                <pages start="883" end="908"/>
+                    <author>J. B. Conrey and D. W. Farmer</author>
+                    <title>Mean values of <m>L</m>-functions and symmetry</title>
+                    <journal>Internat. Math. Res. Notices</journal>
+                    <number>17</number>
+                    <year>2000</year>
+                    <pages start="883" end="908"/>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
@@ -4231,13 +4268,14 @@ the xsltproc executable.
                 </biblio>
 
                 <biblio type="bibtex" xml:id="Dav">
-                <author>H. Davenport</author>
-                <title>Multiplicative Number Theory</title>
-                <series>GTM</series>
-                <volume>74</volume>
-                <publisher>Springer-Verlag New York, NY</publisher>
-                <year>2000</year>
-                <pages>xiv+177</pages>
+                    <author>H. Davenport</author>
+                    <title>Multiplicative Number Theory</title>
+                    <series>GTM</series>
+                    <volume>74</volume>
+                    <publisher>Springer-Verlag New York, NY</publisher>
+                    <year>2000</year>
+                    <pages>xiv+177</pages>
+                    <pubnote>A note may accompany a bibliographic item, such as saying the manuscript is under review.  But it cannot contain any formatting.</pubnote>
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
@@ -4245,7 +4283,7 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid />, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash />103.</biblio>
 
                 <conclusion>
-                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
+                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see that the entry for <xref ref="biblio-beezer-fcla" /> has a short annotation?  So you can make annotated bibliographies easily.</p>
                 </conclusion>
             </references>
 
@@ -4384,11 +4422,11 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol label="*I*">
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol marker="*I*">
                     <li><p>Level 1, first.</p></li>
-                    <li><p>Level 1, second.<ol label="++A">
+                    <li><p>Level 1, second.<ol marker="++A">
                             <li><p>Level 2, first.</p></li>
-                            <li><p>Level 2, second.<ol label="1)">
+                            <li><p>Level 2, second.<ol marker="1)">
                                     <li><p>Level 3, first.</p></li>
                                     <li><p>Level 3, second.</p></li>
                                     <li><p>Level 3, third.</p></li>
@@ -4400,9 +4438,9 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.<ul label="square">
+                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.<ul marker="square">
                     <li><p>Level 1, first.</p></li>
-                    <li><p>Level 1, second.<ul label="">
+                    <li><p>Level 1, second.<ul marker="">
                             <li><p>Level 2, first.</p></li>
                             <li><p>Level 2, second.</p></li>
                         </ul></p>
@@ -4412,7 +4450,7 @@ the xsltproc executable.
 
                 <p>A nested ordered list, to test intramural cross-references.<ol>
                     <li><p>Level 1, first.</p></li>
-                    <li xml:id="list-item-second"><p>Level 1, second.<ul label="">
+                    <li xml:id="list-item-second"><p>Level 1, second.<ul marker="">
                             <li><p>Level 2, first.</p></li>
                             <li><p>Level 2, second.</p></li>
                         </ul></p>
@@ -4421,10 +4459,10 @@ the xsltproc executable.
                     <li><p>Level 1, fourth.  Whose number should not change when the knowl just prior is opened.</p></li>
                 </ol></p>
 
-                <p>An ordered list may begin at zero by using a numeral zero in the <attr>label</attr> attribute, instead of numeral one.<ol label="(0)">
+                <p>An ordered list may begin at zero by using a numeral zero in the <attr>label</attr> attribute, instead of numeral one.<ol marker="(0)">
                     <li>First</li>
                     <li>
-                        <p>Second<ol label="-0-">
+                        <p>Second<ol marker="-0-">
                             <li>Uno</li>
                             <li>Dos</li>
                             <li>Tres</li>
@@ -4440,7 +4478,7 @@ the xsltproc executable.
                     <title>Group</title>
                     <idx>Group</idx>
                     <statement>
-                        <p><idx><h>group</h><h>definition</h></idx><idx><h>paragraph</h><h>initial list</h></idx><ol label="a)">
+                        <p><idx><h>group</h><h>definition</h></idx><idx><h>paragraph</h><h>initial list</h></idx><ol marker="a)">
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
                             <li>The operation is associative.</li>
                             <li>There is an identity element, <m>e</m>.</li>
@@ -4461,7 +4499,7 @@ the xsltproc executable.
             <subsection>
                 <title>List Spacing, I</title>
 
-                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2" label="(a)">
+                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2" marker="(a)">
                     <li>One item.</li>
                     <li><em>Two</em> <alert>ducks</alert>.</li>
                     <li>Three items.  Plus a few more words to check that long entries in a two column list look good.</li>
@@ -4680,6 +4718,77 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Difficult List Items</title>
+
+                <p>In <xref ref="test-second" text="type-global"/> we were careful about lone bits of math inside list items.  The <tag>cd</tag> element is used with indentation, which is likely superfluous inside a list item that is already being indented.  Here we test lone <tag>cd</tag> elements inside of list items in various configurations.</p>
+
+                <p>Unordered list, one-deep.
+                    <ul>
+                        <li>
+                            <cd>
+                                <cline>Foo Bar Foo</cline>
+                                <cline>Bar Foo Bar</cline>
+                            </cd>
+                        </li>
+                        <li>
+                            <p>This list item is a long paragraph with a <tag>cd</tag> in the middle which should be indented some to indicate its participation in the paragraph.
+                            <cd>
+                                <cline>Foo Bar Foo</cline>
+                                <cline>Bar</cline>
+                                <cline>Bar Foo Bar</cline>
+                                <cline>Foo</cline>
+                            </cd>This list item is a long paragraph with a <tag>cd</tag> in the middle which should be indented some to indicate its participation in the paragraph.</p>
+                        </li>
+                        <li>
+                            <cd>
+                                <cline>Foo Bar Foo</cline>
+                                <cline>Bar</cline>
+                                <cline>Bar Foo Bar</cline>
+                                <cline>Foo</cline>
+                            </cd>
+                        </li>
+                    </ul>
+                </p>
+
+                <p>Intervening paragraph, to illuminate spacing at both the top and bottom of a list.  Intervening paragraph, to illuminate spacing at both the top and bottom of a list.  Intervening paragraph, to illuminate spacing at both the top and bottom of a list.  Intervening paragraph, to illuminate spacing at top and bottom of a list.</p>
+
+                <p>Ordered lists, two-deep, mixed.
+                    <ol>
+                        <li>
+                            <p>First item, outer level.<ol>
+                                <li>
+                                    <cd>
+                                        <cline>First inner item, cd only</cline>
+                                        <cline>Foo Bar Foo</cline>
+                                        <cline>Bar</cline>
+                                        <cline>Bar Foo Bar</cline>
+                                        <cline>Foo</cline>
+                                    </cd>
+                                </li>
+                                <li><p>Second inner item, a paragraph in a list item.</p></li>
+                                <li>
+                                    <cd>
+                                        <cline>Third inner item, cd only</cline>
+                                        <cline>Foo Bar Foo</cline>
+                                        <cline>Foo Bar Foo</cline>
+                                        <cline>Bar Foo Bar</cline>
+                                    </cd>
+                                </li>
+                            </ol></p>
+                        </li>
+                        <li>
+                            <cd>
+                                <cline>cd inside second item, outer level</cline>
+                                <cline>Bar</cline>
+                                <cline>Bar Foo Bar</cline>
+                                <cline>Foo</cline>
+                            </cd>
+                        </li>
+                    </ol>
+                </p>
+            </subsection>
+
+            <subsection>
                 <title>Description Lists</title>
 
                 <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
@@ -4725,7 +4834,7 @@ the xsltproc executable.
                     </li>
                     <li>
                         <title>Aqua</title>
-                        <p>The color of shallow tropical waters.</p>
+                        <p>The color of shallow tropical waters.<fn>On a sunny day! (Testing footnotes in description lists for <latex/> output.)</fn></p>
                     </li>
                     <li xml:id="description-list-math-title">
                         <title>Math <m>x^2</m></title>
@@ -4824,10 +4933,10 @@ the xsltproc executable.
                     <introduction>
                         <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.  At one time this paragraph was inadvertently centered<mdash/>that bug has been fixed.</p>
                     </introduction>
-                    <ol label="A">
+                    <ol marker="A">
                         <li>
                             <p>
-                                <ol label="i">
+                                <ol marker="i">
                                     <li>A and i</li>
                                     <li>A and ii</li>
                                     <li>A and iii</li>
@@ -4836,7 +4945,7 @@ the xsltproc executable.
                         </li>
                         <li>
                             <p>
-                                <ol label="a">
+                                <ol marker="a">
                                     <li>B and a</li>
                                     <li>B and b</li>
                                     <li xml:id="target-item">B and c (target of some cross-references)</li>
@@ -4845,14 +4954,14 @@ the xsltproc executable.
                         </li>
                         <li>
                             <p>
-                                <ul label="disc">
+                                <ul marker="disc">
                                     <li>The next three cross-references point to a list item, just above.  It is interesting because the list is named, hence numbered.  The global reference uses the full number, while the local reference uses the number from within the list.  The hybrid reference recognizes that the target is within the same named list, so the number can be shorter.  An identical hybrid cross-reference appears within the <tag>introduction</tag> to this list, an immediately following, but outside the <tag>list</tag>.</li>
                                     <li>Cross-reference within named list (<c>global</c>): <xref ref="target-item" text="type-global" /></li>
                                     <li>Cross-reference within named list (<c>hybrid</c>): <xref ref="target-item" text="type-hybrid" /></li>
                                     <li>Cross-reference within named list (<c>local</c>): <xref ref="target-item" text="type-local" /></li>
                                     <li>
                                         <p>
-                                            <ol label="1">
+                                            <ol marker="1">
                                                 <li>C and bullet and 1</li>
                                                 <li xml:id="target-no-number">C and bullet and 2</li>
                                                 <li>C and bullet and 3</li>
@@ -4880,10 +4989,10 @@ the xsltproc executable.
                     </li>
                 </dl>That's all!</p>
 
-                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul label="square">
-                    <li><p>Introductory text.<ol label="A">
+                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul marker="square">
+                    <li><p>Introductory text.<ol marker="A">
                         <li>First item, first list.</li>
-                    </ol>Intermediate text.<ol label="a">
+                    </ol>Intermediate text.<ol marker="a">
                         <li>First item, second list.</li>
                     </ol>Concluding text.</p></li>
                 </ul></p>
@@ -5065,6 +5174,7 @@ the xsltproc executable.
 
             <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
 
+
             <!-- Default matches HTML and LaTEX, left. -->
             <!-- We set this table's default to right. -->
             <table>
@@ -5111,7 +5221,8 @@ the xsltproc executable.
 
             <p>Example from above, but now with horizontal rules, plus an extra row to test the bottom border.  See the source for comments.</p>
 
-            <table>
+            <!-- Keep this in sync with breakable version, xml:id of horizontal-rules-breakable-table -->
+            <table xml:id="horizontal-rules-table">
                 <title>Horizontal Rules Example</title>
                 <tabular bottom="minor" top="major" halign="right">
                     <col top="minor"/>
@@ -5342,7 +5453,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
 
             <table xml:id="table-time-units">
                 <title>Time Units</title>
@@ -5600,6 +5711,42 @@ the xsltproc executable.
             </table>
 
             <table>
+                <title>One Row Header, Multiline</title>
+                <tabular>
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>
+                            <line>Area</line>
+                            <line>(sq. mi.)</line>
+                        </cell>
+                        <cell>
+                            <line>Statehood</line>
+                            <line>(Year)</line>
+                        </cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
                 <title>Two Row Headers</title>
                 <tabular>
                     <row header="yes">
@@ -5643,6 +5790,42 @@ the xsltproc executable.
                         <cell>Population</cell>
                         <cell>Area (sq. mi.)</cell>
                         <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>One Vertical Row Header, Multiline</title>
+                <tabular>
+                    <row header="vertical">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>
+                            <line>Area</line>
+                            <line>(sq. mi.)</line>
+                        </cell>
+                        <cell>
+                            <line>Statehood</line>
+                            <line>(Year)</line>
+                        </cell>
                     </row>
                     <row>
                         <cell>Washington</cell>
@@ -5731,6 +5914,42 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <table>
+                <title>One Row Header, Multiline, with Rules</title>
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>
+                            <line>Area</line>
+                            <line>(sq. mi.)</line>
+                        </cell>
+                        <cell>
+                            <line>Statehood</line>
+                            <line>(Year)</line>
+                        </cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
             <p>The next table has a progression of thicker rules in the header, plus a progression of thicker rules across the columns.  For testing, not for aesthetics.</p>
 
             <table>
@@ -5773,6 +5992,1205 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <p>We now finish this section with some <em>long</em> tables.  Ones that will not fit on a single printed page.  So this is only of interest when producing this sample article as a <init>PDF</init>.  First a <q>naked</q> tabular, which should force a new page to start, and then still overrun the end of the page.</p>
+
+            <tabular>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+            </tabular>
+
+            <p>Now the same <tag>tabular</tag>, but within a <tag>table</tag>.  Behavior should be similar, a new page and then it overruns the bottom of the page.</p>
+
+
+            <table>
+                <title>A Lot of Colors</title>
+                <tabular>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>When you wish to allow a <tag>tabular</tag> to split itself at a page break, you can add the attribute <attr>break</attr> with the value <c>yes</c>.  Certainly this will control a <tag>table</tag> or <tag>tabular</tag> which is longer than a page, but will also allow a shorter one to break.  This might useful in a draft stage before undertaking page-fitting.</p>
+
+            <p>Here is the long <tag>tabular</tag> again, but with the <attr>break</attr> attribute set to <c>yes</c>.</p>
+
+            <tabular break="yes">
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+                <row>
+                    <cell>Red</cell>
+                    <cell>Green</cell>
+                    <cell>Yellow</cell>
+                </row>
+                <row>
+                    <cell>Blue</cell>
+                    <cell>White</cell>
+                    <cell>Pink</cell>
+                </row>
+            </tabular>
+
+            <p>Here is the long <tag>table</tag> again, but with the <attr>break</attr> attribute set to <c>yes</c> on the <attr>tabular</attr>.</p>
+
+           <table>
+                <title>A Lot of Colors, Breaking</title>
+                <tabular break="yes">
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>This device is not ideal, as some features of tables are not behaving as expected.  More precisely, we switch from the standard <latex/> <c>tabular</c> environment to the <c>longtable</c> environment from the package of the same name when table-breaking is requested.  So there may be some undesirable interaction with other packages.  For one, full-width horizontal rules seem to become as wide as the page (rather than as wide as the tabular).  The following table is <xref ref="horizontal-rules-table" text="type-global"/> repeated but as a breakable <tag>tabular</tag>.  The <c>longtable</c> package documentation suggests it accomodates the <c>array</c> package, but it also seems to make a variety of redefinitions.  Furthermore, a panel of a side-by-side cannot be a breakable tabular, or a <latex/> compilation error occurs.</p>
+
+            <table xml:id="horizontal-rules-breakable-table">
+                <title>Horizontal Rules Example</title>
+                <tabular bottom="minor" top="major" halign="right" break="yes">
+                    <col top="minor"/>
+                    <col />
+                    <col top="none" halign="center" />
+                    <col top="major" />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row bottom="none">
+                        <cell>First</cell>
+                        <cell bottom="major">Second</cell>
+                        <cell bottom="major">Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row bottom="medium">
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row halign="left">
+                        <cell bottom="none">1</cell>
+                        <cell halign="center" bottom="minor">2</cell>
+                        <cell bottom="none">3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- proper bottom, otherwise defaults -->
+                    <row bottom="medium">
+                        <cell>1</cell>
+                        <cell>2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <p>The <c>longtable</c> package allows for headers and footers indicating continued tables.  A possible enhancement is to support this feature in the case of a long table.</p>
         </section>
 
         <section xml:id="section-interactive-authored">
@@ -5862,6 +7280,7 @@ the xsltproc executable.
                             </sidebyside>
                         </sbsgroup>
                         <instructions>
+                            <title>Flipping Woody</title>
                             <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
                         </instructions>
                     </interactive>
@@ -5890,7 +7309,7 @@ the xsltproc executable.
                                 <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
                             </stack>
                         </sidebyside>
-                        <instructions>
+                        <instructions xml:id="kinematics-instructions">
                             <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
                         </instructions>
                         <static>
@@ -5976,13 +7395,13 @@ the xsltproc executable.
                 </figure>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="svg-interactives">
                 <title>SVG</title>
 
                 <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
 
-                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The change in <m>x</m>, denoted here as <m>h</m>, is reported when the <q>Show secant line</q> option is ticked.  The <m>h</m> is being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with <c>$...$</c> nor by <c>\(...\)</c>, but instead by using <tag>script</tag> tags that MathJax recognizes.  So the employment of MathJax here is accomplished with<cd>
-                    <cline>&lt;script type="math/tex">h = &lt;/script></cline>
+                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The functions to choose from via radio buttons, and the change in <m>x</m>, denoted later as <m>h</m>, are being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with simply <c>$...$</c> nor by simply <c>\(...\)</c>, but instead by using the <c>\(...\)</c> and then also wrapping that in a <tag>span</tag> element with a <attr>class</attr> attribute set to <c>process-math</c>. (The latter is how we instruct MathJax as to which parts of a page to process, or not).  So to have MathJax render a nice <m>x^2</m> in this context (math inside <init>HTML</init> inside a <tag>slate</tag> inside an <tag>interactive</tag>) would be accomplished with<cd>
+                    <cline>&lt;span class="process-math"&gt;x^2&lt;/span&gt;</cline>
                 </cd></p>
 
                 <figure xml:id="figure-interactive-slopes">
@@ -6003,18 +7422,18 @@ the xsltproc executable.
                             Here's an illustration of this basic idea.
                             </div>
                             <div id="function_list" style="text-align: center" xmlns="http://www.w3.org/1999/xhtml">
-                                Choose \(f\):
+                                Choose <span class="process-math">\(f\)</span>:
                                 <span class="function_radio_container" style="padding-left: 10px">
                                     <input type="radio" class="radio" name="function" value="f1" id="f1" />
-                                    \(f(x)=x^2\)
+                                    <span class="process-math">\(f(x)=x^2\)</span>
                                 </span>
                                 <span class="function_radio_container">
                                     <input type="radio" class="radio" name="function" value="f2" />
-                                    \(f(x)=\frac{1}{3}e^x\)
+                                    <span class="process-math">\(f(x)=\frac{1}{3}e^x\)</span>
                                 </span>
                                 <span class="function_radio_container">
                                     <input type="radio" class="radio" name="function" value="f3" />
-                                    \(f(x)=\sin(2x^2)+x/4\)
+                                    <span class="process-math">\(f(x)=\sin(2x^2)+x/4\)</span>
                                 </span>
                             </div>
                         </slate>
@@ -6030,7 +7449,7 @@ the xsltproc executable.
                                         <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
                                     </table></td>
                                     <td><table>
-                                        <tr><td class="dimit" style="text-align: left;"><script type="math/tex">h = </script> <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;"><span class="process-math">\(h\)</span> = <span id="h_value_display"></span></td></tr>
                                         <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
                                         <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
                                     </table></td>
@@ -6280,12 +7699,12 @@ the xsltproc executable.
 
                 <p>Do one of the following:<ol>
                     <li>Identify a material ID from GeoGebra's Classroom Resources site. You might even make the material yourself on that site.</li>
-                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder" visual="www.opinionatedgeek.com/codecs/base64decoder"/>.</li>
+                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder"/>.</li>
                     <li>Obtain a base64 encoded string for a GeoGebra applet. You might first open a <c>.ggb</c> file in a desktop installation of GeoGebra, and push ctrl-shift-B (command-shift-B on a Mac) and then the string will be in your clipboard.</li>
                     <li>None of the above, with the intention to make an applet from scratch.</li>
                 </ol></p>
 
-                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
+                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
 
                 <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft" visual="www.geogebra.org/m/D4s2v4ft"/>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>. It is important to use one command per line.</p>
 
@@ -6350,13 +7769,12 @@ the xsltproc executable.
 
                 <p>You could also use a base64-encoded string of the <c>.ggb</c> file. You might come across such a string somewhere, or you might generate one by opening a <c>.ggb</c> file in a desktop installation of GeoGebra, and pushing ctrl-shift-B (command-shift-B on a Mac) to get the string in your clipboard. If you do this, you could use a <attr>base64</attr> attribute in place of the <attr>source</attr> attribute in the previous example. We don't do that here because such a string is generally over 5000 characters long and we are keeping the sample article source a bit cleaner.</p>
 
-                <p>Lastly, you may just wish to build something from scratch using GeoGebra API. Note that for accessibilty reasons, some objects are rendered unselectable with the <c>setFixed</c> command. Perhaps this should have been done with the previous examples, but that is more difficult when you do not know all of their names.</p>
+                <p>Lastly, you may just wish to build something from scratch using GeoGebra API. Note that for accessibilty reasons, some objects are rendered unselectable with the <c>setFixed</c> command. Perhaps this should have been done with the previous examples, but that is more difficult when you do not know all of their names. Note that the GeoGebra scripting command <c>setAttribute</c> also changes the webpage's focus, so it is better to set the perspective using an attribute of the slate.</p>
 
                 <figure>
                     <caption>GeoGebra: from scratch</caption>
                     <interactive xml:id="geogebra-seed-head" platform="geogebra" width="50%" aspect="1:1">
-                        <slate xml:id="seed-head" surface="geogebra" aspect="1:1">
-                            setPerspective("G");
+                        <slate xml:id="seed-head" surface="geogebra" aspect="1:1" perspective="G">
                             setRounding("3s");
                             setCoordSystem(-1,1,-1,1);
                             setGridVisible(false);
@@ -6380,8 +7798,38 @@ the xsltproc executable.
 
             </subsection>
 
-            <subsection xml:id="interactive-iframes">
-                <title>IFrames</title>
+            <subsection>
+                <title>CircuitJS</title>
+
+                <p><url href="https://www.falstad.com/circuit/" visual="www.falstad.com/circuit">CircuitJS</url> is an electronic circuit simulator.  A circuit can be described by a language, which PreTeXt will interpret and submit for rendering.  The next two examples are identical, but provided in slightly different ways, see the <pretext/> source for more.  Preview images for PDF will be added later.</p>
+
+                <figure xml:id="figure-circuitjs-attribute">
+                    <caption>CircuitJS Example (source via an encoded attribute)</caption>
+
+                    <interactive xml:id="interactive-circuitjs-attribute" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3"/>
+                </figure>
+
+                <figure xml:id="figure-circuitjs">
+                    <caption>CircuitJS Example (source authored directly)</caption>
+
+                    <interactive xml:id="interactive-circuitjs" circuitjs="" width="90%">
+                        <source>
+                            $ 1 0.000005 10.20027730826997 58 5 50 5e-11
+                            R 464 32 464 -16 0 0 40 3.3 0 0 0.5
+                            g 464 224 464 240 0 0
+                            s 464 32 464 128 0 0 false
+                            s 464 128 464 224 0 1 false
+                            x 274 181 431 184 4 12 bottom\sswitch\s(to\sground)
+                            x 312 85 426 88 4 12 top\sswitch\s(to\sVdd)
+                            O 464 128 544 128 1 0
+                            x 532 110 593 113 4 12 output\spin
+                        </source>
+                    </interactive>
+                </figure>
+            </subsection>
+
+            <subsection xml:id="interactive-iframes-local">
+                <title>IFrames from Files</title>
 
                 <p>An <c>iframe</c> is an <init>HTML</init> element that allows embedding of a complete web page within another one.  Here we use this device to provide interactive 3D diagrams built with other tools.</p>
 
@@ -6399,25 +7847,20 @@ the xsltproc executable.
                 </figure>
                     <!-- preview="preview/threejs-splines.png"  -->
 
-                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.</p>
+                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.  See <xref ref="interactive-iframes-server" text="type-global"/> for the server version.</p>
             </subsection>
 
             <subsection xml:id="interactive-threejs">
                 <title>threejs</title>
 
-                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+                <p>Once upon a time there was an example here using the <c>threejs</c> 3D Javascript library.  It was <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines" visual="threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url>, licensed with an MIT License, with minimal modifications.</p>
 
-                <figure xml:id="figure-threejs-splines">
-                    <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
-                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="preview/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
-                        <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
-                    </interactive>
-                </figure>
+                <p>But it would seem to have become a bit more complicated to embed and our example was not rendering.  As of 2022-08-08, we have removed it.  Of course, you can find it in the git repository, perhaps searching on the date string just mentioned.  It woulld be interesting to see if our <tag>interactive</tag> framework could still support the changes.</p>
 
-                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
+                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes-local" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
 
-                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes" text="type-global"/>:<cd>
+                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes-local" text="type-global"/>:<cd>
                         <cline>var('x,y')</cline>
                         <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
                     </cd></li>
@@ -6535,27 +7978,363 @@ the xsltproc executable.
                 </figure>
             </subsection>
 
+            <subsection xml:id="interactive-iframes-server">
+                <title>IFrames from Servers</title>
+
+                <p>The <c>iFrame</c> versions of interactives can point to a network location, presuming the endpoint is reasonably well-behaved.  If you are using this sytematically, let us know and perhpas it should become a more dedicated <pretext/> construction.  See <xref ref="interactive-iframes-local" text="type-global"/> for the local file version.</p>
+
+                <p>This example is from <url href="https://phet.colorado.edu/" visual="phet.colorado.edu">PhET Interactive Simulations</url>.</p>
+
+                <figure xml:id="figure-phet-fourier">
+                    <caption>Fourier: Making Waves <c>iframe</c></caption>
+                    <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" aspect="15:10"/>
+                </figure>
+            </subsection>
+        </section>
+
+        <section xml:id="section-interactive-exercises">
+            <title>Interactive Exercises</title>
+
+            <introduction>
+                <p>Interactive components, <em>just</em> for testing, no commentary.</p>
+            </introduction>
+
+            <exercises>
+                <title>True/False</title>
+
+                <p>A True/False question.</p>
+
+                <exercise label="vector-space-dimension">
+                    <title>True/False</title>
+                    <idx>vector space</idx>
+                    <statement correct="no">
+                        <p>Every vector space has finite dimension.</p>
+                    </statement>
+                    <feedback>
+                        <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                    </feedback>
+                    <hint>
+                        <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-FTC"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                    </hint>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Multiple-Choice</title>
+
+                <p>Multiple-Choice problem</p>
+
+                <exercise label="multiple-choice-not-randomized">
+                    <title>Multiple-Choice, Not Randomized, One Answer</title>
+                    <idx>stop signs</idx>
+                    <statement>
+                        <p>What color is a stop sign?</p>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Green</p>
+                            </statement>
+                            <feedback>
+                                <p>Green means <q>go!</q>.</p>
+                            </feedback>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Red</p>
+                            </statement>
+                            <feedback>
+                                <p>Red is universally used for prohibited activities or serious warnings.</p>
+                            </feedback>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>White</p>
+                            </statement>
+                            <feedback>
+                                <p>White might be hard to see.</p>
+                            </feedback>
+                        </choice>
+                    </choices>
+                    <hint>
+                        <p>What did you see last time you went driving?</p>
+                    </hint>
+                    <hint>
+                        <p>Maybe go out for a drive?</p>
+                    </hint>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Parsons Problem, Math Proof</title>
+
+                <p>With some MathJax.</p>
+
+                <exercise label="number-theory-proof" adaptive="yes">
+                    <title>Parsons Problem, Mathematical Proof</title>
+                    <idx>even numbers</idx>
+                    <statement>
+                        <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>.</p>
+                    </statement>
+                    <blocks>
+                        <block order="2">
+                            <p>Suppose <m>n</m> is even.</p>
+                        </block>
+                        <block order="3">
+                            <choice><p>Then <m>n</m> is a prime number.</p></choice>
+                            <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                            <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                        </block>
+                        <block order="1" correct="no">
+                            <p>Click the heels of your ruby slippers together three times.</p>
+                        </block>
+                        <block order="5">
+                            <p>So we have the displayed equation: <me>n = 2m + 0</me>.</p>
+                            <p>This is a superfluous second paragraph in this block.</p>
+                        </block>
+                        <block order="4">
+                            <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                        </block>
+                    </blocks>
+                    <hint>Dorothy will not be much help with this proof.</hint>
+                </exercise>
+
+            </exercises>
+
+            <exercises>
+                <title>Parsons Problem, Code</title>
+
+                <p>Programming Parsons problem, requiring indentation.</p>
+
+                <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
+                    <title>Parsons Problem, Programming</title>
+                    <idx>prime numbers</idx>
+                    <idx>Sieve of Eratosthenes</idx>
+                    <statement>
+                        <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                        <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem requires the reader to provide the necessary indentation.]</p>
+                    </statement>
+                    <blocks>
+                        <block order="6">
+                            <cline>n = 250</cline>
+                        </block>
+                        <block order="2">
+                            <choice correct="yes">
+                                <cline>primes = []</cline>
+                                <cline>candidates = list(range(2,n))</cline>
+                            </choice>
+                            <choice>
+                                <cline>candidates = []</cline>
+                                <cline>primes = list(range(2,n))</cline>
+                            </choice>
+                        </block>
+                        <block order="7" correct="no">
+                            <cline>primes = candidates + [p]</cline>
+                        </block>
+                        <block order="8">
+                            <cline>while candidates:</cline>
+                        </block>
+                        <block order="3">
+                            <cline>    p = candidates[0]</cline>
+                            <cline>    primes.append(p)</cline>
+                        </block>
+                        <block order="1">
+                            <cline>    for nonprime in range(p, n, p):</cline>
+                        </block>
+                        <block order="5">
+                            <cline>        if nonprime in candidates:</cline>
+                            <cline>            candidates.remove(nonprime)</cline>
+                        </block>
+                        <block order="4">
+                            <cline>print(primes)</cline>
+                        </block>
+                    </blocks>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Matching</title>
+
+                <p>Events and dates.</p>
+
+                <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
+                <exercise label="matching-dates">
+                    <title>Matching Problem, Dates</title>
+                    <idx>matching US dates</idx>
+                    <statement>
+                        <p>Match each event in United States history with the year it happened.</p>
+                    </statement>
+                    <feedback>
+                        <p>Review <url href="https://www.britannica.com/list/25-decade-defining-events-in-us-history" visual="www.britannica.com/list/25-decade-defining-events-in-us-history">Encyclopedia Brittania, 25 Decade-Defining Events in U.S. History</url>url.</p>
+                    </feedback>
+                    <matches>
+                        <match order="4">
+                            <premise>Monroe Doctrine</premise>
+                            <response>1823</response>
+                        </match>
+                        <match order="3">
+                            <premise>Haymarket Riot</premise>
+                            <response>1886</response>
+                        </match>
+                        <match order="1">
+                            <premise>Louisiana Purchase</premise>
+                            <response>1803</response>
+                        </match>
+                        <match order="2">
+                            <premise>Battle of Gettysburg</premise>
+                            <response>1863</response>
+                        </match>
+                    </matches>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Clickable Area</title>
+
+                <p>Words, not code.</p>
+
+                <exercise label="clickable-text">
+                    <title>Clickable Areas, <q>Regular</q> Text</title>
+
+                    <statement>
+                        <p>Identify (by clicking, or by circling) all of the nouns in this quotation by Eleanor Roosevelt.</p>
+                    </statement>
+
+                    <areas>
+                        <p><q>The <area>future</area> belongs to <area correct="no">those</area> who believe in the <area correct="yes">beauty</area> of <area correct="no">their</area> <area>dreams</area>.</q></p>
+                    </areas>
+
+                    <feedback>
+                        <p>The incorrect words are pronouns.</p>
+                    </feedback>
+                </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Old-Style Fillin-In</title>
+
+                <p>Do not use this as a model for new exercises.  Just for backwards-compatibility.</p>
+
+                <exercise label="fillin-string-integer">
+                    <title>Fill-In, String and Number Answers</title>
+
+                    <statement>
+                        <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
+                        <p><var/> <c>age = </c> <var/><c>;</c></p>
+                    </statement>
+                    <setup>
+                        <var>
+                            <condition string="int">
+                                <feedback>
+                                    <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                                </feedback>
+                            </condition>
+                        </var>
+                        <var>
+                            <condition number="5">
+                                <feedback>
+                                    <p>An integer variable may be initialized to a value.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Use <c>5</c> as the initial value of the variable.</p>
+                                </feedback>
+                            </condition>
+                        </var>
+                    </setup>
+                </exercise>
+            </exercises>
+
+            <reading-questions>
+                <title>A Reading Question</title>
+
+                <exercise label="short-answer-question">
+                    <title>Short Answer</title>
+
+                    <statement>
+                        <p>This should be built with a text-box, <em>only</em> on a capable server (Runestone).  So it can be answered</p>
+                    </statement>
+                    <response/>
+                </exercise>
+            </reading-questions>
+
             <subsection>
-                <title>Wolfram CDF</title>
-                <idx>Wolfram CDF</idx>
+                <title>Faux Subsection</title>
 
-                <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" visual="reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html"/> for information about creating your demonstration.</p>
+                <p>We used <tag>exercises</tag> divisions above, and need a <tag>subsection</tag> to feed the schema.</p>
+            </subsection>
+        </section>
 
-                <p><url href="http://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html" /> explains hosting CDF files at the Wolfram Cloud, and is the source of <xref ref="wolfram-cdf-cellular-automata" text="type-global" />.  You can learn about powering your CDF with Wolfram Cloud Credits at <url href="https://www.wolfram.com/cloud-credits/" />.  CDF is a public format, and the FreeCDF<trademark /> license is a variant of a Creative Commons BY-SA license, see <url href="http://www.wolfram.com/cdf/adopting-cdf/licensing-options.html" />.</p>
+        <section xml:id="section-interactive-code">
+            <title>Interactive Coding</title>
 
-                <p>The first example here (<xref ref="wolfram-cdf-sine-curve" text="type-global" />) was developed by Itai Seggev, a Senior Kernel Developer at Wolfram.</p>
+            <introduction>
+                <p>More interactive components, just for testing, no commentary.</p>
+            </introduction>
 
-                <p>(2018-04-02) These behave as expected in Chrome, but perhaps not in Firefox.  Testing welcome.</p>
+            <exercises>
+                <title>ActiveCode</title>
 
-                <figure xml:id="wolfram-cdf-sine-curve">
-                    <caption>Variable Sine Curve</caption>
-                    <interactive xml:id="wolfram-sine-curve" wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" width="80%" aspect="1:1" />
-                </figure>
+                <p>ActiveCode, Python program.</p>
 
-                <figure xml:id="wolfram-cdf-cellular-automata">
-                    <caption>Cellular Automata</caption>
-                    <interactive xml:id="wolfram-cellular-automata" wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
-                </figure>
+                <listing xml:id="program-activecode-python">
+                    <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+                    <program xml:id="python-hello-world" interactive='activecode' language="python">
+                        <input>
+                        print("Hello, World!")
+                        </input>
+                    </program>
+                </listing>
+            </exercises>
+
+            <exercises>
+                <title>CodeLens</title>
+
+                <p>A steppable Python program.</p>
+
+                <listing xml:id="program-codelens-python">
+                    <caption>A Python program, stepable with CodeLens</caption>
+                    <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                        <input>
+                        print('Hello, World!')
+                        </input>
+                    </program>
+                </listing>
+            </exercises>
+
+            <exercises>
+                <title>Activity with An ActiveCode</title>
+
+                <p>Something to do with ActiveCode program.</p>
+
+                <activity xml:id="coding-exercise-partial-two">
+                    <title>Activity Coding Exercise</title>
+
+                    <statement>
+                        <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </activity>
+            </exercises>
+
+            <subsection>
+                <title>YouTube</title>
+
+                <p>Video, observable on a Runestone server.</p>
+
+                <video xml:id="yt-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png"/>
             </subsection>
         </section>
 
@@ -6846,15 +8625,15 @@ the xsltproc executable.
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
                     <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                        <track kind="subtitles" label="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                        <track kind="subtitles" listing="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
                 <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                    <track kind="subtitles" label="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
-                    <track kind="subtitles" label="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
+                    <track kind="subtitles" listing="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                    <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
 
             </subsection>
@@ -6874,7 +8653,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -6939,13 +8718,12 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
-                <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" text="title" /></p></li>
+                <li><p>A cross-reference to an aside, by title necessarily, and with some formatting in the title: <xref ref="an-aside" text="title" /></p></li>
                 <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global" /></p></li>
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global" /></p></li>
                 <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
-                <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
@@ -6954,6 +8732,8 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
                 <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.  Also an <tag>exercise</tag> within an <tag>exercises</tag> which should have a cross-reference employing the number of the containing (unstructured) <tag>section</tag>: <xref ref="duplicate-divisional" text="type-global"/> which is in <xref ref="exercise-collection" text="type-global"/> which is in the (unstructured) <xref ref="exercises-single" text="type-global"/>.</p></li>
                 <li><p>A custom cross-reference: <xref ref="corollary-FTC-derivative" text="custom">Custom</xref></p></li>
+                <!-- Instructions for Interactives are not numbered, so use a simpler @text -->
+                <li><p>Cross-reference to <tag>instructions</tag> of an <tag>interactive</tag>: <xref ref="kinematics-instructions" text="title"/></p></li>
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
@@ -6987,7 +8767,7 @@ the xsltproc executable.
 
 
 
-            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="hgo.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
+            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
             <p>For a link like the previous one, you might want to provide advice appropriate for your audience about using a context menu to download a file, or how to configure helper/viewer applications.</p>
 
@@ -6995,6 +8775,11 @@ the xsltproc executable.
             <!-- http://templates.openoffice.org/template/download/1203 -->
 
             <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc />) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext /> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="external/data/runningstatisticstemplate.ots" visual="external/data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
+            <p>The next four paragraphs are each a single <tag>dataurl</tag> element.  Explore the source and the output from different conversions.  Strictly for testing as of 2022-11-04.</p>
+            <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
+            <p>Foo <dataurl source="data/runningstatisticstemplate.ots" visual="http://example.com">Runners Template</dataurl> Bar</p>
+            <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
+            <p>Foo <dataurl source="data/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
         </section>
 
         <section xml:id="section-internationalization">
@@ -7011,7 +8796,9 @@ the xsltproc executable.
 
                     <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut-and-paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <tag>?xml version="1.0" encoding="UTF-8" ?</tag> as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation
+                        <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd>
+                    as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
                     <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
@@ -7309,6 +9096,12 @@ the xsltproc executable.
                 <cline>use a single cline</cline>
             </cd>if you like to have your source closely model the visual look of the output.</p>
 
+            <p>With the <attr>showspaces</attr> attribute of <tag>cd</tag> set to <c>all</c> there will be a visual indication of every space character, which is nice if indentation is critical.  For example,<cd showspaces="all">
+                <cline>there is the &lt;cline&gt; tag</cline>
+                <cline>    meant to model the line tag</cline>
+                <cline>        and short for "code line"</cline>
+            </cd> and as single line <cd showspaces="all">authored as a single line</cd> that is not structured with <tag>cline</tag> elements.</p>
+
             <p>The <tag>pre</tag> tag is meant for use outside of paragraphs, but is otherwise very similar.  The source may also be structured as a sequence of <tag>cline</tag> as in the next example, recycling content from above.</p>
 
             <pre>
@@ -7324,10 +9117,11 @@ the xsltproc executable.
                 <cline>perfect. Consider other options like &lt;cd&gt; or &lt;pre&gt; below.</cline>
             </pre>
 
+            <p>We use a Unicode right arrow (Unicode Character 'RIGHTWARDS ARROW', U+2192) to sometimes indicate the truncation of long lines in a text file.  It is available in our usual monospace font for <latex/>/PDF, but we include a use here in order to make certain that is always the case.  Here: <c>&#x2192;</c>.</p>
         </section>
 
         <section xml:id="section-programs">
-            <title>Program Listings</title>
+            <title>Program Listings (with <c>code</c> in the title)</title>
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
@@ -7430,7 +9224,7 @@ the xsltproc executable.
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>
-                        <li><p>While <c>p &lt; sqrt(n)</c><ol label="1.">
+                        <li><p>While <c>p &lt; sqrt(n)</c><ol marker="1.">
                                 <li>If present, remove from the list multiples <c>2p, 3p, ...</c></li>
                                 <li>If <c>p</c> is now the last element of the list, stop</li>
                                 <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
@@ -7449,13 +9243,15 @@ the xsltproc executable.
 
             <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex /> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <men>\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</men>  If you use these constructions repeatedly, then some <latex /> macros might be useful.  It might also be beneficial for us to add some <pretext /> markup for such numbers used in a paragraph<mdash />send us a feature request.</p>
 
-            <theorem>
+            <theorem xml:id="theorem-detached">
                 <statement>
                     <p>This is a spurious theorem to break up the run of consecutive <c>listing</c> so we might test the effect.</p>
                 </statement>
             </theorem>
 
-            <proof>
+            <p>And this is a spurious paragraph to prove that the theorem beforehand, and the proof following, are distinct from one another.</p>
+
+            <proof ref="theorem-detached" text="type-global">
                 <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.</p>
             </proof>
 
@@ -7665,58 +9461,6 @@ the xsltproc executable.
                     </input>
                 </program>
             </listing>
-
-            <p>In <init>HTML</init> output, a program can be interactive.  This is an example program provided by <url href="http://www.pythontutor.com/" visual="www.pythontutor.com">Python Tutor</url>.</p>
-
-            <listing xml:id="program-interactive">
-                <caption>An interactive Python program, using <pubtitle>Python Tutor</pubtitle></caption>
-                <program xml:id="happy" language="python" interactive="pythontutor">
-                    <input>
-                    # From "Teaching with Python" by John Zelle
-                    def happy():
-                        print("Happy Birthday to you!")
-
-                    def sing(P):
-                        happy()
-                        happy()
-                        print("Happy Birthday dear " + P + "!")
-                        happy()
-
-                    # main
-                    sing("Fred")
-                    </input>
-                </program>
-            </listing>
-
-            <exercise>
-                <title>Inline Coding Exercise, No Help</title>
-
-                <statement>
-                    <p>An exercise might ask a reader to write a computer program, so you can also add a <tag>program</tag> element after the <tag>statement</tag> of an <tag>exercise</tag>.    The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution, if the hosting enviromnment is capable of that.    The <tag>program</tag> element is necessary so you can specify a programming language.  Here we place no code at all in the <tag>program</tag>, so there may be noting at all to see.</p>
-                </statement>
-                <program xml:id="coding-exercise-blank" language="python"/>
-                <hint>
-                    <p>We didn't really ask you to do anything.</p>
-                </hint>
-            </exercise>
-
-            <exercise>
-                <title>Inline Coding Exercise, Partial</title>
-
-                <statement>
-                    <p>Similar to above, but we provide an incomplete start for the exercise, which is likely visible in all conversions.</p>
-                </statement>
-                <program xml:id="coding-exercise-partial" language="c">
-                    <input>
-                    #include
-
-                    int main(void)
-                    </input>
-                </program>
-                <answer>
-                    <p>We're not really sure.</p>
-                </answer>
-            </exercise>
         </section>
 
         <section>
@@ -7728,7 +9472,11 @@ the xsltproc executable.
                 <mag>2\pi</mag>
                 <unit base="radian"/>
             </quantity>
-            in a full circle.</p>
+            in a full circle.  This is a similar quantity with multiple occurences of <c>\pi</c> to test a particular template used for HTML output.  It is not meant to make any sense:
+            <quantity>
+                <mag>21\pi45\pi234\pi890</mag>
+                <unit base="radian"/>
+            </quantity>.</p>
 
             <p>For a full list of the allowed units and prefixes, see <c>pretext-units.xsl</c>. If you have a need for more units, they need to be added to <c>pretext-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
 
@@ -9380,6 +11128,7 @@ the xsltproc executable.
                 </stanza>
 
                 <stanza>
+                    <idx><h>Charge of the Light Brigade</h><h>second stanza</h></idx>
                     <line><q>Forward, the Light Brigade!</q></line>
                     <line>Was there a man dismay'd?</line>
                     <line>Not tho' the soldier knew</line>
@@ -9403,6 +11152,20 @@ the xsltproc executable.
                     <line>Along came their teacher</line>
                     <line>Who asked for this feature:</line>
                     <line>A poem that lives in a knowl.</line>
+                </stanza>
+            </poem>
+
+            <p>And when yours truly tried to joke about poetry on <url href="https://github.com/PreTeXtBook/pretext-cli/issues/182" visual="https://github.com/PreTeXtBook/pretext-cli/issues/182">GitHub CLI #182</url>, back came:</p>
+
+            <poem xml:id="limerick-clontz">
+                <author>Steven Clontz</author>
+
+                <stanza>
+                    <line>There once was a maintainer named Rob</line>
+                    <line>Who told bad jokes while on the job</line>
+                    <line>While they were lame</line>
+                    <line>You could say the same</line>
+                    <line>Of Steven's limericks that cause you to sob</line>
                 </stanza>
             </poem>
 
@@ -10734,7 +12497,7 @@ the xsltproc executable.
                 </subsubsection>
 
                 <conclusion>
-                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
+                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, set the level for numbering theorems to <c>3</c>.  See this GitHub <url href="https://github.com/PreTeXtBook/pretext/issues/139" visual="github.com/PreTeXtBook/pretext/issues/139">Issue #139</url> for details.</p>
 
                     <theorem xml:id="theorem-bad-one">
                         <title>Bad Numbered Theorem One</title>
@@ -10925,9 +12688,7 @@ the xsltproc executable.
         <section xml:id="ancillaries">
             <title>Ancillaries</title>
 
-            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance:<cd>
-                <cline>xsltproc -stringparam commentary yes ...</cline>
-            </cd>Other distinctions are:<ul>
+            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set the string parameter <c>commentary</c> to the value <c>yes</c>. Other distinctions are:<ul>
                 <li>Since it is elective, you need to be careful about cross-references to and from a <tag>commentary</tag>.  It is highly likely that you will want to make cross-references <em>within</em> a <tag>commentary</tag> <em>pointing to</em> other portions of your text, and this is always a good idea.  You will want to avoid making cross-references <em>to</em> a <tag>commentary</tag> from other parts of the text, with the exception of a cross-reference that originates <em>within</em> some <tag>commentary</tag>.</li>
                 <li>Numbered items are prohibited within a <tag>commentary</tag>, such as a <tag>figure</tag> or a <tag>theorem</tag>.  Doing so would disrupt consecutive numbering in different versions, with or without, <tag>commentary</tag> included.  Numbered equations are not prohibited in the schema, but should definitely be avoided anyway.</li>
             </ul></p>
@@ -10936,7 +12697,9 @@ the xsltproc executable.
 
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam odio orci, ullamcorper eget quam et, viverra tristique magna. Integer auctor arcu a sapien pulvinar elementum. Mauris porta, nulla id molestie dignissim, urna dolor rutrum ligula, eu elementum odio nisl sed libero. Nulla nec libero sem.</p>
 
-            <commentary>
+            <!-- control visibility with version support, but until -->
+            <!-- 2024-02-13 we also need to use a string parameter  -->
+            <commentary component="instructor">
                 <title>Some Commentary</title>
                 <idx>commentary</idx>
 
@@ -10958,9 +12721,7 @@ the xsltproc executable.
 
                 <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is a necessary initial <tag>subsection</tag> to the current <tag>section</tag>, since we will have multiple worksheets.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
 
-                <p>If you make PDF output you will notice an increased amount of control over layout.  Also, with the command-line argument<cd>
-                    <cline>-stringparam latex.draft yes</cline>
-                </cd>there will be visual indicators of prescribed whitespace.</p>
+                <p>If you make PDF output you will notice an increased amount of control over layout.  Also, if the publication file elects <latex/> draft mode, then there will be visual indicators of prescribed whitespace.</p>
             </introduction>
 
             <worksheet>
@@ -11077,7 +12838,7 @@ the xsltproc executable.
                 <exercise workspace="2in">
                   <statement>
                     <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
-                      \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
+                      \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
                     </me>.</p>
                   </statement>
                 </exercise>

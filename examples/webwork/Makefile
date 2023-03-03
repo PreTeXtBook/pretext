@@ -77,19 +77,12 @@ MINIPUB = $(WWEXAMPLE)/minimal/publication.xml
 
 # These paths are subdirectories of
 # the scratch directory
+TEXOUT     = $(SCRATCH)/latex
 PDFOUT     = $(SCRATCH)/pdf
 IMGOUT     = $(SCRATCH)/images
 HTMLOUT    = $(SCRATCH)/html
 EPUBOUT    = $(SCRATCH)/epub
 PGOUT      = $(SCRATCH)/pg
-
-# Some aspects of producing these examples require a WeBWorK server.
-# Either specify only the protocol and domain (like https://webwork.yourschool.edu)
-# or specify a 5-tuple with quotes exactly as in this example
-# SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
-# NOTE: it is IMPORTANT to get the protocol correct for your server (HTTP versus HTTPS)
-SERVER = https://webwork-ptx.aimath.org
-
 
 
 ##################
@@ -113,15 +106,14 @@ SERVER = https://webwork-ptx.aimath.org
 #  within "webwork" subfolder
 
 sample-chapter-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
 
 mini-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) $(MINI)
 
 
 #########################################################################
 # PDF versions
-# use -x latex.fillin.style box for box answer blanks instead of underlines
 
 sample-chapter-pdf:
 	-rm -r $(PDFOUT)
@@ -135,6 +127,21 @@ mini-pdf:
 
 
 #########################################################################
+# TeX versions
+# use -x latex.fillin.style box for box answer blanks instead of underlines
+
+sample-chapter-latex:
+	-rm -r $(TEXOUT)
+	install -d $(TEXOUT)
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(SMPCPUB) -d $(TEXOUT) $(SMPC)
+
+mini-latex:
+	-rm -r $(TEXOUT)
+	install -d $(TEXOUT)
+	$(PTX)/pretext/pretext -vv -c all -f latex -p $(MINIPUB) -d $(TEXOUT) $(MINI)
+
+
+#########################################################################
 # HTML output
 # Note that for the sample chapter, first we make the latex-image svg.
 # We turn off dates in file headers, so when we use these for testing we
@@ -143,15 +150,11 @@ mini-pdf:
 # or best practice for a real PreTeXt project using WeBWorK problems.
 
 sample-chapter-html:
-	-rm -r $(IMGOUT)
-	install -d $(IMGOUT)
-	$(PTX)/pretext/pretext -vv -c latex-image -f svg -p $(SMPCPUB) -d $(IMGOUT) $(SMPC)
 	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
-	install -d $(WWEXAMPLE)/sample-chapter/generated/latex-image
-	cp $(IMGOUT)/*.svg $(WWEXAMPLE)/sample-chapter/generated/latex-image
+	$(PTX)/pretext/pretext -c latex-image -f svg -p $(SMPCPUB) $(SMPC)
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
-	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x webwork.divisional.static no debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
 
 mini-html:
 	-rm -r $(HTMLOUT)
@@ -219,13 +222,13 @@ WWOUT        = $(SCRATCH)/webwork-representations
 sample-chapter-representations-not-managed:
 	-rm -r $(WWOUT)
 	install -d $(WWOUT)
-	$(PTX)/pretext/pretext -vv -c webwork -d $(WWOUT) -s $(SERVER) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c webwork -p $(SMPCPUBNOMAN) -d $(WWOUT) $(SMPC)
 
 # DO NOT MODEL YOUR PROJECT AFTER THIS
 mini-representations-not-managed:
 	-rm -r $(WWOUT)
 	install -d $(WWOUT)
-	$(PTX)/pretext/pretext -vv -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
+	$(PTX)/pretext/pretext -vv -c webwork -p $(MINIPUBNOMAN) -d $(WWOUT) $(MINI)
 
 
 #########################################################################

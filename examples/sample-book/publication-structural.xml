@@ -25,9 +25,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
+    <!-- managed directories, standard directory names in source  -->
+    <source>
+        <directories external="ext" generated="gen"/>
+    </source>
+
     <!-- EPUB-Specific Options -->
     <!-- Specification of image locations, relative to main source file -->
-    <epub cover="images/cover_aata_2014.png" image-directory="images"/>
+    <!-- NB: EPUB conversion needs attention -->
+    <!-- <epub cover="images/cover_aata_2014.png" image-directory="images"/> -->
 
     <numbering>
         <!-- defaults for a book with structural parts -->
@@ -36,11 +42,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- HTML-Specific Options -->
     <html>
+        <!-- Turn on a Runestone ActiveCode window, both for show, -->
+        <!-- and for testing purposes                              -->
+        <calculator activecode="python"/>
         <!-- @xml:id of a page to be target of index.html redirect -->
         <!-- This is the @xml:id of the "frontmatter", so this is  -->
         <!-- default behavior, but we do this as a test and as an  -->
         <!-- illustration                                          -->
         <index-page ref="sample-book"/>
+        <!-- As of 2023-02-27 inline exercises with ActiveCode,    -->
+        <!-- etc would not render correctly, so we turn off their  -->
+        <!-- default knowlization.                                 -->
+        <knowl exercise-inline="no"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
@@ -54,9 +67,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <analytics google-gst="UA-48811660-1"
                    statcounter-project="9664088"
                    statcounter-security="6e60c510"/>
-        <!-- Google search, via masthead textbox is switched on    -->
-        <!-- and associated with a Google account via CX number    -->
-        <!-- <search google-cx=""/> -->
+        <!-- native search with Javascript -->
+        <search variant="default"/>
     </html>
+
+    <latex>
+        <cover front="original-front-cover-aata.pdf" back="plain-back-cover-aata.pdf"/>
+    </latex>
 
 </publication>

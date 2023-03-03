@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<!-- NB: This chapter is organized by the hierarchy -->
+<!-- of the publication file and then alphabetically  -->
+<!-- at each level of the tree                      -->
+
+<chapter xml:id="publication-file-reference">
+    <title>Publication File Reference</title>
+
+    <introduction>
+        <p>This chapter is reference material for the <term>publication file</term>, whose employment is described in <xref ref="publication-file"/>, where you can also find an explanation of the shorthand syntax used here to describe elements of this file.</p>
+    </introduction>
+
+    <section xml:id="publication-file-common">
+        <title>Common Options</title>
+        <idx>common options</idx>
+        <idx><h>publisher options</h><h>common</h></idx>
+
+        <introduction>
+            <p>These are options that might affect several conversions, though the influence may vary from one conversion to the next.</p>
+        </introduction>
+
+        <subsection xml:id="common-chunking-options">
+            <title>Common Chunking Option</title>
+            <idx><h>common option</h><h>chunking</h></idx>
+            <idx><h>chunking option</h><h>chunking</h></idx>
+
+            <p>Many outputs are produced as a collection of several files, others may only produce a single file.  A <term>chunk</term> is a generic, informal term for a portion of an output, typically a single file.  This is given as a level, see <xref ref="publisher-levels"/> for more about levels.  The specification is in the attribute<cd>
+                <cline>/publication/common/chunking/@level</cline>
+            </cd>with a whole number as the value (generally 0 is allowed).  This is critical for the construction of <init>HTML</init> output, and ignored for <latex/> output.</p>
+        </subsection>
+
+        <subsection xml:id="common-toc-options">
+            <title>Table of Contents Level Option</title>
+            <idx><h>common option</h><h>table of contents level</h></idx>
+            <idx><h>table of contents</h><h>level option</h></idx>
+
+            <p>The depth of the entries in a Table of Contents is given as a level, see <xref ref="publisher-levels"/> for more about levels.  The specification is in the attribute<cd>
+                <cline>/publication/common/tableofcontents/@level</cline>
+            </cd>with a whole number as the value.  A value of 0 is used to indicate that no Table of Contents is desired.  Absent this setting, reasonable defaults are supplied, which can vary by conversion and document type.</p>
+        </subsection>
+
+        <subsection xml:id="common-exercise-visibility">
+            <title>Exercise Component Visibility</title>
+            <idx><h>exercise</h><h>component visibility</h></idx>
+            <idx><h>exercise components</h><h>visibility</h></idx>
+
+            <p>An <tag>exercise</tag> can appear in four different locations: mixed in with paragraphs and blocks (<q>inline</q>), inside an <tag>exercises</tag> specialized division (<q>divisional</q>), inside a <tag>worksheet</tag> specialized division (<q>worksheet</q>), or inside a <tag>reading-questions</tag> specialized division (<q>reading</q>).  Also, a <tag>project</tag>, and similar (<q>project</q>), behaves in many ways like an <tag>exercise</tag>.  All of these elements (or their <tag>task</tag>) may have <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> (<q>components</q>).</p>
+
+            <p>Where such exercises first appear (not, for example, in back-of-the-book solutions) publication switches can control the visibility of the components.  There are five elements, each with four attributes, which can take on the values of <c>yes</c> or <c>no</c>.  The default is <c>yes</c>, which should be most useful in the early stages of a project.  The element <tag>exercise-project</tag> is a misnomer, but is used to avoid confusion with some other use of <c>project</c>.  See <xref ref="exercise-component-visibility"/> for more explanation.</p>
+
+            <table>
+                <title>Exercise Component Visibility Settings</title>
+
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>Publication File Entry</cell>
+                        <cell>Attributes: <c>yes</c> or <c>no</c> values</cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-inline</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-divisional</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-worksheet</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-reading</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                    <row>
+                        <cell><c>common/exercise-project</c></cell>
+                        <cell><attr>statement</attr>, <attr>hint</attr>, <attr>answer</attr>, <attr>solution</attr></cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
+
+        <subsection xml:id="common-fillin-options">
+            <title>Fillin Options</title>
+            <idx><h>common options</h><h>fillin</h></idx>
+            <idx><h>fillin</h><h>options</h></idx>
+
+            <p>The style of fill-in-the-blanks (from a <tag>fillin</tag>) is set by the attributes<ul>
+                <li>
+                    <title>Text Fillin</title>
+                    <p>Set<cd>
+                        <cline>/publication/common/fillin/@textstyle</cline>
+                    </cd> to values <c>underline</c>, <c>box</c>, or <c>shade</c> to influence the style of a fillin within text. The default is <c>underline</c>.</p>
+                </li>
+
+                <li>
+                    <title>Math Fillin</title>
+                    <p>Set<cd>
+                        <cline>/publication/common/fillin/@mathstyle</cline>
+                    </cd> to values <c>underline</c>, <c>box</c>, or <c>shade</c> to influence the style of a fillin within math. The default is <c>shade</c>.</p>
+                </li>
+            </ul></p>
+        </subsection>
+
+        <subsection xml:id="common-emdash-width-options">
+            <title>Em Dash Width Options</title>
+            <idx><h>common options</h><h>fillin</h></idx>
+            <idx><h>fillin</h><h>options</h></idx>
+
+            <p>The width of spaces on either side of an em dash (the <tage>mdash</tage> element) is set with the <cd>
+                <cline>/publication/common/@emdash-space</cline>
+            </cd>attribute having values <c>none</c> (the default) or <c>thin</c>.  See <xref ref="topics-separators"/> for more explanation.</p>
+        </subsection>
+
+        <subsection xml:id="common-watermark-options">
+            <title>Watermarks</title>
+            <idx><h>common option</h><h>watermark</h></idx>
+            <idx><h>watermark</h><h>common option</h></idx>
+
+            <p>The text of a watermark is given as the content of the <cd>
+                <cline>/publication/common/watermark</cline>
+            </cd>element.  An optional scale factor may be given as a positive rational number with the<cd>
+                <cline>/publication/common/watermark/@scale</cline>
+            </cd>attribute.  The default scale is <c>0.5</c>.</p>
+
+            <p>In the text itself avoid obscure characters or symbols, and do not use any markup.   Keep it simple.  When used with <latex/> output the scharacters <c>\\</c> will survive in the text to create multiple lines of text in the watermark.  This feature is implemented for <latex/> and <init>HTML</init> output.  See <xref ref="watermarks"/> for more detail and an example.</p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-numbering">
+        <title>Numbering Options</title>
+        <idx>numbering options</idx>
+        <idx><h>publisher options</h><h>numbering</h></idx>
+
+        <p>How various items get numbered can be controlled by specifying levels.  For pieces of content (e.g. <tag>example</tag>, <tag>fn</tag>, <ellipsis/>) the level will be the number of separators in the number, usually periods.  To fully understand these options, carefully read <xref ref="publisher-levels"/> and <xref ref="publisher-numbering"/>.</p>
+        <p>You can stop numbering divisions at some depth.  For example, you may want your <tag>book</tag> (without parts) to have numbered <tag>subsection</tag>, but numbers on the few <tag>subsubsection</tag> is just too messy and not necessary.  Then you would set the publication file entry<cd>
+            <cline>/publication/numbering/divisions/@level</cline>
+        </cd> to the value <c>3</c> to number <tag>chapter</tag>, <tag>section</tag>, and <tag>subsection</tag>, only.  (Note this is the exception, you will get at most <em>two</em> separators in a division number in this case.)  So you can think of this as the <em>maximum</em> level for numbers on divisions.  Just be careful not to try to number other objects (described next) to a greater level, as that is impossible, and so will generate a warning and the default will be substituted.</p>
+        <p>For items within a division, various groups of objects are numbered consecutively, with a hierarchy given by a level.  These numbers are controlled by<cd>
+            <cline>/publication/numbering/blocks/@level</cline>
+            <cline>/publication/numbering/projects/@level</cline>
+            <cline>/publication/numbering/equations/@level</cline>
+            <cline>/publication/numbering/footnotes/@level</cline>
+        </cd> whose values should be integers (zero is a possibility) that do not exceed the maximum level specified for divisions.</p>
+        <p>Chapters of a <tag>book</tag> may start numbering from something other than one.  This feature is not available in a book with structural parts (rather than decorative parts).  Read about this at the end of <xref ref="publisher-numbering"/> and <xref ref="best-practice-chapter-zero"/>.  If you still want to proceed, then set the publication file entry<cd>
+            <cline>/publication/numbering/divisions/@chapter-start</cline>
+        </cd> to the desired value of the first chapter.</p>
+        <p>A <tag>book</tag> with <tag>part</tag> may have the parts numbered to reflect two different structures, <term>decorative</term> or <term>structural</term>.  Set the publication file entry<cd>
+            <cline>/publication/numbering/divisions/@part-structure</cline>
+        </cd> to <c>decorative</c> (the default) or <c>structural</c>.</p>
+        <p>When a <tag>book</tag> is designed to have structural parts, then there is an expectation that the part divisions are important or relevant (at least moreso than in the case of decorative parts).  Then, to choose to number objects (blocks, equations, etc.) at level 0, crossing part boundaries, strikes us as an odd choice.  So odd that there is a <url href="https://github.com/PreTeXtBook/pretext/issues/1650" visual="github.com/PreTeXtBook/pretext/issues/1650">small bug at issue #1650</url>, which might be solved by simply banning this combination.</p>
+        <p>For more on divisions, and their numbering see <xref ref="topic-divisions"/>.</p>
+    </section>
+
+    <section xml:id="publication-file-latex">
+        <title>PDF (<latex/>) Options</title>
+        <idx>PDF publisher options</idx>
+        <idx>LaTeX publisher options</idx>
+        <idx><h>publisher options</h><h>PDF</h></idx>
+        <idx><h>publisher options</h><h>LaTeX</h></idx>
+
+        <introduction>
+            <p>These options affect the conversion to <latex/>, which can in turn be converted into <init>PDF</init>.
+            See <xref ref="pdf-print"/> for a more general overview of this conversion with more details.  This includes some existing options that will eventually migrate to the publication file.</p>
+        </introduction>
+
+        <subsection xml:id="latex-print-options">
+            <title><latex/> Print Option</title>
+            <idx><h>print option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>electronic option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>print option</h></idx>
+            <idx><h>LaTeX</h><h>electronic option</h></idx>
+            <idx><h>PDF</h><h>print option</h></idx>
+            <idx><h>PDF</h><h>electronic option</h></idx>
+
+            <p>The conversion to <latex/> can produce a <init>PDF</init> optimized for print, or optimized for use electronically on a screen.  The<cd>
+                <cline>/publication/latex/@print</cline>
+            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.  Note that the use of page numbers in cross-references has different default behavior based on this option (which can be overidden, see <xref ref="latex-xref-page-number-options"/>).</p>
+        </subsection>
+
+        <subsection xml:id="latex-sides-options">
+            <title><latex/> Sides Option</title>
+            <idx><h>sides option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>sides option</h></idx>
+            <idx><h>PDF</h><h>sides option</h></idx>
+
+            <p>The conversion to <latex/> can produce a <init>PDF</init> designed for printing on only one side of the page, or on both sides of the page.  The<cd>
+                <cline>/publication/latex/@sides</cline>
+            </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="latex-font-size-options">
+            <title><latex/> Font Sizes</title>
+            <idx><h>font size options</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>font size option</h></idx>
+            <idx><h>PDF</h><h>font size option</h></idx>
+
+            <p>The document-wide point size can be specified with the<cd>
+                <cline>/publication/latex/@font-size</cline>
+            </cd>attribute can have the value <c>8</c>, <c>9</c>, <c>10</c>, <c>11</c>, <c>12</c>, <c>14</c>, <c>17</c>, <c>20</c>, which are interpreted in points (<q>pt</q>) as the unit of measure.  The default value is <c>10</c>.  See <xref ref="font-size"/> for details.</p>
+        </subsection>
+
+        <subsection xml:id="latex-page-options">
+            <title><latex/> Page Shape Options</title>
+
+            <p>The following options affect the <q>shape</q> of each page, so are in a way less <q>global</q> than some of the previous options.  These are both attributes of the <cd>
+                <cline>/publication/latex/page</cline>
+            </cd>element.<ul>
+                <li>
+                    <title>Text Alignment, Right Edge</title>
+                    <p>Set<cd>
+                        <cline>/publication/latex/page/@right-alignment</cline>
+                    </cd> to values <c>flush</c> (default) or <c>ragged</c> to influence the right edge of the block of text on a page.  See <xref ref="print-justification"/> for more.</p>
+                </li>
+
+                <li>
+                    <title>Text Alignment, Bottom Edge</title>
+                    <p>Set<cd>
+                        <cline>/publication/latex/page/@bottom-alignment</cline>
+                     </cd> to values <c>flush</c> or <c>ragged</c> (default) to influence the bottom edge of the block of text on a page.  See <xref ref="print-justification"/> for more.</p>
+                </li>
+            </ul></p>
+
+            <p>The content of the element<cd>
+                <cline>/publication/latex/page/geometry</cline>
+            </cd> element will feed directly into a <latex/> <c>\geometry{}</c> element, with no modifications.  (In other words, all whitespace, such as newlines and indentation, will be preserved.)  Be sure to carefully read the advice, an example, and further detail at <xref ref="page-shape"/>.</p>
+        </subsection>
+
+        <subsection xml:id="latex-xref-page-number-options">
+            <title>Page Numbers in Cross-References</title>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@pageref</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of page numbers in cross-references (typically achieved with the <tag>xref</tag> element).  The default varies, as it is dependent on the print option (<xref ref="latex-print-options"/>).  See <xref ref="latex-xref-page-numbers"/> for more on the defaults.</p>
+        </subsection>
+
+        <subsection xml:id="latex-worksheet-options">
+            <title><latex /> Worksheet Options</title>
+            <p>
+                By default, worksheets are formatted differently than other pages, including customizable margins, workspace between exercises, and on their own pages.  This separate formatting can be ignored, causing worksheets to be treated like any other division, using the<cd>
+                <cline>/publication/latex/worksheet/@formatted</cline>
+             </cd>attribute, setting the value to <c>no</c>.  The default value is <c>yes</c>.
+            </p>
+        </subsection>
+
+        <subsection xml:id="latex-covers-options">
+            <title>Covers</title>
+            <idx><h>PDF</h><h>covers</h></idx>
+            <idx><h>LaTeX</h><h>covers</h></idx>
+            <idx><h>covers</h><h>PDF</h></idx>
+            <idx><h>covers</h><h>LaTeX</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/latex/cover</cline>
+            </cd>element has attributes <attr>front</attr> and <attr>back</attr> whose values can be paths to <init>PDF</init> files to use as the first and last page of the output <init>PDF</init>.  The paths should be relative to your directory of external files, much like a raster image you might bring to your project being given by a <attr>source</attr> attribute.  See <xref ref="processing-directory-management"/> for more about managed directories, and <xref ref="latex-cover-images"/> for more detail about covers.</p>
+        </subsection>
+
+        <subsection xml:id="latex-asymptote-link-options">
+            <title><latex/> Asymptote Links</title>
+            <idx><h>Asymptote links</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>Asymptote links</h></idx>
+            <idx><h>PDF</h><h>Asymptote links</h></idx>
+
+            <p>The conversion to <latex/> can provide a link to an <init>HTML</init> version of each Asymptote graphic.  The<cd>
+                <cline>/publication/latex/asymptote/@links</cline>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="latex-asymptote-links"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="latex-draft-mode-options">
+            <title>Draft Mode</title>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@draft</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of the <latex/> draft mode.  The default is <c>no</c>.  See <xref ref="processing-author-tools"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="latex-snapshot-record-options">
+            <title>Snapshot Record</title>
+            <idx><h>LaTeX</h><h>snapshot</h></idx>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@snapshot</cline>
+            </cd> to values <c>yes</c> or <c>no</c> to enable or disable the generation of a <q>snapshot</q> record of the LaTeX packages in use.  The default is <c>no</c>.  See <xref ref="latex-snapshot-record"/> for more detail.</p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-online">
+        <title>Online (HTML) Options</title>
+        <idx>HTML publisher options</idx>
+        <idx><h>publisher options</h><h>HTML</h></idx>
+
+        <introduction>
+            <p>These options affect the base conversion to web pages (online, <init>HTML</init>).  Many, but not all, will affect subsequent conversions based on <init>HTML</init>, such as a conversion to <init>EPUB</init> or Jupyter notebooks.  See <xref ref="online-html"/>  for a more general overview of this conversion, including options that will eventually migrate here.</p>
+        </introduction>
+
+        <subsection xml:id="online-analytics-options">
+            <title>HTML Analytics</title>
+            <idx>analytics</idx>
+
+            <p>The<cd>
+                <cline>/publication/html/analytics</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>google-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em></li>
+                <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em></li>
+            </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-baseurl">
+            <title>HTML Base URL</title>
+            <idx><h>base url</h><h>HTML output</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/baseurl/@href</cline>
+            </cd>attribute may be given as a complete <init>URL</init> for the top-level of where <init>HTML</init> output is hosted.  Of course, this may be different for different publishers.  The value is a directory, and so should end with a slash (path separator).  See <xref ref="online-base-url"/> for reasons why you might want to specify this.</p>
+        </subsection>
+
+        <subsection xml:id="online-calculator">
+            <title>HTML Embedded Calculator</title>
+            <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/calculator</cline>
+            </cd>element has the following attribute:<ul>
+                <li>
+                    <p><attr>model</attr>: used to control which calculator is available on every page.  Possible values are:<ul>
+                        <li><c>geogebra-classic</c></li>
+                        <li><c>geogebra-graphing</c></li>
+                        <li><c>geogebra-geometry</c></li>
+                        <li><c>geogebra-3d</c></li>
+                        <li><c>none</c></li>
+                    </ul></p>
+                </li>
+            </ul>The default is <c>none</c>.  See <xref ref="online-embedded-calculator"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-webwork-dynamism">
+            <title>HTML <webwork/> Dynamism</title>
+            <idx><h>WeBWorK</h><h><init>HTML</init>dynamism</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/webwork</cline>
+            </cd>element has the following attributes, each of which can have a value of <c>static</c> or <c>dynamic</c>:<ul>
+                    <li><attr>inline</attr>, default value: <c>dynamic</c></li>
+                    <li><attr>divisional</attr>, default value: <c>static</c></li>
+                    <li><attr>reading</attr>, default value: <c>static</c></li>
+                    <li><attr>worksheet</attr>, default value: <c>static</c></li>
+                    <li><attr>project</attr>, default value: <c>dynamic</c></li>
+            </ul>The attribute names suggest the type of exercise or project-like that will be affected. See <xref ref="webwork-html-output"/> for more details and the rationale for the defaults.</p>
+        </subsection>
+
+        <subsection xml:id="online-activecode">
+            <title>HTML ActiveCode Programming Window</title>
+            <idx><h>ActiveCode</h><h>window in <init>HTML</init></h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/calculator</cline>
+            </cd>element has the following attribute:<ul>
+                <li>
+                    <p><attr>activecode</attr>: used to control if an ActiveCode window is available on every page, and if so, which language it undestands.  Possible values are:<ul>
+                        <li><c>python</c> (Python)</li>
+                        <li><c>javascript</c> (JavaScript)</li>
+                        <li><c>html</c> (<init>HTML</init>)</li>
+                        <li><c>sql</c> (<init>SQL</init>)</li>
+                        <li><c>c</c> (C, Runestone server only)</li>
+                        <li><c>cpp</c> (C++, Runestone server only)</li>
+                        <li><c>java</c> (Java, Runestone server only)</li>
+                        <li><c>python3</c> (Python 3, Runestone server only)</li>
+                        <li><c>octave</c> (Octave, Runestone server only)</li>
+                        <li><c>none</c></li>
+                    </ul></p>
+                </li>
+            </ul>For a build hosted at a Runestone server, <c>python</c> is the default.  For an <init>HTML</init> build hosted elsewhere, <c>none</c> is the default.  See <xref ref="online-scratch-activecode"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-index-page">
+            <title>HTML Index Page</title>
+            <idx><h>index page</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>index page</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/index-page</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>ref</attr>: the <attr>xml:id</attr> of a division which will be a complete page at whatever level the document is chunked (broken into smaller pages).</li>
+            </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-knowlization-options">
+            <title>HTML Knowlization</title>
+            <idx><h>knowls</h><h>elective</h></idx>
+            <idx>elective knowls</idx>
+
+            <p>In a conversion to <init>HTML</init> a wide variety of content can be <q>born</q> in a <term>knowl</term>.  Publisher switches are specified via multiple attributes of a single<cd>
+                <cline>/publication/html/knowl</cline>
+            </cd>element, with values of <c>yes</c> (do use a knowl) or <c>no</c> (do not use a knowl, present content normally).  For example,<cd>
+                <cline>&lt;knowl remark="yes"/&gt;</cline>
+            </cd>would make every <q>remark-like</q> element occur as a knowl where the content is first introduced.  Note that these are distinctly different than cross-reference knowls.  For more detail see <xref ref="knowled-content"/>.</p>
+
+            <p>This table gives the various attribute names, the default value, and an indication of the elements affected.  Note that some items are automatically born knowled (e.g. footnotes) and so there is no option to control that behavior.  Also, items such as <tag>figure</tag>, when included in a <tag>sidebyside</tag> are not influenced by the relevant option and are not born knowled.  There are four flavors of <tag>exercise</tag> and so four options.  A <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag> is automatically knowled as a plot-spoiler where the author is expecting the reader to do something.  In contrast, an <q>example-like</q> is expository, so the knowlization is configurable.</p>
+
+            <table>
+                <title>Knowlization options</title>
+                <tabular>
+                    <row header="yes" bottom="major">
+                        <cell>Attribute</cell>
+                        <cell>Default</cell>
+                        <cell>Element(s)</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>theorem</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>theorem</tag>, <tag>lemma</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>proof</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell><tag>proof</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>definition</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>definition</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>example</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell><tag>example</tag>, <tag>problem</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>example-solution</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell><tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>project</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>project</tag>, <tag>activity</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>task</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>task</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>remark</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>remark</tag>, <tag>note</tag>, <ellipsis/></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>objectives</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>objectives</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>outcomes</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>outcomes</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>figure</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>figure</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>table</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>table</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>listing</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>listing</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>list</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell><tag>list</tag></cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-inline</c></cell>
+                        <cell><c>yes</c></cell>
+                        <cell>within narrative</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-divisional</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell>inside <tag>exercises</tag> division</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-worksheet</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell>inside <tag>worksheet</tag> division</cell>
+                    </row>
+                    <!--  -->
+                    <row>
+                        <cell><c>exercise-readingquestion</c></cell>
+                        <cell><c>no</c></cell>
+                        <cell>inside <tag>readingquestions</tag> division</cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
+
+        <subsection xml:id="online-platform-options">
+            <title>HTML Platforms</title>
+            <idx><h>platform</h><h>HTML</h></idx>
+            <idx>online platforms</idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>platform</attr> with values:<ul>
+                <li><c>web</c>: the default, meant for self-hosting with no server configuration, features, or assumptions</li>
+                <li><c>runestone</c>: output meant for hosting on a Runestone server (<xref ref="runestone"/>)</li>
+            </ul>Here <term>platform</term> refers to the server where the <init>HTML</init> output will eventually be hosted.  The effect is to create minor variations in the output to take advantage of extra features of the indicated platform.</p>
+        </subsection>
+
+        <subsection xml:id="online-style-options">
+            <title>HTML Style</title>
+            <idx><h>style</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/css</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>colors</attr>: used to construct the filename for CSS controlling colors.</li>
+                <li><attr>style</attr>:  used to construct the filename for CSS controlling content appearance.</li>
+                <li><attr>knowls</attr>: used to construct the filename for CSS controlling knowls.</li>
+                <li><attr>toc</attr>:    used to construct the filename for CSS controlling the Table of Contents.</li>
+                <li><attr>banner</attr>: used to construct the filename for CSS controlling the banner (masthead).</li>
+                <li><attr>navbar</attr>: used to construct the filename for CSS controlling the navigation bar.</li>
+                <li><attr>shell</attr>:  used to construct the filename for CSS controlling the shell.</li>
+            </ul>In each case the default file is replaced and instead a new filename is formed from the attributes value.  For example, the specification<cd>
+                <cline>&lt;css colors='bright_red'/&gt;</cline>
+            </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  Possible values for the last four attributes are <c>default</c> and <c>crc</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
+
+        </subsection>
+
+        <subsection xml:id="online-search-options">
+            <title>HTML Search</title>
+            <idx>search</idx>
+            <idx><h>search</h><h>native</h></idx>
+            <idx><h>search</h><h>Google</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/search</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  The default value is<ellipsis/><c>default</c>.  This is search provided natively.</li>
+                <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.  Setting this attribute to a non-empty string is the signal to add the relevant code for a search box in the masthead.</li>
+            </ul>Note that if you elect both native search and Google search the two search boxes will overlay each other and one will not be usable.  See <xref ref="native-search"/> and <xref ref="google-search"/> (respectively) for more.</p>
+        </subsection>
+
+        <subsection xml:id="embedded-video-privacy-options">
+            <title>HTML Video Embedding</title>
+            <idx><h>video</h><h>embedding</h></idx>
+            <idx><h>privacy</h><h>video</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/video</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>privacy</attr>: allowed values are <c>yes</c> or <c>no</c>.</li>
+            </ul>Setting this to yes (the default) prevents certain tracking cookies from being used. Currently only supported for videos from YouTube. See <xref ref="video-embedding"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-short-answer-responses">
+            <title>Short Answer Responses</title>
+            <idx><h>short answer exercises</h><h>response area</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>short-answer-responses</attr> with values:<ul>
+                <li><c>graded</c>: the default, only show an area for responses when they can be graded or scored (such as when hosted on Runestone,  <xref ref="runestone"/>).</li>
+                <li><c>always</c>: include an editable response area, even if it cannot be submitted for feedback.</li>
+            </ul>See <xref ref="short-answer-exercises"/> for details.</p>
+        </subsection>
+
+        <subsection xml:id="html-asymptote-link-options">
+            <title><latex/> Asymptote <q>Click to Enlarge</q> Links</title>
+            <idx><h>Asymptote links</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>Asymptote links</h></idx>
+
+            <p>The conversion to <init>HTML</init> can provide a <q>Link to full-sized image</q> link below each Asymptote graphic.  The<cd>
+                <cline>/publication/html/asymptote/@links</cline>
+            </cd>attribute can have the value <c>yes</c> to produce links, or the value <c>no</c> to not create links.  Note that a base URL must be set for this feature to be functional (<xref ref="online-base-url"/>).  The default is <c>no</c>.  See  <xref ref="html-asymptote-links"/> for more detail.</p>
+        </subsection>
+
+        <subsection xml:id="html-feedback-options">
+            <title>HTML Feedback Button</title>
+            <idx><h>HTML</h><h>feedback button</h></idx>
+            <idx><h>feedback button</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/feedback</cline>
+            </cd>element requires an <attr>href</attr> attribute that is a complete <init>URL</init>.  The content of the element is optional, and will provide alternate text for the button.  This alternate text should have no markup<mdash/>just text.  See <xref ref="html-feedback"/> for explanations, details, and a caveat.</p>
+        </subsection>
+
+        <subsection xml:id="html-navigation-options">
+            <title>HTML Navigation Options</title>
+            <idx><h>HTML</h><h>navigation</h></idx>
+            <idx><h>navigation</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/navigation</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>logic</attr> with values <c>linear</c> (default) and <c>tree</c>.</li>
+                <li><attr>upbutton</attr> with values <c>yes</c> (default) and <c>no</c>.</li>
+                <li><attr>style</attr> with values <c>full</c> (default) and <c>compact</c>.</li>
+            </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-revealjs">
+        <title>Reveal.js Slideshow Options</title>
+        <idx>reveal.js slideshow publisher options</idx>
+        <idx><h>publisher options</h><h>reveal.js slideshow</h></idx>
+
+        <introduction>
+            <p>See <xref ref="publisher-revealjs"/> for a more general overview of this conversion.</p>
+        </introduction>
+
+        <subsection xml:id="revealjs-appearance-options">
+            <title>Reveal.js Appearance</title>
+            <idx><h>publisher options</h><h>reveal.js appearance</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/appearance</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>theme</attr>: the base name of a file that is a reveal.js theme.  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
+            </ul></p>
+        </subsection>
+
+        <subsection xml:id="revealjs-control-options">
+            <title>Reveal.js Controls</title>
+            <idx><h>publisher options</h><h>reveal.js controls</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/controls</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>backarrow</attr>: for the visibility of a <q>back</q> arrow.  Values are <c>faded</c>, <c>hidden</c>, or <c>visible</c>.  The default is <c>faded</c>.</li>
+                <li><attr>display</attr>: for the overall visibility of controls.  Values are <c>yes</c> or <c>no</c>.  The default is <c>yes</c>.</li>
+                <li><attr>layout</attr>: for the location of the controls.  Values are <c>edges</c> or <c>bottom-right</c>.  The default is <c>bottom-right</c>.</li>
+                <li><attr>tutorial</attr>: for animation of suggested navigation arrows.  Values are <c>yes</c> or <c>no</c>.  The default is <c>yes</c>.</li>
+            </ul></p>
+        </subsection>
+
+        <subsection xml:id="revealjs-navigation-options">
+            <title>Reveal.js Navigation</title>
+            <idx><h>publisher options</h><h>reveal.js navigation</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/navigation</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>mode</attr>: for the arrangement of the navigation through slides.  Values are <c>default</c>, <c>linear</c>, or <c>grid</c>.  The default is <c>default</c>.  The value <c>default</c> refers to the default mode of Reveal.js and is synonomous with <c>grid</c>.  In other words, the choice of <c>default</c> or <c>grid</c> results in identical behavior.</li>
+            </ul>See <xref ref="publisher-revealjs"/> for more explanation of the two different navigation modes.</p>
+        </subsection>
+
+        <subsection xml:id="revealjs-resources-options">
+            <title>Reveal.js Resources</title>
+            <idx><h>publisher options</h><h>reveal.js resources</h></idx>
+
+            <p>You may wish to host the reveal.js CSS and javascript files locally or obtain them online.  Be sure to read in  <xref ref="publisher-revealjs"/> about the necessity of providing the complete MathJax library <xref ref="publisher-revealjs"/> if your document has mathematics and you opt for local resources.</p>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/resources</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>host</attr>: The values <c>local</c> and <c>cdn</c> will retrieve various Javascript and CSS files (such as the theme) relative to the slideshow <init>HTML</init> file or from an online Content Delivery Network (respectively).  PreTeXt will maintain a link to a current, updated, <init>CDN</init> version and this will change without notice.  This attribute may be given a <init>URL</init> or a local path, though this has not been tested, so should be considered experimental.</li>
+            </ul></p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-epub">
+        <title>EPUB Options</title>
+        <idx>EPUB publisher options</idx>
+        <idx><h>publisher options</h><h>EPUB</h></idx>
+
+        <introduction>
+            <p>These options are specific to a conversion to <init>EPUB</init>.  But because an <init>EPUB</init> file is a compressed archive of <init>HTML</init> files, many of the options in <xref ref="publication-file-online"/> can have an effect.  See <xref ref="online-html"/> for a more general overview of the conversion to <init>HTML</init>.</p>
+        </introduction>
+
+        <subsection xml:id="epub-cover-image-option">
+            <title>EPUB Cover Image</title>
+            <idx><h>EPUB</h><h>cover image</h></idx>
+            <idx><h>cover image</h><h>EPUB</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/epub/cover/@front</cline>
+            </cd>attribute has a value that is a path, relative to the external directory of the managed directories scheme (see <xref ref="processing-directory-management"/>), that is an image to be used as a cover for the <init>EPUB</init>.  See <xref ref="epub"/> for more.</p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-source">
+        <title>Source Options</title>
+        <idx>source publisher options</idx>
+        <idx><h>publisher options</h><h>source</h></idx>
+
+        <subsection xml:id="publication-file-directory-management">
+            <title>Directory Management</title>
+
+            <p>Two directories of additional files need to be specified, as paths relative to the main <pretext/> source file, in order that they can be managed automatically for the construction of various output formats.  Study <xref ref="processing-directory-management"/> carefully for the exact details.  To set these directories, the<cd>
+                <cline>/publication/source/directories</cline>
+            </cd>element must have the following two attributes:<ul>
+                <li><attr>external</attr>: a directory of files produced independently of your project.</li>
+                <li><attr>generated</attr>: a directory of files produced automatically via <pretext/> tools, from aspects of your <pretext/> source.</li>
+            </ul>It is an error to only specify one of the two directories.  It is all or nothing.</p>
+        </subsection>
+
+        <subsection xml:id="publication-file-source-version">
+            <title>Versions</title>
+
+            <p>Different versions of your source can be constructed by marking elements as belonging to different components.  Each component has a name of your choosing, and then you elect components to include or exclude via the publication file.  See <xref ref="publisher-versions"/> for the exact details and examples.</p>
+
+            <p>To specify components to include, the<cd>
+                <cline>/publication/source/version/@include</cline>
+            </cd>attribute should be a space-separated list of component names.  For example, if <tag>version</tag> has<cd>
+                <cline>include="videos labs"</cline>
+            </cd>then a version would be created that includes all of the videos and all of the labs (since the author placed them into these components), but would not contain any elements whose component is <c>genome</c>.  Note that <c>videos</c>, <c>labs</c>, and <c>genome</c> are names peculiar to the organization of your project, and are not <pretext/> element names (even if they are used consistently with similar element names, such as <tag>video</tag>).</p>
+        </subsection>
+
+        <subsection xml:id="publication-file-source-extras">
+            <title>Extras</title>
+
+            <p>Some source material is optional, and may be included based on the publisher and the audience.  The values of the attributes below are filenames.  They could be absolute paths (which is not very portable, and so likely a bad idea), or relative paths.  In the latter case, they are relative to the source file that contains the <tag>pretext</tag> element (the <q>main</q> file if you have modularized your source).  Temporarily using an absolute path can be useful when you are having problems with any of these files and want to eliminate one variable while debugging.</p>
+
+            <p>The<cd>
+                <cline>/publication/source</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>customizations</attr>: A filename for a structured file of <tag>custom</tag> elements, each with a <attr>name</attr> attribute and content meant to be substituted into source.  See <xref ref="publisher-customizations"/> for details about the use of customizations.</li>
+                <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</li>
+                <li><attr>webwork-problems</attr>: A filename for a structured file of multiple representations of <webwork/> problems.  It is now recommended that when using <webwork/>, that you also use managed directories (see <xref ref="processing-directory-management"/>), in which case this attribute is unsused.</li>
+            </ul></p>
+        </subsection>
+    </section>
+
+    <section xml:id="publication-file-webwork">
+        <title><webwork/> Options</title>
+        <idx>WeBWorK publisher options</idx>
+        <idx><h>publisher options</h><h>WeBWorK</h></idx>
+
+        <introduction>
+            <p>
+                A <webwork/> host course on a <webwork/> server somewhere does the processing of a project's <tag>webwork</tag> elements.
+                These are the details needed to specify where that course is and how <pretext/> will access it.
+                These are discussed again in <xref ref="webwork-representations"/>.
+            </p>
+            <p>
+                See <xref ref="online-webwork-dynamism"/> for publisher file attributes that control <webwork/>'s dynamic behavior in HTML.
+            </p>
+        </introduction>
+
+        <subsection xml:id="publication-file-webwork-server">
+            <title>Server</title>
+            <p>
+                The URL to the <webwork/> server is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@server</cline>
+                </cd>
+                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include a trailing slash.
+                The server should be version 2.14 or later.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-course">
+            <title>Course</title>
+            <p>
+                The name of the host course is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@course</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-course-password">
+            <title>Course Password</title>
+            <p>
+                A course password (distinct from a user password) is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@coursepassword</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-user">
+            <title>User</title>
+            <p>
+                The username that signs in to the host course to process exercises is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@user</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-user-password">
+            <title>User Password</title>
+            <p>
+                That user's password is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@userpassword</cline>
+                </cd>
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-task-reveal">
+            <title>Task Reveal</title>
+
+            <p>The
+                <cd>
+                    <cline>/publication/webwork/@task-reveal</cline>
+                </cd>
+                attribute is used to control how tasks in a multi-task exercise are made available to the reader.
+                This applies to live interactive renderings of the exercises, either in HTML, in <webwork/>,
+                or otherwise. Possible values are:
+                <ul>
+                    <li><c>preceding-correct</c> (all preceding tasks must be correctly answered before the next is available)</li>
+                    <li><c>all</c> (all tasks are available)</li>
+                </ul>
+            </p>
+        </subsection>
+    </section>
+
+</chapter>

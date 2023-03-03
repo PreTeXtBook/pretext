@@ -10,7 +10,7 @@ Quickstart instructions at project website:  [pretextbook.org](https://pretextbo
 Help and development discussions:
 * Support forum/mailing-list: [pretext-support](https://groups.google.com/forum/#!forum/pretext-support)
 * Announcements only, low-volume: [pretext-announce](https://groups.google.com/forum/#!forum/pretext-announce)
-
+* Submitting an issue is the last option for receiving help. See the [Contributing Guide](CONTRIBUTING.md).
 
 PreTeXt is guided by the following principles:
 ----------------------------------------------
@@ -34,7 +34,7 @@ on documents prepared with the system.
 9. PreTeXt is not a closed system: documents can be converted to
 LaTeX and then developed using standard LaTeX tools.
 10. PreTeXt recognizes that scholarly documents involve the
-interaction of authors, publishers, scholars, instructors,
+interaction of authors, publishers, scholars, curators, instructors,
 students, and readers, with each group having its own needs
 and goals.
 11. PreTeXt recognizes the inherent value in producing material

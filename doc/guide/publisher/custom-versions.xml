@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2022  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="custom-versions">
+    <title>Custom Versions</title>
+    <idx>custom versions</idx>
+    <idx><h>versions</h><h>custom</h></idx>
+
+    <introduction>
+        <p>An <term>edition</term> would be a copy of your project, different than one produced at some other time.  For example, you might elect to make annual editions, with corrections, additions, and deletions.  By contrast, a <term>version</term> is a copy of your project that shares content with another version, but differs in minor or substantial ways.  We provide mechanisms for minor differences in <xref ref="publisher-customizations"/> and for substantial differences in <xref ref="publisher-versions"/>.  Be sure to read about both mechanisms first, and understand their purposes, before committing to one or the other.</p>
+    </introduction>
+
+    <section xml:id="publisher-customizations">
+        <title>Customizations</title>
+        <idx>customizations</idx>
+
+        <p>The customization feature allows you to create two or more versions of your text for slightly different audiences. To do this, an author defines custom elements that find their translations in a file specified in the publication file.  Multiple customization files can then be used to build different versions of the text. For example, we might want to create two versions of our <init>AOTA</init> book, one for zoologists and one for laypeople. For the zoologist edition we want animal names to be scientific names, but in the edition for laypeople we want to use common names. The rest of the text is identical.  To execute this, we make every animal name a custom element and create a customization file for each of the two versions.</p>
+
+        <p>Say we want to write a sentence that reads <q>The IUCN red list classification of the western lowland gorilla is critically endangered</q> in the layperson’s edition and <q>The IUCN red list classification of the <taxon>Gorilla gorilla gorilla</taxon> is critically endangered</q> in the zoologist’s edition. We begin by writing the sentence in the source and creating a <tag>custom</tag> element as a place-holder for the name of the gorilla:</p>
+
+        <pre>
+        The &lt;init>IUCN&lt;/init&gt; red list classification of
+        the &lt;custom ref="gorilla-name"/&gt; is critically endangered.
+        </pre>
+
+        <p>Then the file of translations will contain a <tag>custom</tag> element, with a <attr>name</attr> attribute that has value <c>gorilla-name</c>, and whose content is the translation.</p>
+
+        <p>Once you have placed <tag>custom</tag> elements in your source, you need to create one or more files of translations.  To stay organized you might choose to place them in a directory of their own.  The customization file opens with a special element and then contains a definition for each customization.</p>
+
+        <p>For the example above, here is the beginning of the customization file we might name <c>customizations/zoologist.ptx.</c></p>
+
+        <pre>
+        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
+          &lt;!-- Name of Western mountain gorilla --&gt;
+          &lt;custom name= "gorilla-name">
+            &lt;taxon&gt;Gorilla gorilla gorilla&lt;/taxon&gt;
+          &lt;/custom&gt;
+        &lt;/pi:customizations&gt;
+        </pre>
+
+        <p>Note that employing a common value for the <attr>name</attr> attribute and the <attr>ref</attr> attribute makes the association for the replacement in the source. Next, we would also create a customization file named <q>customizations/layperson.ptx</q> that looks like the following.</p>
+
+        <pre>
+        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
+          &lt;!-- Name of Western mountain gorilla --&gt;
+          &lt;custom name= "gorilla-name">western lowland gorilla&lt;/custom&gt;
+        &lt;/pi:customizations&gt;
+        </pre>
+
+        <p>Once the customization files are created, the element <c>&lt;custom ref="gorilla-name"/&gt;</c> can be used <em>throughout</em> the text and will populate automatically depending on which customization file is specified in the publication file.</p>
+
+        <p>When choosing names to use as values for the  <attr>ref</attr> and <attr>name</attr> attributes, develop a consistent scheme that will make sense to other authors. Do not use spaces or capital letters. This name will never be visible to readers but should be easy for developers to understand.  Placing careful comments in one <q>main</q> customization file can help other authors create new customizations that are accurate.</p>
+
+        <p>Note that this functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</p>
+
+        <p>See <xref ref="publication-file-source-extras"/> for the mechanics of specifying a file of customizations via the publication file.</p>
+    </section>
+
+    <section xml:id="publisher-versions">
+        <title>Versions</title>
+        <idx>versions</idx>
+
+        <introduction>
+            <p>A <term>version</term> is formed by including or excluding content coming from your <pretext/> source.  This could be optional content, or it could be content that varies between versions.  See <xref ref="version-use-cases"/> for specific examples.</p>
+        </introduction>
+
+        <subsection>
+            <title>Marking Your Source</title>
+
+            <p>The <attr>component</attr> attribute is used by an author to identify elements in the <pretext/> source.  The value of the attribute is any name that makes sense to a publisher.  Examples might be <c>videos</c>, <c>labs</c>, <c>genome</c>, or <c>color</c>.  There is a (huge) <term>un-component</term> which is the collection of all elements not contained in an element that is in some named component.  You can think of it as a default component, or an un-named component<mdash/>it is content that will be in <em>every</em> version, no matter what.</p>
+        </subsection>
+
+        <subsection>
+            <title>Forming a Version</title>
+
+            <p>Now, a publisher can elect to include or exclude all of the content of each component.  This is accomplished with the <attr>include</attr> attribute of the <c>source/include</c> element inside a publication file.  The value of this attribute is a space-separated listing of some of the component names in use.  An example minimal publication file could look like the following example.  See <xref ref="publication-file-source-version"/> for the specifics.</p>
+
+            <pre><![CDATA[
+                <publication>
+                    <source>
+                        <version include="videos labs"/>
+                    </source>
+                </publication>]]>
+            </pre>
+
+            <p>This attribute is interpreted according to these rules:<ul>
+                <li>An element whose <attr>component</attr> value <em>is</em> in the list in <attr>include</attr> will be included in the source that will be converted.</li>
+                <li>An element whose <attr>component</attr> value <em>is not</em> in the list in <attr>include</attr> will not be included in the source that will be converted.</li>
+                <li>If there is no <attr>include</attr> attribute in the publication file, the indication of the components are ignored and the entire source is processed.  This would be the same as listing every component name in <attr>include</attr>.</li>
+                <li>Setting <attr>include</attr> to an empty value (<c>include=""</c>) achieves the opposite effect and excludes every component from the source that will be converted.</li>
+            </ul>Note that we have not experimented with one component nested inside another.  Once an element is excluded because it is in some component, all of its contained source is gone and never coming back.  But it should be possible to include an element via a component, and exclude portions of that element via a different component.</p>
+        </subsection>
+
+        <subsection xml:id="version-use-cases">
+            <title>Types of Versions</title>
+
+            <p>Here are three typical use cases for versions.</p>
+
+            <paragraphs>
+                <title>Additional Material</title>
+
+                <p>Some material may not be desired for every output format.  Some interactive material might not make sense in a printed book.  Or perhaps certain types of exercises are included at the end of each chapter, or not.  By putting these elements in components, they may be included or excluded via a publication file.  The idea here is that some versions contain a <em>subset</em> of all the available, authored material.  For example, a version might include content in the <c>videos</c> and <c>labs</c> components, but exclude content in the <c>genome</c> component.</p>
+
+                <p>An <q>annotated</q> Instructor's Version can be accomplished with additional material, perhaps in a selection of <tag>commentary</tag> elements looking like like <cd>
+                    <cline>&lt;commentary component="instructor"&gt;</cline>
+                </cd></p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Alternate Treatments</title>
+
+                <p>It may be possible to present a topic in two logically correct orders, but with substantial differences in how subtopics are treated.  An example is the <q>early</q> or <q>late</q> treatment of transcendental functions in calculus.  If the rearrangement is cosmetic, then an alternate main file can simply include divisions (chapters, sections) from separate files in a different order via the <c>xi:include</c> mechanism.  See <xref ref="processing-modular"/> for details.</p>
+
+                <p>When the two pathways through the material have common and distinct material, then two components can be employed and the publication file would always include exactly one component.</p>
+
+                <p>Or for excluded material you might create some sort of placeholder text indicating what is missing.  So all <tag>video</tag> elements might be excluded by placing them into the <c>videos</c> component.  But you might want to indicate that there is a video available in some other format and include an indication of its title or topic.  So you could write a short paragraph next to the <tag>video</tag> and place it in a <c>novideos</c> component.  Now you would typically include exactly one of <c>videos</c> or <c>novideos</c> within each publication file in use.  If your <tag>video</tag> live in numbered figures, you could exclude the <tag>figure</tag> and use a numbered block, such a <tag>remark</tag> as the alternate and perhaps preserve numbering of later items.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Alternate Presentation</title>
+
+                <p>This is an example similar to one Sean Fitzpatrick uses.  His <tag>docinfo</tag> configures the way color is used in his TikZ diagrams.  But instead he has two configurations, one for full color (HTML, electronic PDF), and another for black-and-white (printed hardcopy).  The former is in the <c>color</c> component, and the second is in the <c>nocolor</c> component.  If his project has color photographs, he could make careful gray-scale versions with specialized tools, and then place the resulting pair of <tag>image</tag> into each of the two components separately.</p>
+            </paragraphs>
+        </subsection>
+
+        <subsection>
+            <title>Caveats for Creating Versions</title>
+
+            <p>There are some subtleties when you get fancy with manipulating your source this way, and we cannot protect you from every pitfall.  You may get warnings for some of this.  If you find new gotchas the hard way, please let us know.</p>
+
+            <paragraphs>
+                <title>Numbering</title>
+
+                <p>It is very possible that material that is common between versions ends up with different numbers.  An exception is if you subset by excluding material <em>at the end of a division</em>.  This may be very natural for optional material.  Then elect a numbering option that resets at the next division.  In this way later <q>higher</q> numbers go missing, and it does not affect the sequence of earlier <q>smaller</q> numbers.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Cross-References</title>
+
+                <p>Do not create a cross-reference into content you might exclude, there may not be a target for the <tag>xref</tag>.  You should get a warning about this.  When you have alternate versions, you will need to think carefully about <attr>xml:id</attr> and <tag>xref</tag> for your two versions.  It is possible that what you think is common material might really need to go into two components because an <tag>xref</tag> points at a target that actually resides in two different components.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Identifiers</title>
+
+                <p>Allied with cross-referencing, be careful not to create source that had duplicate identifiers that are meant to be unique.  You may get warnings about this situation.</p>
+            </paragraphs>
+        </subsection>
+    </section>
+</chapter>
+

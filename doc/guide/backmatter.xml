@@ -24,8 +24,10 @@
     <xi:include href="appendices/git.xml"/>
     <xi:include href="appendices/latex-conversion.xml"/>
     <xi:include href="appendices/mac-os.xml"/>
+    <xi:include href="appendices/windows-cli.xml"/>
     <xi:include href="appendices/windows.xml"/>
     <xi:include href="appendices/windows-wsl.xml"/>
+    <xi:include href="appendices/cli-transition.xml"/>
     <appendix>
         <title>Example List of Notation</title>
         <notation-list />

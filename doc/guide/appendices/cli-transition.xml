@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="cli-transition">
+  <title>Transitioning to the PreTeXt-CLI</title>
+  <author>Sean Fitzpatrick</author>
+
+  <introduction>
+    <p>
+      This appendix is intended for authors of existing (<q>legacy</q>) <pretext/>
+      projects who want to transition from using <c>xsltproc</c> to the PreTeXt-CLI.
+    </p>
+  </introduction>
+
+  <section xml:id="cli-setup">
+    <title>Setup</title>
+    <p>
+      We will assume you have the following:
+      <ul>
+        <li>An existing <pretext/> project, in a folder called <c>PROJECT</c>.</li>
+        <li>A Python installation at version 3.8 or newer.</li>
+        <li>The PreTeXt-CLI, installed using the instructions in <xref ref="processing-CLI"/>.</li>
+      </ul>
+    </p>
+
+    <p>
+      For usage of the CLI, see <xref ref="processing-CLI"/>.
+    </p>
+
+    <p>
+      The first thing we will do is to create a new folder.
+      Call this folder <c>PROJECT-CLI</c>, and put it at the same level as the <c>PROJECT</c> folder.
+      In a terminal (or in Python), enter the <c>PROJECT-CLI</c> directory,
+      and run the <c>pretext new book</c> command.
+      This will create the directory structure that the PreTeXt-CLI expects.
+    </p>
+
+    <p>
+      You now should see the following:
+      <ul>
+        <li>A <c>project.ptx</c> file</li>
+        <li>An <c>assets</c> folder</li>
+        <li>A <c>generated-assets</c> folder</li>
+        <li>A <c>publication</c> folder</li>
+        <li>A <c>source</c> folder</li>
+      </ul>
+    </p>
+
+    <p>
+      Within the <c>source</c> folder, there will be a file called <c>main.ptx</c>,
+      and within the <c>publication</c> folder, there will be a publisher file,
+      called <c>publication.ptx</c>.
+    </p>
+  </section>
+
+  <section xml:id="cli-transfer">
+    <title>Transferring files</title>
+    <p>
+      In your original project, you probably have one folder containing your <pretext/> source,
+      and you may have other folders containing external files,
+      such as images, or code for interactive elements.
+      If you use additional <init>XSL</init>, such as a LaTeX style sheet,
+      you may have a folder for those files as well.
+    </p>
+
+    <p>
+      You want to copy your files as follows:
+      <ol>
+        <li>
+          <p>
+            Copy all of your <pretext/> source files into <c>PROJECT-CLI/source</c>.
+          </p>
+
+          <p>
+            If you already have a file called <c>main.ptx</c>,
+            it is fine to let this file overwrite the one created by the <c>pretext init</c> command.
+            If you do not have such a file, you can either delete <c>main.ptx</c>,
+            or rename your top-level file to <c>main.ptx</c>.
+          </p>
+
+          <p>
+            <alert>Note:</alert> if you do not end up with a file called <c>main.ptx</c>,
+            or if your file with this name is not your top-level file,
+            see <xref ref="cli-publication"/> for details on how to edit the <c>project.ptx</c> file accordingly.
+          </p>
+        </li>
+        <li>
+          <p>
+            Copy each folder containing external assets such as images into the <c>assets</c> folder.
+            Note that you want to copy the <em>folders</em> and not the contents of those folders.
+            This should result in folders such as <c>PROJECT-CLI/assets/images</c>.
+          </p>
+        </li>
+        <li>
+          <p>
+            If applicable, copy over your <c>xsl</c> folder, and any other relevant folders.
+            But do not copy over your <c>output</c> or <c>publication</c> folders.
+          </p>
+        </li>
+      </ol>
+    </p>
+  </section>
+
+  <section xml:id="cli-publication">
+    <title>Updating docinfo, the publication file, and the project manifest</title>
+    <p>
+      Open both your original <c>publication.ptx</c> file,
+      and the one created by the <c>pretext init</c> command.
+      The file created by <c>pretext init</c> will contain some directory management details, such as:
+      <cd>
+        <cline>&lt;source webwork-problems="../generated-assets/webwork/webwork-representations.xml"&gt;</cline>
+        <cline>    &lt;directories external="../assets" generated="../generated-assets"/&gt;</cline>
+        <cline>&lt;/source&gt;</cline>
+      </cd>
+    </p>
+
+    <p>
+      If your publication file did not already have a <tag>source</tag> element,
+      copy this from the auto-generated publisher file into your own.
+      If it does, adjust your existing content to match the director structure needed by the PreTeXt-CLI.
+    </p>
+
+    <p>
+      When this is done, replace the publication file created by <c>pretext init</c> with your own.
+    </p>
+
+    <p>
+      If your <tag>docinfo</tag> contains a <tag>brandlogo</tag>,
+      you may need to change the <attr>source</attr> attribute from <c>logo.png</c>
+      to <c>images/logo.png</c>, where <c>logo.png</c> is the name of the file used for your brand logo.
+      This assumes that the file you use for your brand logo is contained in
+      <c>PROJECT-CLI/assets/images/</c>.
+    </p>
+
+    <p>
+      Next, we need to update the <c>project.ptx</c> file that was created by <c>pretext init</c>.
+      Opening the file, you will see there are several components: <c>html</c>,
+      <c>latex</c>, <c>pdf</c>, and <c>subset</c>.
+      The <c>subset</c> component is quite useful for editing:
+      specify an <c>xml:id</c> from your book (such as a chapter or section),
+      and you can use the command <c>pretext build subset</c> to do a partial build of your project.
+    </p>
+
+    <p>
+      In each component, ensure that the <tag>source</tag> tag points to the top level file of your project.
+      By default, this is <c>source/main.ptx</c>,
+      but if you kept a different file name during the step in <xref ref="cli-transfer"/>,
+      you will need to change this line to point to the correct file.
+    </p>
+
+    <p>
+      Similarly, ensure that the <tag>publication</tag> tag points to the correct publication file.
+    </p>
+
+    <p>
+      If you use any string parameters that cannot be transitioned to the publisher file,
+      you can add them in your <c>project.ptx</c> manifest.
+      For example, if you have WeBWorK problems and use the static preview feature,
+      your <c>xsltproc</c> executable would have contained
+      <cd>
+        --stringparam webwork.divisional.static no
+      </cd>
+      In the <tag>html</tag> section of <c>project.ptx</c>, you can add
+      <cd>
+        &lt;stringparam key="webwork.divisional.static" value="no"/&gt;
+      </cd>
+      You can also specify a WeBWorK server as a string parameter,
+      using <c>key="server" </c>, with <attr>value</attr> set to the server you use.
+    </p>
+
+    <p>
+      Finally, if there is any component for which you use additional <init>XSL</init>,
+      you can specify this in the manifest as well.
+      For example, if you have a LaTeX style sheet <c>xsl/latex-style.xsl</c>,
+      then in both the <tag>latex</tag> and <tag>pdf</tag> sections,
+      you should add the line
+      <cd>
+        &lt;xsl&gt;xsl/latex-style.xsl&lt;/xsl&gt;
+      </cd>
+      See <xref ref="cli-xsl"/> below for further details on using custom <init>XSL</init>.
+    </p>
+  </section>
+
+  <section xml:id="cli-xsl">
+    <title>Updating your custom <init>XSL</init></title>
+    <p>
+      Because the PreTeXt-CLI uses its own copy of <pretext/>,
+      we have to change how the custom <init>XSL</init> imports the <pretext/> style sheets.
+    </p>
+
+    <p>
+      At time of writing, import of the <c>entities.ent</c> file,
+      which defines all the different components of <pretext/>,
+      does not seem to work automatically. Our first step will be to make a copy of this file,
+      and place it in the <c>xsl</c> folder, next to our custom <init>XSL</init> style sheet.
+    </p>
+
+    <p>
+      If you still have a copy of the <pretext/> repository,
+      you can copy <c>entities.ent</c> from <c>pretext/xsl</c>.
+      If not, open a Python terminal, and then run:
+      <cd>
+        <cline>from pretext import static</cline>
+        <cline>static.core_xsl('pretext-latex.xsl',as_path=True)</cline>
+      </cd>
+      This will output the path to the <pretext/> <init>XSL</init>,
+      and in that folder you can find <c>entities.ent</c> and copy it to <c>PROJECT-CLI/xsl</c>.
+    </p>
+
+    <p>
+      Next, open your custom <init>XSL</init> file. You will need to change two lines.
+      First, you will have a line that looks something like
+      <cd>
+        &lt;!ENTITY % entities SYSTEM "../xsl/entities.ent"/&gt;
+      </cd>
+      Change the string <c>../xsl/entities.ent</c> to simply <c>entities.ent</c>.
+      (Alternatively, instead of copying this file as above, you could enter the full path.)
+    </p>
+
+    <p>
+      Second, for each style sheet that you import, you will have a line that looks something like
+      <cd>
+        &lt;xsl:import href="../xsl/pretext-latex.xsl"/&gt;
+      </cd>
+      if you are using custom <init>XSL</init> for LaTeX.
+      Replace <c>href="../xsl/pretext-latex.xsl" </c> with <c>pretext-href="pretext-latex.xsl" </c>.
+      This tells the PreTeXt-CLI to import the <init>XSL</init> style sheet that it ships with.
+    </p>
+  </section>
+  <conclusion>
+    <p>
+      At this point, you should be ready to try building your project with the PreTeXt-CLI.
+      The advice above is based on a particular case study, using APEX Calculus.
+      The requirements of your particular project may differ somewhat from the steps presented here.
+    </p>
+
+    <p>
+      As development proceeds on the PreTeXt-CLI, some of this advice may change.
+      In particular, in a future version,
+      it should no longer be necessary to make a copy of <c>entities.ent</c>.
+    </p>
+  </conclusion>
+</appendix>

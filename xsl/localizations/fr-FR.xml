@@ -18,6 +18,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- fr-FR, French (France) -->
+
 <!-- Thomas W. Judson, judsontw@sfasu.edu, 2016-03-23 -->
 <!-- Julien Giol, julien.giol@gmail.com, 2018-02-05   -->
 <!-- Jean-Sébastien Turcotte, js.turcotte@cgodin.qc.ca, 2021-02-19-->
@@ -34,7 +35,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'>Affirmation</localization>
     <localization string-id='fact'>Fait</localization>
     <localization string-id='identity'>Identité</localization>
+    <!-- PROOF-LIKE -->
     <localization string-id='proof'>Démonstration</localization>
+	<localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Justification</localization>
+    <localization string-id='reasoning'>Raisonnement</localization>
+    <localization string-id='explanation'>Explication</localization>
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Cas</localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
@@ -84,7 +91,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='references'>Références</localization>
     <localization string-id='backmatter'>Annexes</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
-    <!--<localization string-id='commentary'>Commentaire</localization> -->
+    <localization string-id='commentary'>Commentaire</localization>
     <localization string-id='paragraphs'>Paragraphes</localization>  <!--checked-->
     <localization string-id='subparagraph'>Sous-paragraphe</localization> <!--checked-->
     <!-- Components of the narrative -->
@@ -96,8 +103,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Observation</localization>
     <localization string-id='warning'>Mise en garde</localization>
     <!-- <localization string-id='insight'>Insight</localization> -->
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Calcul</localization>
     <localization string-id='technology'>Technologie</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Digression</localization>
     <localization string-id='biographical'>Digression biographique</localization>
@@ -123,6 +132,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='outcomes'>Résultats</localization>
     <localization string-id='outcome'>Résultat</localization>
     <!--  -->
+    <!-- "Open" means unsolved, a research question/problem -->
+    <!-- <localization string-id='openquestion'>Open Question</localization> -->
+    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
+    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <!-- "discussion" on open problems -->
+    <!-- <localization string-id='context'>Context</localization> -->
+    <!-- <localization string-id='discussion'>Discussion</localization> -->
+    <!-- <localization string-id='opinion'>Opinion</localization> -->
+    <!-- <localization string-id='status'>Status</localization> -->
+    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <!--  -->
     <localization string-id='figure'>Figure</localization>
     <localization string-id='table'>Table</localization>
     <localization string-id='listing'>Listing</localization>
@@ -136,6 +156,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Paragraphe</localization>
     <localization string-id='blockquote'>Citation</localization>
+    <!-- <localization string-id='pre'>Code Block</localization> -->
     <!-- Literate programming, a chunk of computer code -->
     <!-- <localization string-id='fragment'>Fragment</localization> -->
     <!-- Parts of an exercise and its solution -->
@@ -164,6 +185,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Avant-propos</localization>
     <localization string-id='dedication'>Dédicace</localization>
     <localization string-id='colophon'>Colophon</localization>
+    <!-- Runestone Activities -->
+    <localization string-id='video'>Vidéo</localization>
+    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
@@ -173,6 +199,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'>Index</localization>
     <localization string-id='see'>Visiter</localization>
     <localization string-id='also'>Voir Aussi</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>Symbole</localization>
+    <localization string-id='description'>Description</localization>
+    <localization string-id='location'>Emplacement</localization>
+    <localization string-id='page'>Page</localization>
+    <localization string-id='continued'>Suite à la page suivante</localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
     <localization string-id='skip-to-content'>Sauter au contenu</localization>
@@ -188,6 +220,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='annotations'>Annotations</localization> <!--does not get printed -->
     <localization string-id='feedback'>Commentaires</localization>  <!--e.g., in case there is a link for feedback.  Will appear in HTML.-->
     <localization string-id='authored'>Rédigé avec PreTeXt</localization> <!--e.g., authored in PreTeXt.  Will appear in HTML.-->
+    <!-- Search Results display/dialog -->
+    <localization string-id='search-results-heading'>Résultats de la recherche</localization>
+    <localization string-id='no-search-results'>Aucun résultat</localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'>À</localization>
     <localization string-id='from'>De</localization>
@@ -199,7 +234,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='todo'>À Faire</localization>
     <localization string-id='editor'>Éditeur</localization>
     <localization string-id='edition'>Édition</localization>
-    <localization string-id='website'>Site web</localization>
+    <localization string-id='website'>Site Web</localization>
     <localization string-id='copyright'>Copyright</localization>
     <localization string-id='incontext'>Contexte</localization>
     <!-- Sage Cell evaluate button      -->
@@ -210,4 +245,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'>Évaluer</localization>
     <localization string-id='code'>Code</localization>
+    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <localization string-id='instructions'>Instructions</localization>
+    <!-- Interactive exercise feedback messages  -->
+    <localization string-id='correct'>Correct</localization>
+    <localization string-id='incorrect'>Incorrect</localization>
+    <localization string-id='blank'>Vide</localization>
+    <localization string-id='submit'>Soumettre</localization>
+    <localization string-id='check-responses'>Vérifier les réponses</localization>
+    <localization string-id='reveal'>Dévoiler</localization>
+    <localization string-id='randomize'>Générer une nouvelle version aléatoire</localization>
+    <localization string-id='activate'>Activer</localization>
+    <localization string-id='reset'>Réinitialiser</localization>
+    <!-- <localization string-id='array'>array</localization> -->
 </locale>

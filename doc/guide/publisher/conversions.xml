@@ -16,17 +16,21 @@
         <p>But different output formats have different capabilities.  For example, a conversion to <init>HTML</init> can take advantage of knowls to organize smaller chunks of content, while a conversion to <init>PDF</init> can take advantage of page numbers for cross-references.  And in these two examples, the capability of the one output format is mostly impossible or silly in the other.  Look here in this chapter for notes about options that are largely <em>independent</em> of the particular conversion.  Subsequent chapters contain notes about options that are largely <em>specific</em> to a particular conversion.</p>
     </introduction>
 
-    <section xml:id="publisher-file">
-        <title>Publisher File</title>
-        <idx><h>publisher file</h></idx> <idx><h>publication file</h><see>publisher file</see></idx>
+    <section xml:id="publication-file">
+        <title>Publication File</title>
+        <idx><h>publication file</h></idx> <idx><h>publisher file</h><see>publication file</see></idx>
 
-        <p>As of 2021-01-23 we are well along on a transition to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>. Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publisher-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the old method (which is still in use, but will eventually be obsolete).</p>
+        <p>A key concept when using <pretext/> to describe your writing project is that an author should concentrate on <em>content</em> and then <em>later</em> a publisher can concentrate on <em>presentation</em>.  (Of course, many <pretext/> authors are also their publisher, making this distinction more difficult than when a professional publisher was a necessity).</p>
+
+        <p>We isolate these publisher decisions in a file we call a <term>publication file</term>.  Generally, use of this file will change <em>how</em> words look, or are arranged, on the page, but will not change the author's words <em>themselves</em>.  some software might call this a <q>configuration file</q>, but we think it is very important to indicate its role in the publication process.</p>
+
+        <p>In tnis section, we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publication-file-reference"/>.</p>
 
         <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.  Avoid using spaces in the filename, even if your operating system encourages it.</p>
 
-        <p>Entries that control aspects of the output are often attributes of various elements, but may also be the content of elements.  When you read the reference material in <xref ref="publisher-file-reference"/> be aware that we use a sort of shorthand to describe these entries, modeled on a specification called XPath.  For example, if we say to set<cd>
+        <p>Entries that control aspects of the output are often attributes of various elements, but may also be the content of elements.  When you read the reference material in <xref ref="publication-file-reference"/> be aware that we use a sort of shorthand to describe these entries, modeled on a specification called XPath.  For example, if we say to set<cd>
             <cline>/publication/foo/bar/@bazz</cline>
-        </cd>to possible values of <c>yes</c>, <c>no</c>, or <c>maybe</c> then the following will be the guts of a legitimate publisher file that would somehow adjust your output in some way.  In particular, note that the <q>at sign</q>, <c>@</c>, indicates an attribute of the preceding element.</p>
+        </cd>to possible values of <c>yes</c>, <c>no</c>, or <c>maybe</c> then the following will be the guts of a legitimate publication file that would somehow adjust your output in some way.  In particular, note that the <q>at sign</q>, <c>@</c>, indicates an attribute of the preceding element.</p>
 
         <pre><![CDATA[
             <publication>
@@ -36,22 +40,7 @@
             </publication>]]>
         </pre>
 
-        <p>
-            The path to a publisher file can be specified using the <c>-p</c> option for <c>pretext build</c>.  For example, if your publisher file is <c>publication.ptx</c> in the folder <c>publication</c> (parallel to <c>source</c>), you would enter the following.
-        </p>
-
-        <console>
-            <input>pretext build html -p publication/publication.ptx</input>
-        </console>
-
-        <p>
-            Alternatively, you can specify the path to the publisher file in the <c>project.ptx</c> manifest in the <tag>publication</tag> element for each <tag>target</tag>, allowing you to have a different publisher file for different targets.
-        </p>
-        <aside>
-        <p>To employ the file using <c>xsltproc</c> you use a string parameter (<xref ref="processing-parameters"/>) named <c>publisher</c>.  This should have a path that is relative to the main file for the document.  For example, assuming <c>pod.xml</c> and <c>fauna.xml</c> are in the same directory<cd>
-            <cline>xsltproc -stringparam publisher pod.xml pretext-html.xsl aota.xml</cline>
-        </cd>This file should reduce the many other string parameters in use, and reduce the need for extra <init>XSL</init> files (<xref ref="processing-thin-xsl"/>).</p>
-        </aside>
+        <p>When using the CLI (<xref ref="processing-CLI"/>), the path to a publication file must be specified in the project manifest in the <tag>publication</tag> element for each <tag>target</tag>.</p>
     </section>
 
     <section xml:id="publisher-levels">
@@ -60,11 +49,11 @@
 
         <p>Every <pretext/> document has a hierarchy, even if it might not be very deep.  As an extreme example, for a sub-sub-section of a book, the <tag>subsubsection</tag> is contained in a <tag>subsection</tag>, that <tag>subsection</tag> is contained in a <tag>section</tag>, that <tag>section</tag> is contained in a <tag>chapter</tag>, and that <tag>chapter</tag> is contained in the <tag>book</tag>.  Each division of a document has a <term>level</term>, and the overall <term>root</term> element is always at level 0 (the <tag>book</tag> in the example).  Each other division is at some <term>depth</term>, computed by counting from the root.  So the <tag>subsubsection</tag> in the example is at level 4.</p>
 
-        <p>Many aspects of the different outputs produced can be customized, typically via the publisher file (<xref ref="publisher-file"/>), based on how much of the hierarchy is used or made visible.  A good example is the Table of Contents.  If the level of the Table of Contents of a book is set to 2, then the Table of Contents will be <q>two-deep</q> or have <q>two levels</q> of entries.  More precisely, there will be titles (and maybe page numbers) for every <tag>chapter</tag> and every <tag>section</tag>.</p>
+        <p>Many aspects of the different outputs produced can be customized, typically via the publication file (<xref ref="publication-file"/>), based on how much of the hierarchy is used or made visible.  A good example is the Table of Contents.  If the level of the Table of Contents of a book is set to 2, then the Table of Contents will be <q>two-deep</q> or have <q>two levels</q> of entries.  More precisely, there will be titles (and maybe page numbers) for every <tag>chapter</tag> and every <tag>section</tag>.</p>
 
         <p>When hierarchical numbering is customized by specifying a level, the number of an object will have as many separators (periods, typically) as the level given.  Here's why.  Suppose equations are set to be numbered at level 2.  Then two levels of the hierarchy will be used to create the initial part of the number.  So in an <tag>article</tag>, Equation 5.2.34 will be in Subsection 2, of Chapter 5, and then will be the 34th equation of that sub-section.  Two levels: one separator to describe the division, one less that the number of levels (this is the <term>structure number</term>) and a second separator to set off the count within the division (the <term>serial number</term>).  So, <m>(2 - 1) + 1 = 2</m> separators.  See more on numbering at <xref ref="publisher-numbering"/>.</p>
 
-        <p>Notice that you make no assumptions or decisions in your source about the depth of the Table of Contents, nor the numbering of equations.  At any time, right up to the completion of your project (or later!), you can change this aspect of your output with nearly trivial edits in the publisher file.  Nice.</p>
+        <p>Notice that you make no assumptions or decisions in your source about the depth of the Table of Contents, nor the numbering of equations.  At any time, right up to the completion of your project (or later!), you can change this aspect of your output with nearly trivial edits in the publication file.  Nice.</p>
     </section>
 
     <section xml:id="publisher-numbering">
@@ -77,7 +66,7 @@
 
         <p><term>Blocks</term> are units of content held in a division.  An <tag>example</tag> is a good example.  These are always numbered, so that cross-references are as useful as possible in all output formats.  The number begins with a <term>structure number</term> that is the number of a division.  The division will contain the block, but does not need to be the closest containing division.  For example, Example 5.2.65 of a book has structure number 5.2, indicating it is in Section 2 of Chapter 5.  But this section might be structured as a sequence of sub-sections and Example 5.2.65 would be contained in one of these sub-sections.  But if we started counting all the examples in this <em>section</em> we would find Example 5.2.65 as the sixty-fifth numbered block of the whole <em>section</em>, even if it might only be the twenty-second example of its sub-section.  This final number is known as the <term>serial number</term>.  The granularity of the structure number may be configured.  This is a good place to suggest the complementary <xref ref="publisher-levels"/> on the meaning of the term <term>level</term>.</p>
 
-        <p>Numbering of equations and footnotes may be configured in a manner entirely similar to that of blocks.  See <xref ref="publisher-file-numbering"/> for details on how to control this.</p>
+        <p>Numbering of equations and footnotes may be configured in a manner entirely similar to that of blocks.  See <xref ref="publication-file-numbering"/> for details on how to control this.</p>
 
         <p>As mentioned above, a number is a kind of <term>locator</term><mdash/>it should help a reader locate content, via a cross-reference, an index entry (a specialized cross-reference), or a Table of Contents.  It should also help a reader (teacher) tell another reader (student) where to find content, perhaps as part of a citation to a smaller item within a larger work.  How would you locate Example 5.2.65?  A Table of Contents, in any output format should get you to Section 5.2 quite easily.  We claim that the <tag>remark</tag> immediately preceding Example 5.2.65 should be Remark 5.2.64.  In other words, it will easier to scan the section and quickly home in on the example if the serial numbers count <em>all</em> the numbered blocks, rather than having one sequence of serial numbers counting examples, and a second sequence counting remarks.  Not convinced?  Suppose there were two such sequences of serial numbers.  When you see Remark 5.2.23, should you move forward or backward in your search for Example 5.2.65?</p>
 
@@ -85,59 +74,13 @@
 
         <p>We have implemented some flexibility for figures and tables, and for projects.  This work is in flux, so we have not yet documented the possibilities.  Our view is that figures and tables can be considered visually different enough to merit a separate sequence of serial numbers.</p>
 
-        <p>Divisions that are <tag>chapter</tag>s, and only <tag>chapter</tag>s, may begin with a number other than one.  Primarily this is to accommodate books that need to be printed in multiple physical volumes, so numbering in a second (or subsequent) volume can be correct.  We also understand the instructive value of a computer science text that wants to start counting from zero.  We do not mean to encourage a Chapter 0 that is an introduction (go ahead and title Chapter 1 <articletitle>Introduction</articletitle>) or background preparatory material (make that an appendix).  Understand that a <tag>preface</tag>, or multiple <tag>preface</tag>s, is the place to talk about how, or why, you wrote your book, and/or a place to instruct a reader or instructor about the best ways to use your book.  See <xref ref="publisher-file-numbering"/> for details on how to accomplish this.</p>
+        <p>Divisions that are <tag>chapter</tag>s, and only <tag>chapter</tag>s, may begin with a number other than one.  Primarily this is to accommodate books that need to be printed in multiple physical volumes, so numbering in a second (or subsequent) volume can be correct.  We also understand the instructive value of a computer science text that wants to start counting from zero.  We do not mean to encourage a Chapter 0 that is an introduction (go ahead and title Chapter 1 <articletitle>Introduction</articletitle>) or background preparatory material (make that an appendix).  Understand that a <tag>preface</tag>, or multiple <tag>preface</tag>s, is the place to talk about how, or why, you wrote your book, and/or a place to instruct a reader or instructor about the best ways to use your book.  See <xref ref="publication-file-numbering"/> for details on how to accomplish this.</p>
 
         <note xml:id="best-practice-chapter-zero">
             <title>Use Chapter Zero Carefully</title>
 
             <p>Chapter numbering may start with a number other than one, and zero is a popular choice.  This should not be simply because the first chapter is introductory or preparatory, nor should it be a replacement for a preface, which has a well-defined purpose (see <xref ref="best-practice-preface"/>).</p>
         </note>
-    </section>
-
-    <section xml:id="publisher-customizations">
-    <title>Customizations</title>
-    <idx>customizations</idx>
-
-        <p>The customization feature allows you to create two or more versions of your text for slightly different audiences. To do this, an author defines custom elements that find their translations in a file specified in the publisher file.  Multiple customization files can then be used to build different versions of the text. For example, we might want to create two versions of our <init>AOTA</init> book, one for zoologists and one for laypeople. For the zoologist edition we want animal names to be scientific names, but in the edition for laypeople we want to use common names. The rest of the text is identical.  To execute this, we make every animal name a custom element and create a customization file for each of the two versions.</p>
-
-        <p>Say we want to write a sentence that reads <q>The IUCN red list classification of the western lowland gorilla is critically endangered</q> in the layperson’s edition and <q>The IUCN red list classification of the <taxon>Gorilla gorilla gorilla</taxon> is critically endangered</q> in the zoologist’s edition. We begin by writing the sentence in the source and creating a <tag>custom</tag> element as a place-holder for the name of the gorilla:</p>
-
-        <pre>
-        The &lt;init>IUCN&lt;/init&gt; red list classification of
-        the &lt;custom ref="gorilla-name"/&gt; is critically endangered.
-        </pre>
-
-        <p>Then the file of translations will contain a <tag>custom</tag> element, with a <attr>name</attr> attribute that has value <c>gorilla-name</c>, and whose content is the translation.</p>
-
-        <p>Once you have placed <tag>custom</tag> elements in your source, you need to create one or more files of translations.  To stay organized you might choose to place them in a directory of their own.  The customization file opens with a special element and then contains a definition for each customization.</p>
-
-        <p>For the example above, here is the beginning of the customization file we might name <c>customizations/zoologist.ptx.</c></p>
-
-        <pre>
-        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
-          &lt;!-- Name of Western mountain gorilla --&gt;
-          &lt;custom name= "gorilla-name">
-            &lt;taxon&gt;Gorilla gorilla gorilla&lt;/taxon&gt;
-          &lt;/custom&gt;
-        &lt;/pi:customizations&gt;
-        </pre>
-
-        <p>Note that employing a common value for the <attr>name</attr> attribute and the <attr>ref</attr> attribute makes the association for the replacement in the source. Next, we would also create a customization file named <q>customizations/layperson.ptx</q> that looks like the following.</p>
-
-        <pre>
-        &lt;pi:customizations xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;
-          &lt;!-- Name of Western mountain gorilla --&gt;
-          &lt;custom name= "gorilla-name">western lowland gorilla&lt;/custom&gt;
-        &lt;/pi:customizations&gt;
-        </pre>
-
-        <p>Once the customization files are created, the element <c>&lt;custom ref="gorilla-name"/&gt;</c> can be used <em>throughout</em> the text and will populate automatically depending on which customization file is specified in the publisher file.</p>
-
-        <p>When choosing names to use as values for the  <attr>ref</attr> and <attr>name</attr> attributes, develop a consistent scheme that will make sense to other authors. Do not use spaces or capital letters. This name will never be visible to readers but should be easy for developers to understand.  Placing careful comments in one <q>main</q> customization file can help other authors create new customizations that are accurate.</p>
-
-        <p>Note that this functionality is limited when it comes to irregular plurals and capitalization. Take care with the placement of custom elements: they will not, for example, capitalize automatically at the beginning of a sentence.</p>
-
-        <p>See <xref ref="publisher-file-source-extras"/> for the mechanics of specifying a file of customizations via the publisher file.</p>
     </section>
 
     <section xml:id="exercise-component-visibility">
@@ -150,30 +93,19 @@
         <p>Finally, these settings are observed by the stylesheet which creates a solution manual (see <xref ref="solution-manual"/>).  This might explain why controlling the visibility of a <tag>statement</tag> is of interest.</p>
     </section>
 
-    <section xml:id="processing-parameters">
-        <title>Processing Parameters</title>
-
-        <p>Many of the options for different conversions are accomplished by command-line options by <term>string parameters</term>.  Here is an example:<cd>
-            <cline>pretext build pdf --stringparam latex.font.size "14pt"</cline>
-        </cd>This will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
-
-        <aside>
-            <p>
-                To feed such a string the <c>xsltproc</c>, you would enter <c>xsltproc -stringparam latex.font.size "14pt" pretext-latex.xsl fauna.xml</c>.
-            </p>
-        </aside>
-
-        <p>Notice that this example does nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source, and why they are documented here in the <pubtitle>Publisher's Guide</pubtitle>.  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.  Note that we are phasing out these parameters in favor of the Publisher's File (see <xref ref="publisher-file"/>).</p>
-    </section>
-
-    <section>
+    <section xml:id="watermarks">
         <title>Watermarks</title>
 
         <p>Output can contain a <term>watermark</term><idx>watermark</idx>, which is prominent text in the background of a document.  You might use it to make a draft version (with a date?), or a CONFIDENTIAL version, or a document intended for limited distribution, such as an instructor's solution manual.</p>
 
-        <p>To use, specify the text, and an optional scaling factor to adjust the size.  If your text has spaces, you may need to enclose the string in quote marks so that it passes correctly as a string parameter. For example, all on one line,<cd>
-            <cline>pretext build pdf --stringparam watermark.text "DRAFT 2034-05-25"</cline>
-            <cline>  --stringparam watermark.scale 0.5</cline>
+        <p>In <init>PDF</init> output this text will render as large, light grey text, at an angle across the page.  <init>HTML</init> output will have repeated <init>SVG</init> images of the text below/behind the usual text.</p>
+
+        <p>To use, a publication file entry can be used to specify the text itself, along with a scaling factor that can be used to fill the page and prevent overruns.  Note that the text is assumed to be simple (e.g.<nbsp/>no markup) and when used with <latex/> output certain characters (e.g.<nbsp/>a percent sign) may cause problems.  Make a feature request if the handling of this text needs to be more robust.  See <xref ref="common-watermark-options"/> for exact syntax.</p>
+
+        <p>Here is an example of a specification in the publication file.<cd>
+            <cline>&lt;common&gt;</cline>
+            <cline>  &lt;watermark scale="1.2"&gt;DRAFT 2034-05-25&lt;/watermark&gt;</cline>
+            <cline>&lt;/common&gt;</cline>
         </cd></p>
     </section>
 </chapter>

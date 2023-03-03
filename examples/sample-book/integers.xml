@@ -33,7 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </introduction>
 
     <section xml:id="section-math-induction">
-        <title>Mathematical Induction</title>
+        <title>Mathematical Induction and Math in a Title <m>A\notsubset B</m></title>
 
         <p>Suppose we wish to show that
             <me>1 + 2 + \cdots + n = \frac{n(n + 1)}{2}</me>
@@ -353,7 +353,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercises>
         <title>Programming Exercises</title>
 
-        <exercise>
+        <exercise xml:id="sieve-primes">
             <title>The Sieve of Eratosthenes</title>
             <idx><h>Sieve of Eratosthenes</h></idx>  
             <statement>

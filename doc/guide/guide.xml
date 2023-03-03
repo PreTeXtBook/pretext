@@ -22,7 +22,7 @@
             <title>Introduction</title>
 
             <xi:include href="introduction/start-here.xml"/>
-            <xi:include href="introduction/quickstart-example.xml"/>
+            <xi:include href="introduction/tutorial.xml"/>
         </part>
 
         <part xml:id="part-author">
@@ -49,10 +49,13 @@
             <xi:include href="publisher/production.xml"/>
             <xi:include href="publisher/open-licenses.xml"/>
             <xi:include href="publisher/conversions.xml"/>
+            <xi:include href="publisher/custom-versions.xml"/>
+            <xi:include href="publisher/further-customizations.xml"/>
             <xi:include href="publisher/online-html.xml"/>
             <xi:include href="publisher/pdf-print.xml"/>
             <xi:include href="publisher/epub.xml"/>
             <xi:include href="publisher/runestone.xml"/>
+            <xi:include href="publisher/braille.xml"/>
             <xi:include href="publisher/slides.xml"/>
             <xi:include href="publisher/jupyter-notebook.xml"/>
             <xi:include href="publisher/instructor-version.xml"/>
@@ -62,8 +65,8 @@
             <xi:include href="publisher/latex-fonts.xml"/>
             <xi:include href="publisher/latex-styling.xml"/>
             <xi:include href="publisher/cover-design.xml"/>
-            <xi:include href="publisher/publisher-file.xml"/>
             <xi:include href="publisher/print-on-demand.xml"/>
+            <xi:include href="publisher/publication-file.xml"/>
             <!-- keep the Publisher's FAQ last within part -->
             <xi:include href="publisher/publisher-faq.xml"/>
         </part>
@@ -74,6 +77,8 @@
             <xi:include href="developer/xsltproc.xml"/>
             <xi:include href="developer/pretext-script.xml"/>
             <xi:include href="developer/coding.xml"/>
+            <xi:include href="developer/localization.xml"/>
+            <xi:include href="developer/code-style.xml"/>
             <xi:include href="developer/debugging.xml"/>
             <xi:include href="developer/git.xml"/>
         </part>

@@ -41,28 +41,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
-<!-- Output Python as text -->
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- Enclosing structure is a Python list -->
-<!-- So wrap at outermost level and       -->
-<!-- return control to extract-identity   -->
-<xsl:template match="/">
-    <xsl:text>[</xsl:text>
-    <xsl:apply-imports />
-    <xsl:text>]</xsl:text>
-</xsl:template>
+<!-- Avoid Catch-22: default assembly/pre-processor providews output     -->
+<!-- for a conversion to a static format, but that format will *replace* -->
+<!-- "video" by a static version (a "sidebyside") and it will not be     -->
+<!-- available for extraction.                                           -->
+<xsl:variable name="exercise-style" select="'dynamic'"/>
 
-<!-- YouTube ID, and internal id as a Python pair -->
-<xsl:template match="video[@youtube]" mode="extraction">
+<!-- YouTube ID, and internal id as a comma-separated pair per line -->
+<xsl:template match="video[@youtube and not(@preview)]" mode="extraction">
     <!-- replace commas with spaces, then normalize space,                       -->
     <!-- then tack on a space at the end, then grab content prior to first space -->
     <xsl:variable name="first-video-id" select="substring-before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />
-    <xsl:text>('</xsl:text>
     <xsl:value-of select="$first-video-id" />
-    <xsl:text>', '</xsl:text>
+    <xsl:text>,</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>'), </xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

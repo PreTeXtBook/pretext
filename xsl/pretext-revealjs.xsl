@@ -25,9 +25,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     %entities;
 ]>
 
+<!-- "pi" necessary to trap "visual" URLs automatically being -->
+<!-- added by "assembly" for with-content "url" elements      -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
@@ -59,7 +62,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="/">
     <xsl:call-template name="reveal-warnings"/>
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <xsl:apply-templates select="$root"/>
 </xsl:template>
 
@@ -72,7 +76,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="html-index-page" select="/.."/>
 
 <!-- Kill knowl-ing of various environments -->
-<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>no</xsl:text>
 </xsl:template>
 
@@ -293,12 +297,12 @@ dfn {
       <section>
         <!-- we assume an overall title exists -->
         <h1>
-            <xsl:apply-templates select="/pretext/slideshow" mode="title-full" />
+            <xsl:apply-templates select="$root/slideshow" mode="title-full" />
         </h1>
         <!-- subtitle would be optional, subsidary -->
-        <xsl:if test="/pretext/slideshow/subtitle">
+        <xsl:if test="$root/slideshow/subtitle">
             <h2>
-                <xsl:apply-templates select="/pretext/slideshow" mode="subtitle" />
+                <xsl:apply-templates select="$root/slideshow" mode="subtitle" />
             </h2>
         </xsl:if>
         <!-- we assume at least one author, these are in a table -->
@@ -438,6 +442,12 @@ dfn {
   </img>
 </xsl:template>
 
+<!-- A "url" with content gets an automatic footnote with the @visual -->
+<!-- attribute value (if non-empty) or a mildly-sanitized version of  -->
+<!-- @href.  This template identifies and kills that special          -->
+<!-- construction, since a slideshow really doesn't need footnotes.   -->
+<xsl:template match="fn[@pi:url]"/>
+
 <!-- Side-By-Side -->
 <!-- Built by implementing two abstract   -->
 <!-- templates from the -common templates -->
@@ -540,9 +550,9 @@ dfn {
     </h3>
       <xsl:apply-templates select="statement"/>
   </div>
-  <xsl:if test="proof">
+  <xsl:if test="&PROOF-LIKE;">
   <div class="proof">
-    <xsl:apply-templates select="proof"/>
+    <xsl:apply-templates select="&PROOF-LIKE;"/>
   </div>
 </xsl:if>
 </div>

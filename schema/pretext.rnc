@@ -1,7 +1,9 @@
 
             grammar {
             
-            start =
+            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
+            
+            Pretext =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
@@ -225,7 +227,7 @@
                 }
             Abstract =
                 element abstract {
-                    MetaDataTitleOptional,
+                    MetaDataTarget,
                     BlockText+
                 }
             ColophonFront =
@@ -497,7 +499,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
-                    attribute interactive {"pythontutor"}?,
+                    attribute interactive {"codelens"}?,
                     element input {text}
                 }
             
@@ -505,7 +507,7 @@
                 element ol {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute label {text}?,
+                    attribute marker {text}?,
                     element li {
                         (
                             (MetaDataTarget, TextParagraph)
@@ -517,7 +519,7 @@
                 element ul {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute label {"disc" | "circle" | "square" | ""}?,
+                    attribute marker {"disc" | "circle" | "square" | ""}?,
                     element li {
                         (
                             (MetaDataTarget, TextParagraph)
@@ -597,7 +599,8 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
-                          (IntroductionStatement?, Task+, ConclusionStatement?)
+                          (IntroductionStatement?, Task+, ConclusionStatement?) |
+                          (IntroductionText?, WebWork, ConclusionText?)
                        ),
                        Postlude?
                     )
@@ -633,7 +636,8 @@
                 BlockStatement+
             Computation =
                 element computation {ComputationLike} |
-                element technology {ComputationLike}
+                element technology {ComputationLike} |
+                element data {ComputationLike}
             
             AsideLike =
                 MetaDataTitleOptional,
@@ -780,7 +784,6 @@
                     attribute decorative {"yes" | "no"}?,
                     element description {(TextShort | WWVariable)*}?,
                     element latex-image {
-                        attribute syntax {"PGtikz"},
                         text
                     }?
                 }
@@ -886,7 +889,7 @@
                     BlockStatement |
                     element ol {
                         attribute cols {text}?,
-                        attribute label {text}?,
+                        attribute marker {text}?,
                         element li {
                             MetaDataTarget,
                             (TextParagraph | BlockText+)
@@ -1034,13 +1037,6 @@
                         (StatementExerciseWW, HintWW?, SolutionWW?)
                     |
                         (IntroductionText?, TaskWW+, ConclusionText?)
-                    |
-                        element stage {
-                            Title?,
-                            StatementExerciseWW,
-                            HintWW?,
-                            SolutionWW?
-                        }+
                     )
                 }
             BlockStatementWW =
@@ -1329,9 +1325,13 @@
                     }
                 }
             
+            FillInMath = element fillin {
+                             (attribute fill{text}?|attribute characters {xsd:integer}?),
+                             empty
+                         }
             MathInline =
                 element m {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 }
             MathRow =
                 element mrow {
@@ -1345,16 +1345,16 @@
                                        "maltese" | "dmaltese" | "tmaltese" }
                     )?,
                     attribute break {"yes" | "no"}?,
-                    mixed {(Xref | FillIn | WWVariable)*}
+                    mixed {(Xref | FillInMath | WWVariable)*}
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element me {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element men {
                     MetaDataTarget,
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element md {
                     attribute number {"yes" | "no"}?,
@@ -1444,6 +1444,16 @@
                 element vs {empty} |
                 element viz {empty}
             
+            FillInText =
+                element fillin {
+                    attribute characters {xsd:integer}?,
+                    attribute rows {xsd:integer}?,
+                    attribute cols {xsd:integer}?,
+                    empty
+                }
+            Generator |=
+                FillInText
+            
             UnitSpecification =
                     attribute prefix {text}?,
                     attribute base {text},
@@ -1459,10 +1469,6 @@
                 element nbsp {empty} |
                 element ndash {empty} |
                 element mdash {empty}
-            
-            FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-            Character |=
-                FillIn
             
             Character =
                 element lsq {empty} |
@@ -1573,7 +1579,6 @@
                 }
             Configuration |=
                 element latex-image-preamble {
-                    attribute syntax {"PGtikz"}?,
                     text
                 }
             Configuration |=

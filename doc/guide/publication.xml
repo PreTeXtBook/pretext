@@ -25,13 +25,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <index-page ref="guide-toc"/>
         <baseurl href="https://pretextbook.org/doc/guide/html/"/>
         <css style="default" colors="blue_red"/>
-        <analytics google-gst="UA-48811660-1"
-                   statcounter-project="9664088"
-                   statcounter-security="6e60c510"/>
-        <search google-cx="008832104071767086392:woji51c1uko"/>
+        <analytics google-gst="UA-48811660-1" statcounter-project="9664088" statcounter-security="6e60c510"/>
+        <search variant="default"/>
     </html>
 
+    <latex font-size="10">
+        <page>
+            <geometry>letterpaper,total={6.5in,9in}</geometry>
+        </page>
+    </latex>
+
     <!-- Relative path, relative to "main" source file -->
-    <source webwork-problems="webwork-representations.ptx"/>
+    <source webwork-problems="webwork-representations.xml">
+        <directories external="external" generated="generated"/>
+    </source>
+
+    <!-- These are the defaults but written explicitly here to serve as a model. -->
+    <webwork server="https://webwork-ptx.aimath.org" course="anonymous" coursepassword="anonymous" user="anonymous" userpassword="anonymous" />
 
 </publication>

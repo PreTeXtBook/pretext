@@ -232,7 +232,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="statement">
             <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="hint|answer|solution"/>
+            <xsl:apply-templates select="&SOLUTION-LIKE;"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="*[self::hint|self::answer|self::solution]"/>
@@ -258,10 +258,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="statement">
             <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="proof"/>
+            <xsl:apply-templates select="&PROOF-LIKE;"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*[self::proof]"/>
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -274,7 +274,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- THEOREM-LIKE only -->
-<xsl:template match="proof">
+<xsl:template match="&PROOF-LIKE;">
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>.&#xa;</xsl:text>
     <!-- structured -->
@@ -303,7 +303,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="statement">
             <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="hint|answer|solution"/>
+            <xsl:apply-templates select="&SOLUTION-LIKE;"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="*[self::hint|self::answer|self::solution]"/>
@@ -311,7 +311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="hint|answer|solution">
+<xsl:template match="&SOLUTION-LIKE;">
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="non-singleton-number" />

@@ -38,6 +38,14 @@
 <!-- This may have no practical effect -->
 <xsl:output method="xml" encoding="UTF-8" doctype-system="about:legacy-compat" indent="no" />
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- Content will go into EPUB directory           -->
 <!-- package.opf is main metadata file             -->
 <!-- (META-INF/container.xml will point to it)     -->
@@ -137,23 +145,6 @@
 <xsl:variable name="b-webwork-reading-static" select="true()" />
 <xsl:variable name="b-webwork-worksheet-static" select="true()" />
 
-<!-- Cover image filename, once -->
-<!-- May be empty, in which case pretext/pretext will try to build a cover.png -->
-<xsl:variable name="publication-cover-filename">
-    <xsl:value-of select="$publication/epub/@cover"/>
-</xsl:variable>
-<xsl:variable name="b-has-cover-image" select="not($publication-cover-filename = '')"/>
-<xsl:variable name="cover-filename">
-    <xsl:choose>
-        <xsl:when test="$b-has-cover-image">
-            <xsl:value-of select="$publication-cover-filename"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>cover.png</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 <!-- Kindle needs various tweaks, way beyond just math as MathML -->
 <!-- and PNG images.  So a misnomer to call it a "math format",  -->
 <!-- but a a boolean sure helps                                  -->
@@ -211,9 +202,6 @@
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is relatively new, as of 2021-08-01.  Note that creating&#xa;an EPUB requires the pretext/pretext script, and not this stylesheet alone.</xsl:with-param>
-    </xsl:call-template>
     <!-- no hope for an "article" so fail immediately, with warning -->
     <xsl:if test="not($b-is-book)">
         <xsl:call-template name="banner-warning">
@@ -223,7 +211,8 @@
     </xsl:if>
     <!-- analyze authored source -->
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <!-- Following should use $root or $document-root as defined -->
     <!-- by the "assembly" template.  Checked 2020-07-16.        -->
     <xsl:call-template name="setup" />
@@ -273,6 +262,7 @@
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                 <xsl:call-template name="converter-blurb-html" />
+                <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -284,7 +274,7 @@
                 </title>
             </head>
             <!-- use class to repurpose HTML CSS work -->
-            <body class="pretext-content epub">
+            <body class="ptx-content epub">
                 <xsl:copy-of select="$content" />
                 <!-- Copy MathJax's font information to the bottom -->
                 <xsl:copy-of select="document($mathfile)/pi:math-representations/svg:svg[@id='font-data']"/>
@@ -441,7 +431,7 @@
             <xsl:value-of select="substring(date:date-time(),1,19)" />
             <xsl:text>Z</xsl:text>
         </xsl:element>
-        <meta name="cover" content="{$xhtml-dir}/{$cover-filename}" />
+        <meta name="cover" content="{$xhtml-dir}/{$epub-cover-dest}" />
     </metadata>
 </xsl:template>
 
@@ -462,6 +452,7 @@
     <xsl:variable name="discovery-manifest" select="exsl:node-set($discovery)"/>
     <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
+        <item id="css-ptx"    href="{$css-dir}/pretext.css"           media-type="text/css"/>
         <item id="css-addon"  href="{$css-dir}/pretext_add_on.css"    media-type="text/css"/>
         <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
         <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
@@ -500,11 +491,11 @@
                 </xsl:choose>
             </xsl:attribute>
         </item>
-        <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image">
+        <item id="cover-image" href="{$xhtml-dir}/{$epub-cover-dest}" properties="cover-image">
             <xsl:attribute name="media-type">
                 <xsl:variable name="extension">
                     <xsl:call-template name="file-extension">
-                        <xsl:with-param name="filename" select="$cover-filename" />
+                        <xsl:with-param name="filename" select="$epub-cover-dest" />
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:choose>
@@ -687,8 +678,20 @@
             <!-- for actual EPUB file eventually output -->
             <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
         </filename>
-        <!-- pubfilename maybe empty -->
-        <cover pubfilename="{$publication-cover-filename}"/>
+        <!-- Information about the cover file to transmit to the Python build routine -->
+        <cover source="{$epub-cover-source}" dest="{$epub-cover-dest}">
+            <!-- yes/no on if the authored provided a custom image file -->
+            <xsl:attribute name="authored-cover">
+                <xsl:choose>
+                    <xsl:when test="$b-authored-cover">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>no</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </cover>
         <!-- These may be used in automated creation of a cover image -->
         <title>
             <xsl:apply-templates select="$document-root" mode="title-simple"/>
@@ -817,6 +820,19 @@ width: 100%
 <!-- Content files -->
 <!-- ############# -->
 
+<!-- "coverpage.html" comes in two flavors:                            -->
+<!--                                                                   -->
+<!-- 1.  An author provides a cover image via the publication file and -->
+<!--     then this page has no need of any CSS and the body has a      -->
+<!--     very specific (short) form. -->
+<!--                                                                   -->
+<!-- 2.  No cover image is provided by the author.  The core Python    -->
+<!--     routines will try very hard to build a simple generic image,  -->
+<!--     very similar (but not identical) to what we create here.  But -->
+<!--     that process can fail, and when it does, various packaging    -->
+<!--     here is backed out.  More immediately, we build a simple page -->
+<!--     (with CSS) having title, subtitle, and authors.               -->
+
 <xsl:template match="frontmatter" mode="epub">
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
@@ -826,7 +842,8 @@ width: 100%
                 <title>
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
-                <xsl:if test="not($b-has-cover-image)">
+                <xsl:if test="not($b-authored-cover)">
+                    <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -835,12 +852,12 @@ width: 100%
                     <xsl:call-template name="epub-kindle-css"/>
                 </xsl:if>
             </head>
-            <body class="pretext-content epub">
+            <body class="ptx-content epub">
                 <xsl:choose>
-                    <xsl:when test="$b-has-cover-image">
+                    <xsl:when test="$b-authored-cover">
                         <section epub:type="cover">
                             <!-- https://ebookflightdeck.com/handbook/coverimage   -->
-                            <img src="{$cover-filename}" alt="cover image"/>
+                            <img src="{$epub-cover-dest}" alt="cover image"/>
                         </section>
                     </xsl:when>
                     <xsl:otherwise>
@@ -874,6 +891,7 @@ width: 100%
         <html xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
+                <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -882,7 +900,7 @@ width: 100%
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>Table of Contents</title>
             </head>
-            <body class="pretext-content epub" epub:type="frontmatter">
+            <body class="ptx-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
@@ -1129,7 +1147,7 @@ width: 100%
 <!-- Everything configurable by author, 2020-01-02         -->
 <!-- Roughly in the order of old  html.knowl.*  switches   -->
 <!-- Similar HTML templates return string for boolean test -->
-<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
@@ -1257,6 +1275,7 @@ width: 100%
                 <head>
                     <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                     <xsl:call-template name="converter-blurb-html" />
+                    <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
@@ -1266,7 +1285,7 @@ width: 100%
                     <title>Endnotes</title>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
-                <body class="pretext-content epub">
+                <body class="ptx-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
                     <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint" mode="endnote-content"/>

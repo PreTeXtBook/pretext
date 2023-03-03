@@ -1,0 +1,2185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2016 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2016/03/25)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+
+<!-- permid is for testing friendlier HTML ids for instructors to see -->
+<chapter xml:id="rune" permid="aBc" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Runestone Testing</title>
+
+    <introduction>
+        <p>We collect Runestone interactive items for testing here, in sections of their own.</p>
+    </introduction>
+
+    <section xml:id="activecode">
+        <title>ActiveCode</title>
+
+        <p>Python programs are made interactive in HTML, on request.</p>
+
+        <listing xml:id="program-activecode-python">
+            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world">
+                <input>
+                print("Hello, World!")
+                </input>
+            </program>
+        </listing>
+
+        <p>A C program will only be interactive if hosted on a Runestone server.</p>
+
+        <listing xml:id="program-activecode-c">
+            <caption>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
+            <program xml:id="c-hello-world" interactive='activecode' language="c">
+                <input>
+                #include &lt;stdio.h&gt;
+
+                int main(void)
+                {
+                    puts("Hello, world!");
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>A Java program will only be interactive if hosted on a Runestone server.</p>
+
+        <listing xml:id="program-activecode-java">
+            <title>Informal Java <q>Hello, World</q></title>
+            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
+            <program xml:id="java-hello-world" interactive='activecode' language="java">
+                <title>"hi" in Java</title>
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>Javascript programs are made interactive in HTML, on request.</p>
+
+        <listing xml:id="program-activecode-javascript">
+            <caption>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript">
+                <input>
+                document.write('Hello, world!');
+                </input>
+            </program>
+        </listing>
+
+        <p>A <tag>program</tag> is not interactive, by default, no matter where it is hosted.</p>
+
+        <listing xml:id="program-static-java">
+            <caption>A static Java program</caption>
+            <program xml:id="java-static" interactive='no' language="java">
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>An Octave program will only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
+
+        <listing xml:id="program-activecode-octave">
+            <caption>A simple Octave program</caption>
+            <program xml:id="octave-simple" interactive='activecode' language="octave">
+                <input>
+                x = 2 + 2
+                printf("%d\n", x)
+                </input>
+            </program>
+        </listing>
+
+        <p>A language not supported by Runestone Services will be rendered static.</p>
+
+        <listing xml:id="program-mistake-pascal">
+            <caption>A Pascal program that cannot be interactive on Runestone</caption>
+            <program xml:id="pascal-mistake" interactive='activecode' language="pascal">
+                <input>
+                program HelloWorld;
+                begin
+                  WriteLn('Hello, world!');
+                end.
+                </input>
+            </program>
+        </listing>
+
+        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output.</p>
+
+        <listing xml:id="listing-python-included">
+            <caption>A Python program that defines some statistics</caption>
+            <program xml:id="python-statistics" interactive='activecode' language="python" label="statistics">
+                <input>
+                loan_amount = [1250.0, 500.0, 1450.0, 200.0, 700.0, 100.0, 250.0, 225.0, 1200.0, 150.0, 600.0, 300.0, 700.0, 125.0, 650.0, 175.0, 1800.0, 1525.0, 575.0, 700.0, 1450.0, 400.0, 200.0, 1000.0, 350.0]
+
+                country_name = ['Azerbaijan', 'El Salvador', 'Bolivia', 'Paraguay', 'El Salvador', 'Philippines', 'Philippines', 'Nicaragua', 'Guatemala', 'Philippines', 'Paraguay', 'Philippines', 'Bolivia', 'Philippines', 'Philippines', 'Madagascar', 'Georgia', 'Uganda', 'Kenya', 'Tajikistan', 'Jordan', 'Kenya', 'Philippines', 'Ecuador', 'Kenya']
+
+                time_to_raise = [193075.0, 1157108.0, 1552939.0, 244945.0, 238797.0, 1248909.0, 773599.0, 116181.0, 2288095.0, 51668.0, 26717.0, 48030.0, 1839190.0, 71117.0, 580401.0, 800427.0, 1156218.0, 1166045.0, 2924705.0, 470622.0, 24078.0, 260044.0, 445938.0, 201408.0, 2370450.0]
+
+                num_lenders_total = [38, 18, 51, 3, 21, 1, 10, 8, 42, 1, 18, 6, 28, 5, 16, 7, 54, 1, 18, 22, 36, 12, 8, 24, 8]
+                </input>
+            </program>
+        </listing>
+
+        <p>Now a programming exercise.  The program upcoming is going to <term>include</term> all the code of the program preceding.  This is accomplished with an <attr>include</attr> attribute on the <em>including</em> program whose value is the <attr>xml:id</attr> of the <em>included</em> program.  So by running the next program, it should pass all of its three tests (for example another example using unit tests, see <xref ref="unit-test-example"/>).  Now reload the page, do not run the program in the listing, and then see that the program in the exercise still runs correctly.</p>
+
+        <p>You'll see nothing that tells the reader that the one chunk of code is prefacing the other.  And in static formats it might be even less obvious.  So you will want to say <em>something</em> to alert the reader.  Here it is easy: <xref ref="exercise-python-including"/> includes all the code from <xref ref="listing-python-included"/>.</p>
+
+        <exercise xml:id="exercise-python-including">
+            <title>A Python program, including another</title>
+            <statement>
+                <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
+            </statement>
+            <program xml:id="python-summation" interactive='activecode' language="python" label="pyton-sum-total" include="python-statistics">
+                <input>
+                loan_total = 0
+                for loan in loan_amount:
+                    loan_total += loan
+                print(loan_total)
+                </input>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class MyTests(TestCaseGui):
+
+                    def testOne(self):
+                        self.assertTrue('loan_total' in self.getEditorText(), "you need a loan_total variable")
+                        self.assertEqual(loan_total, sum(loan_amount), "Use the accumulator pattern to add up all the loans")
+                        self.assertFalse('sum(' in self.getEditorText(), "you may not use sum()")
+
+                MyTests().main()
+                </tests>
+            </program>
+        </exercise>
+
+        <p>Exact same exercise again, but now we include <em>two</em> programs.  We first get the simple <q>Hello, world!</q> program at <xref ref="program-activecode-python"/> and then the same program defining the variables with lists of statistics at <xref ref="listing-python-included"/>.  So the output just includes the extra result from the <c>print()</c> statement.</p>
+
+        <exercise xml:id="exercise-python-including-two">
+            <title>A Python program, including two others</title>
+            <statement>
+                <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
+            </statement>
+            <program xml:id="python-summation-two" interactive='activecode' language="python" label="pyton-sum-total-two" include=" python-hello-world python-statistics ">
+                <input>
+                loan_total = 0
+                for loan in loan_amount:
+                    loan_total += loan
+                print(loan_total)
+                </input>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class MyTests(TestCaseGui):
+
+                    def testOne(self):
+                        self.assertTrue('loan_total' in self.getEditorText(), "you need a loan_total variable")
+                        self.assertEqual(loan_total, sum(loan_amount), "Use the accumulator pattern to add up all the loans")
+                        self.assertFalse('sum(' in self.getEditorText(), "you may not use sum")
+
+                MyTests().main()
+                </tests>
+            </program>
+        </exercise>
+
+        <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
+    </section>
+
+    <section xml:id="code-lens">
+        <title>Code Lens</title>
+
+        <p>CodeLens is an interactive tool for following program execution, much like a debugger, without the ability to influence flow control or variable values.  For use without a server, traces must be computed beforehand.  First, we have some trivial programs, to provide minimal testing.</p>
+
+        <listing xml:id="program-codelens-python">
+            <caption>A Python program, stepable with CodeLens</caption>
+            <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                <input>
+                print('Hello, World!')
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-codelens-c">
+            <caption>An C program, stepable with CodeLens</caption>
+            <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
+                <input>
+                #include &lt;stdio.h&gt;
+
+                int main(void)
+                {
+                    puts("Hello, World!");
+                }
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-codelens-java">
+            <caption>A Java program, stepable with CodeLens</caption>
+            <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
+                <input>
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        System.out.println("Hello, World!");
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
+
+        <listing xml:id="sieve-python">
+            <caption><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</caption>
+            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+                <input><![CDATA[
+                def SieveOfEratosthenes(n):
+                   # array of type boolean with True values in it
+                   prime = [True for i in range(n + 1)]
+                   p = 2
+                   while (p * p <= n):
+                      # If it remain unchanged it is prime
+                      if (prime[p] == True):
+                         # updating all the multiples
+                         for i in range(p * 2, n + 1, p):
+                            prime[i] = False
+                      p += 1
+                   prime[0]= False
+                   prime[1]= False
+                   # Print
+                   for p in range(n + 1):
+                      if prime[p]:
+                         print (p,end=" ")
+                # main
+                if __name__=='__main__':
+                   n = 20
+                   print ("The prime numbers smaller than or equal to", n,"is")
+                   SieveOfEratosthenes(n)
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="sieve-cpp">
+            <caption><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</caption>
+            <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
+                <input> <![CDATA[
+                #include <stdio.h>
+                const int len = 20;
+                int main() {
+                   int arr[20] = {0};
+                   for (int i = 2; i < len; i++) {
+                      for (int j = i * i; j < len; j+=i) {
+                         arr[j - 1] = 1;
+                      }
+                   }
+                   for (int i = 1; i < len; i++) {
+                      if (arr[i - 1] == 0)
+                        printf(" %d", i);
+                   }
+                }
+                ]]>
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="sieve-java">
+            <caption><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</caption>
+            <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
+                <input><![CDATA[
+                public class SievePrimeFactors  {
+                   public static void main(String args[]) {
+                      int num = 20;
+                      boolean[] bool = new boolean[num];
+
+                      for (int i = 0; i< bool.length; i++) {
+                         bool[i] = true;
+                      }
+                      for (int i = 2; i < Math.sqrt(num); i++) {
+                         if(bool[i] == true) {
+                            for(int j = (i*i); j < num; j = j+i) {
+                               bool[j] = false;
+                            }
+                         }
+                      }
+                      System.out.println("List of prime numbers: ");
+                      for (int i = 2; i< bool.length; i++) {
+                         if(bool[i]==true) {
+                            System.out.println(i);
+                         }
+                      }
+                   }
+                }
+                ]]>
+                </input>
+            </program>
+        </listing>
+    </section>
+
+    <section xml:id="coding-exercises">
+        <title>Coding Exercises</title>
+
+        <p>Program listings can be more that just live demonstrations, they can be exercises.  The first two also occur in the sample article where they just get a static rendering, if at all.</p>
+
+        <exercise label="coding-exercise-blank">
+            <title>Inline Coding Exercise, No Help</title>
+
+            <statement>
+                <p>An exercise might ask a reader to write a computer program, that would go here in the <tag>statement</tag>.  But you can also add a <tag>program</tag> element after a <tag>statement</tag>.  Here we place no code at all, but we do say we want it to be interactive.  The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution.  The <tag>program</tag> element is necessary so you can specify a programming language.</p>
+
+                <p>In interactive formats, try creating and running a Python program below.  Use CodeLens to step through the program.</p>
+            </statement>
+            <program interactive="activecode" language="python"/>
+            <hint>We didn't really ask you to do anything.</hint>
+        </exercise>
+
+        <exercise label="coding-exercise-partial-one">
+            <title>Inline Coding Exercise, Partial</title>
+
+            <statement>
+                <p>Similar to above, but we provide a starting point for the exercise.</p>
+            </statement>
+            <program interactive="activecode" language="c">
+                <input>
+                #include &lt;stdio.h&gt;
+
+                int main(void)
+                </input>
+            </program>
+            <answer>
+                <p>We're not really sure.  But it would begin as follows:</p>
+                <program language="c">
+                    <input>
+                    #include &lt;stdio.h&gt;
+
+                    int main(void)
+                    </input>
+                </program>
+            </answer>
+        </exercise>
+
+        <activity xml:id="coding-exercise-partial-two">
+            <title>Activity Coding Exercise</title>
+
+            <statement>
+                <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+            </statement>
+            <program interactive="activecode" language="python">
+                <input>
+                for i in range(10):
+                    print(i)
+                </input>
+            </program>
+            <answer>We're still not really sure.</answer>
+        </activity>
+
+        <exercise>
+            <title>An Exercise with a Static Program</title>
+
+            <statement>
+                <p>Similar to above, again, but we place the <tag>program</tag> element <em>inside</em> the <tag>statement</tag>, not after it as a peer.  This signals that this is not a coding exercise and the program will render static, since it is explicitly labeled as not being interactive.</p>
+                <program xml:id="coding-exercise-static" language="c" interactive="no">
+                    <input>
+                    #include &lt;stdio.h&gt;
+
+                    int main(void)
+                    </input>
+                </program>
+            </statement>
+            <solution>We're not really sure. Still.</solution>
+        </exercise>
+
+        <exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
+            <title>Coding Exercise, with Unit Tests</title>
+
+            <statement>
+                <p>Fix the following code so that it always correctly adds two numbers. [Ed. Unit test support is experimental.]</p>
+            </statement>
+            <program interactive="activecode" language="python">
+                <input>
+                def add(a,b):
+                    return 4
+                </input>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class myTests(TestCaseGui):
+
+                   def testOne(self):
+                       self.assertEqual(add(2,2), 4, "Adding two identical integers")
+                       self.assertEqual(add(7,13), 20, "Adding two different integers")
+                       self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Adding two decimal numbers")
+
+                myTests().main()
+                </tests>
+            </program>
+            <answer>
+                <p>We're not really sure.  But it would begin as follows:</p>
+                <program language="c">
+                    <input>
+                    #include &lt;stdio.h&gt;
+
+                    int main(void)
+                    </input>
+                </program>
+            </answer>
+        </exercise>
+    </section>
+
+    <section xml:id="data-files">
+        <title>Data Files</title>
+
+        <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
+
+        <!-- # Section 11.4 Think Like a Computer Scientist, Runestone 2023-01-23 -->
+        <datafile label="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes">
+
+            <pre>
+            1850    -0.37     2.24E-7
+            1860    -0.34     3.94E-7
+            1870    -0.28     6.6E-7
+            1880    -0.24     1.1
+            1890    -0.42     1.72
+            1900    -0.2      2.38
+            1910    -0.49     3.34
+            1920    -0.25     4.01
+            1930    -0.14     4.53
+            1940     0.01     5.5
+            1950    -0.17     6.63
+            1960    -0.05     10.5
+            1970    -0.03     16
+            1980     0.09     20.3
+            1990     0.3      22.6
+            2000     0.29     24.9
+            2010     0.56     32.7
+            2019     0.74     33.3
+            </pre>
+        </datafile>
+
+        <program label="python-average-climate" interactive='activecode' language="python">
+            <input>
+            ccfile = open("ccdata1.txt", "r")
+
+            for aline in ccfile:
+                values = aline.split()
+                print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
+
+            ccfile.close()
+            </input>
+        </program>
+
+        <!-- # Fundamentals of Python Programming, Stack Overflow Developer Survey, Runestone 2023-02-01 -->
+        <data>
+            <title>Stack Overflow Developer Survey</title>
+
+            <p>[A data file can go lots of places.  But to make it more prominent, and easy to cross-reference, it would be natural to put it into a <tag>data</tag> block.]</p>
+
+            <p>Now that you are experienced with working with files lets look at a bit of the data set. The survey had 98,855 respondents. We will work with a sample of 2000 of those responses for this lab. In addition we have narrowed down the questions from 129 to just 13.  The columns we have included in this data set are:<ol>
+                <li>Respondent</li>
+                <li>Country</li>
+                <li>JobSatisfaction</li>
+                <li>UndergradMajor</li>
+                <li>ConvertedSalary</li>
+                <li>Exercise</li>
+                <li>Gender</li>
+                <li>RaceEthnicity</li>
+                <li>EducationParents</li>
+                <li>HoursOutside</li>
+                <li>Age</li>
+                <li>LastNewJob</li>
+                <li>LanguageWorkedWith</li>
+            </ol></p>
+
+            <datafile label="stack-overflow-survey" filename="so_survey.csv" rows="10" cols="65" editable="no">
+                <pre source="datafiles/stackoverflow.csv"/>
+            </datafile>
+        </data>
+
+        <!-- 400px wide, so 400/600 = 66% -->
+        <datafile label="luther-bell" filename="luther-bell.jpg">
+            <image source="datafiles/LutherBellPic.jpg" width="66%"/>
+        </datafile>
+
+        <program label="python-one-pixel" interactive='activecode' language="python">
+            <input>
+            import image
+            img = image.Image("luther-bell.jpg")
+
+            print(img.getWidth())
+            print(img.getHeight())
+
+            p = img.getPixel(45, 55)
+            print(p.getRed(), p.getGreen(), p.getBlue())
+            </input>
+        </program>
+
+        <computation>
+            <title>Golden Gate Bridge Image processing</title>
+
+            <p>This image has a Creative Commons license, but we've lost track of the exact terms.</p>
+
+            <p>[Now a data file and a program to process it, all bundled up inside a <tag>computation</tag>, since an <tag>example</tag> gets knowled and the ActiveCode does not fill.]</p>
+
+            <!-- 300px wide so 300/600 = 50% -->
+            <datafile label="golden-gate" filename="golden_gate.png">
+                <image source="datafiles/golden-gate-bridge.png" width="50%"/>
+            </datafile>
+
+            <p>This program changes every pixel of the image.</p>
+
+            <program label="python-change-pixels" interactive='activecode' language="python">
+                <input>
+                import image
+
+                img = image.Image("golden_gate.png")
+                win = image.ImageWin(img.getWidth(), img.getHeight())
+                img.draw(win)
+
+                # img.setDelay(delay, number of pixels between delay)
+                # setDelay(1, 400) will speed up a lot
+                img.setDelay(1,15)
+
+                for row in range(img.getHeight()):
+                    for col in range(img.getWidth()):
+                        p = img.getPixel(col, row)
+
+                        newred = p.red * 1.4
+                        newgreen =  p.green * .75
+                        newblue =  p.blue * 1.1
+
+                        newpixel = image.Pixel(newred, newgreen, newblue)
+
+                        img.setPixel(col, row, newpixel)
+
+                img.draw(win)
+                win.exitonclick()
+                </input>
+            </program>
+        </computation>
+
+        <p>The examples above all use Python, which will run in your browser.   Other languages will only run when a project is hosted on Runestone Academy servers.  And in this case there is a small twist.  You need to indicate which existing <tag>datafile</tag> your program needs, even if that seems obvious by reading the code.  Use a <attr>datafile</attr> attribute on <tag>program</tag> that has a list of filenames.  These are the filenames you set via the <attr>filename</attr> attribute of the <tag>datafile</tag> element, and are the names you use in your program's code.  As before, no path information is neede, nor allowed.</p>
+
+        <p>[2023-02-21: testing for single files first, list of several not yet implemented.]</p>
+
+        <p>When the <attr>language</attr> attribute of a <tag>program</tag> is set to <c>python3</c> that means in-browser Python is not good enough, and you want the greater power and flexibility of having your code run on a Runestone Academy server.  So this is our first example of using the <attr>datafile</attr> attribute.</p>
+
+        <p>The data file is an abbreviated version of the example above, just to be different.  And is not editable.</p>
+
+        <datafile label="file-global-climate-two" filename="ccdata2.txt" rows="4" cols="40" editable="no">
+            <pre>
+            1900    -0.2      2.38
+            1910    -0.49     3.34
+            1920    -0.25     4.01
+            1930    -0.14     4.53
+            1940     0.01     5.5
+            1950    -0.17     6.63
+            1960    -0.05     10.5
+            1970    -0.03     16
+            1980     0.09     20.3
+            1990     0.3      22.6
+            2000     0.29     24.9
+            2010     0.56     32.7
+            2019     0.74     33.3
+            </pre>
+        </datafile>
+
+        <p>The program is identical to the above, but we specify <c>python3</c> as the language, and use the smaller file.  So this example is only active when this content is hosted on a Runestone Academy server.</p>
+
+        <program label="python-average-climate-two" interactive='activecode' language="python3" datafile="ccdata2.txt">
+            <input>
+            ccfile = open("ccdata2.txt", "r")
+
+            for aline in ccfile:
+                values = aline.split()
+                print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
+
+            ccfile.close()
+            </input>
+        </program>
+
+        <p>[2023-02-24 Testing Java with multiple data files]</p>
+
+        <data>
+            <title>Flowers</title>
+
+            <p>Two flower images as <tag>datafile</tag> for use in upcoming Java program.</p>
+
+            <!-- Images are 100 x 100.  So width are 100/600 = 17% -->
+
+            <datafile label="flower1-datafile" filename="flower1.jpg">
+                <image source="datafiles/flower-one.jpeg" width="17%"/>
+            </datafile>
+
+            <datafile label="flower2-datafile" filename="flower2.jpg">
+                <image source="datafiles/flower-two.jpeg" width="17%"/>
+            </datafile>
+        </data>
+
+        <program label="java-flower-collage" interactive='activecode' language="java" datafile="flower1.jpg, flower2.jpg">
+            <!-- About 10 XML characters, hence CDATA -->
+            <input><![CDATA[
+            import java.awt.*;
+            import java.awt.font.*;
+            import java.awt.geom.*;
+            import java.awt.image.BufferedImage;
+            import java.text.*;
+            import java.util.*;
+            import java.util.List;
+
+            /**
+             * A class that represents a picture.  This class inherits from
+             * SimplePicture and allows the student to add functionality to
+             * the Picture class.
+             *
+             * @author Barbara Ericson ericson@cc.gatech.edu
+             */
+            public class Picture extends SimplePicture
+            {
+              ///////////////////// constructors //////////////////////////////////
+
+              /**
+               * Constructor that takes no arguments
+               */
+              public Picture ()
+              {
+                /* not needed but use it to show students the implicit call to super()
+                 * child constructors always call a parent constructor
+                 */
+                super();
+              }
+
+              /**
+               * Constructor that takes a file name and creates the picture
+               * @param fileName the name of the file to create the picture from
+               */
+              public Picture(String fileName)
+              {
+                // let the parent class handle this fileName
+                super(fileName);
+              }
+
+              /**
+               * Constructor that takes the height and width
+               * @param height the height of the desired picture
+               * @param width the width of the desired picture
+               */
+              public Picture(int width, int height)
+              {
+                // let the parent class handle this width and height
+                super(width,height);
+              }
+
+              /**
+               * Constructor that takes a picture and creates a
+               * copy of that picture
+               * @param copyPicture the picture to copy
+               */
+              public Picture(Picture copyPicture)
+              {
+                // let the parent class do the copy
+                super(copyPicture);
+              }
+
+              /**
+               * Constructor that takes a buffered image
+               * @param image the buffered image to use
+               */
+              public Picture(BufferedImage image)
+              {
+                super(image);
+              }
+              ////////////////////// methods ///////////////////////////////////////
+
+              /**
+               * Method to return a string with information about this picture.
+               * @return a string with information about the picture such as fileName,
+               * height and width.
+               */
+              public String toString()
+              {
+                String output = "Picture, filename " + getFileName() +
+                  " height " + getHeight()
+                  + " width " + getWidth();
+                return output;
+              }
+
+              /**
+                zeroBlue() method sets the blue values at all pixels to zero
+             */
+              public void zeroBlue()
+              {
+                Pixel[][] pixels = this.getPixels2D();
+
+                for (Pixel[] rowArray : pixels)
+                 {
+                   for (Pixel p: rowArray)
+                   {
+                          p.setBlue(0);
+                   }
+                }
+              }
+
+              /* mirrorVertical() */
+              public void mirrorVertical()
+              {
+                   Pixel[][] pixels = this.getPixels2D();
+                   Pixel leftPixel = null;
+                   Pixel rightPixel = null;
+                   int width = pixels[0].length;
+                   for (int row = 0; row < pixels.length; row++)
+                   {
+                        for (int col = 0; col < width / 2; col++)
+                        {
+                             leftPixel = pixels[row][col];
+                             rightPixel = pixels[row][width - 1 - col];
+                             rightPixel.setColor(leftPixel.getColor());
+                        }
+                   }
+              }
+
+               /** copy from the passed fromPic to the
+                 * specified startRow and startCol in the
+                 * current picture
+                 * @param fromPic the picture to copy from
+                 * @param startRow the start row to copy to
+                 * @param startCol the start col to copy to
+                 */
+               public void copy(Picture fromPic,
+                              int startRow, int startCol)
+               {
+                 Pixel fromPixel = null;
+                 Pixel toPixel = null;
+                 Pixel[][] toPixels = this.getPixels2D();
+                 Pixel[][] fromPixels = fromPic.getPixels2D();
+                 for (int fromRow = 0, toRow = startRow;
+                      fromRow < fromPixels.length &&
+                      toRow < toPixels.length;
+                      fromRow++, toRow++)
+                 {
+                   for (int fromCol = 0, toCol = startCol;
+                        fromCol < fromPixels[0].length &&
+                        toCol < toPixels[0].length;
+                        fromCol++, toCol++)
+                   {
+                     fromPixel = fromPixels[fromRow][fromCol];
+                     toPixel = toPixels[toRow][toCol];
+                     toPixel.setColor(fromPixel.getColor());
+                   }
+                 }
+               }
+
+              public void createCollage()
+              {
+                   // You can also try butterfly.jpg and snowflake.jpg
+                   Picture flower1 = new Picture("flower1.jpg");
+                   Picture flower2 = new Picture("flower2.jpg");
+                   this.copy(flower1,0,0);
+                   this.copy(flower2,100,0);
+                   this.copy(flower1,200,0);
+                   Picture flowerNoBlue = new Picture(flower2);
+                   flowerNoBlue.zeroBlue();
+                   this.copy(flowerNoBlue,300,0);
+                   this.copy(flower1,400,0);
+                   this.copy(flower2,500,0);
+                   this.mirrorVertical();
+                   this.show();
+              }
+
+              /* Main method for testing
+               */
+              public static void main(String[] args)
+              {
+                 Picture p = new Picture(500,500);
+                 p.createCollage();
+              }
+            }
+            ]]>
+            </input>
+        </program>
+
+        <!-- Multi-file, Java -->
+        <!-- https://runestone.academy/ns/books/published/csawesome/Unit8-2DArray/pictureLabA8.html -->
+    </section>
+
+    <section xml:id="videos-in-runestone">
+        <title>YouTube Videos</title>
+
+        <p>Runestone uses a YouTube API that broadcasts events when a reader interacts with a video.  In this way, Runestone can record video-watching as an activity.  As <pretext/> output we concede better behavior on small screens (<q>responsiveness</q>) to enable this feature in a Runestone version.  A <attr>label</attr> attribute is necessary for persistence in the Runestone database.  Various <pretext/> features, such as playlists, are not yet supported<mdash/>make a request.</p>
+
+        <video xml:id="yt-list-vars" label="youtube-list-vars" youtube="X1-UNHUajfk" width="60%" margins="5% 35%" preview="yt-list-variables.png">
+            <title>A List Variable Video</title>
+        </video>
+
+        <p>The margins here are asymmetric just as a test.  And this text is here to see where the video ends.</p>
+    </section>
+
+    <section xml:id="rune-nested-divisions">
+        <title>Deeper</title>
+
+        <introduction>
+            <p>This is a stub of a <tag>section</tag>, but it contains two <tag>subsection</tag> which each contain a PROJECT-LIKE item that includes a <tag>program</tag> element, and thus is a coding exercise.  This tests migration to the Runestone assignment area, though Runestone only has divisions two-deep (<q>chapter</q> and <q>subchapter</q>, so both will show up associated with the same <tag>section</tag><mdash/>this one.</p>
+
+            <p>The first is a start of a C program, so will only be interactive on a Runestone server.  The second is a Python program, so will be interactive in all HTML outputs.</p>
+        </introduction>
+
+        <subsection>
+            <title>Subsection One</title>
+
+            <p>An <tag>activity</tag> next.  This one has a <tag>program</tag> so will be made interactive whenever possible.</p>
+
+            <activity label="activity-in-subsection">
+                <title>Activity in a Subsection</title>
+
+                <statement>
+                    <p>We would suggest you do something here.</p>
+                </statement>
+                <program xml:id="coding-exercise-partial-three" interactive="activecode" language="c">
+                    <input>
+                    #include &lt;stdio.h&gt;
+
+                    int main(void)
+                    </input>
+                </program>
+            </activity>
+
+            <p>Nothing suggests this next <tag>project</tag> is interactive.</p>
+
+            <project>
+                <title>Project in a Subsection</title>
+
+                <statement>
+                    <p>You would work this project on paper, most likely.  It is <em>never</em> interactive since there is no indication of a desire for that, even if hosted on a capable platform.</p>
+
+                    <p>A little bit of markup, to test a bug: <m>x^2</m>.  (The bug was only apparent under a deprecated method for specify a question to be an interactive short-answer question on Runestone Academy.)</p>
+                </statement>
+            </project>
+        </subsection>
+
+        <subsection>
+            <title>Subsection Two</title>
+
+            <p>An <tag>exploration</tag> next.</p>
+
+            <exploration xml:id="exploration-with-always-static-program">
+                <title>Exploration in a Subsection</title>
+
+                <statement>
+                    <p>We would suggest now that you explore something here.  In this case we simply provide a CodeLens, which would be graded as an <q>interaction</q>.</p>
+                </statement>
+                <program xml:id="python-count-10" interactive="codelens" language="python">
+                    <input>
+                    for i in range(10):
+                        print(i)
+                    </input>
+                </program>
+            </exploration>
+
+            <p>The next simple <tag>exercise</tag> will be a <q>short answer</q> question on a capable interactive platform since we have included a <tag>response</tag> element.</p>
+
+            <exercise>
+                <title>Inline Exercise in a Subsection</title>
+
+                <statement>
+                    <p>I am an interactive short answer question, but only on a capable platform.</p>
+                </statement>
+                <response/>
+            </exercise>
+        </subsection>
+    </section>
+
+    <exercises xml:id="true-false-exercises">
+        <title>True/False Exercises</title>
+
+        <exercise label="vector-space-dimension">
+            <title>True/False</title>
+            <idx>vector space</idx>
+            <statement correct="no">
+                <p>Every vector space has finite dimension.</p>
+            </statement>
+            <feedback>
+                <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+            </feedback>
+            <hint>
+                <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+            </hint>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="multiple-choice-exercises">
+        <title>Multiple Choice Exercises</title>
+
+        <exercise label="multiple-choice-not-randomized">
+            <title>Multiple-Choice, Not Randomized, One Answer</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>What color is a stop sign?</p>
+            </statement>
+            <!-- to appear as problem with potentially multiple correct -->
+            <!-- answers (even though there is only one), use           -->
+            <!--                                                        -->
+            <!--     <choices multiple-correct="yes">                   -->
+            <!--                                                        -->
+            <choices>
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>White might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
+        <exercise label="multiple-choice-multiple-answers">
+            <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which colors might be found in a rainbow?  (Note that the radio buttons now allow multiple buttons to be selected.)</p>
+            </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is a definitely one of the colors.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Yellow</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, yellow is correct.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>Black</p>
+                    </statement>
+                    <feedback>
+                        <p>Remember the acronym<ellipsis/><acro>ROY G BIV</acro>.  <q>B</q> stands for blue.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, green is one of the colors.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>Do you know the acronym<ellipsis/><acro>ROY G BIV</acro> for the colors of a rainbow, and their order?</p>
+            </hint>
+        </exercise>
+
+        <exercise label="multiple-choice-randomized">
+            <title>Multiple-Choice, Randomized, One Answer</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>What color is a stop sign? [Static versions retain the order as authored.]</p>
+            </statement>
+            <choices randomize="yes">
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>White might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
+        <exercise label="multiple-choice-randomized-multiple-answers">
+            <title>Multiple-Choice, Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which colors might be found in a rainbow?  (Note that the radio buttons now allow multiple buttons to be selected.) [Static versions retain the order as authored.]</p>
+            </statement>
+            <choices randomize="yes">
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is a definitely one of the colors.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Yellow</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, yellow is correct.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>Black</p>
+                    </statement>
+                    <feedback>
+                        <p>Remember the acronym<ellipsis/><acro>ROY G BIV</acro>.  <q>B</q> stands for blue.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, green is one of the colors.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>Do you know the acronym<ellipsis/><acro>ROY G BIV</acro> for the colors of a rainbow, and their order?</p>
+            </hint>
+        </exercise>
+
+        <exercise label="mathematical-multiple-choice-multiple-answers">
+            <title>Mathematical Multiple-Choice, Not Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which of the following is an antiderivative of <m>2\sin(x)\cos(x)</m>?</p>
+            </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p><m>\sin^2(x)+832</m></p>
+                    </statement>
+                    <feedback>
+                        <p>Remember that when we write <m>+C</m> on an antiderivative that this is the way we communicate that there are <em>many</em> possible derivatives, but they all <q>differ by a constant</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p><m>\sin^2(x)</m></p>
+                    </statement>
+                    <feedback>
+                        <p>The derivative given in the statement of the problem looks exactly like an application of the chain rule to <m>\sin^2(x)</m>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p><m>-\cos^2(x)</m></p>
+                    </statement>
+                    <feedback>
+                        <p>Take a derivative on <m>-\cos^2(x)</m> to see that this answer is correct.  Extra credit: does this answer <q>differ by a constant</q> when subtracted from either of the other two correct answers?</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p><m>-2\cos(x)\sin(x)</m></p>
+                    </statement>
+                    <feedback>
+                        <p>The antiderivative of a product is not the product of the antiderivatives.  Use the product rule to take a derivative and see that this answer is not correct.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>You can take a derivative on any one of the choices to see if it is correct or not, rather than using techniques of integration to find <em>a single</em> correct answer.</p>
+            </hint>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="parsons-exercises">
+        <title>Parsons Exercises</title>
+
+        <exercise label="number-theory-proof" adaptive="yes">
+            <title>Parsons Problem, Mathematical Proof</title>
+            <idx>even numbers</idx>
+            <statement>
+                <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>.</p>
+            </statement>
+            <blocks>
+                <block order="2">
+                    <p>Suppose <m>n</m> is even.</p>
+                </block>
+                <block order="3">
+                    <choice><p>Then <m>n</m> is a prime number.</p></choice>
+                    <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                    <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                </block>
+                <block order="1" correct="no">
+                    <p>Click the heels of your ruby slippers together three times.</p>
+                </block>
+                <block order="5">
+                    <p>So <m>n = 2m + 0</m>.</p>
+                    <p>This is a superfluous second paragraph in this block.</p>
+                </block>
+                <block order="4">
+                    <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                </block>
+                <block order="6" correct="no">
+                    <p>And a little bit of irrelevant multi-line math
+                        <md>
+                            <mrow>c^2&amp;a^2+b^2</mrow>
+                            <mrow>&amp;x^2+y^2</mrow>
+                        </md>.
+                    </p>
+                </block>
+            </blocks>
+            <hint>Dorothy will not be much help with this proof.</hint>
+        </exercise>
+
+        <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
+            <title>Parsons Problem, Programming</title>
+            <idx>prime numbers</idx>
+            <idx>Sieve of Eratosthenes</idx>
+            <statement>
+                <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem requires the reader to provide the necessary indentation.]</p>
+                <p>This reprises <xref ref="sieve-primes"/>.</p>
+            </statement>
+            <blocks>
+                <block order="6">
+                    <cline>n = 250</cline>
+                </block>
+                <block order="2">
+                    <choice correct="yes">
+                        <cline>primes = []</cline>
+                        <cline>candidates = list(range(2,n))</cline>
+                    </choice>
+                    <choice>
+                        <cline>candidates = []</cline>
+                        <cline>primes = list(range(2,n))</cline>
+                    </choice>
+                </block>
+                <block order="7" correct="no">
+                    <cline>primes = candidates + [p]</cline>
+                </block>
+                <block order="8">
+                    <cline>while candidates:</cline>
+                </block>
+                <block order="3">
+                    <cline>    p = candidates[0]</cline>
+                    <cline>    primes.append(p)</cline>
+                </block>
+                <block order="1">
+                    <cline>    for nonprime in range(p, n, p):</cline>
+                </block>
+                <block order="5">
+                    <cline>        if nonprime in candidates:</cline>
+                    <cline>            candidates.remove(nonprime)</cline>
+                </block>
+                <block order="4">
+                    <cline>print(primes)</cline>
+                </block>
+            </blocks>
+        </exercise>
+
+        <exercise label="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
+            <title>Parsons Problem, Programming</title>
+            <idx>prime numbers</idx>
+            <idx>Sieve of Eratosthenes</idx>
+            <statement>
+                <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed. this version of this problem does not require the reader to provide the necessary indentation, which is the default.]</p>
+                <p>This reprises <xref ref="sieve-primes"/>.</p>
+            </statement>
+            <blocks>
+                <block order="6">
+                    <cline>n = 250</cline>
+                </block>
+                <block order="2">
+                    <choice correct="yes">
+                        <cline>primes = []</cline>
+                        <cline>candidates = list(range(2,n))</cline>
+                    </choice>
+                    <choice>
+                        <cline>candidates = []</cline>
+                        <cline>primes = list(range(2,n))</cline>
+                    </choice>
+                </block>
+                <block order="7" correct="no">
+                    <cline>primes = candidates + [p]</cline>
+                </block>
+                <block order="8">
+                    <cline>while candidates:</cline>
+                </block>
+                <block order="3">
+                    <cline>    p = candidates[0]</cline>
+                    <cline>    primes.append(p)</cline>
+                </block>
+                <block order="1">
+                    <cline>    for nonprime in range(p, n, p):</cline>
+                </block>
+                <block order="5">
+                    <cline>        if nonprime in candidates:</cline>
+                    <cline>            candidates.remove(nonprime)</cline>
+                </block>
+                <block order="4">
+                    <cline>print(primes)</cline>
+                </block>
+            </blocks>
+        </exercise>
+
+        <exercise label="number-theory-proof-numbered-left" adaptive="yes">
+            <title>Parsons Problem, Mathematical Proof, Numbered Blocks</title>
+            <idx>even numbers</idx>
+            <statement>
+                <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>. [Ed.  This version has numbered blocks, online they are on the right end of the block.]</p>
+            </statement>
+            <blocks numbered="right">
+                <block order="2">
+                    <p>Suppose <m>n</m> is even.</p>
+                </block>
+                <block order="3">
+                    <choice><p>Then <m>n</m> is a prime number.</p></choice>
+                    <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                    <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                </block>
+                <block order="1" correct="no">
+                    <p>Click the heels of your ruby slippers together three times.</p>
+                </block>
+                <block order="5">
+                    <p>So <m>n = 2m + 0</m>.</p>
+                    <p>This is a superfluous second paragraph in this block.</p>
+                </block>
+                <block order="4">
+                    <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                </block>
+            </blocks>
+            <hint>Dorothy will not be much help with this proof.</hint>
+        </exercise>
+
+        <exercise label="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
+            <title>Parsons Problem, Programming</title>
+            <idx>prime numbers</idx>
+            <idx>Sieve of Eratosthenes</idx>
+            <statement>
+                <p>The Sieve of Eratosthenes computes prime numbers by starting with a finite list of the integers bigger than 1.  The first member of the list is a prime and is saved/recorded.  Then all multiples of that prime (which not a prime, excepting the prime itself!) are removed from the list.  Now the first number remaining in the list is the next prime number.  And the process repeats.</p>
+                <p>The code blocks below can be rearranged to form one of the many possible programs to implement this algorithm to compute a list of all the primes less than <m>250</m>. [Ed.  This version has numbered blocks, online they are on the left end of the block.]</p>
+                <p>This reprises <xref ref="sieve-primes"/>.</p>
+            </statement>
+            <blocks numbered="left">
+                <block order="6">
+                    <cline>n = 250</cline>
+                </block>
+                <block order="2">
+                    <choice correct="yes">
+                        <cline>primes = []</cline>
+                        <cline>candidates = list(range(2,n))</cline>
+                    </choice>
+                    <choice>
+                        <cline>candidates = []</cline>
+                        <cline>primes = list(range(2,n))</cline>
+                    </choice>
+                </block>
+                <block order="7" correct="no">
+                    <cline>primes = candidates + [p]</cline>
+                </block>
+                <block order="8">
+                    <cline>while candidates:</cline>
+                </block>
+                <block order="3">
+                    <cline>    p = candidates[0]</cline>
+                    <cline>    primes.append(p)</cline>
+                </block>
+                <block order="1">
+                    <cline>    for nonprime in range(p, n, p):</cline>
+                </block>
+                <block order="5">
+                    <cline>        if nonprime in candidates:</cline>
+                    <cline>            candidates.remove(nonprime)</cline>
+                </block>
+                <block order="4">
+                    <cline>print(primes)</cline>
+                </block>
+            </blocks>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="horizontal-parsons-exercises">
+        <title>Horizontal Parsons Exercises</title>
+
+        <exercise label="horizontal-parson-sql-statement-simple" language="sql">
+            <title>Parsons Problem, SQL statement</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-no-randomize" language="sql">
+            <title>Parsons Problem, SQL statement, no randomization</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.  This version of this problem will <em>always</em> present the blocks in the same fixed order (but incorrect, hopefully!), as prescribed by the author in the source.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="no">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-with-db" language="sql" database="sql/test.db">
+            <title>Parsons Problem, SQL statement, automatic feedback</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.</p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+            <tests>
+            assert 1,1 == world
+            assert 0,1 == hello
+            assert 2,1 == 42
+            </tests>
+        </exercise>
+
+        <exercise label="horizontal-parson-natural" language="natural">
+            <title>Parsons Problem, Natural Language</title>
+            <statement>
+                <p>Form the sentence often used to show font samples.  You can reuse blocks as needed.</p>
+            </statement>
+            <blocks layout="horizontal" reuse="yes" randomize="yes">
+                <block ref="font-the" order="6"/>
+                <block order="8">quick</block>
+                <block order="2">brown</block>
+                <block order="3">fox</block>
+                <block order="1">jumped</block>
+                <block order="5">over</block>
+                <block xml:id="font-the">the</block>
+                <block order="7">lazy</block>
+                <block order="4">dog</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-natural-distractor" language="natural">
+            <title>Parsons Problem, Natural Language, with Distractors</title>
+            <statement>
+                <p>Form the sentence often used to show font samples.  Again, but now with distractors.</p>
+            </statement>
+            <blocks layout="horizontal">
+                <block ref="font-the-two" order="7"/>
+                <block order="10" correct="yes">quick</block>
+                <block order="2">brown</block>
+                <block order="3">fox</block>
+                <block order="1">jumped</block>
+                <block order="8" correct="no">foo</block>
+                <block order="6">over</block>
+                <block xml:id="font-the-two">the</block>
+                <block order="9">lazy</block>
+                <block order="5" correct="no">bar</block>
+                <block order="4">dog</block>
+            </blocks>
+        </exercise>
+
+        <exercise label="horizontal-parson-sql-statement-reusable" language="sql">
+            <title>Parsons Problem, SQL statement, reusable</title>
+            <statement>
+                <p>Form the SQL statement by rearranging the four blocks.  Same problem as above, but we allow blocks to be reused (even though the solution does not require that).</p>
+            </statement>
+            <blocks layout="horizontal" reuse="yes" randomize="yes">
+                <block order="2">SELECT</block>
+                <block order="1">*</block>
+                <block order="4">FROM</block>
+                <block order="3">test</block>
+            </blocks>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="matching-exercises">
+        <title>Matching Exercises</title>
+
+        <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
+        <exercise label="matching-dates">
+            <title>Matching Problem, Dates</title>
+            <idx>matching US dates</idx>
+            <statement>
+                <p>Match each event in United States history with the year it happened.</p>
+            </statement>
+            <feedback>
+                <p>Review <url href="https://www.britannica.com/list/25-decade-defining-events-in-us-history" visual="www.britannica.com/list/25-decade-defining-events-in-us-history">Encyclopedia Brittania, 25 Decade-Defining Events in U.S. History</url>url.</p>
+            </feedback>
+            <matches>
+                <match order="4">
+                    <premise>Monroe Doctrine</premise>
+                    <response>1823</response>
+                </match>
+                <match order="3">
+                    <premise>Haymarket Riot</premise>
+                    <response>1886</response>
+                </match>
+                <match order="1">
+                    <premise>Louisiana Purchase</premise>
+                    <response>1803</response>
+                </match>
+                <match order="2">
+                    <premise>Battle of Gettysburg</premise>
+                    <response>1863</response>
+                </match>
+            </matches>
+        </exercise>
+
+        <exercise label="matching-derivatives">
+            <title>Matching Problem, Derivatives</title>
+            <idx>matching derivatives</idx>
+            <statement>
+                <p>Match each function with its derivative.</p>
+            </statement>
+            <feedback>
+                <p>Did you compute the derivative of each function in the premises (left column)?</p>
+            </feedback>
+            <matches>
+                <match order="1">
+                    <premise><m>x^3-6x^2+5</m></premise>
+                    <response><m>3x^2-12x</m></response>
+                </match>
+                <match order="3">
+                    <premise><m>x^{-3}</m></premise>
+                    <response><m>-3x^{-4}</m></response>
+                </match>
+                <match order="2">
+                    <premise><m>(x+1)^2</m></premise>
+                    <response><m>2x+2</m></response>
+                </match>
+            </matches>
+        </exercise>
+
+        <exercise label="matching-bases">
+            <title>Matching Problem, Linear Algebra</title>
+            <idx>matching bases and subspaces</idx>
+            <statement>
+                <p>Match each subspace with a basis for that subspace. (You may assume that each set is really a basis for at least one of the subspaces.)</p>
+            </statement>
+            <feedback>
+                <p>Each putative basis is a subset of exactly one of the three subspaces.  So for each subspace, two of the three sets can be ruled out by simply testing that the vectors of the basis are members of the subspace, via the membership criteria.</p>
+            </feedback>
+            <matches>
+                <match order="2">
+                    <premise><m>\left\{\langle x,y,z\rangle\mid - y + z = 0\right\}</m></premise>
+                    <response><m>\left\{\langle -4, 3, 3\rangle, \langle 3, -2, -2 \rangle\right\}</m></response>
+                </match>
+                <match order="2">
+                    <premise><m>\left\{\langle x,y,z\rangle\mid -3x - 5y + z = 0\right\}</m></premise>
+                    <response><m>\left\{\langle -4, 3, 3\rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
+                </match>
+                <match order="2">
+                    <premise><m>\left\{\langle x,y,z\rangle\mid -2x - 5y + 2z = 0\right\}</m></premise>
+                    <response><m>\left\{\langle 3, -2, -2 \rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
+                </match>
+            </matches>
+            <hint>
+                <p>For openers, a basis for a subspace must be a <em>subset</em> of the subspace.</p>
+            </hint>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="clickable-area-exercises">
+        <title>Clickable Area Exercises</title>
+
+        <exercise label="clickable-text">
+            <title>Clickable Areas, <q>Regular</q> Text</title>
+
+            <statement>
+                <p>Identify (by clicking, or by circling) all of the nouns in this quotation by Eleanor Roosevelt.</p>
+            </statement>
+
+            <areas>
+                <p><q>The <area>future</area> belongs to <area correct="no">those</area> who believe in the <area correct="yes">beauty</area> of <area correct="no">their</area> <area>dreams</area>.</q></p>
+            </areas>
+
+            <feedback>
+                <p>The incorrect words are pronouns.</p>
+            </feedback>
+        </exercise>
+
+        <exercise label="clickable-code">
+            <title>Clickable Areas, Code</title>
+
+            <statement>
+                <p>Identify (by clicking, or by circling) all of the assignment statements in this Python function.</p>
+            </statement>
+
+            <areas language="python">
+                <cline><area correct="no">def main():</area></cline>
+                <cline>    <area correct="yes">x = 4</area></cline>
+                <cline>    for i in range(5):</cline>
+                <cline>        <area>y = i</area></cline>
+                <cline>        <area correct="no">if y > 2:</area></cline>
+                <cline>            print(y)</cline>
+            </areas>
+
+            <feedback>
+                <p>Remember, the operator <c>=</c> is used for assignment.</p>
+            </feedback>
+        </exercise>
+
+        <exercise label="clickable-table">
+            <title>Clickable Areas, Text in a Table</title>
+
+            <statement>
+                <p>A two-dimensional array was created in Python with the list comprehension:<cd>
+                        <cline>[[0 for x in range(3)] for y in range(2)]</cline>
+                </cd>Then the values were (mostly) changed from zeros and the final array is shown below.</p>
+                <p>Identify (by clicking, or by circling) all of the boolean values in the array.</p>
+            </statement>
+
+            <areas>
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><area><c>True</c></area></cell>
+                        <cell><area correct="no"><c>'towel'</c></area></cell>
+                    </row>
+                    <row>
+                        <cell><area correct="no">'true'</area></cell>
+                        <cell>0</cell>
+                        <cell><area>False</area></cell>
+                    </row>
+                </tabular>
+
+                <p>This second table has no <tag>area</tag>, in order to test CSS for tables.</p>
+
+                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                        <cell><c>42</c></cell>
+                        <cell><c>True</c></cell>
+                        <cell><c>'towel'</c></cell>
+                    </row>
+                    <row>
+                        <cell>'true'</cell>
+                        <cell>0</cell>
+                        <cell>False</cell>
+                    </row>
+                </tabular>
+            </areas>
+            <hint>
+                <p>Python boolean variables begin with capital latters.</p>
+            </hint>
+            <feedback>
+                <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
+            </feedback>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="short-answer-exercises">
+        <title>Short Answer Exercises</title>
+
+        <exercise label="short-answer-question">
+            <title>Short Answer</title>
+
+            <statement>
+                <p>This sample book is configured to make some simple questions interactive on a capable platform, by adding a <tag>response</tag> element as a signal.</p>
+            </statement>
+            <response/>
+        </exercise>
+    </exercises>
+
+    <exercises xml:id="fill-in--exercises">
+        <title>Fill-In Exercises</title>
+
+        <exercise label="fillin-integer">
+            <title>Fill-In, Integer Answer</title>
+
+            <statement>
+                <p>The game of bowling uses <var width="28"/> pins that you try to knock down. (This answer blank has been set to be very wide.)</p>
+            </statement>
+            <setup>
+                <var>
+                    <condition number="10">
+                        <feedback>
+                            <p>Arranged in a triangle, there are <m>1+2+3+4 = 10</m> pins, a so-called <term>triangular</term> number.</p>
+                        </feedback>
+                    </condition>
+                    <condition number="16">
+                        <feedback>
+                            <p><em>Close</em>! You may have used hexadecimal notation, when you did not really mean to.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Incorrect.</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
+        <exercise label="fillin-string-integer">
+            <title>Fill-In, String and Number Answers</title>
+
+            <statement>
+                <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>. (These two answer blanks have been set to be very short.)</p>
+                <p><var width="2"/> <c>age = </c> <var width="3"/><c>;</c></p>
+            </statement>
+            <setup>
+                <var>
+                    <condition string="int">
+                        <feedback>
+                            <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                        </feedback>
+                    </condition>
+                </var>
+                <var>
+                    <condition number="5">
+                        <feedback>
+                            <p>An integer variable may be initialized to a value.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Use <c>5</c> as the initial value of the variable.</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
+        <exercise label="fillin-case-insensitive">
+            <title>Fill-In, Case-Insensitive Answer</title>
+
+            <statement>
+                <p>The word <var/> is the opposite of <q>yes</q>.  (Try a mixture of upper and lower-case letters.)</p>
+            </statement>
+            <setup>
+                <var case="insensitive">
+                    <!-- Note, no "p" in "feedback" -->
+                    <condition string="no">
+                        <feedback>The correct answers are  no, No, nO, and NO.</feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>Incorrect.</feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+
+        <exercise label="fillin-decimal">
+            <title>Fill-In, Decimal Answer</title>
+
+            <statement>
+                <p>The decimal number <var/> is an approximation of <m>\sfrac{1}{3}</m> to within three significant figures.  (<url href="https://en.wikipedia.org/wiki/Significant_figures" visual="en.wikipedia.org/wiki/Significant_figures">Wikipedia</url>).</p>
+            </statement>
+            <setup>
+                <var>
+                    <!-- Note, no "p" in "feedback" -->
+                    <condition number="0.333" tolerance="0.0005">
+                        <feedback>
+                            <p>Any value in the interval <m>0.333\pm 0.0005</m> is correct.</p>
+                        </feedback>
+                    </condition>
+                    <condition string=".*">
+                        <feedback>
+                            <p>Incorrect. Did you provide three <em>significant figures</em>?</p>
+                        </feedback>
+                    </condition>
+                </var>
+            </setup>
+        </exercise>
+    </exercises>
+
+    <section xml:id="exercises-timed">
+        <title>Exercises that are Timed</title>
+
+        <p>This is a section that merely explains and holds an <tag>exercises</tag> division, which will be at the level of a <tag>subsection</tag>.  There is a <attr>time-limit</attr> attribute on <tag>exercises</tag>, set to the value <c>10</c>, which implies (a) the collection of (two) exercises is a <q>timed exam</q> when hosted on Runestone, and (b) a student will have 10 minutes to complete the collection.</p>
+
+        <p>Showing results, showing feedback, displaying a timer, and allowing pausing are all enabled by default.  To disable any of these features, set the corresponding attributes on the <tag>exercises</tag> division, <attr>results</attr>, <attr>feedback</attr>, <attr>timer</attr>, <attr>pause</attr>, to the value <c>no</c>.  As a test, we have turned off pausing.  Don't panic!</p>
+
+        <p>Of course, if you are not viewing this while online and hosted on a Runestone server, then these exercises will not look any different than in other places.</p>
+
+        <p>(Since this is an unstructured division, the number of the <tag>exercises</tag> is not displayed when born.  It does <em>have</em> a number, which is the same as the enclosing <tag>section</tag>.  To wit: <xref ref="exercises-timed"/> versus <xref ref="timing-exercises"/>.)</p>
+
+        <exercises xml:id="timing-exercises" label="timed-exercises" time-limit="10" pause="no">
+            <title>Timed Exercises</title>
+
+            <introduction>
+                <p>You have 10 minutes to do these exercises when hosted online on a Runestone server.</p>
+            </introduction>
+
+            <exercise label="vector-space-dimension-timed">
+                <title>True/False</title>
+                <idx>vector space</idx>
+                <statement correct="no">
+                    <p>Every vector space has finite dimension.</p>
+                </statement>
+                <feedback>
+                    <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                </feedback>
+                <hint>
+                    <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                </hint>
+            </exercise>
+
+            <exercise label="multiple-choice-not-randomized-timed">
+                <title>Multiple-Choice, Not Randomized, One Answer</title>
+                <idx>stop signs</idx>
+                <statement>
+                    <p>What color is a stop sign?</p>
+                </statement>
+                <!-- to appear as problem with potentially multiple correct -->
+                <!-- answers (even though there is only one), use           -->
+                <!--                                                        -->
+                <!--     <choices multiple-correct="yes">                   -->
+                <!--                                                        -->
+                <choices>
+                    <choice>
+                        <statement>
+                            <p>Green</p>
+                        </statement>
+                        <feedback>
+                            <p>Green means <q>go!</q>.</p>
+                        </feedback>
+                    </choice>
+                    <choice correct="yes">
+                        <statement>
+                            <p>Red</p>
+                        </statement>
+                        <feedback>
+                            <p>Red is universally used for prohibited activities or serious warnings.</p>
+                        </feedback>
+                    </choice>
+                    <choice>
+                        <statement>
+                            <p>White</p>
+                        </statement>
+                        <feedback>
+                            <p>White might be hard to see.</p>
+                        </feedback>
+                    </choice>
+                </choices>
+                <hint>
+                    <p>What did you see last time you went driving?</p>
+                </hint>
+                <hint>
+                    <p>Maybe go out for a drive?</p>
+                </hint>
+            </exercise>
+        </exercises>
+    </section>
+
+    <section xml:id="interactive-projects">
+        <title>Projects and Friends</title>
+
+        <p><q>PROJECT-LIKE</q> refers to the elements/blocks <tag>project</tag>, <tag>activity</tag>, <tag>activity</tag>, and <tag>exploration</tag>.  They are very similar to <tag>exercise</tag>, and here we stress that they can be interactive in all the same ways an <tag>exercise</tag> can.  Key differences are that they are blocks, and so are peers of other blocks like paragraphs and examples, and are children of divisions.  By default they have their own numbering scheme, though we expect this to convert to an elective behavior.</p>
+
+        <p>Both <tag>exercise</tag> and PROJECT-LIKE can be structured with <tag>task</tag>.  It would be natural to have a <tag>project</tag> with multiple <tag>task</tag>, each a possibly different interactive problem type.  We expect that to be possible soon.  For now, <tag>exercise</tag> and <tag>project</tag> (and friends) need to be structured with a <tag>statement</tag> (and their associated signal) in order to be interactive.</p>
+
+        <activity label="activity-multiple-choice-multiple-answers">
+            <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>Which colors might be found in a rainbow?  (Note that the radio buttons now allow multiple buttons to be selected.)</p>
+            </statement>
+            <choices>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is a definitely one of the colors.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Yellow</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, yellow is correct.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>Black</p>
+                    </statement>
+                    <feedback>
+                        <p>Remember the acronym<ellipsis/><acro>ROY G BIV</acro>.  <q>B</q> stands for blue.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Yes, green is one of the colors.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>Do you know the acronym<ellipsis/><acro>ROY G BIV</acro> for the colors of a rainbow, and their order?</p>
+            </hint>
+        </activity>
+
+        <p>Now an <tag>exercise</tag> with two <tag>task</tag>.  Since the latter is a short-answer question, it will only be interactive on a capable platform.</p>
+
+        <exercise>
+            <title>True/False and Explain</title>
+            <introduction>
+                <p>Structured with task, we can have an introduction, but this does not migrate with the interactive portions.</p>
+            </introduction>
+
+            <task label="true-false-task">
+                <title>True/False</title>
+                <idx>vector space</idx>
+                <statement correct="no">
+                    <p>Every vector space has finite dimension.</p>
+                </statement>
+                <feedback>
+                    <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                </feedback>
+                <hint>
+                    <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                </hint>
+            </task>
+
+            <task label="short-answer-task">
+                <statement>
+                    <p>Explain your reasoning in the previous question.</p>
+                </statement>
+                <response/>
+            </task>
+        </exercise>
+
+        <p>Now an <tag>exploration</tag> nested two-deep with <em>the same two questions</em>, two times each, just for testing purposes.</p>
+
+        <exploration>
+            <title>Exploring Two-Deep</title>
+
+            <task>
+                <title>First Iterations of Each</title>
+
+                <task label="task-multiple-choice-first">
+                    <title>Multiple-Choice, Not Randomized, One Answer (First Copy)</title>
+                    <idx>stop signs</idx>
+                    <statement>
+                        <p>What color is a stop sign?</p>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Green</p>
+                            </statement>
+                            <feedback>
+                                <p>Green means <q>go!</q>.</p>
+                            </feedback>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Red</p>
+                            </statement>
+                            <feedback>
+                                <p>Red is universally used for prohibited activities or serious warnings.</p>
+                            </feedback>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>White</p>
+                            </statement>
+                            <feedback>
+                                <p>White might be hard to see.</p>
+                            </feedback>
+                        </choice>
+                    </choices>
+                    <hint>
+                        <p>What did you see last time you went driving?</p>
+                    </hint>
+                    <hint>
+                        <p>Maybe go out for a drive?</p>
+                    </hint>
+                </task>
+
+                <task label="task-active-code-first">
+                    <title>Python ActiveCode (First Copy)</title>
+                    <statement>
+                        <p>Run the following program and observe the information provided at each step.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </task>
+            </task>
+
+            <task>
+                <title>Second Iterations of Each</title>
+
+                <task label="task-multiple-choice-second">
+                    <title>Multiple-Choice, Not Randomized, One Answer (Second Copy)</title>
+                    <idx>stop signs</idx>
+                    <statement>
+                        <p>What color is a stop sign?</p>
+                        <p>We include a spurious Python <tag>program</tag> element in the <tag>statement</tag> which should never convert this from a multiple-choice question into a programming exercise (on any host), but should still get syntax highlighting as part of rendering the exercise.</p>
+                        <program xml:id="python-in-statement" language="python">
+                            <input>
+                            sum = 0
+                            sum += 6
+                            for i in range(sum):
+                                print("Hello, World!")
+                            </input>
+                        </program>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Green</p>
+                            </statement>
+                            <feedback>
+                                <p>Green means <q>go!</q>.</p>
+                            </feedback>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Red</p>
+                            </statement>
+                            <feedback>
+                                <p>Red is universally used for prohibited activities or serious warnings.</p>
+                            </feedback>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>White</p>
+                            </statement>
+                            <feedback>
+                                <p>White might be hard to see.</p>
+                            </feedback>
+                        </choice>
+                    </choices>
+                    <hint>
+                        <p>What did you see last time you went driving?</p>
+                    </hint>
+                    <hint>
+                        <p>Maybe go out for a drive?</p>
+                    </hint>
+                </task>
+
+                <task label="task-active-code-second">
+                    <title>Python ActiveCode (Second Copy)</title>
+                    <statement>
+                        <p>Run the following program and observe the information provided at each step.</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <input>
+                        for i in range(10):
+                            print(i)
+                        </input>
+                    </program>
+                    <answer>We're still not really sure.</answer>
+                </task>
+            </task>
+        </exploration>
+
+    </section>
+
+    <section>
+        <title>Expedited Samples</title>
+
+        <p>We hack in various interactive Runestone exercise types while <pretext/> markup evolves to cover more of Runestone's repertoire.  In static output these will just produce a message.  In <init>HTML</init> they may be interactive simply in a browser, or they may require being hosted on a Runestone server in order to perform.</p>
+
+        <p>CodeLens for a Python program:</p>
+
+        <exercise runestone='over_codelens1' />
+
+        <p>CodeLens for a Java program.  Supplied in source with trace data built beforehand on a Runestone server:</p>
+
+        <exercise runestone='asgn_viz1' />
+
+    </section>
+
+    <reading-questions>
+
+        <exercise label="simple-reading-question">
+            <statement>
+                <p>This is a simple question.  Does this look like a short answer question?</p>
+                <p>Both questions in this <q>reading-questions</q> division should render in an interactive <q>short answer</q> form on a capable platform.</p>
+            </statement>
+            <response/>
+            <hint>
+                <p>Shouldn't be hard!</p>
+            </hint>
+        </exercise>
+
+        <exercise label="second-reading-question" attachment="yes">
+            <statement>
+                <p>And a second reading question, so we can test having more than one.  Specifically to be certain each goes into the manifest properly.  How about some math now, <m>a^2+b^2=c^2</m>.  Is that all right?</p>
+            </statement>
+            <response/>
+        </exercise>
+    </reading-questions>
+
+    <section xml:id="atomic-video">
+        <title>YouTube Video Embedding</title>
+
+        <p>An <tag>video</tag> can be placed in five different ways:<ol>
+            <li>all by itself, as a peer of <tag>p</tag> typically, with layout control,</li>
+            <li>inside a <tag>figure</tag>, earning a number and caption,</li>
+            <li>inside a <tag>sidebyside</tag>, with size and layout configured,</li>
+            <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag>, with size and layout configured, with a number and caption, and</li>
+            <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+        </ol>Examples of each, and more.</p>
+
+        <p>A YouTube video is embedded much differently when hosted on a Runestone server, so that an <init>API</init> is available to report reader (student) interactions.  We are testing here the various possibilities.</p>
+
+
+
+        <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
+
+        <video xml:id="yt-list-vars-one" label="youtube-list-vars-one" youtube="X1-UNHUajfk"/>
+
+        <p>Width set at 40%, so equal margins and thus centered.  Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non.</p>
+
+        <video xml:id="yt-list-vars-two" label="youtube-list-vars-two" youtube="X1-UNHUajfk" width="40%"/>
+
+        <p>Asymmetric margins of 20% and 40% given, implying 40% width, equal to previous instance.  Vivamus suscipit diam eget mi cursus viverra.</p>
+
+        <video xml:id="yt-list-vars-three" label="youtube-list-vars-three" youtube="X1-UNHUajfk" margins="20% 40%" />
+
+        <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
+
+        <sidebyside widths="20% 30%">
+            <video xml:id="yt-list-vars-four" label="youtube-list-vars-four" youtube="X1-UNHUajfk"/>
+            <video xml:id="yt-list-vars-five" label="youtube-list-vars-five" youtube="X1-UNHUajfk"/>
+        </sidebyside>
+
+        <p>Inside a <tag>figure</tag> with no adjustments, so default behavior.  Note how a <tag>figure</tag> occupies the entire width of the page, so then does the caption.</p>
+
+        <figure>
+            <caption>List Variables</caption>
+            <video xml:id="yt-list-vars-six" label="youtube-list-vars-six" youtube="X1-UNHUajfk"/>
+        </figure>
+
+        <p>Inside a <tag>figure</tag> with asymmetric (large) margins of 30% and 60%.  Quisque finibus augue sit amet facilisis fringilla. Aenean faucibus augue tellus, et sollicitudin tortor finibus non.</p>
+
+        <figure>
+            <caption>List Variables</caption>
+            <video xml:id="yt-list-vars-seven" label="youtube-list-vars-seven" youtube="X1-UNHUajfk" margins="30% 60%"/>
+        </figure>
+
+        <p>Inside figures inside a <tag>sidebyside</tag>.  Same widths as previous <tag>sidebyside</tag> but alignment on bottoms of the panels, to partially align captions.  Note how the captions are constrained in width by the width of the panels of the side-by-side.</p>
+
+        <sidebyside widths="20% 30%" valign="bottom">
+            <figure>
+                <caption>List Variables</caption>
+                <video xml:id="yt-list-vars-eight" label="youtube-list-vars-eight" youtube="X1-UNHUajfk"/>
+            </figure>
+            <figure>
+                <caption>List Variables (Again)</caption>
+                <video xml:id="yt-list-vars-nine" label="youtube-list-vars-nine" youtube="X1-UNHUajfk"/>
+            </figure>
+        </sidebyside>
+
+        <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="ups-video" text="type-global"/>.</p>
+
+        <figure>
+            <caption>Amalgamation of Videos</caption>
+            <sidebyside widths="20% 30%" valign="bottom">
+                <figure>
+                    <caption>List Variables</caption>
+                    <video xml:id="yt-list-vars-ten" label="youtube-list-vars-ten" youtube="X1-UNHUajfk"/>
+                </figure>
+                <figure xml:id="ups-video">
+                    <caption>List Variables</caption>
+                    <title>List Variables</title>
+                    <video xml:id="yt-list-vars-eleven" label="youtube-list-vars-eleven" youtube="X1-UNHUajfk"/>
+                </figure>
+            </sidebyside>
+        </figure>
+    </section>
+
+</chapter>
+

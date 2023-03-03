@@ -35,35 +35,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
+<xsl:import href="./pretext-html.xsl"/>
 
 <!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
-<!-- Output Python as text -->
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- Enclosing structure is a Python list -->
-<!-- So wrap at outermost level and       -->
-<!-- return control to extract-identity   -->
-<!-- Sneak in baseurl as first item, rather  -->
-<!-- than some involved nested stucture      -->
-<xsl:template match="/">
-    <xsl:text>['</xsl:text>
-    <xsl:value-of select="$baseurl"/>
-    <xsl:text>', </xsl:text>
-    <xsl:apply-imports />
-    <xsl:text>]</xsl:text>
-</xsl:template>
+<!-- Avoid Catch-22: default assembly/pre-processor providews output     -->
+<!-- for a conversion to a static format, but that format will *replace* -->
+<!-- "video" by a static version (a "sidebyside") and it will not be     -->
+<!-- available for extraction.                                           -->
+<xsl:variable name="exercise-style" select="'dynamic'"/>
 
-<!-- "visible-id" of each interactive -->
-<!-- Simple, just list of strings      -->
-<!-- @preview indicates custom image   -->
+<!-- @preview indicates custom image is present    -->
+<!-- Stylesheet output is text, with "visible-id"  -->
+<!-- of each interactive, one per line, to be      -->
+<!-- captured in a text file to guide snapshotting -->
+<!-- Make the iframe and standalone page for each  -->
+<!-- interactive, these are two of the three steps -->
+<!-- in the non-modal template for "interactive"   -->
+<!-- in pretext-html.xsl.  Results are HTML files  -->
+<!-- (despite this stylesheet having text output). -->
 <xsl:template match="interactive[not(@preview)]" mode="extraction">
-    <xsl:text>'</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>', </xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interactive-core" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- (3) A simple page that can be used in an iframe construction -->
+    <xsl:apply-templates select="." mode="create-iframe-page" />
 </xsl:template>
 
 </xsl:stylesheet>

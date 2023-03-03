@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2019                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="localization-contributions">
+    <title>Contributing Localizations</title>
+
+    <p>We rely heavily on those fluent in other languages to provide translations of terms like <c>Chapter</c> and <c>Example</c>.  See <xref ref="topic-localization"/> for more about this feature.  This chapter is meant to help you get started if you would like to contribute to <pretext/> development in this way.</p>
+
+    <p>Some notes:<ul>
+        <li>We know it is hard to translate subtleties of one language into another.  Do the best you can!  Something is better than nothing.  And somebody may come along later with an improvement.  See the <c>en-US</c> file for explanations, this is the only documentation about each term that gets translated.</li>
+
+        <li>Do nt copy the documentation from the <c>en-US</c> file into your file.  Add comments if you feel your work needs some explanations.  Do try to keep the order and organization the same.</li>
+
+        <li>When we add new features, sometimes new translations are needed.  We appreciate maintainers who regularly come back to add in more.  But anybody can hop in and add new translations to an existing file.  We try to be careful to have all the <q>missing</q> translations commented-out so it is easy to see what needs work.</li>
+
+        <li>Explore the files in <c>xsl/localizations</c>, including the <c>README</c> file, which should provide you enough to get started.</li>
+    </ul></p>
+
+    <p>Thanks in advance for continuing the great work that allows us to support readers, authors, and publishers in many parts of the world!</p>
+</chapter>
+
+

@@ -30,7 +30,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We do not specify an output method since nothing gets output from here -->
 
-<!-- This template serves two purposes.                                   -->
+<!-- This template provides several related templates.                    -->
+<!-- See further notes prior to each one.                                 -->
 <!--                                                                      -->
 <!-- 1.  It provides an entry template.                                   -->
 <!--                                                                      -->
@@ -49,6 +50,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template allows plain/generic templates from established conversions -->
 <!-- to be employed, and conceivably overridden, without disturbing the   -->
 <!-- tree walk.                                                           -->
+<!--                                                                      -->
+<!--                                                                      -->
+<!-- 3.  A template provides for one-time lead-in/lead-out material       -->
+<!-- General an "extraction" will make a list of similar items.  But      -->
+<!-- there may need to be header/footer material, or some sort of         -->
+<!-- overall enclosure of the list.  This template can be implemented     -->
+<!-- to accomplish that.                                                  -->
 
 <!-- 2020-05-19: This general-purpose template formerly obtained a      -->
 <!-- "scratch directory" where intermediate results might be processed. -->
@@ -64,9 +72,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no "subtree" stringparam denotes starting at document root -->
 <xsl:param name="subtree" select="''" />
 
-<!-- Entry template, allows restriction to a -->
-<!-- subtree rooted at an element identified -->
-<!-- by an author-supplied xml:id            -->
+<!-- Entry template, allows restriction to a subtree rooted at an element  -->
+<!-- identified by an author-supplied xml:id. This template is not meant   -->
+<!-- to be overridden by an importing stylesheet, though it can be with a  -->
+<!-- use of "xsl:apply-imports".  Instead it is meant to be the entry      -->
+<!-- template for an importing stylesheet, which will usually mean it      -->
+<!-- should be imported last.  It provides for careful handling of the     -->
+<!-- alternate subtree root.                                               -->
 <xsl:template match="/">
     <!-- Fail if a scratch directory is set -->
     <xsl:if test="not($scratch = '')">
@@ -74,7 +86,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:choose>
         <xsl:when test="$subtree=''">
-            <xsl:apply-templates select="$root" mode="extraction"/>
+            <xsl:apply-templates select="$root" mode="extraction-wrapper"/>
         </xsl:when>
         <xsl:otherwise>
             <!-- Context is root of *original* source as we are in the entry template. -->
@@ -85,14 +97,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="not($subtree-root)">
                     <xsl:message terminate="yes">PTX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree"/>") for restriction to a subtree does not exist.  Quitting...</xsl:message>
                 </xsl:if>
-                <xsl:apply-templates select="$subtree-root" mode="extraction"/>
+                <xsl:apply-templates select="$subtree-root" mode="extraction-wrapper"/>
             </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Traverse the tree,       -->
-<!-- looking for things to do -->
+<!-- This template will always be applied with the context being the      -->
+<!-- "real" root, or the optional "subtree" root.  See applications in    -->
+<!-- the entry template.  The implementation here does nothing, but to    -->
+<!-- initiate the "extraction" walker.  This can be optionally overridden -->
+<!-- where the model would be:                                            -->
+<!--                                                                      -->
+<!--    <xsl:template match="*" mode="extraction-wrapper">                -->
+<!--        [do some header, lead-in, and/or set-up, here]                -->
+<!--        <xsl:apply-imports/>                                          -->
+<!--        [do some footer, lead-out, and/or wrap-up, here]              -->
+<!--    </xsl:template>                                                   -->
+<!--                                                                      -->
+<!-- See the "extract-interactive.xsl" stylesheet for a simple example.   -->
+<!-- Note that if the extra material needs to come from some other        -->
+<!-- context, the global variables  $root  and  $document-root  should be -->
+<!-- available to initiate a path to some location of interest.           -->
+<xsl:template match="*" mode="extraction-wrapper">
+    <xsl:apply-templates select="." mode="extraction"/>
+</xsl:template>
+
+<!-- This template traverses the tree, from the provided root, looking       -->
+<!-- for something to do.  As defined here, it does nothing.  An importing   -->
+<!-- stylesheet will define this template for items of interest, providing   -->
+<!-- the desired results.  Note that any such definition should (a) continue -->
+<!-- the recursion, or (b) knowingly dead-end and not recurse further.       -->
 <!-- http://stackoverflow.com/questions/3776333/stripping-all-elements-except-one-in-xml-using-xslt -->
 <xsl:template match="@*|node()" mode="extraction">
     <xsl:apply-templates select="@*|node()" mode="extraction"/>

@@ -21,6 +21,9 @@ To update these files,
 
     $ ./update_css
 
+Note that the script may be easily edited to use a branch
+other than simply `main`, if necessary.
+
 Then update the following record of when this was last done.
 Examine the `xsl/pretext-html.xsl` file if you need to check
 on the latest version number for the CSS.  If there are changes,
@@ -29,8 +32,9 @@ See existing commit messages for communicating the version
 number when that changes.  At a minimum, change the date and
 commit that as a record of a "no-change" update.
 
-CSS version: 0.31
-Date: 2021-07-10
+CSS version:  0.31   Date: 2021-07-10
+CSS version:  0.6    Date: 2022-12-30
+CSS version:  0.6    Date: 2023-01-03
 
 
 Experimental Jupyter Notebook CSS

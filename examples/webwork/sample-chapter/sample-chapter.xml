@@ -49,7 +49,13 @@
         <!-- this is the default, but supresses a warning -->
         <cross-references text="type-global" />
 
-        <!-- An initialism is useful sometimes -->
+        <!-- 
+        This initialism specifies the filename of the macro file (WWSC.pl) that 
+        must be present in the WeBWorK server to be able to generate latex-image
+        images. Make sure this macro file is in your server (a copy is
+        included in  pg-macros folder), and that the macro filename is changed 
+        if the initialism is changed.
+        -->
         <initialism>WWSC</initialism>
         <!--
         With a <feedback> element, in the HTML version, you get a button
@@ -65,10 +71,6 @@
         </feedback>
 
         <latex-image-preamble>
-            \usepackage{tikz}
-        </latex-image-preamble>
-
-        <latex-image-preamble syntax="PGtikz">
             \usepackage{pgfplots}
             \pgfplotsset{
                 every axis/.append style={
@@ -79,7 +81,6 @@
                 }
             }
         </latex-image-preamble>
-
     </docinfo>
 
     <article xml:id="sample-ww-chapter">
@@ -302,9 +303,21 @@
                 </conclusion>
             </exercise>
 
+            <project>
+                <title>Inside a <tag>project</tag></title>
+                <introduction>
+                    <p>
+                        If you like, you can have a <webwork/> inside a PROJECT-LIKE block.
+                        Just like with an <tag>exercise</tag>, it can be preceded with an optional <tag>introduction</tag>
+                        and followed by an optional <tag>conclusion</tag>.
+                    </p>
+                </introduction>
+                <webwork copy="webwork-add-numbers" seed="511"/>
+            </project>
+
         </section>
 
-        <section>
+        <section xml:id="section-the-quadratic-formula">
             <title>The Quadratic Formula</title>
 
             <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems can still behave well.</p>
@@ -553,93 +566,6 @@
 
                 <webwork copy="webwork-solve-quadratic" seed="832"/>
 
-            </exercise>
-
-            <p>
-                We repeat a version of a previous exercise using the deprectated <tag>stage</tag> element.
-                This is for testing to monitor if <tag>stage</tag> decays.
-            </p>
-
-            <exercise xml:id="quadratic-equation-with-stage">
-                <title>Solving Quadratic Equations</title>
-
-                <webwork>
-                    <description>
-                        <line>Find a quadratic equation's solutions.</line>
-                        <line>One positive integer solution and one negative fraction solution.</line>
-                    </description>
-
-                    <pg-code>
-                        Context("Fraction");
-
-                        $a = Compute(random(2,6,1));
-                        do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
-                        $r = Compute(random(2,6,1));
-                        $c = $k*-$r;
-                        $b = $a*-$r+$k;
-                        $quadratic = Formula("$a x^2 + $b x + $c")->reduce;
-                        $x1 = Fraction($r,1);
-                        $x2 = Fraction(-$k,$a);
-                        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
-                        $solnum1 = Formula("-$b+sqrt(($b)**2-4($a)($c))");
-                        $solnum2 = Formula("-$b-sqrt(($b)**2-4($a)($c))");
-
-                        $evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
-                            [-$a] =>
-                            "Do you have the sign correct?"));
-                        $evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
-                            [-$b] =>
-                            "Do you have the sign correct?"));
-                        $evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
-                            [-$c] =>
-                            "Do you have the sign correct?"));
-
-                        Context("LimitedFraction");
-                        $multians1 = MultiAnswer(Fraction("$x1"),Fraction("$x2"))->with(
-                            singleResult => 0,
-                            allowBlankAnswers => 1,
-                            checker => sub {
-                                my ($correct,$student,$self) = @_;
-                                my ($s1, $s2) = @{$student};
-                                my ($c1, $c2) = @{$correct};
-
-                                return (1,1) if ($c1 == $s1 and $c2 == $s2) or
-                                                ($c1 == $s2 and $c2 == $s1);
-                                return (1,0) if $c1 == $s1 or $c2 == $s1;
-                                return (0,1) if $c1 == $s2 or $c2 == $s2;
-                                return (0,0);
-                             }
-                        );
-                    </pg-code>
-
-                    <stage>
-                        <title>Identify Coefficients</title>
-                        <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
-
-                            <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
-                        </statement>
-
-                        <solution>
-                            <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  <em>In this case</em>, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
-                        </solution>
-                    </stage>
-
-                    <stage>
-                        <title>Use the Quadratic Formula</title>
-                        <statement>
-                            <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
-                            <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
-                        </statement>
-
-                        <solution>
-                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
-
-                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
-                        </solution>
-
-                    </stage>
-                </webwork>
             </exercise>
         </section>
 
@@ -1273,10 +1199,10 @@
             </p>
             <p>
                 If your <webwork/> server is version 2.16 or later,
-                <webwork/> problems can process TikZ code. Here is an example.
+                <webwork/> problems can process <tag>latex-image</tag> code. Here is an example.
             </p>
             <exercise>
-                <title>A static TikZ graph</title>
+                <title>A static <tag>latex-image</tag> graph</title>
                 <webwork>
                     <pg-code>
                         Context("IntegerFunctions");
@@ -1299,18 +1225,20 @@
                                 the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
                                 to one pair from the 7 orange balls
                             </description>
-                            <latex-image syntax="PGtikz">
-                                \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
-                                \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
-                                \foreach \x in {1,...,6}
-                                    \foreach \y in {1,...,\x}
-                                        \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
-                                \foreach \y in {1,...,7}
-                                    \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
-                                \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
-                                \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
-                                \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
-                                \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
+                                    \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
+                                    \foreach \x in {1,...,6}
+                                        \foreach \y in {1,...,\x}
+                                            \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
+                                    \foreach \y in {1,...,7}
+                                        \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
+                                    \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
+                                    \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
+                                    \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
+                                    \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                         <instruction>
@@ -1324,7 +1252,7 @@
             </exercise>
 
             <exercise>
-                <title>A randomized TikZ graph</title>
+                <title>A randomized <tag>latex-image</tag> graph</title>
                 <introduction>
                     <p>
                         These images may depend on the random seed.
@@ -1346,8 +1274,10 @@
                                 a rectangle whose width is labeled <var name="$b"/> cm
                                 and height is labeled <var name="$b"/> cm
                             </description>
-                            <latex-image syntax="PGtikz">
-                                \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                         <p>
@@ -1358,11 +1288,11 @@
             </exercise>
 
             <exercise>
-                <title>A TikZ graph affected by <tag>latex-image-preamble</tag></title>
+                <title>A <tag>latex-image</tag> graph affected by <tag>latex-image-preamble</tag></title>
                 <introduction>
                     <p>
-                        This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>
-                        with <attr>syntax</attr> set to <c>PGtikz</c>. This exercise has graph styling that is affected by that.
+                        This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>.
+                        This exercise has graph styling that is affected by that.
                     </p>
                 </introduction>
                 <webwork>
@@ -1382,10 +1312,12 @@
                                 the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
                                 <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
                             </description>
-                            <latex-image syntax="PGtikz">
-                                \begin{axis}
-                                    \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
-                                \end{axis}
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \begin{axis}
+                                        \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                    \end{axis}
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                         <p>
@@ -1403,25 +1335,23 @@
                     </p>
                 </introduction>
                 <webwork>
-                    <pg-code>
-                        $refreshCachedImages = 1;
-                    </pg-code>
                     <statement>
                         <p>
                             The code below has a printed dollar sign, a printed percent sign,
                             a printed at sign, and a percent sign used as a comment marker.
                         </p>
                         <image width="50%">
-                            <latex-image syntax="PGtikz">
-                                \node at (0,0) {I need about \$3.50.};
-                                \node at (0,1) {You gotta give 110\%.};  %This is a comment.
-                                \node at (0,2) {Send email user@domain.com.};
+                            <latex-image>
+                                \begin{tikzpicture}
+                                    \node at (0,0) {I need about \$3.50.};
+                                    \node at (0,1) {You gotta give 110\%.};  %This is a comment.
+                                    \node at (0,2) {Send email user@domain.com.};
+                                \end{tikzpicture}
                             </latex-image>
                         </image>
                     </statement>
                 </webwork>
             </exercise>
-
 
             <!-- TODO: Support for packages, such as pgfplots -->
 
@@ -1445,7 +1375,7 @@
                         $solgr = init_graph(-1,-1,4,4,
                         axes=>[0,0],
                         grid=>[5,5],
-                        size=>[300,300]
+                        size=>[300,180]
                         );
                         add_functions($solgr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                         $solgr->moveTo(0,1);
@@ -1480,6 +1410,67 @@
                     </solution>
                 </webwork>
             </exercise>
+
+            <exercises>
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>
+                            This exercisegroup has a <tag>latex-image</tag> image in its introduction.
+                            In standalone versions of the exercise, this image should be repeated.
+                        </p>
+                        <image width="50%">
+                          <latex-image>
+                            \begin{tikzpicture}
+                                \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(L\)} --++ (0,3) node[right,pos=0.5] {\(W\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(D\)} --++ (0,3) --++ (4,0);
+                            \end{tikzpicture}
+                          </latex-image>
+                        </image>
+                    </introduction>
+                    <exercise>
+                        <webwork>
+                            <statement>
+                                <p>
+                                    Find <m>D</m> when <m>L=4</m> and <m>W=3</m>.
+                                </p>
+                                <p>
+                                    <var name="'5'" width="10"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <image>
+                                  <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(4\)} --++ (0,3) node[right,pos=0.5] {\(3\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(5\)} --++ (0,3) --++ (4,0);
+                                    \end{tikzpicture}
+                                  </latex-image>
+                                </image>
+                            </solution>
+                        </webwork>
+                    </exercise>
+                    <exercise>
+                        <webwork>
+                            <statement>
+                                <p>
+                                    Find <m>D</m> when <m>L=12</m> and <m>W=5</m>.
+                                </p>
+                                <p>
+                                    <var name="'13'" width="10"/>
+                                </p>
+                            </statement>
+                            <solution>
+                                <image>
+                                  <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(12\)} --++ (0,3) node[right,pos=0.5] {\(5\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(13\)} --++ (0,3) --++ (4,0);
+                                    \end{tikzpicture}
+                                  </latex-image>
+                                </image>
+                            </solution>
+                        </webwork>
+                    </exercise>
+                </exercisegroup>
+            </exercises>
+
         </section>
 
         <section>
@@ -1503,7 +1494,7 @@
                         <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer1" width="15" category="integer"/></p>
                                     </li>
@@ -1511,7 +1502,7 @@
                             </li>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer2" width="15" category="formula"/></p>
                                     </li>
@@ -1545,7 +1536,7 @@
                         <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer1" width="15" category="formula"/></p>
                                     </li>
@@ -1553,7 +1544,7 @@
                             </li>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <p><ul label="square">
+                                <p><ul marker="square">
                                     <li>
                                         <p><var name="$answer2" width="15" evaluator="$answer2evaluator" category="formula"/></p>
                                     </li>
@@ -1694,6 +1685,37 @@
 
             </exercise>
 
+            <exercise>
+                <title>Answer Arrays</title>
+                <webwork>
+                  <pg-code>
+                    Context("Point");
+                    $p = Point(0,0);
+                    Context("Vector");
+                    $v = Vector(1,2);
+                    $c = ColumnVector(3,4);
+                    Context("Matrix");
+                    $m = Matrix([[1,2],[3,4]]);
+                  </pg-code>
+                  <statement>
+                    <p>
+                      These answer blanks are all expecting some sort of answer in an array format.
+                    </p>
+                    <p>
+                      <m><var name="$p"/> = {}</m><var name="$p" form="array"/>
+                    </p>
+                    <p>
+                      <m><var name="$v"/> = {}</m><var name="$v" form="array"/>
+                    </p>
+                    <p>
+                      <m><var name="$c"/> = {}</m><var name="$c" form="array"/>
+                    </p>
+                    <p>
+                      <m><var name="$m"/> = {}</m><var name="$m" form="array"/>
+                    </p>
+                  </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
@@ -1713,7 +1735,7 @@
                         add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
                         add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
                     </pg-code>
-                    <stage>
+                    <task>
                         <statement>
                             <image pg-name="$gr[0]" width="25%"/>
                             <image pg-name="$gr[1]" width="25%"/>
@@ -1721,8 +1743,8 @@
                         <solution>
                             <image pg-name="$gr[2]" width="25%"/>
                         </solution>
-                    </stage>
-                    <stage>
+                    </task>
+                    <task>
                         <statement>
                             <image pg-name="$gr[3]" width="25%"/>
                             <image pg-name="$gr[4]" width="25%"/>
@@ -1734,7 +1756,7 @@
                         <solution>
                             <image pg-name="$gr[7]" width="25%"/>
                         </solution>
-                    </stage>
+                    </task>
                 </webwork>
             </exercise>
 
@@ -1792,7 +1814,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p><ol label="A">
+                                <p><ol marker="A">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1814,7 +1836,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="i">
+                                <p>Text before.<ol marker="i">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1837,7 +1859,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p><ol label="I">
+                                <p><ol marker="I">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1864,7 +1886,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="1">
+                                <p>Text before.<ol marker="1">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1891,7 +1913,7 @@
                                 <p>Second<me>1+1=2</me> paragraph</p>
                             </li>
                             <li>
-                                <p><ol label="a">
+                                <p><ol marker="a">
                                     <li>
                                         <p>Sublist<me>1+1=2</me> Item</p>
                                         <p>Second paragraph<me>1+1=2</me></p>
@@ -1918,7 +1940,7 @@
                                 <p>Second paragraph<me>1+1=2</me></p>
                             </li>
                             <li>
-                                <p><me>1+1=2</me>Text before.<ol label="A">
+                                <p><me>1+1=2</me>Text before.<ol marker="A">
                                     <li>
                                         <p>Sublist<me>1+1=2</me> Item</p>
                                         <p>Second paragraph<me>1+1=2</me></p>
@@ -1954,7 +1976,7 @@
                                 <p><md>
                                     <mrow>1+1\amp=2</mrow>
                                     <mrow>2\amp=2</mrow>
-                                </md>Text before.<ol label="i">
+                                </md>Text before.<ol marker="i">
                                     <li>
                                         <p>Sublist<md>
                                             <mrow>1+1\amp=2</mrow>
@@ -2418,6 +2440,15 @@
                     </exercise>
                 </exercisegroup>
             </exercises>
+        </section>
+
+        <section xml:id="section-deprecations">
+            <title>Deprecations</title>
+
+            <p>
+                This section is for testing if deprecated features are still supported.
+                No such tests are being performed now.
+            </p>
         </section>
 
         <backmatter>

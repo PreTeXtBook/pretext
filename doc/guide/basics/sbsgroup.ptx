@@ -1,6 +1,6 @@
 <sbsgroup widths="25% 50%" margins="5% 10%">
     <sidebyside>
-        <image source="images/small_graph" />
+        <image source="small-graph" />
     <p>
       A longer piece of text.
       It goes on and on and on.

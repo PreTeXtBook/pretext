@@ -36,6 +36,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- IMPORTANT: read the documentation for advice on where -->
     <!-- to locate this file, which is not what we have done   -->
     <!-- here with this sample.                                -->
-    <source private-solutions="privatesolutions.xml"/>
+    <source private-solutions="privatesolutions.xml"> 
+        <directories external="media" generated="gen"/>
+    </source>
 
 </publication>

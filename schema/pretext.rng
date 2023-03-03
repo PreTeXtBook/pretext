@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
+    <choice>
+      <ref name="Pretext"/>
+      <ref name="DocInfo"/>
+      <ref name="Part"/>
+      <ref name="Chapter"/>
+      <ref name="Section"/>
+      <ref name="Subsection"/>
+      <ref name="Subsubsection"/>
+      <ref name="Paragraphs"/>
+      <ref name="ReadingQuestions"/>
+      <ref name="Exercises"/>
+      <ref name="Subexercises"/>
+      <ref name="Solutions"/>
+      <ref name="BookFrontMatter"/>
+      <ref name="ArticleFrontMatter"/>
+      <ref name="Preface"/>
+      <ref name="Acknowledgement"/>
+      <ref name="ArticleAppendix"/>
+      <ref name="BookAppendix"/>
+      <ref name="IndexDivision"/>
+      <ref name="References"/>
+      <ref name="Glossary"/>
+    </choice>
+  </start>
+  <define name="Pretext">
     <element name="pretext">
       <optional>
         <ref name="XMLLang"/>
@@ -15,7 +40,7 @@
         <ref name="Memorandum"/>
       </choice>
     </element>
-  </start>
+  </define>
   <define name="Article">
     <element name="article">
       <ref name="MetaDataLinedSubtitle"/>
@@ -674,7 +699,7 @@
   </define>
   <define name="Abstract">
     <element name="abstract">
-      <ref name="MetaDataTitleOptional"/>
+      <ref name="MetaDataTarget"/>
       <oneOrMore>
         <ref name="BlockText"/>
       </oneOrMore>
@@ -1291,7 +1316,7 @@
       </optional>
       <optional>
         <attribute name="interactive">
-          <value>pythontutor</value>
+          <value>codelens</value>
         </attribute>
       </optional>
       <element name="input">
@@ -1317,7 +1342,7 @@
           </attribute>
         </optional>
         <optional>
-          <attribute name="label"/>
+          <attribute name="marker"/>
         </optional>
         <oneOrMore>
           <element name="li">
@@ -1352,7 +1377,7 @@
           </attribute>
         </optional>
         <optional>
-          <attribute name="label">
+          <attribute name="marker">
             <choice>
               <value>disc</value>
               <value>circle</value>
@@ -1582,6 +1607,15 @@
               <ref name="ConclusionStatement"/>
             </optional>
           </group>
+          <group>
+            <optional>
+              <ref name="IntroductionText"/>
+            </optional>
+            <ref name="WebWork"/>
+            <optional>
+              <ref name="ConclusionText"/>
+            </optional>
+          </group>
         </choice>
         <optional>
           <ref name="Postlude"/>
@@ -1678,6 +1712,9 @@
         <ref name="ComputationLike"/>
       </element>
       <element name="technology">
+        <ref name="ComputationLike"/>
+      </element>
+      <element name="data">
         <ref name="ComputationLike"/>
       </element>
     </choice>
@@ -1965,9 +2002,6 @@
       </optional>
       <optional>
         <element name="latex-image">
-          <attribute name="syntax">
-            <value>PGtikz</value>
-          </attribute>
           <text/>
         </element>
       </optional>
@@ -2230,7 +2264,7 @@
             <attribute name="cols"/>
           </optional>
           <optional>
-            <attribute name="label"/>
+            <attribute name="marker"/>
           </optional>
           <oneOrMore>
             <element name="li">
@@ -2616,20 +2650,6 @@
             <ref name="ConclusionText"/>
           </optional>
         </group>
-        <oneOrMore>
-          <element name="stage">
-            <optional>
-              <ref name="Title"/>
-            </optional>
-            <ref name="StatementExerciseWW"/>
-            <optional>
-              <ref name="HintWW"/>
-            </optional>
-            <optional>
-              <ref name="SolutionWW"/>
-            </optional>
-          </element>
-        </oneOrMore>
       </choice>
     </element>
   </define>
@@ -3280,12 +3300,27 @@
       </element>
     </element>
   </define>
+  <define name="FillInMath">
+    <element name="fillin">
+      <choice>
+        <optional>
+          <attribute name="fill"/>
+        </optional>
+        <optional>
+          <attribute name="characters">
+            <data type="integer"/>
+          </attribute>
+        </optional>
+      </choice>
+      <empty/>
+    </element>
+  </define>
   <define name="MathInline">
     <element name="m">
       <mixed>
         <zeroOrMore>
           <choice>
-            <ref name="FillIn"/>
+            <ref name="FillInMath"/>
             <ref name="WWVariable"/>
           </choice>
         </zeroOrMore>
@@ -3336,7 +3371,7 @@
         <zeroOrMore>
           <choice>
             <ref name="Xref"/>
-            <ref name="FillIn"/>
+            <ref name="FillInMath"/>
             <ref name="WWVariable"/>
           </choice>
         </zeroOrMore>
@@ -3354,7 +3389,7 @@
         <mixed>
           <zeroOrMore>
             <choice>
-              <ref name="FillIn"/>
+              <ref name="FillInMath"/>
               <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
@@ -3365,7 +3400,7 @@
         <mixed>
           <zeroOrMore>
             <choice>
-              <ref name="FillIn"/>
+              <ref name="FillInMath"/>
               <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
@@ -3616,6 +3651,29 @@
       </element>
     </choice>
   </define>
+  <define name="FillInText">
+    <element name="fillin">
+      <optional>
+        <attribute name="characters">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="rows">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="cols">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="Generator" combine="choice">
+    <ref name="FillInText"/>
+  </define>
   <define name="UnitSpecification">
     <optional>
       <attribute name="prefix"/>
@@ -3658,19 +3716,6 @@
         <empty/>
       </element>
     </choice>
-  </define>
-  <define name="FillIn">
-    <element name="fillin">
-      <optional>
-        <attribute name="characters">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <empty/>
-    </element>
-  </define>
-  <define name="Character" combine="choice">
-    <ref name="FillIn"/>
   </define>
   <define name="Character">
     <choice>
@@ -3969,11 +4014,6 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="latex-image-preamble">
-      <optional>
-        <attribute name="syntax">
-          <value>PGtikz</value>
-        </attribute>
-      </optional>
       <text/>
     </element>
   </define>

@@ -12,7 +12,7 @@
     <paragraphs>
         <title>Introduction</title>
 
-        <p>This part is the place to begin if you are new to <pretext/>.  <xref ref="start-here"/> is the introduction, overview, and philosophy.  Then <xref ref="quickstart-example"/> intends to get you started quickly by authoring a simple example and converting it to <init>HTML</init> and <init>PDF</init> output formats.</p>
+        <p>This part is the place to begin if you are new to <pretext/>.  <xref ref="start-here"/> is the introduction, overview, and philosophy.  Then <xref ref="tutorial"/> intends to get you started quickly by showing how to set up a <pretext/> authoring environment and converting a document to <init>HTML</init> and <m>\LaTeX</m> output formats.  Notice that there are three parts which target different roles: the <pubtitle>Author's Guide</pubtitle> (<xref ref="part-author"/>), the <pubtitle>Publisher's Guide</pubtitle> (<xref ref="part-publisher"/>) and the <pubtitle>Developer's Guide</pubtitle> (<xref ref="part-developer"/>).</p>
     </paragraphs>
 
     <paragraphs>
@@ -36,7 +36,7 @@
     <paragraphs>
         <title>Developer's Guide</title>
 
-        <p>This part provides advice, suggestions, and conventions for contributing to <pretext/>.  For anything not answered here please use the <url href="https://groups.google.com/forum/#!forum/pretext-dev"><c>pretext-dev</c></url><fn><c>https://groups.google.com/forum/#!forum/pretext-dev</c></fn> Google Group.  Make a membership request and it will be processed quickly.</p>
+        <p>This part provides advice, suggestions, and conventions for contributing to <pretext/>.  For anything not answered here please use the <url href="https://groups.google.com/forum/#!forum/pretext-dev" visual="groups.google.com/forum/#!forum/pretext-dev"><c>pretext-dev</c></url> Google Group.  Make a membership request and it will be processed quickly.</p>
     </paragraphs>
 
     <paragraphs>

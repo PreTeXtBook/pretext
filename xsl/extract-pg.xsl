@@ -62,6 +62,11 @@
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
 
+<!-- Get a "subtree" xml:id value   -->
+<!-- Then walk the XML source tree  -->
+<!-- applying specializations below -->
+<xsl:import href="./extract-identity.xsl" />
+
 <!-- Override the corresponding param in pretext-assembly so that webwork  -->
 <!-- copies can be made.                                                   -->
 <xsl:variable name="b-extracting-pg" select="true()"/>
@@ -92,10 +97,31 @@
 <!--#######################################################################-->
 
 <!-- Initialize empty dictionaries, then define key-value pairs             -->
-<xsl:template match="/">
+<xsl:template match="*" mode="extraction-wrapper">
     <xsl:text>localization = '</xsl:text>
     <xsl:value-of select="$document-language"/>
     <xsl:text>'&#xa;</xsl:text>
+    <!-- Record the server address and credentials from publisher variables -->
+    <!-- This will be an empty dictionary if there was no publication file. -->
+    <xsl:text>server_params_pub = {&#xa;</xsl:text>
+    <xsl:if test="$publisher">
+        <xsl:text>    "ww_domain":"</xsl:text>
+        <xsl:value-of select="$webwork-server"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "courseID":"</xsl:text>
+        <xsl:value-of select="$webwork-course"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "userID":"</xsl:text>
+        <xsl:value-of select="$webwork-user"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "password":"</xsl:text>
+        <xsl:value-of select="$webwork-userpassword"/>
+        <xsl:text>",&#xa;</xsl:text>
+        <xsl:text>    "course_password":"</xsl:text>
+        <xsl:value-of select="$webwork-coursepassword"/>
+        <xsl:text>"&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
     <!-- Initialize empty dictionaries, then define key-value pairs -->
     <xsl:text>origin = {}&#xa;</xsl:text>
     <xsl:text>copiedfrom = {}&#xa;</xsl:text>
@@ -107,13 +133,13 @@
     <xsl:text>pgdense['hint_no_solution_yes'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_no'] = {}&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-templates select="$document-root//webwork[statement|task|stage|@source]" mode="dictionaries"/>
+    <xsl:apply-imports/>
 </xsl:template>
 
-<xsl:template match="webwork[@source]" mode="dictionaries">
+<xsl:template match="webwork[@source]" mode="extraction">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:value-of select="@ww-id"/>
     </xsl:variable>
     <!-- 1. a ptx|copy|server flag (authored in PTX, a copy, or from server)   -->
     <xsl:text>origin["</xsl:text>
@@ -133,10 +159,10 @@
     <xsl:text>"&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork[statement|task|stage]" mode="dictionaries">
+<xsl:template match="webwork[statement|task]" mode="extraction">
     <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:value-of select="@ww-id"/>
     </xsl:variable>
     <!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
     <xsl:text>origin["</xsl:text>
@@ -285,7 +311,7 @@
 <!-- 1. be empty; just for printing "WeBWorK"                              -->
 <!-- 2. use an existing .pg problem from the server                        -->
 <!-- 3. have a single statement child                                      -->
-<!-- 4. have two or more stage children (known in WW as "scaffolded")      -->
+<!-- 4. have two or more task children (known in WW as "scaffolded")       -->
 <!-- What follows is not concerned with the first two. The latter two top  -->
 <!-- level templates follow.                                               -->
 
@@ -304,9 +330,9 @@
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
         <xsl:text>COMMENT('</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'authored'" />
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'authored'"/>
+        </xsl:apply-templates>
         <xsl:text>');&#xa;</xsl:text>
         <xsl:apply-templates select="description"/>
     </xsl:if>
@@ -334,7 +360,7 @@
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="webwork[task|stage]">
+<xsl:template match="webwork[task]">
     <xsl:param name="b-hint" />
     <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
@@ -348,9 +374,9 @@
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
         <xsl:text>COMMENT('</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'authored'" />
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'authored'"/>
+        </xsl:apply-templates>
         <xsl:text>');&#xa;</xsl:text>
         <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
         <xsl:apply-templates select="description"/>
@@ -381,11 +407,23 @@
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);</xsl:text>
+    <xsl:text>Scaffold::Begin(</xsl:text>
+    <xsl:text>numbered => 1,</xsl:text>
+    <xsl:text>is_open => "correct_or_first_incorrect",</xsl:text>
+    <xsl:text>can_open => </xsl:text>
+    <xsl:choose>
+        <xsl:when test="$webwork-task-reveal = 'all'">
+            <xsl:text>always,</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>when_previous_correct,</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>);</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="task|stage">
+    <xsl:apply-templates select="task">
         <xsl:with-param name="b-hint" select="$b-hint" />
         <xsl:with-param name="b-solution" select="$b-solution" />
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
@@ -409,7 +447,7 @@
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="task[statement]|stage">
+<xsl:template match="task[statement]">
     <xsl:param name="b-hint" />
     <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
@@ -525,7 +563,11 @@
         <xsl:with-param name="text" select=".//pg-code" />
     </xsl:call-template>
     <!-- if there are latex-image in the problem, put their code here -->
-    <xsl:apply-templates select=".//image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code"/>
+    <!-- introduction images are not needed except for human readable code -->
+    <xsl:if test="$b-human-readable">
+        <xsl:apply-templates select="ancestor::exercisegroup/introduction//image[latex-image]" mode="latex-image-code"/>
+    </xsl:if>
+    <xsl:apply-templates select=".//image[latex-image]" mode="latex-image-code"/>
 </xsl:template>
 
 <!-- default template, for complete presentation -->
@@ -798,7 +840,7 @@
             </xsl:call-template>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
-        <xsl:if test="task|stage">
+        <xsl:if test="task">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'scaffold.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
@@ -839,10 +881,10 @@
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- when there is a PGtikz graph -->
-        <xsl:if test=".//latex-image[@syntax = 'PGtikz']">
+        <!-- when there is a latex-image graph -->
+        <xsl:if test=".//latex-image or ($b-human-readable and ancestor::exercisegroup/introduction//latex-image)">
             <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'PGtikz.pl'"/>
+                <xsl:with-param name="string" select="'PGlateximage.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
@@ -1223,7 +1265,7 @@
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
-        <xsl:if test=".//latex-image">
+        <xsl:if test=".//latex-image or ancestor::exercisegroup/introduction//latex-image">
             <xsl:value-of select="$ptx-pg-macros" />
         </xsl:if>
         <xsl:value-of select="$course-macros" />
@@ -1234,7 +1276,7 @@
     </xsl:variable>
     <xsl:value-of select="$load-macros" />
     <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
-    <xsl:if test=".//image[@pg-name] and not($b-human-readable)">
+    <xsl:if test="(.//image[@pg-name] or .//image[latex-image]) and not($b-human-readable)">
         <xsl:text>$refreshCachedImages=1;</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -1299,7 +1341,7 @@
     <xsl:value-of select="@name"/>
 </xsl:template>
 
-<xsl:template match="latex-image[@syntax = 'PGtikz']/var" mode="latex-image">
+<xsl:template match="latex-image/var" mode="latex-image">
     <xsl:value-of select="@name" />
 </xsl:template>
 
@@ -1531,16 +1573,12 @@
     <xsl:text>)@]* </xsl:text>
 </xsl:template>
 
-<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="components">
-    <xsl:variable name="visible-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
+<xsl:template match="image[latex-image]" mode="components">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:text>[@image(insertGraph(</xsl:text>
-    <xsl:value-of select="$pg-name"/>
+    <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
     <!-- alt attribute for accessibility -->
@@ -1570,26 +1608,32 @@
     <xsl:apply-templates select="text()|var"/>
 </xsl:template>
 
-<xsl:template match="image[latex-image/@syntax = 'PGtikz']" mode="latex-image-code">
-    <xsl:variable name="visible-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:variable name="pg-name" select="concat('$', translate($visible-id,'-','_'))"/>
-    <xsl:value-of select="$pg-name"/>
-    <xsl:text> = createTikZImage();&#xa;</xsl:text>
-    <xsl:if test="$docinfo/latex-image-preamble[@syntax = 'PGtikz']">
-        <xsl:value-of select="$pg-name"/>
+<xsl:template match="image[latex-image]" mode="latex-image-code">
+    <xsl:apply-templates select="." mode="pg-name"/>
+    <xsl:text> = createLaTeXImage();&#xa;</xsl:text>
+    <xsl:if test="$docinfo/latex-image-preamble">
+        <xsl:apply-templates select="." mode="pg-name"/>
         <xsl:text>->addToPreamble(latexImagePreamble());&#xa;</xsl:text>
     </xsl:if>
-    <xsl:variable name="pg-tikz-code">
+    <xsl:variable name="pg-latex-image-code">
         <xsl:apply-templates select="latex-image/text()|latex-image/var" mode="latex-image"/>
     </xsl:variable>
-    <xsl:value-of select="$pg-name"/>
-    <xsl:text>->BEGIN_TIKZ&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pg-name"/>
+    <xsl:text>->BEGIN_LATEX_IMAGE&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="$pg-tikz-code"/>
+        <xsl:with-param name="text" select="$pg-latex-image-code"/>
     </xsl:call-template>
-    <xsl:text>&#xa;END_TIKZ&#xa;</xsl:text>
+    <xsl:text>&#xa;END_LATEX_IMAGE&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="image[latex-image]" mode="pg-name">
+    <xsl:text>$image_</xsl:text>
+    <xsl:number count="image" from="webwork" level="any" />
+</xsl:template>
+
+<xsl:template match="exercisegroup/introduction//image[latex-image]" mode="pg-name">
+    <xsl:text>$introduction_image_</xsl:text>
+    <xsl:number count="image" from="exercisegroup" level="any" />
 </xsl:template>
 
 <xsl:template match="text()" mode="latex-image">
@@ -2151,14 +2195,6 @@
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<xsl:template name="lbracket-character">
-    <xsl:text>\[</xsl:text>
-</xsl:template>
-
-<xsl:template name="rbracket-character">
-    <xsl:text>\]</xsl:text>
-</xsl:template>
-
 <!-- http://webwork.maa.org/wiki/Special_Characters_-_PGML -->
 <!-- suggests PGML understands the TeX special characters. -->
 <!-- There seems enough exceptions that we will routinely  -->
@@ -2228,81 +2264,10 @@
 <!-- * \    Always escape backslash.                                 -->
 <!-- #################################################### -->
 
-
-<!-- Ampersand -->
-<!-- Not for controlling mathematics -->
-<!-- or table formatting             -->
-<xsl:template name="ampersand-character">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
-
-<!-- Less Than -->
-<xsl:template name="less-character">
-    <xsl:text>&lt;</xsl:text>
-</xsl:template>
-
-<!-- Greater Than -->
-<xsl:template name="greater-character">
-    <xsl:text>&gt;</xsl:text>
-</xsl:template>
-
-<!-- Percent sign -->
-<xsl:template name="percent-character">
-    <xsl:text>%</xsl:text>
-</xsl:template>
-
-<!-- Dollar sign -->
-<xsl:template name="dollar-character">
-    <xsl:text>$</xsl:text>
-</xsl:template>
-
-<!-- Circumflex  -->
-<xsl:template name="circumflex-character">
-    <xsl:text>^</xsl:text>
-</xsl:template>
-
-<!-- Text underscore -->
-<xsl:template name="underscore-character">
-    <xsl:text>\_</xsl:text>
-</xsl:template>
-
-<!-- Number Sign, Hash, Octothorpe -->
-<xsl:template name="hash-character">
-    <xsl:text>\#</xsl:text>
-</xsl:template>
-
-<!-- Tilde -->
-<xsl:template name="tilde-character">
-    <xsl:text>~</xsl:text>
-</xsl:template>
-
-<!-- Asterisk -->
-<!-- Centered as a character, not an exponent -->
-<xsl:template name="asterisk-character">
-    <xsl:text>\*</xsl:text>
-</xsl:template>
-
 <!-- Ellipsis -->
 <!-- Just three periods -->
 <xsl:template name="ellipsis-character">
     <xsl:text>...</xsl:text>
-</xsl:template>
-
-
-<!-- Braces -->
-<!-- Individually, or matched            -->
-<!-- All escaped to avoid conflicts with -->
-<!-- use after answer blanks, etc.       -->
-<xsl:template name="lbrace-character">
-    <xsl:text>\{</xsl:text>
-</xsl:template>
-<xsl:template name="rbrace-character">
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-
-<!-- Backslash -->
-<xsl:template name="backslash-character">
-    <xsl:text>\\</xsl:text>
 </xsl:template>
 
 <!-- ############### -->
@@ -2500,9 +2465,9 @@
     <xsl:choose>
         <xsl:when test="parent::ul">
             <xsl:choose>
-                <xsl:when test="parent::*/@label='disc'">*</xsl:when>
-                <xsl:when test="parent::*/@label='circle'">o</xsl:when>
-                <xsl:when test="parent::*/@label='square'">+</xsl:when>
+                <xsl:when test="parent::*/@marker='disc'">*</xsl:when>
+                <xsl:when test="parent::*/@marker='circle'">o</xsl:when>
+                <xsl:when test="parent::*/@marker='square'">+</xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="count(ancestor::ul) mod 3 = 1">*</xsl:when>
@@ -2515,11 +2480,11 @@
         </xsl:when>
         <xsl:when test="parent::ol">
             <xsl:choose>
-                <xsl:when test="contains(parent::*/@label,'1')">1</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'a')">a</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'A')">A</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'i')">i</xsl:when>
-                <xsl:when test="contains(parent::*/@label,'I')">I</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(parent::*/@marker,'I')">I</xsl:when>
                 <xsl:otherwise>
                     <!-- the exercise will be numbered with Arabic numerals, -->
                     <!-- so we start the default cycle with lower-case Latin -->
@@ -2571,8 +2536,6 @@
 </xsl:template>
 
 <xsl:template match="tabular" mode="components">
-    <!-- PTX tabular attributes top, bottom, left, right, halign are essentially passed -->
-    <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:param name="b-human-readable" />
 
     <xsl:text>[@DataTable(</xsl:text>
@@ -2593,204 +2556,147 @@
         <xsl:text>  </xsl:text>
     </xsl:if>
     <xsl:text>],</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:variable name="table-left">
-        <xsl:choose>
-            <xsl:when test="@left">
-                <xsl:value-of select="@left" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-right">
-        <xsl:choose>
-            <xsl:when test="@right">
-                <xsl:value-of select="@right" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-halign">
-        <xsl:choose>
-            <xsl:when test="@halign">
-                <xsl:value-of select="@halign" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>left</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Build latex column specification                         -->
-    <!--   vertical borders (left side, right side, three widths) -->
-    <!--   horizontal alignment (left, center, right)             -->
-    <xsl:choose>
-        <xsl:when test="$b-human-readable">
-            <xsl:call-template name="potential-list-indent" />
-            <xsl:text>  align => '</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>align=>'</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-        <!-- start with left vertical border -->
-        <xsl:call-template name="pg-vrule-specification">
-            <xsl:with-param name="width" select="$table-left" />
+    <xsl:call-template name="key-value">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+        <xsl:with-param name="key" select="'align'"/>
+        <xsl:with-param name="value">
+            <xsl:apply-templates select="." mode="texalignment"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <!-- niceTables default for valign is top -->
+    <xsl:if test="@valign = str:tokenize('bottom middle') or not(@valign) or @valign = ''">
+        <xsl:call-template name="key-value">
+            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            <xsl:with-param name="key" select="'valign'"/>
+            <xsl:with-param name="value">
+                <xsl:choose>
+                    <xsl:when test="@valign = 'bottom'">
+                        <xsl:text>bottom</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>middle</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:call-template>
-        <xsl:choose>
-            <!-- Potential for individual column overrides    -->
-            <!--   Deduce number of columns from col elements -->
-            <!--   Employ individual column overrides,        -->
-            <!--   or use global table-wide values            -->
-            <!--   write alignment (mandatory)                -->
-            <!--   follow with right border (optional)        -->
-            <xsl:when test="col">
-                <xsl:for-each select="col">
-                    <xsl:call-template name="halign-specification">
-                        <xsl:with-param name="align">
-                            <xsl:choose>
-                                <xsl:when test="@halign">
-                                    <xsl:value-of select="@halign" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$table-halign" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:call-template name="pg-vrule-specification">
-                        <xsl:with-param name="width">
-                            <xsl:choose>
-                                <xsl:when test="@right">
-                                    <xsl:value-of select="@right" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$table-right" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </xsl:for-each>
-            </xsl:when>
-            <!-- No col specification                                  -->
-            <!--   so default identically to global, table-wide values -->
-            <!--   first row determines the  number of columns         -->
-            <!--   write the alignment (mandatory)                     -->
-            <!--   follow with right border (optional)                 -->
-            <!-- TODO: error check each row for correct number of columns -->
-            <xsl:otherwise>
-                <xsl:variable name="ncols" select="count(row[1]/cell) + sum(row[1]/cell[@colspan]/@colspan) - count(row[1]/cell[@colspan])" />
-                <xsl:call-template name="duplicate-string">
-                    <xsl:with-param name="count" select="$ncols" />
-                    <xsl:with-param name="text">
-                        <xsl:call-template name="halign-specification">
-                            <xsl:with-param name="align" select="$table-halign" />
-                        </xsl:call-template>
-                        <xsl:call-template name="pg-vrule-specification">
-                            <xsl:with-param name="width" select="$table-right" />
-                        </xsl:call-template>
-                    </xsl:with-param>
+    </xsl:if>
+    <!-- is there a top border? -->
+    <xsl:if test="@top = str:tokenize('minor medium major', ' ')">
+        <xsl:call-template name="key-value">
+            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            <xsl:with-param name="key" select="'top'"/>
+            <xsl:with-param name="value">
+                <xsl:call-template name="pg-hrule-specification">
+                    <xsl:with-param name="width" select="@top"/>
                 </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    <xsl:text>',</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
     </xsl:if>
-    <!-- kill all of niceTable's column left/right border thickness in colgroup/col css; just let cellcss control border thickness -->
-    <xsl:variable name="columns-css">
-        <xsl:if test="col[@right] or @left">
-            <xsl:if test="$b-human-readable">
-                <xsl:call-template name="potential-list-indent" />
-                <xsl:text>    </xsl:text>
-            </xsl:if>
-            <xsl:text>[</xsl:text>
-                <xsl:for-each select="col">
-                    <xsl:text>'</xsl:text>
-                    <xsl:if test="not($table-left='none') and (count(preceding-sibling::col)=0)">
-                        <xsl:choose>
-                            <xsl:when test="$b-human-readable">
-                                <xsl:text>border-left: </xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>border-left:</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:call-template name="thickness-specification">
-                            <xsl:with-param name="width" select="'none'" />
-                        </xsl:call-template>
-                        <xsl:text>px solid;</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="@right">
-                        <xsl:choose>
-                            <xsl:when test="$b-human-readable">
-                                <xsl:text>border-right: </xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>border-right:</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:call-template name="thickness-specification">
-                            <xsl:with-param name="width" select="'none'" />
-                        </xsl:call-template>
-                        <xsl:text>px solid;</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:text>',</xsl:text>
-                    <xsl:choose>
-                        <xsl:when test="following-sibling::col">
-                            <xsl:if test="$b-human-readable">
-                                <xsl:text>&#xa;     </xsl:text>
-                                <xsl:call-template name="potential-list-indent" />
-                            </xsl:if>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:for-each>
-            <xsl:text>]</xsl:text>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:if test="not($columns-css='')">
-        <xsl:choose>
-            <xsl:when test="$b-human-readable">
-                <xsl:call-template name="potential-list-indent" />
-                <xsl:text>  columnscss =>&#xa;</xsl:text>
-                <xsl:call-template name="potential-list-indent" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>columnscss=></xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:value-of select="$columns-css"/>
-        <xsl:text>,</xsl:text>
-        <xsl:if test="$b-human-readable">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
-    <!-- column specification done -->
-    <xsl:if test="not(parent::table)">
-        <xsl:choose>
-            <xsl:when test="$b-human-readable">
-                <xsl:call-template name="potential-list-indent" />
-                <xsl:text>  center => 0,&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>center=>0,</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
-    <!-- remains to apply tabular/@top and tabular/@bottom -->
-    <!-- will handle these at cell level -->
     <xsl:if test="$b-human-readable">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>);@]*</xsl:text>
+</xsl:template>
+
+
+<xsl:template match="tabular" mode="texalignment">
+    <!-- left border -->
+    <xsl:if test="@left">
+        <xsl:call-template name="pg-vrule-specification">
+            <xsl:with-param name="width" select="@left" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:choose>
+        <!-- go through cols if we have them -->
+        <xsl:when test="col">
+            <xsl:apply-templates select="col" mode="texalignment"/>
+        </xsl:when>
+        <!-- there are no cols, so tabular attributes and defaults are in control -->
+        <!-- but we guess how many columns there are using the first row          -->
+        <xsl:otherwise>
+            <xsl:text>*{</xsl:text>
+            <xsl:value-of select="count(row[1]/cell) + sum(row[1]/cell[@colspan]/@colspan) - count(row[1]/cell[@colspan])"/>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="." mode="per-column-specification"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="tabular" mode="per-column-specification">
+    <!-- halign is an l, c, or r -->
+    <xsl:call-template name="halign-specification">
+        <xsl:with-param name="align">
+            <xsl:choose>
+                <!-- if the tabular has a specification -->
+                <xsl:when test="@halign">
+                    <xsl:value-of select="@halign" />
+                </xsl:when>
+                <!-- else the PTX default -->
+                <xsl:otherwise>
+                    <xsl:text>left</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+    <!-- now the right border, if any -->
+    <xsl:call-template name="pg-vrule-specification">
+        <xsl:with-param name="width" select="@right" />
+    </xsl:call-template>
+ </xsl:template>
+
+<xsl:template match="col" mode="texalignment">
+    <xsl:choose>
+        <!-- if the column has a width we use that in a p{}-->
+        <xsl:when test="@width != ''">
+            <xsl:text>p{</xsl:text>
+            <xsl:apply-templates select="." mode="absolute-width-inches"/>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <!-- otherwise use an l, c, or r -->
+        <xsl:otherwise>
+            <xsl:call-template name="halign-specification">
+                <xsl:with-param name="align">
+                    <xsl:choose>
+                        <!-- if the column has a specification -->
+                        <xsl:when test="@halign">
+                            <xsl:value-of select="@halign" />
+                        </xsl:when>
+                        <!-- else if the tabular has a specification -->
+                        <xsl:when test="../@halign">
+                            <xsl:value-of select="../@halign" />
+                        </xsl:when>
+                        <!-- else the PTX default -->
+                        <xsl:otherwise>
+                            <xsl:text>left</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- now the right border, if any -->
+    <xsl:call-template name="pg-vrule-specification">
+        <xsl:with-param name="width">
+            <xsl:choose>
+                <xsl:when test="@right">
+                    <xsl:value-of select="@right"/>
+                </xsl:when>
+                <xsl:when test="../@right">
+                    <xsl:value-of select="../@right"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="*" mode="absolute-width-inches">
+    <xsl:variable name="percent-width">
+        <xsl:call-template name="normalize-percentage">
+            <xsl:with-param name="percentage" select="@width"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="concat(number(substring-before($percent-width,'%')) div 100 * 6.25,in)"/>
 </xsl:template>
 
 
@@ -2801,7 +2707,7 @@
         <xsl:text>    </xsl:text>
     </xsl:if>
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="cell">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
@@ -2815,458 +2721,258 @@
 </xsl:template>
 
 
-<xsl:template match="tabular/row/cell">
+<xsl:template match="cell">
     <xsl:param name="b-human-readable" />
-    <xsl:variable name="this-cells-left-column" select="count(preceding-sibling::cell) + 1 + sum(preceding-sibling::cell[@colspan]/@colspan) - count(preceding-sibling::cell[@colspan])"/>
-    <xsl:variable name="this-cells-right-column" select="$this-cells-left-column + sum(self::cell[@colspan]/@colspan) - count(self::cell[@colspan]/@colspan)"/>
-
-    <!-- $halign below is a full LaTeX tabular argument for one cell, with perhaps more info than just alignment -->
-    <xsl:variable name="halign">
-        <xsl:if test="@colspan or @halign or @right or parent::row/@halign or (parent::row/@left and (count(preceding-sibling::cell)=0))">
-            <xsl:if test="(count(preceding-sibling::cell) = 0) and (parent::row/@left or ancestor::tabular/@left)">
-                <xsl:choose>
-                    <xsl:when test="parent::row/@left">
-                        <xsl:call-template name="pg-vrule-specification">
-                            <xsl:with-param name="width" select="parent::row/@left" />
-                        </xsl:call-template>
-                    </xsl:when>
-                    <xsl:when test="ancestor::tabular/@left">
-                        <xsl:call-template name="pg-vrule-specification">
-                            <xsl:with-param name="width" select="ancestor::tabular/@left" />
-                        </xsl:call-template>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:if>
-            <xsl:call-template name="halign-specification">
-                <xsl:with-param name="align" >
-                    <xsl:choose>
-                        <xsl:when test="@halign">
-                            <xsl:value-of select="@halign" />
-                        </xsl:when>
-                        <!-- look to the row -->
-                        <xsl:when test="parent::row/@halign">
-                            <xsl:value-of select="parent::row/@halign" />
-                        </xsl:when>
-                        <!-- look to the col -->
-                        <xsl:when test="ancestor::tabular/col[$this-cells-left-column]/@halign">
-                            <xsl:value-of select="ancestor::tabular/col[$this-cells-left-column]/@halign" />
-                        </xsl:when>
-                        <!-- look to the tabular -->
-                        <xsl:when test="ancestor::tabular/@halign">
-                            <xsl:value-of select="ancestor::tabular/@halign" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'left'" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:choose>
-                <xsl:when test="@right">
-                    <xsl:call-template name="pg-vrule-specification">
-                        <xsl:with-param name="width" select="@right" />
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:when test="ancestor::tabular/col[$this-cells-right-column]/@right">
-                    <xsl:call-template name="pg-vrule-specification">
-                        <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-right-column]/@right" />
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:when test="ancestor::tabular/@right">
-                    <xsl:call-template name="pg-vrule-specification">
-                        <xsl:with-param name="width" select="ancestor::tabular/@right" />
-                    </xsl:call-template>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:variable>
-
-    <!-- bottom borders -->
-    <!-- if there is a bottom border due to tabular or row, put midrule => 1 in first cell of row  -->
-    <!-- to get these horizontal rules in WeBWorK tex output; always omit last row for such output -->
-    <!-- additionally put rowcss with more specific thickness into first cell                      -->
-    <!-- if there is a bottom border due to cell, store some css to go into cellcss later          -->
-    <!-- but need to understand that cell-specific bottom borders are not implemented in TeX       -->
-    <!-- output from WeBWorK itself processing the PG                                              -->
-    <xsl:variable name="midrule">
-        <xsl:variable name="table-bottom-width">
-            <xsl:if test="ancestor::tabular/@bottom">
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
-                </xsl:call-template>
-            </xsl:if>
-        </xsl:variable>
-        <xsl:variable name="row-bottom-width">
-            <xsl:if test="parent::row/@bottom">
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="parent::row/@bottom" />
-                </xsl:call-template>
-            </xsl:if>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="parent::row/@bottom and parent::row/following-sibling::row">
-                <xsl:choose>
-                    <xsl:when test="$row-bottom-width &gt; 0">
-                        <xsl:text>1</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>0</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <xsl:when test="ancestor::tabular/@bottom and parent::row/following-sibling::row">
-                <xsl:choose>
-                    <xsl:when test="$table-bottom-width &gt; 0">
-                        <xsl:text>1</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>0</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="rowcss">
-        <xsl:if test="position()=1">
-            <xsl:choose>
-                <xsl:when test="parent::row/@bottom">
-                    <xsl:text>border-bottom:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="thickness-specification">
-                        <xsl:with-param name="width" select="parent::row/@bottom" />
-                    </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test="ancestor::tabular/@bottom">
-                    <xsl:text>border-bottom:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="thickness-specification">
-                        <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
-                    </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="parent::row/@valign">
-                    <xsl:text>vertical-align:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:value-of select="parent::row/@valign" />
-                    <xsl:text>;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test="ancestor::tabular/@valign">
-                    <xsl:text>vertical-align:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:value-of select="ancestor::tabular/@valign" />
-                    <xsl:text>;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="cell-bottom-css">
-        <xsl:if test="@bottom">
-            <xsl:text>border-bottom:</xsl:text>
-            <xsl:if test="$b-human-readable">
-                <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:call-template name="thickness-specification">
-                <xsl:with-param name="width" select="@bottom" />
-            </xsl:call-template>
-            <xsl:text>px solid;</xsl:text>
-            <xsl:if test="$b-human-readable">
-                <xsl:text> </xsl:text>
-            </xsl:if>
-        </xsl:if>
-    </xsl:variable>
-
-    <!-- top from tabular or col: implement in HMTL side only with string for cellcss -->
-    <xsl:variable name="cell-top-css">
-        <xsl:if test="count(parent::row/preceding-sibling::row) = 0">
-            <xsl:choose>
-                <xsl:when test="ancestor::tabular/col[$this-cells-left-column]/@top">
-                    <xsl:text>border-top:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="thickness-specification">
-                        <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-left-column]/@top" />
-                    </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test="ancestor::tabular/@top">
-                    <xsl:text>border-top:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="thickness-specification">
-                        <xsl:with-param name="width" select="ancestor::tabular/@top" />
-                    </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:variable>
-
-    <!-- left from tabular or row: implement thickness in HMTL side with string for cellcss -->
-    <xsl:variable name="cell-left-css">
-        <xsl:if test="count(preceding-sibling::cell) = 0">
-            <xsl:choose>
-                <xsl:when test="parent::row/@left">
-                    <xsl:text>border-left:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="thickness-specification">
-                        <xsl:with-param name="width" select="parent::row/@left" />
-                    </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test="ancestor::tabular/@left">
-                    <xsl:text>border-left:</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="thickness-specification">
-                        <xsl:with-param name="width" select="ancestor::tabular/@left" />
-                    </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
-                    <xsl:if test="$b-human-readable">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:variable>
-
-    <!-- right from tabular, col, or row: implement thickness in HMTL side with string for cellcss -->
-    <xsl:variable name="cell-right-css">
-        <xsl:choose>
-            <xsl:when test="@right">
-                <xsl:text>border-right:</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="@right" />
-                </xsl:call-template>
-                <xsl:text>px solid;</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-            </xsl:when>
-            <xsl:when test="ancestor::tabular/col[$this-cells-right-column]/@right">
-                <xsl:text>border-right:</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-right-column]/@right" />
-                </xsl:call-template>
-                <xsl:text>px solid;</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-            </xsl:when>
-            <xsl:when test="ancestor::tabular/@right">
-                <xsl:text>border-right:</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="ancestor::tabular/@right" />
-                </xsl:call-template>
-                <xsl:text>px solid;</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-
-    <xsl:variable name="cellcss">
-        <xsl:if test="not($cell-bottom-css='') or not($cell-top-css='') or not($cell-left-css='') or not($cell-right-css='')">
-            <xsl:if test="not($cell-bottom-css='')">
-                <xsl:value-of select="$cell-bottom-css"/>
-            </xsl:if>
-            <xsl:if test="$b-human-readable">
-                <xsl:if test="not($cell-bottom-css='') and (not($cell-top-css='') or not($cell-left-css='') or not($cell-right-css=''))">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>                  </xsl:text>
-                </xsl:if>
-            </xsl:if>
-            <xsl:if test="not($cell-top-css='')">
-                <xsl:value-of select="$cell-top-css"/>
-            </xsl:if>
-            <xsl:if test="$b-human-readable">
-                <xsl:if test="not($cell-top-css='') and (not($cell-left-css='') or not($cell-right-css=''))">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>                  </xsl:text>
-                </xsl:if>
-            </xsl:if>
-
-            <xsl:if test="not($cell-left-css='')">
-                <xsl:value-of select="$cell-left-css"/>
-            </xsl:if>
-            <xsl:if test="$b-human-readable">
-                <xsl:if test="not($cell-left-css='') and not($cell-right-css='')">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>                  </xsl:text>
-                </xsl:if>
-            </xsl:if>
-            <xsl:if test="not($cell-right-css='')">
-                <xsl:value-of select="$cell-right-css"/>
-            </xsl:if>
-        </xsl:if>
-    </xsl:variable>
-
-    <xsl:if test="$b-human-readable">
-        <xsl:choose>
-            <xsl:when test="not(preceding-sibling::cell)">
-                <xsl:text></xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="potential-list-indent" />
-                <xsl:text>     </xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:if test="$b-human-readable and preceding-sibling::cell">
+        <xsl:call-template name="potential-list-indent" />
+        <xsl:text>     </xsl:text>
     </xsl:if>
 
+    <!-- A goal is to minimize length of code, so we work hard here to ascertain -->
+    <!-- when a given cell specification like valign can be omitted, because the -->
+    <!-- inherited or default value does the same thing.                         -->
+
+    <!-- work out which col's left edge and which col's right edge align with this cell -->
+    <xsl:variable name="left-col" select="count(preceding-sibling::cell) + sum(preceding-sibling::cell[@colspan]/@colspan) - count(preceding-sibling::cell[@colspan]) + 1"/>
+    <xsl:variable name="right-col" select="$left-col + sum(self::cell[@colspan]/@colspan) - count(self::cell[@colspan])"/>
+
+    <!-- work out if the cell needs to declare bottom -->
+    <xsl:variable name="tabular-bottom">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/@bottom = str:tokenize('minor medium major', ' ')">
+                <xsl:value-of select="ancestor::tabular[1]/@bottom"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="row-bottom">
+        <xsl:choose>
+            <xsl:when test="parent::row/@bottom = str:tokenize('minor medium major none', ' ') and parent::row/@bottom != $tabular-bottom">
+                <xsl:value-of select="parent::row/@bottom"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$tabular-bottom"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- work out if the cell needs to declare valign -->
+    <xsl:variable name="tabular-valign">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/@valign = str:tokenize('top bottom', ' ')">
+                <xsl:value-of select="ancestor::tabular[1]/@valign"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>middle</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="row-valign">
+        <xsl:choose>
+            <xsl:when test="parent::row/@valign = str:tokenize('top middle bottom', ' ') and parent::row/@valign != $tabular-valign">
+                <xsl:value-of select="parent::row/@valign"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$tabular-valign"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- work out if the cell needs to declare halign -->
+    <xsl:variable name="tabular-halign">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/@halign = str:tokenize('center right', ' ')">
+                <xsl:value-of select="ancestor::tabular[1]/@halign"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>left</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="col-halign">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/col[$left-col]/@halign = str:tokenize('center right left', ' ') and ancestor::tabular[1]/col[$left-col]/@halign != $tabular-halign">
+                <xsl:value-of select="ancestor::tabular[1]/col[$left-col]/@halign"/>
+            </xsl:when>
+            <xsl:when test="ancestor::tabular[1]/col[$left-col]/@halign = 'justify' and 'left' != $tabular-halign">
+                <xsl:text>left</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$tabular-halign"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="row-halign">
+        <xsl:choose>
+            <xsl:when test="parent::row/@halign = str:tokenize('center right left', ' ') and parent::row/@halign != $col-halign">
+                <xsl:value-of select="parent::row/@halign"/>
+            </xsl:when>
+            <xsl:when test="parent::row/@halign = 'justify' and 'left' != $col-halign">
+                <xsl:text>left</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$col-halign"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="cell-halign">
+        <xsl:choose>
+            <xsl:when test="@halign = str:tokenize('center right left', ' ') and @halign != $row-halign">
+                <xsl:value-of select="@halign"/>
+            </xsl:when>
+            <xsl:when test="@halign = 'justify' and 'left' != $row-halign">
+                <xsl:text>left</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$row-halign"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- work out if the cell needs to declare left -->
+    <xsl:variable name="tabular-left">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/@left = str:tokenize('minor medium major', ' ')">
+                <xsl:value-of select="ancestor::tabular[1]/@left"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="row-left">
+        <xsl:choose>
+            <xsl:when test="parent::row/@left = str:tokenize('minor medium major none', ' ') and parent::row/@left != $tabular-left">
+                <xsl:value-of select="parent::row/@left"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$tabular-left"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- work out if the cell needs to declare right -->
+    <xsl:variable name="tabular-right">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/@right = str:tokenize('minor medium major', ' ')">
+                <xsl:value-of select="ancestor::tabular[1]/@right"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="col-right">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular[1]/col[$right-col]/@right = str:tokenize('minor medium major none', ' ') and ancestor::tabular[1]/col[$right-col]/@right != $tabular-right">
+                <xsl:value-of select="ancestor::tabular[1]/col[$right-col]/@right"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$tabular-right"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="cell-right">
+        <xsl:choose>
+            <xsl:when test="@right = str:tokenize('minor medium major none', ' ') and @right != $col-right">
+                <xsl:value-of select="@right"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$col-right"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="cell-has-traits" select="
+            boolean(@colspan)
+            or
+            $cell-halign != $col-halign
+            or
+            ($row-bottom != 'none' and not(preceding-sibling::cell))
+            or
+            ($row-valign != $tabular-valign and not(preceding-sibling::cell))
+            or
+            ($row-left != $tabular-left and not(preceding-sibling::cell))
+            or
+            $cell-right != $col-right
+    "/>
+
     <xsl:choose>
-        <xsl:when test="($halign='') and ($midrule='') and ($rowcss='') and ($cellcss='') and not(descendant::m) and not(descendant::var[@width|@form]) and not(@colspan)">
-            <xsl:text>PGML('</xsl:text>
+        <!-- if the cell only has data and no traits to declare,               -->
+        <!-- simplify the output by leaving off the array reference delimiters -->
+        <!-- Below, &#x00a6; is an extended ASCII character almost guaranteed  -->
+        <!-- not to appear in content, used as a delimiter.                    -->
+        <xsl:when test="not($cell-has-traits)">
+            <xsl:text>PGML(q&#x00a6;</xsl:text>
             <xsl:apply-templates/>
-            <xsl:text>'),</xsl:text>
+            <xsl:text>&#x00a6;),</xsl:text>
             <xsl:if test="$b-human-readable">
                 <xsl:text>&#xa;</xsl:text>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[PGML('</xsl:text>
+            <xsl:text>[PGML(q&#x00a6;</xsl:text>
             <xsl:apply-templates/>
-            <xsl:text>'),</xsl:text>
+            <xsl:text>&#x00a6;),</xsl:text>
+            <!-- declare bottom if needed; note niceTables.pl does not respect bottom on an individual cell -->
+            <xsl:if test="$row-bottom != 'none' and not(preceding-sibling::cell)">
+                <xsl:call-template name="key-value">
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                    <xsl:with-param name="key" select="'bottom'"/>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="pg-hrule-specification">
+                            <xsl:with-param name="width" select="$row-bottom"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <!-- this is redundant, but it here for backward compatibility -->
+                <xsl:call-template name="key-value">
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                    <xsl:with-param name="key" select="'midrule'"/>
+                    <xsl:with-param name="value" select="1"/>
+                </xsl:call-template>
+            </xsl:if>
+            <!-- declare valign if needed -->
+            <xsl:if test="$row-valign != $tabular-valign and not(preceding-sibling::cell)">
+                <xsl:call-template name="key-value">
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                    <xsl:with-param name="key" select="'valign'"/>
+                    <xsl:with-param name="value" select="$row-valign"/>
+                </xsl:call-template>
+            </xsl:if>
+            <!-- declare halign if needed -->
+            <xsl:if test="$cell-halign != $col-halign and not(ancestor::tabular[1]/col[$left-col]/@width) or ($row-left != $tabular-left and not(preceding-sibling::cell)) or ($cell-right != $col-right)">
+                <xsl:call-template name="key-value">
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                    <xsl:with-param name="key" select="'halign'"/>
+                    <xsl:with-param name="value">
+                        <xsl:if test="$row-left != $tabular-left and not(preceding-sibling::cell)">
+                            <xsl:call-template name="pg-vrule-specification">
+                                <xsl:with-param name="width" select="$row-left"/>
+                            </xsl:call-template>
+                        </xsl:if>
+                        <xsl:call-template name="halign-specification">
+                            <xsl:with-param name="align" select="$cell-halign"/>
+                        </xsl:call-template>
+                        <xsl:if test="$cell-right != $col-right">
+                            <xsl:call-template name="pg-vrule-specification">
+                                <xsl:with-param name="width" select="$cell-right"/>
+                            </xsl:call-template>
+                        </xsl:if>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+            <!-- declare colspan if present-->
             <xsl:if test="@colspan">
-                <xsl:if test="$b-human-readable">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>      </xsl:text>
-                </xsl:if>
-                <xsl:text>colspan</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>=></xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="@colspan"/>
-                <xsl:text>',</xsl:text>
+                <xsl:call-template name="key-value">
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                    <xsl:with-param name="key" select="'colspan'"/>
+                    <xsl:with-param name="value" select="@colspan"/>
+                </xsl:call-template>
             </xsl:if>
-            <xsl:if test="not($halign='')">
-                <xsl:if test="$b-human-readable">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>      </xsl:text>
-                </xsl:if>
-                <xsl:text>halign</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <!-- two spaces is legacy -->
-                    <xsl:text>  </xsl:text>
-                </xsl:if>
-                <xsl:text>=></xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="$halign"/>
-                <xsl:text>',</xsl:text>
-            </xsl:if>
-            <xsl:if test="$midrule='1' and not(preceding-sibling::cell)">
-                <xsl:if test="$b-human-readable">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>      </xsl:text>
-                </xsl:if>
-                <xsl:text>midrule</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>=></xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="$midrule"/>
-                <xsl:text>',</xsl:text>
-            </xsl:if>
-            <xsl:if test="not($rowcss='')">
-                <xsl:if test="$b-human-readable">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>      </xsl:text>
-                </xsl:if>
-                <xsl:text>rowcss</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <!-- two spaces is legacy -->
-                    <xsl:text>  </xsl:text>
-                </xsl:if>
-                <xsl:text>=></xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="$rowcss"/>
-                <xsl:text>',</xsl:text>
-            </xsl:if>
-            <xsl:if test="not($cellcss='')">
-                <xsl:if test="$b-human-readable">
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:call-template name="potential-list-indent" />
-                    <xsl:text>      </xsl:text>
-                </xsl:if>
-                <xsl:text>cellcss</xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>=></xsl:text>
-                <xsl:if test="$b-human-readable">
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="$cellcss"/>
-                <xsl:text>',</xsl:text>
-            </xsl:if>
+            <!-- close cell's array reference bracket -->
             <xsl:text>],</xsl:text>
             <xsl:if test="$b-human-readable">
                 <xsl:text>&#xa;</xsl:text>
@@ -3279,23 +2985,67 @@
 <xsl:template name="pg-vrule-specification">
     <xsl:param name="width" />
     <xsl:choose>
-        <xsl:when test="$width='none'">
-            <xsl:text></xsl:text>
-        </xsl:when>
-        <xsl:when test="$width='minor'">
+        <xsl:when test="$width = 'none' or $width = '' or not($width)"/>
+        <xsl:when test="$width = 'minor'">
             <xsl:text>|</xsl:text>
         </xsl:when>
-        <xsl:when test="$width='medium'">
-            <xsl:text>|</xsl:text>
+        <xsl:when test="$width = 'medium'">
+            <xsl:text>!{\vrule width 0.07em}</xsl:text>
         </xsl:when>
-        <xsl:when test="$width='major'">
-            <xsl:text>|</xsl:text>
+        <xsl:when test="$width = 'major'">
+            <xsl:text>!{\vrule width 0.11em}</xsl:text>
         </xsl:when>
-        <xsl:when test="$width=''"/>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular left or right attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:WARNING:  left or right attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+
+<!-- Translate vertical rule width to a LaTeX vertical rule -->
+<xsl:template name="pg-hrule-specification">
+    <xsl:param name="width" />
+    <xsl:choose>
+        <xsl:when test="$width = 'none' or $width = '' or not($width)">
+            <xsl:text>0</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width = 'minor'">
+            <xsl:text>1</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width = 'medium'">
+            <xsl:text>2</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width = 'major'">
+            <xsl:text>3</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING:  top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+<xsl:template name="key-value">
+    <xsl:param name="b-human-readable"/>
+    <xsl:param name="key"/>
+    <xsl:param name="value"/>
+    <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:call-template name="potential-list-indent" />
+        <xsl:text>      </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$key"/>
+    <xsl:choose>
+        <xsl:when test="$b-human-readable">
+            <xsl:text> => </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>,</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>'</xsl:text>
+    <xsl:value-of select="$value"/>
+    <xsl:text>',</xsl:text>
 </xsl:template>
 
 

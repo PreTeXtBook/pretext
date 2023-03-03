@@ -30,7 +30,7 @@
 
         <p>Begin by creating a file that is a new <init>XSL</init> stylesheet.  You can likely safely copy a mature one from the <c>xsl/latex</c> directory.  Be certain to keep the first few declarations.  The <tag>xsl:import</tag> is critical, since it will <q>pull in</q> all the basic code for the <pretext/> conversion to <latex/>.  You will be overriding and appending to that code (which <pretext/> has made straightforward).  You can start with an absolute path from your filesystem root, but once public a relative path will be necessary.  Remove all of the <tag>xsl:template</tag> elements, leaving a hollow shell to begin working with.</p>
 
-        <p>What we are doing here is similar to the discussion of <q>thin <init>XSL</init> stylesheets</q> in the <url href="https://pretextbook.org/doc/author-guide/html/processing-thin-xsl.html">Author's Guide</url>, only thicker.  String parameters are also described in this guide, at <xref ref="processing-parameters"/>.</p>
+        <p>What we are doing here is similar to the discussion of <q>extra <init>XSL</init> stylesheets</q> in <xref ref="publisher-extra-stylesheet"/>, only thicker.  String parameters are also described in this Guide, at <xref ref="publisher-string-parameters"/>.</p>
     </section>
 
     <section>
@@ -38,7 +38,7 @@
 
         <p>Some changes in style are effected by setting string parameters that exist for use at the command line.  However, the more flexible features come from the selection by <pretext/> of certain <latex/> packages.  These have been chosen for their flexibility, maturity, and stability.  They should be part of a full <latex/> installation, especially one based on TeXLive.  We presume each author has a similar installation.  Please let us know of any exceptions.  Please try to avoid requiring new packages as part of your style, and if necessary, be sure they are mainstream ones.  Start a discussion on the development forum if you think it is warranted or necessary.  It may be difficult and error-prone for you to employ and integrate an obscure package, and it will cause problems for authors who want to use your style.</p>
 
-        <p>This is an incomplete list of the primary packages we employ, and their general purpose.  They, and their documentation, can be easily found at the <url href="https://ctan.org/">Comprehensive <tex/> Archive Network</url>, aka <init>CTAN</init>.</p>
+        <p>This is an incomplete list of the primary packages we employ, and their general purpose.  They, and their documentation, can be easily found at the <url href="https://ctan.org/" visual="ctan.org">Comprehensive <tex/> Archive Network</url>, aka <init>CTAN</init>.</p>
 
         <table>
             <title>Principal <latex/> packages used for styles</title>
@@ -64,7 +64,7 @@
         </table>
     </section>
 
-    <section xml:id="page-shape">
+    <section xml:id="page-shape-styling">
         <title>Page Shape</title>
 
         <p>Various dimensions of a printed page, including the page itself, may be adjusted using the <c>geometry</c> package, so study the documentation of this package to explore possibilities.  The options of this package may be also set on the command line.  To make options part of your style, place the <tag>xsl:param</tag> declaration in your stylesheet as follows (note the two sets of quotes):<cd>
@@ -145,6 +145,14 @@
         <p>There is only one mode, but it can handle a variety of <pretext/> elements in the <attr>match</attr>.  The text produced by the template will be supplied in a named <c>tcolorbox</c> style via a <c>\tcbset{}</c> command.  It is marginally more complicated than that.  <pretext/> will manage certain aspects of creating a <c>tcolorbox</c>, such as forming the <c>tcolorbox</c> <c>title</c> to be a string like <q>Example 4.5 The Chain Rule.</q>, or just <q>Example 4.6</q> when an author does not include a <pretext/> <tag>title</tag>.  As a style writer, you can change the font, color and placement of that string, but not the use of the type-name, the number, the title, or their order.  The text of your template is additive, meaning it is in addition to what the stock <pretext/> conversion provides.  Your options come last, so will be new and effective, or will replace what the base conversion to <latex/> does.  So in the example above, the base conversion to <latex/> has <c>colback=white</c> (rather than the default gray!), and this will be overridden since pink will come later.</p>
     </section>
 
+    <section>
+        <title>Preamble and Experimentation</title>
+
+        <p>Two hooks are provided to allow for arbitrary additions to the <latex/> preamble.  It should go without saying that this is for experimenting with new features and is no way supported, including, but not limited to, interactions with current <latex/> packages in use, or those added in the future.</p>
+
+        <p>Arbitrary text (<latex/>) used as the values of the string parameters <c>latex.preamble.early</c> and <c>latex.preamble.late</c> will be added to the very beginning, or very end (respectively), of the generated preamble.</p>
+    </section>
+
     <section xml:id="style-xsl-101">
         <title><init>XSL</init> 101</title>
 
@@ -176,7 +184,7 @@
     <section xml:id="styling-justification">
         <title>Justified Text</title>
 
-        <p>We employ the <latex/> package, <url href="https://ctan.org/pkg/microtype"><c>microtype</c></url><fn><c>ctan.org/pkg/microtype</c></fn> to enhance <latex/>'s algorithms for spacing text.  See <xref ref="print-justification"/> for some explanation.  The package admits a great deal of fine-tuning, and we make it easy to pass in options via a template included as part of the styling.</p>
+        <p>We employ the <latex/> package, <url href="https://ctan.org/pkg/microtype" visual="ctan.org/pkg/microtype"><c>microtype</c></url> to enhance <latex/>'s algorithms for spacing text.  See <xref ref="print-justification"/> for some explanation.  The package admits a great deal of fine-tuning, and we make it easy to pass in options via a template included as part of the styling.</p>
 
         <p>If you were using <c>pdflatex</c> you might include in your styling:<cd>
             <cline>&lt;xsl:template name="microtype-options"&gt;</cline>

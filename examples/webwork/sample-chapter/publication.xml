@@ -25,4 +25,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <directories generated="generated" external="external"/>
     </source>
 
+    <!-- These are the defaults but written explicitly here to serve as a model. -->
+    <webwork
+        server="https://webwork-ptx.aimath.org"
+        course="anonymous"
+        coursepassword="anonymous"
+        user="anonymous"
+        userpassword="anonymous"
+        task-reveal="preceding-correct"
+        />
+
+    <html>
+        <!-- native search with Javascript -->
+        <search variant="default"/>
+        <!-- for this demonstration, we want all the problems dynamic -->
+        <webwork divisional="dynamic"/>
+    </html>
+
 </publication>

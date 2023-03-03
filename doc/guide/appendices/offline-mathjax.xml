@@ -12,7 +12,7 @@
     <idx>MathJax</idx>
 
     <introduction>
-        <p><pretext/> uses the well-known <latex/> syntax for mathematics.  One fundamental reason for this choice is that the <url href="https://www.mathjax.org/">MathJax</url><fn><c>www.mathjax.org</c></fn> Javascript library is so capable at rendering <latex/> inside of an <init>HTML</init> web page.  Of course, it is not hard to render <latex/> syntax inside of <latex/> output!  But what about output formats that are not processed by <latex/> or Javascript, such as <init>EPUB</init> or braille?  That is where running MathJax offline (locally) comes into play.</p>
+        <p><pretext/> uses the well-known <latex/> syntax for mathematics.  One fundamental reason for this choice is that the <url href="https://www.mathjax.org/" visual="www.mathjax.org/">MathJax</url> Javascript library is so capable at rendering <latex/> inside of an <init>HTML</init> web page.  Of course, it is not hard to render <latex/> syntax inside of <latex/> output!  But what about output formats that are not processed by <latex/> or Javascript, such as <init>EPUB</init> or braille?  That is where running MathJax offline (locally) comes into play.</p>
     </introduction>
 
     <section xml:id="node-and-npm">

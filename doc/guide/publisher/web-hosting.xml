@@ -12,7 +12,9 @@
 
     <p>You have HTML output, and now where do you put it?  A fundamental design decision is that you only need to simply upload your <init>HTML</init> files to a hosting service and since all the links are relative, readers should be able to read your whole book with no more effort than that from you.  By design, no extraordinary configuration or privileges are necessary on the server.</p>
 
-    <p>For the choice of a <term>hosting service</term> you may have a fundamental decision to make.  Mostly this applies to authors who are employees of an institution, yet have the freedom to control the copyright on their scholarly work.  But there is information here for independent scholars and for other employees.<ul>
+    <p>Users of the PreTeXt-CLI (<xref ref="processing-CLI">Section</xref>) have access to <c>pretext deploy</c>, which walks users through the process of deploying their document to the free <url href="https://pages.github.com/" visual="pages.github.com/">GitHub Pages</url> service, even if they don't manually manage their Git revision history.</p>
+
+    <p>Otherwise, for the choice of a <term>hosting service</term> you may have a fundamental decision to make.  Mostly this applies to authors who are employees of an institution, yet have the freedom to control the copyright on their scholarly work.  But there is information here for independent scholars and for other employees.<ul>
         <li>
             <p>You love your institution, and plan to stay for a good long time.  They have implicitly (or explicitly) supported your project with time and/or money.  A <init>URL</init> with the insitution's domain name on a freely-accessible project is good advertising for the institution.  Bandwidth is huge, IT is super reliable and helpful, all this is no-cost to you.  Read the next scenario, but you have a good situation, so you might as well use it.</p>
         </li>
@@ -30,8 +32,8 @@
 
         <li>
             <p>Sign up for, and perhaps pay for, a hosting service that lets you point your domain name at the site.<ul>
-                <li>Oscar Levin explains that <url href="https://pages.github.com/">GitHub Pages</url> (<c>pages.github.com</c>) is free, super-easy to use if you already use <c>git</c>, and makes using your domain name (<q>custom <init>URL</init></q>) nearly trivial.  (2017-09-08)</li>
-                <li>Mitch Keller likes the <q>Swift</q> plan at <url href="https://www.a2hosting.com/web-hosting">A2 Hosting</url> (<c>a2hosting.com</c>) at about $60 annually.  (2017-07-05)</li>
+                <li>Oscar Levin explains that <url href="https://pages.github.com/" visual="pages.github.com/">GitHub Pages</url> is free, super-easy to use if you already use <c>git</c>, and makes using your domain name (<q>custom <init>URL</init></q>) nearly trivial.  (2017-09-08)</li>
+                <li>Mitch Keller likes the <q>Swift</q> plan at <url href="https://www.a2hosting.com/web-hosting" visual="www.a2hosting.com/web-hosting">A2 Hosting</url> at about $60 annually.  (2017-07-05)</li>
             </ul></p>
         </li>
     </ol>Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>

@@ -18,7 +18,7 @@
   <introduction>
     <p>
       With a <webwork/> server
-      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>)
+      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
       and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
       HTML output can have interactive problem cells or print problems in <q>static</q> form.
       PDF output will print static versions.
@@ -35,7 +35,7 @@
     <p>
       To make use of <webwork/> in your <pretext/> project, you need a <webwork/> server.
       If someone is providing a <webwork/> server for you, like the AIM server
-      at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
+      at <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>,
       then we assume they have already configured that server for use with <pretext/>,
       and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
     </p>
@@ -87,7 +87,7 @@
     <p>
       To make use of <webwork/> in your <pretext/> project, you need a host <webwork/> course.
       If someone is providing a <webwork/> server for you, like the AIM server
-      at <url href="https://webwork-ptx.aimath.org"><c>webwork-ptx.aimath.org</c></url>,
+      at <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>,
       then we assume they have already configured a course for use with <pretext/>,
       and you may skip this section and move on to <xref ref="webwork-processing">Section</xref>.
     </p>
@@ -102,13 +102,15 @@
       In the course's Course Configuration menu, set all permissions to <c>admin</c>
       (or perhaps set some to the even more restrictive <c>nobody</c>).
       Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.
+      Also if your server is new enough, it has <q>Allowed to view course home page</q> which should
+      also be set to <c>login_proctor</c>.
     </p>
     <p>
       In the Classlist Editor, add a user named <c>anonymous</c> (again, you could use some other name),
       and set that user's permission level to <c>login_proctor</c>, the permission level one higher than <c>student</c>.
       Set that user's password to <c>anonymous</c> (again, you could use some other password).
       Note that because this is public information, anyone will be able to log into this course as this user.
-      This is why setting the permissions earlier is very important. (Especially preventing this user from changing its own password.)
+      This is why restricting permissions in the previous paragraph is very important.
     </p>
     <p>
       Add the following lines to the <c>course.conf</c> file (which lives in the parent folder of the <c>templates/</c> folder.)
@@ -157,8 +159,7 @@
     <title>PG Macros from the <pretext/> Source</title>
     <p>
       The project's <webwork/> exercises may rely on PG macros that are written into the project's source.
-      For example, the exercises might have TikZ images that rely on <tag>docinfo/latex-image-preamble</tag>
-      with <attr>syntax</attr> set to <c>PGtikz</c>.
+      For example, the exercises might have TikZ images that rely on <tag>docinfo/latex-image-preamble</tag>.
     </p>
     <p>
       For this, a PG macro library file must be built and placed in the host course's <c>templates/macros/</c>
@@ -186,8 +187,12 @@
       <title>Extraction and Processing</title>
       <p>
         Before anything else can be done, a <pretext/> project with <webwork/> problems must first have its <webwork/> content extracted and processed into multiple representations, which are then collected into an auxiliary XML file.
-        We do this with the <c>pretext/pretext</c> script which uses Python and the Python <c>requests</c> module.
-        It is not uncommon for your computer to not have <c>requests</c> installed,
+        Using the CLI, this is done with <c>pretext generate webwork</c> (if you want to reference a particular target, add <c>-t [targetname]</c>).
+      </p>
+
+      <p>
+        If instead you want to use the <c>pretext/pretext</c> script, you might need to install the Python <c>requests</c> module.
+        It is not uncommon for your computer to not have <c>requests</c> installed (although it comes with the CLI),
         so you should check if it is there and install it if need be.
         You can check if it is installed from the command line with:
         <cd>
@@ -205,7 +210,7 @@
       </p>
       <p>
         Processing <webwork/> problems is best accomplished if you are using directory management.
-        With a publisher file, declare the external and generated directories as describe in
+        With a publication file, declare the external and generated directories as describe in
         <xref ref="processing-directory-management"/>.
         Then use the <c>pretext</c> script to extract <pretext/> content from the <webwork/> server.
         It will be placed in a <c>webwork</c> subfolder of your generated folder.
@@ -213,7 +218,7 @@
       </p>
       <console>
         <prompt>$ </prompt>
-        <input>pretext -c webwork -p &lt;publisher&gt; -s &lt;server&gt; aota.ptx</input>
+        <input>pretext -c webwork -p &lt;publisher&gt; aota.ptx</input>
       </console>
       <p>
         <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
@@ -222,30 +227,21 @@
         <title>File Paths</title>
         <p>
           In the previous example and those that follow, you should specify paths as needed.
-          For example, the <c>pretext</c> script is typically at <c>~/mathbook/pretext/pretext</c>.
-          And the <c>-p</c> option is specifying a publisher file.
+          For example, the <c>pretext</c> script is typically at <c>~/pretext/pretext/pretext</c>.
+          And the <c>-p</c> option is specifying a publication file.
         </p>
       </warning>
       <p>
         <c>-c webwork</c> means you are processing the <webwork/> components.
       </p>
       <p>
-        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
-      </p>
-      <p>
-        <c>-s</c> specifies the <webwork/> server.
-        The <webwork/> server needs to be version 2.14 or later, specified with its protocol and domain,
-        like <c>https://webwork-ptx.aimath.org</c>.
-        It is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
-        If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.
-      </p>
-      <p>
-        If any of your hosting course, user for that course, password for the site, or password for the course user are not <q>anonymous</q>,
-        then specify the server like
-        <cd>-s "(https://webwork-ptx.aimath.org,courseID,userID,site_password,course_password)"</cd>
-        The <c>site_password</c> is probably <q>anonymous</q>,
-        but could be something different. Only server administrators can set this.
-        Again, it is <em>important</em> to get the protocol correct for your server (<c>http</c> versus <c>https</c>).
+        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
+        In the publication file, the element <tag>webwork</tag> may have attributes <attr>server</attr>,
+        <attr>course</attr>, <attr>coursepassword</attr>, <attr>user</attr>, and <attr>userpassword</attr>.
+        If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>, <c>anonymous</c>,
+        <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a server, you must correctly
+        specify the protocol (<c>http</c> versus <c>https</c>). And it must be version 2.14 or later.
+        Do not include a trailing slash.
       </p>
     </subsection>
 
@@ -253,129 +249,51 @@
       <title>HTML output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as above.
-        Now you may use <c>pretext/pretext</c> to build HTML. For example:
+        We assume you are using managed directories, and have <webwork/> representations file as above.  Build the HTML with <c>pretext build web</c>.
+        You can also use <c>pretext/pretext</c> to build HTML. For example:
       </p>
       <console>
         <prompt>$ </prompt>
         <input>pretext -c all -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
-        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
+        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
       </p>
       <p>
         <c>-d</c> specifies a folder to place all of the HTML output.
         If unspecified, this will be the current working directory.
       </p>
       <p>
-        There are several string parameters you may pass to <c>pretext</c> using
-        <c>-x stringparam option stringparam option ...</c>. If you use <c>-x</c> with <c>pretext</c>,
-        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
+          There are five publisher file entries which  control how a <webwork/> problem is realized within <init>HTML</init> output.  These are divided based on where the exercise (or project-like) resides: inline, within a division of exercises, within a reading questions division, within a worksheet, or if it is a project or similar.  If the class of problems is declared <c>dynamic</c>, then each problem has a button that readers can click to make the problem interactive.  Conversely, if the class of problems is declared <c>static</c>, then the problems render with a static preview.
+        </p>
+        <p>
+          By default, inline exercises and project-like will be dynamic, under the assumption that these are meant to be worked as a reader works through the material.  The others will be static, under the assumption that they will be placed on a WeBWorK server where they will be worked for scores and grades.  See <xref ref="online-webwork-dynamism"/> for the precise syntax for these switches.
+        </p>
+      <p>
+        If an exercise is subdivided into tasks, then by default they will only be revealed incrementally
+        as the reader answers each one correctly. If you would like to have all tasks revealed from the start,
+        then this option may be elected in the publication file (see <xref ref="publication-file-webwork-task-reveal"/>).
       </p>
-      <tabular valign="top">
-        <col />
-        <col width="60%" />
-        <row bottom="major">
-          <cell>stringparam</cell>
-          <cell>options</cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>webwork.inline.static</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> (default) means inline exercises render as interactive.
-            </p>
-            <p>
-              <c>'yes'</c> means inline exercises render as static.
-            </p>
-            <p>
-              <c>'preview'</c> (planned) means inline exercises render as static until you click to activate them.
-            </p>
-          </cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>webwork.divisional.static</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> means divisional exercises render as interactive.
-            </p>
-            <p>
-              <c>'yes'</c> (default) means divisional exercises render as static.
-            </p>
-            <p>
-              <c>'preview'</c> (planned) means divisional exercises render as static until you click to activate them.
-            </p>
-          </cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>html.knowl.exercise.inline</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> means inline exercises appear on page load.
-            </p>
-            <p>
-              <c>'yes'</c> (default) means inline exercises are hidden in knowls.
-            </p>
-          </cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>html.knowl.exercise.sectional</c></cell>
-          <cell>
-            <p>
-              <c>'no'</c> (default) means divisional exercises appear on page load.
-            </p>
-            <p>
-              <c>'yes'</c> means divisional exercises are hidden in knowls.
-            </p>
-          </cell>
-        </row>
-      </tabular>
     </subsection>
 
     <subsection xml:id="webwork-latex-output">
       <title><latex/> output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as above.
-        Now you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
+        We assume you are using managed directories, and have <webwork/> representations file as above.  Then build as normal with the CLI.  Or
+        you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
       </p>
       <console>
         <prompt>$ </prompt>
         <input>pretext -c all -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
-        <c>-p</c> specifies the publisher file, as described in <xref ref="publisher-file-reference"/>.
+        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
       </p>
       <p>
         <c>-d</c> specifies a folder to place the PDF output.
         If unspecified, this will be the current working directory.
       </p>
-      <p>
-        There is one string parameter you may pass to <c>pretext</c> using <c>-x</c>.
-        If you use <c>-x</c> with <c>pretext</c>,
-        make sure at least one other switch (<c>-p</c> for example) follows the use of <c>-x</c>.
-      </p>
-      <tabular valign="top">
-        <col />
-        <col width="60%" />
-        <row bottom="major">
-          <cell>stringparam</cell>
-          <cell>options</cell>
-        </row>
-        <row bottom="minor">
-          <cell><c>latex.fillin.style</c></cell>
-          <cell>
-            <p>
-              <c>'underline'</c> (default) means that where there would be an answer blank,
-              it is rendered as an underline.
-            </p>
-            <p>
-              <c>'box'</c> means that where there would be an answer blank,
-              it is rendered as a box outline.
-            </p>
-          </cell>
-        </row>
-      </tabular>
     </subsection>
 
     <subsection>

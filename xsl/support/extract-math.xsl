@@ -49,12 +49,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Use the HTML variants, as we are making input for MathJax -->
 <xsl:import href="../pretext-html.xsl" />
 
+<!-- Extraction infrastructure, plus redefinition -->
+<!-- of entry template, so *after* HTML template  -->
+<xsl:import href="../extract-identity.xsl" />
+
 <!-- Write XML, since 'output="html"' creates things  -->
 <!-- like unclosed "meta" and these get replicated by  -->
 <!-- the MathJax tools, producing a non-XML file. -->
 
 <!-- Output an HTML for MathJax to consume page -->
 <xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="yes" doctype-system="about:legacy-compat"/>
+
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
 
 <!-- This stylesheet is parameterized by how trailing punctuation       -->
 <!-- is handled by math elements.  An  xsl:param  immediately overrides -->
@@ -100,11 +112,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Build a super-simple HTML page, whose only -->
 <!-- purpose is to serve as input to a MathJax  -->
 <!-- *-page routine.                            -->
-<!-- "cruise" mode wanders the tree, so when    -->
-<!-- we get to an item of interest we can hit   -->
-<!-- it with "regular" templates and not cruise -->
-<!-- down into components.                      -->
-<xsl:template match="/">
+<!-- calling context is $root, or subtree root  -->
+<xsl:template match="*" mode="extraction-wrapper">
     <html>
         <!-- no "head" at all -->
         <body>
@@ -128,15 +137,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:with-param>
                 </xsl:call-template>
             </div>
-            <!-- modal template to bypass everything but math -->
-            <xsl:apply-templates select="$root" mode="cruise"/>
+            <!-- initiate tree-walker "extraction" templates -->
+            <xsl:apply-imports/>
         </body>
     </html>
 </xsl:template>
 
 <!-- Associate IDs with the LaTeX so we -->
 <!-- know where the results belong      -->
-<xsl:template match="m|me|men|md|mdn" mode="cruise">
+<xsl:template match="m|me|men|md|mdn" mode="extraction">
     <div context="{local-name(.)}">
         <!-- NB: stylesheets receiving these representations will  -->
         <!-- want to *also* mark math bits via the "visible-id"    -->
@@ -184,13 +193,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- correct, possibly in the publisher file once revisited -->
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
-</xsl:template>
-
-<!-- Traverse the tree,       -->
-<!-- looking for things to do -->
-<!-- http://stackoverflow.com/questions/3776333/stripping-all-elements-except-one-in-xml-using-xslt -->
-<xsl:template match="@*|node()" mode="cruise">
-    <xsl:apply-templates select="@*|node()" mode="cruise"/>
 </xsl:template>
 
 </xsl:stylesheet>

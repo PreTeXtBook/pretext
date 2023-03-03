@@ -22,9 +22,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl str"
+    xmlns:dyn="http://exslt.org/dynamic"
+    extension-element-prefixes="exsl str dyn"
 >
 
 <!-- ######################### -->
@@ -77,6 +79,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- recursively defined, variables, this discussion may be        -->
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
+<!--                                                               -->
+<!-- Also, in this stylesheet, we should not be letting "docinfo"  -->
+<!-- directly set variables, as "docinfo" contains                 -->
+<!-- settings/characteristics that are part of the author's source -->
+<!-- and are not changed/influenced by a publisher.  Some uses are -->
+<!-- historical when we we were not so aware of the distinction,   -->
+<!-- and some uses are tangential (such as the type of "part" the  -->
+<!-- author has chosen).                                           -->
 
 <!-- ############## -->
 <!-- Common Options -->
@@ -139,6 +149,136 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Flag Table of Contents, or not, with boolean variable -->
 <xsl:variable name="b-has-toc" select="$toc-level > 0" />
+
+<!-- Fillin styles (underline, box, shade) -->
+<xsl:variable name="fillin-text-style">
+    <xsl:choose>
+        <xsl:when test="$publication/common/fillin/@textstyle = 'box'">
+            <xsl:text>box</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/fillin/@textstyle = 'shade'">
+            <xsl:text>shade</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>underline</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="fillin-math-style">
+    <xsl:choose>
+        <xsl:when test="$publication/common/fillin/@mathstyle = 'underline'">
+            <xsl:text>underline</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/fillin/@mathstyle = 'box'">
+            <xsl:text>box</xsl:text>
+        </xsl:when>
+        <!-- default -->
+        <xsl:otherwise>
+            <xsl:text>shade</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Em dash Width -->
+
+<xsl:variable name="emdash-space">
+    <xsl:variable name="default-width" select="'none'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/common/@emdash-space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/common/@emdash-space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/common/@emdash-space">
+            <xsl:message>PTX:WARNING: em-dash width setting in publisher file should be "none" or "thin", not "<xsl:value-of select="$publication/common/@emdash-space"/>". Proceeding with default value: "<xsl:value-of select="$default-width"/>"</xsl:message>
+            <xsl:value-of select="$default-width"/>
+        </xsl:when>
+        <!-- backwards-compatability -->
+        <xsl:when test="$emdash.space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <xsl:when test="$emdash.space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <!-- no attempt to set -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-width"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Watermarking -->
+<!-- Variables for watermark text (simple!), and a scale factor. -->
+<!-- Boolean variables for existence (one is deprecated LaTeX).  -->
+
+<xsl:variable name="watermark-text">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/common/watermark">
+            <xsl:value-of select="$publication/common/watermark"/>
+        </xsl:when>
+        <!-- string parameter, general -->
+        <xsl:when test="($watermark.text != '')">
+            <xsl:value-of select="$watermark.text"/>
+        </xsl:when>
+        <!-- old LaTeX-specific string parameter -->
+        <xsl:when test="($latex.watermark != '')">
+            <xsl:value-of select="$latex.watermark"/>
+        </xsl:when>
+        <!-- won't get employed if we get here, but... -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Unedited comment, copied from old code:                            -->
+<!-- watermark uses a 5cm font, which can be scaled                     -->
+<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
+<!-- and in the default body width for LaTeX                            -->
+
+<xsl:variable name="watermark-scale">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/common/watermark and $publication/common/watermark/@scale">
+            <xsl:value-of select="$publication/common/watermark/@scale"/>
+        </xsl:when>
+        <!-- string parameter, general -->
+        <xsl:when test="($watermark.text != '') and ($watermark.scale != '')">
+            <xsl:value-of select="$watermark.scale"/>
+        </xsl:when>
+        <!-- old LaTeX-specific string parameter -->
+        <xsl:when test="($latex.watermark != '') and ($latex.watermark.scale != '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <!-- employ (historical) defaults to accompany provided text-->
+        <xsl:otherwise>
+            <xsl:choose>
+                <!-- via publication file -->
+                <xsl:when test="$publication/common/watermark">
+                    <xsl:text>0.5</xsl:text>
+                </xsl:when>
+                <!-- string parameter, general -->
+                <xsl:when test="($watermark.text != '')">
+                    <xsl:text>0.5</xsl:text>
+                </xsl:when>
+                <!-- old LaTeX-specific string parameter -->
+                <xsl:when test="($latex.watermark != '')">
+                    <xsl:text>2.0</xsl:text>
+                </xsl:when>
+                <!-- won't get employed if we get here, but... -->
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- General watermarking, publication file or deprecated stringparam.  Plus  .-->
+<!-- the option of double-deprecated string parameter (indicating LaTeX only). -->
+<xsl:variable name="b-watermark" select="$publication/common/watermark or ($watermark.text != '')"/>
+<xsl:variable name="b-latex-watermark" select="$b-watermark or ($latex.watermark != '')"/>
 
 <!-- ########################### -->
 <!-- Exercise component switches -->
@@ -1116,21 +1256,103 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- WeBWork problem representations are formed by the           -->
-<!-- pretext/pretext script communicating with a WeBWorK server. -->
-<xsl:variable name="webwork-representations-file">
+
+<!-- ############### -->
+<!-- WeBWorK Options -->
+<!-- ############### -->
+
+<!-- WeBWorK server location and credentials for the daemon course -->
+<xsl:variable name="webwork-server">
     <xsl:choose>
-        <!-- XSLT should skip the second condition below if the first is false (boosts efficiency). -->
-        <xsl:when test="$generated-directory-source != '' and $original//webwork[*|@*]">
-            <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
-        </xsl:when>
-        <xsl:when test="$publication/source/@webwork-problems">
-            <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
+        <xsl:when test="$publication/webwork/@server">
+            <xsl:value-of select="$publication/webwork/@server"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text/>
+            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="webwork-course">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@course">
+            <xsl:value-of select="$publication/webwork/@course"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="webwork-coursepassword">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@coursepassword">
+            <xsl:value-of select="$publication/webwork/@coursepassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="webwork-user">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@user">
+            <xsl:value-of select="$publication/webwork/@user"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="webwork-userpassword">
+    <xsl:choose>
+        <xsl:when test="$publication/webwork/@userpassword">
+            <xsl:value-of select="$publication/webwork/@userpassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>anonymous</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- WeBWorK tasks can be revealed incrementally or all at once -->
+<xsl:variable name="webwork-task-reveal">
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/@task-reveal"/>
+</xsl:variable>
+
+
+<!-- WeBWork problem representations are formed by Python routines  -->
+<!-- in the   pretext.py  module that communicates with a WeBWorK   -->
+<!-- server.  So this filename is only relevant for *consumption"   -->
+<!-- of WW representations into final output.   But we need to make -->
+<!-- sure these filenames stay in sync, creation v. consumption.    -->
+<!-- Keep this template silent, since this variable may not be      -->
+<!-- necessary, and it is only needed during consumption.           -->
+<xsl:variable name="webwork-representations-file">
+    <!-- Only relevant if there are WW problems present. A version     -->
+    <!-- might remove all WW problems but there is no harm in this     -->
+    <!-- template since the variable created will not be used, and     -->
+    <!-- the template is silent, but for a useful deprecation warning. -->
+    <xsl:if test="$original//webwork[* or @copy or @source]">
+        <xsl:choose>
+            <!-- Note: $generated-directory-source is never empty?    -->
+            <!-- Defaults to the very old "directory.images"?         -->
+            <!-- So testing for the publication file entry is better. -->
+            <xsl:when test="$publication/source/directories/@generated">
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
+            </xsl:when>
+            <xsl:when test="$publication/source/@webwork-problems">
+                <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
+                <xsl:message>PTX:WARNING: the publication file entry  source/@webwork-problems  is</xsl:message>
+                <xsl:message>             deprecated, please move to using managed directories</xsl:message>
+            </xsl:when>
+            <!-- no specification, so empty string for filename -->
+            <!-- this will be noted where it is employed        -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:if>
 </xsl:variable>
 
 <!-- File of  custom/@name  elements, whose content is a custom -->
@@ -1173,6 +1395,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering -->
 <!-- ######### -->
 
+<!-- NB: the "$assembly-*" trees are a bit dangerous, being formed  -->
+<!-- partway through the pre-processing phase.  Their purpose, when -->
+<!-- used to query the structure of the document was to be certain  -->
+<!-- that the pre-processing was done building versions, and/or     -->
+<!-- done adding/deleting material.  We want to build numbers as    -->
+<!-- part of pre-processing, and various defaults are a function    -->
+<!-- of structure, hence the intermediate trees. (We are being very -->
+<!-- cautious here, likely the $original trees would suffice for    -->
+<!-- determining gross sructure.                                    -->
 
 <!-- User-supplied Numbering for Maximum Level     -->
 <!-- Respect switch, or provide sensible defaults  -->
@@ -1600,6 +1831,98 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+<!-- Scratch ActiveCode Window -->
+<!-- Pop-up a window for testing program code.  So "calculator-like" but we      -->
+<!-- reserve the word "calculator" for the hand-held type (even if more modern). -->
+<xsl:variable name="html-scratch-activecode-language">
+    <!-- Builds for a Runestone server default to having this   -->
+    <!-- available via a button, and a "generic" build defaults -->
+    <!-- to not having a button (or teh feature in any event).  -->
+    <xsl:variable name="activecode-default">
+        <xsl:choose>
+            <xsl:when test="$b-host-runestone">
+                <xsl:text>python</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="entered-lang" select="$publication/html/calculator/@activecode"/>
+    <xsl:choose>
+        <!-- languages *always* supported, including "none" -->
+        <xsl:when test="($entered-lang = 'none') or
+                        ($entered-lang = 'python') or
+                        ($entered-lang = 'javascript') or
+                        ($entered-lang = 'html') or
+                        ($entered-lang = 'sql')">
+            <!-- HTML has odd identifier, due to CodeMirror API, we  -->
+            <!-- use a simple one for our authors and translate here -->
+            <xsl:choose>
+                <xsl:when test="$entered-lang = 'html'">
+                    <xsl:text>htmlmixed</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$entered-lang"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- languages only available on a Runestone server -->
+        <xsl:when test="($entered-lang = 'c') or
+                        ($entered-lang = 'cpp') or
+                        ($entered-lang = 'java') or
+                        ($entered-lang = 'python3') or
+                        ($entered-lang = 'octave')">
+            <xsl:choose>
+                <!-- good when hosting on a server -->
+                <xsl:when test="$b-host-runestone">
+                    <xsl:value-of select="$entered-lang"/>
+                </xsl:when>
+                <!-- sounds good, but no, not the right build -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file requests "<xsl:value-of select="$entered-lang"/>", but this language is not supported unless the publisher file also indicates the build is meant to be hosted on a Runestone server. Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+                    <xsl:value-of select="$activecode-default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- an attempt was made, but failed to be any sort of language -->
+        <xsl:when test="$publication/html/calculator/@activecode">
+            <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file should be a programming language or "none", not "<xsl:value-of select="$publication/html/calculator/@activecode"/>". Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+            <xsl:value-of select="$activecode-default"/>
+        </xsl:when>
+        <!-- no attempt to specify build-dependent default value -->
+        <xsl:otherwise>
+            <xsl:value-of select="$activecode-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-has-scratch-activecode" select="not($html-scratch-activecode-language = 'none')"/>
+
+<!--                                      -->
+<!-- HTML Reading Question Response Boxes -->
+<!--                                      -->
+
+<xsl:variable name="short-answer-responses">
+    <xsl:variable name="default-responses" select="'graded'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/@short-answer-responses = 'graded'">
+            <xsl:text>graded</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/@short-answer-responses = 'always'">
+            <xsl:text>always</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/@short-answer-responses">
+            <xsl:message>PTX:WARNING: HTML @short-answer-responses in publisher file should be "graded" or "always", not "<xsl:value-of select="$publication/html/@short-answer-responses"/>". Proceeding with default value: "<xsl:value-of select="$default-responses"/>"</xsl:message>
+            <xsl:value-of select="$default-responses"/>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-responses"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!--                          -->
 <!-- HTML Index Page Redirect -->
@@ -1631,6 +1954,230 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!--                      -->
+<!-- HTML Feedback Button -->
+<!--                      -->
+
+<xsl:variable name="feedback-button-href">
+    <!-- internal variable, just for error-checking -->
+    <xsl:variable name="attempted-href">
+        <xsl:choose>
+            <xsl:when test="$publication/html/feedback/@href">
+                <xsl:value-of select="$publication/html/feedback/@href"/>
+            </xsl:when>
+            <!-- deprecated -->
+            <xsl:when test="$assembly-docinfo/feedback/url">
+                <xsl:value-of select="$assembly-docinfo/feedback/url"/>
+            </xsl:when>
+            <!-- default to empty, as a signal of failure -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- we error-check a bad @href *only* as a publisher -->
+    <!-- variable, and not in the deprecated situation    -->
+    <xsl:if test="$publication/html/feedback and ($attempted-href = '')">
+        <xsl:message>PTX:ERROR:  an HTML "feedback" button with an empty, or missing, @href will be ineffective, or worse, non-existent</xsl:message>
+    </xsl:if>
+    <!-- now capture the internal variable -->
+    <xsl:value-of select="$attempted-href"/>
+</xsl:variable>
+
+<!-- Pure text, no markup, no math, etc. -->
+<!-- Empty is a meaningful value         -->
+<xsl:variable name="feedback-button-text">
+    <xsl:variable name="provided-button-text">
+        <xsl:choose>
+            <xsl:when test="$publication/html/feedback">
+                <xsl:value-of select="$publication/html/feedback"/>
+            </xsl:when>
+            <!-- deprecated -->
+            <!-- "apply-templates is historical, may do poorly as -->
+            <!-- markup below in the absence of "copy-of", etc.   -->
+            <xsl:when test="$assembly-docinfo/feedback/text">
+                <xsl:apply-templates select="$assembly-docinfo/feedback/text"/>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Clean-up *and* utilize emptieness as a signal to use -->
+    <!-- default text. If empty, provide default text in      -->
+    <!-- language of the page at implementation time          -->
+    <xsl:value-of select="normalize-space($provided-button-text)"/>
+</xsl:variable>
+
+<!-- Since we capture alternate text easily, and   -->
+<!-- we *need* an @href, we use this as the signal -->
+<!-- for the election of a feedback button         -->
+<xsl:variable name="b-has-feedback-button" select="not($feedback-button-href = '')"/>
+
+<!--                       -->
+<!-- HTML WeBWorK Dynamism -->
+<!--                       -->
+
+<!-- In HTML output a WeBWorK problem may be static or dynamic.  This  -->
+<!-- is a dichotomy, so we make (historical) boolean variables, where  -->
+<!-- static = True, which get used in the HTML conversion.  But as a   -->
+<!-- publisher setting, we have allowed for possibilities beyond just  -->
+<!-- two.  Inline and project-like default to "dynamic" since they may -->
+<!-- be formative, while the others are "static" since they may be     -->
+<!-- summative.                                                        -->
+
+<xsl:variable name="webwork-inline-capability">
+    <xsl:variable name="ww-default" select="'dynamic'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@inline = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@inline = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@inline">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @inline setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@inline"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.inline.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.inline.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-inline-static" select="$webwork-inline-capability = 'static'" />
+
+<xsl:variable name="webwork-divisional-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@divisional = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@divisional = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@divisional">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @divisional setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@divisional"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.divisional.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.divisional.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-divisional-static" select="$webwork-divisional-capability = 'static'" />
+
+<xsl:variable name="webwork-reading-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@reading = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@reading = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@reading">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @reading setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@reading"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.reading.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.reading.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-reading-static" select="$webwork-reading-capability = 'static'" />
+
+<xsl:variable name="webwork-worksheet-capability">
+    <xsl:variable name="ww-default" select="'static'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@worksheet = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@worksheet = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@worksheet">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @worksheet setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@worksheet"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.worksheet.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.worksheet.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-worksheet-static" select="$webwork-worksheet-capability = 'static'" />
+
+<xsl:variable name="webwork-project-capability">
+    <xsl:variable name="ww-default" select="'dynamic'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/webwork/@project = 'dynamic'">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/webwork/@project = 'static'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/html/webwork/@project">
+            <xsl:message>PTX:WARNING: HTML WeBWorK @project setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@project"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:when>
+        <!-- backwards compatibility: 'yes' indicated static,     -->
+        <!-- anything else would be interpreted as if it was 'no' -->
+        <xsl:when test="$webwork.project.static = 'yes'">
+            <xsl:text>static</xsl:text>
+        </xsl:when>
+        <xsl:when test="$webwork.project.static != ''">
+            <xsl:text>dynamic</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$ww-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- the variable is now either 'static' or 'dynamic' -->
+<xsl:variable name="b-webwork-project-static" select="$webwork-project-capability = 'static'" />
+
 
 <!--                   -->
 <!-- HTML Knowlization -->
@@ -2181,7 +2728,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-
 <!--               -->
 <!-- HTML Base URL -->
 <!--               -->
@@ -2199,9 +2745,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$publication/html/baseurl/@href">
                 <xsl:value-of select="$publication/html/baseurl/@href"/>
             </xsl:when>
-            <!-- reluctantly query the old docinfo version -->
-            <xsl:when test="$assembly-docinfo/html/baseurl/@href">
-                <xsl:value-of select="$assembly-docinfo/html/baseurl/@href"/>
+            <!-- reluctantly query the old docinfo version  -->
+            <!-- If the "version" feature controls multiple -->
+            <!-- "docinfo" then this might query the wrong  -->
+            <!-- one (using $assembly-docinfo here led to a -->
+            <!-- circular variable definition).             -->
+            <xsl:when test="$original/docinfo/html/baseurl/@href">
+                <xsl:value-of select="$original/docinfo/html/baseurl/@href"/>
             </xsl:when>
             <!-- otherwise use the default, is empty as sentinel -->
             <xsl:otherwise/>
@@ -2217,6 +2767,105 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!--                 -->
+<!-- HTML Navigation -->
+<!--                 -->
+
+<!-- Navigation may follow two different logical models:                     -->
+<!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
+<!--       Previous and Next take you to the adjacent "page"                 -->
+<!--   (b) Tree, Prev/Up/Next - explicitly traverse the document tree        -->
+<!--       Prev and Next remain at same depth/level in tree                  -->
+<!--       Must follow a summary link to descend to finer subdivisions       -->
+<!--   'linear' is the default, 'tree' is an option                          -->
+<xsl:variable name="nav-logic">
+    <xsl:variable name="logic-default" select="'linear'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@logic = 'linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@logic = 'tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@logic">
+            <xsl:message>PTX:WARNING: HTML navigation logic setting in publisher file should be "linear" or "tree", not "<xsl:value-of select="$publication/html/navigation/@logic"/>". Proceeding with default value: "<xsl:value-of select="$logic-default"/>"</xsl:message>
+            <xsl:value-of select="$logic-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.logic='linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.logic='tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$logic-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The "up" button is optional given the contents sidebar, default is to have it -->
+<!-- An up button is very desirable if you use the tree-like logic                 -->
+<xsl:variable name="nav-upbutton">
+    <xsl:variable name="upbutton-default" select="'yes'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@upbutton = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@upbutton = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@upbutton">
+            <xsl:message>PTX:WARNING: HTML navigation up-button setting in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/navigation/@upbutton"/>". Proceeding with default value: "<xsl:value-of select="$upbutton-default"/>"</xsl:message>
+            <xsl:value-of select="$upbutton-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.upbutton='yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.upbutton='no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$upbutton-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- There are also "compact" versions of the navigation buttons in the top right -->
+<xsl:variable name="nav-style">
+    <xsl:variable name="style-default" select="'full'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/navigation/@style = 'full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/navigation/@style = 'compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <!-- an attempt to set, but wrong -->
+        <xsl:when test="$publication/html/navigation/@style">
+            <xsl:message>PTX:WARNING: HTML navigation style setting in publisher file should be "full" or "compact", not "<xsl:value-of select="$publication/html/navigation/@style"/>". Proceeding with default value: "<xsl:value-of select="$style-default"/>"</xsl:message>
+            <xsl:value-of select="$style-default"/>
+        </xsl:when>
+        <!-- backwards compatibility, no error-checking -->
+        <xsl:when test="$html.navigation.style='full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.style='compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <!-- no effort to set this switch, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$style-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!--                              -->
 <!-- HTML CSS Style Specification -->
@@ -2330,12 +2979,54 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="html-css-navbarfile">
+    <xsl:choose>
+        <!-- if publisher.xml file has style value, use it -->
+        <xsl:when test="$publication/html/css/@navbar">
+            <xsl:text>navbar_</xsl:text>
+            <xsl:value-of select="$publication/html/css/@navbar"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text>navbar_default.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="html-css-shellfile">
+    <xsl:choose>
+        <!-- if publisher.xml file has style value, use it -->
+        <xsl:when test="$publication/html/css/@shell">
+            <xsl:text>shell_</xsl:text>
+            <xsl:value-of select="$publication/html/css/@shell"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text>shell_default.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                              -->
 <!-- HTML Analytics Configuration -->
 <!--                              -->
 
 <!-- String parameters are deprecated, so in -common -->
 <!-- file, and are only consulted secondarily here   -->
+
+<!-- NB: the "$assembly-*" trees are a bit dangerous, being formed  -->
+<!-- partway through the pre-processing phase.  Their previous      -->
+<!-- purpose, when used to query the "docinfo" was to be certain    -->
+<!-- that the pre-processing was done building versions, and/or     -->
+<!-- done adding/deleting material.  They could probably be         -->
+<!-- changed to "$original/docinfo".  The risk is that a project    -->
+<!-- might have multiple "docinfo" for multiple versions (the       -->
+<!-- supported scheme for this) and would be relying on only one    -->
+<!-- "docinfo" surviving.  However, uses below are for deprecated   -->
+<!-- situations, so we can warn about multiple "docinfo" in the     -->
+<!-- deprecation messages (as has been done for html/baseurl/@href. -->
 
 <xsl:variable name="statcounter-project">
     <xsl:choose>
@@ -2451,6 +3142,53 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!-- Possible values for search/@variant are:                      -->
+<!--                                                               -->
+<!--   "none" - self-explanatory, no computation, no interface     -->
+<!--   "textbook" - pages, divisions on pages, blocks, p[term],    -->
+<!--                chronological and indented presentation        -->
+<!--   "reference" - pages, divisions, all children of a division  -->
+<!--                 (blocks, first-class "p")                     -->
+<!--   "default" - historical, equal to "textbook"                 -->
+<!--                                                               -->
+<!-- Resulting variable values are "none", "textbook", "reference" -->
+<!-- and *not* "default", it was an historical fudge.              -->
+<!-- Note the boolean variable for the no-search case              -->
+<xsl:variable name="native-search-variant">
+    <xsl:variable name="default-native-search" select="'textbook'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/html/search/@variant = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'textbook'">
+            <xsl:text>textbook</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'reference'">
+            <xsl:text>reference</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/search/@variant = 'default'">
+            <!-- change to default variable once this becomes opt-out -->
+            <xsl:text>textbook</xsl:text>
+        </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/search/@variant">
+            <xsl:message>PTX:WARNING: HTML search/@variant in publisher file should be "none", "textbook", "reference" or "default", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
+            <xsl:value-of select="$default-native-search"/>
+        </xsl:when>
+        <!-- unset, so use default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-native-search"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- warn if Google search is also set               -->
+    <!-- TODO: implementation might prefer native search -->
+    <xsl:if test="$b-google-cse and $publication/html/search/@variant and not($publication/html/search/@variant = 'none')">
+        <xsl:message>PTX:WARNING: specifying HTML search/@variant AND search/@google-cx in publisher file is not possible and will lead to unpredictable results</xsl:message>
+    </xsl:if>
+</xsl:variable>
+
+<xsl:variable name="has-native-search" select="not($native-search-variant = 'none')"/>
+
 <!-- Add a boolean variable to toggle "enhanced privacy mode" -->
 <!-- This is an option for embedded YouTube videos            -->
 <!-- and possibly other platforms at a later date.            -->
@@ -2513,6 +3251,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-host-web"       select="$host-platform = 'web'"/>
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
 <xsl:variable name="b-host-aim"       select="$host-platform = 'aim'"/>
+
+
+<!-- ##################### -->
+<!-- EPUB-Specific Options -->
+<!-- ##################### -->
+
+<!-- Cover image specification -->
+
+<!-- Author-specified relative to source external directory -->
+<xsl:variable name="epub-cover-base-filename">
+    <xsl:value-of select="$publication/epub/cover/@front"/>
+</xsl:variable>
+
+<!-- If the author does not say, eventually we will try to build a cover -->
+<xsl:variable name="b-authored-cover" select="not(normalize-space($epub-cover-base-filename)) = ''"/>
+
+<!-- This is where the file lives within the author's version of -->
+<!-- the external files, so eventually Python will pick this up  -->
+<xsl:variable name="epub-cover-source">
+    <xsl:value-of select="$external-directory-source"/>
+    <xsl:value-of select="$epub-cover-base-filename"/>
+</xsl:variable>
+
+<!-- This is where the image file lands in the final XHTML directory. -->
+<!-- So this gets written into several constituents of the EPUB files -->
+<!-- as the (special) cover image.  When an author does not provide   -->
+<!-- the file, the Python makes one and it is always placed in the    -->
+<!-- top-level of the EPUB package.                                   -->
+<xsl:variable name="epub-cover-dest">
+    <xsl:choose>
+        <xsl:when test="$b-authored-cover">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$epub-cover-base-filename"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>cover.png</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ###################### -->
 <!-- LaTeX-Specific Options -->
@@ -2598,12 +3376,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- guaranteed to be 'flush' or 'ragged'   -->
 <!-- N.B. let HTML be different/independent -->
 <xsl:variable name="latex-right-alignment">
+    <xsl:variable name="default-align" select="'flush'"/>
     <xsl:choose>
         <xsl:when test="$publication/latex/page/@right-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/latex/page/@right-alignment = 'ragged'">
             <xsl:text>ragged</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but wrong -->
+        <xsl:when test="$publication/latex/page/@right-alignment">
+            <xsl:message>PTX:WARNING: LaTeX right-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@right-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:value-of select="$default-align"/>
         </xsl:when>
         <!-- or respect deprecated stringparam in use, text.alignment -->
         <xsl:when test="$text.alignment = 'justify'">
@@ -2612,9 +3396,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$text.alignment = 'raggedright'">
             <xsl:text>ragged</xsl:text>
         </xsl:when>
-        <!-- default -->
+        <!-- no attempt at all, so default -->
         <xsl:otherwise>
-            <xsl:text>flush</xsl:text>
+            <xsl:value-of select="$default-align"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -2625,16 +3409,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://www.sascha-frank.com/page-break.html    -->
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
+    <xsl:variable name="default-align" select="'ragged'"/>
     <xsl:choose>
-        <xsl:when test="$publication/latex/page/@bottom-alignmant = 'flush'">
+        <xsl:when test="$publication/latex/page/@bottom-alignment = 'flush'">
             <xsl:text>flush</xsl:text>
         </xsl:when>
         <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
             <xsl:text>ragged</xsl:text>
         </xsl:when>
-        <!-- default -->
+        <xsl:when test="$publication/latex/page/@bottom-alignment">
+            <xsl:message>PTX:WARNING: LaTeX bottom-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@bottom-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:value-of select="$default-align"/>
+        </xsl:when>
+        <!-- no attempt at all, so default -->
         <xsl:otherwise>
-            <xsl:text>ragged</xsl:text>
+            <xsl:value-of select="$default-align"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -2663,6 +3452,166 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
+
+<!-- For historical reasons, this variable has "pt" as part -->
+<!-- of its value.  A change would need to be coordinated   -->
+<!-- with every application in the -latex conversion.       -->
+<xsl:variable name="font-size">
+    <xsl:choose>
+        <!-- via publication file -->
+        <xsl:when test="$publication/latex/@font-size">
+            <!-- provisional, convenience -->
+            <xsl:variable name="fs" select="$publication/latex/@font-size"/>
+            <xsl:choose>
+                <xsl:when test="($fs =  '8') or
+                                ($fs =  '9') or
+                                ($fs = '10') or
+                                ($fs = '11') or
+                                ($fs = '12') or
+                                ($fs = '14') or
+                                ($fs = '17') or
+                                ($fs = '20')">
+                    <xsl:value-of select="$fs"/>
+                    <xsl:text>pt</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
+                    <xsl:text>10pt</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- via deprecated stringparam: assumes "pt" as the unit of measure   -->
+        <!-- (this is recycled code, so no real attempt to do better)          -->
+        <xsl:when test="not($latex.font.size = '')">
+            <xsl:choose>
+                <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>10pt</xsl:text>
+                    <xsl:message>PTX:ERROR   the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- no publication file entry, no deprecated  -->
+        <!-- string parameter, so use the default value -->
+        <xsl:otherwise>
+            <xsl:text>10pt</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Simple - just feeds into a LaTeX \geometry{} -->
+<xsl:variable name="latex-page-geometry">
+    <xsl:choose>
+        <!-- prefer publication file entry -->
+        <xsl:when test="$publication/latex/page/geometry">
+            <xsl:value-of select="$publication/latex/page/geometry"/>
+        </xsl:when>
+        <!-- deprecated string parameter in use-->
+        <xsl:when test="($latex.geometry != '')">
+            <xsl:value-of select="$latex.geometry"/>
+        </xsl:when>
+        <!-- empty is the signal to not use -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The default for the use of page references varies, so that  -->
+<!-- particular logic is in the -latex conversion.  Here we just -->
+<!-- sanitize to "yes", "no" or empty (i.e. ignored)             -->
+<xsl:variable name="latex-pageref">
+    <xsl:choose>
+        <!-- given in publication file -->
+        <xsl:when test="$publication/latex/@pageref">
+            <xsl:choose>
+                <xsl:when test="$publication/latex/@pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the publisher file entry  latex/@pageref  should be "yes" or "no" not "<xsl:value-of select="$publication/latex/@pageref"/>".  The value is being ignored.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- given by deprecated string parameter -->
+        <xsl:when test="($latex.pageref != '')">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$latex.pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.pageref  should be "yes" or "no" not "<xsl:value-of select="$latex.pageref"/>".  The value is being ignored.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- empty if no attempt to influence -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Draft Copies                                              -->
+<!-- Various options for working copies for authors            -->
+<!-- (1) LaTeX's draft mode                                    -->
+<!-- (2) Crop marks on letter paper, centered                  -->
+<!--     presuming geometry sets smaller page size             -->
+<!--     with paperheight, paperwidth                          -->
+<xsl:variable name="latex-draft-mode">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@draft">
+            <xsl:choose>
+                <xsl:when test="$publication/latex/@draft = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@draft = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$publication/latex/@draft">
+                    <xsl:message>PTX WARNING: LaTeX draft mode in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@draft"/>". Proceeding with default value: "no"</xsl:message>
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- default -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="($latex.draft != '')">
+            <xsl:choose>
+                <xsl:when test="$latex.draft = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$latex.draft = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- ignored = empty (as if not attempted -->
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.draft  should be "yes" or "no" not "<xsl:value-of select="$latex.draft"/>".  The default value of "no" is being used.</xsl:message>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
+       </xsl:when>
+        <!-- ho effort to specify, default to "no" -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-latex-draft-mode" select="$latex-draft-mode = 'yes'"/>
 
 <!-- LaTeX/Asymptote -->
 
@@ -2740,6 +3689,84 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
+
+<xsl:variable name="latex-snapshot">
+    <xsl:variable name="default-snapshot" select="'no'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/latex/@snapshot = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/latex/@snapshot = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- attempt to set, but wrong -->
+        <xsl:when test="$publication/latex/@snapshot">
+            <xsl:message>PTX WARNING: LaTeX snapshot record in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@snapshot"/>". Proceeding with default value: "<xsl:value-of select="$default-snapshot"/>"</xsl:message>
+            <xsl:value-of select="$default-snapshot"/>
+        </xsl:when>
+        <!-- no attempt to set, thus default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-snapshot"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
+
+<!-- LaTeX Cover Pages -->
+
+<!-- Front and back, a filename and a flag -->
+
+<xsl:variable name="latex-front-cover-filename">
+    <xsl:choose>
+        <!-- post-managed directories, but $external-directory -->
+        <!-- should preserve backward-compatibilty             -->
+        <xsl:when test="$publication/latex/cover/@front">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$publication/latex/cover/@front"/>
+        </xsl:when>
+        <!-- backward compatibility (from source "docinfo") -->
+        <xsl:when test="$assembly-docinfo/covers/@front">
+            <xsl:value-of select="$assembly-docinfo/covers/@front"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-has-latex-front-cover" select="not($latex-front-cover-filename = '')"/>
+
+<xsl:variable name="latex-back-cover-filename">
+    <xsl:choose>
+        <!-- post-managed directories, but $external-directory -->
+        <!-- should preserve backward-compatibilty             -->
+        <xsl:when test="$publication/latex/cover/@back">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$publication/latex/cover/@back"/>
+        </xsl:when>
+        <!-- backward compatibility (from source "docinfo") -->
+        <xsl:when test="$assembly-docinfo/covers/@back">
+            <xsl:value-of select="$assembly-docinfo/covers/@back"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-has-latex-back-cover" select="not($latex-back-cover-filename = '')"/>
+
+
+<!-- ########### -->
+<!-- LaTeX Fonts -->
+<!-- ########### -->
+
+<!-- 2022-11-03: experimental, subject to change -->
+
+<xsl:variable name="latex-font-main-regular">
+    <xsl:choose>
+        <!-- having a main font specification *rerquires* a @regular -->
+        <!-- TODO: put in a test here to generate a warning if no @regular -->
+        <xsl:when test="$publication/latex/fonts/main">
+            <xsl:value-of select="$publication/latex/fonts/main/@regular"/>
+        </xsl:when>
+        <!-- empty is signal there is no main font overrride -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
@@ -2891,43 +3918,196 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 
+<!-- ########################################### -->
+<!-- Set Values/Defaults for Publisher Variables -->
+<!-- ########################################### -->
+
+<!-- The pi:publisher tree should mirror the official list of options   -->
+<!-- for publisher file attributes for each attribute that has a finite -->
+<!-- list of options.  The first option in the list is, by convention,  -->
+<!-- the default value.                                                 -->
+
+<pi:publisher>
+    <webwork task-reveal="preceding-correct all"/>
+</pi:publisher>
+
+<!-- global variable for pi:publisher tree above -->
+<xsl:variable name="publisher-attribute-options" select="document('')/xsl:stylesheet/pi:publisher"/>
+
+<!-- context for a match below will be an attribute from the pi:publisher tree -->
+<xsl:template match="@*" mode="set-pubfile-attribute-variable">
+    <!-- get the options that are in pi:publisher -->
+    <xsl:variable name="options" select="str:tokenize(., ' ')"/>
+    <!-- the first option is the default -->
+    <xsl:variable name="default" select="$options[1]"/>
+    <!-- get the path to this attribute -->
+    <xsl:variable name="path">
+        <xsl:apply-templates select="." mode="path"/>
+    </xsl:variable>
+    <!-- get the corresponding attribute from the publisher file -->
+    <!-- which may not exist                                     -->
+    <xsl:variable name="full-path" select="concat('$publication/', $path)"/>
+    <xsl:variable name="pubfile-attribute" select="dyn:evaluate($full-path)"/>
+    <xsl:choose>
+        <!-- test catches when attribute is omitted from pubfile, -->
+        <!-- as well as present but null or only whitepsace       -->
+        <xsl:when test="string($pubfile-attribute) = ''">
+            <xsl:value-of select="$default"/>
+        </xsl:when>
+        <!-- a non-empty, non-whitespace string was used in the pubfile -->
+        <!-- next test checks if it is among the legal options          -->
+        <xsl:when test="$pubfile-attribute = $options">
+            <xsl:value-of select="$pubfile-attribute"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should be <xsl:apply-templates select="$options" mode="quoted-list"/>, not "<xsl:value-of select="$pubfile-attribute"/>".  The default "<xsl:value-of select="$default"/>" will be used instead.</xsl:message>
+            <xsl:value-of select="$default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Recurse back up the tree to get the path to an attribute -->
+<xsl:template match="@*" mode="path">
+    <xsl:apply-templates select=".." mode="path"/>
+    <xsl:value-of select="concat('@', local-name())"/>
+</xsl:template>
+
+<xsl:template match="*" mode="path">
+    <xsl:apply-templates select=".." mode="path"/>
+    <xsl:value-of select="concat(local-name(), '/')"/>
+</xsl:template>
+
+<xsl:template match="pi:publisher" mode="path"/>
+
+<!-- Expects a node set from tokenize()                       -->
+<!-- Produces a string where each token is wrapped in quotes  -->
+<!-- When there are multiple options, separates with a comma  -->
+<!-- Last options preceded by "or" with Oxford comma if 3+    -->
+<xsl:template match="token" mode="quoted-list">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>"</xsl:text>
+    <xsl:choose>
+        <!-- if there are at least two more coming -->
+        <xsl:when test="count(following-sibling::token) &gt;= 2">
+            <xsl:text>, </xsl:text>
+        </xsl:when>
+        <!-- if there is exactly one more coming and we have a list of at least three -->
+        <xsl:when test="preceding-sibling::token and following-sibling::token">
+            <xsl:text>, or </xsl:text>
+        </xsl:when>
+        <!-- if there is exactly one more coming and we have a list of two -->
+        <xsl:when test="following-sibling::token">
+            <xsl:text> or </xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ######################### -->
 <!-- String Parameter Bad Bank -->
 <!-- ######################### -->
+
+<!-- 2022-12-26: this list of deprecated, retired, obsolete (string)  -->
+<!-- parameters has evolved over time and the comments are a bit      -->
+<!-- haphazard.  The primary motivation for keeping (most of) these   -->
+<!-- is to allow deprecation warnings to flag (and often react        -->
+<!-- favorably) to attempted uses. Dated, and in chronological        -->
+<!-- order.  Grep, or the git pickaxe (log -S) using the date strings -->
+ <!-- is often effective in locating all the pieces of a deprecation. -->
 
 <!-- Conversion specific parameters that die will   -->
 <!-- live on in warnings, which are isolated in the -->
 <!-- pretext-common stylesheet.  So we need to      -->
 <!-- declare them here for use in the warnings      -->
 
-<!-- DO NOT USE -->
+<!-- Some string parameters have been deprecated without any      -->
+<!-- sort of replacement, fallback, or upgrade.  But for a        -->
+<!-- deprecation message to be effective, they need to exist.     -->
+<!-- If you add something here, make a note by the deprecation    -->
+<!-- message.  These definitions expain why it is *always* best   -->
+<!-- to define a user variable as empty, and then supply defaults -->
+<!-- to an internal variable.                                     -->
+
 <!-- HTML-specific deprecated 2015-06, but still functional -->
 <xsl:param name="html.chunk.level" select="''" />
+
+<!-- DEPRECATED: 2017-12-18, do not use, any value -->
+<!-- besides an empty string will raise a warning  -->
+<xsl:param name="latex.console.macro-char" select="''" />
+<xsl:param name="latex.console.begin-char" select="''" />
+<xsl:param name="latex.console.end-char" select="''" />
+
 <!-- html.knowl.sidebyside is deprecated 2017-07  -->
 <!-- null value necessary for deprecation message -->
 <xsl:param name="html.knowl.sidebyside" select="''" />
+
 <!-- Analytics deprecated 2019-11-28               -->
 <!-- null values necessary for deprecation message -->
 <xsl:param name="html.statcounter.project" select="''"/>
 <xsl:param name="html.statcounter.security" select="''"/>
 <xsl:param name="html.google-classic" select="''"/>
 <xsl:param name="html.google-universal" select="''"/>
+
 <!-- Google search via string parameter deprecated 2019-11-29 -->
 <xsl:param name="html.google-search" select="''"/>
-<!-- DO NOT USE -->
+
+<!-- DEPRECATED: 2020-05-29  In favor of       -->
+<!-- html/calculator/@model  in publisher file -->
+<xsl:param name="html.calculator" select="''" />
+
+<!-- The old (incomplete) methods for duplicating components of -->
+<!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
+<!-- these here as we have tried to preserve their intent, and  -->
+<!-- we are generating warnings if they are ever set.           -->
+<!-- 2020-08-31 exercise.backmatter.* only remain for warnings  -->
+<xsl:param name="exercise.text.statement" select="''" />
+<xsl:param name="exercise.text.hint" select="''" />
+<xsl:param name="exercise.text.answer" select="''" />
+<xsl:param name="exercise.text.solution" select="''" />
+<xsl:param name="project.text.hint" select="''" />
+<xsl:param name="project.text.answer" select="''" />
+<xsl:param name="project.text.solution" select="''" />
+<xsl:param name="task.text.hint" select="''" />
+<xsl:param name="task.text.answer" select="''" />
+<xsl:param name="task.text.solution" select="''" />
+<xsl:param name="exercise.backmatter.statement" select="''" />
+<xsl:param name="exercise.backmatter.hint" select="''" />
+<xsl:param name="exercise.backmatter.answer" select="''" />
+<xsl:param name="exercise.backmatter.solution" select="''" />
 
 <!-- The dashed version is deprecated 2019-02-10,      -->
 <!-- but we still recognize it.  Move to variable bad  -->
 <!-- bank once killed.                                 -->
 <xsl:param name="author-tools" select="''" />
+
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
+
 <!-- 2020-11-22: latex.print to publisher file -->
 <xsl:param name="latex.print" select="''"/>
 <!-- 2020-11-22 sidedness to publisher file -->
 <xsl:param name="latex.sides" select="''"/>
 
+<!-- Replaced by more specific versions, 2019-02-10     -->
+<!-- These are variables, but still react when supplied -->
+<!-- to xsltproc/lxml as command-line arguments         -->
+<xsl:variable name="html.css.file" select="''"/>
+<xsl:variable name="html.permalink" select="''"/>
+
+<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
+<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
+<xsl:param name="latex.engine" select="'pdflatex'" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.media"  select="''" />
+
+<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
+<!-- silently moved here, which should make no real difference -->
+<xsl:param name="directory.knowls"  select="''" />
 
 <!-- Deprecated 2020-11-23 in favor of publisher file -->
 <!-- specification, but will still be respected       -->
@@ -2937,7 +4117,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="chunk.level" select="''" />
 <!-- 2021-01-03 toc.level to publisher file -->
 <xsl:param name="toc.level" select="''" />
-
 
 <!-- Deprecated 2021-01-23, but still respected -->
 <xsl:param name="html.knowl.theorem" select="''" />
@@ -2998,83 +4177,673 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
 
-<!-- ################# -->
-<!-- Variable Bad Bank -->
-<!-- ################# -->
+<!-- On 2021-03-03 abandoned a "fast-id" scheme that was never -->
+<!-- really used since it was in-effect a developer testing    -->
+<!-- option. Then on 2022-05-23 removed code, strengthened     -->
+<!-- deprecation message, and moved parameter here.            -->
+<xsl:param name="oldids" select="''"/>
 
-<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
+<!-- Deprecated on 2022-10-24.  Definition has changed from  -->
+<!-- a default value of "10pt" to an empty string, so we can -->
+<!-- detect use for a deprecation warning.  Default value is -->
+<!-- preserved in other ways as part of the deprecation.     -->
+<xsl:param name="latex.font.size" select="''" />
 
-<!-- Some string parameters have been deprecated without any      -->
-<!-- sort of replacement, fallback, or upgrade.  But for a        -->
-<!-- deprecation message to be effective, they need to exist.     -->
-<!-- If you add something here, make a note by the deprecation    -->
-<!-- message.  These definitions expain why it is *always* best   -->
-<!-- to define a user variable as empty, and then supply defaults -->
-<!-- to an internal variable.                                     -->
+<!-- Geometry: page shape, margins, etc. Deprecated    -->
+<!--2022-10-24, non-empty triggers deprecation warning -->
+<xsl:param name="latex.geometry" select="''"/>
 
-<xsl:variable name="html.css.file" select="''"/>
-<xsl:variable name="html.permalink" select="''"/>
+<!-- Page Numbers in cross-references, deprecated 2022-10-24 -->
+<xsl:param name="latex.pageref" select="''"/>
 
-<!-- The old (incomplete) methods for duplicating components of -->
-<!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
-<!-- these here as we have tried to preserve their intent, and  -->
-<!-- we are generating warnings if they are ever set.           -->
-<!-- 2020-08-31 exercise.backmatter.* only remain for warnings  -->
-<xsl:param name="exercise.text.statement" select="''" />
-<xsl:param name="exercise.text.hint" select="''" />
-<xsl:param name="exercise.text.answer" select="''" />
-<xsl:param name="exercise.text.solution" select="''" />
-<xsl:param name="project.text.hint" select="''" />
-<xsl:param name="project.text.answer" select="''" />
-<xsl:param name="project.text.solution" select="''" />
-<xsl:param name="task.text.hint" select="''" />
-<xsl:param name="task.text.answer" select="''" />
-<xsl:param name="task.text.solution" select="''" />
-<xsl:param name="exercise.backmatter.statement" select="''" />
-<xsl:param name="exercise.backmatter.hint" select="''" />
-<xsl:param name="exercise.backmatter.answer" select="''" />
-<xsl:param name="exercise.backmatter.solution" select="''" />
+<!-- Electing LaTeX draft mode, deprecated 2022-10-24 -->
+<xsl:param name="latex.draft" select="''"/>
 
-<!-- These are deprecated in favor of watermark.text and watermark.scale -->
-<!-- which are now managed in common. These still "work" for now.        -->
-<!-- The default scaling factor of 2.0 is historical.                    -->
+<!-- These first two are deprecated in favor of watermark.text  -->
+<!-- and watermark.scale, which in turn are deprecated in favor -->
+<!-- of publication file entry.  Double deprecation, second one -->
+<!-- on 2022-10-24.                                             -->
 <xsl:param name="latex.watermark" select="''"/>
-<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
 <xsl:param name="latex.watermark.scale" select="''"/>
-<xsl:variable name="latex-watermark-scale">
-    <xsl:choose>
-        <xsl:when test="not($latex.watermark.scale = '')">
-            <xsl:value-of select="$latex.watermark.scale"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>2.0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<xsl:param name="watermark.text" select="''" />
+<xsl:param name="watermark.scale" select="''" />
 
-<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
+<!-- These were yes/no string parameters.  We converted to values -->
+<!-- of "static" or "dynamic" as publisher entries on 2022-11-19. -->
+<xsl:param name="webwork.inline.static" select="''" />
+<xsl:param name="webwork.divisional.static" select="''" />
+<xsl:param name="webwork.reading.static" select="''" />
+<xsl:param name="webwork.worksheet.static" select="''" />
+<xsl:param name="webwork.project.static" select="''" />
 
-<!-- DEPRECATED: 2017-12-18, do not use, any value -->
-<!-- besides an empty string will raise a warning  -->
-<xsl:param name="latex.console.macro-char" select="''" />
-<xsl:param name="latex.console.begin-char" select="''" />
-<xsl:param name="latex.console.end-char" select="''" />
+<!-- Navigation options move to the publisher file on 2022-11-20. -->
+<xsl:param name="html.navigation.logic"  select="''"/>
+<xsl:param name="html.navigation.upbutton"  select="''"/>
+<xsl:param name="html.navigation.style"  select="''"/>
 
-<!-- DEPRECATED: 2020-05-29  In favor of       -->
-<!-- html/calculator/@model  in publisher file -->
-<xsl:param name="html.calculator" select="''" />
+<!-- Publisher option to surround emdash, deprecated 2022-11-20 -->
+<xsl:param name="emdash.space" select="''" />
 
-<!-- RETIRED: 2020-11-22 Not a deprecation, this is a string parameter that             -->
-<!-- was never used at all.  Probably no real harm in parking it here for now.          -->
-<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
-<xsl:param name="latex.engine" select="'pdflatex'" />
+<!-- ###################################### -->
+<!-- Parameter Deprecation Warning Messages -->
+<!-- ###################################### -->
 
-<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
-<!-- silently moved here, which should make no real difference -->
-<xsl:param name="directory.media"  select="''" />
+<!-- Pass in a condition, true is a problem.       -->
+<!-- A message string like "'foo'" cannot contain  -->
+<!-- a single quote, even if entered as &apos;.    -->
+<!-- If despearate, concatentate with $apos.       -->
+<!-- A &#xa; can be used if necessary, but only    -->
+<!-- rarely do we bother.                          -->
+<xsl:template name="parameter-deprecation-message">
+    <xsl:param name="incorrect-use" select="false()" />
+    <xsl:param name="date-string" />
+    <xsl:param name="message" />
+    <xsl:if test="$incorrect-use">
+        <xsl:message>
+            <xsl:text>PTX:DEPRECATE: (</xsl:text>
+            <xsl:value-of select="$date-string" />
+            <xsl:text>) </xsl:text>
+            <xsl:value-of select="$message" />
+            <!-- once verbosity is implemented -->
+            <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
+        </xsl:message>
+        <xsl:message>
+            <xsl:text>--------------</xsl:text>
+        </xsl:message>
+    </xsl:if>
+</xsl:template>
 
-<!-- RETIRED: 2020-11-23 this parameter was never used, now    -->
-<!-- silently moved here, which should make no real difference -->
-<xsl:param name="directory.knowls"  select="''" />
+<!-- 2023-01-11: These warnings are originally about string parameters -->
+<!-- moving to the publisher file.  But they seem to work just as well -->
+<!-- when an option in the publisher file changes.  So "parameter" is  -->
+<!-- the nomenclature, but usage is a bit more broad.                  -->
+
+<xsl:template match="mathbook|pretext" mode="parameter-deprecation-warnings">
+    <!-- These apparent re-definitions are local to this template -->
+    <!-- Reasons are historical, so to be a convenience           -->
+    <xsl:variable name="docinfo" select="./docinfo"/>
+    <xsl:variable name="document-root" select="./*[not(self::docinfo)]"/>
+
+
+    <!-- 2017-07-05  sidebyside cannot be cross-referenced anymore, so not knowlizable -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-05'" />
+        <xsl:with-param name="message" select="'the  html.knowl.sidebyside  parameter is now obsolete and will be ignored'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.sidebyside != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2015-06-26  chunking became a general thing -->
+    <!-- 2021-01-03  rendered ineffective            -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2015-06-26'" />
+        <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by the common/chunking/@level  entry in the publisher file.  It will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.chunk.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-25  deprecate intentional autoname without new setting -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/cross-references/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
+        <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references)" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-25  deprecate intentional autoname also with new setting -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/cross-references/@text&quot;  and so is totally ineffective and can be removed'" />
+            <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-12-18  deprecate three console macro characters -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.macro-char  parameter is deprecated, and there is no longer a need to be careful about the backslash (\) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.macro-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.begin-char  parameter is deprecated, and there is no longer a need to be careful about the begin group ({) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.begin-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-12-18'" />
+        <xsl:with-param name="message" select="'the  latex.console.end-char  parameter is deprecated, and there is no longer a need to be careful about the end group (}) character in a console'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.console.end-char = '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-11-07  obsolete exercise component switches          -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-11-07'" />
+        <xsl:with-param name="message" select="'the  *.text.*  parameters that control the visibility of components of exercises and projects have been removed and replaced by a greater variety of  exercise.*.*  and  project.*  parameters'" />
+            <xsl:with-param name="incorrect-use" select="not(($exercise.text.statement = '') and ($exercise.text.hint = '') and ($exercise.text.answer = '') and ($exercise.text.solution = '') and ($project.text.hint = '') and ($project.text.answer = '') and ($project.text.solution = '') and ($task.text.hint = '') and ($task.text.answer = '') and ($task.text.solution = ''))"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-11-07  obsolete backmatter exercise component switches -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here    -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-11-07'" />
+        <xsl:with-param name="message" select="'the  exercise.backmatter.*  parameters that control the visibility of components of exercises and projects in the back matter have been removed and replaced by the &quot;solutions&quot; element, which is much more versatile'"/>
+            <xsl:with-param name="incorrect-use" select="not(($exercise.backmatter.statement = '') and ($exercise.backmatter.hint = '') and ($exercise.backmatter.answer = '') and ($exercise.backmatter.solution = ''))" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-10  obsolete  html.css.file  removed             -->
+    <!-- Still exists in "String Parameter Bad Bank" for use here -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-10'" />
+        <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
+            <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-20  replace author-tools with author.tools                       -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'the  author-tools  parameter has been replaced by the functionally equivalent  author.tools'" />
+            <xsl:with-param name="incorrect-use" select="not($author-tools = '')"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark with watermark.text                  -->
+    <!-- 2022-10-24  update - to publication file                                 -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale           -->
+    <!-- 2022-10-24  update - to publication file                                 -->
+    <!-- Still exists and is respected, move to "String Parameter Bad Bank" later -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark.scale  string parameter has been replaced by a publication file entry which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark.scale != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- And switches for analytics  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-11-28'" />
+        <xsl:with-param name="message" select="'use of string parameters for analytics configuration has been deprecated.  Existing switches are being respected, but please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.&#xa;  * For StatCounter this is a cosmetic change.&#xa;  * Google Classic has been deprecated by Google and will not be supported.&#xa;  * Google Universal has been replaced, your ID may continue to work.&#xa;  * Google Global Site Tag is fully supported, try your Universal ID.&#xa;'" />
+            <xsl:with-param name="incorrect-use" select="($html.statcounter.project != '') or ($html.statcounter.security != '') or ($html.google-classic != '') or ($html.google-universal != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-11-29  deprecated Google search via string parameter -->
+    <!-- see 2019-04-14 for docinfo deprecation                    -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-11-29'" />
+        <xsl:with-param name="message" select="'Google search is no longer specified with a string parameter.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+            <xsl:with-param name="incorrect-use" select="$html.google-search != ''" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-05-10  permalinks (their style actually) are now controlled by Javascript -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-05-10'" />
+        <xsl:with-param name="message" select="'the  html.permalink  parameter is now obsolete and will be ignored as this is now controlled by Javascript'" />
+        <xsl:with-param name="incorrect-use" select="($html.permalink != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-05-29  HTML calculator model controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-05-29'" />
+        <xsl:with-param name="message" select="'the  html.calculator  parameter has been replaced by the  html/calculator/@model  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.calculator != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX print option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.print  parameter has been replaced by the  latex/@print  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.print != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2020-11-22  LaTeX sideness option controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-22'" />
+        <xsl:with-param name="message" select="'the  latex.sides  parameter has been replaced by the  latex/@sides  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.sides != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-01-03  chunk.level now in publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-03'" />
+        <xsl:with-param name="message" select="'the  chunk.level  parameter has been replaced by the  common/chunking/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($chunk.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2021-01-03  toc.level now in publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-03'"/>
+        <xsl:with-param name="message" select="'the  toc.level  parameter has been replaced by the  common/tableofcontents/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($toc.level != '')" />
+    </xsl:call-template>
+    <!-- 2020-11-23  directory.images replaced by publisher file specification -->
+    <!-- Reverse this soon, hot fix -->
+    <!--
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-11-23'" />
+        <xsl:with-param name="message" select="'the  directory.images  parameter has been replaced by specification of two directories in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
+    </xsl:call-template>
+ -->
+    <!--  -->
+    <!--                                                  -->
+    <!-- 2021-01-23  Seventeen old knowl-ization switches -->
+    <!--                                                  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.theorem  parameter has been replaced by the  html/knowl/@theorem  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.theorem != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.proof  parameter has been replaced by the  html/knowl/@proof  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.proof != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.definition  parameter has been replaced by the  html/knowl/@definition  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.definition != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.example  parameter has been replaced by the  html/knowl/@example  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.example != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.project  parameter has been replaced by the  html/knowl/@project  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.project != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.task  parameter has been replaced by the  html/knowl/@task  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.task != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.list  parameter has been replaced by the  html/knowl/@list  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.list != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.remark  parameter has been replaced by the  html/knowl/@remark  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.remark != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.objectives  parameter has been replaced by the  html/knowl/@objectives  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.objectives != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.outcomes  parameter has been replaced by the  html/knowl/@outcomes  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.outcomes != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.figure  parameter has been replaced by the  html/knowl/@figure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.figure != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.table  parameter has been replaced by the  html/knowl/@table  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.table != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.listing  parameter has been replaced by the  html/knowl/@listing  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.listing != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.inline  parameter has been replaced by the  html/knowl/@exercise-inline  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.inline != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.sectional  parameter has been replaced by the  html/knowl/@exercise-divisional  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.sectional != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.worksheet  parameter has been replaced by the  html/knowl/@exercise-worksheet  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.worksheet != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-01-23'" />
+        <xsl:with-param name="message" select="'the  html.knowl.exercise.readingquestion  parameter has been replaced by the  html/knowl/@exercise-readingquestion  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.knowl.exercise.readingquestion != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2014-02-14 Five parameters for numbering level to publisher file -->
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.maximum.level  parameter has been replaced by the  numbering/divisions/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.theorems.level  parameter has been replaced by the  numbering/blocks/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.theorems.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.projects.level  parameter has been replaced by the  numbering/projects/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.projects.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.equations.level  parameter has been replaced by the  numbering/equations/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.equations.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  numbering.footnotes.level  parameter has been replaced by the  numbering/footnotes/@level  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.footnotes.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-02-14'" />
+        <xsl:with-param name="message" select="'the  debug.chapter.start  parameter has been removed entirely and so will be ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($debug.chapter.start != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2021-11-04'" />
+        <xsl:with-param name="message" select="'the  text.alignment  parameter has been deprecated, but we will attempt to honor your intent.  Please switch to using the Publishers File for configuration of LaTeX page shape, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($text.alignment != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 1/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 2/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 3/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 4/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.inline.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.inline.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 5/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 6/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 7/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 8/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.divisional.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.divisional.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 9/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 10/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 11/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 12/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.worksheet.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.worksheet.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 13/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 14/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 15/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 16/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  exercise.reading.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($exercise.reading.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 17/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.statement  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.statement != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 18/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.hint  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.hint != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 19/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.answer  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.answer != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-01-31  exercise component visibility setting 20/20 -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-01-31'" />
+        <xsl:with-param name="message" select="'the  project.solution  string parameter is now deprecated, but we will attempt to honor your intent.  Please switch to using the Publication File, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($project.solution != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-23  experimental scheme for "fast-id" abandonend -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-23'" />
+        <xsl:with-param name="message" select="'the  oldids  string parameter was used for testing, was deprecated on 2021-03-03, is now obsolete, there is no replacement, relevant code has been removed, and the parameter is being ignored'" />
+        <xsl:with-param name="incorrect-use" select="($oldids != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-05-28  "latex.fillin.style" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-05-28'" />
+        <xsl:with-param name="message" select="'the  latex.fillin.style  parameter has been replaced by the  common/fillin/@textstyle  and  common/fillin/mathstyle  entries in the publication file. The default style for a text fillin is now  underline  and the default style for a math fillin is now  shade .  To use  box  style for either, set values in the publication file.'" />
+        <xsl:with-param name="incorrect-use" select="($numbering.maximum.level != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.font.size" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.font.size  parameter has been replaced by the  latex/@font-size  entry in the publication file.   We will attempt to honor your intent.  Note that possible values are the same, but you no longer provide &quot;pt&quot; as the unit of measure.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.font.size != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.geometry" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.geometry  parameter has been replaced by the  latex/page/geometry  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.geometry != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.pageref" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.pageref string parameter has been replaced by the  latex/@pageref  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.pageref != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  "latex.draft" is deprecated for publisher variables -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  latex.draft string parameter has been replaced by the  latex/@draft  entry in the publication file.  We will attempt to honor your intent.'" />
+        <xsl:with-param name="incorrect-use" select="($latex.draft != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.text  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.text  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.text != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-10-24  watermark.scale  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-10-24'" />
+        <xsl:with-param name="message" select="'the  watermark.scale  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($watermark.scale != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.inline.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.inline.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.inline.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.divisional.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.divisional.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.divisional.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.reading.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.reading.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.reading.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.worksheet.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.worksheet.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.worksheet.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-19  webwork.project.static  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-19'" />
+        <xsl:with-param name="message" select="'the  webwork.project.static  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($webwork.project.static != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.logic  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.logic  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.logic != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.upbutton  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.upbutton  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.upbutton != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  html.navigation.style  deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  html.navigation.style  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($html.navigation.style != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2022-11-20  emdash.space deprecated in favor of publication file entry-->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2022-11-20'" />
+        <xsl:with-param name="message" select="'the  emdash.space  string parameter has been replaced by a publication file entry.  We will try to honor your intent.'" />
+            <xsl:with-param name="incorrect-use" select="($emdash.space != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2023-01-11  EPUB cover image publication file entry totally reworked -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2023-01-11'" />
+        <xsl:with-param name="message" select="'the  epub/@cover  publication file entry has been replaced, and likely you will only get a simple generic cover image.  Please read the documentation for how to transition to the new specification'" />
+            <xsl:with-param name="incorrect-use" select="($publication/epub/@cover != '')" />
+    </xsl:call-template>
+    <!--  -->
+</xsl:template>
 
 </xsl:stylesheet>

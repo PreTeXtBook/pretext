@@ -48,6 +48,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this will import -assembly and -common stylesheets -->
 <xsl:import href="./pretext-html.xsl" />
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- Output (xsl:output) is controlled by an explicit exsl:document() call -->
 <!-- later, for better control over the header of the resulting file       -->
 
@@ -75,8 +83,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- abandoning the chunking templates.                                    -->
 <xsl:variable name="chunk-level" select="0"/>
 
-<!-- NB: This will need to be expanded with terms like //subsection/exercises -->
-<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection)"/>
+<!-- All the ways we can have a division at the subsubsection level.     -->
+<!-- This influences how headings of divisions are indicated (centered,  -->
+<!-- cell5, cell7) when subdivisions go this deep.  Or not.              -->
+<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection |
+                                                         $document-root//subsection/exercises |
+                                                         $document-root//subsection/reading-questions |
+                                                         $document-root//subsection/worksheet |
+                                                         $document-root//subsection/solutions |
+                                                         $document-root//subsection/references |
+                                                         $document-root//subsection/glossary
+                                                        )"/>
 
 <!-- Necessary to get pre-constructed Nemeth braille for math elements. -->
 <xsl:param name="mathfile" select="''"/>
@@ -120,7 +137,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- the usual warnings, as part of a primary conversion -->
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <!-- One monolithic HTML page, as input to liblouis' file2brl   -->
     <!-- executable.  The HTML templates are engineered to be       -->
     <!-- chunked into multiple pages, however a "chunk level" of    -->
@@ -210,9 +228,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A marker for generating the Table of Contents,      -->
     <!-- content of the element is the title of the new page -->
     <div data-braille="tableofcontents">
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'toc'" />
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'toc'"/>
+        </xsl:apply-templates>
     </div>
 </xsl:template>
 
@@ -237,14 +255,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-
-<!-- Unnumbered, chapter-level headings, just title text -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
-    <span class="title">
-        <xsl:apply-templates select="." mode="title-full" />
-    </span>
-</xsl:template>
-
 <!-- We override the "section-heading" template to place classes  -->
 <!--                                                              -->
 <!--     fullpage centerpage center cell5 cell7                   -->
@@ -252,7 +262,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- onto the heading so liblouis can style it properly           -->
 <!-- This is greatly simplified, "hX" elements just become "div", -->
 <!-- which is all we need for the  liblouis  semantic action file -->
-
 
 <xsl:template match="*" mode="section-heading">
     <div>
@@ -263,74 +272,198 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Verbatim from -html conversion read about it there -->
-<xsl:template match="book|article" mode="section-heading" />
-<!-- Slideshow is similar, but not present in the -html stylesheet -->
-<xsl:template match="slideshow" mode="section-heading" />
+<!-- Verbatim from -html conversion for book, article, so read -->
+<!-- about it there.  Slideshow doesn't get a heading either.  -->
+<xsl:template match="book|article|slideshow" mode="section-heading" />
 
-<!-- Default is indeterminate (seacrch while debugging) -->
+<!-- Heading Content (for divisions) -->
+
+<!-- This is an override of the template in the HTML conversion. -->
+<!-- We drop the names of divisions (which are usually squelced  -->
+<!-- by CSS), except we keep "Chapter" since the chapter-busting -->
+<!-- Python depends on it.  Otherwise, number and title, as      -->
+<!-- recommended by Cantino and Maneki.                          -->
+<xsl:template match="*" mode="heading-content">
+    <!-- retain "Chapter" as a necessary component -->
+    <!-- of the regular-expressions used in the    -->
+    <!-- chapter-busting Python routine            -->
+    <!-- Note: to test without the "Chapter"       -->
+    <!-- string in the heading, replace            -->
+    <!--     "self::chapter" -> "false()"          -->
+    <!-- or "comment-out" the whole "if" stanza    -->
+    <xsl:if test="self::chapter">
+        <span class="type">
+            <xsl:apply-templates select="." mode="type-name" />
+        </span>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <span class="codenumber">
+        <xsl:apply-templates select="." mode="number" />
+    </span>
+    <xsl:text> </xsl:text>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- Unnumbered, chapter-level headings, just title text -->
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="heading-content">
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- This is an override of the template in the HTML conversion, -->
+<!-- but now for specilaized divisions. We drop the names of     -->
+<!-- divisions (which are usually squelced by CSS), especially   -->
+<!-- since this is often a duplicate of the (default) title we   -->
+<!-- provide.  Also, links to HTML worksheets are killed (and a  -->
+<!-- heading is a strange place to have them anyway?).           -->
+<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
+    <!-- be selective about displaying numbers at birth-->
+    <xsl:variable name="is-numbered">
+        <xsl:apply-templates select="." mode="is-specialized-own-number"/>
+    </xsl:variable>
+    <xsl:if test="($is-numbered = 'true')">
+        <span class="codenumber">
+            <xsl:apply-templates select="." mode="number"/>
+        </span>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- Heading Classes -->
+
+<!-- Default is indeterminate (search while debugging) -->
 <xsl:template match="*" mode="division-class">
     <xsl:text>none</xsl:text>
 </xsl:template>
 
 <!-- Part is more like a title page -->
 <xsl:template match="part" mode="division-class">
-    <xsl:text>fullpage</xsl:text>
+    <xsl:call-template name="division-class-part-like"/>
 </xsl:template>
 
 <!-- Chapters headings are always centered -->
-<xsl:template match="chapter" mode="division-class">
-    <xsl:text>centerpage</xsl:text>
+<xsl:template match="chapter|appendix" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
 </xsl:template>
 
 <!-- Chapter-level headings are always centered -->
-<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="division-class">
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|backmatter/solutions|backmatter/references|index|colophon" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
+</xsl:template>
+
+<xsl:template match="section" mode="division-class">
+    <xsl:call-template name="division-class-section-like"/>
+</xsl:template>
+
+<xsl:template match="subsection" mode="division-class">
+    <xsl:call-template name="division-class-subsection-like"/>
+</xsl:template>
+
+<!-- terminal always, according to schema -->
+<xsl:template match="subsubsection" mode="division-class">
+    <xsl:call-template name="division-class-subsubsection-like"/>
+</xsl:template>
+
+<!-- The "look" of a specialized division (not in the backmatter)      -->
+<!-- depends on its depth, which we determine by a look at its parent. -->
+<xsl:template match="exercises|reading-questions|worksheet|references|solutions|glossary" mode="division-class">
+    <xsl:choose>
+        <xsl:when test="parent::chapter|parent::appendix">
+            <xsl:call-template name="division-class-section-like"/>
+        </xsl:when>
+        <xsl:when test="parent::section">
+            <xsl:call-template name="division-class-subsection-like"/>
+        </xsl:when>
+        <xsl:when test="parent::subsection">
+            <xsl:call-template name="division-class-subsubsection-like"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A "section" in a slideshow is a major division,      -->
+<!-- holding many slides, so much like a "part" of a book -->
+<xsl:template match="slideshow/section" mode="division-class">
+    <xsl:call-template name="division-class-part-like"/>
+</xsl:template>
+
+<!-- New centered pages for each new slide -->
+<xsl:template match="slide" mode="division-class">
+    <xsl:call-template name="division-class-chapter-like"/>
+</xsl:template>
+
+
+<!-- Heading Classes Named Templates-->
+
+<!-- These are named templates, hence context-free, intentionally.        -->
+<!-- These templated provide the five classes present in teh semantic     -->
+<!-- file to control the look of headings at various depths.  They do     -->
+<!-- rely on the global boolean  $b-has-subsubsection  variable.          -->
+<!--                                                                      -->
+<!-- The "*-like" names make the most sense in the case of a book with    -->
+<!-- subsubsections, where the hierachy goes right down the line.         -->
+<!-- Absent subsubsections, centering is abandoned sooner for a           -->
+<!-- cell5/cell7  look below a chapter.                                   -->
+<!--                                                                      -->
+<!-- The purpose of isolating these to allow for their use with           -->
+<!-- specialized divisions that occur at many different depths, so a      -->
+<!-- parent can be examined as a clue to depth, and a choice can be made. -->
+
+<xsl:template name="division-class-part-like">
+    <xsl:text>fullpage</xsl:text>
+</xsl:template>
+
+<xsl:template name="division-class-chapter-like">
     <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
-<!-- Section and subsection is complicated, since it depends on -->
-<!-- the depth.  The boolean variable is true with a depth of 4 -->
-<!-- or greater, starting from "chapter".                       -->
-
-<xsl:template match="section" mode="division-class">
+<xsl:template name="division-class-section-like">
     <xsl:choose>
-        <!-- slideshow is exceptional, a major division, -->
-        <!-- but no real content, and only a title       -->
-        <xsl:when test="parent::slideshow">
-            <xsl:text>fullpage</xsl:text>
-        </xsl:when>
-        <!-- routine and *not* generally terminal -->
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>center</xsl:text>
         </xsl:when>
-        <!-- routine and necessarily terminal -->
         <xsl:otherwise>
             <xsl:text>cell5</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-
-<xsl:template match="subsection" mode="division-class">
+<xsl:template name="division-class-subsection-like">
     <xsl:choose>
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>cell5</xsl:text>
         </xsl:when>
-        <!-- terminal -->
         <xsl:otherwise>
             <xsl:text>cell7</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- terminal always, according to schema -->
-<xsl:template match="subsubsection" mode="division-class">
+<xsl:template name="division-class-subsubsection-like">
     <xsl:text>cell7</xsl:text>
 </xsl:template>
 
-<xsl:template match="slide" mode="division-class">
-    <xsl:text>centerpage</xsl:text>
+<!-- Heading Utilities -->
+
+<!-- We override two templates of the generic HTML conversion.   -->
+<!-- There, spans for styling cause liblouis to insert a space,  -->
+<!-- which is definitely not desirable.  This primarily affects  -->
+<!-- headings and titles of blocks, in addition to the numbers   -->
+<!-- for exercises.  E.g. "5."  These are "span-less" versions.  -->
+
+<xsl:template name="space-styled">
+    <xsl:text> </xsl:text>
 </xsl:template>
+
+<xsl:template name="period-styled">
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
 
 <!-- ################### -->
 <!-- Environments/Blocks -->
@@ -343,59 +476,73 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Everything configurable by author, 2020-01-02         -->
 <!-- Roughly in the order of old  html.knowl.*  switches   -->
 <!-- Similar HTML templates return string for boolean test -->
-<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- A hook in the HTML conversion allows for the addition of a @data-braille attribute to the "body-element".  Then liblouis can select on these values to apply the "boxline" style which delimits the blocks.  Here we define these values.  The stub in the HTML conversion does nothing (empty text) and so is a signal to not employ this attribute at all.  So a non-empty definition here also activates the attribute's existence. -->
+<!-- A hook in the HTML conversion allows for the addition of a    -->
+<!-- @data-braille attribute to the "body-element".  Then liblouis -->
+<!-- can select on these values to apply the "boxline" style which -->
+<!-- delimits the blocks.  Here we define these values.  The stub  -->
+<!-- in the HTML conversion does nothing (empty text) and so is a  -->
+<!-- signal to not employ this attribute at all.  So a non-empty   -->
+<!-- definition here also activates the attribute's existence.     -->
 
-<xsl:template match="&REMARK-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;" mode="data-braille-attribute-value">
+    <xsl:apply-templates select="." mode="base-block-string"/>
+</xsl:template>
+
+<!-- Absent an implementation, empty text signals  -->
+<!-- that the @data-braille attribute is not desired.    -->
+<xsl:template match="*" mode="data-braille-attribute-value"/>
+
+<!-- We map blocks to strings used in attribute values -->
+<!-- to denote the various types of blocks             -->
+
+<xsl:template match="&REMARK-LIKE;" mode="base-block-string">
     <xsl:text>remark-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&COMPUTATION-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&COMPUTATION-LIKE;" mode="base-block-string">
     <xsl:text>computation-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&DEFINITION-LIKE;" mode="base-block-string">
     <xsl:text>definition-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&ASIDE-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&ASIDE-LIKE;" mode="base-block-string">
     <xsl:text>aside-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&FIGURE-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&FIGURE-LIKE;" mode="base-block-string">
     <xsl:text>figure-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="assemblage" mode="data-braille-attribute-value">
+<xsl:template match="assemblage" mode="base-block-string">
     <xsl:text>assemblage-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&GOAL-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&GOAL-LIKE;" mode="base-block-string">
     <xsl:text>goal-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&EXAMPLE-LIKE;" mode="base-block-string">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&PROJECT-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&PROJECT-LIKE;" mode="base-block-string">
     <xsl:text>project-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="data-braille-attribute-value">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="base-block-string">
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="proof" mode="data-braille-attribute-value">
+<!-- NB: could edit to "proof-like" and adjust styles -->
+<xsl:template match="&PROOF-LIKE;" mode="base-block-string">
     <xsl:text>proof</xsl:text>
 </xsl:template>
-
-<!-- Absent an implementation above, empty text signals  -->
-<!-- that the @data-braille attribute is not desired.    -->
-<xsl:template match="*" mode="data-braille-attribute-value"/>
 
 <!-- The HTML conversion has a "block-data-braille-attribute" -->
 <!-- hook with a no-op stub template.  Here we activate the   -->
@@ -413,6 +560,139 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
     </xsl:if>
 </xsl:template>
+
+<!-- We "hardcode" box lines to delineate blocks in ways that are -->
+<!-- super-obvious to the reader.  A blank line before and after  -->
+<!-- help with spacing.  The lines themselves are runs of Unicode -->
+<!-- braille cells, and so pass through unfettered.               -->
+
+<!-- These two templates are hooks in the main "block-creation"   -->
+<!-- template in the stock HTML conversion.  So they should do    -->
+<!-- nothing when                                                 -->
+<!--     (a) a "block" is not a major one                         -->
+<!--         (see catch-all templates in HTML conversion),        -->
+<!--       or                                                     -->
+<!--     (b) we are not building braille in the first place.      -->
+
+<!-- Proofs: are treated as they are in HTML (since they come     -->
+<!-- from there).  They become peers of their statements, and     -->
+<!-- hence go in boxes (regular or exterior).  Unless they are    -->
+<!-- the "lightweight" ones inside SOLUTION-LIKE.                 -->
+
+<!-- TODO: top and bottom templates are parameterized by 7/g characters only -->
+
+<!-- U+2836 is dot-2356 is BRF 7 for interior top   -->
+<!-- U+283F is dot-123465 is BRF = for exterior top -->
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&AXIOM-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;" mode="braille-top-box-line">
+    <xsl:variable name="boxline-character">
+        <xsl:choose>
+            <!-- "child-ish" FIGURE-LIKE demands exterior box lines for parent        -->
+            <!-- don't use "descendant::* or a "theorem" can be fooled by its "proof" -->
+            <xsl:when test="*[&FIGURE-FILTER;] or statement/*[&FIGURE-FILTER;] or case/*[&FIGURE-FILTER;]">
+                <xsl:text>&#x283F;</xsl:text>
+            </xsl:when>
+            <!-- default to "regular" (interior) box -->
+            <xsl:otherwise>
+                <xsl:text>&#x2836;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <div data-braille="blankline"/>
+    <div>
+        <xsl:call-template name="boxline">
+            <xsl:with-param name="character" select="$boxline-character"/>
+            <xsl:with-param name="width" select="40"/>
+        </xsl:call-template>
+    </div>
+</xsl:template>
+
+<!-- U+281B is dot-1245 is BRF g for interior bottom   -->
+<!-- U+283F is dot-123465 is BRF = for exterior bottom -->
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|&GOAL-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&AXIOM-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;" mode="braille-bottom-box-line">
+    <xsl:variable name="boxline-character">
+        <xsl:choose>
+            <!-- "child-ish" FIGURE-LIKE demands exterior box lines for parent        -->
+            <!-- don't use "descendant::* or a "theorem" can be fooled by its "proof" -->
+            <xsl:when test="*[&FIGURE-FILTER;] or statement/*[&FIGURE-FILTER;] or case/*[&FIGURE-FILTER;]">
+                <xsl:text>&#x283F;</xsl:text>
+            </xsl:when>
+            <!-- default to "regular" (interior) box -->
+            <xsl:otherwise>
+                <xsl:text>&#x281B;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <div>
+        <xsl:call-template name="boxline">
+            <xsl:with-param name="character" select="$boxline-character"/>
+            <xsl:with-param name="width" select="40"/>
+        </xsl:call-template>
+    </div>
+    <div data-braille="blankline"/>
+</xsl:template>
+
+<!-- Proofs in SOLUTION-LIKE *never" get boxed.  These take -->
+<!-- precedence over the general match on PROOF-LIKE above. -->
+<xsl:template match="*[&SOLUTION-PROOF-FILTER;]" mode="braille-top-box-line"/>
+<xsl:template match="*[&SOLUTION-PROOF-FILTER;]" mode="braille-bottom-box-line"/>
+
+<!-- Catch-all templates to do nothing when the HTML "body" template is -->
+<!-- building things like list items that do not need boxline treatment -->
+<xsl:template match="*" mode="braille-top-box-line"/>
+<xsl:template match="*" mode="braille-bottom-box-line"/>
+
+<!-- Utility template to string out a boxline character -->
+<xsl:template name="boxline">
+    <xsl:param name="character"/>
+    <xsl:param name="width"/>
+
+    <span>
+        <xsl:call-template name="duplicate-string">
+             <xsl:with-param name="text" select="$character"/>
+             <xsl:with-param name="count" select="$width" />
+        </xsl:call-template>
+    </span>
+</xsl:template>
+
+
+<!-- ################# -->
+<!-- WeBWorK Exercises -->
+<!-- ################# -->
+
+<!-- The "webwork-reps" element contains a "static" representation in    -->
+<!-- PreTeXt syntax, which we process as if it was a sttic exercise      -->
+<!-- authored as such.  We do need to know if the publisher wants        -->
+<!-- hints, answers, or solutions available where the exercises is born. -->
+<!-- NB: this is a simplified version of the stock HTML conversion which -->
+<!-- avoids having things like an "Activate" button, and similar         -->
+<!-- interactive features.                                               -->
+<xsl:template match="webwork-reps">
+    <xsl:param name="b-original" select="true()"/>
+    <!-- TODO: simplify these variables, much like for LaTeX -->
+    <xsl:variable name="b-has-hint" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-hint) or
+                                            (ancestor::exercises and $b-has-divisional-hint) or
+                                            (ancestor::reading-questions and $b-has-reading-hint) or
+                                            (ancestor::worksheet and $b-has-worksheet-hint) or
+                                            (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-answer) or
+                                              (ancestor::exercises and $b-has-divisional-answer) or
+                                              (ancestor::reading-questions and $b-has-reading-answer) or
+                                              (ancestor::worksheet and $b-has-worksheet-answer) or
+                                              (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::*[&PROJECT-FILTER;] and $b-has-project-solution) or
+                                                (ancestor::exercises and $b-has-divisional-solution) or
+                                                (ancestor::reading-questions and $b-has-reading-solution) or
+                                                (ancestor::worksheet and $b-has-worksheet-solution) or
+                                                (not(ancestor::*[&PROJECT-FILTER;] or ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:apply-templates select="static" mode="exercise-components">
+        <xsl:with-param name="b-original"      select="$b-original"/>
+        <xsl:with-param name="b-has-statement" select="true()"/>
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+    </xsl:apply-templates>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Subsidiary Items -->
@@ -590,89 +870,270 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Nemeth braille representation of mathematics are constructed  -->
 <!-- previously and collected in the $math-repr variable/tree.     -->
-<!-- So most distinctions have already been handled in that        -->
-<!-- construction and here we do a (simple) replacement.           -->
-<!-- Except as noted, liblouis generally passes through braille    -->
-<!-- characters from the Unicode U+2800 block as the corresponding -->
-<!-- (a 1-1 map) BRF "ASCII braille" characters.                   -->
+<!-- Here we do replacement and Nemeth indicators.  liblouis       -->
+<!-- passes through braille characters from the Unicode U+2800     -->
+<!-- block as the corresponding (a 1-1 map) BRF ASCII characters.  -->
+<!-- Wrap using classes to signal liblouis.                        -->
+
+
+
+<!-- We have three liblouis styles at our disposal, which is a   -->
+<!-- bit restrictive, but it is the most control we can muster.  -->
+<!--                                                             -->
+<!-- data-braille="nemeth-inline"                                -->
+<!--   Uses "generic" so Unicode braille becomes BRF.  Used      -->
+<!--   when a chunk of math, plus opening and closing Nemeth     -->
+<!--   indicators, will fit in current maximum width.  (With     -->
+<!--   non-braking spaces, it may get wrapped to the next line.) -->
+<!--                                                             -->
+<!-- data-braille="nemeth-oneline"                               -->
+<!--   Uses "generic" so Unicode braille becomes BRF, and        -->
+<!--   allows us to use HTML "br" elements to control some       -->
+<!--   line breaks.  Usually a portion of some larger display,   -->
+<!--   such as a Nemeth indicator on its own line.               -->
+<!--                                                             -->
+<!-- data-braille="nemeth-display"                               -->
+<!--   Math we get back from SRE with at least one newline,      -->
+<!--   which we use as a signal that the math is spatial.        -->
+<!--   So we use a style that indents two spaces, and we add     -->
+<!--   a blank line before and after.  Further, we never place   -->
+<!--   this where it gets a page break.                          -->
+<!--   DANGER: Long lines are a disaster, we  can't help it yet. -->
+
+
+<!-- First, authored as inline, but maybe becomes multiline. -->
 <xsl:template match="m|me|men|md|mdn">
     <!-- We connect source location with representations via id -->
     <!-- NB: math-representation file writes with "visible-id"  -->
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
-    <!-- Real spaces are Unicode braille blank pattern U+2800 -->
-    <xsl:variable name="braille" select="$math-repr/pi:math[@id = $id]/div[@class = 'braille']"/>
-    <!-- An "m" could have a fraction that is complicated enough that SRE -->
-    <!-- will produce a visual layout spread over multiple lines.  So the -->
-    <!-- PreTeXt "m" element is not a guarantee of inline placement       -->
-    <xsl:variable name="b-multiline" select="contains($braille, '&#xa;')"/>
+    <!-- Unicode braille cells from Speech Rule Engine (SRE) -->
+    <xsl:variable name="raw-braille" select="$math-repr/pi:math[@id = $id]/div[@class = 'braille']"/>
+    <!-- SRE uses U+2800 for all "spaces".  For single-line math bits,  -->
+    <!-- sometimes we want these to be breakable spaces, sometimes not. -->
+    <!-- For multiline braille (2D layout, no matter how authored) we   -->
+    <!-- need to be more careful.                                       -->
+    <!-- Note: we once called this "$breakable-braille"                 -->
+    <!--                                                                -->
+    <!-- Read code comments near the definition of the modal            -->
+    <!-- "sanitize-nemeth-braille" template for full details.           -->
+    <!-- Briefly, U+2800 remain only for indentation of 2D layout       -->
+    <!-- beyond line 1, and other spaces are "regular" spaces, U+0020.  -->
+    <xsl:variable name="braille">
+        <xsl:call-template name="sanitize-nemeth-braille">
+            <xsl:with-param name="text" select="$raw-braille"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- Length is critical for various decisions about formatting output -->
+    <xsl:variable name="braille-length" select="string-length($braille)"/>
+    <!-- For single-line braille expressions up to about the length of  -->
+    <!-- line, we find it advantageous to employ a non-breaking version.   -->
+    <!-- The means making a "regular" space into a non-breaking one,  -->
+    <!-- which here is U+2800 (not U+00A0). -->
+    <xsl:variable name="no-break-braille" select="str:replace($braille, '&#x0020;', '&#xa0;')"/>
     <!-- We investigate actual source for very simple math   -->
-    <!-- (one-letter variable names in Latin letters), so we -->
-    <!-- process the content (which could have "xref", etc)  -->
+    <!-- such as one-letter variable names as Latin letters  -->
+    <!-- or positive integers, so we process the orginal     -->
+    <!-- content outside of a MathJax/SRE translation (which -->
+    <!-- could have "xref", etc)                             -->
     <xsl:variable name="content">
         <xsl:apply-templates select="node()"/>
     </xsl:variable>
-    <xsl:variable name="clean-content" select="normalize-space($content)"/>
-    <!-- Ready: various situations, more specific first -->
-    <xsl:choose>
-        <!-- inline math with one Latin letter  -->
-        <!-- $braille is ignored.  c'est la vie -->
-        <xsl:when test="(self::m and string-length($clean-content) = 1) and
-                        contains(&ALPHABET;, $clean-content)">
-            <!-- class is signal to liblouis styling rules -->
-            <i class="one-letter">
-                <xsl:value-of select="$clean-content"/>
-            </i>
-        </xsl:when>
-        <!-- inline, both as authored and as converted by SRE -->
-        <xsl:when test="self::m and not($b-multiline)">
-            <!-- We get Nemeth braille as Unicode, and wrap with a class -->
-            <!-- to signal liblouis. Indicators need spaces inline, we   -->
-            <!-- experiment with non-breaking spaces to see if we get    -->
-            <!-- marginally better line-breaks from liblouis             -->
-            <span data-braille="nemeth-inline">
-                <xsl:value-of select="$nemeth-open"/>
-                <xsl:text>&#xa0;</xsl:text>
-                <xsl:value-of select="$braille"/>
-                <xsl:text>&#xa0;</xsl:text>
-                <xsl:value-of select="$nemeth-close"/>
-            </span>
-        </xsl:when>
-        <!-- single line, authored as such, and converted by SRE as such -->
-        <xsl:when test="(self::me or self::men) and not($b-multiline)">
-            <!-- Similarly, but div puts onto a newline, and breaks after -->
-            <div data-braille="nemeth-display">
+    <xsl:variable name="original-content" select="normalize-space($content)"/>
+    <!-- An "m" could have a fraction that is complicated enough that SRE -->
+    <!-- will produce a visual layout spread over multiple lines.  So all -->
+    <!-- flavors of math could occupy several lines in braille output     -->
+    <xsl:variable name="b-multiline" select="contains($braille, '&#xa;')"/>
+    <!-- An author's intent is different than what gets realized -->
+    <xsl:variable name="b-inline-math" select="boolean(self::m)"/>
+    <xsl:variable name="b-display-math" select="not($b-inline-math)"/>
+    <!-- We need to know how much width we have available.  This  -->
+    <!-- should be a publisher setting, but right now we are just -->
+    <!-- hard-coding 40 characters, which is the most common.     -->
+    <xsl:variable name="page-width" select="40"/>
+    <!-- List items are indented.  Math (of any kind) goes in     -->
+    <!-- paragraphs, which are constituents of paragraphs.  So    -->
+    <!-- $page-width is not the whole story and we need to reduce -->
+    <!-- the space available on a line.  There may well be other  -->
+    <!-- such situations?                                         -->
+    <!--                                                          -->
+    <!-- A chunk of math is usually followed by whitespace, with  -->
+    <!-- the exception of clause-ending punctuation.  For         -->
+    <!-- example, a period may immediately follow the             -->
+    <!-- closing-Nemeth indicator.  To avoid a line-break via     -->
+    <!-- a hyphen we reduce the available width by 1 (thus,       -->
+    <!-- two "- 1" below).  This means some other situations have -->
+    <!-- less space than is really possible.  One experiment      -->
+    <!-- suggests the number of times this is needed about        -->
+    <!-- equals the number of times it is harmful. We could       -->
+    <!-- condition on the occurence of clause-ending              -->
+    <!-- punctuation and only subtract when necessary.            -->
+    <xsl:variable name="line-width">
+        <xsl:choose>
+            <!-- inside a list item, could be a few levels up -->
+            <xsl:when test="ancestor::li">
+                <xsl:variable name="nested" select="count(ancestor::ol|ancestor::ul|ancestor::dl)"/>
+                <xsl:value-of select="$page-width - (2 * $nested) - 1"/>
+            </xsl:when>
+            <!-- no restrictions, we have the entire width -->
+            <xsl:otherwise>
+                <xsl:value-of select="$page-width - 1"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Authored as "m" first -->
+    <xsl:if test="$b-inline-math">
+        <!-- Ready: various situations, more specific first -->
+        <xsl:choose>
+            <!-- Multi-line first, SRE has done layout on inline math.   -->
+            <!-- Mimic display math as in display math stanza.           -->
+            <!-- ASSUMPTION: "m" has become multi-line, so is spatial.   -->
+            <!-- If we were to know otherwise, we might have open-Nemeth -->
+            <!-- immediately after last literary word, and the           -->
+            <!-- close-Nemeth immediately after last bit of math.        -->
+            <xsl:when test="$b-multiline">
+                <!-- open on new line as a "div" -->
+                <div data-braille="nemeth-display">
+                    <span data-braille="nemeth-oneline">
+                        <xsl:value-of select="$nemeth-open"/>
+                    </span>
+                    <!-- isolate open-Nemeth on its own line -->
+                    <br/>
+                    <!-- blank line for spatial content -->
+                    <br/>
+                    <xsl:call-template name="wrap-multiline-math">
+                        <xsl:with-param name="braille" select="$braille"/>
+                    </xsl:call-template>
+                    <!-- blank line for spatial content -->
+                    <br/>
+                    <span data-braille="nemeth-oneline">
+                        <xsl:value-of select="$nemeth-close"/>
+                    </span>
+                    <!-- isolate close-Nemeth on its own line -->
+                    <br/>
+                </div>
+            </xsl:when>
+            <!-- Positive integers inside of "m" should not be wrapped at all. -->
+            <!-- The translate() ends up empty in exactly this case.           -->
+            <xsl:when test="$b-inline-math and (translate($original-content, &DIGIT; ,'') = '')">
+                <xsl:value-of select="$original-content"/>
+            </xsl:when>
+            <!-- Inline math with just one Latin letter. No formatting,  -->
+            <!-- no italics, according to BANA rules via Michael Cantino -->
+            <!-- (2023-01-26) so $braille is ignored.  C'est la vie.     -->
+            <xsl:when test="$b-inline-math and (string-length($original-content) = 1) and
+                            contains(&ALPHABET;, $original-content)">
+                <xsl:value-of select="$original-content"/>
+            </xsl:when>
+
+            <!-- Fits on one line, including 6 characters of Nemeth -->
+            <!-- indicators. Fix all spaces to be unbreakable,      -->
+            <!-- Michael Cantino says a wholesale wrap to the next  -->
+            <!-- line is better than any kind of line break within. -->
+            <xsl:when test="$braille-length &lt; ($line-width - 5)">
+                <!-- Bind open/close indicators and all characters via a non-breaking    -->
+                <!-- space, so liblouis will never break this shorter inline expression. -->
+                <!-- It will be fine on current line, or it will push/wrap to the next   -->
+                <!-- line, where it will always fit.                                     -->
                 <span data-braille="nemeth-inline">
                     <xsl:value-of select="$nemeth-open"/>
                     <xsl:text>&#xa0;</xsl:text>
-                    <xsl:value-of select="$braille"/>
+                    <xsl:value-of select="$no-break-braille"/>
                     <xsl:text>&#xa0;</xsl:text>
                     <xsl:value-of select="$nemeth-close"/>
                 </span>
-            </div>
-        </xsl:when>
-        <!-- Now, authored as display, or converted by SRE, as multiline.  -->
-        <!-- liblouis defaults to breaking lines before and after the div. -->
-        <!-- We supply opening and closing Nemeth indicators on their own  -->
-        <!-- lines, by virtue of the "oneline" span (described below) and  -->
-        <!-- trailing line-breaks.                                         -->
-        <xsl:otherwise>
-            <div data-braille="nemeth-display">
-                <span data-braille="nemeth-oneline">
+            </xsl:when>
+            <!-- In a grey zone where Nemeth indicators are just too much.    -->
+            <!-- Open on current line, *all* of the braille on its own line,  -->
+            <!-- close as best we can and immediately pick up with remainder. -->
+            <!-- DANGER: could occupy three lines and cross a page break.     -->
+            <!-- TODO: refine into a 2-line output case, 3-line output case?  -->
+            <xsl:when test="(($line-width - 6) &lt; $braille-length) and ($braille-length &lt; ($line-width + 1))">
+                <span data-braille="nemeth-inline">
                     <xsl:value-of select="$nemeth-open"/>
                 </span>
+                <!-- line break after open-Nemeth to move to a new line -->
                 <br/>
-                <xsl:call-template name="wrap-multiline-math">
-                    <xsl:with-param name="braille" select="$braille"/>
-                </xsl:call-template>
-                <span data-braille="nemeth-oneline">
+                <!-- Now onto a new line, do the actual Nemeth, which  -->
+                <!-- will (a) fill much of the line, (b) always fit.   -->
+                <span data-braille="nemeth-inline">
+                    <xsl:value-of select="$no-break-braille"/>
+                </span>
+                <!-- Drop the closing marker, preceeded by a space, which might -->
+                <!-- fit on current line, or may wrap/push to next line. In any -->
+                <!-- event, let following literary text immediately follow.     -->
+                <span data-braille="nemeth-inline">
+                    <xsl:text> </xsl:text>
                     <xsl:value-of select="$nemeth-close"/>
                 </span>
-                <br/>
-            </div>
-        </xsl:otherwise>
-    </xsl:choose>
+            </xsl:when>
+            <!-- Now we are longer than the line-width available, though  -->
+            <!-- this was authored as inline math. So make it a display   -->
+            <!-- (drop to new line for opening Nemeth with an unbreakable -->
+            <!-- space, then let the expression break as it wants to,     -->
+            <!-- however liblouis does it (since spaces are breakable).   -->
+            <!-- ASSUMPTION: breaking on spaces, under liblouis control,  -->
+            <!-- is the best we can do here.                              -->
+            <xsl:otherwise>
+                <div data-braille="nemeth-display">
+                    <span data-braille="nemeth-inline">
+                        <xsl:value-of select="$nemeth-open"/>
+                        <xsl:text>&#xa0;</xsl:text>
+                        <xsl:value-of select="$braille"/>
+                        <xsl:text>&#xa0;</xsl:text>
+                        <xsl:value-of select="$nemeth-close"/>
+                    </span>
+                </div>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <!-- Mutually exclusive, now authored as display -->
+    <xsl:if test="$b-display-math">
+        <xsl:choose>
+            <!-- single line, authored as such, and converted by SRE as such. -->
+            <!-- Gets its own line in output, at least.  Won't page-break.    -->
+            <!-- Any wrapping is simply opportunistic on spaces.              -->
+            <xsl:when test="(self::me or self::men) and not($b-multiline)">
+                <!-- Similarly, but div puts onto a newline, and breaks after -->
+                <div data-braille="nemeth-display">
+                    <span data-braille="nemeth-inline">
+                        <xsl:value-of select="$nemeth-open"/>
+                        <xsl:text>&#xa0;</xsl:text>
+                        <xsl:value-of select="$braille"/>
+                        <xsl:text>&#xa0;</xsl:text>
+                        <xsl:value-of select="$nemeth-close"/>
+                    </span>
+                </div>
+            </xsl:when>
+            <!-- Now, authored as display, or converted by SRE, as multiline.  -->
+            <!-- liblouis defaults to breaking lines before and after the div. -->
+            <!-- We supply opening and closing Nemeth indicators on their own  -->
+            <!-- lines, by virtue of the "oneline" span (described below) and  -->
+            <!-- trailing line-breaks.                                         -->
+            <xsl:otherwise>
+                <div data-braille="nemeth-display">
+                    <span data-braille="nemeth-oneline">
+                        <xsl:value-of select="$nemeth-open"/>
+                    </span>
+                    <!-- isolate open-Nemeth on its own line -->
+                    <br/>
+                    <!-- blank line for spatial content -->
+                    <br/>
+                    <xsl:call-template name="wrap-multiline-math">
+                        <xsl:with-param name="braille" select="$braille"/>
+                    </xsl:call-template>
+                    <!-- blank line for spatial content -->
+                    <br/>
+                    <span data-braille="nemeth-oneline">
+                        <xsl:value-of select="$nemeth-close"/>
+                    </span>
+                    <!-- isolate open-Nemeth on its own line -->
+                    <br/>
+                </div>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
     <!-- The braille representations of math elements should not migrate any -->
     <!-- clause-ending punctuation from trailing text nodes.  So we should   -->
     <!-- not need to invoke the "get-clause-punctuation" modal template here -->
@@ -682,14 +1143,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- before a concluding line break, say.                                -->
 </xsl:template>
 
-<!-- We recursively isolate lines of braille from SRE that are potentially           -->
-<!-- laid-out in a manner similar to print.                                          -->
-<!--   1.  Spans contain each line, which we will process as-is.                     -->
-<!--   2.  Braille spaces (U+2800) are converted to ASCII non-breaking spaces.       -->
-<!--       This is necessary to preserve leading spaces.  liblouis will still        -->
-<!--       line-break at thse spaces later on in a line/expression.                  -->
-<!--   3.  A "br" element is needed so we can convince liblouis to create a newline. -->
-<!--                                                                                 -->
+<!-- We recursively isolate lines of braille from SRE that are potentially -->
+<!-- laid-out in a manner similar to print.                                -->
+<!--   1.  Spans contain each line, which we will process as-is.           -->
+<!--   2.  Braille spaces (U+2800) are converted to ASCII non-breaking     -->
+<!--       spaces. This is necessary to preserve leading spaces.           -->
+<!--       Note: if this indentation is too long, liblouis will line-break -->
+<!--       at these spaces with a hyphen, which is highly undesirable.     -->
+<!--   3.  A "br" element is needed so we can convince liblouis to         -->
+<!--       create a newline.                                               -->
+<!--   4.  Unbreakable spaces are necessary to preserve leading spaces     -->
+<!--       to align expressions (eg. fractions) from one line to the next. -->
+<!-- DANGER: no notion of optimal line breaks means long lines get         -->
+<!-- wrapped, and with unbreakable spaces there are hyphens at breaks.     -->
+
 <xsl:template name="wrap-multiline-math">
     <xsl:param name="braille"/>
 
@@ -697,7 +1164,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not(contains($braille, '&#xa;'))">
             <!-- finished, output, don't recurse -->
             <span data-braille="nemeth-oneline">
-                <xsl:value-of select="$braille"/>
+                <xsl:value-of select="translate($braille, '&#x2800;', '&#x00a0;')"/>
             </span>
             <br/>
         </xsl:when>
@@ -712,7 +1179,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </span>
             <br/>
             <xsl:call-template name="wrap-multiline-math">
-                <xsl:with-param name="braille" select="translate($trailing, '&#x2800;', '&#x00a0;')"/>
+                <xsl:with-param name="braille" select="$trailing"/>
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
@@ -875,23 +1342,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- We write a paragraph with the "description"  -->
-<!-- (authored as a bare string of sorts) and a   -->
-<!-- paragraph with our internal id, which is the -->
-<!-- basis of a filename that would be used to    -->
-<!-- construct any tactile versions.              -->
-<xsl:template match="image">
-    <div data-braille="image">
-        <xsl:text>Image ID: </xsl:text>
-        <xsl:apply-templates select="." mode="visible-id" />
-        <br/>
-        <xsl:text>Description: </xsl:text>
-        <xsl:apply-templates select="description"/>
-        <br/>
-        <xsl:if test="$page-format = 'electronic'">
-            <xsl:text>Transcriber note: this image should be provided separately for an electronic version.</xsl:text>
-        </xsl:if>
-    </div>
+<!-- An image may be a child of a "figure".  It can also be buried  -->
+<!-- within a "sidebyside", perhaps in a "figure", or in a "stack". -->
+<!-- This is the other case, a "naked" tabular, perhaps just        -->
+<!-- between paragraphs, and thus a child of a division or a block. -->
+<!-- We always replace with the textual version.  In the embossed   -->
+<!-- case, we move to new placeholder page for a tactile version.   -->
+<xsl:template match="image[not(parent::figure|ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="textual-version"/>
+    <xsl:if test="$page-format = 'emboss'">
+        <div data-braille="pageeject"/>
+        <xsl:apply-templates select="." mode="placeholder-page"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- For an image inside a figure, we replace the image by its -->
+<!-- text version, but we do not follow with a page-eject,     -->
+<!-- since we want to finish the figure.                       -->
+<xsl:template match="image[parent::figure]">
+    <xsl:apply-templates select="." mode="textual-version"/>
+    <!-- The parent figure will always have a caption, and   -->
+    <!-- neither the transcriber note for the image, nor the -->
+    <!-- author-provided description, nor the caption,       -->
+    <!-- provides a separator to force the caption onto its  -->
+    <!-- own line, we so take matters into our own hands.    -->
+    <br/>
 </xsl:template>
 
 <!-- If a "figure" has an "image", we let the image do its thing -->
@@ -900,13 +1375,95 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- version of the image should be subsituted in.               -->
 <xsl:template match="figure[image]">
     <xsl:apply-imports/>
+    <!-- place the placholder page *after* the figure finishes -->
     <xsl:if test="$page-format = 'emboss'">
         <div data-braille="pageeject"/>
-        <xsl:text>Transcriber note: the image with ID </xsl:text>
-        <xsl:apply-templates select="image" mode="visible-id" />
-        <xsl:text> belongs here.  Replace this page with the independently generated tactile image.</xsl:text>
-        <div data-braille="pageeject"/>
+        <xsl:apply-templates select="image" mode="placeholder-page"/>
     </xsl:if>
+</xsl:template>
+
+<!-- We write a paragraph with the "description"  -->
+<!-- (authored as a bare string of sorts) and a   -->
+<!-- paragraph with our internal id, which is the -->
+<!-- basis of a filename that would be used to    -->
+<!-- construct any tactile versions.              -->
+<xsl:template match="image" mode="textual-version">
+    <div data-braille="image">
+        <xsl:call-template name="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>Image "</xsl:text>
+                <xsl:apply-templates select="." mode="visible-id" />
+                <xsl:text>" goes here.</xsl:text>
+                <xsl:if test="description">
+                    <xsl:text>  A text description follows.</xsl:text>
+                </xsl:if>
+                <xsl:if test="$page-format = 'emboss'">
+                    <xsl:text> The next page can be replaced with a tactile version.</xsl:text>
+                </xsl:if>
+            </xsl:with-param>
+        </xsl:call-template>
+        <br/>
+        <xsl:if test="description">
+            <xsl:text>Description: </xsl:text>
+            <xsl:apply-templates select="description"/>
+        </xsl:if>
+    </div>
+</xsl:template>
+
+<!-- We assume the embossable case has been checked, and a -->
+<!-- page-ejection has happened just before this template  -->
+<!-- is applied.  And then we follow with a page ejection. -->
+<xsl:template match="image" mode="placeholder-page">
+    <xsl:call-template name="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>Replace this page with image "</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:text>".</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <div data-braille="pageeject"/>
+</xsl:template>
+
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Transcriber Notes -->
+
+<!-- Here code is the transcriber, so we can explain places where we   -->
+<!-- have done something different than it might be realized in print. -->
+<!--                                                                   -->
+<!-- Two three-cell sequences indicate the begin and end of a          -->
+<!-- transcriber note.  Additionally, the indentation is 7-5           -->
+<!-- margins, which we achieve with a div.data-braille attribute       -->
+<!-- set to "transcribernote" (no dash is intentional) for the         -->
+<!-- liblouis semantic action file.  See BANA Formats 3.2.1:           -->
+<!-- www.brailleauthority.org/formats/2016manual-web/section03.html    -->
+<!--                                                                   -->
+<!-- The content provided in the "message" parameter by a calling      -->
+<!-- instance should look like the HTML produced by this stylesheet.   -->
+<!-- For example to get emphasis, code here should provide             -->
+<!-- <em class="emphasis"> so the correct semantic action is applied.  -->
+<!-- No overall root element is necessary.  "xsl:text" can be used to  -->
+<!-- control stray whitespace.  "xsl:apply-templates" can also be used -->
+<!-- to access variable properties, such as identification of objects  -->
+<!-- like images. See examples throughout this stylesheet.             -->
+<!-- Short answer: the value of "message" is made into a deep copy for -->
+<!-- the HTML output (which is next seen by liblouis.                  -->
+<!--                                                                   -->
+<!-- Template is context-free intentionally.                           -->
+<xsl:template name="transcriber-note">
+    <xsl:param name="message"/>
+
+    <div data-braille="transcriber-note">
+        <!-- dot 4, dot 46, dot 126 -->
+        <xsl:text>&#x2808;&#x2828;&#x2823;</xsl:text>
+        <!-- straight duplication of raw HTML provided as a parameter -->
+        <xsl:copy-of select="$message"/>
+        <!-- dot 4, dot 46, dot 345 -->
+        <xsl:text>&#x2808;&#x2828;&#x281C;</xsl:text>
+    </div>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -43,6 +43,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- This variable controls representations of interactive exercises   -->
+<!-- built in  pretext-assembly.xsl.  The imported  pretext-html.xsl   -->
+<!-- stylesheet sets it to "dynamic".  But for this stylesheet we want -->
+<!-- to utilize the "standard" PreTeXt exercise versions built with    -->
+<!-- "static".  See both  pretext-assembly.xsl  and  pretext-html.xsl  -->
+<!-- for more discussion. -->
+<xsl:variable name="exercise-style" select="'static'"/>
+
 <!-- iPython files as output -->
 <xsl:variable name="file-extension" select="'.ipynb'" />
 
@@ -67,7 +75,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="warning">Jupyter notebook conversion is experimental and incomplete&#xa;Requests to fix/implement specific constructions welcome</xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
@@ -399,7 +408,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Jupyter is hostile to knowls code, so we don't knowl  -->
 <!-- anything and ignore any choice in a publisher file    -->
 <!-- https://github.com/jupyter/notebook/pull/2947         -->
-<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
@@ -535,114 +544,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="key('icon-key', $icon-name)/@unicode" />
     </xsl:for-each>
 </xsl:template>
-
-<!-- ################### -->
-<!-- Markdown Protection -->
-<!-- ################### -->
-
-<!-- XML with LaTeX, to HTML, to JSON.  Its hard to keep track. -->
-<!-- And the HTML is really spiced up with Markdown.  Or is it  -->
-<!-- the other way around?  No matter, a first defense is to    -->
-<!-- convert common simple characters employed by Markdown and  -->
-<!-- make them escaped versions.  Here is the list of escapable -->
-<!-- characters from the Markdown documentation on 2017-11-06.  -->
-<!-- daringfireball.net/projects/markdown/syntax#backslash      -->
-<!--                                                            -->
-<!--         \   backslash                                      -->
-<!--         `   backtick                                       -->
-<!--         *   asterisk                                       -->
-<!--         _   underscore                                     -->
-<!--         {}  curly braces                                   -->
-<!--         []  square brackets                                -->
-<!--         ()  parentheses                                    -->
-<!--         #   hash mark                                      -->
-<!--         +   plus sign                                      -->
-<!--         -   minus sign (hyphen)                            -->
-<!--         .   dot                                            -->
-<!--         !   exclamation mark                               -->
-
-
-<!-- Dollar sign -->
-<!-- The Jupyter notebook allows markdown cells to        -->
-<!-- use dollar signs to delimit LaTeX, if you have       -->
-<!-- two used for financial reasons, they will be         -->
-<!-- interpreted incorrectly.  But they can be escaped.   -->
-<!-- Not a Markdown element, but critical so here anyway. -->
-<xsl:template name="dollar-character">
-    <xsl:text>\$</xsl:text>
-</xsl:template>
-
-<!-- Other than the dollar sign, these are from the -html code.    -->
-<!-- We escape ASCII versions, and leave just comments for         -->
-<!-- those whose HTML definitions suffice, either as HTML entities -->
-<!-- (&, <, >) or as fancier, non-ASCII, Unicode versions.         -->
-
-<!-- Number Sign, Hash, Octothorpe -->
-<xsl:template name="hash-character">
-    <xsl:text>\#</xsl:text>
-</xsl:template>
-
-<!-- Underscore -->
-<xsl:template name="underscore-character">
-    <xsl:text>\_</xsl:text>
-</xsl:template>
-
-<!-- Left Brace -->
-<xsl:template name="lbrace-character">
-    <xsl:text>\{</xsl:text>
-</xsl:template>
-
-<!-- Right  Brace -->
-<xsl:template name="rbrace-character">
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-
-<!-- Backslash -->
-<xsl:template name="backslash-character">
-    <xsl:text>\\</xsl:text>
-</xsl:template>
-
-<!-- Asterisk  -->
-<xsl:template name="asterisk-character">
-    <xsl:text>\*</xsl:text>
-</xsl:template>
-
-<!-- Left Bracket -->
-<xsl:template name="lbracket-character">
-    <xsl:text>\[</xsl:text>
-</xsl:template>
-
-<!-- Right Bracket -->
-<xsl:template name="rbracket-character">
-    <xsl:text>\]</xsl:text>
-</xsl:template>
-
-<!-- Backtick -->
-<!-- This is the rationale for this element. -->
-<!-- We can use it in a text context,        -->
-<!-- and protect it here from Markdown.      -->
-<xsl:template name="backtick-character">
-    <xsl:text>\`</xsl:text>
-</xsl:template>
-
-<!-- Markdown protection remaining unimplemented?            -->
-<!-- These are symbols we would not want to need to          -->
-<!-- replace by PreTeXt empty elements, since they           -->
-<!-- are in heavy use.  Some require placement in            -->
-<!-- column 1, which may never happen as a text              -->
-<!-- (Markdown) cell will always have lots of HTML           -->
-<!-- around without many newlines at all.  If square         -->
-<!-- brackets are escaped, the link and image                -->
-<!-- constructions will break, so exclamation marks          -->
-<!-- and parentheses will render correctly, even if          -->
-<!-- accidentally forming the Markdown constructions         -->
-<!-- for links or images.                                    -->
-<!--                                                         -->
-<!-- 1.  parentheses - only an issue following []            -->
-<!-- 2.  plus, minus/hyphen - list items if in column 1      -->
-<!-- 3.  hyphens - three in a row is an hrule.  Breakup?     -->
-<!-- 4.  dot - numbered list construction, in column 1       -->
-<!-- 4.  exclamation - part of image construction, before [] -->
 
 <!--
 TODO: (overall)

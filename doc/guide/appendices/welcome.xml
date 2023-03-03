@@ -21,7 +21,7 @@
     <section xml:id="help-and-support">
         <title>Help and Support</title>
 
-        <p>There is a documentation area at the project website.  Presumably, that is where you found this <pubtitle>Author's Guide</pubtitle>.  This is what another software project might call the <pubtitle>User's Manual</pubtitle>.  So start here.  Re-read <xref ref="philosophy"/> on the project philosophy and the principles in <xref ref="list-principles"/> at regular intervals.  <xref ref="overview"/> is meant to inform you of the features of <pretext/>, without getting into all the details.  It will frequently refer you to <xref ref="topics"/> for all those details.</p>
+        <p>There is a documentation area at the project website.  Presumably, that is where you found this <pubtitle><pretext/> Guide</pubtitle>.  This is what another software project might call the <pubtitle>User's Manual</pubtitle>.  So start here.  Re-read <xref ref="philosophy"/> on the project philosophy and the principles in <xref ref="list-principles"/> at regular intervals.  <xref ref="overview"/> is meant to inform you of the features of <pretext/>, without getting into all the details.  It will frequently refer you to <xref ref="topics"/> for all those details.</p>
 
         <p>PreTeXt is fundamentally a specification of a set of elements and attributes, a topic discussed in <xref ref="schema"/>.  This chapter also discusses validation.  Once comfortable, but before authoring lots of material, take the time to get validation working, and use it regularly.  Do not save it for last.</p>
 
@@ -29,6 +29,14 @@
 
         <p>When the above is not sufficient, the <c>pretext-support</c> Google Group is the right place to ask questions.  If you are trying to determine which elements to use to accomplish something, provide some context.  Do not ask, <q>How do I print a line of text upside-down?</q>  Instead say, <q>I am writing a monograph on mammalian vision, and I'd like the reader to use a mirror to view a line of text written upside down.  What is the best way to do that?</q>  (I think the answer would be: make an image and include that, rather than trying to get reflected text.)  Sometimes a quick search of the Goggle Group may yield insights.  Overall, do your best not to be a <url href="http://slash7.com/2006/12/22/vampires/" visual="slash7.com/2006/12/22/vampires/">Help Vampire</url>.</p>
 
+    </section>
+
+    <section xml:id="drop-in">
+        <title>Weekly Drop-Ins</title>
+
+        <p>Since May<nbsp/>2020 there has been a standing weekly online gathering of <pretext/> authors and developers on Friday afternoons.  And now there is a companion session on Tuesday afternoons, and a Getting Started session on Mondays.  A weekly schedule of these, and other activities, is posted to the <c>pretext-announce</c> Google Group, so look htere for particulars.   Once in a while there are scheduled discussions on development topics or seminars on topics of interest to authors and developers (such as building an index, see <xref ref="topic-index-advice"/>).  But mostly there is no agenda and no schedule.  Come late, leave early, drop-in, drop-out. If you are present, then you are implicitly available to help someone with questions, even if you are working on something yourself.  The rest of us may lurk and/or join in.  We can use break-out rooms if a subgroup wants to run a discussion, work on a targeted project, or help somebody get started one-on-one.  The model is the hotel lobby after dinner at a workshop, but you provide your own contraband.</p>
+
+        <p>So this is a great place to discuss a support question (likely with the person who wrote the code!) or a place to get involved with development.</p>
     </section>
 
     <section xml:id="github-issues">
@@ -40,14 +48,14 @@
 
         <p>As you gain more experience, you will identify bugs, obsolete instructions, typos, <etc/>  Search the issues to see if there is something relevant you can add.  For example, your particular version of a bug might provide the key insight into identifying the cause.  When you are certain something is wrong, and there is no need to discuss it in the groups, feel free to go straight to making an issue.  For something like a list of typos, make a single issue and just keep editing your initial post.</p>
 
-        <p>If you have some structural problem, see if you can reproduce it by adding into the minimal example, and post that <em>entire</em> source file.  If the rendering in <init>HTML</init> is a bit off or you think it exhibits a bug, be sure to post a link to a <em>live</em> example, not just a verbal description and <em>definitely not</em> a screenshot.  If you need an easy, quick, free, temporary location to host one file or your whole project as <init>HTML</init>, try <url href="https://app.netlify.com/drop">Netlify Drop</url><fn><c>https://app.netlify.com/drop</c></fn>.</p>
+        <p>If you have some structural problem, see if you can reproduce it by adding into the minimal example, and post that <em>entire</em> source file.  If the rendering in <init>HTML</init> is a bit off or you think it exhibits a bug, be sure to post a link to a <em>live</em> example, not just a verbal description and <em>definitely not</em> a screenshot.  If you need an easy, quick, free, temporary location to host one file or your whole project as <init>HTML</init>, try <url href="https://app.netlify.com/drop" visual="app.netlify.com/drop">Netlify Drop</url>.</p>
     </section>
 
 
     <section xml:id="contributing">
         <title>Contributing</title>
 
-        <p>As a project that is licensed openly, we welcome contributions.  And this does not necessarily mean you need to learn our primary language, <init>XSL</init>.  For ideas, find the issues on GitHub that have the label <c>contributor project</c>.  As one example, it would be very helpful if a member of the community would create and maintain a Wikipedia page.  That is a skill that is very distinct from the other skills used to create and maintain other parts of the project.  See <url href="https://github.com/PreTeXtBook/pretext/issues/207">Issue #207</url>.</p>
+        <p>As a project that is licensed openly, we welcome contributions.  And this does not necessarily mean you need to learn our primary language, <init>XSL</init>.  For ideas, find the issues on GitHub that have the label <c>contributor project</c>.  As one example, it would be very helpful if a member of the community would create and maintain a Wikipedia page.  That is a skill that is very distinct from the other skills used to create and maintain other parts of the project.  See <url href="https://github.com/PreTeXtBook/pretext/issues/207" visual="github.com/PreTeXtBook/pretext/issues/207">Issue #207</url>.</p>
 
         <p>The documentation is authored in <pretext/>, so you know how to create additions, clean-up obsolete parts, and fix typos.  If you know <c>git</c> and GitHub, then a pull request (on a new branch!) is a very economical way for us to manage contributions.  Even if you do not know GitHub, we can easily accept files written in <pretext/> that contain changes to the documentation.  For example, files supporting localization to new languages (see <xref ref="topic-localization"/>) are ideal for simply submitting an entire file.  (Send files to us by email, or post as attachments on one of the Google groups.)</p>
 
@@ -73,5 +81,3 @@
     </section>
 
 </appendix>
-
-

@@ -206,6 +206,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>A <term>right triangle</term> has one of its three angles subtending a quarter of a circle.</p>
                     <p>And this second paragraph is part of the definition.</p>
+                    <figure>
+                        <caption>An interior boxline figure</caption>
+                        <p>This figure has a paragraph in it.  It is just forcing an <q>exterior</q> boxline on teh enclosing definition.</p>
+                    </figure>
+                    <p>And a last paragraph to disentangle the end of the definition.</p>
                 </statement>
             </definition>
 
@@ -354,9 +359,407 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </row>
                 </tabular>
             </table>
-        </chapter>
 
-        <chapter>
+	    <p>Below is a table from section 10.3 of <pubtitle>Active Calculus -
+	    Multivariable</pubtitle> by Steven Schlicker. It may be a
+	    challenge because all the content is mathematical, but the
+	    negative numbers aren't marked up as such. Michael Cantino
+	    suggests that the entire table should be one big Nemeth
+	    table. It is followed by the same table appearing in the
+	    previous section but with all the table cells marked up
+	    using <tag>m</tag>. Are either of these good, or should we
+	    have something that just purely comes from SRE?
+	    </p>
+
+	    <table xml:id="T_10_3_wind_chill">
+              <title>Wind chill as a function of wind speed and temperature.</title>
+              <tabular halign="center" bottom="minor" top="minor">
+		<row bottom="medium">
+		  <cell><m>v \backslash T</m></cell>
+		  <cell>-30</cell>
+		  <cell>-25</cell>
+		  <cell>-20</cell>
+		  <cell>-15</cell>
+		  <cell>-10</cell>
+		  <cell>-5</cell>
+		  <cell>0</cell>
+		  <cell>5</cell>
+		  <cell>10</cell>
+		  <cell>15</cell>
+		  <cell>20</cell>
+		</row>
+		<row>
+		  <cell>5</cell>
+		  <cell>-46</cell>
+		  <cell>-40</cell>
+		  <cell>-34</cell>
+		  <cell>-28</cell>
+		  <cell>-22</cell>
+		  <cell>-16</cell>
+		  <cell>-11</cell>
+		  <cell>-5</cell>
+		  <cell>1</cell>
+		  <cell>7</cell>
+		  <cell>13</cell>
+		</row>
+		<row>
+		  <cell>10</cell>
+		  <cell>-53</cell>
+		  <cell>-47</cell>
+		  <cell>-41</cell>
+		  <cell>-35</cell>
+		  <cell>-28</cell>
+		  <cell>-22</cell>
+		  <cell>-16</cell>
+		  <cell>-10</cell>
+		  <cell>-4</cell>
+		  <cell>3</cell>
+		  <cell>9</cell>
+		</row>
+		<row>
+		  <cell>15</cell>
+		  <cell>-58</cell>
+		  <cell>-51</cell>
+		  <cell>-45</cell>
+		  <cell>-39</cell>
+		  <cell>-32</cell>
+		  <cell>-26</cell>
+		  <cell>-19</cell>
+		  <cell>-13</cell>
+		  <cell>-7</cell>
+		  <cell>0</cell>
+		  <cell>6</cell>
+		</row>
+		<row>
+		  <cell>20</cell>
+		  <cell>-61</cell>
+		  <cell>-55</cell>
+		  <cell>-48</cell>
+		  <cell>-42</cell>
+		  <cell>-35</cell>
+		  <cell>-29</cell>
+		  <cell>-22</cell>
+		  <cell>-15</cell>
+		  <cell>-9</cell>
+		  <cell>-2</cell>
+		  <cell>4</cell>
+		</row>
+		<row>
+		  <cell>25</cell>
+		  <cell>-64</cell>
+		  <cell>-58</cell>
+		  <cell>-51</cell>
+		  <cell>-44</cell>
+		  <cell>-37</cell>
+		  <cell>-31</cell>
+		  <cell>-24</cell>
+		  <cell>-17</cell>
+		  <cell>-11</cell>
+		  <cell>-4</cell>
+		  <cell>3</cell>
+		</row>
+		<row>
+		  <cell>30</cell>
+		  <cell>-67</cell>
+		  <cell>-60</cell>
+		  <cell>-53</cell>
+		  <cell>-46</cell>
+		  <cell>-39</cell>
+		  <cell>-33</cell>
+		  <cell>-26</cell>
+		  <cell>-19</cell>
+		  <cell>-12</cell>
+		  <cell>-5</cell>
+		  <cell>1</cell>
+		</row>
+		<row>
+		  <cell>35</cell>
+		  <cell>-69</cell>
+		  <cell>-62</cell>
+		  <cell>-55</cell>
+		  <cell>-48</cell>
+		  <cell>-41</cell>
+		  <cell>-34</cell>
+		  <cell>-27</cell>
+		  <cell>-21</cell>
+		  <cell>-14</cell>
+		  <cell>-7</cell>
+		  <cell>0</cell>
+		</row>
+		<row>
+		  <cell>40</cell>
+		  <cell>-71</cell>
+		  <cell>-64</cell>
+		  <cell>-57</cell>
+		  <cell>-50</cell>
+		  <cell>-43</cell>
+		  <cell>-36</cell>
+		  <cell>-29</cell>
+		  <cell>-22</cell>
+		  <cell>-15</cell>
+		  <cell>-8</cell>
+		  <cell>-1</cell>
+		</row>
+              </tabular>
+	    </table>
+
+	    <table xml:id="T_10_2_wind_chill">
+              <title>Wind chill as a function of wind speed and temperature.</title>
+              <tabular halign="center" bottom="minor" top="minor">
+		<row bottom="medium">
+		  <cell><m>v \backslash T</m></cell>
+		  <cell><m>-30</m></cell>
+		  <cell><m>-25</m></cell>
+		  <cell><m>-20</m></cell>
+		  <cell><m>-15</m></cell>
+		  <cell><m>-10</m></cell>
+		  <cell><m>-5</m></cell>
+		  <cell><m>0</m></cell>
+		  <cell><m>5</m></cell>
+		  <cell><m>10</m></cell>
+		  <cell><m>15</m></cell>
+		  <cell><m>20</m></cell>
+		</row>
+		<row>
+		  <cell><m>5</m></cell>
+		  <cell><m>-46</m></cell>
+		  <cell><m>-40</m></cell>
+		  <cell><m>-34</m></cell>
+		  <cell><m>-28</m></cell>
+		  <cell><m>-22</m></cell>
+		  <cell><m>-16</m></cell>
+		  <cell><m>-11</m></cell>
+		  <cell><m>-5</m></cell>
+		  <cell><m>1</m></cell>
+		  <cell><m>7</m></cell>
+		  <cell><m>13</m></cell>
+		</row>
+		<row>
+		  <cell><m>10</m></cell>
+		  <cell><m>-53</m></cell>
+		  <cell><m>-47</m></cell>
+		  <cell><m>-41</m></cell>
+		  <cell><m>-35</m></cell>
+		  <cell><m>-28</m></cell>
+		  <cell><m>-22</m></cell>
+		  <cell><m>-16</m></cell>
+		  <cell><m>-10</m></cell>
+		  <cell><m>-4</m></cell>
+		  <cell><m>3</m></cell>
+		  <cell><m>9</m></cell>
+		</row>
+		<row>
+		  <cell><m>15</m></cell>
+		  <cell><m>-58</m></cell>
+		  <cell><m>-51</m></cell>
+		  <cell><m>-45</m></cell>
+		  <cell><m>-39</m></cell>
+		  <cell><m>-32</m></cell>
+		  <cell><m>-26</m></cell>
+		  <cell><m>-19</m></cell>
+		  <cell><m>-13</m></cell>
+		  <cell><m>-7</m></cell>
+		  <cell><m>0</m></cell>
+		  <cell><m>6</m></cell>
+		</row>
+		<row>
+		  <cell><m>20</m></cell>
+		  <cell><m>-61</m></cell>
+		  <cell><m>-55</m></cell>
+		  <cell><m>-48</m></cell>
+		  <cell><m>-42</m></cell>
+		  <cell><m>-35</m></cell>
+		  <cell><m>-29</m></cell>
+		  <cell><m>-22</m></cell>
+		  <cell><m>-15</m></cell>
+		  <cell><m>-9</m></cell>
+		  <cell><m>-2</m></cell>
+		  <cell><m>4</m></cell>
+		</row>
+		<row>
+		  <cell><m>25</m></cell>
+		  <cell><m>-64</m></cell>
+		  <cell><m>-58</m></cell>
+		  <cell><m>-51</m></cell>
+		  <cell><m>-44</m></cell>
+		  <cell><m>-37</m></cell>
+		  <cell><m>-31</m></cell>
+		  <cell><m>-24</m></cell>
+		  <cell><m>-17</m></cell>
+		  <cell><m>-11</m></cell>
+		  <cell><m>-4</m></cell>
+		  <cell><m>3</m></cell>
+		</row>
+		<row>
+		  <cell><m>30</m></cell>
+		  <cell><m>-67</m></cell>
+		  <cell><m>-60</m></cell>
+		  <cell><m>-53</m></cell>
+		  <cell><m>-46</m></cell>
+		  <cell><m>-39</m></cell>
+		  <cell><m>-33</m></cell>
+		  <cell><m>-26</m></cell>
+		  <cell><m>-19</m></cell>
+		  <cell><m>-12</m></cell>
+		  <cell><m>-5</m></cell>
+		  <cell><m>1</m></cell>
+		</row>
+		<row>
+		  <cell><m>35</m></cell>
+		  <cell><m>-69</m></cell>
+		  <cell><m>-62</m></cell>
+		  <cell><m>-55</m></cell>
+		  <cell><m>-48</m></cell>
+		  <cell><m>-41</m></cell>
+		  <cell><m>-34</m></cell>
+		  <cell><m>-27</m></cell>
+		  <cell><m>-21</m></cell>
+		  <cell><m>-14</m></cell>
+		  <cell><m>-7</m></cell>
+		  <cell><m>0</m></cell>
+		</row>
+		<row>
+		  <cell><m>40</m></cell>
+		  <cell><m>-71</m></cell>
+		  <cell><m>-64</m></cell>
+		  <cell><m>-57</m></cell>
+		  <cell><m>-50</m></cell>
+		  <cell><m>-43</m></cell>
+		  <cell><m>-36</m></cell>
+		  <cell><m>-29</m></cell>
+		  <cell><m>-22</m></cell>
+		  <cell><m>-15</m></cell>
+		  <cell><m>-8</m></cell>
+		  <cell><m>-1</m></cell>
+		</row>
+              </tabular>
+	    </table>
+
+	    <p>Below are two tables from Oscar Levin's
+	    <pubtitle>Discrete Mathematics: An Open
+	    Introduction</pubtitle>. Might the second one be better as
+	    transposed when making BRF?
+	    </p>
+	    <tabular>
+              <col right="minor" halign="center"/>
+              <col/>
+              <row bottom="minor">
+		<cell>Class:</cell>
+		<cell>Conflicts with:</cell>
+              </row>
+              <row>
+		<cell>A</cell>
+		<cell>D I</cell>
+              </row>
+              <row>
+		<cell>B</cell>
+		<cell>D I J</cell>
+              </row>
+              <row>
+		<cell>C</cell>
+		<cell>E F I</cell>
+              </row>
+              <row>
+		<cell>D</cell>
+		<cell>A B F</cell>
+              </row>
+              <row>
+		<cell>E</cell>
+		<cell>C H I</cell>
+              </row>
+              <row>
+		<cell>F</cell>
+		<cell>C D I</cell>
+              </row>
+              <row>
+		<cell>G</cell>
+		<cell>J</cell>
+              </row>
+              <row>
+		<cell>H</cell>
+		<cell>E I J</cell>
+              </row>
+              <row>
+		<cell>I</cell>
+		<cell>A B C E F H</cell>
+              </row>
+              <row>
+		<cell>J</cell>
+		<cell>B G H</cell>
+              </row>
+            </tabular>
+	    <tabular halign="center">
+              <row bottom="medium">
+                <cell halign="left" right="medium">Student:</cell>
+                <cell>A</cell>
+                <cell>B</cell>
+                <cell>C</cell>
+                <cell>D</cell>
+                <cell>E</cell>
+                <cell>F</cell>
+                <cell>G</cell>
+                <cell>H</cell>
+                <cell>I</cell>
+                <cell>J</cell>
+              </row>
+              <row>
+                <cell halign="left" right="medium">Conflicts:</cell>
+                <cell>BEJ</cell>
+                <cell>ADG</cell>
+                <cell>HJ</cell>
+                <cell>BF</cell>
+                <cell>AI</cell>
+                <cell>DJ</cell>
+                <cell>B</cell>
+                <cell>CI</cell>
+                <cell>EHJ</cell>
+                <cell>ACFI</cell>
+              </row>
+            </tabular>
+
+	    <p>Here is a table from <pubtitle>Active Calculus -
+	    Multivariable + Vector</pubtitle> by Steven Schlicker,
+	    Mitchel T. Keller, and Nicholas Long. Again, it probably
+	    should be marked for Nemeth both before and after.</p>
+	    <tabular>
+              <col halign="center" right="minor"/><col/><col/><col/><col/><col/>
+              <row bottom="minor">
+                <cell><m>(x,y)</m></cell>
+                <cell><m>(2,1)</m></cell>
+                <cell><m>(0,0)</m></cell>
+                <cell><m>(-1,2)</m></cell>
+                <cell><m>(3,-1)</m></cell>
+                <cell><m>(-2,-1)</m></cell>
+              </row>
+              <row>
+                <cell><m>\mathbf{F}(x,y)</m></cell>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+              </row>
+            </tabular>
+
+	    <p>Here is a table from <pubtitle>Applied
+	    Combinatorics</pubtitle> by Mitchel T. Keller and William
+	    T. Trotter. One of the cells is very wide, but it looks
+	    fine in HTML and PDF.</p>
+            <tabular>
+              <col halign="right" /> <col />
+              <row bottom="minor"><cell>School</cell><cell>Player numbers</cell></row>
+              <row><cell>Boston College</cell><cell>1, 3, 4</cell></row>
+              <row><cell>Clemson University</cell><cell>1, 3, 4, 6</cell></row>
+              <row><cell>Georgia Institute of Technology</cell><cell>2, 6</cell></row>
+              <row><cell>University of Georgia</cell><cell>None interested</cell></row>
+              <row><cell>University of Maryland</cell><cell>2, 3, 5</cell></row>
+              <row><cell>University of North Carolina</cell><cell>1, 2, 5</cell></row>
+              <row><cell>Virginia Polytechnic Institute and State University</cell><cell>1, 2, 5, 6</cell></row>
+            </tabular>
+
+          </chapter>
+
+          <chapter>
             <title>Figures</title>
 
             <p>Figures should create some usable information, but also create a blank page (for embossable output) that will allow placement of a separately generated tactile graphic.</p>
@@ -368,7 +771,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </image>
             </figure>
 
-            <p>And some text trailing the figure.</p>
+            <p>And some text trailing the figure. And a bare image next.</p>
+
+            <image source="foo.jpg"/>
+
+            <p>More text trailing an image.</p>
         </chapter>
 
         <chapter>
@@ -396,8 +803,64 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <attribution>Dr. Seuss</attribution>
                 </blockquote>
             </paragraphs>
-
         </chapter>
-    </book>
 
+        <backmatter>
+            <!-- copied/edited from Judson Chapter 8 -->
+            <references xml:id="algcodes-references">
+                <title>References and Suggested Readings</title>
+
+                <biblio type="raw">
+                Blake, I. F. <q>Codes and Designs,</q>
+                <title>Mathematics Magazine</title>
+                <volume>52</volume>
+                (1979), 81<ndash/>95.
+                </biblio>
+
+                <biblio type="raw">
+                Hill, R.
+                <title>A First Course in Coding Theory</title>. Oxford University Press, Oxford, 1990.
+                </biblio>
+
+                <biblio type="raw">
+                Levinson, N. <q>Coding Theory: A Counterexample to G. H. Hardy's Conception of Applied Mathematics,</q>
+                <title>American Mathematical Monthly</title>
+                <volume>77</volume>
+                (1970), 249<ndash/>58.
+                </biblio>
+
+                <biblio type="raw">
+                Lidl, R. and Pilz, G.
+                <title>Applied Abstract Algebra</title>. 2nd ed. Springer, New York, 1998.
+                </biblio>
+
+                <biblio type="raw">
+                MacWilliams, F. J. and Sloane, N. J. A.
+                <title>The Theory of Error-Correcting Codes</title>. North-Holland Mathematical Library, 16, Elsevier, Amsterdam, 1983.
+                </biblio>
+
+                <biblio type="raw">
+                Roman, S.
+                <title>Coding and Information Theory</title>. Springer-Verlag, New York, 1992.
+                </biblio>
+
+                <biblio type="raw">
+                Shannon, C. E. <q>A Mathematical Theory of Communication,</q>
+                <title>Bell System Technical Journal</title>
+                <volume>27</volume>
+                (1948), 379<ndash/>423, 623<ndash/>56.
+                </biblio>
+
+                <biblio type="raw">
+                Thompson, T. M.
+                <title>From Error-Correcting Codes through Sphere Packing to Simple Groups</title>. Carus Monograph Series, No. 21. Mathematical Association of America, Washington, DC, 1983.
+                </biblio>
+
+                <biblio type="raw">
+                van Lint, J. H.
+                <title>Introduction to Coding Theory</title>. Springer, New York, 1999.
+                </biblio>
+            </references>
+        </backmatter>
+    </book>
 </pretext>

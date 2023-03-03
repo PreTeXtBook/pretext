@@ -63,14 +63,27 @@
     </introduction>
 
     <section>
+        <title>Start Elements</title>
+
+        <p>To support modular source files, we specify which elements can naturally be the root of a <em>fragment</em> file in a <pretext /> document.  These include the <c>pretext</c> element itself, as well as most divisions.  All of these are defined as elements later in the schema.</p>
+
+        <fragment xml:id="start-elements">
+            <title>Start elements</title>
+            <code>
+            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>Gross Structure</title>
 
-        <p>A <pretext/> document is always a single <c>pretext</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.  <c>start</c> is the way to specify the lone top-level element as part of the schema, so it will not be used again.</p>
+        <p>A <pretext/> document is always a single <c>pretext</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.</p>
 
         <fragment xml:id="gross-structure">
             <title>Gross structure</title>
             <code>
-            start =
+            Pretext =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
@@ -477,17 +490,6 @@
             </code>
         </fragment>
 
-        <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisible, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
-
-        <fragment xml:id="fillin-character">
-            <title>Fill-in blank character</title>
-            <code>
-            FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-            Character |=
-                FillIn
-            </code>
-        </fragment>
-
         <p>We define a few characters to help with simple arithmetic expressions authored within regular text.  (Perhaps you are writing a novel with <pretext/>.)  These are for simple uses in regular text, not for actual mathematics, which is described later.  The <term>solidus</term> is slightly different from the <term>slash</term> found on a keyboard and is used for fractions and ratios.  The <tage>minus</tage> is for subtraction and negation, and is not a hyphen or dash.  An <term>obelus</term> is better known as a division sign.  <tage>degree</tage>, <tage>prime</tage>, and <tage>dblprime</tage> are designed for specifying coordinates in degrees, minutes, and seconds.  Use the unambiguous <c>+</c> keyboard character for addition.</p>
 
         <fragment xml:id="arithmetic-character">
@@ -594,7 +596,6 @@
         <fragment xml:id="character">
             <title>Characters</title>
             <fragref ref="dash-character" />
-            <fragref ref="fillin-character" />
             <fragref ref="delimiter-character" />
             <fragref ref="arithmetic-character" />
             <fragref ref="exotic-character" />
@@ -631,6 +632,23 @@
                 element ps {empty} |
                 element vs {empty} |
                 element viz {empty}
+            </code>
+        </fragment>
+
+        <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisible, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
+
+        <fragment xml:id="fillin-character">
+            <title>Fill-in blank character</title>
+            <code>
+            FillInText =
+                element fillin {
+                    attribute characters {xsd:integer}?,
+                    attribute rows {xsd:integer}?,
+                    attribute cols {xsd:integer}?,
+                    empty
+                }
+            Generator |=
+                FillInText
             </code>
         </fragment>
 
@@ -761,14 +779,18 @@
     <section>
         <title>Mathematics</title>
 
-        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, <c>md</c> and <c>mdn</c> are not targets of cross-references, though their rows can be.</p>
+        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, <c>md</c> and <c>mdn</c> are not targets of cross-references, though their rows can be.  Fill-in blanks have a variant attribute <attr>fill</attr> more suited for mathematics.</p>
 
         <fragment xml:id="mathematics">
             <title>Mathematics</title>
             <code>
+            FillInMath = element fillin {
+                             (attribute fill{text}?|attribute characters {xsd:integer}?),
+                             empty
+                         }
             MathInline =
                 element m {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 }
             MathRow =
                 element mrow {
@@ -782,16 +804,16 @@
                                        "maltese" | "dmaltese" | "tmaltese" }
                     )?,
                     attribute break {"yes" | "no"}?,
-                    mixed {(Xref | FillIn | WWVariable)*}
+                    mixed {(Xref | FillInMath | WWVariable)*}
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element me {
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element men {
                     MetaDataTarget,
-                    mixed {(FillIn | WWVariable)*}
+                    mixed {(FillInMath | WWVariable)*}
                 } |
                 element md {
                     attribute number {"yes" | "no"}?,
@@ -1110,7 +1132,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
-                    attribute interactive {"pythontutor"}?,
+                    attribute interactive {"codelens"}?,
                     element input {text}
                 }
             </code>
@@ -1131,7 +1153,7 @@
                 element ol {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute label {text}?,
+                    attribute marker {text}?,
                     element li {
                         (
                             (MetaDataTarget, TextParagraph)
@@ -1143,7 +1165,7 @@
                 element ul {
                     PermanentID?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute label {"disc" | "circle" | "square" | ""}?,
+                    attribute marker {"disc" | "circle" | "square" | ""}?,
                     element li {
                         (
                             (MetaDataTarget, TextParagraph)
@@ -1255,7 +1277,8 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
-                          (IntroductionStatement?, Task+, ConclusionStatement?)
+                          (IntroductionStatement?, Task+, ConclusionStatement?) |
+                          (IntroductionText?, WebWork, ConclusionText?)
                        ),
                        Postlude?
                     )
@@ -1313,7 +1336,8 @@
                 BlockStatement+
             Computation =
                 element computation {ComputationLike} |
-                element technology {ComputationLike}
+                element technology {ComputationLike} |
+                element data {ComputationLike}
             </code>
         </fragment>
     </section>
@@ -1593,7 +1617,6 @@
                     attribute decorative {"yes" | "no"}?,
                     element description {(TextShort | WWVariable)*}?,
                     element latex-image {
-                        attribute syntax {"PGtikz"},
                         text
                     }?
                 }
@@ -1723,7 +1746,7 @@
                     BlockStatement |
                     element ol {
                         attribute cols {text}?,
-                        attribute label {text}?,
+                        attribute marker {text}?,
                         element li {
                             MetaDataTarget,
                             (TextParagraph | BlockText+)
@@ -1896,13 +1919,6 @@
                         (StatementExerciseWW, HintWW?, SolutionWW?)
                     |
                         (IntroductionText?, TaskWW+, ConclusionText?)
-                    |
-                        element stage {
-                            Title?,
-                            StatementExerciseWW,
-                            HintWW?,
-                            SolutionWW?
-                        }+
                     )
                 }
             BlockStatementWW =
@@ -2230,7 +2246,7 @@
                 }
             Abstract =
                 element abstract {
-                    MetaDataTitleOptional,
+                    MetaDataTarget,
                     BlockText+
                 }
             ColophonFront =
@@ -2402,7 +2418,6 @@
                 }
             Configuration |=
                 element latex-image-preamble {
-                    attribute syntax {"PGtikz"}?,
                     text
                 }
             Configuration |=
@@ -2521,6 +2536,7 @@
             <code>
             grammar {
             </code>
+            <fragref ref="start-elements" />
             <fragref ref="gross-structure" />
             <fragref ref="document-types" />
             <fragref ref="divisions" />
@@ -2569,6 +2585,7 @@
             <fragref ref="verbatim" />
             <fragref ref="group" />
             <fragref ref="generator" />
+            <fragref ref="fillin-character" />
             <fragref ref="siunit" />
             <fragref ref="character" />
             <fragref ref="listgenerator" />

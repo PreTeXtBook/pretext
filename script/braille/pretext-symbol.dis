@@ -52,7 +52,10 @@ punctuation \x27e7 46-345-46-345
 # is just for good measure
 
 # From latinLetterDef8Dots.uti
-uplow Ss 2347,234
+# 2022-02-22 Amended on suspicions at unmerged
+# https://github.com/liblouis/liblouisutdml/pull/76
+# Unclear why we have this (not being used)?
+lowercase s 234
 
 # From en-ueb-chardefs.uti
 punctuation \x2018 6-236

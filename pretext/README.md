@@ -38,3 +38,9 @@ perform various tasks.  Look inside the file for instructions on
 making, placing, and employing a customized version.
 
 **NEVER EDIT THE ORIGINAL VERSION OF** `pretext.cfg`
+
+`runestone`
+-----------
+
+Selected modules from RunestoneComponents to support the formulation of trace data for
+Python programs to CodeLens interactive programs written in Python.

@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2021-03-07   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2022-05-05   -->
 
 <locale language="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -34,8 +34,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='proposition'>Věta</localization>
     <localization string-id='claim'>Tvrzení</localization>
     <localization string-id='fact'>Fakt</localization>
-    <localization string-id='proof'>Důkaz</localization>
     <localization string-id='identity'>Rovnost</localization>
+    <!-- PROOF-LIKE -->
+    <localization string-id='proof'>Důkaz</localization>
+    <localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Odůvodnění</localization>
+    <localization string-id='reasoning'>Argumentace</localization>
+    <localization string-id='explanation'>Vysvětlení</localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'>Axiom</localization>
@@ -86,6 +91,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Odstavce</localization>
     <localization string-id='commentary'>Komentář</localization>
     <localization string-id='subparagraph'>Pododstavec</localization>
+    <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Případ</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -96,8 +102,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='observation'>Postřeh</localization>
     <localization string-id='warning'>Varování</localization>
     <localization string-id='insight'>Nahléd</localization>
+    <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Výpočet</localization>
     <localization string-id='technology'>Technologie</localization>
+    <!-- <localization string-id='data'>Data</localization> -->
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Poznámka stranou</localization>
     <localization string-id='biographical'>Biografická poznámka</localization>
@@ -123,6 +131,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='outcomes'>Výsledky</localization>
     <localization string-id='outcome'>Výsledek</localization>
     <!--  -->
+    <!-- "Open" means unsolved, a research question/problem -->
+    <!-- <localization string-id='openquestion'>Open Question</localization> -->
+    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
+    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <!-- "discussion" on open problems -->
+    <!-- <localization string-id='context'>Context</localization> -->
+    <!-- <localization string-id='discussion'>Discussion</localization> -->
+    <!-- <localization string-id='opinion'>Opinion</localization> -->
+    <!-- <localization string-id='status'>Status</localization> -->
+    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <!--  -->
     <localization string-id='figure'>Obrázek</localization>
     <localization string-id='table'>Tabulka</localization>
     <localization string-id='listing'>Výpis</localization>
@@ -136,6 +155,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Odstavec</localization>
     <localization string-id='blockquote'>Citát</localization>
+    <!-- <localization string-id='pre'>Code Block</localization> -->
     <!-- Literate programming, a chunk of computer code -->
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
@@ -166,6 +186,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'>Předmluva</localization>
     <localization string-id='dedication'>Věnování</localization>
     <localization string-id='colophon'>Kolofon</localization>
+    <!-- Runestone Activities -->
+    <!-- <localization string-id='video'>Video</localization> -->
+    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
@@ -195,6 +220,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='annotations'>Anotace</localization>
     <localization string-id='feedback'>Odezva</localization>
     <localization string-id='authored'>Napsáno v PreTeXt</localization>
+    <!-- Search Results display/dialog -->
+    <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
+    <!-- <localization string-id='no-search-results'>No results</localization> -->
     <!-- Parts of memos and letters -->
     <localization string-id='to'>Komu</localization>
     <localization string-id='from'>Od</localization>
@@ -219,4 +247,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'>Ohodnotit</localization>
     <localization string-id='code'>Kód</localization>
+    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <!-- <localization string-id='instructions'>Instructions</localization> -->
+    <!-- Interactive exercise feedback messages -->
+    <!-- <localization string-id='correct'>Correct</localization> -->
+    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
+    <!-- <localization string-id='blank'>Blank</localization> -->
+    <!-- <localization string-id='submit'>Submit</localization> -->
+    <!-- <localization string-id='check-responses'>Check Responses</localization> -->
+    <!-- <localization string-id='reveal'>Reveal</localization> -->
+    <!-- <localization string-id='randomize'>Randomize</localization> -->
+    <!-- <localization string-id='activate'>Activate</localization> -->
+    <!-- <localization string-id='reset'>Reset</localization> -->
+    <!-- <localization string-id='array'>array</localization> -->
 </locale>

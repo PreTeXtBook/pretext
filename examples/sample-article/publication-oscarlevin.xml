@@ -23,11 +23,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- we use customizations-one for the plain sample article -->
     <source customizations="customizations-two.xml">
-        <directories external="media" generated="generated" data="data"/>
+        <directories external="media" generated="gen"/>
     </source>
 
     <!-- HTML-Specific Options -->
     <html>
+        <!-- links below images to open full-size, must be elected -->
+        <asymptote links="yes"/>
+        <!-- A location for a hosted HTML version, as certain      -->
+        <!-- aspects of the LaTeX/PDF version will link to         -->
+        <!-- corresponding aspects of the HTML version             -->
+        <!-- NB: URL is version hosted to demo oscarlevin style    -->
+        <baseurl href="https://pretextbook.org/examples/sample-article/oscar/"/>
         <!-- Several embedded calculators are available            -->
         <!-- Use "none" to turn this off (or remove the element)   -->
         <calculator model="geogebra-classic"/>
@@ -39,8 +46,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
-        <!-- @colors currently unimplementd.                       -->
-        <css style="oscarlevin" colors="blue_red"/>
+        <css style="oscarlevin" colors="blue_red" toc="default" banner="default" navbar="default" shell="default"/>
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->

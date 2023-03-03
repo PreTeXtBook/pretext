@@ -1,3 +1,26 @@
+Contributing
+------------
+
+Thanks for your interest in contributing to [PreTeXt](https://pretextbook.org).
+
+Details on participation in the PreTeXt Community can be found at
+
+[Welcome to the PreTeXt Community](https://pretextbook.org/doc/guide/html/welcome.html)
+
+In particular, discussion almost always begins in the Google Groups,
+and once there is consensus about what needs to be done
+(bug-fix, new feature, etc.), then an issue is created.
+
+Please do not use issues for support questions and please
+initiate feature requests in one of the Google Groups.  Pull
+requests are welcome without discussion when something is clearly
+in error and the change is readily apparent.
+
+Thanks for adapting to the idosyncracies of our project!
+Some specific details follow.
+
+(2022-06-19)
+
 Reporting Errors
 ----------------
 
@@ -23,18 +46,18 @@ Thanks for your interest in making PreTeXt better.  Contributions from users are
 *  Use the [pretext-dev](https://groups.google.com/forum/#!forum/pretext-dev) Google Group to float your idea before starting.  You will get some good feedback that will make your contribution better and you may get some cautions that will save you some effort.
 *  Pull requests on GitHub are the easiest way to contribute and are really the only practical way for us to review, test, and incorporate your work.  If you are new to Git, there is lots of information on the Internet, and some of it is even helpful and accurate.  You can also read a guide we put together, [Git for Authors](https://pretextbook.org/gfa/html/). Despite the title, it has general principles and techniques that work equally well for software.
 *  **Always** begin a new branch for a contribution.  And keep topically distinct contributions on different branches.  Small and compact is better than large and diverse.
-*  Pull frequently from the main line of development for official PreTeXt (`dev` at this writing) to update current progress.  Then **rebase** your topic branch onto the tip of this official branch as you work.
+*  Pull frequently from the main line of development for official PreTeXt (`master` at this writing) to update current progress.  Then **rebase** your topic branch onto the tip of this official branch as you work, as follows.
 ```
-git checkout dev
-git pull origin dev
-git checkout topic
-git rebase dev
+git switch master
+git pull origin master
+git switch topic
+git rebase master
 ```
-*  In particular, **do not merge** `dev` into your `topic` branch, that makes our job harder when we add your work into the official repository.
-*  Once you have your branch in good shape, be sure you update `dev` one last time and rebase onto the tip of `dev`.  Then make a pull request with that branch.
+*  In particular, **do not merge** `master` into your `topic` branch, that makes our job harder when we add your work into the official repository.
+*  Once you have your branch in good shape, be sure you update `master` one last time and rebase onto the tip of `master`.  Then make a pull request with that branch.
 *  While your work is being reviewed, do not add any new commits to your branch, and do not rebase it again, unless you are asked to add changes.  If you later need to build on your work, then say so in the discussion area and we can plot how to accomodate that.  But it would be better to not make a pull request until you are completely finished with a task.
 *  We are likely to combine your commits, and maybe even then distribute them into logical chunks.  We will edit your commit messages, deleting anything beyond a single line (so do not spend time on that).
-*  We will preserve your authorship, and mark the commit(s) with the pull request number so there is a record of where it came from and how.
+*  We will preserve your authorship, and mark the commit(s) with the pull request number so there is a record of where it came from and how (or we will merge and put the pull request number on the merge commit).
 *  Once we incorporate your work into the mainline of the official repository, then you can pull those changes and delete your topic branch.
 
 (2018-08-27)

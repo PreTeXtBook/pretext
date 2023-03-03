@@ -37,13 +37,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- parts of an exercise, where born.                      -->
         <exercise-inline hint="yes"/>
         <exercise-project answer="yes"/>
+        <!-- fillin styles are "underline" (the default for text),  -->
+        <!-- "box", and "shade" (the default for math)              -->
+        <fillin textstyle="underline" mathstyle="shade"/>
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->
     <source customizations="customizations-one.xml">
-        <directories external="media" generated="generated" data="data"/>
+        <directories external="media" generated="gen"/>
         <!-- this is an example of placing @generated *outside* of revision control -->
-        <!-- <directories external="media" generated="../../../altgen" data="data"/> -->
+        <!-- <directories external="media" generated="../../../altgen"/> -->
+        <!-- A single "commentary" is included and we place it into the -->
+        <!-- "instructor" component, and then we need this "version"    -->
+        <!-- element to make that component include'd.  Until we remove -->
+        <!-- the "commentary" string parameter (planned for 2024-02-13, -->
+        <!-- or later) we need to have that set to "yes" as well.       -->
+        <version include="instructor"/>
     </source>
 
     <!-- For an "article" with "section" we can only go 3 levels    -->
@@ -79,12 +88,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- are variable.  We exercise two such switches here,    -->
         <!-- the values are defaults so should make no discernable -->
         <!-- difference.                                           -->
-        <knowl example="yes" remark="no"/>
+        <knowl example="no" remark="no" proof="no" example-solution="no"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
-        <!-- @colors currently unimplementd.                       -->
-        <css style="default" colors="blue_red"/>
+        <css style="default" colors="blue_red" toc="default" banner="default" navbar="default" shell="default"/>
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->
@@ -97,9 +105,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Request fewer tracking cookies for YouTube videos     -->
         <!-- This is the default, here for documentation/testing   -->
         <video privacy="yes"/>
+        <!-- native search via Javascript library -->
+        <search variant="default"/>
+        <!-- With a <feedback> element, in the HTML version, you get a button     -->
+        <!-- for reporting typos and errors.  You might link to a Google Docs     -->
+        <!-- spreadsheet or something similar.  Default is to get a button        -->
+        <!-- labeled "Feedback", which will be localized to your target language. -->
+        <!-- You can override this with some text of your choosing, but then you  -->
+        <!-- lose the localization feature.                                       -->
+        <!-- (The feedback element could be empty, we place text in a comment to  -->
+        <!-- suggest how the text can be changed/specified.)                      -->
+        <feedback href="http://example.com/not-implemented.html"><!-- My Button Text --></feedback>
     </html>
 
-    <latex print="no" sides="two">
+    <!-- 10pt font is the default   -->
+    <!-- draft mode default is "no" -->
+    <!-- snapshot default is "no", but we elect to stress the supported package -->
+    <latex print="no" sides="two" font-size="10" draft="no" snapshot="yes">
         <!-- these are the default alignments, given just as an example -->
         <page right-alignment="flush" bottom-alignment="ragged"/>
         <!-- worksheets are formatted separately by default.   -->
