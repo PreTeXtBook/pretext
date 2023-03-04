@@ -1070,12 +1070,17 @@
             <xsl:with-param name="context" select="'Currency'"/>
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:apply-templates>
+        <!-- Form -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Form'"/>
+            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+        </xsl:apply-templates>
         <!-- Fractions -->
         <xsl:apply-templates select="." mode="context">
             <xsl:with-param name="context" select="'Fraction'"/>
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:apply-templates>
-        <!-- Inequalitis -->
+        <!-- Inequalities -->
         <xsl:apply-templates select="." mode="context">
             <xsl:with-param name="context" select="'Inequalities'"/>
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
