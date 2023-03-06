@@ -2149,6 +2149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- anywhere in the document, and that is         -->
                 <!-- sufficient for the external knowl             -->
                 <xsl:apply-templates select="." mode="sagecell" />
+                <xsl:call-template name="diagcess-knowl" />
             </head>
             <!-- ignore MathJax signals everywhere, then enable selectively -->
             <body class="ignore-math">
@@ -6485,6 +6486,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Addition for Diagcess ready SVG diagrams -->
+<xsl:template match="image[@data-src|@data-cml]">
+    <xsl:element name="div">
+      <xsl:attribute name="class">
+        <xsl:text>ChemAccess-element</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="data-src">
+        <xsl:value-of select="@data-src"/>
+      </xsl:attribute>
+      <xsl:attribute name="data-cml">
+        <xsl:value-of select="@data-cml"/>
+      </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
 
 <!-- SVG's produced by mbx script                     -->
 <!--   Asymptote graphics language                    -->
@@ -10834,6 +10851,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- jquery used by sage, webwork, knowls -->
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
+            <xsl:call-template name="diagcess" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
@@ -10958,6 +10976,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
             <xsl:call-template name="aim-login-footer" />
+            <xsl:call-template name="diagcess-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
@@ -10991,6 +11010,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- jquery used by sage, webwork, knowls -->
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
+            <xsl:call-template name="diagcess" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
@@ -11016,6 +11036,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
+            <xsl:call-template name="diagcess-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
@@ -12564,6 +12585,40 @@ TODO:
             </xsl:choose>
         </xsl:attribute>
     </xsl:element>
+</xsl:template>
+
+<!-- DiagCess Header for the conditional loading of diagcess.js -->
+<!-- The conditional loading is necessary for knowls -->
+<!-- diagcess needs to be loaded if diagrams are in the page -->
+<!-- if a knowl in that page contains a diagram, it must not be loaded again -->
+<!-- only reinitialised to process any new diagram -->
+<!-- if no diagrams are in the page but a knowl is opened with a diagram -->
+<!-- then diagcess needs to be loaded and wait for a bit to process -->
+<!-- NOTE: This timeout can be fragile for a slow network! -->
+<!-- TODO: Make this cleaner and more robust. -->
+<!-- TODO: This should eventually be set to the proper URL -->
+<!-- https://cdn.jsdelivr.net/npm/diagcess/dist/diagcess.js -->
+<xsl:template name="diagcess">
+  <xsl:if test=".//image[@data-src|@data-cml]">
+    <script src="./diagcess.js"></script>
+  </xsl:if>
+</xsl:template>
+<xsl:template name="diagcess-knowl">
+  <xsl:if test=".//image[@data-src|@data-cml]">
+    <script>
+      if (!window.diagcess) {
+        let script = document.createElement('script');
+        script.src = './diagcess.js'; // replace here
+        document.body.appendChild(script);
+      }
+      setTimeout(() => {diagcess.Base.init()}, 500);
+    </script>
+  </xsl:if>
+</xsl:template>
+<xsl:template name="diagcess-footer">
+    <xsl:if test=".//image[@data-src|@data-cml]">
+      <script>diagcess.Base.init()</script>
+    </xsl:if>
 </xsl:template>
 
 <!-- SageCell Javascript-->
