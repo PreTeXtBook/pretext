@@ -810,10 +810,6 @@
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:call-template>
         <xsl:call-template name="macro-padding">
-            <xsl:with-param name="string" select="'MathObjects.pl'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:call-template>
-        <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGML.pl'"/>
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:call-template>
@@ -1212,19 +1208,30 @@
     <!-- accumulate new macros supplied by problem author, warn if not new -->
     <xsl:variable name="user-macros">
         <xsl:for-each select=".//pg-macros/macro-file">
+            <xsl:variable name="trimmed-macro">
+                <xsl:value-of select="normalize-space(.)"/>
+            </xsl:variable>
             <!-- wrap in quotes to protect accidental matches -->
             <xsl:variable name="fenced-macro">
                 <xsl:text>"</xsl:text>
-                <xsl:value-of select="." />
+                <xsl:value-of select="$trimmed-macro" />
                 <xsl:text>"</xsl:text>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="contains($standard-macros, $fenced-macro) or ($fenced-macro = '&quot;PGcourse.pl&quot;')">
-                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="."/> is always included for every problem</xsl:message>
+                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="$trimmed-macro"/> is always included for every problem</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:when>
+                <xsl:when test="$trimmed-macro = 'PG.pl' or $trimmed-macro = 'PGbasicmacros.pl' or $trimmed-macro = 'PGanswermacros.pl' or $trimmed-macro = 'PGauxiliaryFunctions.pl' or $trimmed-macro = 'customizeLaTeX.pl'">
+                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="$trimmed-macro"/> is always included for every problem as a dependency of PGstandard.pl</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:when>
+                <xsl:when test="$trimmed-macro = 'Parser.pl' or $trimmed-macro = 'MathObjects.pl' or $trimmed-macro = 'contextTypeset.pl'">
+                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="$trimmed-macro"/> is always included for every problem as a dependency of PGML.pl</xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />
                 </xsl:when>
                 <xsl:when test="contains($implied-macros, $fenced-macro)">
-                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="."/> is implied by the problem construction and already included</xsl:message>
+                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="$trimmed-macro"/> is implied by the problem construction and already included</xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />
                 </xsl:when>
                 <xsl:otherwise>
