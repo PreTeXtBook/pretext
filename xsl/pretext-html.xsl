@@ -12176,15 +12176,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js?x=1"></script>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
-            <script defer="" src="./static/js/bundle.js"></script>
-            <script defer="" src="./static/js/main.js"></script>
+            <script type="module" defer="" src="./static/js/main.js"></script>
             <link href="./static/css/main.css" rel="stylesheet"/>
         </xsl:when>
         <!-- provisional implementation -->
         <xsl:when test="$b-debug-react-global">
             <xsl:variable name="prefix" select="'https://siefkenj.github.io/pretext-react'"/>
-            <script defer="" src="{$prefix}/static/js/bundle.js"></script>
-            <script defer="" src="{$prefix}/static/js/main.js"></script>
+            <script type="module" defer="" src="{$prefix}/static/js/main.js"></script>
             <link href="{$prefix}/static/css/main.css" rel="stylesheet"/>
         </xsl:when>
     </xsl:choose>
