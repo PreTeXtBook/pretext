@@ -10851,7 +10851,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
             <!-- analytics services, if requested -->
-            <xsl:call-template name="statcounter"/>
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
