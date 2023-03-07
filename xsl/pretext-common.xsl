@@ -79,20 +79,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output methods here are just pure text -->
 <xsl:output method="text" />
 
-<!-- THE dev BRANCH IS HISTORY IN THIS COMMIT ON THIS BRANCH -->
-<xsl:template name="stub-dev">
-    <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">
-            <xsl:text>THE "dev" BRANCH IS NOW OBSOLETE AS PART OF A REPOSITORY RELOCATION&#xa;</xsl:text>
-            <xsl:text>To be up-to-date, try the commands:  git switch master&#xa;</xsl:text>
-            <xsl:text>                                     git pull&#xa;</xsl:text>
-            <xsl:text>The PreTeXt repository is now hosted at the PreTeXtBook organization.&#xa;</xsl:text>
-            <xsl:text>The transition on 2022-02-21 should be almost seamless.&#xa;</xsl:text>
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:message terminate="yes">Quitting...</xsl:message>
-</xsl:template>
-
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
