@@ -11,7 +11,7 @@
     <title>Processing, Tools and Workflow</title>
 
     <introduction>
-        <p>This chapter explains in full detail how to convert your source into various output formats, using both the simple <pretext />-CLI as well as other methods to combine your source file with an XSL stylesheet that might provide greater flexibility and control.  It expands on the simple example in <xref ref="tutorial" /> and should also be read in conjunction with the chapter on the <c>pretext</c> script (<xref ref="pretext-script" />).</p>
+        <p>This chapter explains in full detail how to convert your source into various output formats, using both the simple <pretext />-CLI as well as other methods to combine your source file with an XSL stylesheet that might provide greater flexibility and control.  It expands on the simple cloud-based workflow in <xref ref="tutorial" />, providing options for a local installation and processing.</p>
     </introduction>
 
     <section xml:id="processing-basic">
@@ -22,7 +22,7 @@
             <ol>
                 <li>
                     <p>
-                        The <pretext/>-CLI: very easy and friendly, but somewhat limited in customization.  Requires Python 3.8 or later.  Documentation appears here shortly, and throughout the Guide as needed.
+                        The <pretext/>-CLI: very easy and friendly, but somewhat limited in customization.  Requires Python 3.8 or later.  Documentation appears in <xref ref="processing-CLI" />, and throughout the Guide as needed.
                     </p>
                 </li>
                 <li>
@@ -39,7 +39,7 @@
         </p>
 
         <p>
-            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretextbook</c>, see <xref ref="processing-CLI"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext" visual="github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
+            The <pretext />-CLI, can be installed on the command-line using the command <c>pip install pretext</c>, see <xref ref="processing-CLI"/>.  To use options 2 and 3 above, you will need to get a copy of <pretext /> from its <url href="https://github.com/PreTeXtBook/pretext" visual="github.com/PreTeXtBook/pretext">GitHub repository</url>.  This can be done using the command <c>git clone https://github.com/PreTeXtBook/pretext.git</c>, or by downloading a zip file directly from the repository.
         </p>
 
         <p>
@@ -52,34 +52,110 @@
         <idx><h>CLI</h></idx>
         <introduction>
         <p>
-            Here we will outline the functionality of the <pretext />-CLI.  Instructions for installing this command line interface can be found in <xref ref="processing-CLI"/>.
+            Here we will outline the functionality of the <pretext />-CLI.  Instructions for using the CLI without any local installation can be found in <xref ref="tutorial"/>.  Note that an easy first step toward getting PreTeXt working locally would be to download VS Code and install the <c>pretext-tools</c> extension (which will install the <pretext />-CLI for you, assuming you have an appropriate version of python available).
+        </p>
+        
+        <p><idx>command-line</idx><idx>terminal</idx><idx>console</idx>
+            We will work at the <term>command-line</term> inside of a <term>
+            terminal</term> or <term>console</term>. If you do not know what this is, it will seem very primitive at first. This will be called a <q>Command Prompt</q> or <q>PowerShell</q> in Windows or a <q>Terminal</q> on a Mac. In Linux it may be known as a <q>console</q> or a <q>shell</q>. Whenever the guide says to enter something on the <em>command line</em> or in a <em>terminal</em>, or just to <em>enter the command</em>, this is what we are talking about. 
         </p>
 
         <p>
-            First, to verify that you have the CLI installed correctly, enter the following command in a terminal:
+            A final note before we get started: everything we describe here can be done locally or using an online service like <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>, which has a terminal and has all the required software (python, <latex />, sagemath, etc) installed already.  To use CoCalc, you likely will need a paid account so you have internet access (required if you want to get the most recent version of <pretext /> or want to use <c>pretext deploy</c> to save and host your work on GitHub).
         </p>
 
-        <console>
-            <input>pretext --version</input>
-        </console>
 
-        <p>
-            You should get back something like <c>1.0.2</c>.  If this doesn't work, try starting the previous line with <c>python -m</c> (or maybe <c>python3 -m</c> on Mac/Linux), which might help if your PATH is not set up correctly.  In fact, prepending <c>python -m</c> to all commands in this section might be necessary, depending on your system.
-        </p>
-        <p>
-            This documentation will assume you have version 1.0 or later of the CLI.
-            You can upgrade the CLI to the most recent version through PIP using the command:
-        </p>
-        <console>
-            <input>pip install pretext --upgrade</input>
-        </console>
-
-        <p>
-            <idx><h>CLI</h><h><c>--help</c></h></idx>
-            For quick hints about what you can do, the CLI has built-in help.  You can access this by entering <c>pretext --help</c> or <c>pretext build --help</c> (replacing <c>build</c> with <c>new</c> or <c>view</c> or <c>generate</c>
-            etc.)
-        </p>
         </introduction>
+
+        <subsection>
+            <title>Installing <pretext /></title>
+
+            <p>
+                Before you can install <pretext /> locally, make sure you have the following software on your computer, or else install it using instructions easily searched for online. 
+                <ul>
+                    <li>
+                        <p> 
+                            Python, version 3.8.5 or later. In a terminal, type <c>python --version</c> to ensure you are already set up. On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>. 
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            To produce a pdf, or to generate tikz images from source, you need <latex />. Try <c>xelatex --version</c> to see if you already have this.
+                        </p>
+                    </li>
+                    <li>
+                        <p> 
+                            Any text editor. <url href="https://code.visualstudio.com/" visual="code.visualstudio.com">Visual Studio Code</url> is an excellent choice (and has an extension, <url href="https://marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools">PreTeXt-tools</url>, with specific language support), but other editors such as SublimeText, atom, emacs, vi, etc. can also be used. See <xref ref="editors" />. 
+                        </p>
+                    </li>
+                </ul>
+            </p>
+
+            <p>
+                Now we can install <pretext />. Open a terminal and type the following: 
+            </p>
+            <console>
+                <input>pip install pretext</input>
+            </console>
+
+            <p>
+                If this fails, try:
+            </p>
+
+            <console>
+                <input>python -m pip install pretext</input>
+            </console>
+            
+            <p>
+               (or, if <c>python3</c> worked above, do <c>python3 -m pip install pretext</c>.) 
+            </p>
+               
+            <p>
+                The <c>python -m</c> helps in case Python is on your <init>PATH</init> but <c>pip</c> is not. This is a useful fix for the rest of the commands listed for the <pretext />-CLI.
+            </p>
+
+            <p>
+                To verify that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (1.4.2, for example). 
+            </p>
+            
+            <p>
+            <idx><h>CLI</h><h><c>--help</c></h></idx>
+                For quick hints about what you can do, the CLI has built-in help. You can access this by entering <c>pretext --help</c> or <c>pretext build --help</c> (replacing <c>build</c> with <c>new</c> or <c>view</c> or <c>generate</c> etc.). 
+            </p>            
+            
+        <paragraphs>
+            <title>Upgrading</title>
+                
+            <p>
+                This documentation will assume you have version 1.0 or later of the CLI. You can upgrade the CLI to the most recent version through PIP using the command:
+            </p>
+
+            <console>
+                <input>pip install pretext --upgrade</input>
+            </console>
+
+            <p>
+                If you want to experiment with bleeding-edge features, you can install a nightly development version of the CLI by running:
+            </p>
+
+            <console>
+                <input>pip install pretext --upgrade --pre</input>
+            </console>
+        
+            <p>
+                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 1.1.0:
+            </p>
+
+            <console>
+                <input>pip install pretext=="1.1.0"</input>
+            </console>
+            <note>
+                <p>
+                    If you installed the <pretext />-CLI before version 1.0, you need to manually uninstall the package <c>pretextbook</c> (which is what the CLI was called during early development).  Run <c>pip uninstall pretextbook</c> and then <c>pip install pretext</c> te get caught up.
+                </p>
+            </note>
+            </paragraphs>
+        </subsection>
 
         <subsection>
             <title>Starting a New Project: <c>pretext new</c></title>
@@ -231,7 +307,7 @@
             <idx><h><c>pretext generate</c></h></idx>
             <idx><h>CLI</h><h><c>generate</c></h></idx>
             <p>
-                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos.  We call these elements <q>assets</q> or <q>generated assets</q>.  To generate the assets, run the following command.
+                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.  To generate the assets, run the following command.
             </p>
 
             <console>
@@ -260,6 +336,10 @@
                 <input>pretext generate latex-image</input>
             </console>
 
+            <p>
+                Valid choices for what types of assets you can generate in this specific way are: <c>webwork</c>, <c>latex-image</c>, <c>sageplot</c>, <c>asymptote</c>, <c>interactive</c>, <c>youtube</c>, <c>codelense</c>, and <c>datafile</c>.
+            </p>
+            
             <p>
                 To be even more precise, if the element you wish to generate has an <attr>xml:id</attr>, you can generate just that element using the <c>-x</c> flag.  For example, if your <tag>latex-image</tag> has id <q>img-circle</q>, generate it with,
             </p>
