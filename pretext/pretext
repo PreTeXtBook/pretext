@@ -744,6 +744,10 @@ def main():
                 dest_dir,
                 "electronic",
             )
+        elif args.format == "braille-emboss-new":
+            ptx.braille_new(xml_source, publication_file, stringparams, out_file, dest_dir, "emboss")
+        elif args.format == "braille-electronic-new":
+            ptx.braille_new(xml_source, publication_file, stringparams, out_file, dest_dir, "electronic")
         elif args.format == "epub-svg":
             ptx.epub(
                 xml_source, publication_file, out_file, dest_dir, "svg", stringparams
