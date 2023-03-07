@@ -2211,6 +2211,27 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                 raise OSError(msg.format(r.status_code, url))
     log.info("MyOpenMath static problem download complete")
 
+###########################
+# New Conversion to Braille
+###########################
+
+def braille_new(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
+
+    # Incomplete:
+    #     xml_source: not the author's source, output from a new stylesheet
+    #     page_format: ignored, producing  embossable  first
+    #     dest_dir: ignored, multi-file output will wait
+
+    # Needs:
+    #     Interpret author's source, account for publisher file, etc.
+    #     Support "electronic" format (squelch page formation)
+    #     Allow for multi-file (chapters) output
+
+    import braille_format as braille
+
+    # temporary entry point
+    braille.parse_paragraphs(xml_source, out_file)
+
 
 #######################
 # Conversion to Braille
