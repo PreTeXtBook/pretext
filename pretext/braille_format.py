@@ -130,6 +130,21 @@ class LineBuffer:
     def flush(self, out_file):
         # this does not write a newline character as we
         # may want to end without provoking a new page
+        # Non-breaking spaces have done their job, and we
+        # do not want to see them in the BRF file.  Thanks,
+        # you are dismissed.
+        self.contents = self.contents.replace("\xA0", " ")
+
+        # Unlikely a non-breaking space may be at the end of a line,
+        # but we do this in a particular order just in case.
+        # Remove trailing spaces which are important for spacing off
+        # mixed content, but can end up at the end of a line where they
+        # are not needed.  This does not harm line-breaking, since if
+        # another word would fit, then the space would need to be there.
+        if self.contents[-1] == " ":
+            self.contents = self.contents[:-1]
+
+        # OK, the main event
         out_file.write(self.contents)
 
     def reset(self, size):
