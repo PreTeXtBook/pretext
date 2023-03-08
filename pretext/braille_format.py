@@ -31,10 +31,18 @@ import louis
 
 class Cursor:
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, page_format):
         # page shape, dimensions, at creation time
         self.width = width
         self.height = height
+        # Finally, we interpret `page_format`
+        if page_format == 'emboss':
+            self.emboss = True
+        elif page_format == 'electronic':
+            self.emboss = False
+        else:
+            print("BUG: page format not recognized, so embossing")
+            self.emboss = True
         # we allow for variable length lines, in
         # order to allow for insertion of page numbers
         self.maxchars = width
@@ -154,12 +162,11 @@ class LineBuffer:
 
 class BRF:
 
-    def __init__(self, out_file, emboss, width, height):
+    def __init__(self, out_file, page_format, width, height):
         self.filename = out_file
         # we assume `out_file` has been error-checked
         self.brf_file = open(out_file, "w")
-        self.emboss = emboss
-        self.cursor = Cursor(width, height)
+        self.cursor = Cursor(width, height, page_format)
         self.line_buffer = LineBuffer(width)
 
     # Properties (boolean functions) reported
@@ -295,12 +302,12 @@ def write_fragment(typeface, aline):
             brf.write_word(whole_line)
 
 # Current entry point, sort of
-def parse_paragraphs(xml_simple, out_file):
+def parse_paragraphs(xml_simple, out_file, page_format):
 
     global brf
 
     # Embossed, page shape
-    brf = BRF(out_file, True, 40,25)
+    brf = BRF(out_file, page_format, 40,25)
 
     # needs warning if not available
     import lxml.etree as ET

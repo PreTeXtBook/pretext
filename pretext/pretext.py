@@ -2230,7 +2230,7 @@ def braille_new(xml_source, pub_file, stringparams, out_file, dest_dir, page_for
     import braille_format as braille
 
     # temporary entry point
-    braille.parse_paragraphs(xml_source, out_file)
+    braille.parse_paragraphs(xml_source, out_file, page_format)
 
 
 #######################
