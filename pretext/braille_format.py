@@ -337,12 +337,15 @@ def parse_segments(xml_simple, out_file, page_format):
     segments = src_tree.xpath("//segment")
 
     for s in segments:
+        # dictionary of attributes
+        attrs = s.attrib
         # Likely previous text was left mid-line
         if not(brf.at_line_start()):
             brf.advance_one_line()
-        # Hardcode paragraph indent
-        # should use p/@pindent
-        write_fragment("text", "  ")
+        # Lead with any indentation on first line
+        if 'indent' in attrs:
+            indentation = " " * int(attrs['indent'])
+            write_fragment("text", indentation)
 
         if s.text:
             write_fragment("text", s.text)
