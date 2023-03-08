@@ -114,26 +114,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="nbsp-character">
     <xsl:text>&#x00A0;</xsl:text>
 </xsl:template>
-<xsl:template match="nbsp">
-    <xsl:apply-imports/>
-</xsl:template>
 
 <!-- Unicode Character 'EN DASH' (U+2013) -->
 <!-- Seems to become ",-"                 -->
 <xsl:template name="ndash-character">
     <xsl:text>&#x2013;</xsl:text>
 </xsl:template>
-<xsl:template match="ndash">
-    <xsl:apply-imports/>
-</xsl:template>
 
 <!-- Unicode Character 'EM DASH' (U+2014) -->
 <!-- Seems to also become ",-"            -->
 <xsl:template name="mdash-character">
     <xsl:text>&#x2014;</xsl:text>
-</xsl:template>
-<xsl:template match="mdash">
-    <xsl:apply-imports/>
 </xsl:template>
 
 <!-- Italics -->
@@ -220,9 +211,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Cross-References -->
 <!-- ################ -->
 
-<xsl:template match="xref">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- Simple implementations of the basic -->
+<!-- components of a cross-reference     -->
 
 <!-- This device is just for the LaTeX conversion -->
 <xsl:template match="*" mode="xref-number">
@@ -289,9 +279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
 
-
     <xsl:value-of select="$visible-text"/>
-    <!-- <xsl:value-of select="'URL'"/> -->
 </xsl:template>
 
 
@@ -348,11 +336,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EXPERIMENTAL -->
 <!-- ############ -->
 
-<!-- Uncaught elements for debugging reporting -->
-<!-- Note: this overrides non-modal base templates in -common which are -->
-<!-- abstract templates that rely on partial implementation in an       -->
-<!-- importing conversion.  To squelch message, we give implementations -->
-<!-- that just use "apply-imports".  They can be removed.               -->
+<!-- Uncaught elements for debugging reporting                     -->
+<!-- These elements have full implementations in -common, or       -->
+<!-- partial/abstract implementations which we extend hee.         -->
+<!-- So we just hit them with "apply-imports" so they do not       -->
+<!-- all into the (temporary, development) template below          -->
+<!-- reporting missed elements.   "Commenting out this template    -->
+<!-- should have zero effect, except to generate more debugging    -->
+<!-- messages, since this reporting template will take precedence. -->
+
+<xsl:template match="nbsp|ndash|mdash|xref">
+    <xsl:apply-imports/>
+</xsl:template>
+
 <xsl:template match="*">
     <!-- target informative messages to "blocks" being considered -->
     <xsl:if test="ancestor::p">
