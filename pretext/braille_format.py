@@ -50,7 +50,18 @@ class Cursor:
         # chars, lines are *remaining* room
         # they will decrement to zero
         self.chars = self.maxchars
-        self.lines = self.height
+        # Default brehavior is to form pages for embossing, which requires
+        # a lot of attention to page breaks and page numbers.  BUT, if we
+        # start with an absurd number of lines available, AND we never
+        # decrement the number of lines available then we will never think
+        # we are at the bottom of a page.  No page breaks, no adjustment of
+        # the page number, no writing out page numbers.   It is like the
+        # file is an infinitely long page.  See companion discussion
+        # at Cursor.new_line().
+        if self.emboss:
+            self.lines = self.height
+        else:
+            self.lines = 2*self.height
         # page_num is the page being produced
         # increment as a new page begins
         self.page_num = 1
@@ -81,8 +92,16 @@ class Cursor:
         self.page_num += 1
 
     def new_line(self):
-        # decrement lines available
-        self.lines -= 1
+        # decrement the lines available
+        # This is where we decrement the number of lines available
+        # on a page.  And it is the only place.  If not embossing,
+        # then no page, so we conspire to never change the lines
+        # available count.  It is like the file is an infinitely
+        # long page.  See companion discussion at Cursor.__init__().
+        if self.emboss:
+            self.lines -= 1
+        else:
+            pass
 
         # reset maxchars, chars
         # limit line length when we need room for a page number
