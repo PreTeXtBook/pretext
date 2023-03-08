@@ -321,7 +321,7 @@ def write_fragment(typeface, aline):
             brf.write_word(whole_line)
 
 # Current entry point, sort of
-def parse_paragraphs(xml_simple, out_file, page_format):
+def parse_segments(xml_simple, out_file, page_format):
 
     global brf
 
@@ -334,9 +334,9 @@ def parse_paragraphs(xml_simple, out_file, page_format):
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml_simple, parser=huge_parser)
 
-    paras = src_tree.xpath("//paragraph")
+    segments = src_tree.xpath("//segment")
 
-    for p in paras:
+    for s in segments:
         # Likely previous text was left mid-line
         if not(brf.at_line_start()):
             brf.advance_one_line()
@@ -344,9 +344,9 @@ def parse_paragraphs(xml_simple, out_file, page_format):
         # should use p/@pindent
         write_fragment("text", "  ")
 
-        if p.text:
-            write_fragment("text", p.text)
-        children = list(p)
+        if s.text:
+            write_fragment("text", s.text)
+        children = list(s)
         for c in children:
             if c.text:
                 write_fragment(c.tag, c.text)

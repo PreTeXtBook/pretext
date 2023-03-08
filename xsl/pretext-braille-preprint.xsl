@@ -308,9 +308,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############ -->
 
 <xsl:template match="p">
-    <paragraph newpage="no" newline="yes" indent="2">
+    <segment newpage="no" newline="yes" indent="2">
         <xsl:apply-templates select="node()"/>
-    </paragraph>
+    </segment>
 </xsl:template>
 
 <xsl:template match="m">
