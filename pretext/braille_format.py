@@ -337,11 +337,10 @@ def parse_segments(xml_simple, out_file, page_format):
     segments = src_tree.xpath("//segment")
 
     for s in segments:
+        # Will always start a new segment at a fresh line
+        assert brf.at_line_start(), "BUG: starting a segment, but not at the start of a line"
         # dictionary of attributes
         attrs = s.attrib
-        # Likely previous text was left mid-line
-        if not(brf.at_line_start()):
-            brf.advance_one_line()
         # Lead with any indentation on first line
         if 'indent' in attrs:
             indentation = " " * int(attrs['indent'])
@@ -355,7 +354,8 @@ def parse_segments(xml_simple, out_file, page_format):
                 write_fragment(c.tag, c.text)
             if c.tail:
                 write_fragment("text", c.tail)
-
-    # may need to finalize aftet last paragraph
-    if not(brf.at_line_start()):
-        brf.advance_one_line()
+        # finished with a segment
+        # flush buffer, move to new line, maybe a new page
+        # BUT not if we landed in this state anyway
+        if not(brf.at_line_start()):
+            brf.advance_one_line()
