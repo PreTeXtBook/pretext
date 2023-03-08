@@ -140,66 +140,66 @@ class LineBuffer:
 class BRF:
 
     def __init__(self, out_file, emboss, width, height):
-        self._filename = out_file
+        self.filename = out_file
         # we assume `out_file` has been error-checked
-        self._brf_file = open(out_file, "w")
-        self._emboss = emboss
-        self._cursor = Cursor(width, height)
-        self._line_buffer = LineBuffer(width)
+        self.brf_file = open(out_file, "w")
+        self.emboss = emboss
+        self.cursor = Cursor(width, height)
+        self.line_buffer = LineBuffer(width)
 
     # Properties (boolean functions) reported
     # by the current line buffer or default/embedded cursor
 
     def is_room_on_line(self, text):
-        return self._line_buffer.is_room(text)
+        return self.line_buffer.is_room(text)
 
     def at_line_start(self):
-        return self._line_buffer.is_empty()
+        return self.line_buffer.is_empty()
 
     # Actions
 
     def advance_one_line(self):
         # before leaving line, possibly add a page number
-        if self._cursor.remaining_lines() == 1:
+        if self.cursor.remaining_lines() == 1:
             # a character (period?) here can aid debugging
-            gap = " " * (self._line_buffer.remaining_chars())
-            num = str(self._cursor.page_number())
+            gap = " " * (self.line_buffer.remaining_chars())
+            num = str(self.cursor.page_number())
             # this can exceed buffer, but we have no checks for that
-            self._line_buffer.add(gap + num)
+            self.line_buffer.add(gap + num)
 
         # flush buffer and issue newline
-        self._line_buffer.flush(self._brf_file)
-        self._brf_file.write("\n")
+        self.line_buffer.flush(self.brf_file)
+        self.brf_file.write("\n")
 
         # record the advance to new line
-        self._cursor.new_line()
+        self.cursor.new_line()
 
         # If now on last line, use a reduced buffer
         # so there will be room for a page number
-        if self._cursor.remaining_lines() == 1:
-            buffer_width = self._line_buffer.max_width() - 2 - len(str(self._cursor.page_number()))
+        if self.cursor.remaining_lines() == 1:
+            buffer_width = self.line_buffer.max_width() - 2 - len(str(self.cursor.page_number()))
         else:
-            buffer_width = self._line_buffer.max_width()
+            buffer_width = self.line_buffer.max_width()
         # reset the buffer for subsequent line
-        self._line_buffer.reset(buffer_width)
+        self.line_buffer.reset(buffer_width)
 
         # this can cause the cursor to move to the start of a new
         # page if there were no more lines available on the page.
         # So issue FF: ctrl-L, ASCII 12, hex 0C
-        if self._cursor.at_page_start():
-            self._brf_file.write("\x0C")
+        if self.cursor.at_page_start():
+            self.brf_file.write("\x0C")
 
     def write_word(self, word):
         # This assumes there is room on the current line
         # so no adjustments are made to the cursor
-        assert self._line_buffer.remaining_chars() == self._cursor.remaining_characters(), "Cursor and LineBuffer have desynced"
-        self._cursor.advance(len(word))
-        self._line_buffer.add(word)
+        assert self.line_buffer.remaining_chars() == self.cursor.remaining_characters(), "Cursor and LineBuffer have desynced"
+        self.cursor.advance(len(word))
+        self.line_buffer.add(word)
 
     # File operations
 
     def close_file(self):
-        self._brf_file.close()
+        self.brf_file.close()
 
 
 def write_fragment(typeface, aline):
@@ -275,8 +275,8 @@ def write_fragment(typeface, aline):
             # (on accident or by having gone around) and there is
             # *still* not enough room
             # So we brutally hypentate the word to just fit with a hyphen
-            whole_line = word[:(brf._line_buffer.remaining_chars() - 1)] + "-"
-            aline = word[(brf._line_buffer.remaining_chars() - 1):] + " " + pieces[1]
+            whole_line = word[:(brf.line_buffer.remaining_chars() - 1)] + "-"
+            aline = word[(brf.line_buffer.remaining_chars() - 1):] + " " + pieces[1]
             brf.write_word(whole_line)
 
 # Current entry point, sort of
