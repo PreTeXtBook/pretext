@@ -59,9 +59,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- with /, so a plain generator can match others -->
 <xsl:template match="/pretext">
-    <xsl:copy>
-        <xsl:apply-templates select="*|@*"/>
-    </xsl:copy>
+    <!-- Need an overall container   -->
+    <!-- Maybe copy a language code? -->
+    <brf>
+        <segment>Temporary Transcriber Notes: </segment>
+        <xsl:apply-templates select="*"/>
+    </brf>
 </xsl:template>
 
 
