@@ -31,6 +31,9 @@ import louis
 
 class Cursor:
 
+    # spaces prior to a page number, duplicated in BRF
+    page_num_sep = 3
+
     def __init__(self, width, height, page_format):
         # page shape, dimensions, at creation time
         self.width = width
@@ -106,8 +109,10 @@ class Cursor:
         # reset maxchars, chars
         # limit line length when we need room for a page number
         # at least a space, a number indicator, the digits
+        # Sloppy: assumes ASCII number translates to additional
+        # character, the number sign (#)
         if self.lines == 1:
-            self.maxchars = self.width - 2 - len(str(self.page_num))
+            self.maxchars = self.width - (Cursor.page_num_sep + 1 + len(str(self.page_num)))
         else:
             self.maxchars = self.width
 
@@ -181,6 +186,9 @@ class LineBuffer:
 
 class BRF:
 
+    # spaces prior to a page number, duplicated in Cursor
+    page_num_sep = 3
+
     def __init__(self, out_file, page_format, width, height):
         self.filename = out_file
         # we assume `out_file` has been error-checked
@@ -200,13 +208,19 @@ class BRF:
     # Actions
 
     def advance_one_line(self):
+        # We need a braille version of the page number, for actual
+        # printing on the last line, or for adjusting the size of
+        # the line buffer for the last line prior to its formation.
+        if (self.cursor.remaining_lines() == 1) or (self.cursor.remaining_lines() == 2):
+            num = str(self.cursor.page_number())
+            braille_num = self.translate_segment('text', num)
+
         # before leaving line, possibly add a page number
         if self.cursor.remaining_lines() == 1:
             # a character (period?) here can aid debugging
-            gap = " " * (self.line_buffer.remaining_chars())
-            num = str(self.cursor.page_number())
+            gap = " " * (self.line_buffer.remaining_chars() + BRF.page_num_sep)
             # this can exceed buffer, but we have no checks for that
-            self.line_buffer.add(gap + num)
+            self.line_buffer.add(gap + braille_num)
 
         # flush buffer and issue newline
         self.line_buffer.flush(self.brf_file)
@@ -218,7 +232,7 @@ class BRF:
         # If now on last line, use a reduced buffer
         # so there will be room for a page number
         if self.cursor.remaining_lines() == 1:
-            buffer_width = self.line_buffer.max_width() - 2 - len(str(self.cursor.page_number()))
+            buffer_width = self.line_buffer.max_width() - (BRF.page_num_sep + len(braille_num))
         else:
             buffer_width = self.line_buffer.max_width()
         # reset the buffer for subsequent line
