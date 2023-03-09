@@ -189,6 +189,11 @@ class BRF:
     # spaces prior to a page number, duplicated in Cursor
     page_num_sep = 3
 
+    # We need to connect the "trans1" emphasis scheme of the liblouis
+    # "en-ueb-g1.ctb" table with a typeform bit we can use to switch
+    # to this variant when we translate inline code phrases
+    trans1_bit = louis.getTypeformForEmphClass(["en-ueb-g2.ctb"], 'trans1')
+
     def __init__(self, out_file, page_format, width, height):
         self.filename = out_file
         # we assume `out_file` has been error-checked
@@ -283,12 +288,18 @@ class BRF:
         # computer_braille = 0x0400 = 1024
         # no_contract = 0x1000 = 4096
 
+        # `BRF.trans1_bit` is a class variable provided by the louis
+        # package for switching into a transcriber-defined emphasis class
+        # 2023-03-09: apparently  0x0020 = 32  for "trans1" (could change?)
+
         if typeface == "text":
             typeforms = None
         elif typeface == "italic":
             typeforms = [1] * len(aline)
         elif typeface == "bold":
             typeforms = [4] * len(aline)
+        elif typeface == "code":
+            typeforms = [BRF.trans1_bit] * len(aline)
         else:
             print("BUG: did not recognize typeface", typeface)
 
