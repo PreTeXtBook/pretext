@@ -173,7 +173,7 @@ class LineBuffer:
         # mixed content, but can end up at the end of a line where they
         # are not needed.  This does not harm line-breaking, since if
         # another word would fit, then the space would need to be there.
-        if self.contents[-1] == " ":
+        if not(self.contents == '') and self.contents[-1] == " ":
             self.contents = self.contents[:-1]
 
         # OK, the main event
@@ -243,6 +243,16 @@ class BRF:
         # So issue FF: ctrl-L, ASCII 12, hex 0C
         if self.cursor.at_page_start():
             self.brf_file.write("\x0C")
+
+    def blank_line(self):
+        # We assume this method is only called when
+        # we are at the start of a fresh line, so
+        # flushing the line buffer does not produce
+        # any text (unless a page number is printed)
+        assert self.at_line_start(), "BUG: creating a blank line, but not at the start of a line"
+        # `advance_one_line()` should flush an empty buffer,
+        # write a newline, and manage page number output
+        self.advance_one_line()
 
     def write_word(self, word):
         # This assumes there is room on the current line
