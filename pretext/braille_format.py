@@ -347,7 +347,13 @@ def write_fragment(typeface, aline):
             # *still* not enough room
             # So we brutally hypentate the word to just fit with a hyphen
             whole_line = word[:(brf.line_buffer.remaining_chars() - 1)] + "-"
-            aline = word[(brf.line_buffer.remaining_chars() - 1):] + " " + pieces[1]
+            # Put `aline` back together, but without the string `whole_line`.
+            # If there are more pieces we need to add back the space that
+            # disappeared in the split.  Otherwise this is the last word
+            # and it just got smaller.
+            aline = word[(brf.line_buffer.remaining_chars() - 1):]
+            if len(pieces) == 2:
+                aline += " " + pieces[1]
             brf.write_word(whole_line)
 
 # Current entry point, sort of
