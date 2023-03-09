@@ -242,34 +242,40 @@ class BRF:
     def close_file(self):
         self.brf_file.close()
 
+    # Static methods
+
+    @staticmethod
+    def translate_segment(typeface, aline):
+
+        # g2 includes g1 explicitly
+        tableList = ["en-ueb-g2.ctb"]
+
+        # Typeforms bits
+        #    from Python, which is from C header, louis.h
+        # plain_text = 0x0000
+        # emph_1 = comp_emph_1 = italic = 0x0001 = 1
+        # emph_2 = comp_emph_2 = underline = 0x0002 = 2
+        # emph_3 = comp_emph_3 = bold = 0x0004 = 4
+        # computer_braille = 0x0400 = 1024
+        # no_contract = 0x1000 = 4096
+
+        if typeface == "text":
+            typeforms = None
+        elif typeface == "italic":
+            typeforms = [1] * len(aline)
+        elif typeface == "bold":
+            typeforms = [4] * len(aline)
+        else:
+            print("BUG: did not recognize typeface", typeface)
+
+        return louis.translateString(tableList, aline, typeforms, 0)
+
 
 def write_fragment(typeface, aline):
 
     global brf
 
-    # g2 includes g1 explicitly
-    tableList = ["en-ueb-g2.ctb"]
-
-    # Typeforms bits
-    #    from Python, which is from C header, louis.h
-    # plain_text = 0x0000
-    # emph_1 = comp_emph_1 = italic = 0x0001 = 1
-    # emph_2 = comp_emph_2 = underline = 0x0002 = 2
-    # emph_3 = comp_emph_3 = bold = 0x0004 = 4
-    # computer_braille = 0x0400 = 1024
-    # no_contract = 0x1000 = 4096
-
-    if typeface == "text":
-        typeforms = None
-    elif typeface == "italic":
-        typeforms = [1] * len(aline)
-    elif typeface == "bold":
-        typeforms = [4] * len(aline)
-    else:
-        print("BUG: did not recognize typeface", typeface)
-
-    # aline = louis.translateString(tableList, aline, typeforms, 0)
-    aline = louis.translateString(tableList, aline, typeforms, 0)
+    aline = BRF.translate_segment(typeface, aline)
 
     # When a word is output, it gets the space from the previous split,
     # unless it is the first word of a line and the prior space became
