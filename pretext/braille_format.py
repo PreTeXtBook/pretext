@@ -266,6 +266,65 @@ class BRF:
         self.cursor.advance(len(word))
         self.line_buffer.add(word)
 
+    def write_fragment(self, typeface, aline):
+
+        aline = BRF.translate_segment(typeface, aline)
+
+        # When a word is output, it gets the space from the previous split,
+        # unless it is the first word of a line and the prior space became
+        # a newline character.
+        prior_space = ""
+
+        # We chop down `aline` until there is nothing left.  When the first
+        # space is at the end of `aline` the split will yield an empty string
+        # as the second piece.  We do want this string to pass through the
+        # `while` again, to pick up the space we split on via `prior_space`.
+        # THEN the split yields just one piece and the while ends.  This is
+        # all a long excplnation of why we control the halting of the `while`
+        # loop rather than just testing that `aline` is empty.
+
+        while aline != None:
+            pieces = aline.split(" ", 1)
+            word = pieces[0]
+            # if we add to current output line, how many characters would
+            # be left? A negative number is indicative of no room
+            # there *is* room for previous split and next word
+            next_text = prior_space + word
+
+            if self.is_room_on_line(next_text):
+                # TODO: sanitize non-breaking space now, as it has
+                # served its purpose, but we don't want it in output
+                self.write_word(next_text)
+                prior_space = " "
+                # update, or nullify, aline
+                if len(pieces) == 2:
+                    aline = pieces[1]
+                else:
+                    # A 1-piece list after a split indicates there was no
+                    # space to split on, so `word` will have been written out.
+                    # Set `aline` to `None` as sentinel.  See above for rationale.
+                    aline = None
+            elif not(self.at_line_start()):
+                # no room, have a partial line already in place
+                # so move to a new line, i.e. "go around again"
+                # do not update  aline  as it can split again
+                prior_space = ""
+                self.advance_one_line()
+            else:
+                # this is bad - we are at the start of a new line already
+                # (on accident or by having gone around) and there is
+                # *still* not enough room
+                # So we brutally hypentate the word to just fit with a hyphen
+                whole_line = word[:(self.line_buffer.remaining_chars() - 1)] + "-"
+                # Put `aline` back together, but without the string `whole_line`.
+                # If there are more pieces we need to add back the space that
+                # disappeared in the split.  Otherwise this is the last word
+                # and it just got smaller.
+                aline = word[(self.line_buffer.remaining_chars() - 1):]
+                if len(pieces) == 2:
+                    aline += " " + pieces[1]
+                self.write_word(whole_line)
+
     # File operations
 
     def close_file(self):
@@ -306,66 +365,6 @@ class BRF:
         return louis.translateString(tableList, aline, typeforms, 0)
 
 
-def write_fragment(typeface, aline):
-
-    global brf
-
-    aline = BRF.translate_segment(typeface, aline)
-
-    # When a word is output, it gets the space from the previous split,
-    # unless it is the first word of a line and the prior space became
-    # a newline character.
-    prior_space = ""
-
-    # We chop down `aline` until there is nothing left.  When the first
-    # space is at the end of `aline` the split will yield an empty string
-    # as the second piece.  We do want this string to pass through the
-    # `while` again, to pick up the space we split on via `prior_space`.
-    # THEN the split yields just one piece and the while ends.  This is
-    # all a long excplnation of why we control the halting of the `while`
-    # loop rather than just testing that `aline` is empty.
-
-    while aline != None:
-        pieces = aline.split(" ", 1)
-        word = pieces[0]
-        # if we add to current output line, how many characters would
-        # be left? A negative number is indicative of no room
-        # there *is* room for previous split and next word
-        next_text = prior_space + word
-
-        if brf.is_room_on_line(next_text):
-            # TODO: sanitize non-breaking space now, as it has
-            # served its purpose, but we don't want it in output
-            brf.write_word(next_text)
-            prior_space = " "
-            # update, or nullify, aline
-            if len(pieces) == 2:
-                aline = pieces[1]
-            else:
-                # A 1-piece list after a split indicates there was no
-                # space to split on, so `word` will have been written out.
-                # Set `aline` to `None` as sentinel.  See above for rationale.
-                aline = None
-        elif not(brf.at_line_start()):
-            # no room, have a partial line already in place
-            # so move to a new line, i.e. "go around again"
-            # do not update  aline  as it can split again
-            prior_space = ""
-            brf.advance_one_line()
-        else:
-            # this is bad - we are at the start of a new line already
-            # (on accident or by having gone around) and there is
-            # *still* not enough room
-            # So we brutally hypentate the word to just fit with a hyphen
-            whole_line = word[:(brf.line_buffer.remaining_chars() - 1)] + "-"
-            # Put `aline` back together, but without the string `whole_line`.
-            # If there are more pieces we need to add back the space that
-            # disappeared in the split.  Otherwise this is the last word
-            # and it just got smaller.
-            aline = word[(brf.line_buffer.remaining_chars() - 1):]
-            if len(pieces) == 2:
-                aline += " " + pieces[1]
-            brf.write_word(whole_line)
 
 # Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
@@ -391,16 +390,16 @@ def parse_segments(xml_simple, out_file, page_format):
         # Lead with any indentation on first line
         if 'indent' in attrs:
             indentation = " " * int(attrs['indent'])
-            write_fragment("text", indentation)
+            brf.write_fragment("text", indentation)
 
         if s.text:
-            write_fragment("text", s.text)
+            brf.write_fragment("text", s.text)
         children = list(s)
         for c in children:
             if c.text:
-                write_fragment(c.tag, c.text)
+                brf.write_fragment(c.tag, c.text)
             if c.tail:
-                write_fragment("text", c.tail)
+                brf.write_fragment("text", c.tail)
         # finished with a segment
         # flush buffer, move to new line, maybe a new page
         # BUT not if we landed in this state anyway
