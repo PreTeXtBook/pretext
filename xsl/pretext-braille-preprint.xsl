@@ -63,6 +63,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Maybe copy a language code? -->
     <brf>
         <segment>Temporary Transcriber Notes: </segment>
+        <!-- See "c" template for explanation -->
+        <segment>1. Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</segment>
         <xsl:apply-templates select="*"/>
     </brf>
 </xsl:template>
@@ -146,6 +148,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </bold>
 </xsl:template>
 
+<!-- Code -->
+<!-- Accomplished in UEB Grade 2, but with transcriber emphasis scheme 1 -->
+<!-- from liblouis (where is this defined?).  See liblouis table         -->
+<!-- "en-ueb-g1.ctb" for exact definition of emphasis code "trans1".     -->
+<!--                                                                     -->
+<!--     emphletter trans1 4-3456-23                                     -->
+<!--     begemphword trans1 4-3456-2                                     -->
+<!--     endemphword trans1 4-3456-3                                     -->
+<!--     lenemphphrase trans1 3                                          -->
+<!--     begemphphrase trans1 4-3456-2356                                -->
+<!--     endemphphrase trans1 after 4-3456-3                             -->
+<xsl:template match="c">
+    <code>
+        <xsl:apply-templates select="node()"/>
+    </code>
+</xsl:template>
+
 <!-- Pass-through/Dropped -->
 <xsl:template match="abbr|acro|init">
     <xsl:apply-templates select="node()"/>
@@ -158,20 +177,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and an interior "usage", and "description".              -->
 
 <xsl:template match="idx|notation"/>
-
-<!-- Code/Computer Braille -->
-<!-- UEB Rulebook: 5.9 Choice of indicators (can use Grade 1)
-10.12.3 Use contractions in computer material, such as email addresses, web sites, URLs, and filenames when it is embedded in regular text. Use uncontracted braille for computer material, such as computer program code which is displayed on separate lines, as well as any nearby excerpts from the program. [From UEB Rulebook] -->
-<!-- 2012: http://www.dotlessbraille.org/computerbraille.htm -->
-<xsl:template match="c">
-    <xsl:text>CODE</xsl:text>
-    <!-- TEMPORARY: kill for now -->
-    <!-- <c>
-        <xsl:apply-templates select="node()"/>
-    </c> -->
-</xsl:template>
-
-
 
 <!-- non-breaking space -->
 <!-- will liblouis preserve? -->
