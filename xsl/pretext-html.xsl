@@ -770,6 +770,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:with-param>
+        <xsl:with-param name="b-printable" select="true()"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -10785,6 +10786,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Hack, include leading space for now -->
     <xsl:param name="extra-body-classes"/>
     <xsl:param name="filename" select="''"/>
+    <xsl:param name="b-printable" select="false()"/>
 
     <xsl:variable name="the-filename">
         <xsl:choose>
@@ -10919,6 +10921,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="ptx-main">
                     <div id="ptx-content" class="ptx-content">
+                        <xsl:if test="$b-printable">
+                            <xsl:apply-templates select="." mode="print-button"/>
+                        </xsl:if>
                         <xsl:if test="$b-watermark">
                             <xsl:attribute name="style">
                                 <xsl:value-of select="$watermark-css" />
@@ -11554,6 +11559,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="calculator-toggle">
     <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container"><span class="name">Calc</span></button>
+</xsl:template>
+
+<xsl:template match="*" mode="print-button"/>
+
+<xsl:template match="worksheet" mode="print-button">
+    <xsl:variable name="print-text">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'print'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button class="print-button" title="{$print-text}" onClick="window.print()">
+        <span class="name"><xsl:value-of select="$print-text"/></span>
+    </button>
 </xsl:template>
 
 <xsl:template name="user-preferences-menu">
