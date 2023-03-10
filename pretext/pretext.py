@@ -3842,6 +3842,8 @@ def release_temporary_directories():
             log.info("Removing temporary directory {}".format(td))
             # conservatively, raise exception on errors
             shutil.rmtree(td, ignore_errors=False)
+            # reset list of temp direcotries to empty, to avoid duplicate requests
+            __temps = []
     else:
         log.debug("Temporary directories left behind for inspection: {}".format(__temps))
 
