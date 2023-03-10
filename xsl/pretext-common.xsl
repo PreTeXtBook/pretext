@@ -3306,14 +3306,13 @@ Book (with parts), "section" at level 3
 <!-- with standard XSLT.                                              -->
 <!-- NB: the $localizations variable has multiple root nodes, so when -->
 <!-- used in a context-switch before looking up a key, the "for-each" -->
-<!-- is actually looping over multiple root nodes.  Perhaps a single  -->
-<!-- "for-each" here should do a "copy-of" without the root node, all -->
-<!-- captured in a variable, then converted back to a node-set with   -->
-<!-- just one root.                                                   -->
+<!-- is actually looping over multiple root nodes.  So when we switch -->
+<!-- context with a "for-each" we restrict to the root node for the   -->
+<!-- specific language in play.                                       -->
 <xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/filename" />
 <xsl:variable name="localizations" select="document($locale-files)" />
 <!-- Key to lookup a particular localization -->
-<xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
+<xsl:key name="localization-key" match="localization" use="@string-id"/>
 
 <!-- Ultimately translations are all contained in the files of  -->
 <!-- the xsl/localizations directory, which provides            -->
@@ -3322,7 +3321,6 @@ Book (with parts), "section" at level 3
 <!-- Template is intentionally modal.                           -->
 <xsl:template match="*" mode="type-name">
     <xsl:param name="string-id" select="''"/>
-
     <!-- The $string-id parameter allows for an override on        -->
     <!-- semi-automatic determination of the object being named    -->
     <!-- (see the modal "string-id" templates).  This is necessary -->
@@ -3371,10 +3369,11 @@ Book (with parts), "section" at level 3
                 <xsl:apply-templates select="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]"/>
             </xsl:when>
             <!-- Finally, default to a lookup from the localization file's nodes -->
-            <!-- Use a "for-each" to effect a context switch for the look-up     -->
+            <!-- Use a "for-each" to effect a context switch for the look-up and -->
+            <!-- restrict the context to the language in play.                   -->
             <xsl:otherwise>
-                <xsl:for-each select="$localizations">
-                    <xsl:value-of select="key('localization-key', concat($lang,$str-id) )"/>
+                <xsl:for-each select="$localizations/locale[@language = $lang]">
+                    <xsl:value-of select="key('localization-key', $str-id)"/>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
