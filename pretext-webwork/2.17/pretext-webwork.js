@@ -138,6 +138,38 @@ function handleWW(ww_id, action) {
 			ww_container.dataset.hasHint == 'true', ww_container.dataset.hasSolution == 'true',
 			ww_container.dataset.hintLabelText, ww_container.dataset.solutionLabelText)
 
+		// insert previous answers
+		if (runestone_logged_in) {
+			const answersObject = (wwList[ww_id.replace(/-ww-rs$/,'')].answers ? wwList[ww_id.replace(/-ww-rs$/,'')].answers : {'answers' : [], 'mqAnswers' : []});
+			const mqAnswers = answersObject.mqAnswers;
+			for (const mqAnswer in mqAnswers) {
+				const mqInput = body_div.querySelector('input[id=' + mqAnswer + ']');
+				if (mqInput && mqInput.value == '') {
+					mqInput.setAttribute('value', mqAnswers[mqAnswer]);
+				}
+			}
+			const answers = answersObject.answers;
+			for (const answer in answers) {
+				const input = body_div.querySelector('input[id=' + answer + ']');
+				if (input && input.value == '') {
+					input.setAttribute('value', answers[answer]);
+				}
+				if (input && input.type.toUpperCase() == 'RADIO') {
+					const buttons = body_div.querySelectorAll('input[name=' + answer + ']');
+					for (const button of buttons) {
+						if (button.value == answers[answer]) {
+							button.setAttribute('checked', 'checked');
+						}
+					}
+				}
+				const select = body_div.querySelector('select[id=' + answer + ']');
+				if (select) {
+					const option = body_div.querySelector('option[value=' + answers[answer] + ']');
+					option.setAttribute('selected', 'selected');
+				}
+			}
+		}
+
 		// insert our cleaned up problem text
 		form.appendChild(body_div);
 
@@ -320,7 +352,6 @@ function handleWW(ww_id, action) {
 					const score = data.rh_result.answers[name].score;
 					const student_ans = data.rh_result.answers[name].student_value || data.rh_result.answers[name].student_ans;
  					const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
-					console.log([data.rh_result.answers[name].student_ans, data.rh_result.answers[name].student_value, data.rh_result.answers[name].correct_ans, data.rh_result.answers[name].correct_choice, input.value]);
  					if (input.value == student_ans) {
 						if (score == 1) {
 							input.parentNode.classList.add('correct');
@@ -752,7 +783,9 @@ function WWshowCorrect(ww_id, answers) {
 				feedbackButton.remove();
 			}
 			const correct_ans = answers[name].correct_choice || answers[name].correct_ans;
- 			if (input.value == correct_ans) input.checked = true;
+ 			if (input.value == correct_ans) {
+				input.setAttribute('checked', 'checked');
+			}
 		}
 	}
 
