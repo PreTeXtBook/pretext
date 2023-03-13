@@ -128,10 +128,13 @@ class Cursor:
         if self.chars < 0:
             print("BUG: negative chars")
 
+# The line buffer is used to break a long line of words into
+# a sequence of lines that fit width-wise on a braille page.
+# The orignal `fragment` is assumed to have no line-breaks.
+# As we fill the line buffer, some spaces become newlines.
+# So in the usual parlance this is "text-wrapping".  However,
+# we also manage automatic page breaks once a page is full.
 
-#  We fill a line buffer, so we can make adjustments before writing out
-#  its contents.  In an early round of development we began by writing
-#  out each word as we saw it, which would not have been tenable long-term.
 
 class LineBuffer:
 
@@ -159,7 +162,10 @@ class LineBuffer:
     def add(self, text):
         self.contents += text
 
-    def flush(self, out_file):
+    def flush(self, brf):
+        # Flushing the line buffer places the contents into
+        # the `out_buffer` of the BRF object provided.
+
         # this does not write a newline character as we
         # may want to end without provoking a new page
         # Non-breaking spaces have done their job, and we
@@ -177,7 +183,7 @@ class LineBuffer:
             self.contents = self.contents[:-1]
 
         # OK, the main event
-        out_file.write(self.contents)
+        brf.write(self.contents)
 
     def reset(self, size):
         self.contents = ''
@@ -194,10 +200,8 @@ class BRF:
     # to this variant when we translate inline code phrases
     trans1_bit = louis.getTypeformForEmphClass(["en-ueb-g2.ctb"], 'trans1')
 
-    def __init__(self, out_file, page_format, width, height):
-        self.filename = out_file
-        # we assume `out_file` has been error-checked
-        self.brf_file = open(out_file, "w")
+    def __init__(self, page_format, width, height):
+        self.out_buffer = ''
         self.cursor = Cursor(width, height, page_format)
         self.line_buffer = LineBuffer(width)
 
@@ -211,6 +215,9 @@ class BRF:
         return self.line_buffer.is_empty()
 
     # Actions
+
+    def write(self, text):
+        self.out_buffer += text
 
     def advance_one_line(self):
         # We need a braille version of the page number, for actual
@@ -227,10 +234,12 @@ class BRF:
             # this can exceed buffer, but we have no checks for that
             self.line_buffer.add(gap + braille_num)
 
-        # flush buffer and issue newline
-        self.line_buffer.flush(self.brf_file)
-        self.brf_file.write("\n")
-
+        # flush the BRF's line buffer into its
+        # `out_buffer` while adding a newline
+        # TODO: have line_buffer return contents as
+        # a string, and .write() onto `out_buffer`
+        self.line_buffer.flush(self)
+        self.write("\n")
         # record the advance to new line
         self.cursor.new_line()
 
@@ -245,9 +254,9 @@ class BRF:
 
         # this can cause the cursor to move to the start of a new
         # page if there were no more lines available on the page.
-        # So issue FF: ctrl-L, ASCII 12, hex 0C
+        # So add FF (trl-L, ASCII 12, hex 0C) to the `out_buffer`
         if self.cursor.at_page_start():
-            self.brf_file.write("\x0C")
+            self.write("\x0C")
 
     def blank_line(self):
         # We assume this method is only called when
@@ -376,8 +385,9 @@ class BRF:
 
     # File operations
 
-    def close_file(self):
-        self.brf_file.close()
+    def to_file(self, out_file):
+        out_file.write(self.out_buffer)
+        self.out_buffer = ''
 
     # Static methods
 
@@ -420,10 +430,12 @@ class BRF:
 # Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
 
-    global brf
-
     # Embossed, page shape
-    brf = BRF(out_file, page_format, 40,25)
+    brf = BRF(page_format, 40,25)
+
+    # We assume `out_file` has been error-checked
+    # It would be better to use a context manager
+    brf_file = open(out_file, "w")
 
     # needs warning if not available
     import lxml.etree as ET
@@ -468,4 +480,8 @@ def parse_segments(xml_simple, out_file, page_format):
         if 'lines_after' in attrs:
             for i in range(int(attrs['lines_after'])):
                 brf.blank_line()
+
+        brf.to_file(brf_file)
+
+    brf_file.close()
 
