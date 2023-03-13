@@ -34,10 +34,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl date str"
+    extension-element-prefixes="pi exsl date str"
 >
 
 <!-- Standard conversion groundwork -->
@@ -48,6 +49,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 <xsl:variable name="exercise-style" select="'static'"/>
+
+<!-- Necessary to get pre-constructed Nemeth braille for math elements. -->
+<!-- This file of math representations will come from another process   -->
+<!-- that involves mathJax and Speech Rule Engine (SRE).                -->
+<!-- Note: this is a manual step during development.                    -->
+<xsl:param name="mathfile" select="''"/>
+<xsl:variable name="math-repr"  select="document($mathfile)/pi:math-representations"/>
+
+<!-- Not so much "include" as "manipulate"            -->
+<!-- Switch to "all" when display math is accomodated -->
+<xsl:param name="math.punctuation.include" select="'inline'"/>
 
 <!-- xsltproc -o sa.xml -stringparam publisher ~/mathbook/mathbook/examples/sample-article/publication.xml ~/mathbook/mathbook/xsl/pretext-braille-preprint.xsl ~/mathbook/mathbook/examples/sample-article/sample-article.xml -->
 
@@ -215,6 +227,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="."/>
 </xsl:template>
 
+<!-- #### -->
+<!-- Math -->
+<!-- #### -->
+
+<!-- $math-rep is a "global" variable with "pi:math" elements -->
+<xsl:key name="math-elts" match="pi:math" use="@id"/>
+
+<xsl:template match="m">
+    <!-- We connect source location with representations via id -->
+    <!-- NB: math-representation file writes with "visible-id"  -->
+    <xsl:variable name="id">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:variable>
+    <!-- Unicode braille cells from Speech Rule Engine (SRE) -->
+    <xsl:variable name="raw-braille">
+        <!-- sets the context for the key -->
+        <xsl:for-each select="$math-repr">
+            <xsl:value-of select="key('math-elts', $id)/div[@class = 'braille']"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- inline vs. spatial makes a difference -->
+    <xsl:variable name="b-multiline" select="contains($raw-braille, '&#xa;')"/>
+    <!-- We investigate actual source for very simple math   -->
+    <!-- such as one-letter variable names as Latin letters  -->
+    <!-- or positive integers, so we process the orginal     -->
+    <!-- content outside of a MathJax/SRE translation (which -->
+    <!-- could have "xref", etc)                             -->
+    <xsl:variable name="content">
+        <xsl:apply-templates select="node()"/>
+    </xsl:variable>
+    <xsl:variable name="original-content" select="normalize-space($content)"/>
+    <!-- Note: this mark is *always* removed from the trailing text node,    -->
+    <!-- so we need to *always* restore it.  In other wordds, we usually     -->
+    <!-- put it into an attribute to get picked up by  lxml  in the Python.  -->
+    <!-- But if we short-circuit that process here by turning integers into  -->
+    <!-- digits or making single-letter variables unadorned, then we need to -->
+    <!-- restore the mark in this template.                                  -->
+    <xsl:variable name="clause-ending-mark">
+        <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
+    </xsl:variable>
+    <!-- Various cases, more specific first -->
+    <xsl:choose>
+        <!-- Inline math with just one Latin letter. No formatting,  -->
+        <!-- no italics, according to BANA rules via Michael Cantino -->
+        <!-- (2023-01-26) so drop-in $original.  C'est la vie.       -->
+        <xsl:when test="(string-length($original-content) = 1) and contains(&ALPHABET;, $original-content)">
+            <xsl:value-of select="$original-content"/>
+            <!-- restore clause-ending punctuation -->
+            <xsl:value-of select="$clause-ending-mark"/>
+        </xsl:when>
+        <!-- Test is true for non-negative integers, which we drop into -->
+        <!-- the stream as if they were never authored as math anyway   -->
+        <xsl:when test="translate($original-content, &DIGIT; ,'') = ''">
+            <xsl:value-of select="$original-content"/>
+            <!-- restore clause-ending punctuation -->
+            <xsl:value-of select="$clause-ending-mark"/>
+        </xsl:when>
+        <!-- We construct a fragment for teh Python formatter.   -->
+        <!-- SRE may convert inline "m" into a spatial layout,   -->
+        <!-- such as a fraction or column vector authored inline -->
+        <!-- We ignore this situation for now                    -->
+        <xsl:when test="not($b-multiline)">
+            <math>
+                <!-- Add punctuation as an attribute conditionally. -->
+                <!-- We could probably just add an empty string     -->
+                <!-- routinely and push that through to the closing -->
+                <!-- Nemeth indicator, but we take a bit more care. -->
+                <xsl:if test="not($clause-ending-mark = '')">
+                    <xsl:attribute name="punctuation">
+                        <xsl:value-of select="$clause-ending-mark"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="$raw-braille"/>
+            </math>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- TEMPORARY: Multi-line case -->
+            <xsl:text>MATH</xsl:text>
+            <!-- restore clause-ending punctuation -->
+            <xsl:value-of select="$clause-ending-mark"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->
@@ -319,10 +416,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <segment newpage="no" indent="2">
         <xsl:apply-templates select="node()"/>
     </segment>
-</xsl:template>
-
-<xsl:template match="m">
-    <xsl:text>MATH</xsl:text>
 </xsl:template>
 
 <!-- inline at this stage -->
