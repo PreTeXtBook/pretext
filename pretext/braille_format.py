@@ -346,6 +346,51 @@ class BRF:
                     aline += " " + pieces[1]
                 self.write_word(whole_line)
 
+    def process_segment(self, s):
+        '''For actual output, and for trial output with a disposable BRF'''
+
+        # Note: this routine will fill a buffer that is part of a BRF
+        # object.  It is independent of any file, so does not ever
+        # actually output anything.  There is a separate method for that.
+        # In this way, the method can be used in a trial fashion with a
+        # scratch/temporary BRF object to see how the Cursor behaves and
+        # thus if a segmant might cross a page boundary.
+
+        # Will always start a new segment at a fresh line
+        assert self.at_line_start(), "BUG: starting a segment, but not at the start of a line"
+        # dictionary of attributes
+        attrs = s.attrib
+        # Lines before
+        if 'lines_before' in attrs:
+            for i in range(int(attrs['lines_before'])):
+                self.blank_line()
+        # Lead with any indentation on first line
+        if 'indent' in attrs:
+            indentation = " " * int(attrs['indent'])
+            self.write_fragment("text", indentation, None)
+
+        if s.text:
+            self.write_fragment("text", s.text, None)
+        children = list(s)
+        for c in children:
+            if c.text:
+                if 'punctuation' in c.attrib:
+                    math_punctuation = c.attrib['punctuation']
+                else:
+                    math_punctuation = None
+                self.write_fragment(c.tag, c.text, math_punctuation)
+            if c.tail:
+                self.write_fragment("text", c.tail, None)
+        # finished with a segment
+        # flush buffer, move to new line, maybe a new page
+        # BUT not if we landed in this state anyway
+        if not(self.at_line_start()):
+            self.advance_one_line()
+        # Lines after
+        if 'lines_after' in attrs:
+            for i in range(int(attrs['lines_after'])):
+                self.blank_line()
+
     def massage_math(self, aline, punctuation):
 
         # available width will change across lines,
@@ -452,41 +497,7 @@ def parse_segments(xml_simple, out_file, page_format):
     segments = src_tree.xpath("//segment")
 
     for s in segments:
-        # Will always start a new segment at a fresh line
-        assert brf.at_line_start(), "BUG: starting a segment, but not at the start of a line"
-        # dictionary of attributes
-        attrs = s.attrib
-        # Lines before
-        if 'lines_before' in attrs:
-            for i in range(int(attrs['lines_before'])):
-                brf.blank_line()
-        # Lead with any indentation on first line
-        if 'indent' in attrs:
-            indentation = " " * int(attrs['indent'])
-            brf.write_fragment("text", indentation, None)
-
-        if s.text:
-            brf.write_fragment("text", s.text, None)
-        children = list(s)
-        for c in children:
-            if c.text:
-                if 'punctuation' in c.attrib:
-                    math_punctuation = c.attrib['punctuation']
-                else:
-                    math_punctuation = None
-                brf.write_fragment(c.tag, c.text, math_punctuation)
-            if c.tail:
-                brf.write_fragment("text", c.tail, None)
-        # finished with a segment
-        # flush buffer, move to new line, maybe a new page
-        # BUT not if we landed in this state anyway
-        if not(brf.at_line_start()):
-            brf.advance_one_line()
-        # Lines after
-        if 'lines_after' in attrs:
-            for i in range(int(attrs['lines_after'])):
-                brf.blank_line()
-
+        brf.process_segment(s)
         brf.to_file(brf_file)
 
     brf_file.close()
