@@ -438,6 +438,10 @@ def parse_segments(xml_simple, out_file, page_format):
         assert brf.at_line_start(), "BUG: starting a segment, but not at the start of a line"
         # dictionary of attributes
         attrs = s.attrib
+        # Lines before
+        if 'lines_before' in attrs:
+            for i in range(int(attrs['lines_before'])):
+                brf.blank_line()
         # Lead with any indentation on first line
         if 'indent' in attrs:
             indentation = " " * int(attrs['indent'])
@@ -460,3 +464,8 @@ def parse_segments(xml_simple, out_file, page_format):
         # BUT not if we landed in this state anyway
         if not(brf.at_line_start()):
             brf.advance_one_line()
+        # Lines after
+        if 'lines_after' in attrs:
+            for i in range(int(attrs['lines_after'])):
+                brf.blank_line()
+
