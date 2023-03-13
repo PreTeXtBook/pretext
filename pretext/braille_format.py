@@ -17,7 +17,13 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
+# A routine PreTeXt package/module, so
+# natural to import at the module level
+# needs warning if not available
+import lxml.etree as ET
+
 # could import in a routine, but will do here in the module
+# Note: an import into the BRF class requires changes to the static method
 import louis
 
 # A  Cursor  object tracks location in a BRF file:
@@ -437,8 +443,8 @@ def parse_segments(xml_simple, out_file, page_format):
     # It would be better to use a context manager
     brf_file = open(out_file, "w")
 
-    # needs warning if not available
-    import lxml.etree as ET
+    # this routine converts XML information into arguments
+    # to Python routines, but not exclusively yet
 
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml_simple, parser=huge_parser)
