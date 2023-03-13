@@ -266,9 +266,15 @@ class BRF:
         self.cursor.advance(len(word))
         self.line_buffer.add(word)
 
-    def write_fragment(self, typeface, aline):
+    def write_fragment(self, typeface, aline, math_punctuation):
 
-        aline = BRF.translate_segment(typeface, aline)
+        # Nemeth math needs special care, and is already braille
+        # Otherwise, have liblouis translate with correct typeface
+        # After this, `aline` is a BRF string, with spaces, nbsps
+        if typeface == "math":
+            aline = self.massage_math(aline, math_punctuation)
+        else:
+            aline = BRF.translate_segment(typeface, aline)
 
         # When a word is output, it gets the space from the previous split,
         # unless it is the first word of a line and the prior space became
@@ -325,6 +331,49 @@ class BRF:
                     aline += " " + pieces[1]
                 self.write_word(whole_line)
 
+    def massage_math(self, aline, punctuation):
+
+        # available width will change across lines,
+        # so this assumption is mildly flawed
+        width = self.line_buffer.default_size
+
+        # Unicode versions of Nemeth switch indicators.
+        # We control separating spaces below as a way to
+        # influence line-breaking for inline math
+        # Note: maybe make these into class variables
+        nemeth_open = "\u2838\u2829"
+        nemeth_close = "\u2838\u2831"
+
+        # Join trailing punctuation to the closing indicator and
+        # record influence on overall length for line-breaking.
+        if punctuation:
+            nemeth_close += punctuation
+            punct_len = len(punctuation)
+        else:
+            punct_len = 0
+
+        # Actual Nemeth braille, plus 3, plus 3 for indicators, and punctuation
+        math_len = len(aline) + 6 + punct_len
+
+        if math_len <= width:
+            # fuse all blanks, force onto one line if needed
+            aline = nemeth_open + "\xA0" + aline.replace(" ", "\xA0") + "\xA0" + nemeth_close
+        elif math_len <= width + 3:
+            # fuse all blanks, except let Nemeth-close break off
+            aline = nemeth_open + "\xA0" + aline.replace(" ", "\xA0") + " " + nemeth_close
+        elif math_len <= width + 6 + punct_len:
+            # fuse all blanks, except let both Nemeth break off
+            aline = nemeth_open + " " + aline.replace(" ", "\xA0") + " " + nemeth_close
+        else:
+            # fuse on the indicators, then break at any space
+            aline = nemeth_open + "\xA0" + aline + "\xA0" + nemeth_close
+
+        # Unicode characters translate, one for one, into BRF
+        # characters and we assume punctuation does the same.
+        # If not, we could map a few punctuation marks to Unicode.
+        # Or perhaps set argument to do uncontracted braille.
+        return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
+
     # File operations
 
     def close_file(self):
@@ -361,6 +410,8 @@ class BRF:
             typeforms = [BRF.trans1_bit] * len(aline)
         else:
             print("BUG: did not recognize typeface", typeface)
+            # Just to keep going while developing, if necessary
+            # typeforms = None
 
         return louis.translateString(tableList, aline, typeforms, 0)
 
@@ -390,16 +441,20 @@ def parse_segments(xml_simple, out_file, page_format):
         # Lead with any indentation on first line
         if 'indent' in attrs:
             indentation = " " * int(attrs['indent'])
-            brf.write_fragment("text", indentation)
+            brf.write_fragment("text", indentation, None)
 
         if s.text:
-            brf.write_fragment("text", s.text)
+            brf.write_fragment("text", s.text, None)
         children = list(s)
         for c in children:
             if c.text:
-                brf.write_fragment(c.tag, c.text)
+                if 'punctuation' in c.attrib:
+                    math_punctuation = c.attrib['punctuation']
+                else:
+                    math_punctuation = None
+                brf.write_fragment(c.tag, c.text, math_punctuation)
             if c.tail:
-                brf.write_fragment("text", c.tail)
+                brf.write_fragment("text", c.tail, None)
         # finished with a segment
         # flush buffer, move to new line, maybe a new page
         # BUT not if we landed in this state anyway
