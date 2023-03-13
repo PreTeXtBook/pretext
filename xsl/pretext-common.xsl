@@ -1980,13 +1980,26 @@ Book (with parts), "section" at level 3
 <!-- A corresponding event happens with the following    -->
 <!-- text() node: the punctuation will get scrubbed      -->
 <!-- from there iff the punctuation migrates in this     -->
-<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
+
+<!-- Sometimes we just need the mark itself (e.g. braille).  Note -->
+<!-- that the "mark" could well be plural, but usuually is not.   -->
+<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation-mark">
     <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
         <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
+        <xsl:call-template name="leading-clause-punctuation">
+            <xsl:with-param name="text" select="$trailing-text" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Usually we wrap the punctuation with \text{} for use   -->
+<!-- inside LaTeX rendering.                                -->
+<!-- NB: this mode name is not great, but we leave it as-is -->
+<!-- from a refactor. A cosmetic refactor could improve it. -->
+<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
         <xsl:variable name="punctuation">
-            <xsl:call-template name="leading-clause-punctuation">
-                <xsl:with-param name="text" select="$trailing-text" />
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:variable>
         <xsl:if test="not($punctuation = '')">
             <xsl:text>\text{</xsl:text>
@@ -1995,7 +2008,6 @@ Book (with parts), "section" at level 3
         </xsl:if>
     </xsl:if>
 </xsl:template>
-
 
 
 <!-- ################################## -->
