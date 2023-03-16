@@ -373,6 +373,7 @@ so that we can set our own later */
     margin-top: 1.25em;
 }
 .ptx-content section article + article,
+.ptx-content section .introduction + article,
 .ptx-content section .para + article,
 .ptx-content section .posterior + article {
     margin-top: 1.75em;
