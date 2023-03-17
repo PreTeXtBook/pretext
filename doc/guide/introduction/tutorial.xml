@@ -317,17 +317,19 @@
     <section xml:id="tutorial-videos">
       <title>Videos</title>
 
-      <p>A series of videos showcasing how to get started with PreTeXt
+      <p>Regularly produced videos showcasing how to get started with PreTeXt
       as the ecosystem evolves over time is curated by
       <url href="https://clontz.org">Steven Clontz</url>. Roughly once
-      a month, a <q>Getting Started with PreTeXt Today</q> presentation is
-      made available on Zoom, showcasing any new workflows or technologies
-      that are best recommended for writing modern PreTeXt. These videos
-      are documented here for your reference.</p>
+      a month, a <q>Getting Started with PreTeXt</q> presentation is offered
+      to new or prospective community members, showcasing the latest recommendations
+      for writing modern PreTeXt.</p>
 
-      <figure xml:id="gsv-2023-jan">
-          <caption>Getting Started in 2023 Jan</caption>
-          <video xml:id="gsv-2023-jan-video" youtube="y-33Ube-Rhk"/>
+      <p>The most recent recording of this series is provided here for
+      your reference.</p>
+
+      <figure xml:id="tutorial-videos-figure">
+          <caption>Getting Started in 2023 March</caption>
+          <video xml:id="tutorial-videos-video" youtube="Z-BfcnZ8Sm8"/>
       </figure>
     </section>
 
