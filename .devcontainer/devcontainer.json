@@ -1,0 +1,46 @@
+{
+  "name": "PreTeXt-Lite",
+  "image": "mcr.microsoft.com/devcontainers/python:3",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/rocker-org/devcontainer-features/pandoc:1": {}
+  },
+  // "forwardPorts": [
+  // 	27377,
+  // 	27378
+  // ],
+  // "portsAttributes": {
+  // 	"27378": {
+  // 		"label": "CodeChat",
+  // 		"onAutoForward": "openPreview",
+  // 		"requireLocalPort": true,
+  // 		"elevateIfNeeded": true,
+  // 		"protocol": "https"
+  // 	}
+  // },
+  "onCreateCommand": "pip install pretext",
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "sudo bash ./.devcontainer/postCreateCommand.sh",
+
+  // Configure tool-specific properties.
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "source/main.ptx"
+      ]
+    },
+    "vscode": {
+      "settings": {
+        "editor.quickSuggestions": {
+          "other": "off"
+        },
+        "editor.snippetSuggestions": "top",
+        "xml.validation.enabled": false
+      },
+      "extensions": ["ms-vscode.live-server", "oscarlevin.pretext-tools"]
+    }
+  }
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}

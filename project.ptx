@@ -6,21 +6,21 @@
 -->
 <project>
   <targets>
-    <target name="html">
+    <target name="web">
       <format>html</format>
-      <source>guide.xml</source>
-      <publication>publication.xml</publication>
+      <source>doc/guide/guide.xml</source>
+      <publication>doc/guide/publication.xml</publication>
       <output-dir>output/html</output-dir>
     </target>
-    <target name="latex">
+    <target name="print-latex">
       <format>latex</format>
-      <source>guide.xml</source>
-      <output-dir>output/latex</output-dir>
+      <source>doc/guide/guide.xml</source>
+      <output-dir>doc/guide/output/latex</output-dir>
     </target>
-    <target name="pdf" pdf-method="pdflatex">
+    <target name="print">
       <format>pdf</format>
-      <source>guide.xml</source>
-      <output-dir>output/pdf</output-dir>
+      <source>doc/guide/guide.xml</source>
+      <output-dir>doc/guide/output/pdf</output-dir>
     </target>
   </targets>
   <executables>
