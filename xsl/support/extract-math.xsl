@@ -129,7 +129,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="latex-macros-html" select="str:replace($no-less-than, '\newcommand{\gt}{&gt;}&#xa;', '')"/>
             <!-- put macros and packages early for MJ to find         -->
             <!-- give the div an @id so we can trash it as a leftover -->
-            <div id="latex-macros">
+            <div class="latex-macros">
                 <xsl:call-template name="inline-math-wrapper">
                     <xsl:with-param name="math">
                         <xsl:value-of select="$latex-packages-mathjax"/>

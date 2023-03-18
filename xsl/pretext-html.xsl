@@ -7144,7 +7144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="skip-to-content-link" />
                 <xsl:call-template name="latex-macros" />
                 <xsl:call-template name="enable-editing" />
-                 <header id="ptx-masthead">
+                 <header class="ptx-masthead">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
@@ -7186,7 +7186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <main class="ptx-main">
                         <!-- relax the 600px width restriction, so with    -->
                         <!-- responsive videos they grow to be much bigger -->
-                        <div id="ptx-content" class="ptx-content" style="max-width: 1600px">
+                        <div class="ptx-content" style="max-width: 1600px">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
                           </div>
@@ -9721,7 +9721,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="aim-login-footer">
     <xsl:if test="$b-host-aim">
-        <div class="login-link"><span id="loginlogout" class="login">login</span></div>
+        <div class="login-link"><span class="login">login</span></div>
         <script src="{$html.js.server}/js/{$html.js.version}/login.js"></script>
     </xsl:if>
 </xsl:template>
@@ -10878,7 +10878,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- this *must* be first for maximum utility -->
             <xsl:call-template name="skip-to-content-link" />
             <!-- HTML5 body/header will be a "banner" landmark automatically -->
-            <header id="ptx-masthead">
+            <header class="ptx-masthead">
                 <div class="ptx-banner">
                     <xsl:call-template name="brand-logo" />
                     <div class="title-container">
@@ -10920,7 +10920,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="ptx-main">
-                    <div id="ptx-content" class="ptx-content">
+                    <div class="ptx-content">
                         <xsl:if test="$b-printable">
                             <xsl:apply-templates select="." mode="print-button"/>
                         </xsl:if>
@@ -10950,7 +10950,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </main>
             </div>
             <!-- formerly "extra" -->
-            <div id="ptx-page-footer">
+            <div class="ptx-page-footer">
                 <xsl:apply-templates select="." mode="feedback-button"/>
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="runestone-link"/>
@@ -11558,7 +11558,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator-toggle">
-    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container"><span class="name">Calc</span></button>
+    <button class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container"><span class="name">Calc</span></button>
 </xsl:template>
 
 <xsl:template match="*" mode="print-button"/>
@@ -11721,7 +11721,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
-    <nav id="ptx-navbar" class="navbar">
+    <nav class="ptx-navbar">
         <button class="toc-toggle button" aria-label="Show or hide table of contents">
             <span class="icon">☰</span>
             <span class="name">
@@ -11788,8 +11788,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Two HTML aside's for ToC (left), Annotations (right)       -->
 <!-- Need to pass node down into "toc-items", which is per-page -->
 <xsl:template match="*" mode="sidebars">
-    <div id="ptx-sidebar">
-        <nav id="ptx-toc">
+    <div class="ptx-sidebar">
+        <nav class="ptx-toc">
             <xsl:attribute name="class">
                 <!-- A class indicates how much of the ToC we want   -->
                 <!-- to see, as set in the publication file. Always. -->
@@ -11809,8 +11809,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="calculator">
     <xsl:if test="contains($html-calculator,'geogebra')">
-        <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
-            <div id="geogebra-calculator"></div>
+        <div class="calculator-container" style="display: none; z-index:100;">
+            <div class="geogebra-calculator"></div>
         </div>
         <script>
             <xsl:text>&#xa;</xsl:text>
@@ -13035,7 +13035,7 @@ TODO:
 <!-- sneaking in packages, which load first, in       -->
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
-    <div id="latex-macros" class="hidden-content process-math" style="display:none">
+    <div class="latex-macros hidden-content process-math" style="display:none">
         <xsl:if test="$b-braille">
             <xsl:attribute name="data-braille">
                 <xsl:text>latex-macros</xsl:text>
@@ -13078,12 +13078,12 @@ TODO:
                 <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="$docinfo/brandlogo/@source"/>
             </xsl:variable>
-            <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
+            <a class="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
                 <img src="{$location}" alt="Logo image"/>
             </a>
         </xsl:when>
         <xsl:otherwise>
-            <a id="logo-link" href=""/>
+            <a class="logo-link" href=""/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
