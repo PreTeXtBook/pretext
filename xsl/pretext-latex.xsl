@@ -3897,18 +3897,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
 
-    <xsl:if test="frontmatter/colophon/copyright" >
+    <!-- There may be multiple copyrights (a fork under the GFDL -->
+    <!-- requires as much).  This accomodates zero to many.  The -->
+    <!-- "for-each" enacts a context shift so we know we are     -->
+    <!-- mining one "copyright" element at a time.               -->
+    <xsl:for-each select="frontmatter/colophon/copyright">
         <xsl:text>\noindent</xsl:text>
         <xsl:call-template name="copyright-character"/>
-        <xsl:apply-templates select="frontmatter/colophon/copyright/year" />
+        <xsl:apply-templates select="year" />
         <xsl:text>\quad{}</xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/copyright/holder" />
-        <xsl:if test="frontmatter/colophon/copyright/shortlicense">
+        <xsl:apply-templates select="holder" />
+        <xsl:if test="shortlicense">
             <xsl:text>\\[0.5\baselineskip]&#xa;</xsl:text>
-            <xsl:apply-templates select="frontmatter/colophon/copyright/shortlicense" />
+            <xsl:apply-templates select="shortlicense" />
         </xsl:if>
         <xsl:text>\par\medskip&#xa;</xsl:text>
-    </xsl:if>
+    </xsl:for-each>
 
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <!-- Something so page is not totally nothing -->
