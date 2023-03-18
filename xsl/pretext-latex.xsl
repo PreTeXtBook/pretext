@@ -3867,6 +3867,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="frontmatter/colophon/credit">
         <xsl:text>\par\noindent&#xa;</xsl:text>
     </xsl:if>
+    <!-- We accomodate multiple "credit" with a context shift -->
     <xsl:for-each select="frontmatter/colophon/credit">
         <xsl:text>\textbf{</xsl:text>
         <xsl:apply-templates select="role" />
@@ -3881,6 +3882,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\par\vspace*{\stretch{2}}&#xa;</xsl:text>
     </xsl:if>
 
+    <!-- A book cannot be multiple editions, and if -->
+    <!-- attempted this will produce a mish-mash.   -->
     <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bfseries </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name"/>
@@ -3889,13 +3892,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
 
-    <xsl:if test="frontmatter/colophon/website" >
+    <!-- We accomodate zero to many "website" via a context shift. -->
+    <xsl:for-each select="frontmatter/colophon/website" >
         <xsl:text>\noindent{\bfseries </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/website" mode="type-name"/>
+        <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text>}: </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/website" />
+        <xsl:apply-templates select="." />
         <xsl:text>\par\medskip&#xa;</xsl:text>
-    </xsl:if>
+    </xsl:for-each>
 
     <!-- There may be multiple copyrights (a fork under the GFDL -->
     <!-- requires as much).  This accomodates zero to many.  The -->
