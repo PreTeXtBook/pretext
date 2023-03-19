@@ -1176,8 +1176,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% arguments are left-margin, width, right-margin, as multiples of&#xa;</xsl:text>
         <xsl:text>%% \linewidth, and are guaranteed to be positive and sum to 1.0&#xa;</xsl:text>
         <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{image}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{tcbimage}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+        <xsl:text>%% Wrapper environment for tcbimage environment with a fourth argument&#xa;</xsl:text>
+        <xsl:text>%% Fourth argument, if nonempty, is a vertical space adjustment&#xa;</xsl:text>
+        <xsl:text>%% and implies image will be preceded by \leavevmode\nopagebreak&#xa;</xsl:text>
+        <xsl:text>%% Intended use is for alignment with a list marker&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{image}{mmmm}{\notblank{#4}{\leavevmode\nopagebreak\vspace{#4}}{}\begin{tcbimage}{#1}{#2}{#3}}{\end{tcbimage}%&#xa;}</xsl:text>
     </xsl:if>
+
     <!-- Tables -->
     <xsl:if test="$document-root//tabular">
         <xsl:text>%% For improved tables&#xa;</xsl:text>
@@ -8602,9 +8608,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$layout/right-margin div 100"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="vertical-adjustment"/>
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />
     <xsl:text>\end{image}%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="image" mode="vertical-adjustment">
+    <xsl:choose>
+        <!-- When the image is the first thing in an exercisegroup (tcbraster) exercise -->
+        <!-- NB: ancestor::exercisegroup would catch too many cases                     -->
+        <xsl:when test="parent::statement/parent::exercise/parent::exercisegroup or parent::exercise/parent::exercisegroup and not(preceding-sibling::*)">
+            <xsl:text>-0.5\baselineskip</xsl:text>
+        </xsl:when>
+        <!-- When the image is the first thing in a list item, project-like, (not exercisegroup) exercise, or task -->
+        <xsl:when test="(parent::li|parent::statement|parent::exercise|parent::task|parent::*[PROJECT-FILTER]) and not(preceding-sibling::*)">
+            <xsl:text>-1.5\baselineskip</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Second: images already constrained by side-by-side panels -->
