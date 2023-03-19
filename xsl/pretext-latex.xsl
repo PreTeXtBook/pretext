@@ -8425,12 +8425,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="stage" mode="leave-vertical-mode">
-    <xsl:if test="not(preceding-sibling::stage)">
-        <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
 <xsl:template match="figure|table|list|listing" mode="environment-name">
     <!-- subfigures, etc -->
     <xsl:if test="ancestor::*[self::figure]">
