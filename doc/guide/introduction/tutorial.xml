@@ -329,7 +329,7 @@
 
       <figure xml:id="tutorial-videos-figure">
           <caption>Getting Started in 2023 March</caption>
-          <video xml:id="tutorial-videos-video" youtube="Z-BfcnZ8Sm8"/>
+          <video xml:id="tutorial-videos-video" youtube="Z-BfcnZ8Sm8" preview="getting-started-preview.png"/>
       </figure>
     </section>
 
