@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    This file provides the overall configuration for your PreTeXt
+    project. To edit the content of your document, open `source/main.ptx`
+    (default location).
+-->
+<project>
+  <targets>
+    <!-- doc/guide -->
+    <target name="guide-web">
+      <format>html</format>
+      <source>doc/guide/guide.xml</source>
+      <publication>doc/guide/publication.xml</publication>
+      <output-dir>doc/guide/output/web</output-dir>
+    </target>
+    <target name="guide-print">
+      <format>pdf</format>
+      <source>doc/guide/guide.xml</source>
+      <publication>doc/guide/publication.xml</publication>
+      <output-dir>doc/guide/output/print</output-dir>
+    </target>
+    <target name="guide-print-latex">
+      <format>latex</format>
+      <source>doc/guide/guide.xml</source>
+      <publication>doc/guide/publication.xml</publication>
+      <output-dir>output/latex</output-dir>
+    </target>
+    <!-- examples/humanities -->
+    <target name="humanities-web">
+      <format>html</format>
+      <source>examples/humanities/source/hia.xml</source>
+      <publication>examples/humanities/publication/publication.ptx</publication>
+      <output-dir>examples/humanities/output/web</output-dir>
+    </target>
+    <target name="humanities-print">
+      <format>pdf</format>
+      <source>examples/humanities/source/hia.xml</source>
+      <publication>examples/humanities/publication/publication.ptx</publication>
+      <output-dir>examples/humanities/output/print</output-dir>
+    </target>
+    <target name="humanities-print-latex">
+      <format>latex</format>
+      <source>examples/humanities/source/hia.xml</source>
+      <publication>examples/humanities/publication/publication.ptx</publication>
+      <output-dir>examples/humanities/output/print-latex</output-dir>
+    </target>
+    <!-- examples/minimal -->
+    <target name="minimal-web">
+      <format>html</format>
+      <source>examples/minimal/source/main.xml</source>
+      <publication>examples/minimal/publication/publication.ptx</publication>
+      <output-dir>examples/minimal/output/web</output-dir>
+    </target>
+    <target name="minimal-print">
+      <format>pdf</format>
+      <source>examples/minimal/source/main.xml</source>
+      <publication>examples/minimal/publication/publication.ptx</publication>
+      <output-dir>examples/minimal/output/print</output-dir>
+    </target>
+    <target name="minimal-print-latex">
+      <format>latex</format>
+      <source>examples/minimal/source/main.xml</source>
+      <publication>examples/minimal/publication/publication.ptx</publication>
+      <output-dir>examples/minimal/output/print-latex</output-dir>
+    </target>
+    <!-- examples/showcase -->
+    <target name="showcase-web">
+      <format>html</format>
+      <source>examples/showcase/source/pretext-showcase.ptx</source>
+      <publication>examples/showcase/publication/publication.ptx</publication>
+      <output-dir>examples/showcase/output/web</output-dir>
+    </target>
+    <target name="showcase-print">
+      <format>pdf</format>
+      <source>examples/showcase/source/pretext-showcase.ptx</source>
+      <publication>examples/showcase/publication/publication.ptx</publication>
+      <output-dir>examples/showcase/output/print</output-dir>
+    </target>
+    <target name="showcase-print-latex">
+      <format>latex</format>
+      <source>examples/showcase/source/pretext-showcase.ptx</source>
+      <publication>examples/showcase/publication/publication.ptx</publication>
+      <output-dir>examples/showcase/output/print-latex</output-dir>
+    </target>
+    <!-- examples/sample-article -->
+    <target name="sample-article-web">
+      <format>html</format>
+      <source>examples/sample-article/sample-article.xml</source>
+      <publication>examples/sample-article/publication.xml</publication>
+      <output-dir>examples/sample-article/output/html</output-dir>
+    </target>
+    <target name="sample-article-web-oscar">
+      <format>html</format>
+      <source>examples/sample-article/sample-article.xml</source>
+      <publication>examples/sample-article/publication-oscarlevin.xml</publication>
+      <output-dir>examples/sample-article/output/oscar</output-dir>
+    </target>
+    <target name="sample-article-print-latex">
+      <format>latex</format>
+      <source>examples/sample-article/sample-article.xml</source>
+      <publication>examples/sample-article/publication.xml</publication>
+      <output-dir>examples/sample-article/output/latex</output-dir>
+    </target>
+    <target name="sample-article-print">
+      <format>pdf</format>
+      <source>examples/sample-article/sample-article.xml</source>
+      <publication>examples/sample-article/publication.xml</publication>
+      <output-dir>examples/sample-article/output/pdf</output-dir>
+    </target>
+    <target name="sample-article-print-solutions">
+      <format>pdf</format>
+      <source>examples/sample-article/sample-article.xml</source>
+      <publication>examples/sample-article/publication-solution-manual.xml</publication>
+      <output-dir>examples/sample-article/output/solutions</output-dir>
+    </target>
+  </targets>
+  <executables>
+    <latex>latex</latex>
+    <pdflatex>pdflatex</pdflatex>
+    <xelatex>xelatex</xelatex>
+    <pdfsvg>pdf2svg</pdfsvg>
+    <asy>asy</asy>
+    <sage>sage</sage>
+    <pdfpng>convert</pdfpng>
+    <pdfeps>pdftops</pdfeps>
+    <pdfcrop>pdf-crop-margins</pdfcrop>
+    <pageres>pageres</pageres>
+    <node>node</node>
+    <liblouis>file2brl</liblouis>
+  </executables>
+</project>
