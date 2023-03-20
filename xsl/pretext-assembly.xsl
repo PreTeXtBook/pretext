@@ -332,6 +332,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
+<!--                        IMPORTANT                           -->
+<!--                                                            -->
+<!-- Definitions that follow may be overridden after additional -->
+<!-- per-conversion passes that takeoff from the final tree,    -->
+<!-- here $augment.                                             -->
+<!--                                                            -->
+<!--    IF $augment CHANGES, SEARCH FOR AFFECTED CONVERSIONS    -->
+<!--                                                            -->
+<!-- 2023-03-20: braille conversion incorporares Nemeth braille -->
+
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
