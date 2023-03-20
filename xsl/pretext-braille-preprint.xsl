@@ -460,25 +460,89 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EXPERIMENTAL -->
 <!-- ############ -->
 
+<!-- A paragraph without "displays" is straightforward and -->
+<!-- we can bypass the more complicated procedure next.    -->
 <xsl:template match="p">
     <segment newpage="no" indent="2">
         <xsl:apply-templates select="node()"/>
     </segment>
 </xsl:template>
 
-<!-- inline at this stage -->
+<!-- Two-dimensional displayed itmes will get their own segment and   -->
+<!-- we will explode the rest of a "p" into pieces that are segments. -->
+<!-- But with indentation only on the first piece.                    -->
+<!-- Note: leading with a display in a "p" means no indentation.      -->
+<!-- Note: this is derived from a similar template in the HTML        -->
+<!-- conversion.                                                      -->
+<xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]">
+    <!-- will later loop over displays within paragraph      -->
+    <!-- match guarantees at least one for $initial variable -->
+    <xsl:variable name="displays" select="ul|ol|dl|me|men|md|mdn|cd" />
+    <!-- content prior to first display is exceptional, but if empty,   -->
+    <!-- as indicated by $initial, we do not produce an empty paragraph -->
+    <!--                                                                -->
+    <!-- all interesting nodes of paragraph, before first display       -->
+    <xsl:variable name="initial" select="$displays[1]/preceding-sibling::node()"/>
+    <xsl:variable name="initial-content">
+        <xsl:apply-templates select="$initial"/>
+    </xsl:variable>
+    <xsl:if test="not(normalize-space($initial-content) = '')">
+        <segment newpage="no" indent="2">
+            <xsl:apply-templates select="$initial"/>
+        </segment>
+    </xsl:if>
+    <!-- for each display, output the display, plus trailing content -->
+    <xsl:for-each select="$displays">
+        <!-- do the display proper -->
+        <xsl:apply-templates select="."/>
+        <!-- look through remainder, all element and text nodes, and the next display -->
+        <xsl:variable name="rightward" select="following-sibling::node()" />
+        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::me or self::men or self::md or self::mdn or self::cd][1]" />
+        <xsl:choose>
+            <xsl:when test="$next-display">
+                <xsl:variable name="leftward" select="$next-display/preceding-sibling::node()" />
+                <!-- device below forms set intersection -->
+                <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
+                <!-- Careful, punctuation after display math      -->
+                <!-- gets absorbed into display and so is a node  -->
+                <!-- that produces no content (cannot just count) -->
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$common"/>
+                </xsl:variable>
+                <xsl:if test="not(normalize-space($common-content) = '')">
+                    <segment indent="0">
+                        <xsl:apply-templates select="$common"/>
+                    </segment>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- finish the trailing content, if nonempty -->
+                <xsl:variable name="final-content">
+                    <xsl:apply-templates select="$rightward"/>
+                </xsl:variable>
+                <xsl:if test="not(normalize-space($final-content) = '')">
+                    <segment indent="0">
+                        <xsl:apply-templates select="$rightward"/>
+                    </segment>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- segment with placeholder content at this stage -->
 <xsl:template match="me|men|md|mdn">
-    <xsl:text> DISPLAY MATH</xsl:text>
+    <segment>DISPLAY MATH</segment>
 </xsl:template>
 
-<!-- inline at this stage -->
+<!-- segment with placeholder content at this stage -->
 <xsl:template match="ol|ul|dl">
-    <xsl:text> LIST</xsl:text>
+    <segment>LIST</segment>
 </xsl:template>
 
-<!-- inline at this stage -->
+<!-- segment with placeholder content at this stage -->
 <xsl:template match="cd">
-    <xsl:text> CODE DISPLAY</xsl:text>
+    <segment>CODE DISPLAY</segment>
 </xsl:template>
 
 <!-- ############ -->
