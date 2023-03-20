@@ -50,6 +50,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="exercise-style" select="'static'"/>
 
+<!-- Not so much "include" as "manipulate"            -->
+<!-- Switch to "all" when display math is accomodated -->
+<xsl:param name="math.punctuation.include" select="'inline'"/>
+
+<!-- ############################## -->
+<!-- Incorporate (Meld) Mathematics -->
+<!-- ############################## -->
+
+<!-- We do a pass (similar to those in the "pretext-assembly.xsl"   -->
+<!-- stylesheet.  Purpose is to incorporate Nemeth braille versions -->
+<!-- of mathematics, produced by MathJax/Speech RTule Engine.       -->
+
 <!-- Necessary to get pre-constructed Nemeth braille for math elements. -->
 <!-- This file of math representations will come from another process   -->
 <!-- that involves mathJax and Speech Rule Engine (SRE).                -->
@@ -57,13 +69,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="mathfile" select="''"/>
 <xsl:variable name="math-repr"  select="document($mathfile)/pi:math-representations"/>
 
-<!-- Not so much "include" as "manipulate"            -->
-<!-- Switch to "all" when display math is accomodated -->
-<xsl:param name="math.punctuation.include" select="'inline'"/>
+<!-- Default xerox machine for "meld-math" pass -->
+<xsl:template match="node()|@*" mode="meld-math">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="meld-math"/>
+    </xsl:copy>
+</xsl:template>
 
-<!-- xsltproc -o sa.xml -stringparam publisher ~/mathbook/mathbook/examples/sample-article/publication.xml ~/mathbook/mathbook/xsl/pretext-braille-preprint.xsl ~/mathbook/mathbook/examples/sample-article/sample-article.xml -->
+<!-- $math-repr is a "global" variable with "pi:math" elements -->
+<xsl:key name="math-elts" match="pi:math" use="@id"/>
 
-<!-- xsltproc -xinclude  -o sa.xml -stringparam publisher ~/books/aata/aata/publisher/public.xml  ~/mathbook/mathbook/xsl/pretext-braille-preprint.xsl ~/books/aata/aata/src/aata.xml 2> missing.txt -->
+<!-- Replace math elements with a substructure: -->
+<!--     math-original: the guts, simply xeroxed, necessary for -->
+<!--         examining simple situations which do not require a -->
+<!--         switch to Nemeth, or use simpler indicators        -->
+<!--     math-nemeth: unicode from SRE                          -->
+<xsl:template match="m|me|men|md|mdn" mode="meld-math">
+    <!-- preserve author's element -->
+    <xsl:copy>
+        <!-- preserve attributes -->
+        <xsl:apply-templates select="@*" mode="meld-math"/>
+        <!-- get braille from representations file -->
+        <!-- TODO: this id takes 25 seconds on AATA, it seems. -->
+        <!-- Switch to a "static" id?                          -->
+        <xsl:variable name="id">
+            <xsl:apply-templates select="." mode="visible-id"/>
+        </xsl:variable>
+        <math-original>
+            <xsl:apply-templates select="node()|@*" mode="meld-math"/>
+        </math-original>
+        <math-nemeth>
+            <xsl:for-each select="$math-repr">
+                <xsl:value-of select="key('math-elts', $id)/div[@class = 'braille']"/>
+            </xsl:for-each>
+        </math-nemeth>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Convert to "real" XML, starting with "$augment" the   -->
+<!-- (current) final tree produced by the -assembly phase. -->
+<xsl:variable name="math-meld-rtf">
+    <xsl:apply-templates select="$augment" mode="meld-math"/>
+</xsl:variable>
+<xsl:variable name="melded-math" select="exsl:node-set($math-meld-rtf)"/>
+
+<!-- Replace the "standard" key landmarks normally  -->
+<!-- produced by the -assembly stylesheet. -->
+<xsl:variable name="root" select="$melded-math/pretext"/>
+<xsl:variable name="docinfo" select="$root/docinfo"/>
+<xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
+
+<!-- ###################### -->
+<!-- Conversion to Segments -->
+<!-- ###################### -->
 
 <xsl:template match="/">
     <xsl:apply-templates select="$root"/>
@@ -231,21 +289,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Math -->
 <!-- #### -->
 
-<!-- $math-rep is a "global" variable with "pi:math" elements -->
-<xsl:key name="math-elts" match="pi:math" use="@id"/>
-
 <xsl:template match="m">
-    <!-- We connect source location with representations via id -->
-    <!-- NB: math-representation file writes with "visible-id"  -->
-    <xsl:variable name="id">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <!-- Unicode braille cells from Speech Rule Engine (SRE) -->
+    <!-- Unicode braille cells from Speech Rule Engine (SRE)   -->
+    <!-- Not expecting any markup, so "value-of" is everything -->
     <xsl:variable name="raw-braille">
-        <!-- sets the context for the key -->
-        <xsl:for-each select="$math-repr">
-            <xsl:value-of select="key('math-elts', $id)/div[@class = 'braille']"/>
-        </xsl:for-each>
+        <xsl:value-of select="math-nemeth"/>
     </xsl:variable>
     <!-- inline vs. spatial makes a difference -->
     <xsl:variable name="b-multiline" select="contains($raw-braille, '&#xa;')"/>
@@ -255,7 +303,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- content outside of a MathJax/SRE translation (which -->
     <!-- could have "xref", etc)                             -->
     <xsl:variable name="content">
-        <xsl:apply-templates select="node()"/>
+        <xsl:value-of select="math-original/node()"/>
     </xsl:variable>
     <xsl:variable name="original-content" select="normalize-space($content)"/>
     <!-- Note: this mark is *always* removed from the trailing text node,    -->
