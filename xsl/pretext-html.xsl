@@ -5695,6 +5695,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- All but the first is p/@data-braille="continuation" -->
 <!-- so later HTML "p" can be styled for Braille as if   -->
 <!-- they are part of a logical PreTeXt paragraph        -->
+<!-- Note: a simpler version of this appears in the      -->
+<!-- braille conversion, with a few improvements         -->
+<!-- (such as using "node()").                           -->
 <xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
