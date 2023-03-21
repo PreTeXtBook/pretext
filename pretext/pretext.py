@@ -1878,8 +1878,8 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.debug("QR code id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
-    id_file = open(id_filename, "r")
-    interactives = id_file.readlines()
+    with open(id_filename, "r") as id_file:
+        interactives = id_file.readlines()
 
     for inter in interactives:
         # separator is a space, since a comma can be in a YouTube playlist
