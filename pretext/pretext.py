@@ -667,8 +667,9 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     text_info  = '<pi:text-file xmlns:pi="http://pretextbook.org/2020/pretext/internal">{}</pi:text-file>'
 
     # read lines, one-per-binary
-    datafile_list = open(the_files, "r")
-    for df in datafile_list.readlines():
+    with open(the_files, "r") as datafile_list:
+        dfs = datafile_list.readlines()
+    for df in dfs:
         visible_id, file_type, relative_path = df.split()
         data_file = os.path.join(external_abs, relative_path)
         log.debug("converting data file {} to a text/XML file".format(data_file))
@@ -930,8 +931,9 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.debug("Program sources for traces temporarily in {}".format(code_filename))
     xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
     # read lines, one-per-program
-    code_file = open(code_filename, "r")
-    for program in code_file.readlines():
+    with open(code_filename, "r") as code_file:
+        programs = code_file.readlines()
+    for program in programs:
         # three parts, always
         program_quad = program.split(",", 3)
         runestone_id = program_quad[0]
@@ -1055,9 +1057,8 @@ def webwork_to_xml(
     log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
     xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
-    ww_file = open(ww_filename, "r")
-    problem_dictionaries = ww_file.read()
-    ww_file.close()
+    with open(ww_filename, "r") as ww_file:
+        problem_dictionaries = ww_file.read()
     # "run" the dictionaries and localization string
     # protect backslashes in LaTeX code
     # globals() necessary for success
