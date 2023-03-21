@@ -1807,9 +1807,9 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.debug("YouTube id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
-    id_file = open(id_filename, "r")
-    # read lines, but only lines that are comma delimited
-    thumbs = [t.strip() for t in id_file.readlines() if "," in t]
+    with open(id_filename, "r") as id_file:
+        # read lines, but only lines that are comma delimited
+        thumbs = [t.strip() for t in id_file.readlines() if "," in t]
 
     for thumb in thumbs:
         thumb_pair = thumb.split(",")
@@ -1987,8 +1987,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # list of ids *and* produce a pile of files (the "standalone") pages
     xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
     # read the list of interactive identifiers just generated
-    id_file = open(id_filename, "r")
-    interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
+    with open(id_filename, "r") as id_file:
+        interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Copy in external resources (e.g., js code)
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
@@ -2191,9 +2191,9 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     log.debug("MyOpenMath id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of problem numbers
-    id_file = open(id_filename, "r")
-    # read lines, skipping blank lines
-    problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
+    with open(id_filename, "r") as id_file:
+        # read lines, skipping blank lines
+        problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
     for problem in problems:
         url = "https://www.myopenmath.com/util/mbx.php?id={}".format(problem)
         path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
