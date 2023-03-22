@@ -464,20 +464,31 @@ class BRF:
 
         # Will always start a new segment at a fresh line
         assert self.at_line_start(), "BUG: starting a segment, but not at the start of a line"
-        # dictionary of attributes
-        attrs = s.attrib
-        # Lines before
-        if 'lines_before' in attrs:
-            for i in range(int(attrs['lines_before'])):
-                self.blank_line()
-        # Lead with any indentation on first line
-        if 'indent' in attrs:
-            indentation = " " * int(attrs['indent'])
-            self.write_fragment("text", indentation, None)
 
-        if s.text:
-            self.write_fragment("text", s.text, None)
-        children = list(s)
+        if s.newpage and self.cursor.emboss:
+            self.advance_page()
+
+        # Lines before (but not if at the start of a page)
+        if not(self.cursor.at_page_start()):
+            for i in range(int(s.lines_before)):
+                self.blank_line()
+
+        # Lead with any indentation on first line
+        indentation = " " * int(s.indentation)
+        self.write_fragment("text", indentation, None)
+
+        # Centered
+        # [BANA 2016],  4.4.2
+        # At least three blank cells must precede and follow a centered heading.
+        #
+        # So shrink line buffer to get extra space
+        if s.centered:
+            self.adjust_width(-6)
+
+        sxml = s.xml
+        if sxml.text:
+            self.write_fragment("text", sxml.text, None)
+        children = list(sxml)
         for c in children:
             if c.text:
                 if 'punctuation' in c.attrib:
@@ -492,10 +503,15 @@ class BRF:
         # BUT not if we landed in this state anyway
         if not(self.at_line_start()):
             self.advance_one_line()
+        # Necessary to restore for subsequent centering
+        if s.centered:
+            self.adjust_width(6)
         # Lines after
-        if 'lines_after' in attrs:
-            for i in range(int(attrs['lines_after'])):
-                self.blank_line()
+        for i in range(int(s.lines_after)):
+            self.blank_line()
+        # post-process before any use
+        if s.centered:
+            self.center()
 
     def massage_math(self, aline, punctuation):
 
