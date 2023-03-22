@@ -556,6 +556,14 @@ class BRF:
         # Or perhaps set argument to do uncontracted braille.
         return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
 
+
+    def write_segment(self, seg):
+        self.process_segment(seg)
+        # if self.is_room_on_page(seg):
+        #     self.process_segment(seg)
+        # else:
+        #     self.process_segment(seg)
+
     # File operations
 
     def to_file(self, out_file):
@@ -598,10 +606,14 @@ class BRF:
 
         return louis.translateString(tableList, aline, typeforms, 0)
 
+    # End BRF object definition
 
 
 # Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
+
+    # File is global temporarily
+    global brf_file
 
     # Embossed, page shape
     brf = BRF(page_format, 40,25)
@@ -619,7 +631,18 @@ def parse_segments(xml_simple, out_file, page_format):
     segments = src_tree.xpath("//segment")
 
     for s in segments:
-        brf.process_segment(s)
+        seg = Segment(s)
+        brf.write_segment(seg)
+
+        # brf.process_segment(seg)
+
+        # Need a "size" routine, maybe a "final" routine???
+        # if seg.breakable:
+        # else:
+        #     brf.process_segment(seg)
+        #     if not(brf.is_room_on_page(seg)):
+        #         brf_file.write("CROSSED PAGE BOUNDARY")
+
         brf.to_file(brf_file)
 
     brf_file.close()
