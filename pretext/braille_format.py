@@ -268,7 +268,32 @@ class BRF:
     def at_line_start(self):
         return self.line_buffer.is_empty()
 
+    # Provisional
+    def is_room_on_page(self, segment):
+        import copy
+
+        orginal_cursor = self.cursor
+        trial_brf = copy.deepcopy(self)
+        # all changes (cursor movement, text-wrapping) will
+        # occur in the temporary/trial/throwaway cursor
+        trial_brf.process_segment(segment)
+        trial_cursor = trial_brf.cursor
+
+        # print("OC", orginal_cursor.page_num)
+        # print("TC", trial_cursor.page_num)
+
+        return not(orginal_cursor.page_num + 1 == trial_cursor.page_num)
+
     # Actions
+
+    def adjust_width(self, adjustment):
+        # Temporarily adjust the width of a page
+        # For example, to construct a centered heading
+        # Argument is an adjustment to current (negative, then positive?)
+        self.line_buffer.size += adjustment
+        self.cursor.maxchars  += adjustment
+        # Reset counters as well
+        self.cursor.chars = self.cursor.maxchars
 
     def write(self, text):
         self.out_buffer += text
@@ -321,6 +346,22 @@ class BRF:
         # `advance_one_line()` should flush an empty buffer,
         # write a newline, and manage page number output
         self.advance_one_line()
+
+    def advance_page(self):
+        # It might look silly to call this complicated function when we
+        # could just drop a bunch of newlines into the `out_buffer`.
+        # But we can be sure a partial line is handled correctly and we
+        # can be sure a page number gets written properly in all cases.
+        # And the FF for the end of the page.
+
+        # File is global temporarily
+        global brf_file
+
+        for i in range(self.cursor.remaining_lines()):
+            self.advance_one_line()
+        self.to_file(brf_file)
+        if self.cursor.emboss:
+            assert self.cursor.at_page_start(), "Page advance did not reach exactly the start of a new page"
 
     def write_word(self, word):
         # This assumes there is room on the current line
@@ -393,6 +434,23 @@ class BRF:
                 if len(pieces) == 2:
                     aline += " " + pieces[1]
                 self.write_word(whole_line)
+
+    def center(self):
+        # Centered headings, may have blank lines
+        lines = self.out_buffer.split("\x0A")
+        nlines = len(lines)
+        # Replacing contents
+        self.out_buffer = ""
+        for i in range(nlines):
+            line = lines[i]
+            if line == "":
+                self.out_buffer += line
+            else:
+                pad = " " * ((self.line_buffer.size - len(line))//2)
+                self.out_buffer += pad + line
+            # Restore n-1 separators
+            if i != (nlines - 1):
+                self.out_buffer += "\x0A"
 
     def process_segment(self, s):
         '''For actual output, and for trial output with a disposable BRF'''
