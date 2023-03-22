@@ -5369,9 +5369,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A minimal division within an "exercises" division. -->
 
 <xsl:template match="subexercises">
+    <xsl:variable name="id">
+        <xsl:apply-templates select="." mode="latex-id"/>
+    </xsl:variable>
     <xsl:text>\paragraph{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{</xsl:text>
+        <xsl:value-of select="$id"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{</xsl:text>
+    <xsl:value-of select="$id"/>
+    <xsl:text>}{}&#xa;</xsl:text>
     <xsl:apply-templates select="idx|notation|introduction|exercisegroup|exercise|conclusion"/>
 </xsl:template>
 
@@ -9943,7 +9954,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
-<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|subexercises|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
