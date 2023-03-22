@@ -8734,6 +8734,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A custom cross-reference: <xref ref="corollary-FTC-derivative" text="custom">Custom</xref></p></li>
                 <!-- Instructions for Interactives are not numbered, so use a simpler @text -->
                 <li><p>Cross-reference to <tag>instructions</tag> of an <tag>interactive</tag>: <xref ref="kinematics-instructions" text="title"/></p></li>
+                <li><p>A hyperlink to a <tag>subexercises</tag> via its required title (no number is assigned): <xref ref="hard-subexercises" text="title"/></p></li>
+                <!-- Accumulate examples here -->
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
@@ -13500,7 +13502,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </subexercises>
 
-            <subexercises>
+            <subexercises xml:id="hard-subexercises">
                 <title>Hard Problems</title>
 
                 <exercise>
