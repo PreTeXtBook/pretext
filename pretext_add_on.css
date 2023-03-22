@@ -562,6 +562,12 @@
     margin-left: 1em;
 }
 
+.ptx-content tr th.r0.l0,
+.ptx-content tr td.r0.l0 {
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+}
+
 .ptx-content table tr td span.decimal {
     float: left;
     text-align: right;
