@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Suggerimento</localization>
     <localization string-id='answer'>Risposta</localization>
     <localization string-id='solution'>Soluzione</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Gruppo di esercizi</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->

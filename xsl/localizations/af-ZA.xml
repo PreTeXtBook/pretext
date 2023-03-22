@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Wenk</localization>
     <localization string-id='answer'>Antwoord</localization>
     <localization string-id='solution'>Oplossing</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Oefening Groep</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->

@@ -184,6 +184,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Подсказка</localization>
     <localization string-id='answer'>Отговор</localization>
     <localization string-id='solution'>Решение</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
 <!--
     <localization string-id='exercisegroup'>Exercise Group</localization>

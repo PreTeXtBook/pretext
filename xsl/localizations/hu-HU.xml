@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Tipp</localization>
     <localization string-id='answer'>Vélasz</localization>
     <localization string-id='solution'>Megoldás</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Feladatcsoport</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->

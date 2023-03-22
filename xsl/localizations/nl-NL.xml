@@ -198,6 +198,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'>Antwoord</localization>
     <localization string-id='solution'>Oplossing</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- <localization string-id='biblio'>Bibliographic Entry</localization> -->

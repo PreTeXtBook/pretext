@@ -169,6 +169,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Indice</localization>  <!-- Knowingly differs from fr-FR, which uses "Indication" instead -->
     <localization string-id='answer'>Réponse</localization>
     <localization string-id='solution'>Solution</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Groupe d'exercices</localization>
      <!-- Front matter components -->

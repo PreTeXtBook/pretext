@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Nápověda</localization>
     <localization string-id='answer'>Odpověď</localization>
     <localization string-id='solution'>Řešení</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Skupina cvičení</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
