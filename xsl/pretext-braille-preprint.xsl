@@ -123,6 +123,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Conversion to Segments -->
 <!-- ###################### -->
 
+<!-- A "segment" is a chunk of text that begins on a new line and finishes  -->
+<!-- with a partial line followed by a newline, ready for another segment.  -->
+<!-- Various properties, akin to the main tools of braille formatting,      -->
+<!-- affect how it is formatted into a BRF.  The XSL analyzes the nature of -->
+<!-- the text and its surrounding from preTeXt markup, so then Python gets  -->
+<!-- something that just describes how it should be formatted.              -->
+<!--                                                                        -->
+<!-- This documents much of the transition from PreTeXt XML to an XML meant -->
+<!-- only for Python text processing.                                       -->
+<!--                                                                        -->
+<!-- Here we do not write anything when a default is correct, and then      -->
+<!-- Python (lxml) will interpret a "missing" attribute as the default,     -->
+<!-- and create something of the correct datatype for Python.               -->
+<!--                                                                        -->
+<!--     @newpage - default: no, else yes                                   -->
+<!--     @centered - default: no, else yes                                  -->
+<!--     @breakable - default: yes, else no                                 -->
+<!--     @indentation - default: 0, else positive integer                   -->
+<!--     @runover - default: 0, else positive integer                       -->
+<!--     @lines-before - default: 0, else positive integer                  -->
+<!--     @lines-after - default: 0, else positive integer                   -->
+<!--     @lines-following - default: 0, else positive integer               -->
+
 <xsl:template match="/">
     <xsl:apply-templates select="$root"/>
 </xsl:template>
@@ -463,7 +486,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A paragraph without "displays" is straightforward and -->
 <!-- we can bypass the more complicated procedure next.    -->
 <xsl:template match="p">
-    <segment newpage="no" indent="2">
+    <segment indentation="2">
         <xsl:apply-templates select="node()"/>
     </segment>
 </xsl:template>
@@ -487,7 +510,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$initial"/>
     </xsl:variable>
     <xsl:if test="not(normalize-space($initial-content) = '')">
-        <segment newpage="no" indent="2">
+        <segment indentation="2">
             <xsl:apply-templates select="$initial"/>
         </segment>
     </xsl:if>
@@ -510,7 +533,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$common"/>
                 </xsl:variable>
                 <xsl:if test="not(normalize-space($common-content) = '')">
-                    <segment indent="0">
+                    <segment>
                         <xsl:apply-templates select="$common"/>
                     </segment>
                 </xsl:if>
@@ -521,7 +544,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$rightward"/>
                 </xsl:variable>
                 <xsl:if test="not(normalize-space($final-content) = '')">
-                    <segment indent="0">
+                    <segment>
                         <xsl:apply-templates select="$rightward"/>
                     </segment>
                 </xsl:if>
