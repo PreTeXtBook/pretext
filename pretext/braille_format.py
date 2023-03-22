@@ -195,6 +195,54 @@ class LineBuffer:
         self.contents = ''
         self.size = size
 
+class Segment:
+
+    def __init__(self, s):
+
+        self.xml = s
+
+        # decipher, record attributes
+        attrs = s.attrib
+        if ("newpage" in attrs) and (attrs["newpage"] == "yes"):
+            self.newpage = True
+        else:
+            self.newpage = False
+
+        if ("centered" in attrs) and (attrs["centered"] == "yes"):
+            self.centered = True
+        else:
+            self.centered = False
+
+        if ("breakable" in attrs) and (attrs["breakable"] == "no"):
+            self.breakable = False
+        else:
+            self.breakable = True
+
+        if "indentation" in attrs:
+            self.indentation = attrs["indentation"]
+        else:
+            self.indentation = 0
+
+        if "runover" in attrs:
+            self.runover = attrs["runover"]
+        else:
+            self.runover = 0
+
+        if "lines-before" in attrs:
+            self.lines_before = attrs["lines-before"]
+        else:
+            self.lines_before = 0
+
+        if "lines-after" in attrs:
+            self.lines_after = attrs["lines-after"]
+        else:
+            self.lines_after = 0
+
+        if "lines-following" in attrs:
+            self.lines_following = attrs["lines-following"]
+        else:
+            self.lines_following = 0
+
 
 class BRF:
 
