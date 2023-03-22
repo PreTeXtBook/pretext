@@ -119,6 +119,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 
+<!-- Source analysis -->
+
+<!-- We need to determine "how deep" the division hierarchy goes, so       -->
+<!-- we probe for depths of four and five.  Note how specialized           -->
+<!-- divisions result in additional depth beyond traditional divisions.    -->
+<!-- (exercises|worksheet|reading-questions|solutions|references|glossary) -->
+
+<xsl:variable name="b-has-level-four" select="boolean(
+      $document-root//subsubsection
+    | $document-root//subsection/exercises
+    | $document-root//subsection/worksheet
+    | $document-root//subsection/reading-questions
+    | $document-root//subsection/solutions
+    | $document-root//subsection/references
+    | $document-root//subsection/glossary)"/>
+
+<xsl:variable name="b-has-level-five" select="boolean(
+      $document-root//subsubsection/exercises
+    | $document-root//subsubsection/worksheet
+    | $document-root//subsubsection/reading-questions
+    | $document-root//subsubsection/solutions
+    | $document-root//subsubsection/references
+    | $document-root//subsubsection/glossary)"/>
+
+<!-- And anything less -->
+<xsl:variable name="b-has-level-three-or-less" select="not($b-has-level-four) and not($b-has-level-five)"/>
+
 <!-- ###################### -->
 <!-- Conversion to Segments -->
 <!-- ###################### -->
@@ -160,6 +187,239 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <segment>1. Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</segment>
         <xsl:apply-templates select="*"/>
     </brf>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Divisions -->
+<!-- ######### -->
+
+<!-- [BANA, 2016] 4.2.1 -->
+<!-- As a general rule, centered headings are used to represent     -->
+<!-- the print headings of major sections of the text, and cell-5   -->
+<!-- and cell-7 headings are used to represent the print headings   -->
+<!-- for subsections shown within major sections. When there are    -->
+<!-- more than three distinct heading levels in print, cell-7       -->
+<!-- headings are applied only to the lowest hierarchy level; the   -->
+<!-- use of centered headings is extended to one or more subsection -->
+<!-- levels as necessary.                                           -->
+
+<!-- Braille division headings are centered, indented 4 cells ("cell-5"),   -->
+<!-- or indented 6 cells ("cell-7"), along with blank lines possibly        -->
+<!-- before and after.  Cell-7 is always terminal and is only used at one   -->
+<!-- level.   To "fill" when there are more than three levels, centered     -->
+<!-- headings get extended.  At the chapter level of a book, we start at    -->
+<!-- the top of a page, which somewhat distinguishes the centered style     -->
+<!-- of a chapter.  From PreTeXt, division numbers (if used) are            -->
+<!-- unambiguous indicators of levels.                                      -->
+<!--                                                                        -->
+<!-- Level                        book                      article         -->
+<!-- 1 chapter           center  center  center                             -->
+<!-- 2 section           cell-5  center  center      center  center  center -->
+<!-- 3 subsection        cell-7  cell-5  center      cell-7  cell-5  center -->
+<!-- 4 subsubsection             cell-7  cell-5              cell-7  cell-5 -->
+<!-- 5 (specialized)                     cell-7                      cell-7 -->
+
+<!-- Divisions apparent in a rendered BRF. -->
+<xsl:template match="chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary">
+
+    <!-- Determine: newpage, centered, cell5, cell7 -->
+    <xsl:variable name="heading-style">
+        <xsl:apply-templates select="." mode="heading-style"/>
+    </xsl:variable>
+
+    <segment breakable="no" lines-following="1">
+        <!-- various attributes are fixed (above) or -->
+        <!-- vary according to the heading-style     -->
+        <xsl:attribute name="newpage">
+            <xsl:choose>
+                <xsl:when test="$heading-style = 'newpage'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- Explicit defaults for Python, partially to get types right -->
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <!--  -->
+        <xsl:attribute name="centered">
+            <xsl:choose>
+                <xsl:when test="($heading-style = 'newpage') or ($heading-style = 'centered')">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <!-- Explicit defaults for Python, partially to get types right -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <!--  -->
+        <xsl:variable name="indentation">
+            <xsl:choose>
+                <xsl:when test="$heading-style = 'cell5'">
+                    <xsl:text>4</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-style = 'cell7'">
+                    <xsl:text>6</xsl:text>
+                </xsl:when>
+                <!-- Explicit defaults for Python, partially to get types right -->
+                <xsl:otherwise>
+                    <xsl:text>0</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!--  -->
+        <xsl:attribute name="indentation">
+            <xsl:value-of select="$indentation"/>
+        </xsl:attribute>
+        <!--  -->
+        <xsl:attribute name="runover">
+            <xsl:value-of select="$indentation"/>
+        </xsl:attribute>
+        <!-- Indicate a "line-before" whenever necessary for an     -->
+        <!-- electronic version.  Page formatting for an embossed   -->
+        <!-- version will not include these at the start of a page. -->
+        <xsl:attribute name="lines-before">
+            <xsl:choose>
+                <xsl:when test="$heading-style = 'newpage'">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <!-- [BANA 2016], 4.4.1                                           -->
+                <!-- A centered heading is preceded and followed by a blank line. -->
+                <xsl:when test="$heading-style = 'centered'">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-style = 'cell5'">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-style = 'cell7'">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <!--  -->
+        <xsl:attribute name="lines-after">
+            <xsl:choose>
+                <xsl:when test="$heading-style = 'newpage'">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <!-- [BANA 2016], 4.4.1                                           -->
+                <!-- A centered heading is preceded and followed by a blank line. -->
+                <xsl:when test="$heading-style = 'centered'">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-style = 'cell5'">
+                    <xsl:text>0</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-style = 'cell7'">
+                    <xsl:text>0</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- Finally, the heading content itself -->
+       <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:variable>
+        <xsl:if test="not($the-number = '')">
+            <xsl:value-of select="$the-number"/>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </segment>
+    <!-- end heading segment, recurse into the -->
+    <!-- contents of the (structured) division -->
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- Overall document "types/classes", level 0/-1 -->
+<!-- Normalize so that: "chapter" is always level 1, "section"  -->
+<!-- is always level 2.  We do not ever consult these specific  -->
+<!-- values for the document type/class, they are not imporant. -->
+<!--  Also, the climb up the tree ends here.                    -->
+<xsl:template match="book|article|slideshow|letter|memo" mode="braille-level">
+    <xsl:choose>
+        <!-- "book" with parts, make "part" level 0 -->
+        <xsl:when test="$b-has-parts">
+            <xsl:text>-1</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Containiers, inherit from parent -->
+<xsl:template match="frontmatter|backmatter" mode="braille-level">
+    <xsl:apply-templates select="parent::*" mode="braille-level"/>
+</xsl:template>
+
+<!-- True divisions, +1 from parent -->
+<xsl:template match="part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary" mode="braille-level">
+    <xsl:variable name="parent-level">
+        <xsl:apply-templates select="parent::*" mode="braille-level"/>
+    </xsl:variable>
+    <xsl:value-of select="$parent-level + 1"/>
+</xsl:template>
+
+<!-- Divisions apparent in a BRF.  Four headings styles,       -->
+<!-- which we use to "define" how headings are formatted.      -->
+<!-- Specialized divisions can appear at many levels, but will -->
+<!-- be formatted according to their level in the hierarchy.   -->
+<!-- See table above for explanation of choices here.          -->
+<xsl:template match="chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary" mode="heading-style">
+    <xsl:variable name="braille-level">
+        <xsl:apply-templates select="." mode="braille-level"/>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- chapters (of books) -->
+        <xsl:when test="$braille-level = 1">
+            <xsl:text>newpage</xsl:text>
+        </xsl:when>
+        <!-- sections (of books or articles) -->
+        <xsl:when test="$braille-level = 2">
+            <xsl:choose>
+                <xsl:when test="$b-has-level-three-or-less and $b-is-book">
+                    <xsl:text>cell5</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>centered</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!--  -->
+        <xsl:when test="$braille-level = 3">
+            <xsl:choose>
+                <xsl:when test="$b-has-level-five">
+                    <xsl:text>centered</xsl:text>
+                </xsl:when>
+                <xsl:when test="$b-has-level-four">
+                    <xsl:text>cell5</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>cell7</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!--  -->
+        <xsl:when test="$braille-level = 4">
+            <xsl:choose>
+                <xsl:when test="$b-has-level-five">
+                    <xsl:text>cell5</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>cell7</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!--  -->
+        <xsl:when test="$braille-level = 5">
+            <xsl:text>cell7</xsl:text>
+         </xsl:when>
+        <!--  -->
+        <xsl:otherwise>
+            <xsl:text>UNDEFINED</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
