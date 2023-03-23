@@ -200,10 +200,9 @@ class LineBuffer:
 
         # OK, the main event
         brf.write(self.contents)
-
-    def reset(self, size):
+        # Once written, reset contents
         self.contents = ''
-        self.text_width = size
+
 
 class Segment:
 
@@ -339,7 +338,7 @@ class BRF:
         else:
             buffer_width = self.line_buffer.max_width()
         # reset the buffer for subsequent line
-        self.line_buffer.reset(buffer_width)
+        self.line_buffer.text_width =  buffer_width
 
         # this can cause the cursor to move to the start of a new
         # page if there were no more lines available on the page.
