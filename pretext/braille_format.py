@@ -42,8 +42,8 @@ class Cursor:
 
     def __init__(self, width, height, page_format):
         # page shape, dimensions, at creation time
-        self.width = width
-        self.height = height
+        self.page_width = width
+        self.page_height = height
         # Finally, we interpret `page_format`
         if page_format == 'emboss':
             self.emboss = True
@@ -54,11 +54,11 @@ class Cursor:
             self.emboss = True
         # we allow for variable length lines, in
         # order to allow for insertion of page numbers
-        self.maxchars = width
+        self.text_width = width
         # initialize clean slate
         # chars, lines are *remaining* room
         # they will decrement to zero
-        self.chars = self.maxchars
+        self.chars_left = self.text_width
         # Default brehavior is to form pages for embossing, which requires
         # a lot of attention to page breaks and page numbers.  BUT, if we
         # start with an absurd number of lines available, AND we never
@@ -68,22 +68,22 @@ class Cursor:
         # file is an infinitely long page.  See companion discussion
         # at Cursor.new_line().
         if self.emboss:
-            self.lines = self.height
+            self.lines_left = self.page_height
         else:
-            self.lines = 2*self.height
+            self.lines_left = 2*self.page_height
         # page_num is the page being produced
         # increment as a new page begins
         self.page_num = 1
 
     # this includes the line currently under formation
     def remaining_lines(self):
-        return self.lines
+        return self.lines_left
 
     def remaining_characters(self):
-        return self.chars
+        return self.chars_left
 
     def at_page_start(self):
-        return (self.chars == self.maxchars) and (self.lines == self.height)
+        return (self.chars_left == self.text_width) and (self.lines_left == self.page_height)
 
     def page_number(self):
         return self.page_num
@@ -93,10 +93,10 @@ class Cursor:
     #########
 
     def new_page(self):
-        # refresh maxchars, chars and lines
-        self.maxchars = self.width
-        self.chars = self.maxchars
-        self.lines = self.height
+        # refresh text width, chars and lines
+        self.text_width = self.page_width
+        self.chars_left = self.text_width
+        self.lines_left = self.page_height
         # increment page number
         self.page_num += 1
 
@@ -108,7 +108,7 @@ class Cursor:
         # available count.  It is like the file is an infinitely
         # long page.  See companion discussion at Cursor.__init__().
         if self.emboss:
-            self.lines -= 1
+            self.lines_left -= 1
         else:
             pass
 
@@ -117,21 +117,21 @@ class Cursor:
         # at least a space, a number indicator, the digits
         # Sloppy: assumes ASCII number translates to additional
         # character, the number sign (#)
-        if self.lines == 1:
-            self.maxchars = self.width - (Cursor.page_num_sep + 1 + len(str(self.page_num)))
+        if self.lines_left == 1:
+            self.text_width = self.page_width - (Cursor.page_num_sep + 1 + len(str(self.page_num)))
         else:
-            self.maxchars = self.width
+            self.text_width = self.page_width
 
-        self.chars = self.maxchars
+        self.chars_left = self.text_width
         # falling off page end provokes new page
-        if self.lines == 0:
+        if self.lines_left == 0:
             self.new_page()
 
     def advance(self, nchars):
         # do not do this unless there is room
         # does not provoke a new line
-        self.chars -= nchars
-        if self.chars < 0:
+        self.chars_left -= nchars
+        if self.chars_left < 0:
             print("BUG: negative chars")
 
 # The line buffer is used to break a long line of words into
@@ -291,9 +291,9 @@ class BRF:
         # For example, to construct a centered heading
         # Argument is an adjustment to current (negative, then positive?)
         self.line_buffer.size += adjustment
-        self.cursor.maxchars  += adjustment
+        self.cursor.text_width  += adjustment
         # Reset counters as well
-        self.cursor.chars = self.cursor.maxchars
+        self.cursor.chars_left = self.cursor.text_width
 
     def write(self, text):
         self.out_buffer += text
