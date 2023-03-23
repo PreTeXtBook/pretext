@@ -88,6 +88,9 @@ class Cursor:
     def page_number(self):
         return self.page_num
 
+    def embossing(self):
+        return self.emboss
+
     #########
     # Actions
     #########
@@ -126,6 +129,10 @@ class Cursor:
         # falling off page end provokes new page
         if self.lines_left == 0:
             self.new_page()
+
+    def adjust_text_width(self, adjustment):
+        self.text_width  += adjustment
+        self.chars_left = self.text_width
 
     def advance(self, nchars):
         # do not do this unless there is room
@@ -167,6 +174,9 @@ class LineBuffer:
 
     def add(self, text):
         self.contents += text
+
+    def adjust_text_width(self, adjustment):
+        self.size += adjustment
 
     def flush(self, brf):
         # Flushing the line buffer places the contents into
@@ -279,21 +289,21 @@ class BRF:
         trial_brf.process_segment(segment)
         trial_cursor = trial_brf.cursor
 
-        # print("OC", orginal_cursor.page_num)
-        # print("TC", trial_cursor.page_num)
+        # print("OC", orginal_cursor.page_number())
+        # print("TC", trial_cursor.page_number())
 
-        return not(orginal_cursor.page_num + 1 == trial_cursor.page_num)
+        return not(orginal_cursor.page_number() + 1 == trial_cursor.page_number())
 
     # Actions
 
-    def adjust_width(self, adjustment):
+    def adjust_text_width(self, adjustment):
         # Temporarily adjust the width of a page
         # For example, to construct a centered heading
         # Argument is an adjustment to current (negative, then positive?)
-        self.line_buffer.size += adjustment
-        self.cursor.text_width  += adjustment
-        # Reset counters as well
-        self.cursor.chars_left = self.cursor.text_width
+        # Do not call while mid-line, only when at the start of a line
+        assert self.at_line_start(), "BUG: adjusting text width, when not at a line start"
+        self.cursor.adjust_text_width(adjustment)
+        self.line_buffer.adjust_text_width(adjustment)
 
     def write(self, text):
         self.out_buffer += text
@@ -360,7 +370,7 @@ class BRF:
         for i in range(self.cursor.remaining_lines()):
             self.advance_one_line()
         self.to_file(brf_file)
-        if self.cursor.emboss:
+        if self.cursor.embossing():
             assert self.cursor.at_page_start(), "Page advance did not reach exactly the start of a new page"
 
     def write_word(self, word):
@@ -465,7 +475,7 @@ class BRF:
         # Will always start a new segment at a fresh line
         assert self.at_line_start(), "BUG: starting a segment, but not at the start of a line"
 
-        if s.newpage and self.cursor.emboss:
+        if s.newpage and self.cursor.embossing():
             self.advance_page()
 
         # Lines before (but not if at the start of a page)
@@ -483,7 +493,7 @@ class BRF:
         #
         # So shrink line buffer to get extra space
         if s.centered:
-            self.adjust_width(-6)
+            self.adjust_text_width(-6)
 
         sxml = s.xml
         if sxml.text:
@@ -505,7 +515,7 @@ class BRF:
             self.advance_one_line()
         # Necessary to restore for subsequent centering
         if s.centered:
-            self.adjust_width(6)
+            self.adjust_text_width(6)
         # Lines after
         for i in range(int(s.lines_after)):
             self.blank_line()
