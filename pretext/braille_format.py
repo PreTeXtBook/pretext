@@ -153,22 +153,22 @@ class LineBuffer:
 
     def __init__(self, width):
         self.contents = ''
-        self.default_size = width
-        self.size = self.default_size
+        self.page_width = width
+        self.text_width = width
 
     # Properties
 
     def max_width(self):
-        return self.default_size
+        return self.page_width
 
     def is_room(self, text):
-        return len(self.contents) + len(text) <= self.size
+        return len(self.contents) + len(text) <= self.text_width
 
     def is_empty(self):
         return self.contents == ''
 
     def remaining_chars(self):
-        return self.size - len(self.contents)
+        return self.text_width - len(self.contents)
 
     # Actions
 
@@ -176,7 +176,7 @@ class LineBuffer:
         self.contents += text
 
     def adjust_text_width(self, adjustment):
-        self.size += adjustment
+        self.text_width += adjustment
 
     def flush(self, brf):
         # Flushing the line buffer places the contents into
@@ -203,7 +203,7 @@ class LineBuffer:
 
     def reset(self, size):
         self.contents = ''
-        self.size = size
+        self.text_width = size
 
 class Segment:
 
@@ -456,7 +456,7 @@ class BRF:
             if line == "":
                 self.out_buffer += line
             else:
-                pad = " " * ((self.line_buffer.size - len(line))//2)
+                pad = " " * ((self.line_buffer.text_width - len(line))//2)
                 self.out_buffer += pad + line
             # Restore n-1 separators
             if i != (nlines - 1):
@@ -527,7 +527,7 @@ class BRF:
 
         # available width will change across lines,
         # so this assumption is mildly flawed
-        width = self.line_buffer.default_size
+        width = self.line_buffer.page_width
 
         # Unicode versions of Nemeth switch indicators.
         # We control separating spaces below as a way to
