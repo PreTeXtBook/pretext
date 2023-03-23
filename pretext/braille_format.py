@@ -96,9 +96,7 @@ class Cursor:
     #########
 
     def new_page(self):
-        # refresh text width, chars and lines
-        self.text_width = self.page_width
-        self.chars_left = self.text_width
+        # refresh lines remaining
         self.lines_left = self.page_height
         # increment page number
         self.page_num += 1
