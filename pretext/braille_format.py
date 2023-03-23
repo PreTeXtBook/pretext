@@ -66,7 +66,7 @@ class Cursor:
         # we are at the bottom of a page.  No page breaks, no adjustment of
         # the page number, no writing out page numbers.   It is like the
         # file is an infinitely long page.  See companion discussion
-        # at Cursor.new_line().
+        # at Cursor.advance_line().
         if self.emboss:
             self.lines_left = self.page_height
         else:
@@ -103,7 +103,7 @@ class Cursor:
         # increment page number
         self.page_num += 1
 
-    def new_line(self):
+    def advance_line(self):
         # decrement the lines available
         # This is where we decrement the number of lines available
         # on a page.  And it is the only place.  If not embossing,
@@ -329,7 +329,9 @@ class BRF:
         self.line_buffer.flush(self)
         self.write("\n")
         # record the advance to new line
-        self.cursor.new_line()
+        # Note that this adjusts cursor text_width similar
+        # to manipulations below for the line buffer
+        self.cursor.advance_line()
 
         # If now on last line, use a reduced buffer
         # so there will be room for a page number
