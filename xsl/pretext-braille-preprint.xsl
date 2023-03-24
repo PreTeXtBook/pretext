@@ -173,8 +173,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     @lines-after - default: 0, else positive integer                   -->
 <!--     @lines-following - default: 0, else positive integer               -->
 
-<xsl:template match="/">
+<!-- This is the main event, hidden within the formulation of a  -->
+<!-- variable holding an RTF.  This is formed by the totality of -->
+<!-- non-modal templates.  It will be converted into a node set, -->
+<!-- for a post-processing step to incorporate "runin"           -->
+<!-- title/heading elements into a subsequent segment.           -->
+<xsl:variable name="segmented-rtf">
     <xsl:apply-templates select="$root"/>
+</xsl:variable>
+
+<!-- The entry template "waits" for the "$math-meld-rtf" and    -->
+<!-- "$segmented-rtf" global variables to form, then the actual -->
+<!-- output is a run of modal "meld-runin" templates as a sort  -->
+<!-- of post-processing step.                                   -->
+<xsl:template match="/">
+    <xsl:apply-templates select="exsl:node-set($segmented-rtf)/brf" mode="meld-runin"/>
+</xsl:template>
+
+<!-- Process segments here, looking for run-in titles/headings -->
+
+<!-- Xerox machine -->
+<xsl:template match="@*|node()" mode="meld-runin">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="meld-runin"/>
+    </xsl:copy>
 </xsl:template>
 
 <!-- with /, so a plain generator can match others -->
