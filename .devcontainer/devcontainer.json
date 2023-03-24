@@ -5,19 +5,6 @@
     "ghcr.io/devcontainers/features/node:1": {},
     "ghcr.io/rocker-org/devcontainer-features/pandoc:1": {}
   },
-  // "forwardPorts": [
-  // 	27377,
-  // 	27378
-  // ],
-  // "portsAttributes": {
-  // 	"27378": {
-  // 		"label": "CodeChat",
-  // 		"onAutoForward": "openPreview",
-  // 		"requireLocalPort": true,
-  // 		"elevateIfNeeded": true,
-  // 		"protocol": "https"
-  // 	}
-  // },
   "onCreateCommand": "pip install pretext",
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "sudo bash ./.devcontainer/postCreateCommand.sh",
