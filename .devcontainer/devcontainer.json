@@ -24,11 +24,6 @@
 
   // Configure tool-specific properties.
   "customizations": {
-    "codespaces": {
-      "openFiles": [
-        "source/main.ptx"
-      ]
-    },
     "vscode": {
       "settings": {
         "editor.quickSuggestions": {
