@@ -8806,6 +8806,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="5 * $characters div 11" />
             <xsl:text>em;</xsl:text>
         </xsl:attribute>
+        <xsl:text> </xsl:text>
     </span>
     <xsl:if test="@rows or @cols">
         <xsl:apply-templates select="." mode="fillin-array"/>
