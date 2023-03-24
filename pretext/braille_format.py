@@ -37,9 +37,6 @@ import louis
 
 class Cursor:
 
-    # spaces prior to a page number, duplicated in BRF
-    page_num_sep = 3
-
     def __init__(self, width, height, page_format):
         # page shape, dimensions, at creation time
         self.page_width = width
@@ -113,24 +110,18 @@ class Cursor:
         else:
             pass
 
-        # reset maxchars, chars
-        # limit line length when we need room for a page number
-        # at least a space, a number indicator, the digits
-        # Sloppy: assumes ASCII number translates to additional
-        # character, the number sign (#)
-        if self.lines_left == 1:
-            self.text_width = self.page_width - (Cursor.page_num_sep + 1 + len(str(self.page_num)))
-        else:
-            self.text_width = self.page_width
-
+        # Restore the number of available characters
         self.chars_left = self.text_width
+
         # falling off page end provokes new page
         if self.lines_left == 0:
             self.new_page()
 
+    # Note: it is possible to adjust text width
+    # while in the middle of forming a line
     def adjust_text_width(self, adjustment):
         self.text_width  += adjustment
-        self.chars_left = self.text_width
+        self.chars_left  += adjustment
 
     def advance(self, nchars):
         # do not do this unless there is room
@@ -155,9 +146,6 @@ class LineBuffer:
         self.text_width = width
 
     # Properties
-
-    def max_width(self):
-        return self.page_width
 
     def is_room(self, text):
         return len(self.contents) + len(text) <= self.text_width
@@ -306,15 +294,23 @@ class BRF:
         self.out_buffer += text
 
     def advance_one_line(self):
+        # The last line needs a page number at its conclusion, so
+        # we need to (a) shorten the buffer going *into* forming
+        # that line, and (b) actually tack on the number. These
+        # booleans identify the line we are completing as we enter
+        # this method.
+        finish_penultimate = (self.cursor.remaining_lines() == 2)
+        finish_last = (self.cursor.remaining_lines() == 1)
+
         # We need a braille version of the page number, for actual
         # printing on the last line, or for adjusting the size of
         # the line buffer for the last line prior to its formation.
-        if (self.cursor.remaining_lines() == 1) or (self.cursor.remaining_lines() == 2):
+        if finish_penultimate or finish_last:
             num = str(self.cursor.page_number())
             braille_num = self.translate_segment('text', num)
 
-        # before leaving line, possibly add a page number
-        if self.cursor.remaining_lines() == 1:
+        # before leaving last line, add a page number, flush right
+        if finish_last:
             # a character (period?) here can aid debugging
             gap = " " * (self.line_buffer.remaining_chars() + BRF.page_num_sep)
             # this can exceed buffer, but we have no checks for that
@@ -326,19 +322,20 @@ class BRF:
         # a string, and .write() onto `out_buffer`
         self.line_buffer.flush(self)
         self.write("\n")
-        # record the advance to new line
-        # Note that this adjusts cursor text_width similar
-        # to manipulations below for the line buffer
+
+        # Record the advance to new line.
+        # Note: this changes the number of remaining lines, which
+        # explains the two booleans above recording the situation
         self.cursor.advance_line()
 
-        # If now on last line, use a reduced buffer
-        # so there will be room for a page number
-        if self.cursor.remaining_lines() == 1:
-            buffer_width = self.line_buffer.max_width() - (BRF.page_num_sep + len(braille_num))
-        else:
-            buffer_width = self.line_buffer.max_width()
-        # reset the buffer for subsequent line
-        self.line_buffer.text_width =  buffer_width
+        # If we flushed penultimate line, set up a reduced
+        # buffer for formation of the last line so there
+        # will be room for a page number
+        # Otherwise, restore the line buffer to its usual width
+        if finish_penultimate:
+            self.adjust_text_width( -(BRF.page_num_sep + len(braille_num)))
+        if finish_last:
+            self.adjust_text_width(  (BRF.page_num_sep + len(braille_num)))
 
         # this can cause the cursor to move to the start of a new
         # page if there were no more lines available on the page.
