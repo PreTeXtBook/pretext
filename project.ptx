@@ -47,19 +47,19 @@
     <!-- examples/minimal -->
     <target name="minimal-web">
       <format>html</format>
-      <source>examples/minimal/source/main.xml</source>
+      <source>examples/minimal/source/main.ptx</source>
       <publication>examples/minimal/publication/publication.ptx</publication>
       <output-dir>examples/minimal/output/web</output-dir>
     </target>
     <target name="minimal-print">
       <format>pdf</format>
-      <source>examples/minimal/source/main.xml</source>
+      <source>examples/minimal/source/main.ptx</source>
       <publication>examples/minimal/publication/publication.ptx</publication>
       <output-dir>examples/minimal/output/print</output-dir>
     </target>
     <target name="minimal-print-latex">
       <format>latex</format>
-      <source>examples/minimal/source/main.xml</source>
+      <source>examples/minimal/source/main.ptx</source>
       <publication>examples/minimal/publication/publication.ptx</publication>
       <output-dir>examples/minimal/output/print-latex</output-dir>
     </target>
