@@ -3,7 +3,7 @@
 apt update
 
 echo "Install LaTeX"
-apt install -y texlive texlive-latex-extra texlive-fonts-extra texlive-xetex texlive-science --no-install-recommends
+apt install -y texlive texlive-latex-extra texlive-fonts-extra texlive-xetex texlive-science texlive-music --no-install-recommends
 
 echo "Install sage"
 apt install -y sagemath --no-install-recommends
