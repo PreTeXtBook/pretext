@@ -249,7 +249,8 @@ class BRF:
     # to this variant when we translate inline code phrases
     trans1_bit = louis.getTypeformForEmphClass(["en-ueb-g2.ctb"], 'trans1')
 
-    def __init__(self, page_format, width, height):
+    def __init__(self, out_file, page_format, width, height):
+        self.brf_file = out_file
         self.out_buffer = ''
         self.cursor = Cursor(width, height, page_format)
         self.line_buffer = LineBuffer(width)
@@ -268,6 +269,7 @@ class BRF:
         import copy
 
         orginal_cursor = self.cursor
+        # NEXT LINE WILL FAIL, CAN'T PICKLE OPEN FILE HANDLE
         trial_brf = copy.deepcopy(self)
         # all changes (cursor movement, text-wrapping) will
         # occur in the temporary/trial/throwaway cursor
@@ -360,12 +362,9 @@ class BRF:
         # can be sure a page number gets written properly in all cases.
         # And the FF for the end of the page.
 
-        # File is global temporarily
-        global brf_file
-
         for i in range(self.cursor.remaining_lines()):
             self.advance_one_line()
-        self.to_file(brf_file)
+        self.flush()
         if self.cursor.embossing():
             assert self.cursor.at_page_start(), "Page advance did not reach exactly the start of a new page"
 
@@ -565,6 +564,7 @@ class BRF:
 
     def write_segment(self, seg):
         self.process_segment(seg)
+        self.flush()
         # if self.is_room_on_page(seg):
         #     self.process_segment(seg)
         # else:
@@ -572,8 +572,8 @@ class BRF:
 
     # File operations
 
-    def to_file(self, out_file):
-        out_file.write(self.out_buffer)
+    def flush(self):
+        self.brf_file.write(self.out_buffer)
         self.out_buffer = ''
 
     # Static methods
@@ -618,15 +618,12 @@ class BRF:
 # Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
 
-    # File is global temporarily
-    global brf_file
-
-    # Embossed, page shape
-    brf = BRF(page_format, 40,25)
-
     # We assume `out_file` has been error-checked
     # It would be better to use a context manager
     brf_file = open(out_file, "w")
+
+    # Embossed, page shape
+    brf = BRF(brf_file, page_format, 40,25)
 
     # this routine converts XML information into arguments
     # to Python routines, but not exclusively yet
@@ -649,7 +646,7 @@ def parse_segments(xml_simple, out_file, page_format):
         #     if not(brf.is_room_on_page(seg)):
         #         brf_file.write("CROSSED PAGE BOUNDARY")
 
-        brf.to_file(brf_file)
+        brf.flush()
 
     brf_file.close()
 
