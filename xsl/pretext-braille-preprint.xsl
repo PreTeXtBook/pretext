@@ -845,6 +845,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
 </xsl:template>
 
+<!-- titles get killed in -common so we don't need to see them here -->
+<xsl:template match="title|subtitle|shorttitle|plaintitle|creator">
+    <xsl:apply-imports/>
+</xsl:template>
+
 <xsl:template match="*">
     <!-- target informative messages to "blocks" being considered -->
     <xsl:if test="ancestor::p">
