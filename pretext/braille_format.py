@@ -244,6 +244,10 @@ class BRF:
     # spaces prior to a page number, duplicated in Cursor
     page_num_sep = 3
 
+    # Nemeth switch indicators, class variables for convenience
+    nemeth_open = "\u2838\u2829"
+    nemeth_close = "\u2838\u2831"
+
     # We need to connect the "trans1" emphasis scheme of the liblouis
     # "en-ueb-g1.ctb" table with a typeform bit we can use to switch
     # to this variant when we translate inline code phrases
@@ -527,9 +531,9 @@ class BRF:
         # Unicode versions of Nemeth switch indicators.
         # We control separating spaces below as a way to
         # influence line-breaking for inline math
-        # Note: maybe make these into class variables
-        nemeth_open = "\u2838\u2829"
-        nemeth_close = "\u2838\u2831"
+        # Local versions for convenience and manipulation
+        nemeth_open = BRF.nemeth_open
+        nemeth_close = BRF.nemeth_close
 
         # Join trailing punctuation to the closing indicator and
         # record influence on overall length for line-breaking.
