@@ -589,6 +589,49 @@ class BRF:
         # Or perhaps set argument to do uncontracted braille.
         return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
 
+    def write_block(self, blk):
+
+        # Lines before (but not if at the start of a page)
+        if not(self.cursor.at_page_start()):
+            for i in range(int(blk.lines_before)):
+                self.blank_line()
+
+        if blk.box == "standard":
+            top_line = "7" * self.line_buffer.text_width
+            self.write_word(top_line)
+            self.advance_one_line()
+        elif blk.box == "nemeth":
+            open_brf = louis.translateString(["en-ueb-g2.ctb"], BRF.nemeth_open, None, 0)
+            self.write_word(open_brf)
+            self.advance_one_line()
+            self.blank_line()
+
+        inner_segments = blk.xml.xpath("segment|block")
+        for s in inner_segments:
+            if s.tag == "segment":
+                seg = Segment(s)
+                self.write_segment(seg)
+            elif s.tag == "block":
+                innerblk = Block(s)
+                self.write_block(innerblk)
+
+        if blk.box == "standard":
+            bottom_line = "g" * self.line_buffer.text_width
+            self.write_word(bottom_line)
+            self.advance_one_line()
+        elif blk.box == "nemeth":
+            close_brf = louis.translateString(["en-ueb-g2.ctb"], BRF.nemeth_close, None, 0)
+            self.blank_line()
+            self.write_word(close_brf)
+            self.advance_one_line()
+
+        # Lines after
+        for i in range(int(blk.lines_after)):
+            self.blank_line()
+            self.flush()
+
+        self.flush()
+
 
     def write_segment(self, seg):
         self.process_segment(seg)
@@ -659,11 +702,15 @@ def parse_segments(xml_simple, out_file, page_format):
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml_simple, parser=huge_parser)
 
-    segments = src_tree.xpath("//segment")
+    top_elts = src_tree.xpath("/brf/segment|/brf/block")
 
-    for s in segments:
-        seg = Segment(s)
-        brf.write_segment(seg)
+    for elt in top_elts:
+        if elt.tag == "segment":
+            seg = Segment(elt)
+            brf.write_segment(seg)
+        elif elt.tag == "block":
+            blk = Block(elt)
+            brf.write_block(blk)
 
         # brf.process_segment(seg)
 
