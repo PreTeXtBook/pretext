@@ -422,6 +422,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- A special division: "paragraphs" -->
+<xsl:template match="paragraphs">
+    <!-- Should be run-in with automatic space afterward -->
+    <xsl:if test="title">
+        <segment lines-before="1">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </segment>
+    </xsl:if>
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 
 <!-- Generators -->
 
