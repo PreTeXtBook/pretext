@@ -944,6 +944,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Miscellaneous -->
+<!-- ############# -->
+
+<!-- Containers that have zero metadata (no title, etc.) -->
+<xsl:template match="statement|introduction|conclusion">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
 
 <!-- ############ -->
 <!-- EXPERIMENTAL -->
