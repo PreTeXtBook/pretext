@@ -191,6 +191,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Process segments here, looking for run-in titles/headings -->
+<xsl:template match="segment" mode="meld-runin">
+    <!-- Look for "run-in" material just prior -->
+    <xsl:variable name="adjacent-runin" select="preceding-sibling::*[1][self::runin]"/>
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="meld-runin"/>
+        <xsl:apply-templates select="$adjacent-runin/@indentation|$adjacent-runin/@lines-before" mode="meld-runin"/>
+        <xsl:apply-templates select="$adjacent-runin/node()" mode="meld-runin"/>
+        <xsl:value-of select="$adjacent-runin/@separator"/>
+        <xsl:apply-templates select="node()" mode="meld-runin"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="runin" mode="meld-runin"/>
 
 <!-- Xerox machine -->
 <xsl:template match="@*|node()" mode="meld-runin">
