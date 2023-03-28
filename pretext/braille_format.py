@@ -238,6 +238,30 @@ class Segment:
         else:
             self.lines_following = 0
 
+class Block:
+
+    def __init__(self, b):
+
+        self.xml = b
+
+        # decipher, record attributes
+        attrs = b.attrib
+
+        if "lines-before" in attrs:
+            self.lines_before = attrs["lines-before"]
+        else:
+            self.lines_before = 0
+
+        if "lines-after" in attrs:
+            self.lines_after = attrs["lines-after"]
+        else:
+            self.lines_after = 0
+
+        if "box" in attrs:
+            self.box = attrs["box"]
+        else:
+            self.box = None
+
 
 class BRF:
 
