@@ -635,7 +635,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- TEMPORARY: Multi-line case -->
-            <xsl:text>MATH</xsl:text>
+            <xsl:text>INLINE MATH (RENDERED WITH NEWLINES)</xsl:text>
             <!-- restore clause-ending punctuation -->
             <xsl:value-of select="$clause-ending-mark"/>
         </xsl:otherwise>
@@ -826,6 +826,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- segment with placeholder content at this stage -->
 <xsl:template match="cd">
     <segment>CODE DISPLAY</segment>
+</xsl:template>
+
+<!-- segment with placeholder content at this stage -->
+<xsl:template match="tabular">
+    <segment>TABULAR</segment>
+</xsl:template>
+
+<!-- segment with placeholder content at this stage -->
+<xsl:template match="pre">
+    <segment>PREFORMATTED TEXT</segment>
+</xsl:template>
+
+<!-- segment with placeholder content at this stage -->
+<xsl:template match="program">
+    <segment>PROGRAM</segment>
+</xsl:template>
+
+<!-- segment with placeholder content at this stage -->
+<xsl:template match="image">
+    <segment>IMAGE</segment>
 </xsl:template>
 
 <!-- ############ -->
