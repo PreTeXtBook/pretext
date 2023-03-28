@@ -815,6 +815,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="me|men|md|mdn">
+    <xsl:variable name="nemeth">
+        <xsl:value-of select="math-nemeth"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:variable>
+    <block box="nemeth">
+        <xsl:call-template name="segmentize-display-math">
+            <xsl:with-param name="display-math" select="$nemeth"/>
+        </xsl:call-template>
+    </block>
+</xsl:template>
+
+<xsl:template name="segmentize-display-math">
+    <xsl:param name="display-math"/>
+
+    <xsl:choose>
+        <!-- done, nothing left to work on -->
+        <xsl:when test="$display-math = ''"/>
+        <xsl:otherwise>
+            <!-- first line into a segment -->
+            <segment>
+                <xsl:call-template name="trim-nemeth-trailing-whitespace">
+                   <xsl:with-param name="text" select="substring-before($display-math, '&#xa;')"/>
+               </xsl:call-template>
+            </segment>
+            <!-- recurse on remainder -->
+            <xsl:call-template name="segmentize-display-math">
+                <xsl:with-param name="display-math" select="substring-after($display-math, '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Cross-References -->
@@ -984,11 +1017,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:for-each>
-</xsl:template>
-
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="me|men|md|mdn">
-    <segment>DISPLAY MATH</segment>
 </xsl:template>
 
 <!-- segment with placeholder content at this stage -->
