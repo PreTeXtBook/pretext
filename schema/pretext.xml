@@ -1240,6 +1240,27 @@
     </section>
 
     <section>
+        <title>Proof-like (experimental)</title>
+        <p>
+            We extend the types of elements that are types of proofs, as well as create a <c>ProofLike</c> named pattern for what can go in them.
+        </p>
+
+        <fragment xml:id="proof-like">
+            <title>Proofs, and similar</title>
+            <code>
+            ProofLike = 
+                MetaDataTitleOptional,
+                (BlockStatement | Case)+
+            Proof |=
+                element proof {ProofLike} |
+                element argument {ProofLike} |
+                element justification {ProofLike} |
+                element reasoning {ProofLike} |
+                element explanation {ProofLike}
+            </code>
+        </fragment>
+    </section>
+    <section>
         <title>Axioms and Other Mathematical Statements</title>
 
         <p>Mathematical statements that do not have proofs (in other words, no proof is known, or a proof is not appropriate).</p>
@@ -2645,7 +2666,7 @@
             <code>
             Configuration |=
                 element document-id {
-                    attribute edition {text},
+                    attribute edition {text}?,
                     text
                 }
             </code>
@@ -2750,6 +2771,7 @@
             <fragref ref="interactive" />
             <fragref ref="frontmatter-dev"/>
             <fragref ref="docinfo-dev"/>
+            <fragref ref="proof-like"/>
 
             <code>
                     }

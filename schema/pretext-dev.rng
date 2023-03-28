@@ -191,8 +191,38 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="document-id">
-      <attribute name="edition"/>
+      <optional>
+        <attribute name="edition"/>
+      </optional>
       <text/>
     </element>
+  </define>
+  <define name="ProofLike">
+    <ref name="MetaDataTitleOptional"/>
+    <oneOrMore>
+      <choice>
+        <ref name="BlockStatement"/>
+        <ref name="Case"/>
+      </choice>
+    </oneOrMore>
+  </define>
+  <define name="Proof" combine="choice">
+    <choice>
+      <element name="proof">
+        <ref name="ProofLike"/>
+      </element>
+      <element name="argument">
+        <ref name="ProofLike"/>
+      </element>
+      <element name="justification">
+        <ref name="ProofLike"/>
+      </element>
+      <element name="reasoning">
+        <ref name="ProofLike"/>
+      </element>
+      <element name="explanation">
+        <ref name="ProofLike"/>
+      </element>
+    </choice>
   </define>
 </grammar>

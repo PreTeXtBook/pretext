@@ -83,9 +83,19 @@
             
             Configuration |=
                 element document-id {
-                    attribute edition {text},
+                    attribute edition {text}?,
                     text
                 }
+            
+            ProofLike = 
+                MetaDataTitleOptional,
+                (BlockStatement | Case)+
+            Proof |=
+                element proof {ProofLike} |
+                element argument {ProofLike} |
+                element justification {ProofLike} |
+                element reasoning {ProofLike} |
+                element explanation {ProofLike}
             
                     }
                 
