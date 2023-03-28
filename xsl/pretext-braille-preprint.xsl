@@ -434,6 +434,133 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ###### -->
+<!-- Blocks -->
+<!-- ###### -->
+
+<!-- "Blocks" are major components of PreTeXt output.  Typically  -->
+<!-- numbered, titled, set-off, and sometimes with subsidiary     -->
+<!-- pieces hanging off them.  For braille, they might not        -->
+<!-- cross page boundaries, and may have box lines, etc.          -->
+<!--                                                              -->
+<!-- We handle the title as a heading of sorts, which might not   -->
+<!-- cross a page boundary, and which might be "stuck" on a       -->
+<!-- certain number of following lines.  See the discussion below -->
+<!-- about titles.                                                -->
+
+<!-- "Regular" blocks, including inline "exercise" (aka "Checkpoint") -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]">
+    <block box="standard" lines-before="1" lines-after="1">
+        <xsl:apply-templates select="." mode="block-title"/>
+        <xsl:apply-templates select="*[not(self::title)]"/>
+    </block>
+</xsl:template>
+
+<!-- "Other" exercises (in "exercises" divisions, in "reading questions", -->
+<!-- in worksheets) are not as prominent and have run-in titles           -->
+<xsl:template match="exercise[not(&INLINE-EXERCISE-FILTER;)]">
+    <xsl:apply-templates select="." mode="block-title"/>
+    <xsl:apply-templates select="*[not(self::title)]"/>
+</xsl:template>
+
+<!-- The appendages are not yet blocks, they live inside blocks           -->
+<!-- NOTE: if these become contained blocks, that is a structural change  -->
+<!-- that will require changes in the Python lxml which assumes otherwise -->
+<xsl:template match="&PROOF-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;">
+    <xsl:apply-templates select="." mode="block-title"/>
+    <xsl:apply-templates select="*[not(self::title)]"/>
+</xsl:template>
+
+<!-- Titles of blocks can be an entire "segment" if they finish with a  -->
+<!-- newline.  Other titles are "runin" and are consolidated in a final -->
+<!-- post-processing step.                                              -->
+
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]" mode="block-title">
+    <segment lines-before="0">
+        <!--  -->
+        <xsl:apply-templates select="." mode="type-name"/>
+        <!--  -->
+        <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:variable>
+        <xsl:if test="not($the-number = '')">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+        </xsl:if>
+        <!--  -->
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+        <!--  -->
+    </segment>
+</xsl:template>
+
+<!-- Should be run-in with automatic space afterward -->
+<!-- There may be multiple proofs, but we do not number them at birth, -->
+<!-- the number only gets used in a cross-reference.  Maybe standalone -->
+<!-- is different??                                                    -->
+<!-- TENTATIVE: DISCUSSION-LIKE may be identical                       -->
+<xsl:template match="&PROOF-LIKE;|&DISCUSSION-LIKE;" mode="block-title">
+        <runin indentation="0" lines-before="1" separator="&#x20;&#x20;">
+        <!--  -->
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:text>.</xsl:text>
+        <!--  -->
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+        <!--  -->
+    </runin>
+</xsl:template>
+
+<!-- Should be run-in with automatic space afterward -->
+<xsl:template match="exercise[not(&INLINE-EXERCISE-FILTER;)]" mode="block-title">
+    <runin indentation="0" lines-before="1" separator="&#x20;&#x20;">
+        <xsl:apply-templates select="." mode="serial-number"/>
+        <xsl:text>.</xsl:text>
+        <!--  -->
+        <xsl:if test="title">
+            <xsl:text> (</xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+        <!--  -->
+    </runin>
+</xsl:template>
+
+<!-- Should be run-in with automatic space afterward -->
+<xsl:template match="&SOLUTION-LIKE;" mode="block-title">
+    <runin indentation="0" lines-before="1" separator="&#x20;&#x20;">
+        <!--  -->
+        <xsl:apply-templates select="." mode="type-name"/>
+        <!--  -->
+        <xsl:variable name="the-number">
+             <xsl:apply-templates select="." mode="non-singleton-number"/>
+        </xsl:variable>
+        <xsl:if test="not($the-number = '')">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+        </xsl:if>
+        <xsl:text>.</xsl:text>
+        <!--  -->
+        <xsl:if test="title">
+            <xsl:text> (</xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+        <!--  -->
+    </runin>
+</xsl:template>
+
+<!-- TODO: GOAL-LIKE -->
+
+<!-- ########### -->
+<!-- FIGURE-LIKE -->
+<!-- ########### -->
+
+
 <!-- Generators -->
 
 <xsl:template match="pretext">
