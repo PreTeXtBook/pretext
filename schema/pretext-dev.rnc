@@ -97,5 +97,12 @@
                 element reasoning {ProofLike} |
                 element explanation {ProofLike}
             
+            Figure |= 
+                element figure {
+                    MetaDataCaption,
+                    Tabular
+                }
+
+            
                     }
                 

@@ -1507,6 +1507,24 @@
     </section>
 
     <section>
+        <title>Figure (experimental)</title>
+        <p>
+            We add tabular as a valid child of a figure.
+        </p>
+        <fragment xml:id="figure-dev">
+            <title>Figure (experimental)</title>
+            <code>
+            Figure |= 
+                element figure {
+                    MetaDataCaption,
+                    Tabular
+                }
+
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>Side-By-Side Layout</title>
 
         <p>Page width or screen width, both are at a premium.  Height goes on forever (barring physical page breaks) and we have many devices for demarcating that flow.  But sometimes you need to organize items horizontally, <ie/> side-by-side.  We place the components of a <c>sidebyside</c> into generic regions of specified width called <term>panels</term>.</p>
@@ -2772,6 +2790,7 @@
             <fragref ref="frontmatter-dev"/>
             <fragref ref="docinfo-dev"/>
             <fragref ref="proof-like"/>
+            <fragref ref="figure-dev"/>
 
             <code>
                     }

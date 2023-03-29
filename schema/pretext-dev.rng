@@ -225,4 +225,10 @@
       </element>
     </choice>
   </define>
+  <define name="Figure" combine="choice">
+    <element name="figure">
+      <ref name="MetaDataCaption"/>
+      <ref name="Tabular"/>
+    </element>
+  </define>
 </grammar>
