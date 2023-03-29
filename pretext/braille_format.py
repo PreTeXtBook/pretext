@@ -219,27 +219,27 @@ class Segment:
             self.breakable = True
 
         if "indentation" in attrs:
-            self.indentation = attrs["indentation"]
+            self.indentation = int(attrs["indentation"])
         else:
             self.indentation = 0
 
         if "runover" in attrs:
-            self.runover = attrs["runover"]
+            self.runover = int(attrs["runover"])
         else:
             self.runover = 0
 
         if "lines-before" in attrs:
-            self.lines_before = attrs["lines-before"]
+            self.lines_before = int(attrs["lines-before"])
         else:
             self.lines_before = 0
 
         if "lines-after" in attrs:
-            self.lines_after = attrs["lines-after"]
+            self.lines_after = int(attrs["lines-after"])
         else:
             self.lines_after = 0
 
         if "lines-following" in attrs:
-            self.lines_following = attrs["lines-following"]
+            self.lines_following = int(attrs["lines-following"])
         else:
             self.lines_following = 0
 
@@ -253,12 +253,12 @@ class Block:
         attrs = b.attrib
 
         if "lines-before" in attrs:
-            self.lines_before = attrs["lines-before"]
+            self.lines_before = int(attrs["lines-before"])
         else:
             self.lines_before = 0
 
         if "lines-after" in attrs:
-            self.lines_after = attrs["lines-after"]
+            self.lines_after = int(attrs["lines-after"])
         else:
             self.lines_after = 0
 
@@ -516,11 +516,11 @@ class BRF:
 
         # Lines before (but not if at the start of a page)
         if not(self.cursor.at_page_start()):
-            for i in range(int(s.lines_before)):
+            for i in range(s.lines_before):
                 self.blank_line()
 
         # Lead with any indentation on first line
-        indentation = " " * int(s.indentation)
+        indentation = " " * s.indentation
         self.write_fragment("text", indentation, None)
 
         # Centered
@@ -553,7 +553,7 @@ class BRF:
         if s.centered:
             self.adjust_text_width(6)
         # Lines after
-        for i in range(int(s.lines_after)):
+        for i in range(s.lines_after):
             self.blank_line()
         # post-process before any use
         if s.centered:
@@ -611,7 +611,7 @@ class BRF:
 
         # Lines before (but not if at the start of a page)
         if not(self.cursor.at_page_start()):
-            for i in range(int(blk.lines_before)):
+            for i in range(blk.lines_before):
                 self.blank_line()
 
         if blk.box == "standard":
@@ -649,7 +649,7 @@ class BRF:
             self.advance_one_line()
 
         # Lines after
-        for i in range(int(blk.lines_after)):
+        for i in range(blk.lines_after):
             self.blank_line()
             self.flush()
 
