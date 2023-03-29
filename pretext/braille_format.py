@@ -203,6 +203,11 @@ class Segment:
         else:
             self.newpage = False
 
+        if ("ownpage" in attrs) and (attrs["ownpage"] == "yes"):
+            self.ownpage = True
+        else:
+            self.ownpage = False
+
         if ("centered" in attrs) and (attrs["centered"] == "yes"):
             self.centered = True
         else:
@@ -506,6 +511,9 @@ class BRF:
         if s.newpage and self.cursor.embossing():
             self.advance_page()
 
+        if s.ownpage and self.cursor.embossing():
+            self.advance_page()
+
         # Lines before (but not if at the start of a page)
         if not(self.cursor.at_page_start()):
             for i in range(int(s.lines_before)):
@@ -550,6 +558,11 @@ class BRF:
         # post-process before any use
         if s.centered:
             self.center()
+
+        # Dedicated page, so off we go (reqires something was written on page)
+        if s.ownpage and self.cursor.embossing():
+            self.advance_page()
+
 
     def massage_math(self, aline, punctuation):
 
