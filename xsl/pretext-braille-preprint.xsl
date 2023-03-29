@@ -214,9 +214,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need an overall container   -->
     <!-- Maybe copy a language code? -->
     <brf>
-        <segment>Temporary Transcriber Notes: </segment>
+        <segment lines-after="1">Temporary Transcriber Notes:</segment>
         <!-- See "c" template for explanation -->
-        <segment>1. Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</segment>
+        <xsl:apply-templates select="." mode="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>1. Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
         <xsl:apply-templates select="*"/>
     </brf>
 </xsl:template>
@@ -1081,11 +1085,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*">
     <!-- target informative messages to "blocks" being considered -->
-    <xsl:if test="ancestor::p">
+    <!-- <xsl:if test="ancestor::p"> -->
         <xsl:message>Pass: <xsl:value-of select="local-name()"/></xsl:message>
-    </xsl:if>
+    <!-- </xsl:if> -->
     <!-- recurse into child elements to find more "missing" elements -->
     <xsl:apply-templates select="*"/>
 </xsl:template>
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Transcriber Notes -->
+
+<!-- Here code is the transcriber, so we can explain places where we   -->
+<!-- have done something different than it might be realized in print. -->
+<!--                                                                   -->
+<!-- [BANA 2016] 3.2.1                                                 -->
+<!-- Two three-cell sequences indicate the begin and end of a          -->
+<!-- transcriber note.  Additionally, the indentation is 7-5 margins.  -->
+<!--                                                                   -->
+<!-- The content provided in the "message" parameter by a calling      -->
+<!-- instance will be placed into a segment, so this is not an         -->
+<!-- "embedded" note (which is for seven words or less).  Content can  -->
+<!-- contain the *internal* markup used here, such as "italic" or      -->
+<!-- "bold", and that will be copied into the note for processing when -->
+<!-- converted to braille                                              -->
+<!--                                                                   -->
+<!-- Template could be context-free for literal messages, but the      -->
+<!-- $message will sometimes come from the context of an element       -->
+<!-- (e.g. the "description" of an "image")                            -->
+<xsl:template match="*" mode="transcriber-note">
+    <xsl:param name="message"/>
+
+    <segment indentation="7" runover="5">
+        <!-- dot 4, dot 46, dot 126, spacee -->
+        <xsl:text>&#x2808;&#x2828;&#x2823;&#x2800;</xsl:text>
+        <!-- *Copy* literal markup, or result of applying templates -->
+        <xsl:copy-of select="$message"/>
+        <!-- space, dot 4, dot 46, dot 345 -->
+        <xsl:text>&#x2800;&#x2808;&#x2828;&#x281C;</xsl:text>
+    </segment>
+</xsl:template>
+
 
 </xsl:stylesheet>
