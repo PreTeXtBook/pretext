@@ -1382,6 +1382,32 @@ a.mjx-svg-href  {
     margin-right: 0.1em;
     margin-bottom: -0.25em;
 }
+.ptx-content .fillin.underline {
+    display: inline-block;
+    border-bottom-style: solid;
+    border-width: 1px;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+}
+.ptx-content .fillin.box {
+    display: inline-block;
+    border: none;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+    outline: 1px solid black;
+    height: 1.3em;
+}
+.ptx-content .fillin.shade {
+    display: inline-block;
+    border: none;
+    margin-right: 0.1em;
+    margin-left: 0.1em;
+    margin-bottom: -0.25em;
+    background-color: #eee;
+    height: 1.3em;
+}
+
 
 /*
  *  .hiddenproof
