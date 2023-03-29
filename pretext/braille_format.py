@@ -196,6 +196,9 @@ class Segment:
 
         self.xml = s
 
+        # For switching from indentation to runover
+        self.first_line = True
+
         # decipher, record attributes
         attrs = s.attrib
         if ("newpage" in attrs) and (attrs["newpage"] == "yes"):
@@ -413,7 +416,7 @@ class BRF:
         self.cursor.advance(len(word))
         self.line_buffer.add(word)
 
-    def write_fragment(self, typeface, aline, math_punctuation):
+    def write_fragment(self, typeface, aline, math_punctuation, seg):
 
         # Nemeth math needs special care, and is already braille
         # Otherwise, have liblouis translate with correct typeface
@@ -443,6 +446,11 @@ class BRF:
             # be left? A negative number is indicative of no room
             # there *is* room for previous split and next word
             next_text = prior_space + word
+
+            if self.at_line_start():
+                if seg.first_line:
+                    next_text = (" " * seg.indentation) + next_text
+                    seg.first_line = False
 
             if self.is_room_on_line(next_text):
                 # TODO: sanitize non-breaking space now, as it has
@@ -519,10 +527,6 @@ class BRF:
             for i in range(s.lines_before):
                 self.blank_line()
 
-        # Lead with any indentation on first line
-        indentation = " " * s.indentation
-        self.write_fragment("text", indentation, None)
-
         # Centered
         # [BANA 2016],  4.4.2
         # At least three blank cells must precede and follow a centered heading.
@@ -533,7 +537,7 @@ class BRF:
 
         sxml = s.xml
         if sxml.text:
-            self.write_fragment("text", sxml.text, None)
+            self.write_fragment("text", sxml.text, None, s)
         children = list(sxml)
         for c in children:
             if c.text:
@@ -541,9 +545,9 @@ class BRF:
                     math_punctuation = c.attrib['punctuation']
                 else:
                     math_punctuation = None
-                self.write_fragment(c.tag, c.text, math_punctuation)
+                self.write_fragment(c.tag, c.text, math_punctuation, s)
             if c.tail:
-                self.write_fragment("text", c.tail, None)
+                self.write_fragment("text", c.tail, None, s)
         # finished with a segment
         # flush buffer, move to new line, maybe a new page
         # BUT not if we landed in this state anyway
