@@ -51,8 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="exercise-style" select="'static'"/>
 
 <!-- Not so much "include" as "manipulate"            -->
-<!-- Switch to "all" when display math is accomodated -->
-<xsl:param name="math.punctuation.include" select="'inline'"/>
+<xsl:param name="math.punctuation.include" select="'all'"/>
 
 <!-- ############################## -->
 <!-- Incorporate (Meld) Mathematics -->
@@ -819,6 +818,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;</xsl:text>
     </xsl:variable>
     <block box="nemeth">
+        <xsl:attribute name="punctuation">
+            <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
+        </xsl:attribute>
         <xsl:call-template name="segmentize-display-math">
             <xsl:with-param name="display-math" select="$nemeth"/>
         </xsl:call-template>

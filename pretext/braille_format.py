@@ -262,6 +262,11 @@ class Block:
         else:
             self.box = None
 
+        if "punctuation" in attrs:
+            self.punctuation = attrs["punctuation"]
+        else:
+            self.punctuation = None
+
 
 class BRF:
 
@@ -620,8 +625,13 @@ class BRF:
             self.write_word(bottom_line)
             self.advance_one_line()
         elif blk.box == "nemeth":
-            close_brf = louis.translateString(["en-ueb-g2.ctb"], BRF.nemeth_close, None, 0)
             self.blank_line()
+            # add punctuation that was mined from trailing text
+            # node.  Note: only for Nemeth box/display math
+            close_brf = BRF.nemeth_close
+            if blk.punctuation:
+                close_brf += blk.punctuation
+            close_brf = louis.translateString(["en-ueb-g2.ctb"], close_brf, None, 0)
             self.write_word(close_brf)
             self.advance_one_line()
 
