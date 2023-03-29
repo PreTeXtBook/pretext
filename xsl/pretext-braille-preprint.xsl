@@ -221,6 +221,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>1. Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</xsl:text>
             </xsl:with-param>
         </xsl:apply-templates>
+        <!--  -->
+        <xsl:apply-templates select="." mode="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>2. Images are replaced by authors' descriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <!-- process segments and blocks of "brf" -->
         <xsl:apply-templates select="*"/>
     </brf>
 </xsl:template>
@@ -596,6 +603,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- FIGURE-LIKE -->
 <!-- ########### -->
 
+<!-- Figures are only implemented for the case where their contents are   -->
+<!-- images (thus requiring a tactile graphic page to follow the figure). -->
+<xsl:template match="figure[image]">
+    <block box="standard">
+        <xsl:apply-templates select="image" mode="braille-representation"/>
+        <segment>
+            <xsl:apply-templates select="." mode="block-title"/>
+        </segment>
+    </block>
+    <!-- Form a page to be replaced by tactile version -->
+    <segment ownpage="yes">
+        <xsl:apply-templates select="." mode="block-title"/>
+    </segment>
+</xsl:template>
+
+<!-- Caption, with label, number, etc.  "caption" element   -->
+<!-- is metadata, killed in -common, obtained as needed via -->
+<!-- modal template (much like a title).                    -->
+<xsl:template match="figure" mode="block-title">
+    <xsl:apply-templates select="." mode="type-name"/>
+    <!--  -->
+    <xsl:variable name="the-number">
+         <xsl:apply-templates select="." mode="number"/>
+    </xsl:variable>
+    <xsl:if test="not($the-number = '')">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$the-number"/>
+    </xsl:if>
+    <xsl:text>. </xsl:text>
+    <xsl:apply-templates select="." mode="caption-full"/>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Images -->
+<!-- ###### -->
+
+<!-- A bare image becomes a transcriber note with a small amount -->
+<!-- of identification, and then generates a replacement page.   -->
+<xsl:template match="image">
+    <!-- A "segment" with the ID of the image to identify it, -->
+    <!-- then the author's "description" to describe it       -->
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:apply-templates select="." mode="block-title"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="description"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Form a page to be replaced by tactile version -->
+    <segment ownpage="yes">
+        <xsl:apply-templates select="." mode="block-title"/>
+    </segment>
+</xsl:template>
+
+<!-- A transcriber note replacing an image when included -->
+<!-- in some other (identifying) structure.              -->
+<xsl:template match="image" mode="braille-representation">
+    <!-- A "segment" with the author's "description" -->
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:apply-templates select="description"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Not really a title, but a repeated identification of an image  -->
+<!-- to coordinate text and manually inserted tactile versions.     -->
+<xsl:template match="image" mode="block-title">
+    <xsl:text>Image: </xsl:text>
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>.</xsl:text>
+</xsl:template>
 
 <!-- Generators -->
 
@@ -957,6 +1036,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<xsl:template match="description">
+    <xsl:apply-templates select="node()"/>
+</xsl:template>
+
 <!-- ############ -->
 <!-- EXPERIMENTAL -->
 <!-- ############ -->
@@ -1054,11 +1137,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- segment with placeholder content at this stage -->
 <xsl:template match="program">
     <segment>PROGRAM</segment>
-</xsl:template>
-
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="image">
-    <segment>IMAGE</segment>
 </xsl:template>
 
 <!-- ############ -->
