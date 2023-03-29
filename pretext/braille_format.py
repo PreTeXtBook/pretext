@@ -447,10 +447,16 @@ class BRF:
             # there *is* room for previous split and next word
             next_text = prior_space + word
 
+            # `aline` is non-empty, check if at line start
+            # first line:  indent and flip switch permanently to False
+            # later lines: use runover instead
             if self.at_line_start():
                 if seg.first_line:
-                    next_text = (" " * seg.indentation) + next_text
+                    pad = seg.indentation
                     seg.first_line = False
+                else:
+                    pad = seg.runover
+                next_text = (" " * pad) + next_text
 
             if self.is_room_on_line(next_text):
                 # TODO: sanitize non-breaking space now, as it has
