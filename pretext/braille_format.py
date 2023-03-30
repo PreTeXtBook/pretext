@@ -290,9 +290,9 @@ class BRF:
     # to this variant when we translate inline code phrases
     trans1_bit = louis.getTypeformForEmphClass(["en-ueb-g2.ctb"], 'trans1')
 
-    def __init__(self, out_file, page_format, width, height):
-        self.brf_file = out_file
+    def __init__(self, page_format, width, height):
         self.out_buffer = ''
+        self.accumulator = []
         self.cursor = Cursor(width, height, page_format)
         self.line_buffer = LineBuffer(width)
 
@@ -674,11 +674,17 @@ class BRF:
         # else:
         #     self.process_segment(seg)
 
-    # File operations
-
     def flush(self):
-        self.brf_file.write(self.out_buffer)
+        # The `accumulator` *is* the final document, as a list of
+        # strings, so here we move the (completed) string for the
+        # segment into the list that will be concatenated.  And
+        # prepare the `out_buffer` for the next segment.
+        self.accumulator.append(self.out_buffer)
         self.out_buffer = ''
+
+    # Concatenate the strings of the `accumulator`
+    def get_brf(self):
+        return ''.join(self.accumulator)
 
     # Static methods
 
@@ -722,12 +728,8 @@ class BRF:
 # Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
 
-    # We assume `out_file` has been error-checked
-    # It would be better to use a context manager
-    brf_file = open(out_file, "w")
-
     # Embossed, page shape
-    brf = BRF(brf_file, page_format, 40,25)
+    brf = BRF(page_format, 40,25)
 
     # this routine converts XML information into arguments
     # to Python routines, but not exclusively yet
@@ -756,5 +758,8 @@ def parse_segments(xml_simple, out_file, page_format):
 
         brf.flush()
 
+    # We assume `out_file` has been error-checked
+    # It would be better to use a context manager
+    brf_file = open(out_file, "w")
+    brf_file.write(brf.get_brf())
     brf_file.close()
-
