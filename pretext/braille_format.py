@@ -310,7 +310,6 @@ class BRF:
         import copy
 
         orginal_cursor = self.cursor
-        # NEXT LINE WILL FAIL, CAN'T PICKLE OPEN FILE HANDLE
         trial_brf = copy.deepcopy(self)
         # all changes (cursor movement, text-wrapping) will
         # occur in the temporary/trial/throwaway cursor
