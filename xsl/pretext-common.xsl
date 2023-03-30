@@ -3662,6 +3662,18 @@ Book (with parts), "section" at level 3
 <!-- Identifiers -->
 <!-- ########### -->
 
+<!-- Identifiers are in flux, as of 2023-03-30.  The "internal-id" is  -->
+<!-- an attribute built during the descent of the tree during the      -->
+<!-- pre-processor/assembly phase.  As such, it is fast and ugly.      -->
+<!-- Do not let a reader catch sight of it in output ever, beacuase it -->
+<!-- is ugly, and because it is not really permanant.  That is what    -->
+<!-- "visible-id" is for.  But constructing "visible-id" is very slow  -->
+<!-- (we hope to speed htat up as well).  So we are transitioning to   -->
+<!-- the "internal-id" wherever possible, but with careful testing.    -->
+<xsl:template match="*" mode="internal-id">
+    <xsl:value-of select="@internal-id"/>
+</xsl:template>
+
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
 <!-- Since items like filenames and URLs are sometimes shared across     -->
