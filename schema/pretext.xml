@@ -2155,6 +2155,116 @@
     </section>
 
     <section>
+        <title>Exercises (experimental)</title>
+        <p>
+            We can have exercises that are interactive, such as true/false, multiple choices, Parson's problems, etc.
+        </p>
+
+        <fragment xml:id="exercise-dev">
+            <title>Exercises (experimental)</title>
+            <code>
+            #True/False
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    element statement {
+                        attribute correct {"yes"|"no"},
+                        Paragraph
+                    }, 
+                    Feedback?, Hint*, Answer*, Solution*
+                }
+            #Multiple Choice
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    StatementExercise,
+                    element choices {
+                        attribute randomize {"yes"|"no"}?,
+                        Choice+
+                    },
+                    Hint*, Answer*, Solution*
+                }
+            Choice = 
+                element choice {
+                    attribute correct {"yes"|"no"}?,
+                    BlockText,
+                    Feedback?
+                }
+            # Parsons
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    StatementExercise,
+                    element blocks {
+                        attribute layout {"horizontal"}?,
+                        attribute randomize {"yes"|"no"}?,
+                        Block+
+                    },
+                    Hint*, Answer*, Solution*
+                }
+            Block = 
+                element block {
+                    attribute order {xsd:integer}?,
+                    ((
+                        attribute correct {"yes"|"no"}?,
+                        mixed {BlockText?}
+                    ) | 
+                    (
+                        element choice {
+                            attribute correct {"yes"|"no"}?,
+                            mixed {BlockText?}
+                        }+ 
+                    ))
+                }
+            # Matching
+            Exercise |= 
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    StatementExercise,
+                    Feedback?,
+                    element matches {
+                        Match+
+                    },
+                    Hint*, Answer*, Solution*
+                }
+            Match =
+                element match {
+                    attribute order {xsd:integer}?,
+                    element premise {
+                        mixed {BlockText?}
+                    },
+                    element response {
+                        mixed {BlockText?}
+                    }
+                }
+            # Free response
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    (
+                    (ExerciseBody, Response?) |
+                    (StatementExercise, Response?, Hint*, Answer*, Solution*) |
+                    (IntroductionStatement?, Task+, ConclusionStatement?) 
+                    )
+                }
+            Response =
+                element response {empty}
+            # General feedback element    
+            Feedback = 
+                element feedback {
+                    MetaDataTitleOptional,
+                    BlockSolution+
+                }
+            </code>
+        </fragment> 
+    </section>
+
+    <section>
         <title>Bibliography</title>
 
         <p>This is all stop-gap and will change radically.  But it seems to work for now.  So these rules should not be taken as definitive, at all.</p>
@@ -3086,6 +3196,7 @@
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
             <fragref ref="label"/>
+            <fragref ref="exercise-dev"/>
             <code>
                 }
             </code>

@@ -340,5 +340,103 @@
                 attribute xml:id {text}?,
                 attribute label {text}?   
             
+            #True/False
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    element statement {
+                        attribute correct {"yes"|"no"},
+                        Paragraph
+                    }, 
+                    Feedback?, Hint*, Answer*, Solution*
+                }
+            #Multiple Choice
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    StatementExercise,
+                    element choices {
+                        attribute randomize {"yes"|"no"}?,
+                        Choice+
+                    },
+                    Hint*, Answer*, Solution*
+                }
+            Choice = 
+                element choice {
+                    attribute correct {"yes"|"no"}?,
+                    BlockText,
+                    Feedback?
+                }
+            # Parsons
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    StatementExercise,
+                    element blocks {
+                        attribute layout {"horizontal"}?,
+                        attribute randomize {"yes"|"no"}?,
+                        Block+
+                    },
+                    Hint*, Answer*, Solution*
+                }
+            Block = 
+                element block {
+                    attribute order {xsd:integer}?,
+                    ((
+                        attribute correct {"yes"|"no"}?,
+                        mixed {BlockText?}
+                    ) | 
+                    (
+                        element choice {
+                            attribute correct {"yes"|"no"}?,
+                            mixed {BlockText?}
+                        }+ 
+                    ))
+                }
+            # Matching
+            Exercise |= 
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    StatementExercise,
+                    Feedback?,
+                    element matches {
+                        Match+
+                    },
+                    Hint*, Answer*, Solution*
+                }
+            Match =
+                element match {
+                    attribute order {xsd:integer}?,
+                    element premise {
+                        mixed {BlockText?}
+                    },
+                    element response {
+                        mixed {BlockText?}
+                    }
+                }
+            # Free response
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    (
+                    (ExerciseBody, Response?) |
+                    (StatementExercise, Response?, Hint*, Answer*, Solution*) |
+                    (IntroductionStatement?, Task+, ConclusionStatement?) 
+                    )
+                }
+            Response =
+                element response {empty}
+            # General feedback element    
+            Feedback = 
+                element feedback {
+                    MetaDataTitleOptional,
+                    BlockSolution+
+                }
+            
                 }
             

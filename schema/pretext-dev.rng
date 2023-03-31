@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <include href="pretext.rng"/>
   <define name="Interactive">
     <element name="interactive">
@@ -969,5 +969,270 @@
     <optional>
       <attribute name="label"/>
     </optional>
+  </define>
+  <!-- True/False -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <element name="statement">
+        <attribute name="correct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+        <ref name="Paragraph"/>
+      </element>
+      <optional>
+        <ref name="Feedback"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- Multiple Choice -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <ref name="StatementExercise"/>
+      <element name="choices">
+        <optional>
+          <attribute name="randomize">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <oneOrMore>
+          <ref name="Choice"/>
+        </oneOrMore>
+      </element>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Choice">
+    <element name="choice">
+      <optional>
+        <attribute name="correct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <ref name="BlockText"/>
+      <optional>
+        <ref name="Feedback"/>
+      </optional>
+    </element>
+  </define>
+  <!-- Parsons -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <ref name="StatementExercise"/>
+      <element name="blocks">
+        <optional>
+          <attribute name="layout">
+            <value>horizontal</value>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="randomize">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <oneOrMore>
+          <ref name="Block"/>
+        </oneOrMore>
+      </element>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Block">
+    <element name="block">
+      <optional>
+        <attribute name="order">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <choice>
+        <group>
+          <optional>
+            <attribute name="correct">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <mixed>
+            <optional>
+              <ref name="BlockText"/>
+            </optional>
+          </mixed>
+        </group>
+        <oneOrMore>
+          <element name="choice">
+            <optional>
+              <attribute name="correct">
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+            </optional>
+            <mixed>
+              <optional>
+                <ref name="BlockText"/>
+              </optional>
+            </mixed>
+          </element>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <!-- Matching -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <ref name="StatementExercise"/>
+      <optional>
+        <ref name="Feedback"/>
+      </optional>
+      <element name="matches">
+        <oneOrMore>
+          <ref name="Match"/>
+        </oneOrMore>
+      </element>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Match">
+    <element name="match">
+      <optional>
+        <attribute name="order">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <element name="premise">
+        <mixed>
+          <optional>
+            <ref name="BlockText"/>
+          </optional>
+        </mixed>
+      </element>
+      <element name="response">
+        <mixed>
+          <optional>
+            <ref name="BlockText"/>
+          </optional>
+        </mixed>
+      </element>
+    </element>
+  </define>
+  <!-- Free response -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <choice>
+        <group>
+          <ref name="ExerciseBody"/>
+          <optional>
+            <ref name="Response"/>
+          </optional>
+        </group>
+        <group>
+          <ref name="StatementExercise"/>
+          <optional>
+            <ref name="Response"/>
+          </optional>
+          <zeroOrMore>
+            <ref name="Hint"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Answer"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Solution"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionStatement"/>
+          </optional>
+          <oneOrMore>
+            <ref name="Task"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionStatement"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Response">
+    <element name="response">
+      <empty/>
+    </element>
+  </define>
+  <!-- General feedback element    -->
+  <define name="Feedback">
+    <element name="feedback">
+      <ref name="MetaDataTitleOptional"/>
+      <oneOrMore>
+        <ref name="BlockSolution"/>
+      </oneOrMore>
+    </element>
   </define>
 </grammar>
