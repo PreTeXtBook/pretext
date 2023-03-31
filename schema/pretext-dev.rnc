@@ -340,40 +340,35 @@
                 attribute xml:id {text}?,
                 attribute label {text}?   
             
-            #True/False
-            Exercise |=
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    element statement {
-                        attribute correct {"yes"|"no"},
-                        Paragraph
-                    }, 
-                    Feedback?, Hint*, Answer*, Solution*
-                }
-            #Multiple Choice
-            Exercise |=
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    StatementExercise,
-                    element choices {
-                        attribute randomize {"yes"|"no"}?,
-                        Choice+
-                    },
-                    Hint*, Answer*, Solution*
-                }
+            TrueFalse =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                element statement {
+                    attribute correct {"yes"|"no"},
+                    Paragraph
+                }, 
+                Feedback?, Hint*, Answer*, Solution*
+            MultipleChoice =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                element choices {
+                    attribute randomize {"yes"|"no"}?,
+                    Choice+
+                },
+                Hint*, Answer*, Solution*
             Choice = 
                 element choice {
                     attribute correct {"yes"|"no"}?,
-                    BlockText,
-                    Feedback?
+                    ((mixed {BlockText?})
+                    | (StatementExercise, Feedback?))
                 }
-            # Parsons
-            Exercise |=
-                element exercise {
+            Parsons =
                     MetaDataTitleOptional,
                     attribute number {text}?,
+                    attribute language {text}?,
+                    attribute adaptive {"yes"|"no"}?,
+                    attribute indentation {text}?,
                     StatementExercise,
                     element blocks {
                         attribute layout {"horizontal"}?,
@@ -381,7 +376,6 @@
                         Block+
                     },
                     Hint*, Answer*, Solution*
-                }
             Block = 
                 element block {
                     attribute order {xsd:integer}?,
@@ -396,18 +390,15 @@
                         }+ 
                     ))
                 }
-            # Matching
-            Exercise |= 
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    StatementExercise,
-                    Feedback?,
-                    element matches {
-                        Match+
-                    },
-                    Hint*, Answer*, Solution*
-                }
+            Matching = 
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Feedback?,
+                element matches {
+                    Match+
+                },
+                Hint*, Answer*, Solution*
             Match =
                 element match {
                     attribute order {xsd:integer}?,
@@ -418,17 +409,14 @@
                         mixed {BlockText?}
                     }
                 }
-            # Free response
-            Exercise |=
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    (
-                    (ExerciseBody, Response?) |
-                    (StatementExercise, Response?, Hint*, Answer*, Solution*) |
-                    (IntroductionStatement?, Task+, ConclusionStatement?) 
-                    )
-                }
+            FreeResponse =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                (
+                (ExerciseBody, Response?) |
+                (StatementExercise, Response?, Hint*, Answer*, Solution*) |
+                (IntroductionStatement?, Task+, ConclusionStatement?) 
+                )
             Response =
                 element response {empty}
             # General feedback element    
@@ -437,6 +425,21 @@
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
+            # Include all exercise types in exercise and activity    
+            Exercise |=
+                element exercise {
+                    TrueFalse |
+                    MultipleChoice |
+                    Parsons |
+                    Matching |
+                    FreeResponse
+                }
+            ProjectLike |=
+                TrueFalse |
+                MultipleChoice |
+                Parsons |
+                Matching |
+                FreeResponse
             
                 }
             
