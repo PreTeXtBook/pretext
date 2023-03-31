@@ -214,19 +214,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need an overall container   -->
     <!-- Maybe copy a language code? -->
     <brf>
-        <segment lines-after="1">Temporary Transcriber Notes:</segment>
+        <segment indentation="4" lines-after="1">Temporary Transcriber Notes</segment>
+        <!-- TODO: engineer bullet points (numbered list would vary?),    -->
+        <!-- formatted as individual notes helps delimit one from another -->
+        <xsl:if test="//c">
         <!-- See "c" template for explanation -->
-        <xsl:apply-templates select="." mode="transcriber-note">
-            <xsl:with-param name="message">
-                <xsl:text>1. Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</xsl:text>
-            </xsl:with-param>
-        </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="transcriber-note">
+                <xsl:with-param name="message">
+                    <xsl:text>Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
         <!--  -->
-        <xsl:apply-templates select="." mode="transcriber-note">
-            <xsl:with-param name="message">
-                <xsl:text>2. Images are replaced by authors' descriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
-            </xsl:with-param>
-        </xsl:apply-templates>
+        <xsl:if test="//image">
+            <xsl:apply-templates select="." mode="transcriber-note">
+                <xsl:with-param name="message">
+                    <xsl:text>Images are replaced by authors' descriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
         <!-- process segments and blocks of "brf" -->
         <xsl:apply-templates select="*"/>
     </brf>
