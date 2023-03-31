@@ -265,7 +265,31 @@
       <ref name="ListGenerator"/>
       <ref name="Fragment"/>
       <ref name="Demonstration"/>
+      <ref name="WorksheetSideBySide"/>
     </choice>
+  </define>
+  <!-- Allow exercise in sidebyside -->
+  <define name="WorksheetSideBySide">
+    <element name="sidebyside">
+      <ref name="SidebySideAttributes"/>
+      <oneOrMore>
+        <choice>
+          <ref name="Figure"/>
+          <ref name="Poem"/>
+          <ref name="Tabular"/>
+          <ref name="Image"/>
+          <ref name="Video"/>
+          <ref name="Program"/>
+          <ref name="Console"/>
+          <ref name="Paragraph"/>
+          <ref name="Preformatted"/>
+          <ref name="List"/>
+          <ref name="Stack"/>
+          <ref name="WorksheetExercise"/>
+          <ref name="WorksheetTask"/>
+        </choice>
+      </oneOrMore>
+    </element>
   </define>
   <!-- Exercises and tasks can have workspace if they don't contain additional tasks: -->
   <define name="WorksheetExercise">
@@ -309,6 +333,9 @@
       <optional>
         <attribute name="number"/>
       </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <group>
         <optional>
           <ref name="IntroductionStatement"/>
@@ -350,6 +377,9 @@
   <define name="WorksheetTask" combine="choice">
     <element name="task">
       <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <group>
         <optional>
           <ref name="IntroductionStatement"/>
@@ -377,11 +407,16 @@
         </optional>
       </interleave>
       <choice>
-        <element name="page">
-          <oneOrMore>
-            <ref name="WorksheetBlock"/>
-          </oneOrMore>
-        </element>
+        <oneOrMore>
+          <element name="page">
+            <choice>
+              <oneOrMore>
+                <ref name="WorksheetBlock"/>
+              </oneOrMore>
+              <empty/>
+            </choice>
+          </element>
+        </oneOrMore>
         <oneOrMore>
           <ref name="WorksheetBlock"/>
         </oneOrMore>
@@ -448,7 +483,10 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Section"/>
+          <choice>
+            <ref name="Section"/>
+            <ref name="Worksheet"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Section"/>
@@ -523,7 +561,10 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Subsection"/>
+          <choice>
+            <ref name="Subsection"/>
+            <ref name="Worksheet"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Subsection"/>
@@ -598,7 +639,10 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Subsubsection"/>
+          <choice>
+            <ref name="Subsubsection"/>
+            <ref name="Worksheet"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Subsubsection"/>
@@ -715,7 +759,10 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Subsection"/>
+          <choice>
+            <ref name="Subsection"/>
+            <ref name="Worksheet"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Subsection"/>
@@ -791,7 +838,10 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Section"/>
+          <choice>
+            <ref name="Section"/>
+            <ref name="Worksheet"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Section"/>

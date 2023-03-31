@@ -429,8 +429,27 @@
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | WorksheetExercise | Project |
                 Poem | Assemblage | ListGenerator | Fragment |
-                Demonstration
-            
+                Demonstration |WorksheetSideBySide
+            # Allow exercise in sidebyside
+            WorksheetSideBySide = 
+                element sidebyside {
+                    SidebySideAttributes,
+                    (
+                        Figure |
+                        Poem |
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Stack |
+                        WorksheetExercise |
+                        WorksheetTask
+                    )+
+                }     
             # Exercises and tasks can have workspace if they don't contain additional tasks:
             WorksheetExercise = 
                 element exercise {
@@ -447,6 +466,7 @@
                 element exercise {
                     MetaDataTitleOptional,
                     attribute number {text}?,
+                    attribute workspace {text}?,
                     (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
                 }
             WorksheetTask = 
@@ -461,16 +481,17 @@
             WorksheetTask |=
                 element task {
                     MetaDataTitleOptional,
+                    attribute workspace {text}?,
                     (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
                 } 
-
             # Main worksheet definition    
             Worksheet = 
                 element worksheet {
                     WorksheetAttributes,
                     MetaDataAltTitleOptional,
                     (Objectives? &amp; IntroductionDivision?),
-                    (element page {WorksheetBlock+} | WorksheetBlock+),
+                    (
+                    element page {WorksheetBlock+|empty}+ | WorksheetBlock+),
                     (Outcomes? &amp; ConclusionDivision?)
                 } 
 
@@ -490,7 +511,7 @@
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Section,
+                            (Section | Worksheet),
                             (Section | Worksheet | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
@@ -512,7 +533,7 @@
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Subsection,
+                            (Subsection | Worksheet),
                             (Subsection | Worksheet | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
@@ -534,7 +555,7 @@
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Subsubsection,
+                            (Subsubsection | Worksheet),
                             (Subsubsection | Worksheet | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
@@ -567,7 +588,7 @@
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Subsection,
+                            (Subsection | Worksheet),
                             (Subsection | Worksheet | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
@@ -590,7 +611,7 @@
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Section,
+                            (Section | Worksheet),
                             (Section | Worksheet | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
