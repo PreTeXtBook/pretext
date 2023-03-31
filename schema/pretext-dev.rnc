@@ -1,8 +1,8 @@
 
-                    grammar {
+                grammar {
 
-                    include "pretext.rnc"
-                
+                include "pretext.rnc"
+            
             Interactive =
                 element interactive {
                     UniqueID?,
@@ -104,5 +104,198 @@
                 }
 
             
-                    }
-                
+            WorksheetAttributes =
+                attribute margin { text }?,
+                attribute top { text }?,
+                attribute bottom { text }?,
+                attribute right { text }?,
+                attribute left { text }?                
+
+            WorksheetBlock = 
+                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
+                Axiom | Example | WorksheetExercise | Project |
+                Poem | Assemblage | ListGenerator | Fragment |
+                Demonstration
+            
+            # Exercises and tasks can have workspace if they don't contain additional tasks:
+            WorksheetExercise = 
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    attribute workspace {text}?,
+                    (
+                    ExerciseBody |
+                    (StatementExercise, Hint*, Answer*, Solution*) |
+                    (IntroductionText?, WebWork, ConclusionText?)
+                    )
+                }
+            WorksheetExercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
+                }
+            WorksheetTask = 
+                element task {
+                    MetaDataTitleOptional,
+                    attribute workspace {text}?,
+                    (
+                        BlockStatement+ |
+                        (Statement, Hint*, Answer*, Solution*)
+                    )
+                } 
+            WorksheetTask |=
+                element task {
+                    MetaDataTitleOptional,
+                    (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
+                } 
+
+            # Main worksheet definition    
+            Worksheet = 
+                element worksheet {
+                    WorksheetAttributes,
+                    MetaDataAltTitleOptional,
+                    (Objectives? & IntroductionDivision?),
+                    (element page {WorksheetBlock+} | WorksheetBlock+),
+                    (Outcomes? & ConclusionDivision?)
+                } 
+
+            # Insert worksheets into divisions (merge with division when adopted)
+            Chapter |=
+                element chapter {
+                    MetaDataLinedTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            Section,
+                            (Section | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            Section |=
+                element section {
+                    MetaDataLinedTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            Subsection,
+                            (Subsection | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            Subsection |=
+                element subsection {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            Subsubsection,
+                            (Subsubsection | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            Subsubsection |=
+                element subsubsection {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    Objectives?,
+                    (BlockDivision | Paragraphs | Commentary)+,
+                    (Worksheet? & ReadingQuestions? & Exercises? &
+                     Solutions? & References? & Glossary?),
+                    Outcomes?
+                }
+            ArticleAppendix |=
+                element appendix {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary |
+                             NotationList)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            Subsection,
+                            (Subsection | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            BookAppendix |=
+                element appendix {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary |
+                             NotationList)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            Section,
+                            (Section | Worksheet | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            
+            Solutions |=
+                element solutions {
+                    MetaDataAltTitleOptional,
+                    attribute inline {text}?,
+                    attribute divisional {text}?,
+                    attribute project {text}?,
+                    attribute worksheet {text}?,
+                    attribute reading {text}?,
+                    attribute scope {text}?,
+                    attribute admit {"all"|"odd"|"even"}?,
+                    IntroductionDivision?,
+                    ConclusionDivision?
+                }
+            
+                }
+            
