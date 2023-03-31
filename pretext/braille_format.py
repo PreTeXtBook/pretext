@@ -305,21 +305,53 @@ class BRF:
     def at_line_start(self):
         return self.line_buffer.is_empty()
 
-    # Provisional
-    def is_room_on_page(self, segment):
+    # Designed for "short" segments, to avoid poor placement near
+    # a page break.  A segment longer than a page will *always*
+    # provoke a page advance (which might not be desired).
+    def needs_page_advance(self, seg):
         import copy
 
+        # A "page" only makes sense if embossing
+        if not(self.cursor.embossing()):
+            return False
+
+        # If segment explicitly creates a new page,
+        # then the question of space is moot
+        if seg.ownpage or seg.newpage:
+            return False
+
         orginal_cursor = self.cursor
-        trial_brf = copy.deepcopy(self)
+        start_page = orginal_cursor.page_number()
+
         # all changes (cursor movement, text-wrapping) will
-        # occur in the temporary/trial/throwaway cursor
-        trial_brf.process_segment(segment)
-        trial_cursor = trial_brf.cursor
+        # occur in the temporary/sandbox/throwaway cursor
+        sandbox_brf = copy.deepcopy(self)
+        sandbox_cursor = sandbox_brf.cursor
+        # Do the deal, in a sandbox
+        sandbox_brf.process_segment(seg)
+        # Attach some lines of content, virtually
+        for i in range(seg.lines_following):
+            sandbox_cursor.advance_line()
 
-        # print("OC", orginal_cursor.page_number())
-        # print("TC", trial_cursor.page_number())
+        finish_page = sandbox_cursor.page_number()
+        # Except, segment finishes ready-to-go,
+        # which could be the tip-top of the next page.
+        if sandbox_cursor.at_page_start():
+            finish_page -= 1
 
-        return not(orginal_cursor.page_number() + 1 == trial_cursor.page_number())
+        # For a block (not implemented yet), when it breaks, we want
+        # to do another simulation: advance a page, see if that stays
+        # on a page.  If not, there is no point in a page advance.
+        # Note: we can't just "size" the first simulation, since the
+        # location of a page break affects a line that reserves space
+        # for a page number.
+
+        # Maybe return the value of boolean expression,
+        # once extended to blocks
+        if finish_page > start_page:
+            return True
+        else:
+            return False
 
     # Actions
 
@@ -666,12 +698,11 @@ class BRF:
 
 
     def write_segment(self, seg):
+        # See if a page advance will improve awkward page breaks
+        if not(seg.breakable) and self.needs_page_advance(seg):
+            self.advance_page()
         self.process_segment(seg)
         self.flush()
-        # if self.is_room_on_page(seg):
-        #     self.process_segment(seg)
-        # else:
-        #     self.process_segment(seg)
 
     def flush(self):
         # The `accumulator` *is* the final document, as a list of
@@ -745,16 +776,6 @@ def parse_segments(xml_simple, out_file, page_format):
         elif elt.tag == "block":
             blk = Block(elt)
             brf.write_block(blk)
-
-        # brf.process_segment(seg)
-
-        # Need a "size" routine, maybe a "final" routine???
-        # if seg.breakable:
-        # else:
-        #     brf.process_segment(seg)
-        #     if not(brf.is_room_on_page(seg)):
-        #         brf_file.write("CROSSED PAGE BOUNDARY")
-
         brf.flush()
 
     # We assume `out_file` has been error-checked
