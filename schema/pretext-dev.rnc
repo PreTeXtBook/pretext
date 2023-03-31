@@ -336,5 +336,9 @@
                     (MathRow | MathIntertext)*
                 }
             
+            UniqueID |=
+                attribute xml:id {text}?,
+                attribute label {text}?   
+            
                 }
             

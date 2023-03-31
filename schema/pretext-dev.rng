@@ -962,4 +962,12 @@
       </element>
     </choice>
   </define>
+  <define name="UniqueID" combine="choice">
+    <optional>
+      <attribute name="xml:id"/>
+    </optional>
+    <optional>
+      <attribute name="label"/>
+    </optional>
+  </define>
 </grammar>

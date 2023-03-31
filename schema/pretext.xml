@@ -2530,6 +2530,18 @@
     </section>
 
     <section>
+        <title>Labels as Unique IDs (experimental)</title>
+        <p>We assume that everywhere an xml:id can go, we can also now put a label.</p>
+        <fragment xml:id="label">
+            <title>Labels as Unique IDs</title>
+            <code>
+            UniqueID |=
+                attribute xml:id {text}?,
+                attribute label {text}?   
+            </code>
+        </fragment>
+    </section>
+    <section>
         <title>Miscellaneous</title>
 
         <p>Provisional items, with uncertain futures.</p>
@@ -3073,6 +3085,7 @@
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
+            <fragref ref="label"/>
             <code>
                 }
             </code>
