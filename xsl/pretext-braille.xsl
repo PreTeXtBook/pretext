@@ -904,9 +904,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- First, authored as inline, but maybe becomes multiline. -->
 <xsl:template match="m|me|men|md|mdn">
     <!-- We connect source location with representations via id -->
-    <!-- NB: math-representation file writes with "visible-id"  -->
+    <!-- NB: math-representation file writes with "internal-id" -->
     <xsl:variable name="id">
-        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:apply-templates select="." mode="internal-id"/>
     </xsl:variable>
     <!-- Unicode braille cells from Speech Rule Engine (SRE) -->
     <xsl:variable name="raw-braille" select="$math-repr/pi:math[@id = $id]/div[@class = 'braille']"/>
