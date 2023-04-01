@@ -148,9 +148,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="m|me|men|md|mdn" mode="extraction">
     <div context="{local-name(.)}">
         <!-- NB: stylesheets receiving these representations will  -->
-        <!-- want to *also* mark math bits via the "visible-id"    -->
+        <!-- want to *also* mark math bits via the "internal-id"   -->
+        <!-- The speed of the "internal-id" is critical here       -->
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="visible-id"/>
+            <xsl:apply-templates select="." mode="internal-id"/>
         </xsl:attribute>
         <xsl:apply-templates select="."/>
     </div>
