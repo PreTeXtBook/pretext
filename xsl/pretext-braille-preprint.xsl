@@ -90,10 +90,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- preserve attributes -->
         <xsl:apply-templates select="@*" mode="meld-math"/>
         <!-- get braille from representations file -->
-        <!-- TODO: this id takes 25 seconds on AATA, it seems. -->
-        <!-- Switch to a "static" id?                          -->
         <xsl:variable name="id">
-            <xsl:apply-templates select="." mode="visible-id"/>
+            <xsl:apply-templates select="." mode="internal-id"/>
         </xsl:variable>
         <math-original>
             <xsl:apply-templates select="node()|@*" mode="meld-math"/>
