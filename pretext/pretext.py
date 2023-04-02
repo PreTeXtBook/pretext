@@ -1762,17 +1762,47 @@ def webwork_to_xml(
 
 ################################
 #
+#  WeBWorK Problem Sets
+#
+################################
+
+
+def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-ww-problem-sets.xsl")
+    tmp_dir = get_temporary_directory()
+    xsltproc(extraction_xslt, xml_source, None, output_dir=tmp_dir, stringparams=stringparams)
+    # We don't explicitly know the name of the folder that has all of the sets
+    # But it is the oly thing in the tmp_dir
+    folder_name = os.listdir(tmp_dir)[0]
+    folder = os.path.join(tmp_dir, folder_name)
+    macros_folder = os.path.join(folder, 'macros')
+    os.mkdir(macros_folder)
+    pg_macros(xml_source, pub_file, stringparams, macros_folder)
+    if tgz:
+        archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
+        targz(archive_file, folder)
+        shutil.copy2(archive_file, dest_dir)
+    else:
+        shutil.copytree(folder, os.path.join(dest_dir,folder_name))
+
+
+################################
+#
 #  WeBWorK PG Macro Library
 #
 ################################
 
 
-def pg_macros(xml_source, dest_dir):
+def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
+    if pub_file:
+        stringparams["publisher"] = pub_file
     ptx_xsl_dir = get_ptx_xsl_path()
-    extraction_xslt = os.path.join(ptx_xsl_dir, "support/pretext-pg-macros.xsl")
-    os.chdir(dest_dir)
-    xsltproc(extraction_xslt, xml_source, None)
+    extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
+    xsltproc(extraction_xslt, xml_source, None, output_dir=dest_dir, stringparams=stringparams)
 
 
 ##############################
@@ -3948,6 +3978,14 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(missing_dir_error.format(abs_path, raw_path, ext_attr))
     # pair of discovered absolute paths
     return (generated, external)
+
+
+def targz(output, source_dir):
+    """Creates a zipped tar file, output; the root of the archive has a single folder, source_dir"""
+    import tarfile
+
+    with tarfile.open(output, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
 
 
 ###########################

@@ -100,6 +100,18 @@ PGOUT      = $(SCRATCH)/pg
 # testing purposes.This should not be taken as necessary or best
 # practice for a real PreTeXt project using WeBWorK problems.
 
+
+#########################################################################
+#  Construct macros file. This must be uploaded into the macros folder
+#  of the server's host course before building representations below.
+#  There are no macros for the minimal example, so omitted
+
+sample-chapter-macros:
+	install -d $(PGOUT)/macros
+	cd $(PGOUT)/macros; \
+	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) $(SMPC)
+
+
 #########################################################################
 #  Extract webwork problems into a single XML file.
 #  Location is within generated folder (named in the publisher file),
@@ -177,13 +189,13 @@ sample-chapter-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	xsltproc -stringparam publisher $(SMPCPUB) -stringparam chunk.level 1 -stringparam debug.datedfiles no $(PTXXSL)/pretext-ww-problem-sets.xsl $(SMPC)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -z -x chunk.level 1 debug.datedfiles no -p $(SMPCPUB) $(SMPC)
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	xsltproc -stringparam publisher $(MINIPUB) -stringparam chunk.level 1 -stringparam debug.datedfiles no $(PTXXSL)/pretext-ww-problem-sets.xsl $(MINI)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -z -x chunk.level 1 debug.datedfiles no -p $(MINIPUB) $(MINI)
 
 
 #########################################################################
