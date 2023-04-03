@@ -626,14 +626,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- FIGURE-LIKE -->
 <!-- ########### -->
 
-<!-- Figures are only implemented for the case where their contents are   -->
+
+<!-- [BANA, 2016] 6.2.2(e) -->
+<!-- When both a print caption and a transcriber-generated description    -->
+<!-- are needed, begin the description (enclosed in transcriber's note    -->
+<!-- indicators) on the line following the caption.                       -->
+<!-- Figures are treated different for the case where their contents are  -->
 <!-- images (thus requiring a tactile graphic page to follow the figure). -->
 <xsl:template match="figure[image]">
     <block box="standard">
-        <xsl:apply-templates select="image" mode="braille-representation"/>
         <segment>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
+        <xsl:apply-templates select="*[not(self::image)]"/>
+        <xsl:apply-templates select="image" mode="braille-representation"/>
     </block>
     <!-- Form a page to be replaced by tactile version -->
     <segment ownpage="yes">
@@ -1253,6 +1259,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- titles get killed in -common so we don't need to see them here -->
 <xsl:template match="title|subtitle|shorttitle|plaintitle|creator">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- captions get killed in -common so we don't need to see them here -->
+<xsl:template match="caption">
     <xsl:apply-imports/>
 </xsl:template>
 
