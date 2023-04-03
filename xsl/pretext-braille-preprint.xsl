@@ -647,10 +647,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </segment>
 </xsl:template>
 
-<!-- Caption, with label, number, etc.  "caption" element   -->
-<!-- is metadata, killed in -common, obtained as needed via -->
-<!-- modal template (much like a title).                    -->
-<xsl:template match="figure" mode="block-title">
+<!-- Other FIGURE-LIKE can be handled together -->
+<xsl:template match="figure|listing|table|list">
+    <block box="standard">
+        <segment>
+            <xsl:apply-templates select="." mode="block-title"/>
+        </segment>
+        <xsl:apply-templates/>
+    </block>
+</xsl:template>
+
+<!-- Caption/title, with label, number, etc.  "caption" and -->
+<!-- "title" elements are metadata, killed in -common,      -->
+<!-- obtained as needed via modal templates.                -->
+<xsl:template match="figure|listing|table|list" mode="block-title">
     <xsl:apply-templates select="." mode="type-name"/>
     <!--  -->
     <xsl:variable name="the-number">
@@ -661,7 +671,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$the-number"/>
     </xsl:if>
     <xsl:text>. </xsl:text>
-    <xsl:apply-templates select="." mode="caption-full"/>
+    <xsl:choose>
+        <xsl:when test="self::figure|self::listing">
+            <xsl:apply-templates select="." mode="caption-full"/>
+        </xsl:when>
+        <xsl:when test="self::table|self::list">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ###### -->
