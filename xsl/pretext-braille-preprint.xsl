@@ -233,6 +233,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:apply-templates>
         </xsl:if>
+        <!--  -->
+        <xsl:if test="//sidebyside">
+            <xsl:apply-templates select="." mode="transcriber-note">
+                <xsl:with-param name="message">
+                    <xsl:text>A "side-by-side" is a horizontal layout of document elements.  The components of a side-by-side are called "panels".  Typically panels are images or figures, but can also be items like program listings, tables, or paragraphs.  For braille, we let each panel use the full width of the page, so we announce the start, indicating the total number of panels.  Then we preface each panel with its number in the sequence.  Finally we announce the end because it may be hard to distinguish a final panel from the ensuing text.</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
+        <!--  -->
+        <!-- automatically infers we have a note already for "sidebyside" -->
+        <xsl:if test="//sbsgroup">
+            <xsl:apply-templates select="." mode="transcriber-note">
+                <xsl:with-param name="message">
+                    <xsl:text>A "side-by-side group" is a sequence down the page of "side-by-side" (see previous note).  We announce the start with the number of side-by-side in the group to expect, and let the beginning and ending notes for each side-by-side delineate the sequence.</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
         <!-- process segments and blocks of "brf" -->
         <xsl:apply-templates select="*"/>
     </brf>
@@ -681,6 +698,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>.</xsl:text>
 </xsl:template>
+
+<!-- ############ -->
+<!-- Side-by-Side -->
+<!-- ############ -->
+
+<!-- We delimit the panels of a "sidebyside" with an introductory        -->
+<!-- transcriber note and a concluding note.  Each panel is preceded     -->
+<!-- by a very short transcriber note giving its number in the sequence. -->
+<!-- An "sbsgroup" only announces its start, but each "sidebyside"       -->
+<!-- introduction provides the number within the group.                  -->
+<!--                                                                     -->
+<!-- Otherwise, a "sidebyside" is just "linearized" and strung out down  -->
+<!-- pages, rather than across, since horizontal real estate is limited  -->
+<!-- and images are going full (own) page.                               -->
+<!-- From discussion with Michael Cantino and Al Maneki, 2023-03-30      -->
+
+<xsl:template match="sidebyside">
+    <xsl:variable name="npanels" select="count(*)"/>
+    <!-- Intro -->
+    <!-- At a 40-character width, this will fit on one line with -->
+    <!-- two cells to spare when the count is single-digit.      -->
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>side-by-side: </xsl:text>
+            <!-- panels are simply child elements -->
+            <xsl:value-of select="$npanels"/>
+            <xsl:text> panels</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Panels -->
+    <xsl:for-each select="*">
+        <xsl:variable name="number" select="count(preceding-sibling::*) + 1"/>
+        <xsl:apply-templates select="." mode="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>panel: </xsl:text>
+                <xsl:value-of select="$number"/>
+                <xsl:text>/</xsl:text>
+                <xsl:value-of select="$npanels"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <!-- context switch, so self -->
+        <xsl:apply-templates select="."/>
+    </xsl:for-each>
+    <!-- Outro -->
+    <!-- This message mimics the format of the opening note -->
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>side-by-side: end</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="sbsgroup">
+    <xsl:variable name="nsbs" select="count(sidebyside)"/>
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>side-by-side group: </xsl:text>
+            <xsl:value-of select="$nsbs"/>
+            <xsl:text> sbs</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- A "stack" is strictly a side-by-side panel and we just -->
+<!-- process its children.  No need to get carried away for -->
+<!-- braille, and maybe an "apply-imports" (or nothing at   -->
+<!-- all) is the right thing to do.                         -->
+<xsl:template match="stack">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 
 <!-- Generators -->
 
