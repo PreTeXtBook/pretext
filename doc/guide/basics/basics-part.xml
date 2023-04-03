@@ -1226,7 +1226,7 @@
             <idx><h>graphics formats</h><h>generating from <latex/> source</h></idx>
         <pretext/> makes it straightforward to embed <latex/> code that produces images
         (such as TikZ)
-        into your source files. <c>xsltproc</c> basically just dumps your code out to your <latex/> file so that it compiles nicely.
+        into your source files. The <pretext />-CLI basically just dumps your code out to your <latex/> file so that it compiles nicely.
         However, for <init>HTML</init> display,
         you will need <init>SVG</init> graphic files.
         This is where the <c>pretext/pretext</c> script comes in.
@@ -1290,20 +1290,30 @@
 
       <p>
         Well, that's not 100% true for <init>HTML</init>.
-        If you just run <c>xsltproc</c>,
-        your browser will display an error message about not being able to find the graphic file,
-        since it doesn't exist.
-        To generate the image,
-        we have to run the <c>pretext/pretex</c> script.
-        To do this, on the command line we run the following command
-        (on a single line).
+        If you just run <c>pretext build web</c>,
+        your terminal will display a few warnings about not generating assets such as images.
+        To generate the assets,
+        we have to use the <c>-g</c> flag.
+        To generate the assets before building, on the command line we run the following command
+        (on a single line). (Omitting the <c>web</c> target will, by default, use the first target)
+        in the <c>project.ptx</c> file.)
+        <cd>
+          <cline>pretext build web -g</cline>
+        </cd>
       </p>
 
-      <console width="80%" margins="10% 10%">
-        <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
+      <aside>
+        <p>
+          For the same build using <c>xsltproc</c>, you would use the following:
+          
+        </p>
+        <console width="80%" margins="10% 10%">
+         <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
         <input>/path/to/pretext/pretext -c latex-image -f
 	svg -d /path/to/html/output/directory/images /path/to/yoursource.ptx</input>
       </console>
+      </aside>
+      
     </section>
   </chapter>
 
