@@ -1,6 +1,6 @@
 
-            grammar {
-            
+                    grammar {
+                
             start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
             
             Pretext =
@@ -1554,12 +1554,12 @@
             NotationList =
                 element notation-list {empty}
             
-            Demonstration = element demonstration {
-                Title,
-                Paragraph,
-                Sage
-            }
-            
+                    Demonstration = element demonstration {
+                    Title,
+                    Paragraph,
+                    Sage
+                    }
+                
             DocInfo =
                 element docinfo {
                     XMLBase?,
@@ -1628,5 +1628,5 @@
                     }?
                 }
             
-            }
-            
+                    }
+                
