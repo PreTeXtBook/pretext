@@ -2166,6 +2166,26 @@
                     </statement>
                 </webwork>
             </exercise>
+
+            <exercise>
+                <introduction>
+                    <p>
+                        This exercise has a single quote in it.
+                        A single quote is the first option for a delimiter for perl's q
+                        function which is used by extract-pg.xsl in table cells.
+                        So if working, it should move on to the next delimiter option.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <tabular>
+                            <row>
+                                <cell>What's up, Doc?</cell>
+                            </row>
+                        </tabular>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
