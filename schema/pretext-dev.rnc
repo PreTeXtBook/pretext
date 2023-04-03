@@ -1,0 +1,466 @@
+
+                grammar {
+
+                include "pretext.rnc"
+            
+            Interactive =
+                element interactive {
+                    UniqueID?,
+                    PermanentID?,
+                    attribute aspect { text }?,
+                    attribute width { text }?,
+                    attribute platform { text }?,
+                    attribute preview { text }?,
+                    attribute iframe { text }?,
+                    attribute source { text }?,
+                    attribute version { text }?,
+                    (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
+                    element instructions { BlockText* | text }?
+                }
+
+            Slate =
+                element slate {
+                    UniqueID?,
+                    attribute surface { text },
+                    (attribute source { text } | attribute material { text })?,
+                    attribute aspect { text }?,
+                    (Paragraph | Tabular | SideBySideNoCaption)*
+                }
+
+            # add Interactives where used
+            BlockStatement |= Interactive
+
+            Figure |= element figure { MetaDataCaption, Interactive }
+
+            SideBySide |= element sidebyside {
+                SidebySideAttributes,
+                (Interactive | Slate)+
+            }
+
+            SideBySideNoCaption |= element sidebyside {
+                SidebySideAttributes,
+                (Interactive | Slate)+
+            }
+
+            Exercises |= element exercises {
+                MetaDataAltTitleOptional,
+                IntroductionDivision?,
+                (
+                (Exercise | ExerciseGroup)+ |
+                Subexercises+ | Interactive
+                ),
+                ConclusionDivision?
+            }
+            
+            ColophonFront |=
+                element colophon {
+                    MetaDataTarget,
+                    element credit {
+                        element role {TextShort},
+                        element entity {TextLong}
+                    }*,
+                    element edition {text}?,
+                    element website {
+                        element name {TextShort},
+                        element address {text}
+                    }?,
+                    element copyright {
+                        element year {TextShort},
+                        element holder {text},
+                        element minilicense {TextShort}?,
+                        element shortlicense {
+                            TextLong &
+                            Footnote*
+                        }?
+                    }?
+                }
+            
+            Configuration |=
+                element blurb {
+                    attribute shelf {text},
+                    text
+                }
+            
+            Configuration |=
+                element document-id {
+                    attribute edition {text}?,
+                    text
+                }
+            
+            ProofLike =
+                MetaDataTitleOptional,
+                (BlockStatement | Case)+
+            Proof |=
+                element proof {ProofLike} |
+                element argument {ProofLike} |
+                element justification {ProofLike} |
+                element reasoning {ProofLike} |
+                element explanation {ProofLike}
+            
+            Figure |=
+                element figure {
+                    MetaDataCaption,
+                    Tabular
+                }
+
+            
+            WorksheetAttributes =
+                attribute margin { text }?,
+                attribute top { text }?,
+                attribute bottom { text }?,
+                attribute right { text }?,
+                attribute left { text }?
+
+            WorksheetBlock =
+                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
+                Axiom | Example | WorksheetExercise | Project |
+                Poem | Assemblage | ListGenerator | Fragment |
+                Demonstration |WorksheetSideBySide
+            # Allow exercise in sidebyside
+            WorksheetSideBySide =
+                element sidebyside {
+                    SidebySideAttributes,
+                    (
+                        Figure |
+                        Poem |
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Stack |
+                        WorksheetExercise |
+                        WorksheetTask
+                    )+
+                }
+            # Exercises and tasks can have workspace if they don't contain additional tasks:
+            WorksheetExercise =
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    attribute workspace {text}?,
+                    (
+                    ExerciseBody |
+                    (StatementExercise, Hint*, Answer*, Solution*) |
+                    (IntroductionText?, WebWork, ConclusionText?)
+                    )
+                }
+            WorksheetExercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    attribute workspace {text}?,
+                    (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
+                }
+            WorksheetTask =
+                element task {
+                    MetaDataTitleOptional,
+                    attribute workspace {text}?,
+                    (
+                        BlockStatement+ |
+                        (Statement, Hint*, Answer*, Solution*)
+                    )
+                }
+            WorksheetTask |=
+                element task {
+                    MetaDataTitleOptional,
+                    attribute workspace {text}?,
+                    (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
+                }
+            # Main worksheet definition
+            Worksheet =
+                element worksheet {
+                    WorksheetAttributes,
+                    MetaDataAltTitleOptional,
+                    (Objectives? & IntroductionDivision?),
+                    (
+                    element page {WorksheetBlock+|empty}+ | WorksheetBlock+),
+                    (Outcomes? & ConclusionDivision?)
+                }
+
+            # Insert worksheets into divisions (merge with division when adopted)
+            Chapter |=
+                element chapter {
+                    MetaDataLinedTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            (Section | Worksheet),
+                            (Section | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            Section |=
+                element section {
+                    MetaDataLinedTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            (Subsection | Worksheet),
+                            (Subsection | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            Subsection |=
+                element subsection {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            (Subsubsection | Worksheet),
+                            (Subsubsection | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            Subsubsection |=
+                element subsubsection {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    Objectives?,
+                    (BlockDivision | Paragraphs | Commentary)+,
+                    (Worksheet? & ReadingQuestions? & Exercises? &
+                     Solutions? & References? & Glossary?),
+                    Outcomes?
+                }
+            ArticleAppendix |=
+                element appendix {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary |
+                             NotationList)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            (Subsection | Worksheet),
+                            (Subsection | Worksheet | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            BookAppendix |=
+                element appendix {
+                    MetaDataAltTitle,
+                    AuthorByline*,
+                    (
+                        (
+                            Objectives?,
+                            (BlockDivision | Paragraphs | Commentary |
+                             NotationList)+,
+                            (Worksheet? & ReadingQuestions? & Exercises? &
+                             Solutions? & References? & Glossary?),
+                            Outcomes?
+                        )
+                    |
+                        (
+                            (Objectives? & IntroductionDivision?),
+                            (Section | Worksheet),
+                            (Section | Worksheet | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
+                            (Outcomes? & ConclusionDivision?)
+                        )
+                    )
+                }
+            
+            Solutions |=
+                element solutions {
+                    MetaDataAltTitleOptional,
+                    attribute inline {text}?,
+                    attribute divisional {text}?,
+                    attribute project {text}?,
+                    attribute worksheet {text}?,
+                    attribute reading {text}?,
+                    attribute scope {text}?,
+                    attribute admit {"all"|"odd"|"even"}?,
+                    IntroductionDivision?,
+                    ConclusionDivision?
+                }
+            
+            Url |=
+                element url {
+                    attribute href {text},
+                    (
+                        (attribute visual {text},
+                        TextShort
+                        )| TextShort |
+                        (
+                        attribute visual {text}?
+                        )
+                    )
+                }
+            
+            MathDisplay |=
+                element me {
+                    MetaDataTarget?,
+                    mixed {(Xref | FillInMath | WWVariable)*}
+                } |
+                element men {
+                    MetaDataTarget?,
+                    mixed {(Xref | FillInMath | WWVariable)*}
+                } |
+                element md {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                } |
+                element mdn {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                }
+            
+            UniqueID |=
+                attribute xml:id {text}?,
+                attribute label {text}?
+            
+            TrueFalse =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                element statement {
+                    attribute correct {"yes"|"no"},
+                    Paragraph
+                },
+                Feedback?, Hint*, Answer*, Solution*
+            MultipleChoice =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                element choices {
+                    attribute randomize {"yes"|"no"}?,
+                    Choice+
+                },
+                Hint*, Answer*, Solution*
+            Choice =
+                element choice {
+                    attribute correct {"yes"|"no"}?,
+                    ((mixed {BlockText?})
+                    | (StatementExercise, Feedback?))
+                }
+            Parsons =
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    attribute language {text}?,
+                    attribute adaptive {"yes"|"no"}?,
+                    attribute indentation {text}?,
+                    StatementExercise,
+                    element blocks {
+                        attribute layout {"horizontal"}?,
+                        attribute randomize {"yes"|"no"}?,
+                        Block+
+                    },
+                    Hint*, Answer*, Solution*
+            Block =
+                element block {
+                    attribute order {xsd:integer}?,
+                    ((
+                        attribute correct {"yes"|"no"}?,
+                        mixed {BlockText?}
+                    ) |
+                    (
+                        element choice {
+                            attribute correct {"yes"|"no"}?,
+                            mixed {BlockText?}
+                        }+
+                    ))
+                }
+            Matching =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Feedback?,
+                element matches {
+                    Match+
+                },
+                Hint*, Answer*, Solution*
+            Match =
+                element match {
+                    attribute order {xsd:integer}?,
+                    element premise {
+                        mixed {BlockText?}
+                    },
+                    element response {
+                        mixed {BlockText?}
+                    }
+                }
+            FreeResponse =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                (
+                (ExerciseBody, Response?) |
+                (StatementExercise, Response?, Hint*, Answer*, Solution*) |
+                (IntroductionStatement?, Task+, ConclusionStatement?)
+                )
+            Response =
+                element response {empty}
+            # General feedback element
+            Feedback =
+                element feedback {
+                    MetaDataTitleOptional,
+                    BlockSolution+
+                }
+            # Include all exercise types in exercise and activity
+            Exercise |=
+                element exercise {
+                    TrueFalse |
+                    MultipleChoice |
+                    Parsons |
+                    Matching |
+                    FreeResponse
+                }
+            ProjectLike |=
+                TrueFalse |
+                MultipleChoice |
+                Parsons |
+                Matching |
+                FreeResponse
+            
+                }
+            
