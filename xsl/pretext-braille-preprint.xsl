@@ -793,6 +793,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- ########## -->
+<!-- References -->
+<!-- ########## -->
+
+<!-- Bibliography [BANA-2016, 22.2.1]                           -->
+<!-- Bibliographic items in a "references" division have a      -->
+<!-- bracketed number leading each new entry, then two spaces   -->
+<!-- of indentation for the remainder .                         -->
+<!-- TODO: expand to accomodate annotations ("note"), BANA 22.3 -->
+<xsl:template match="biblio[@type='raw']">
+    <runin indentation="0" separator="&#x20;&#x20;">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="serial-number"/>
+        <xsl:text>]</xsl:text>
+    </runin>
+    <segment indentation="0" runover="2">
+        <xsl:apply-templates/>
+    </segment>
+</xsl:template>
+
+<!-- Override usual killing of title, but perhaps a generic -->
+<!-- template (without punctuation!) would be saner?        -->
+<xsl:template match="biblio/title">
+    <italic>
+        <xsl:apply-templates/>
+    </italic>
+</xsl:template>
+
+<xsl:template match="volume">
+    <bold>
+        <xsl:apply-templates/>
+    </bold>
+</xsl:template>
 
 <!-- Generators -->
 
