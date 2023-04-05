@@ -976,14 +976,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Math -->
 <!-- #### -->
 
-<xsl:template match="m">
+<xsl:template match="m[not(contains(math-nemeth, '&#xa;'))]">
     <!-- Unicode braille cells from Speech Rule Engine (SRE)   -->
     <!-- Not expecting any markup, so "value-of" is everything -->
     <xsl:variable name="raw-braille">
         <xsl:value-of select="math-nemeth"/>
     </xsl:variable>
-    <!-- inline vs. spatial makes a difference -->
-    <xsl:variable name="b-multiline" select="contains($raw-braille, '&#xa;')"/>
     <!-- We investigate actual source for very simple math   -->
     <!-- such as one-letter variable names as Latin letters  -->
     <!-- or positive integers, so we process the orginal     -->
@@ -1019,11 +1017,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- restore clause-ending punctuation -->
             <xsl:value-of select="$clause-ending-mark"/>
         </xsl:when>
-        <!-- We construct a fragment for teh Python formatter.   -->
+        <!-- We construct a fragment for the Python formatter.   -->
         <!-- SRE may convert inline "m" into a spatial layout,   -->
         <!-- such as a fraction or column vector authored inline -->
-        <!-- We ignore this situation for now                    -->
-        <xsl:when test="not($b-multiline)">
+        <!-- We treat this elsewhere, more like "md" elements    -->
+        <xsl:otherwise>
             <math>
                 <!-- Add punctuation as an attribute conditionally. -->
                 <!-- We could probably just add an empty string     -->
@@ -1036,17 +1034,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <xsl:value-of select="$raw-braille"/>
             </math>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- TEMPORARY: Multi-line case -->
-            <xsl:text>INLINE MATH (RENDERED WITH NEWLINES)</xsl:text>
-            <!-- restore clause-ending punctuation -->
-            <xsl:value-of select="$clause-ending-mark"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="me|men|md|mdn">
+<xsl:template match="m[contains(math-nemeth, '&#xa;')]|me|men|md|mdn">
     <xsl:variable name="nemeth">
         <xsl:value-of select="math-nemeth"/>
         <xsl:text>&#xa;</xsl:text>
@@ -1209,10 +1201,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: leading with a display in a "p" means no indentation.      -->
 <!-- Note: this is derived from a similar template in the HTML        -->
 <!-- conversion.                                                      -->
-<xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]">
+<xsl:template match="p[ol|ul|dl|m[contains(math-nemeth, '&#xa;')]|me|men|md|mdn|cd]">
     <!-- will later loop over displays within paragraph      -->
     <!-- match guarantees at least one for $initial variable -->
-    <xsl:variable name="displays" select="ul|ol|dl|me|men|md|mdn|cd" />
+    <xsl:variable name="displays" select="ul|ol|dl|m[contains(math-nemeth, '&#xa;')]|me|men|md|mdn|cd" />
     <!-- content prior to first display is exceptional, but if empty,   -->
     <!-- as indicated by $initial, we do not produce an empty paragraph -->
     <!--                                                                -->
@@ -1232,7 +1224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="."/>
         <!-- look through remainder, all element and text nodes, and the next display -->
         <xsl:variable name="rightward" select="following-sibling::node()" />
-        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::me or self::men or self::md or self::mdn or self::cd][1]" />
+        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::m[contains(math-nemeth, '&#xa;')] or self::me or self::men or self::md or self::mdn or self::cd][1]" />
         <xsl:choose>
             <xsl:when test="$next-display">
                 <xsl:variable name="leftward" select="$next-display/preceding-sibling::node()" />
