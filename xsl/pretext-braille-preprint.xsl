@@ -200,6 +200,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- It is entirely possible for a segment to be preceded by     -->
+<!-- consecutive "runin" elements.  Three examples:              -->
+<!--                                                             -->
+<!--   "proof" then "case"                                       -->
+<!--   "hint" then "li" (and other SOLUTION-LIKE)                -->
+<!--   "exercise" then "li" (but should probably be "task"?)     -->
+<!--                                                             -->
+<!-- Likely a structure with an immediate "p" with an immediate  -->
+<!-- list could result in a run-in title for the structure and   -->
+<!-- a run-in title for the first list item.  Experimentation on -->
+<!-- 2023-04-05 with Judson's AATA did not reveal any runs of    -->
+<!-- three (or more) consecutive "runin" elements.  So our       -->
+<!-- solution is ad-hoc for the double case, with a bug report   -->
+<!-- for three or more.                                          -->
+<!-- We convert the first "runin" to a "segment" (rather than    -->
+<!-- killing it) and let the second "runin" get absorbed by the  -->
+<!-- subsequent "segment".                                       -->
+<xsl:template match="runin[following-sibling::*[1][self::runin]]" mode="meld-runin">
+    <segment>
+        <xsl:apply-templates select="@*|node()" mode="meld-runin"/>
+    </segment>
+    <xsl:if test="following-sibling::*[2][self::runin]">
+        <xsl:message>BUG: the braille conversion has encountered three "run-in" titles in a row,</xsl:message>
+        <xsl:message>which we had not expected.  Please report me.  Thank-you.</xsl:message>
+        <xsl:message>First: <xsl:value-of select="."/></xsl:message>
+        <xsl:message>Second: <xsl:value-of select="following-sibling::*[1][self::runin]"/></xsl:message>
+        <xsl:message>Third: <xsl:value-of select="following-sibling::*[2][self::runin]"/></xsl:message>
+    </xsl:if>
+</xsl:template>
+
+<!-- Every "runin" has been absorbed into a trailing "segment" or -->
+<!-- perhaps converted into a "segment".  This will prevent the   -->
+<!-- absorbed ones from persisting.                               -->
 <xsl:template match="runin" mode="meld-runin"/>
 
 <!-- Xerox machine -->
