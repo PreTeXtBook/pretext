@@ -591,6 +591,12 @@ class BRF:
         if s.centered:
             self.adjust_text_width(-6)
 
+        # If making segments/headings into ToC entries, then
+        # reserve 6 spaces to the right at all times, until
+        # just about to write the guide dots and page number
+        if self.toc_mode:
+            self.adjust_text_width(-6)
+
         sxml = s.xml
         if sxml.text:
             self.write_fragment("text", sxml.text, None, s)
@@ -604,6 +610,25 @@ class BRF:
                 self.write_fragment(c.tag, c.text, math_punctuation, s)
             if c.tail:
                 self.write_fragment("text", c.tail, None, s)
+
+        # Release width restriction to finish ToC entry
+        if self.toc_mode:
+            self.adjust_text_width(6)
+            # Page numbers iff embossing
+            if self.cursor.embossing():
+                page_num = str(self.toc_dict[s.heading_id])
+                guide_dots = self.cursor.remaining_characters() - (1 + len(page_num))
+                guide = ['', '', '']
+                if guide_dots > 0:
+                    guide[0] = ' '
+                    guide_dots -= 1
+                if guide_dots > 0:
+                    guide[2] = ' '
+                    guide_dots -= 1
+                if guide_dots > 0:
+                    guide[1] = '\u2810' * guide_dots
+                self.write_fragment("text", ''.join(guide) + page_num, None, s)
+
         # finished with a segment
         # flush buffer, move to new line, maybe a new page
         # BUT not if we landed in this state anyway
