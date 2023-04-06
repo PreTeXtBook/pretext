@@ -415,6 +415,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
+        <!-- division headings go to the Table of Contents -->
+        <xsl:attribute name="heading-id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
+        <!-- TODO: record heading levels for indentation/runover in ToC -->
+        <!--  -->
         <!-- Finally, the heading content itself -->
        <xsl:variable name="the-number">
             <xsl:apply-templates select="." mode="number"/>
