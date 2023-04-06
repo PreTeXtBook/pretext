@@ -570,6 +570,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
+<!-- A "case" is a further division of a PROOF-LIKE -->
+<xsl:template match="case">
+    <runin indentation="2" separator="&#x20;&#x20;">
+        <xsl:apply-templates select="." mode="title-full"/>
+    </runin>
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- Titles of blocks can be an entire "segment" if they finish with a  -->
 <!-- newline.  Other titles are "runin" and are consolidated in a final -->
 <!-- post-processing step.                                              -->
