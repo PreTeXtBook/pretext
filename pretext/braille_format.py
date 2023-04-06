@@ -246,6 +246,12 @@ class Segment:
         else:
             self.lines_following = 0
 
+        if "heading-id" in attrs:
+            self.heading_id = attrs["heading-id"]
+        else:
+            self.heading_id = None
+
+
 class Block:
 
     def __init__(self, b):
@@ -293,6 +299,8 @@ class BRF:
     def __init__(self, page_format, width, height):
         self.out_buffer = ''
         self.accumulator = []
+        self.toc_dict = {}
+        self.toc_mode = False
         self.cursor = Cursor(width, height, page_format)
         self.line_buffer = LineBuffer(width)
 
@@ -567,6 +575,13 @@ class BRF:
         if not(self.cursor.at_page_start()):
             for i in range(s.lines_before):
                 self.blank_line()
+
+        # Any page adjustments are now concluded, including a sandbox
+        # trial that may have necessitated a move to a new page.  If
+        # the segment is a heading it is about to be written on the
+        # page and the cursor knows the page number
+        if s.heading_id and self.cursor.embossing() and not(self.toc_mode):
+            self.toc_dict[s.heading_id] = self.cursor.page_number()
 
         # Centered
         # [BANA 2016],  4.4.2
