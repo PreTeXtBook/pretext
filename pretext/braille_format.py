@@ -357,10 +357,14 @@ class BRF:
 
     def adjust_text_width(self, adjustment):
         # Temporarily adjust the width of a page
-        # For example, to construct a centered heading
-        # Argument is an adjustment to current (negative, then positive?)
-        # Do not call while mid-line, only when at the start of a line
-        assert self.at_line_start(), "BUG: adjusting text width, when not at a line start"
+        # For example, to construct a centered heading,
+        # or to reserve space for a trailing page number.
+        # Argument is an adjustment to the current width
+        # (reduce with negative, then quickly restore with positive).
+        # A reduction must be while preparing a line, the ensuing
+        # expansion can (and often will) occur while mid-line.
+        if (adjustment < 0):
+            assert self.at_line_start(), "BUG: reducing text width, when not at a line start"
         self.cursor.adjust_text_width(adjustment)
         self.line_buffer.adjust_text_width(adjustment)
 
