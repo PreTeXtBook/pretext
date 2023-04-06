@@ -822,8 +822,30 @@ def parse_segments(xml_simple, out_file, page_format):
             brf.write_block(blk)
         brf.flush()
 
+    # Prepare a new BRF object, but copy out ToC page numbers
+    front = BRF(page_format, 40,25)
+    front.toc_mode = True
+    front.toc_dict = brf.toc_dict
+
+    headings = src_tree.xpath("/brf/segment[@heading-id]")
+    for head in headings:
+        seg = Segment(head)
+        seg.newpage = False
+        seg.ownpage = False
+        seg.centered = False
+        seg.breakable = False
+        # indentation, runover
+        seg.lines_before = 0
+        seg.lines_after = 0
+        seg.lines_following = 0
+        front.write_segment(seg)
+    # Fill out frontmatter final page
+    if page_format == 'emboss':
+        front.advance_page()
+
     # We assume `out_file` has been error-checked
     # It would be better to use a context manager
     brf_file = open(out_file, "w")
+    brf_file.write(front.get_brf())
     brf_file.write(brf.get_brf())
     brf_file.close()
