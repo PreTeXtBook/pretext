@@ -840,6 +840,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Lists -->
+<!-- ##### -->
+
+<!-- Lists are containers full of list items.  All by   -->
+<!-- themselves they have no real impact on the braille -->
+<!-- output.  The list items are another matter.        -->
+<!-- 2023-04-06: very prelimnary, e.g. no runover       -->
+<xsl:template match="ul|ol|dl">
+    <!-- <segment>LIST</segment> -->
+    <xsl:apply-templates select="li"/>
+</xsl:template>
+
+<xsl:template match="li">
+    <!-- Marker as a "runin" element -->
+    <runin indentation="0" separator="&#x20;&#x20;">
+        <xsl:choose>
+            <xsl:when test="parent::ol">
+                <xsl:apply-templates select="." mode="item-number"/>
+                <xsl:text>.</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::ul">
+                <xsl:apply-templates select="." mode="unicode-list-marker"/>
+                <xsl:text>.</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::dl">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </xsl:when>
+        </xsl:choose>
+    </runin>
+    <xsl:apply-templates select="node()"/>
+</xsl:template>
+
+<xsl:template match="ul/li" mode="unicode-list-marker">
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="parent::ul" mode="format-code"/>
+    </xsl:variable>
+    <!-- The list label.  The file  en-ueb-chardefs.uti        -->
+    <!-- associates these Unicode values with the indicated    -->
+    <!-- dot patterns.  This jibes with [BANA-2016, 8.6.2],    -->
+    <!-- which says the open circle needs a Grade 1 indicator. -->
+    <!-- The file  en-ueb-g2.ctb  lists  x25cb  and  x24a0  as -->
+    <!-- both being "contraction" and so needing a             -->
+    <!-- Grade 1 indicator.                                    -->
+    <xsl:choose>
+        <!-- Unicode Character 'BULLET' (U+2022)       -->
+        <!-- Dot pattern: 456-256                      -->
+        <xsl:when test="$format-code = 'disc'">
+            <xsl:text>&#x2022; </xsl:text>
+        </xsl:when>
+        <!-- Unicode Character 'WHITE CIRCLE' (U+25CB) -->
+        <!-- Dot pattern: 1246-123456                  -->
+        <xsl:when test="$format-code = 'circle'">
+            <xsl:text>&#x25cb; </xsl:text>
+        </xsl:when>
+        <!-- Unicode Character 'BLACK SQUARE' (U+25A0) -->
+        <!-- Dot pattern: 456-1246-3456-145            -->
+        <xsl:when test="$format-code = 'square'">
+            <xsl:text>&#x25a0; </xsl:text>
+        </xsl:when>
+        <!-- a bad idea for Braille -->
+        <xsl:when test="$format-code = 'none'">
+            <xsl:text/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ########## -->
 <!-- References -->
 <!-- ########## -->
@@ -1302,11 +1369,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:for-each>
-</xsl:template>
-
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="ol|ul|dl">
-    <segment>LIST</segment>
 </xsl:template>
 
 <!-- segment with placeholder content at this stage -->
