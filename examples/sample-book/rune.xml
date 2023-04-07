@@ -1384,12 +1384,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Parsons Problem, SQL statement</title>
             <statement>
                 <p>Form the SQL statement by rearranging the four blocks.</p>
+                <!-- <p>Note: for this SQL exercise, and the others following, blocks are authored as code via a <tag>c</tag> element, in order that the text pass through to the compiler with no changes.</p> -->
             </statement>
             <blocks layout="horizontal" randomize="yes">
-                <block order="2">SELECT</block>
-                <block order="1">*</block>
-                <block order="4">FROM</block>
-                <block order="3">test</block>
+                <block order="2"><c>SELECT</c></block>
+                <block order="1"><c>*</c></block>
+                <block order="4"><c>FROM</c></block>
+                <block order="3"><c>test</c></block>
             </blocks>
         </exercise>
 
@@ -1399,10 +1400,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Form the SQL statement by rearranging the four blocks.  This version of this problem will <em>always</em> present the blocks in the same fixed order (but incorrect, hopefully!), as prescribed by the author in the source.</p>
             </statement>
             <blocks layout="horizontal" randomize="no">
-                <block order="2">SELECT</block>
-                <block order="1">*</block>
-                <block order="4">FROM</block>
-                <block order="3">test</block>
+                <block order="2"><c>SELECT</c></block>
+                <block order="1"><c>*</c></block>
+                <block order="4"><c>FROM</c></block>
+                <block order="3"><c>test</c></block>
             </blocks>
         </exercise>
 
@@ -1412,10 +1413,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Form the SQL statement by rearranging the four blocks.</p>
             </statement>
             <blocks layout="horizontal" randomize="yes">
-                <block order="2">SELECT</block>
-                <block order="1">*</block>
-                <block order="4">FROM</block>
-                <block order="3">test</block>
+                <block order="2"><c>SELECT</c></block>
+                <block order="1"><c>*</c></block>
+                <block order="4"><c>FROM</c></block>
+                <block order="3"><c>test</c></block>
             </blocks>
             <tests>
             assert 1,1 == world
@@ -1468,10 +1469,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Form the SQL statement by rearranging the four blocks.  Same problem as above, but we allow blocks to be reused (even though the solution does not require that).</p>
             </statement>
             <blocks layout="horizontal" reuse="yes" randomize="yes">
-                <block order="2">SELECT</block>
-                <block order="1">*</block>
-                <block order="4">FROM</block>
-                <block order="3">test</block>
+                <block order="2"><c>SELECT</c></block>
+                <block order="1"><c>*</c></block>
+                <block order="4"><c>FROM</c></block>
+                <block order="3"><c>test</c></block>
             </blocks>
         </exercise>
     </exercises>
@@ -1611,6 +1612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cline>[[0 for x in range(3)] for y in range(2)]</cline>
                 </cd>Then the values were (mostly) changed from zeros and the final array is shown below.</p>
                 <p>Identify (by clicking, or by circling) all of the boolean values in the array.</p>
+                <!-- <p>Note that every entry is inline code, authored with a <tag>c</tag>.</p> -->
             </statement>
 
             <areas>
@@ -1621,9 +1623,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell><area correct="no"><c>'towel'</c></area></cell>
                     </row>
                     <row>
-                        <cell><area correct="no">'true'</area></cell>
-                        <cell>0</cell>
-                        <cell><area>False</area></cell>
+                        <cell><area correct="no"><c>'true'</c></area></cell>
+                        <cell><c>0</c></cell>
+                        <cell><area><c>False</c></area></cell>
                     </row>
                 </tabular>
 
@@ -1636,9 +1638,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell><c>'towel'</c></cell>
                     </row>
                     <row>
-                        <cell>'true'</cell>
-                        <cell>0</cell>
-                        <cell>False</cell>
+                        <cell><c>'true'</c></cell>
+                        <cell><c>0</c></cell>
+                        <cell><c>False</c></cell>
                     </row>
                 </tabular>
             </areas>
