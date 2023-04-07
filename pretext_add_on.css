@@ -2998,6 +2998,10 @@ label.incorrect .feedback {
     right: -35px;
 }
 
+article.project-like > .heading + div.ptx-runestone-container > div.runestone,
+article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
+    margin-top: 0.5em;
+}
 
 /* hack for runestone */
 /*
