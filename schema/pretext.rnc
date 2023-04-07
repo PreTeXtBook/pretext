@@ -766,7 +766,7 @@
                     attribute margins {text}?,
                     attribute archive {text}?,
                     attribute decorative {"yes" | "no"}?,
-                    element description {TextShort}?,
+                    element description {(TextShort | WWVariable)*}?,
                     (
                         element latex-image {text} |
                         element asymptote {text} |
