@@ -306,6 +306,7 @@ console.log("this is e", e);
         for (var i = 0; i < items_needing_permalinks.length; i++) {
             this_item = items_needing_permalinks[i];
             var this_anchor = this_item.id;
+            if (Boolean(this_item.closest(".parsons"))) { continue }  /* parsons block */
             if (this_item.parentElement.classList.contains("lines")) { continue }  /* parsons block */
             if (getComputedStyle(this_item).display == "inline") { continue }  /* inline paragraph at start of article, for example*/
             try {
