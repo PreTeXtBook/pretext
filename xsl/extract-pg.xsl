@@ -1348,12 +1348,6 @@
     </xsl:if>
 </xsl:template>
 
-<!-- An image description may depend on the value of a simple scalar var   -->
-<!-- Perhaps this should warn if @name is not in Perl scalar syntax        -->
-<xsl:template match="description//var">
-    <xsl:value-of select="@name"/>
-</xsl:template>
-
 <xsl:template match="latex-image/var" mode="latex-image">
     <xsl:value-of select="@name" />
 </xsl:template>
@@ -1557,36 +1551,7 @@
 <!-- PGML Image Construction -->
 <!-- ####################### -->
 
-<xsl:template match="image[@pg-name]" mode="components">
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
-    </xsl:variable>
-    <xsl:text>[@image(insertGraph(</xsl:text>
-    <xsl:value-of select="@pg-name"/>
-    <xsl:text>), width=&gt;</xsl:text>
-    <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
-    <!-- alt attribute for accessibility -->
-    <xsl:choose>
-        <xsl:when test="@decorative = 'yes'">
-            <xsl:text>, alt=&gt;""</xsl:text>
-        </xsl:when>
-        <xsl:when test="not(string(description) = '')">
-            <xsl:variable name="delimiter">
-                <xsl:call-template name="find-unused-character">
-                    <xsl:with-param name="string" select="description"/>
-                    <xsl:with-param name="charset" select="concat('&quot;|/\?:;.,=+-_~`!^&amp;*',&SIMPLECHAR;)"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:text>, alt=&gt;qq</xsl:text>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:apply-templates select="description" />
-            <xsl:value-of select="$delimiter"/>
-        </xsl:when>
-    </xsl:choose>
-    <xsl:text>)@]* </xsl:text>
-</xsl:template>
-
-<xsl:template match="image[latex-image]" mode="components">
+<xsl:template match="image[@pg-name|latex-image]" mode="components">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -1594,31 +1559,41 @@
     <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
-    <!-- alt attribute for accessibility -->
+    <xsl:apply-templates select="." mode="description"/>
+    <xsl:text>)@]* </xsl:text>
+</xsl:template>
+
+<!-- Puts the description into an "alt" tag.                               -->
+<xsl:template match="image" mode="description">
     <xsl:choose>
         <xsl:when test="@decorative = 'yes'">
             <xsl:text>, alt=&gt;""</xsl:text>
         </xsl:when>
         <xsl:when test="not(string(description) = '')">
+            <xsl:variable name="description-text">
+                <xsl:apply-templates select="description"/>
+            </xsl:variable>
             <xsl:variable name="delimiter">
                 <xsl:call-template name="find-unused-character">
-                    <xsl:with-param name="string" select="description"/>
+                    <xsl:with-param name="string" select="$description-text"/>
                     <xsl:with-param name="charset" select="concat('&quot;|/\?:;.,=+-_~`!^&amp;*',&SIMPLECHAR;)"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:text>, alt=&gt;qq</xsl:text>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:apply-templates select="description" />
-            <xsl:value-of select="$delimiter"/>
+            <xsl:value-of select="concat($delimiter, $description-text, $delimiter)"/>
         </xsl:when>
     </xsl:choose>
-    <xsl:text>)@]* </xsl:text>
 </xsl:template>
 
 <!-- A description here should only have text nodes and var children.      -->
-<!-- Puts the description into an "alt" tag.                               -->
-<xsl:template match="image[@pg-name]/description">
+<xsl:template match="image/description">
     <xsl:apply-templates select="text()|var"/>
+</xsl:template>
+
+<!-- An image description may depend on the value of a simple scalar var   -->
+<!-- Perhaps this should warn if @name is not in Perl scalar syntax        -->
+<xsl:template match="description/var">
+    <xsl:value-of select="@name"/>
 </xsl:template>
 
 <xsl:template match="image[latex-image]" mode="latex-image-code">
@@ -1639,9 +1614,16 @@
     <xsl:text>&#xa;END_LATEX_IMAGE&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="image[latex-image]" mode="pg-name">
-    <xsl:text>$image_</xsl:text>
-    <xsl:number count="image" from="webwork" level="any" />
+<xsl:template match="image" mode="pg-name">
+    <xsl:choose>
+        <xsl:when test="@pg-name">
+            <xsl:value-of select="@pg-name"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>$image_</xsl:text>
+            <xsl:number count="image" from="webwork" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="exercisegroup/introduction//image[latex-image]" mode="pg-name">
