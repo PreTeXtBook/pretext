@@ -46,7 +46,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
 
-<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+<!-- With @indent="yes" the (intermediate) file is much easier to study    -->
+<!-- and debug, but it introduces whitespace we can not (or do not want    -->
+<!-- to) control for.  The situation is a single isolated sentence that    -->
+<!-- is entirely a font change.  Here "isolated" means it becomes an       -->
+<!-- entire "segment", such as being between two "displays" when breaking  -->
+<!-- up a paragraph.  For example, an entire sentence could be in italics, -->
+<!-- thus leading to a "segment" with a child "italic" and nothing else.   -->
+<!-- The indentation provided introduces whitespace where we are expecting -->
+<!-- mixed content.  In old parlance, we expect a "segment" to be "tight". -->
+<!-- We saw this just twice in all of AATA (2023-04-07) where a lone "m"   -->
+<!-- (plus absorbed punctuation) was caught between displays in a          -->
+<!-- paragraph, and the whitespace bled into a diff when the previous      -->
+<!-- commit led to the @indent suddenly being effective.                   -->
+
+<xsl:output method="xml" indent="no" encoding="UTF-8"/>
 
 <xsl:variable name="exercise-style" select="'static'"/>
 
