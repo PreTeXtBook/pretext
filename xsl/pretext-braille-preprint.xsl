@@ -1391,6 +1391,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <segment>PROGRAM</segment>
 </xsl:template>
 
+<!-- We support books and articles, though nothing in particular -->
+<!-- needs to be done at these root elements.  Yet?              -->
+<xsl:template match="book|article">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- "docinfo" should *always* be mined directly for pieces that affect output -->
+<xsl:template match="docinfo"/>
+
+<!-- Many pieces of the "frontmatter" have templates designed for divisions -->
+<xsl:template match="frontmatter">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- The "titlepage" and front "colophon" should be mined to form front -->
+<!-- matter material in the right places, etc.  We kill them for now so -->
+<!-- we don't see their children being overlooked.                      -->
+<xsl:template match="titlepage"/>
+<xsl:template match="frontmatter/colophon"/>
+
+<!-- Many pieces of the "backmatter" have templates designed for divisions -->
+<xsl:template match="backmatter">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+
 <!-- ############ -->
 <!-- EXPERIMENTAL -->
 <!-- ############ -->
@@ -1418,11 +1444,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
 </xsl:template>
 
+<!-- *Every* element needs an implementation, or it ends up here being -->
+<!-- reported as overlooked.  This is temporary during development.    -->
 <xsl:template match="*">
-    <!-- target informative messages to "blocks" being considered -->
-    <!-- <xsl:if test="ancestor::p"> -->
-        <xsl:message>Pass: <xsl:value-of select="local-name()"/></xsl:message>
-    <!-- </xsl:if> -->
+    <xsl:message>Overlooked: <xsl:value-of select="local-name()"/></xsl:message>
     <!-- recurse into child elements to find more "missing" elements -->
     <xsl:apply-templates select="*"/>
 </xsl:template>
