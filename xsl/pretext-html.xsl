@@ -6164,9 +6164,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mathematics").   We did this by breaking up strings with a zero-width -->
 <!-- space (U+200B), but a better device is wrapping a delimiter in a span -->
 <!-- (see this technique in the "text-processing" template in the Jupyter  -->
-<!-- conversion.  However, MathJax 3 lets us target/ignore spcific         -->
+<!-- conversion).  However, MathJax 3 lets us target/ignore specific       -->
 <!-- locations for its translation.  So the "text-processing" template     -->
-<!-- that was once here is now gone.                                       -->
+<!-- that was once here is now gone.  But now it is back, to upgrade a     -->
+<!-- keyboard "plain" apostrophe to a Unicode "curly" apostrophe.          -->
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+
+    <!-- 'RIGHT SINGLE QUOTATION MARK' (U+2019) -->
+    <xsl:variable name="apostophe-fixed" select="str:replace($text, $apos, '&#x2019;')"/>
+
+    <xsl:value-of select="$apostophe-fixed"/>
+</xsl:template>
 
 <!-- We cruise knowled content for necessity of hidden knowls -->
 <xsl:template match="*" mode="is-hidden">

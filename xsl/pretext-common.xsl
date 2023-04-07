@@ -155,8 +155,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- used in a string in XSLT functions, not even as   -->
 <!-- &apos;. But if it is stored as a variable, then   -->
 <!-- XSLT 1.0 will be OK with using $apos.             -->
-<!-- Use like "contat('L',$apos,'Hospital')"           -->
-<xsl:variable name="apos">'</xsl:variable>
+<!-- Use like "concat('L',$apos,'Hospital')"           -->
+<!-- Unicode Character 'APOSTROPHE' (U+0027)           -->
+<xsl:variable name="apos">&#x0027;</xsl:variable>
 
 <!-- Here we perform manipulations of math elements and subsequent  -->
 <!-- text nodes that lead with punctuation.  Basically, punctuation -->
