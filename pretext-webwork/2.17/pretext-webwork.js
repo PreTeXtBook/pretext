@@ -657,6 +657,9 @@ function handleWW(ww_id, action) {
 				width: 300px;
 				height: 300px;
 			}
+			.graphtool-answer-container .graphtool-number-line {
+				height: 57px;
+			}
 			</style>` +
 			'</head><body><main class="pretext-content">' + form.outerHTML + '</main></body>' +
 			'</html>';
