@@ -184,18 +184,19 @@ mini-html:
 # can get more accurate diffs. Dates are useful for single file output
 # (or at least less of an annoyance).  This should not be taken as necessary
 # or best practice for a real PreTeXt project using WeBWorK problems.
+# Adding a "-z" switch will create a "tgz" compressed archive
 
 sample-chapter-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -z -x chunk.level 1 debug.datedfiles no -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(SMPCPUB) $(SMPC)
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -z -x chunk.level 1 debug.datedfiles no -p $(MINIPUB) $(MINI)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(MINIPUB) $(MINI)
 
 
 #########################################################################
