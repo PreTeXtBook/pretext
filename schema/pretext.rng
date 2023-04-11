@@ -1947,7 +1947,12 @@
       </optional>
       <optional>
         <element name="description">
-          <ref name="TextShort"/>
+          <zeroOrMore>
+            <choice>
+              <ref name="TextShort"/>
+              <ref name="WWVariable"/>
+            </choice>
+          </zeroOrMore>
         </element>
       </optional>
       <choice>
