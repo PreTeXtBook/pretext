@@ -1629,7 +1629,7 @@ def webwork_to_xml(
                         for child in hnt:
                             chcopy = copy.deepcopy(child)
                             hint.append(chcopy)
-                answer_names = read.xpath(".//fillin/@name|.//var/@name")
+                answer_names = read.xpath(".//fillin/@name|.//var/@name|.//ul/@name|.//ol/@name|.//dl/@name")
                 answer_hashes = response_root.find("./answerhashes")
                 if answer_hashes is not None:
                     for ans in list(answer_hashes):
