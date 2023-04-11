@@ -24,11 +24,13 @@
     </xsl:variable>
     <xsl:element name="input">
         <xsl:attribute name="types"><xsl:text>text</xsl:text></xsl:attribute>
-        <xsl:attribute name="id">
-            <xsl:value-of select="$parent-id"/>
-            <xsl:text>-</xsl:text>
-            <xsl:value-of select="@name"/>
-        </xsl:attribute>
+        <xsl:if test="@name">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$parent-id"/>
+                <xsl:text>-</xsl:text>
+                <xsl:value-of select="@name"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
     </xsl:element>
 </xsl:template>
@@ -51,21 +53,6 @@
             </xsl:attribute>
             <script type="application/json">
                 <xsl:text>{&#xa;</xsl:text>
-                    <!-- A seed is provided to generate consistent static content -->
-                    <xsl:if test="$b-dynamics-static-seed">
-                        <xsl:text>"static_seed": "</xsl:text>
-                        <xsl:choose>
-                            <xsl:when test="setup/@seed">
-                                <xsl:value-of select="setup/@seed"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <!-- Report if a seed is not provided-->
-                                <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="$the-id"/>" is missing setup @seed for static content generation.</xsl:message>
-                                <xsl:text>1234</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:text>",&#xa;</xsl:text>
-                    </xsl:if>
                     <!-- The formatted HTML presentation of the problem, -->
                     <!-- with escape codes for dynamic content, all of   -->
                     <!-- which is serialized and escaped to a string.    -->
@@ -92,36 +79,55 @@
                             <xsl:apply-templates select="solution" mode="body" />
                         </xsl:with-param>
                     </xsl:call-template>
-                    <!-- Add packages that need to be loaded as javascript -->
-                    <xsl:text>,&#xa;"dyn_imports": [</xsl:text>
-                    <xsl:if test="setup/de-object">
-                        <xsl:text>"BTM"</xsl:text>
-                    </xsl:if>
-                    <xsl:text>]</xsl:text>
-                    <!-- Names assigned to the blanks. (Inclusion is     -->
-                    <!-- really so that evaluation of answers can refer  -->
-                    <!-- to submitted work by name.                      -->
-                    <xsl:text>,&#xa;"blankNames": {</xsl:text>
-                    <xsl:apply-templates select="statement//fillin" mode="declare-blanks" />
-                    <!-- The actual setup code is javascript enclosed in quotes. -->
-                    <!-- The declaration creates the objects that are needed.    -->
-                    <!-- The script is included as an escaped string             -->
-                    <xsl:text>},&#xa;"dyn_vars": </xsl:text>
-                    <xsl:call-template name="dynamic-setup" />
+                    <!-- Additional features that only appear for dynamic problems -->
+                    <!-- exercise/setup means there is javascript to setup the problem -->
+                    <xsl:choose>
+                        <xsl:when test="setup">
+                            <!-- A seed is provided to generate consistent static content -->
+                            <xsl:if test="$b-dynamics-static-seed">
+                                <xsl:text>"static_seed": "</xsl:text>
+                                <xsl:choose>
+                                    <xsl:when test="setup/@seed">
+                                        <xsl:value-of select="setup/@seed"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <!-- Report if a seed is not provided-->
+                                        <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="$the-id"/>" is missing setup @seed for static content generation.</xsl:message>
+                                        <xsl:text>1234</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:text>",&#xa;</xsl:text>
+                            </xsl:if>
+                            <!-- Add packages that need to be loaded as javascript -->
+                            <xsl:text>,&#xa;"dyn_imports": [</xsl:text>
+                            <xsl:if test="setup/de-object">
+                                <xsl:text>"BTM"</xsl:text>
+                            </xsl:if>
+                            <xsl:text>]</xsl:text>
+                            <!-- Names assigned to the blanks. (Inclusion is     -->
+                            <!-- really so that evaluation of answers can refer  -->
+                            <!-- to submitted work by name.                      -->
+                            <xsl:text>,&#xa;"blankNames": {</xsl:text>
+                            <xsl:apply-templates select="statement//fillin" mode="declare-blanks" />
+                            <!-- The actual setup code is javascript enclosed in quotes. -->
+                            <!-- The declaration creates the objects that are needed.    -->
+                            <!-- The script is included as an escaped string             -->
+                            <xsl:text>},&#xa;"dyn_vars": </xsl:text>
+                            <xsl:call-template name="dynamic-setup" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>,&#xa;"blankNames": {}</xsl:text>
+                            <xsl:text>,&#xa;"dyn_vars": null</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <!-- An array of tests and feedback for answer evaluation    -->
                     <!-- Each blank has a corresponding array of test/feedback   -->
                     <!-- response. The test is Javascript (stringified) that     -->
                     <!-- returns a boolean response. The first test is for       -->
                     <!-- correctness. The last response is default.              -->
                     <xsl:text>,&#xa;"feedbackArray": [</xsl:text>
-                    <!-- In case all answers are based on one test               -->
-                    <xsl:variable name="multiAns">
-                        <xsl:apply-templates select="evaluation" mode="get-multianswer-check" />
-                    </xsl:variable>
                     <!-- Generate test/feedback pair for each fillin             -->
-                    <xsl:apply-templates select="statement//fillin" mode="dynamic-feedback">
-                        <xsl:with-param name="multiAns" select="$multiAns" />
-                    </xsl:apply-templates>
+                    <xsl:apply-templates select="statement//fillin" mode="generate-feedback" />
                     <xsl:text>]</xsl:text>
                 <xsl:text>&#xa;}</xsl:text>
             </script>
@@ -275,9 +281,19 @@
     <xsl:if test="position() > 1">
         <xsl:text>, </xsl:text>
     </xsl:if>
-    <!-- Future: There may be attributes of the fillin that declare parser type. -->
-    <!-- For now, simply assuming everything is an expression.                   -->
-    <xsl:text>v._menv.getParser()</xsl:text>
+    <!-- @context determines the parser type. -->
+    <!-- If absent means raw text.            -->
+    <xsl:choose>
+        <xsl:when test="not(@context)"> <!-- do nothing -->
+            <xsl:text>(x) => x</xsl:text>
+        </xsl:when>
+        <xsl:when test="@context = 'formula'">  <!-- parse formula -->
+            <xsl:text>v._menv.getParser()</xsl:text>
+        </xsl:when>
+        <xsl:otherwise> <!-- Warning not supported -->
+            <xsl:message>PTX:WARNING: A fillin was requested with an unsupported context=<xsl:value-of select="@context"/></xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -285,103 +301,172 @@
 <!-- Evaluation and Feedback                                    -->
 <!-- ========================================================== -->
 
-<!-- Template for answer checking. Actual work done by specialized templates. -->
-<xsl:template match="fillin" mode="dynamic-feedback">
-    <xsl:param name="multiAns"/>
-    <xsl:variable name="curFillIn" select="."/>
-    <xsl:variable name="check" select="ancestor::exercise//evaluation/evaluate[@submit = $curFillIn/@name]" />
+<!-- Template for answer checking. -->
+<!-- This is called in turn for each fillin in the statement -->
+<!-- Actual work done by specialized templates. -->
+<xsl:template match="fillin" mode="generate-feedback">
+    <!-- Generating a list, so comma-separate once first added. -->
     <xsl:if test="position() > 1">
         <xsl:text>, </xsl:text>
     </xsl:if>
-    <!-- First check is for correctness. -->
-    <xsl:text>[{"solution_code": </xsl:text>
+    <xsl:text>[</xsl:text>
+    <!-- If *any* checker uses fillin's name, they *all* must -->
+    <xsl:variable name="b-use-names" select="boolean(ancestor::exercise/evaluation/fillin[@name])"/>
+    <!-- Run through all of the conditions to test for feedback -->
+    <!-- First is always correct. -->
+    <!-- Add conditions for feedback. First always determines correctness. -->
+    <xsl:choose>
+        <!-- Must match on names when present. -->
+        <xsl:when test="@name">
+            <xsl:apply-templates select="ancestor::exercise/evaluation/fillin[@name = @name]/condition" mode="generate-feedback"/>
+        </xsl:when>
+        <!-- Otherwise based on order. -->
+        <xsl:otherwise>
+            <xsl:if test="$b-use-names">
+                <xsl:message>PTX:WARNING:    Fillin exercises must be consistent about using names in evaluation (<xsl:apply-templates select="ancestor::exercise" mode="html-id" />)</xsl:message>
+            </xsl:if>
+            <xsl:variable name="fillin-pos" select="position()"/>
+            <xsl:variable name="evaluate-fillin" select="ancestor::exercise/evaluation/fillin[position()=$fillin-pos]"/>
+            <xsl:apply-templates select="$evaluate-fillin/condition" mode="generate-feedback"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- Add a generic incorrect response at the end. -->
+    <xsl:text>, { "solution_code": "true", "feedback": "Incorrect." }</xsl:text>
+    <xsl:text>]</xsl:text>         
+</xsl:template>
+
+<!-- Generate the condition/feedback dictionary for evaluation -->
+<xsl:template match="condition" mode="generate-feedback">
+    <!-- See if this is the first or later condition -->
+    <xsl:if test="position()>1">
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+    <!-- per-condition dictionary begin -->
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="generate-feedback-condition"/>
+    <!-- optional feedback -->
+    <xsl:text>, "feedback": "</xsl:text>
+    <xsl:choose>
+        <xsl:when test="feedback">
+            <xsl:apply-templates select="feedback" mode="serialize-feedback"/>
+        </xsl:when>
+        <!-- XXX This should use localized strings for Correct/Incorrect XXX -->
+        <xsl:when test="position() = 1">
+            <xsl:text>Correct.</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>Incorrect.</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>"</xsl:text>
+    <!-- per-condition dictionary end -->
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Allow feedback to have HTML, so need to serialize and escape -->
+<xsl:template match="feedback" mode="serialize-feedback">
+    <xsl:variable name="feedback-rtf">
+        <xsl:apply-templates select="."/>
+    </xsl:variable>
+    <!-- serialize HTML as text, then escape as JSON -->
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- JSON dictionary entry for numerical condition -->
+<xsl:template match="condition[@number]" mode="generate-feedback-condition">
+    <!-- per-condition dictionary begin -->
+    <xsl:text>"number": [</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@tolerance">
+            <xsl:value-of select="@number - @tolerance"/>
+            <xsl:text>,</xsl:text>
+            <xsl:value-of select="@number + @tolerance"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@number"/>
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="@number"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- JSON dictionary entry for string condition -->
+<xsl:template match="condition[@string]" mode="generate-feedback-condition">
+    <!-- regex string match, drop    -->
+    <!-- leading/trailing whitespace -->
+    <xsl:text>"regex": "</xsl:text>
+    <!-- JSON escapes necessary for regular expression -->
+    <xsl:call-template name="escape-json-string">
+        <xsl:with-param name="text">
+            <xsl:text>^\s*</xsl:text>
+            <xsl:value-of select="@string"/>
+            <xsl:text>\s*$</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>"</xsl:text>
+    <!-- flag for case-sensitive match -->
+    <!-- default:  'sensitive'         -->
+    <xsl:text>, "regexFlags": "</xsl:text>
+    <xsl:if test="@case = 'insensitive'">
+        <xsl:text>i</xsl:text>
+    </xsl:if>
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<!-- Condition that is based on dynamic logic. -->
+<xsl:template match="condition" mode="generate-feedback-condition">
+    <xsl:text>"empty_code": </xsl:text>
     <xsl:call-template name="escape-quote-string">
         <xsl:with-param name="text">
-            <xsl:choose>
-                <xsl:when test="string-length($multiAns)>0">
-                    <xsl:value-of select="$multiAns"/>
-                </xsl:when>
-                <xsl:when test="$check/test[@correct='yes']">
-                    <xsl:call-template name="create-test">
-                        <xsl:with-param name="submit" select="$curFillIn/@name" />
-                        <xsl:with-param name="test" select="$check/test[@correct='yes']/*[not(self::feedback)]" />
-                    </xsl:call-template>
-                </xsl:when>
-                <!-- If no explicit test, must be on the fillin. -->
-                <xsl:otherwise>
-                    <xsl:text>function() {&#xa;</xsl:text>
-                    <xsl:text>    return _menv.compareExpressions(</xsl:text>
-                    <xsl:value-of select="$curFillIn/@correct"/>
-                    <xsl:text>, </xsl:text>
-                    <xsl:value-of select="$curFillIn/@name"/>
-                    <xsl:text>);&#xa;}</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="create-test">
+                <xsl:with-param name="submit" select="parent::fillin/@name" />
+                <xsl:with-param name="test" select="*[not(self::feedback)]" />
+            </xsl:call-template>
             <xsl:text>()</xsl:text>
         </xsl:with-param>
     </xsl:call-template>
-    <xsl:text>, "feedback": </xsl:text>
-    <xsl:choose>
-        <xsl:when test="$check/test[@correct='yes']/feedback">
-            <xsl:call-template name="quote-string">
-                <xsl:with-param name="text" select="$check/test[@correct='yes']/feedback"/>
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>"Correct."</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}</xsl:text>
-    <!-- Now add additional checks for feedback. -->
-    <xsl:for-each select="$check/test[not(@correct='yes')]">
-        <xsl:text>, {"solution_code": </xsl:text>
-        <xsl:call-template name="escape-quote-string">
-            <xsl:with-param name="text">
-                <xsl:call-template name="create-test">
-                    <xsl:with-param name="submit" select="$curFillIn/@name" />
-                    <xsl:with-param name="test" select="*[not(self::feedback)]" />
-                </xsl:call-template>
-                <xsl:text>()</xsl:text>
-            </xsl:with-param>
-        </xsl:call-template>
-        <xsl:text>, "feedback": </xsl:text>
-        <xsl:choose>
-            <xsl:when test="feedback">
-                <xsl:call-template name="quote-string">
-                    <xsl:with-param name="text" select="feedback"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>"Try again."</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>}</xsl:text>
-    </xsl:for-each>
-    <!-- Default feedback for the blank. Always evaluates true.   -->
-    <xsl:text>, {"feedback": </xsl:text>
-    <xsl:choose>
-        <!-- Allow the problem to define it: feedback with no test   -->
-        <xsl:when test="$check/feedback">
-            <xsl:call-template name="quote-string">
-                <xsl:with-param name="text" select="$check/feedback"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- Maybe this should be a configurable default???   -->
-        <xsl:otherwise>
-            <xsl:text>"Try again."</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}]</xsl:text>         
 </xsl:template>
 
-<!-- Deal with possibility of global checker for all blanks -->
-<xsl:template match="evaluation" mode="get-multianswer-check">
-    <xsl:variable name="responseTree" select="ancestor::exercise//fillin" />
-    <xsl:if test="count($responseTree) > 1 and ancestor::exercise//evaluation/evaluate[@all='yes']/test">
-        <xsl:call-template name="create-test">
-            <xsl:with-param name="test" select="ancestor::exercise//evaluation/evaluate[@all='yes']/test/*[not(self::feedback)]" />
-        </xsl:call-template>
-    </xsl:if>
+<!-- Condition that is based on matching a dynamic expression. -->
+<xsl:template match="condition[@expr]" mode="generate-feedback-condition">
+    <xsl:text>"solution_code": </xsl:text>
+    <xsl:call-template name="escape-quote-string">
+        <xsl:with-param name="text">
+            <xsl:text>function() {&#xa;</xsl:text>
+            <xsl:text>    return _menv.compareExpressions(</xsl:text>
+            <xsl:value-of select="@expr"/>
+            <xsl:text>, ans);&#xa;}()</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="condition[@multiple]" mode="generate-feedback-condition">
+    <xsl:variable name="multiple-name" select="@multiple"/>
+    <xsl:choose>
+        <xsl:when test="ancestor::evaluation/multiple[@name=$multiple-name]">
+            <xsl:text>"solution_code": </xsl:text>
+            <xsl:call-template name="escape-quote-string">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="create-test">
+                        <xsl:with-param name="test" select="ancestor::evaluation/multiple[@name=$multiple-name]/*" />
+                    </xsl:call-template>
+                    <xsl:text>()</xsl:text>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>
+                <xsl:text>
+                    PTX-Error:: multiple comparison not matching.
+                </xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Template for simple answer checkers: no interaction between different fillins. -->
@@ -592,6 +677,7 @@
                                     <xsl:when test="options/min/@name">
                                         <xsl:value-of select="$prefix"/>
                                         <xsl:value-of select="options/min/@name"/>
+                                        <xsl:text>.value()</xsl:text>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:value-of select="options/min"/>
@@ -613,6 +699,7 @@
                                     <xsl:when test="options/max/@name">
                                         <xsl:value-of select="$prefix"/>
                                         <xsl:value-of select="options/max/@name"/>
+                                        <xsl:text>.value()</xsl:text>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:value-of select="options/max"/>

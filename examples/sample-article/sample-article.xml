@@ -8278,13 +8278,121 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </introduction>
 
             <exercises>
+                <title>Static Versions</title>
+
+                <exercise label="fillin-integer">
+                    <title>Fill-In, Integer Answer</title>
+        
+                    <statement>
+                        <p>The game of bowling uses <fillin width="28"/> pins that you try to knock down. (This answer blank has been set to be very wide.)</p>
+                    </statement>
+                    <evaluation>
+                        <fillin>
+                            <condition number="10">
+                                <feedback>
+                                    <p>Arranged in a triangle, there are <m>1+2+3+4 = 10</m> pins, a so-called <term>triangular</term> number.</p>
+                                </feedback>
+                            </condition>
+                            <condition number="16">
+                                <feedback>
+                                    <p><em>Close</em>! You may have used hexadecimal notation, when you did not really mean to.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Incorrect.</p>
+                                </feedback>
+                            </condition>
+                        </fillin>
+                    </evaluation>
+                </exercise>
+        
+                <exercise label="fillin-string-integer">
+                    <title>Fill-In, String and Number Answers</title>
+        
+                    <statement>
+                        <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>. (These two answer blanks have been set to be very short.)</p>
+                        <p><fillin width="2"/> <c>age = </c> <fillin width="3"/><c>;</c></p>
+                    </statement>
+                    <evaluation>
+                        <fillin>
+                            <condition string="int">
+                                <feedback>
+                                    <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                                </feedback>
+                            </condition>
+                        </fillin>
+                        <fillin>
+                            <condition number="5">
+                                <feedback>
+                                    <p>An integer variable may be initialized to a value.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Use <c>5</c> as the initial value of the variable.</p>
+                                </feedback>
+                            </condition>
+                        </fillin>
+                    </evaluation>
+                </exercise>
+        
+                <exercise label="fillin-case-insensitive">
+                    <title>Fill-In, Case-Insensitive Answer</title>
+        
+                    <statement>
+                        <p>The word <fillin/> is the opposite of <q>yes</q>.  (Try a mixture of upper and lower-case letters.)</p>
+                    </statement>
+                    <evaluation>
+                        <fillin>
+                            <!-- Note, no "p" in "feedback" -->
+                            <condition string="no" case="insensitive">
+                                <feedback>The correct answers are  no, No, nO, and NO.</feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>Incorrect.</feedback>
+                            </condition>
+                        </fillin>
+                    </evaluation>
+                </exercise>
+        
+                <exercise label="fillin-decimal">
+                    <title>Fill-In, Decimal Answer</title>
+        
+                    <statement>
+                        <p>The decimal number <fillin/> is an approximation of <m>\sfrac{1}{3}</m> to within three significant figures.  (<url href="https://en.wikipedia.org/wiki/Significant_figures" visual="en.wikipedia.org/wiki/Significant_figures">Wikipedia</url>).</p>
+                    </statement>
+                    <evaluation>
+                        <fillin>
+                            <!-- Note, no "p" in "feedback" -->
+                            <condition number="0.333" tolerance="0.0005">
+                                <feedback>
+                                    <p>Any value in the interval <m>0.333\pm 0.0005</m> is correct.</p>
+                                </feedback>
+                            </condition>
+                            <condition string=".*">
+                                <feedback>
+                                    <p>Incorrect. Did you provide three <em>significant figures</em>?</p>
+                                </feedback>
+                            </condition>
+                        </fillin>
+                    </evaluation>
+                </exercise>
+            </exercises>
+
+            <exercises>
                 <title>Dynamic Fill-In</title>
 
                 <exercise label="dynamic-fitb-simple-formula">
                     <title>Fill-In Formula (Dynamic)</title>
                     <statement>
-                        <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval expr="x1"/></m>,  <m>x=<eval expr="x2"/></m>, and <m>x=<eval expr="x3"/></m> and so that <m>f(0)=<eval expr="y0"/></m>.</p>
-                        <p><m>f(x)=</m> <fillin name="st_cubic" correct="x3"/></p>
+                        <p>Find a formula for a cubic function <m>f(x)</m> that has roots at <m>x=<eval expr="x1"/></m>,  <m>x=<eval expr="x2"/></m>, and <m>x=<eval expr="x3"/></m> and so that <m>f(0)=<eval expr="y0"/></m>.</p>
+                        <p><m>f(x)=</m> <fillin name="st_cubic" correct="cubic"  context="formula"/></p>
                     </statement>
                     <solution>
                         <p>
@@ -8342,11 +8450,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </de-object>
                     </setup>
                     <evaluation>
-                        <evaluate submit="st_cubic">
-                            <test correct="yes">
-                                <eval expr="cubic"/>
-                            </test>
-                        </evaluate>
+                        <fillin name="st_cubic">
+                            <condition expr="cubic"/>
+                        </fillin>
                     </evaluation>
                 </exercise>
                 <exercise label="function-decomposition">
@@ -8357,8 +8463,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
                         </p>
                         <p>
-                        <m>f(x) = </m> <fillin width="15" correct="outerFormula" name="fGiven"/> 
-                        and <m>g(x)=</m> <fillin width="15" correct="innerFormula" name="gGiven"/>
+                        <m>f(x) = </m> <fillin width="15" correct="outerFormula" name="fGiven" context="formula"/> 
+                        and <m>g(x)=</m> <fillin width="15" correct="innerFormula" name="gGiven" context="formula"/>
                         </p>
                     </statement>
                     <solution>
@@ -8396,62 +8502,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <variable name="x"><eval expr="innerFormula"/></variable>
                         </de-object>
                     </setup>
-                    <evaluation answers-coupled="yes">
-                        <evaluate submit="fGiven">
-                        <test>
-                            <eval expr="identityFunction"/>
-                            <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
-                        </test>
-                        <test>
+                    <evaluation>
+                        <fillin name="fGiven">
+                            <condition multiple="composition">
+                                <feedback>Excellent!</feedback>
+                            </condition>
+                            <condition expr="identityFunction">
+                                <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                            </condition>
+                            <condition>
+                                <not>
+                                    <equal>
+                                        <eval expr="composition"/>
+                                        <de-object context="formula" mode="substitution">
+                                            <formula><eval expr="fGiven"/></formula>
+                                            <variable name="x"><eval expr="gGiven"/></variable>
+                                        </de-object>
+                                    </equal>
+                                </not>
+                                <equal>
+                                    <eval expr="composition"/>
+                                    <de-object context="formula" mode="substitution">
+                                        <formula><eval expr="gGiven"/></formula>
+                                        <variable name="x"><eval expr="fGiven"/></variable>
+                                    </de-object>
+                                </equal>
+                                <feedback>You have composed in the wrong order.</feedback>
+                            </condition>
+                        </fillin>
+                        <fillin name="gGiven">
+                            <condition multiple="composition">
+                                <feedback>Good choice!</feedback>
+                            </condition>
+                            <condition>
+                                <eval expr="identityFunction"/>
+                                <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                            </condition>
+                        </fillin>
+                        <multiple name="composition">
+                            <equal>
+                                <eval expr="composition"/>
+                                <de-object context="formula" mode="substitution">
+                                    <formula><eval expr="fGiven"/></formula>
+                                    <variable name="x"><eval expr="gGiven"/></variable>
+                                </de-object>
+                            </equal>
                             <not>
                                 <equal>
-                                    <eval expr="composition"/>
-                                    <de-object context="formula" mode="substitution">
-                                        <formula><eval expr="fGiven"/></formula>
-                                        <variable name="x"><eval expr="gGiven"/></variable>
-                                    </de-object>
+                                    <eval expr="fGiven"/>
+                                    <eval expr="identityFunction"/>
                                 </equal>
                             </not>
-                            <equal>
-                            <eval expr="composition"/>
-                            <de-object context="formula" mode="substitution">
-                                <formula><eval expr="gGiven"/></formula>
-                                <variable name="x"><eval expr="fGiven"/></variable>
-                            </de-object>
-                            </equal>
-                            <feedback>You have composed in the wrong order.</feedback>
-                        </test>
-                        </evaluate>
-                        <evaluate submit="gGiven">
-                        <test>
-                            <eval expr="identityFunction"/>
-                            <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
-                        </test>
-                        </evaluate>
-                        <evaluate all="yes">
-                            <test correct="yes">
+                            <not>
                                 <equal>
-                                    <eval expr="composition"/>
-                                    <de-object context="formula" mode="substitution">
-                                        <formula><eval expr="fGiven"/></formula>
-                                        <variable name="x"><eval expr="gGiven"/></variable>
-                                    </de-object>
+                                    <eval expr="gGiven"/>
+                                    <eval expr="identityFunction"/>
                                 </equal>
-                                <not>
-                                    <equal>
-                                        <eval expr="fGiven"/>
-                                        <eval expr="identityFunction"/>
-                                    </equal>
-                                </not>
-                                <not>
-                                    <equal>
-                                        <eval expr="gGiven"/>
-                                        <eval expr="identityFunction"/>
-                                    </equal>
-                                </not>
-                            <feedback>Excellent!</feedback>
-                            </test>
-                        </evaluate>
+                            </not>
+                        </multiple>
                     </evaluation>
                 </exercise>
             </exercises>
