@@ -2750,6 +2750,7 @@
               <choice>
                 <value>popup</value>
                 <value>buttons</value>
+                <value>checkboxes</value>
                 <value>none</value>
               </choice>
             </attribute>
