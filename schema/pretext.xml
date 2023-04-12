@@ -2466,7 +2466,7 @@
                                       | "limit" | "number" | "point"
                                       | "syntax" | "quantity" | "vector"
                                       }?,
-                    attribute form {"popup"|"buttons"|"none"}?) |
+                    attribute form {"popup"|"buttons"|"checkboxes"|none"}?) |
                     (attribute form {"essay"},
                     attribute width {text}?)
                 }
