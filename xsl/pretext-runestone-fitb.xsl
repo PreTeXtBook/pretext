@@ -85,18 +85,21 @@
                         <xsl:when test="setup">
                             <!-- A seed is provided to generate consistent static content -->
                             <xsl:if test="$b-dynamics-static-seed">
-                                <xsl:text>"static_seed": "</xsl:text>
-                                <xsl:choose>
-                                    <xsl:when test="setup/@seed">
-                                        <xsl:value-of select="setup/@seed"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <!-- Report if a seed is not provided-->
-                                        <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="$the-id"/>" is missing setup @seed for static content generation.</xsl:message>
-                                        <xsl:text>1234</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <xsl:text>",&#xa;</xsl:text>
+                                <xsl:text>,&#xa;"static_seed": </xsl:text>
+                                <xsl:call-template name="quote-string">
+                                    <xsl:with-param name="text">
+                                        <xsl:choose>
+                                            <xsl:when test="setup/@seed">
+                                                <xsl:value-of select="setup/@seed"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <!-- Report if a seed is not provided-->
+                                                <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="$the-id"/>" is missing setup @seed for static content generation.</xsl:message>
+                                                <xsl:text>1234</xsl:text>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:with-param>
+                                </xsl:call-template>
                             </xsl:if>
                             <!-- Add packages that need to be loaded as javascript -->
                             <xsl:text>,&#xa;"dyn_imports": [</xsl:text>
