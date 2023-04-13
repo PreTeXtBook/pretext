@@ -216,7 +216,8 @@ function handleWW(ww_id, action) {
 				answers[id] = {
 					correct_ans: this[id].correct_ans,
 					correct_ans_latex_string: this[id].correct_ans_latex_string,
-					correct_choice: this[id].correct_choice
+					correct_choice: this[id].correct_choice,
+					correct_choices: this[id].correct_choices,
 				};
 			}, data.rh_result.answers);
 		}
@@ -351,8 +352,8 @@ function handleWW(ww_id, action) {
 				if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
 					const score = data.rh_result.answers[name].score;
 					const student_ans = data.rh_result.answers[name].student_value || data.rh_result.answers[name].student_ans;
- 					const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
- 					if (input.value == student_ans) {
+					const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
+					if (input.value == student_ans) {
 						if (score == 1) {
 							input.parentNode.classList.add('correct');
 						} else {
@@ -363,6 +364,24 @@ function handleWW(ww_id, action) {
 							? `<span class="correct">${localize_correct}</span>` : `<span class="incorrect">${localize_incorrect}.</span>`)
 						feedbackButton.style.marginRight = '0.25rem';
 						input.after(feedbackButton);
+					}
+				}
+
+				if (input.type.toUpperCase() == 'CHECKBOX' && answers[name]) {
+					const score = data.rh_result.answers[name].score;
+					const student_ans = data.rh_result.answers[name].student_ans;
+					const correct_ans = data.rh_result.answers[name].correct_ans;
+					if (input.value == data.rh_result.answers[name].firstElement) {
+						const checkbox_div = input.parentNode.parentNode;
+						if (score == 1) {
+							checkbox_div.classList.add('correct');
+						} else {
+							checkbox_div.classList.add('incorrect');
+						}
+						const feedbackButton = createFeedbackButton(`${ww_id}-${name}`,
+							(student_ans == correct_ans)
+							? `<span class="correct">${localize_correct}</span>` : `<span class="incorrect">${localize_incorrect}.</span>`)
+						checkbox_div.insertBefore(feedbackButton, checkbox_div.firstChild);
 					}
 				}
 			}
@@ -520,7 +539,7 @@ function handleWW(ww_id, action) {
 			`<style>
 			html { overflow-y: hidden; }
 			html body { background:unset; margin: 0; }
-			body { font-size: initial; line-height: initial; }
+			body { font-size: initial; line-height: initial; padding:2px; }
 			.hidden-content { display: none; }
 			input[type="text"], input[type="radio"], label, select {
 				height: auto;
@@ -592,7 +611,7 @@ function handleWW(ww_id, action) {
 			background-size: auto 70%;
 		}
 		label {
-			padding-left: 1.5em;
+			padding-left: 1.8em;
 		}
 		label.correct::before {
 			color: #060;
@@ -618,6 +637,32 @@ function handleWW(ww_id, action) {
 			content: '⚠';
 			margin-right: 2pt;
 			font-size: small;
+		}
+		.checkboxes-container.correct label input, .checkboxes-container.incorrect label input {
+			border-radius: 2px;
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+			position: relative;
+			top: 5px;
+			background-repeat: no-repeat;
+		}
+		.checkboxes-container.correct label input {
+			background-color: #8F8;
+			border: #060 solid;
+		}
+		.checkboxes-container.correct label input:checked {
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='14px' width='14px'><text x='13' y='13' text-anchor='end'>✓</text></svg>");
+		}
+		.checkboxes-container.incorrect label input {
+			background-color: #DAA;
+			border: #943D3D solid;
+		}
+		.checkboxes-container.incorrect label input:checked {
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='14px' width='14px'><text x='13' y='13' text-anchor='end'>✘</text></svg>");
 		}
 		div.PGML img.image-view-elt {
 			max-width:100%;
@@ -659,6 +704,10 @@ function handleWW(ww_id, action) {
 			}
 			.graphtool-answer-container .graphtool-number-line {
 				height: 57px;
+			}
+			.checkboxes-container .ww-feedback {
+				position: absolute;
+				left: 2px;
 			}
 			</style>` +
 			'</head><body><main class="pretext-content">' + form.outerHTML + '</main></body>' +
@@ -786,8 +835,23 @@ function WWshowCorrect(ww_id, answers) {
 				feedbackButton.remove();
 			}
 			const correct_ans = answers[name].correct_choice || answers[name].correct_ans;
- 			if (input.value == correct_ans) {
-				input.setAttribute('checked', 'checked');
+			if (input.value == correct_ans) {
+				input.checked = true;
+				//input.setAttribute('checked', 'checked');
+			} else {
+				input.checked = false;
+			}
+		}
+
+		if (input.type.toUpperCase() == 'CHECKBOX' && answers[name]) {
+console.log(JSON.stringify(answers[name]));
+			const correct_choices = answers[name].correct_choices;
+			if (correct_choices.includes(input.value)) {
+				input.checked = true;
+			//	input.setAttribute('checked', 'checked');
+			} else {
+				input.checked = false;
+			//	 input.setAttribute('checked', false);
 			}
 		}
 	}
