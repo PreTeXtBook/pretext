@@ -78,7 +78,9 @@ function augmentResults(result, docs) {
         res.snum = info.snum;
     }
 }
-// had to rewrite this with a variable for the index, because we have to
+// have to rewrite this with a variable for the index, because we have to
+// remember the location.
+// but probably this step is not actually needed, because of rearrangeArray
 function REaugmentResults(result) {
     let currenttopindex = 0;
     // assume only level 1 and 2 in results
@@ -89,7 +91,42 @@ function REaugmentResults(result) {
         else if (res.level == 1) { currenttopindex = index }
     }
 }
-
+function rearrangedArray(arry) {
+   // return a new array which is arry (with depth) sorted according to meas,
+   // again as an array with depth.
+   // "with depth'' means that large children drag along their parents.
+   let newarry = [];
+   let startind = 0;
+   let numtograb = 0;
+   let ct = 1;
+   while (arry.length > 0 && ct < 500) {
+++ct;
+       const locofmax = maxLocation(arry)
+       let segmentstart = locofmax;
+       let segmentlength = 1;
+       while (arry[segmentstart].level == "2") {
+           --segmentstart
+       }
+       while (segmentstart + segmentlength < arry.length && arry[segmentstart + segmentlength].level == "2") {
+           ++segmentlength
+       }
+console.log("locofmax", locofmax, "starting", segmentstart, "going", segmentlength, "from", arry.length);
+       newarry.push(...arry.splice(segmentstart,segmentlength));
+   }
+console.log("newarry", newarry);
+    return newarry
+}
+function maxLocation(arry) {
+    let maxloc = 0;
+    let maxvalsofar = -1;
+    for (let index = 0; index < arry.length; ++index) {
+        if (arry[index].score > maxvalsofar) {
+            maxloc = index;
+            maxvalsofar = arry[index].score
+        }
+    }
+    return maxloc
+}
 
 function comparePosition(a, b) {
     if (a.snum < b.snum) {
@@ -145,7 +182,9 @@ console.log("allScores",allScores);
     let high = allScores[Math.floor(len*0.25)];
     let med = allScores[Math.floor(len*0.5)];
     let low = allScores[Math.floor(len*0.75)];
-//    if (ptx_lunr_search_style == "reference") { result = result.sort(compareScoreDesc) }
+    if (ptx_lunr_search_style == "reference") {
+        result = rearrangedArray(result);
+        }
     let indent = "1";
     let currIndent = indent;
     let origResult = resultArea;
@@ -160,6 +199,8 @@ console.log("allScores",allScores);
             link.classList.add("medium_result")
         } else if (res.score >= low) {
             link.classList.add("low_result")
+        } else { 
+            link.classList.add("no_result")
         }
         currIndent = res.level;
         if (currIndent > indent) {
