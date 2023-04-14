@@ -1,13 +1,5 @@
 
-//  window.addEventListener("load",function(event) {
-//          var secondsearchbox = document.createElement("div");
-//          secondsearchbox.className = "searchbox";
-//          secondsearchbox.id = "secondsearch";
-//          document.body.appendChild(secondsearchbox);
-//          secondsearchbox.innerHTML = '<div class="searchwidget"><input id="ptxsearchB" type="text" name="terms" placeholder="Search" onchange="doSearch(\'B\')"><button id="searchbutton" type="button" onclick="doSearch(\'B\')">🔍</button> <div>'
-//      console.log("added second search box");
-//  });
-
+// next comment is out of date: there are more search options
 // from lunr-pretext-search-index.js we will have either
 // var ptx_lunr_search_style = "default";
 //   or
@@ -49,10 +41,9 @@ function doSearch(searchlocation="A") {
     }
     // Transfer meta data from the document to the results to make it easy to add 
     // our lists later.
-console.log("pageResult", pageResult);
+// console.log("pageResult", pageResult.length, "which are", pageResult);
     augmentResults(pageResult, ptx_lunr_docs);
     pageResult.sort(comparePosition)
-    REaugmentResults(pageResult);
     addResultToPage(terms, pageResult, ptx_lunr_docs, resultArea);
     MathJax.typeset();
 }
@@ -76,19 +67,7 @@ function augmentResults(result, docs) {
         res.url = info.url;
         res.level = info.level;
         res.snum = info.snum;
-    }
-}
-// have to rewrite this with a variable for the index, because we have to
-// remember the location.
-// but probably this step is not actually needed, because of rearrangeArray
-function REaugmentResults(result) {
-    let currenttopindex = 0;
-    // assume only level 1 and 2 in results
-    for (let index = 0; index < result.length; ++index) {
-        res = result[index];
-        res.order = index;
-        if (res.level == 2) { res.parent = currenttopindex }
-        else if (res.level == 1) { currenttopindex = index }
+        res.score = parseFloat(res.score);
     }
 }
 function rearrangedArray(arry) {
@@ -98,9 +77,9 @@ function rearrangedArray(arry) {
    let newarry = [];
    let startind = 0;
    let numtograb = 0;
-   let ct = 1;
+let ct = 1;
    while (arry.length > 0 && ct < 500) {
-++ct;
+++ct;  // just in case something goes wrong
        const locofmax = maxLocation(arry)
        let segmentstart = locofmax;
        let segmentlength = 1;
@@ -110,10 +89,10 @@ function rearrangedArray(arry) {
        while (segmentstart + segmentlength < arry.length && arry[segmentstart + segmentlength].level == "2") {
            ++segmentlength
        }
-console.log("locofmax", locofmax, "starting", segmentstart, "going", segmentlength, "from", arry.length);
+// console.log("locofmax", locofmax, "starting", segmentstart, "going", segmentlength, "from", arry.length);
        newarry.push(...arry.splice(segmentstart,segmentlength));
    }
-console.log("newarry", newarry);
+// console.log("newarry", newarry);
     return newarry
 }
 function maxLocation(arry) {
@@ -169,18 +148,19 @@ function addResultToPage(searchterms, result, docs, resultArea) {
         document.getElementById("searchresultsplaceholder").style.display = "block";
         return
     }
-console.log("result",result);
+// console.log("result",result);
     let allScores = result.map(function (r) { return r.score });
-console.log("allScores",allScores);
-    allScores.sort();
+// console.log(typeof allScores[0], "allScores",allScores);
+    allScores.sort((a,b) => (a - b));
     allScores.reverse();
+// console.log("allScores, sorted",allScores);
 
 //    let high = result[Math.floor(len*0.25)].score;
 //    let med = result[Math.floor(len*0.5)].score;
 //    let low = result[Math.floor(len*0.75)].score;
     // sort the results by their position in the book, not their score
-    let high = allScores[Math.floor(len*0.25)];
-    let med = allScores[Math.floor(len*0.5)];
+    let high = allScores[Math.floor(len*0.20)];
+    let med = allScores[Math.floor(len*0.40)];
     let low = allScores[Math.floor(len*0.75)];
     if (ptx_lunr_search_style == "reference") {
         result = rearrangedArray(result);
