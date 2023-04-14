@@ -90,10 +90,18 @@ ol#searchresults > li > text {
     font-weight: 500;
 }
 
+
 .low_result {
+    font-weight: 200;
+}
+.no_result {
     font-weight: 200;
     color: #444;
 }
+.detailed_result .no_result {
+    font-size: 90%;
+}
+
 #searchresultsplaceholder {
     position: fixed;
     top: 4em;
