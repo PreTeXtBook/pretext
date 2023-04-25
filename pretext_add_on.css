@@ -3014,6 +3014,11 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
     position: unset;
 }
 
+/* to undo Runestone's draganddrop.css */
+.ptx-content .rsdraggable {
+    font-size: 100%;
+}
+
 .ptx-content .exercise-wrapper form button:hover {
     cursor: pointer;
     background-color: #e0e0ff;
