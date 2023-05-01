@@ -7989,6 +7989,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Fourier: Making Waves <c>iframe</c></caption>
                     <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" aspect="15:10"/>
                 </figure>
+
+                <p>Anything that suggests you can <term>embed</term> an interactive widget via an iFrame is fair game for this feature.  This is a Google Map of the state of California, for use in a French language document, from Julien Giol.  The necessary <init>URL</init> is obtained by using the <q>Share</q> feature, and then the <q>Embed a map</q> option has <init>HTML</init> with the <init>URL</init> in a <attr>src</attr> attribute.</p>
+
+                <figure xml:id="map-california">
+                    <caption>California.</caption>
+                    <interactive xml:id="interactive-map-california" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" width="95%" aspect="15:10"/>
+                </figure>
             </subsection>
         </section>
 
