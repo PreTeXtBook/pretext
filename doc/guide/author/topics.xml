@@ -1355,13 +1355,17 @@
             <title>Glossary</title>
             <idx>glossary</idx>
 
-            <p>A <tag>glossary</tag> division may be placed in any main matter division, and once in the <tag>backmatter</tag>.</p>
+            <p>A glossary is a list, in alphabetical order, of foreign or unfamiliar words, along with definitions. <xref ref="cmos" detail="1.87"/></p>
 
-            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about a particular glossary.</p>
+            <p>A <tag>glossary</tag> division may be placed inside any main matter division, and at most once in the <tag>backmatter</tag>.   In either event, the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="1.87"/> indicates that it should be placed right before a <tag>references</tag>.</p>
 
-            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained. The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in the desired order.  Automatic divisions (by initial letter) could be reasonable feature request, perhaps especially for a final, overall, back matter glossary, much like an index.</p>
+            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about the construction of a particular glossary.</p>
 
-            <p>For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
+            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained.  <pretext/> will provide a period after each defined word, so there should not be any punctuation in your source at this location.  The term should not have any markup, <em>unless</em> the markup is used in every occurence of the term in the text.  Similarly, a term is capitalized only if it is capitalized routinely in the text.</p>
+
+            <p>The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in alphabetical order.  Automatic groupss (according to initial letter) are a pending feature request, perhaps especially for a final, overall, back matter glossary, much like an index.  See <url href="https://github.com/PreTeXtBook/pretext/issues/1971">GitHub #1971</url>.</p>
+
+            <p>Many of the preceding recommendations can be found in <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="2.28"/>.  For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
         </subsection>
 
         <subsection xml:id="topic-worksheet">
