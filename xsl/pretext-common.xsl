@@ -2892,8 +2892,8 @@ Book (with parts), "section" at level 3
 <xsl:template match="paragraphs|case|exercisegroup" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
-<!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
-<xsl:template match="ol/li|ul/li|task" mode="title-wants-punctuation">
+<!-- Titled: list items; tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE; glossary items -->
+<xsl:template match="ol/li|ul/li|task|gi" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->
