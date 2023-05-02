@@ -1319,10 +1319,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </conclusion>
                 </reading-questions>
 
-                <glossary>
+                <glossary xml:id="glossary-specialized">
                     <idx>glossary</idx>
                     <headnote>
-                        <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.</p>
+                        <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is a specialized division within a section.  Placement in the back matter is another option, see the <xref ref="glossary-backmatter" text="title"/>.</p>
                     </headnote>
 
                     <gi>
@@ -13959,6 +13959,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Most all of the index entries below to page 2 (PDF output) are just from a suite of non-sensical tests.  These are harder to recognize in the <init>HTML</init> output.</p>
                 </paragraphs>
             </appendix>
+
+            <glossary xml:id="glossary-backmatter">
+                <idx>glossary</idx>
+                <headnote>
+                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized" text="type-global"/>.</p>
+                </headnote>
+
+                <gi>
+                    <title>bar</title>
+                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined-two" text="title"/>.</p>
+                </gi>
+
+                <gi xml:id="foobar-defined-two">
+                    <title>foobar</title>
+                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                </gi>
+            </glossary>
 
             <appendix xml:id="references">
                 <title>Multiple References</title>
