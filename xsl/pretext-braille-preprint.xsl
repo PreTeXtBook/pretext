@@ -569,7 +569,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- "Regular" blocks, including inline "exercise" (aka "Checkpoint") -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]">
-    <block box="standard" lines-before="1" lines-after="1">
+    <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <xsl:apply-templates select="." mode="block-title"/>
         <xsl:apply-templates select="*[not(self::title)]"/>
     </block>
@@ -695,7 +695,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures are treated different for the case where their contents are  -->
 <!-- images (thus requiring a tactile graphic page to follow the figure). -->
 <xsl:template match="figure[image]">
-    <block box="standard">
+    <block breakable="no" box="standard">
         <segment>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
@@ -710,7 +710,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Other FIGURE-LIKE can be handled together -->
 <xsl:template match="figure|listing|table|list">
-    <block box="standard">
+    <block breakable="no" box="standard">
         <segment>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
@@ -1171,7 +1171,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="math-nemeth"/>
         <xsl:text>&#xa;</xsl:text>
     </xsl:variable>
-    <block box="nemeth">
+    <block breakable="no" box="nemeth">
         <xsl:attribute name="punctuation">
             <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:attribute>
