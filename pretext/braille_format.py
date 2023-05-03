@@ -333,14 +333,21 @@ class BRF:
     def at_line_start(self):
         return self.line_buffer.is_empty()
 
-    # Designed for "short" segments and blocks, to avoid poor
-    # placement near a page break.  If longer than a page will
-    # *always* provoke a page advance (which might not be desired).
+    # Designed for segments and blocks, to avoid poor placement
+    # near a page break.  Key is a trial/sandbox BRF object and
+    # its associated cursor.
+    #
+    #  * Trial does not provoke a page break.  Good.
+    #  * Trial provokes two page breaks.  Too bad, nothing to be done.
+    #  * Trial provokes exactly one page break.
+    #     - if content is more than a page, that's life
+    #     - see if content fits on a page, recommend a page advance
+    #
     # Note: this is a bit disingenuous.  This allows both a segment
     # and a block as an argument, on the assumption they have common
     # attributes employed here.  Really they should be derived from
     # a common object.  A switch on object type is necessary to call
-    # the two different "process" methods.
+    # the two different BRF "process" methods, no matter what.
     def needs_page_advance(self, seg):
         import copy
 
@@ -353,9 +360,24 @@ class BRF:
         if seg.ownpage or seg.newpage:
             return False
 
+        # Line numbers could be actual line numbers for first and
+        # last line of content produced by the sandbox BRF.
+        # Formula would be
+        #
+        #     line-number = page-height - remaining-lines + 1
+        #
+        # We will subtract the starting line from the finishing line,
+        # so the page-heights and the "+1" will cancel out.  Thus
+        # definitions are just the negatives of the remaining lines.
+        #
+        # Segment processing always ends on a new line, so the finishing
+        # line has a "-1" to walk it back a line (and if the segment reset
+        # goes to a new page, then the remaining lines would be zero on
+        # the previous page, set to negative zero here).
+
         orginal_cursor = self.cursor
         start_page = orginal_cursor.page_number()
-
+        start_line = -orginal_cursor.remaining_lines()
         # all changes (cursor movement, text-wrapping) will
         # occur in the temporary/sandbox/throwaway cursor
         sandbox_brf = copy.deepcopy(self)
@@ -371,24 +393,28 @@ class BRF:
             sandbox_cursor.advance_line()
 
         finish_page = sandbox_cursor.page_number()
+        finish_line = -sandbox_cursor.remaining_lines() - 1
         # Except, segment finishes ready-to-go,
         # which could be the tip-top of the next page.
         if sandbox_cursor.at_page_start():
             finish_page -= 1
+            finish_line = -0
 
-        # For a block (not implemented yet), when it breaks, we want
-        # to do another simulation: advance a page, see if that stays
-        # on a page.  If not, there is no point in a page advance.
-        # Note: we can't just "size" the first simulation, since the
-        # location of a page break affects a line that reserves space
-        # for a page number.
-
-        # Maybe return the value of boolean expression,
-        # once extended to blocks
-        if finish_page > start_page:
-            return True
-        else:
+        # Fine as-is, no page boundary has been broached
+        if (finish_page - start_page) == 0:
             return False
+        # Really long, hopeless, a break doesn't help
+        elif (finish_page - start_page) > 1:
+            return False
+        # Exactly one page-break, so look to line numbers
+        # More than a page-full, since finish is later
+        elif finish_line - start_line >= 0:
+            return False
+        # There would be a break, and content would fit on the next
+        # page, so go for it and report the need for a page advance
+        else:
+            return True
+
 
     # Actions
 
