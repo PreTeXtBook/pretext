@@ -261,6 +261,21 @@ class Block:
         # decipher, record attributes
         attrs = b.attrib
 
+        if ("newpage" in attrs) and (attrs["newpage"] == "yes"):
+            self.newpage = True
+        else:
+            self.newpage = False
+
+        if ("ownpage" in attrs) and (attrs["ownpage"] == "yes"):
+            self.ownpage = True
+        else:
+            self.ownpage = False
+
+        if ("breakable" in attrs) and (attrs["breakable"] == "no"):
+            self.breakable = False
+        else:
+            self.breakable = True
+
         if "lines-before" in attrs:
             self.lines_before = int(attrs["lines-before"])
         else:
@@ -270,6 +285,11 @@ class Block:
             self.lines_after = int(attrs["lines-after"])
         else:
             self.lines_after = 0
+
+        if "lines-following" in attrs:
+            self.lines_following = int(attrs["lines-following"])
+        else:
+            self.lines_following = 0
 
         if "box" in attrs:
             self.box = attrs["box"]
@@ -692,7 +712,7 @@ class BRF:
         # Or perhaps set argument to do uncontracted braille.
         return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
 
-    def write_block(self, blk):
+    def process_block(self, blk):
 
         # Lines before (but not if at the start of a page)
         if not(self.cursor.at_page_start()):
@@ -738,14 +758,23 @@ class BRF:
             self.blank_line()
             self.flush()
 
-        self.flush()
-
+    # The next two "write" routines simply check if a page advance
+    # is necessary/desirable for the block or segment in question,
+    # and then call the "process" versions, where the real action
+    # happens.  Then a flush.
 
     def write_segment(self, seg):
         # See if a page advance will improve awkward page breaks
         if not(seg.breakable) and self.needs_page_advance(seg):
             self.advance_page()
         self.process_segment(seg)
+        self.flush()
+
+    def write_block(self, blk):
+        # See if a page advance will improve awkward page breaks
+        if not(blk.breakable) and self.needs_page_advance(blk):
+            self.advance_page()
+        self.process_block(blk)
         self.flush()
 
     def flush(self):
