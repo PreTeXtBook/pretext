@@ -333,9 +333,14 @@ class BRF:
     def at_line_start(self):
         return self.line_buffer.is_empty()
 
-    # Designed for "short" segments, to avoid poor placement near
-    # a page break.  A segment longer than a page will *always*
-    # provoke a page advance (which might not be desired).
+    # Designed for "short" segments and blocks, to avoid poor
+    # placement near a page break.  If longer than a page will
+    # *always* provoke a page advance (which might not be desired).
+    # Note: this is a bit disingenuous.  This allows both a segment
+    # and a block as an argument, on the assumption they have common
+    # attributes employed here.  Really they should be derived from
+    # a common object.  A switch on object type is necessary to call
+    # the two different "process" methods.
     def needs_page_advance(self, seg):
         import copy
 
@@ -356,7 +361,11 @@ class BRF:
         sandbox_brf = copy.deepcopy(self)
         sandbox_cursor = sandbox_brf.cursor
         # Do the deal, in a sandbox
-        sandbox_brf.process_segment(seg)
+        # Type will be "Block" or "Segment"
+        if type(seg) == Segment:
+            sandbox_brf.process_segment(seg)
+        else:
+            sandbox_brf.process_block(seg)
         # Attach some lines of content, virtually
         for i in range(seg.lines_following):
             sandbox_cursor.advance_line()
