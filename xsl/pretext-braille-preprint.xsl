@@ -695,7 +695,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures are treated different for the case where their contents are  -->
 <!-- images (thus requiring a tactile graphic page to follow the figure). -->
 <xsl:template match="figure[image]">
-    <block breakable="no" box="standard">
+    <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <segment>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
@@ -715,7 +715,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Other FIGURE-LIKE can be handled together -->
 <xsl:template match="figure|listing|table|list">
-    <block breakable="no" box="standard">
+    <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <segment>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
