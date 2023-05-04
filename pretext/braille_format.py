@@ -749,6 +749,9 @@ class BRF:
 
     def process_block(self, blk):
 
+        if blk.ownpage and self.cursor.embossing():
+            self.advance_page()
+
         # Lines before (but not if at the start of a page)
         if not(self.cursor.at_page_start()):
             for i in range(blk.lines_before):
@@ -792,6 +795,11 @@ class BRF:
         for i in range(blk.lines_after):
             self.blank_line()
             self.flush()
+
+        # Dedicated page, so off we go (reqires something was written on page)
+        if blk.ownpage and self.cursor.embossing():
+            self.advance_page()
+
 
     # The next two "write" routines simply check if a page advance
     # is necessary/desirable for the block or segment in question,
