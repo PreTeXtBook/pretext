@@ -66,6 +66,7 @@
             On 2020-08-01 Andrew Rechnitzer suggests the <url href="https://github.com/astefanutti/decktape" visual="github.com/astefanutti/decktape"><c>decktape</c></url> node (Javascript) program.
             The <c>reveal</c> plugin works well once you settle on a resolution (the <c>-s</c> option).
             The <c>generic</c> plugin, along with the default key action (<c>ArrowRight</c>) can capture the behavior of slides built using the <attr>pause</attr> attribute.
+            Note that the <c>grid</c> option (see below) may not always work well for printing all slides, while <c>default</c> creates slides that <c>decktape</c> steps through properly.
             A local web server can also be employed to serve up the slides, see <xref ref="processing-testing-html"/>.
         </p>
         <paragraphs>
