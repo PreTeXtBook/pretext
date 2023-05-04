@@ -1493,12 +1493,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="message"/>
 
     <segment indentation="7" runover="5">
-        <!-- dot 4, dot 46, dot 126, spacee -->
-        <xsl:text>&#x2808;&#x2828;&#x2823;&#x2800;</xsl:text>
+        <!-- dot 4, dot 46, dot 126 -->
+        <xsl:text>&#x2808;&#x2828;&#x2823;</xsl:text>
         <!-- *Copy* literal markup, or result of applying templates -->
         <xsl:copy-of select="$message"/>
-        <!-- space, dot 4, dot 46, dot 345 -->
-        <xsl:text>&#x2800;&#x2808;&#x2828;&#x281C;</xsl:text>
+        <!-- dot 4, dot 46, dot 345 -->
+        <xsl:text>&#x2808;&#x2828;&#x281C;</xsl:text>
     </segment>
 </xsl:template>
 
