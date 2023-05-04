@@ -703,9 +703,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="image" mode="braille-representation"/>
     </block>
     <!-- Form a page to be replaced by tactile version -->
-    <segment ownpage="yes">
-        <xsl:apply-templates select="." mode="block-title"/>
-    </segment>
+    <block ownpage="yes">
+        <xsl:apply-templates select="." mode="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>Replace this page with </xsl:text>
+                <xsl:apply-templates select="." mode="block-title"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </block>
 </xsl:template>
 
 <!-- Other FIGURE-LIKE can be handled together -->
@@ -759,9 +764,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
     </xsl:apply-templates>
     <!-- Form a page to be replaced by tactile version -->
-    <segment ownpage="yes">
-        <xsl:apply-templates select="." mode="block-title"/>
-    </segment>
+    <block ownpage="yes">
+        <xsl:apply-templates select="." mode="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:text>Replace this page with </xsl:text>
+                <xsl:apply-templates select="." mode="block-title"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </block>
 </xsl:template>
 
 <!-- A transcriber note replacing an image when included -->
