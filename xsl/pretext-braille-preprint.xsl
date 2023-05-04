@@ -592,7 +592,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A "case" is a further division of a PROOF-LIKE -->
 <xsl:template match="case">
-    <runin indentation="2" separator="&#x20;&#x20;">
+    <runin indentation="2" separator="&#x20;">
         <xsl:apply-templates select="." mode="title-full"/>
     </runin>
     <xsl:apply-templates select="*"/>
@@ -629,7 +629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is different??                                                    -->
 <!-- TENTATIVE: DISCUSSION-LIKE may be identical                       -->
 <xsl:template match="&PROOF-LIKE;|&DISCUSSION-LIKE;" mode="block-title">
-        <runin indentation="0" lines-before="1" separator="&#x20;&#x20;">
+        <runin indentation="0" lines-before="1" separator="&#x20;">
         <!--  -->
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text>.</xsl:text>
@@ -644,7 +644,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Should be run-in with automatic space afterward -->
 <xsl:template match="exercise[not(&INLINE-EXERCISE-FILTER;)]" mode="block-title">
-    <runin indentation="0" lines-before="1" separator="&#x20;&#x20;">
+    <runin indentation="0" lines-before="1" separator="&#x20;">
         <xsl:apply-templates select="." mode="serial-number"/>
         <xsl:text>.</xsl:text>
         <!--  -->
@@ -659,7 +659,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Should be run-in with automatic space afterward -->
 <xsl:template match="&SOLUTION-LIKE;" mode="block-title">
-    <runin indentation="0" lines-before="1" separator="&#x20;&#x20;">
+    <runin indentation="0" lines-before="1" separator="&#x20;">
         <!--  -->
         <xsl:apply-templates select="." mode="type-name"/>
         <!--  -->
@@ -869,7 +869,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="li">
     <!-- Marker as a "runin" element -->
-    <runin indentation="0" separator="&#x20;&#x20;">
+    <runin indentation="0" separator="&#x20;">
         <xsl:choose>
             <xsl:when test="parent::ol">
                 <xsl:apply-templates select="." mode="item-number"/>
@@ -931,7 +931,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of indentation for the remainder .                         -->
 <!-- TODO: expand to accomodate annotations ("note"), BANA 22.3 -->
 <xsl:template match="biblio[@type='raw']">
-    <runin indentation="0" separator="&#x20;&#x20;">
+    <runin indentation="0" separator="&#x20;">
         <xsl:text>[</xsl:text>
         <xsl:apply-templates select="." mode="serial-number"/>
         <xsl:text>]</xsl:text>
