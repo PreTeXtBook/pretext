@@ -687,6 +687,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- FIGURE-LIKE -->
 <!-- ########### -->
 
+<!-- [BANA, 2016] 6.2.2 -->
+<!-- 7-5 margins for captions of "Illustrative Materials" -->
+<!-- We generalize to titles of "table" and "list" blocks -->
 
 <!-- [BANA, 2016] 6.2.2(e) -->
 <!-- When both a print caption and a transcriber-generated description    -->
@@ -696,7 +699,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- images (thus requiring a tactile graphic page to follow the figure). -->
 <xsl:template match="figure[image]">
     <block breakable="no" box="standard" lines-before="1" lines-after="1">
-        <segment>
+        <segment indentation="6" runover="4">
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
         <xsl:apply-templates select="*[not(self::image)]"/>
@@ -716,7 +719,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Other FIGURE-LIKE can be handled together -->
 <xsl:template match="figure|listing|table|list">
     <block breakable="no" box="standard" lines-before="1" lines-after="1">
-        <segment>
+        <segment indentation="6" runover="4">
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
         <xsl:apply-templates/>
