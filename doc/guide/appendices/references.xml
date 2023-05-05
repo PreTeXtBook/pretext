@@ -10,6 +10,10 @@
 <references xml:id="references">
     <!-- Let title internationalize itself -->
 
+    <biblio type="raw" xml:id="cmos">
+        <title>The Chicago Manual of Style</title>.  Fifteenth Edition, The University of Chicago Press. 2003.
+    </biblio>
+
     <biblio type="raw" xml:id="knuth-literate-programming">
         Knuth, Donald E., <title>Literate Programming</title>.  <journal>The Computer Journal</journal>, 1983, <url href="http://www.literateprogramming.com/knuthweb.pdf" visual="www.literateprogramming.com/knuthweb.pdf"/>.
     </biblio>

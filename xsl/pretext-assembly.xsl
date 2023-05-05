@@ -332,6 +332,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
+<!--                        IMPORTANT                           -->
+<!--                                                            -->
+<!-- Definitions that follow may be overridden after additional -->
+<!-- per-conversion passes that takeoff from the final tree,    -->
+<!-- here $augment.                                             -->
+<!--                                                            -->
+<!--    IF $augment CHANGES, SEARCH FOR AFFECTED CONVERSIONS    -->
+<!--                                                            -->
+<!-- 2023-03-20: braille conversion incorporares Nemeth braille -->
+
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
@@ -1146,6 +1156,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (filenames, fragment identifiers).  Subsequent passes        -->
 <!-- should not introduce or remove elements.                     -->
 
+<!-- 2023-03-30: This is old commentary about the use of the -->
+<!-- "internal-id" identifier in the LaTeX conversion, which -->
+<!-- has now become more universal.  Once identifiers settle -->
+<!-- down, we can clean up the parts of this worth keeping.  -->
+<!--  -->
+<!-- This produces unique strings that are internal to the  -->
+<!-- LaTeX (intermediate) file.  Since neither author nor   -->
+<!-- reader will ever see these, they can be as fast and as -->
+<!-- wild as necessary.  But for mature works, likely with  -->
+<!-- @permid on many relevant objects, or many @xml:id      -->
+<!-- provided for URLs in HTML, these can be predictable    -->
+<!-- across runs (and therefore help with tweaking the LaTeX-->
+<!-- output under revision control) These are employed with -->
+<!-- \label{}, \ref{}, \cite{}, \pageref{}, \eqref{}, etc.  -->
+<!-- We can change this at will, with no adverse effects    -->
+<!-- NB: colons are banned from PTX @xml:id, and will not   -->
+<!-- appear in @permid, though we could use dashes instead  -->
+<!-- without getting duplicates.  The prefixes guarantee    -->
+<!-- that the three uniqueness schemes do not overlap.      -->
+
 <!-- NB: this template is "in progresss".  Likely we will -->
 <!-- generate manufactured @label (recursively) for many  -->
 <!-- elements, which will cause changes in how the        -->
@@ -1182,7 +1212,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- * Colons as separators might create confusion with namespaces                -->
         <!-- * Prefixed with a full element name aids debugging                           -->
         <!-- * Salt (digits) added to authored values may decrease risk of collision      -->
-        <xsl:variable name="new-latex-id">
+        <xsl:variable name="new-internal-id">
             <xsl:choose>
                 <xsl:when test="@label">
                     <xsl:value-of select="@label"/>
@@ -1208,12 +1238,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <!-- aids debugging/portabiity somewhat -->
         <xsl:variable name="element-name" select="local-name()"/>
-        <xsl:attribute name="latex-id">
-            <xsl:value-of select="concat($element-name, '-', $new-latex-id)"/>
+        <xsl:attribute name="internal-id">
+            <xsl:value-of select="concat($element-name, '-', $new-internal-id)"/>
         </xsl:attribute>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="identification">
-            <xsl:with-param name="parent-id" select="$new-latex-id"/>
+            <xsl:with-param name="parent-id" select="$new-internal-id"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>

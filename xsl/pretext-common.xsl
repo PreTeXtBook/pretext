@@ -2892,8 +2892,8 @@ Book (with parts), "section" at level 3
 <xsl:template match="paragraphs|case|exercisegroup" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
-<!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
-<xsl:template match="ol/li|ul/li|task" mode="title-wants-punctuation">
+<!-- Titled: list items; tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE; glossary items -->
+<xsl:template match="ol/li|ul/li|task|gi" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->
@@ -3661,6 +3661,18 @@ Book (with parts), "section" at level 3
 <!-- ########### -->
 <!-- Identifiers -->
 <!-- ########### -->
+
+<!-- Identifiers are in flux, as of 2023-03-30.  The "internal-id" is  -->
+<!-- an attribute built during the descent of the tree during the      -->
+<!-- pre-processor/assembly phase.  As such, it is fast and ugly.      -->
+<!-- Do not let a reader catch sight of it in output ever, beacuase it -->
+<!-- is ugly, and because it is not really permanant.  That is what    -->
+<!-- "visible-id" is for.  But constructing "visible-id" is very slow  -->
+<!-- (we hope to speed htat up as well).  So we are transitioning to   -->
+<!-- the "internal-id" wherever possible, but with careful testing.    -->
+<xsl:template match="*" mode="internal-id">
+    <xsl:value-of select="@internal-id"/>
+</xsl:template>
 
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
@@ -8145,7 +8157,7 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 

@@ -1292,13 +1292,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:choose>
                         <!-- just go with authored order as canonical -->
                         <xsl:when test="$b-randomize">
-                            <xsl:apply-templates select="$unique-blocks" mode="horizontal-blocks"/>
+                            <xsl:apply-templates select="$unique-blocks" mode="horizontal-blocks">
+                                <xsl:with-param name="b-natural" select="$b-natural"/>
+                            </xsl:apply-templates>
                         </xsl:when>
                         <!-- sort by the order provided  by author -->
                         <xsl:otherwise>
                             <xsl:for-each select="$unique-blocks">
                                 <xsl:sort select="@order"/>
-                                <xsl:apply-templates select="." mode="horizontal-blocks"/>
+                                <xsl:apply-templates select="." mode="horizontal-blocks">
+                                    <xsl:with-param name="b-natural" select="$b-natural"/>
+                                </xsl:apply-templates>
                             </xsl:for-each>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -1319,7 +1323,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Non-reused block.  Perhaps text should be massaged here?       -->
 <!-- We do not ever dump duplicates into HTML or to the reader      -->
 <xsl:template match="blocks/block[not(@ref)]" mode="horizontal-blocks">
-    <xsl:apply-templates select="."/>
+    <xsl:param name="b-natural"/>
+
+    <xsl:choose>
+        <xsl:when test="$b-natural">
+            <xsl:apply-templates select="."/>
+        </xsl:when>
+        <!-- Now this a problem with code, requiring a "c" wrapper -->
+        <!-- 2023-03-07: can move to warnings or validation-plus, semi-deprecated -->
+        <xsl:when test="not(c)">
+            <xsl:message>PTX:WARNING:  a block of a horizontal Parson problem with</xsl:message>
+            <xsl:message>              code needs to be enclosed in a "c" element</xsl:message>
+            <xsl:apply-templates select="."/>
+            <xsl:text> (NEEDS "c" ELEMENT)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="c"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 

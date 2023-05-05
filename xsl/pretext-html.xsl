@@ -5695,6 +5695,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- All but the first is p/@data-braille="continuation" -->
 <!-- so later HTML "p" can be styled for Braille as if   -->
 <!-- they are part of a logical PreTeXt paragraph        -->
+<!-- Note: a simpler version of this appears in the      -->
+<!-- braille conversion, with a few improvements         -->
+<!-- (such as using "node()").                           -->
 <xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -12793,7 +12796,7 @@ TODO:
 <!-- resulted in console errors (2022-02-08)            -->
 <xsl:template name="native-search-box-js">
     <xsl:if test="$has-native-search">
-        <script src="https://unpkg.com/lunr/lunr.js"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js" integrity="sha512-4xUl/d6D6THrAnXAwGajXkoWaeMNwEKK4iNfq5DotEbLPAfk6FSxSP3ydNxqDgCw1c/0Z1Jg6L8h2j+++9BZmg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <!-- document-specific variables with search documents -->
         <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->

@@ -375,6 +375,7 @@ def get_cli_arguments():
             "PreTeXt source, after pre-processor, WeBWorK problem set PG exercises (for developers)",
         ),
         ("sagenb", "Sage worksheet conversion (removed)"),
+        ("webwork-sets", "Folder tree of PG files, set definitions, and set headers"),
         ("all", "All available output formats"),
     ]
     format_help = "Output formats are:\n" + "\n".join(
@@ -466,6 +467,13 @@ def get_cli_arguments():
         help="abort script upon recoverable errors",
         action="store_true",
         dest="abort",
+    )
+    parser.add_argument(
+        "-z",
+        "--tgz",
+        help="output a compressed tar archive (WeBWorK problem sets)",
+        action="store_true",
+        dest="tgz",
     )
     # Needs help-file, once public
     # Will default to False
@@ -656,7 +664,7 @@ def main():
             dest_dir,
         )
     elif args.component == "pg-macros":
-        ptx.pg_macros(xml_source, dest_dir)
+        ptx.pg_macros(xml_source, publication_file, stringparams, dest_dir)
     elif args.component == "youtube":
         ptx.youtube_thumbnail(
             xml_source, publication_file, stringparams, args.xmlid, dest_dir
@@ -781,6 +789,8 @@ def main():
             ptx.assembly(
                 xml_source, publication_file, stringparams, out_file, dest_dir, "pg-problems"
             )
+        elif args.format == "webwork-sets":
+            ptx.webwork_sets(xml_source, publication_file, stringparams, dest_dir, args.tgz)
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == "sagenb":
             raise NotImplementedError(

@@ -12,7 +12,7 @@
   <author>Dave Rosoff</author>
 
   <introduction>
-    <p>The recommended method for setting up <pretext /> on Windows now uses the <pretext/>-CLI. For instructions on setting up the CLI, see <xref ref="windows-cli"/>. This appendix explains how to install the older <pretext /> toolchain using <c>xsltproc</c>, and is intended primarily for developers. It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. <pretext /> compatibility with existing Python installations is addressed elsewhere in this document (<xref provisional="python-pretext-compatibility" />).</p>
+    <p>The recommended method for setting up <pretext /> on Windows now uses the <pretext/>-CLI. For instructions on setting up the CLI, see <xref ref="windows-cli"/>. This appendix explains how to install the older <pretext /> toolchain using <c>xsltproc</c>, and is intended primarily for developers. It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. <pretext /> compatibility with existing Python installations is addressed elsewhere in this document (<xref ref="python-executable" />).</p>
 
     <p>If you have Windows 10, be sure to read about <init>WSL</init> in <xref ref="windows-subsystem-linux" />, which could be a whole lot easier to setup and maintain.</p>
   </introduction>

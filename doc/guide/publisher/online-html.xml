@@ -228,7 +228,18 @@
         <title>Native Search</title>
         <idx><h>search</h><h>native</h></idx>
 
-        <p>Client-side search is supported natively by a Javascript library.  Search results are tuned to leverage the <em>structure</em> of your <pretext/> project.  As such, as of 2022-10-27, development and support will favor this approach over our legacy support for an online service (<xref ref="google-search"/>).</p>
+        <p>Client-side search is supported natively by a Javascript library.  Search results are tuned to leverage the <em>structure</em> of your <pretext/> project.  As such, development and support will favor this approach over our legacy support for an online service (<xref ref="google-search"/>).</p>
+
+        <p>There are two <term>tunings</term> of search.<dl>
+            <li>
+                <title>Textbook</title>
+                <p>This is the default.  Results are presented in order of appearance, on the assumption that a reader is following the text in a linear order and knows their current location.  Visual clues will reflect the relevance of each result.</p>
+            </li>
+            <li>
+                <title>Reference</title>
+                <p>This assumes a document is more like a reference work and is accessed <q>randomly.</q>  Results are not in order of appearnce, but rather early results will likely be more relevant.</p>
+            </li>
+        </dl></p>
 
         <p>Employing a switch in the publication file will provide search boxes (top banner, lower-right corner) and all the supporting infrastructure.  See <xref ref="online-search-options"/> for details.</p>
     </section>

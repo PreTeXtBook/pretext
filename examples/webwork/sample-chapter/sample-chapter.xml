@@ -1272,7 +1272,7 @@
                         <image width="50%">
                             <description>
                                 a rectangle whose width is labeled <var name="$b"/> cm
-                                and height is labeled <var name="$b"/> cm
+                                and height is labeled <var name="$a"/> cm
                             </description>
                             <latex-image>
                                 \begin{tikzpicture}
@@ -1341,6 +1341,9 @@
                             a printed at sign, and a percent sign used as a comment marker.
                         </p>
                         <image width="50%">
+                            <description>
+                                this image has pictures of text with special characters like $, %, and @
+                            </description>
                             <latex-image>
                                 \begin{tikzpicture}
                                     \node at (0,0) {I need about \$3.50.};
@@ -2163,6 +2166,26 @@
                 </introduction>
                 <webwork>
                     <statement>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <introduction>
+                    <p>
+                        This exercise has a single quote in it.
+                        A single quote is the first option for a delimiter for perl's q
+                        function which is used by extract-pg.xsl in table cells.
+                        So if working, it should move on to the next delimiter option.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <tabular>
+                            <row>
+                                <cell>What's up, Doc?</cell>
+                            </row>
+                        </tabular>
                     </statement>
                 </webwork>
             </exercise>

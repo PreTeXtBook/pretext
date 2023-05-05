@@ -192,6 +192,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Hint</localization>
     <localization string-id='answer'>Answer</localization>
     <localization string-id='solution'>Solution</localization>
+    <!-- A subdivision of an "exercises" section -->
+    <localization string-id='subexercises'>Subexercises</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Exercise Group</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->

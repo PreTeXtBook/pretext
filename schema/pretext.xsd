@@ -1742,7 +1742,10 @@
           <xs:sequence>
             <xs:element minOccurs="0" name="description">
               <xs:complexType mixed="true">
-                <xs:group ref="TextShort"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="TextShort"/>
+                  <xs:element ref="var"/>
+                </xs:choice>
               </xs:complexType>
             </xs:element>
             <xs:choice>

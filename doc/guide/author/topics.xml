@@ -1355,13 +1355,17 @@
             <title>Glossary</title>
             <idx>glossary</idx>
 
-            <p>A <tag>glossary</tag> division may be placed in any main matter division, and once in the <tag>backmatter</tag>.</p>
+            <p>A glossary is a list, in alphabetical order, of foreign or unfamiliar words, along with definitions. <xref ref="cmos" detail="1.87"/></p>
 
-            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about a particular glossary.</p>
+            <p>A <tag>glossary</tag> division may be placed inside any main matter division, and at most once in the <tag>backmatter</tag>.   In either event, the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="1.87"/> indicates that it should be placed right before a <tag>references</tag>.</p>
 
-            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained. The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in the desired order.  Automatic divisions (by initial letter) could be reasonable feature request, perhaps especially for a final, overall, back matter glossary, much like an index.</p>
+            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about the construction of a particular glossary.</p>
 
-            <p>For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
+            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained.  <pretext/> will provide a period after each defined word, so there should not be any punctuation in your source at this location.  The term should not have any markup, <em>unless</em> the markup is used in every occurence of the term in the text.  Similarly, a term is capitalized only if it is capitalized routinely in the text.</p>
+
+            <p>The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in alphabetical order.  Automatic groupss (according to initial letter) are a pending feature request, perhaps especially for a final, overall, back matter glossary, much like an index.  See <url href="https://github.com/PreTeXtBook/pretext/issues/1971">GitHub #1971</url>.</p>
+
+            <p>Many of the preceding recommendations can be found in <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="2.28"/>.  For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
         </subsection>
 
         <subsection xml:id="topic-worksheet">
@@ -1634,7 +1638,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>If you prefer to not have this behavior, insert an intervening <tag>p</tag>, and output will be identical, but without the <c>\displaystyle</c>.</p>
 
-            <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the Chicago Manual of Style, 14e, 6.127, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
+            <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="6.127"/>, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
         </subsection>
 
         <subsection xml:id="mathematics-latex-packages">
@@ -3460,7 +3464,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Table Philosophy</title>
 
-            <p>The <pubtitle>Chicago Manual of Style</pubtitle> (15e, 13.1) says:</p>
+            <p>The <pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="13.1"/> says:</p>
 
             <blockquote>
                 <p>A table offers an excellent means of presenting a large number of individual similar facts so that they are easy to scan and compare.  A simple table can give information that would require several paragraphs to present textually, and it can do so more clearly. <ellipsis/> A table should be as simple as the material allows and understandable on its own; even a reader unfamiliar with the material presented should be able to make general sense of a table.</p>
@@ -3746,7 +3750,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>(*) Acknowledgements</title>
 
-            <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style (15th Edition, 1.52) suggests that if these are short, they may be contained in a preface.</p>
+            <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style  <xref ref="cmos" detail="1.52"/> suggests that if these are short, they may be contained in a preface.</p>
         </subsection>
 
         <subsection>
@@ -3765,7 +3769,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <note xml:id="best-practice-preface">
                 <title>Understand the Role of a Preface</title>
 
-                <p>Chicago Manual of Style (15th Edition, 1.49) begins with <q>Material normally contained in an author's preface includes reasons for undertaking the work, method of research, <ellipsis/></q>  Note that a preface is not introductory content and is not an introduction.  It is written from the author's point-of-view, and may include information about why they are qualified to write on the topic of the book.  If there are several editions, the prefaces to the newer editions are placed first.  See the related <xref ref="best-practice-chapter-zero"/>.</p>
+                <p><pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="1.49"/> begins with <q>Material normally contained in an author's preface includes reasons for undertaking the work, method of research, <ellipsis/></q>  Note that a preface is not introductory content and is not an introduction.  It is written from the author's point-of-view, and may include information about why they are qualified to write on the topic of the book.  If there are several editions, the prefaces to the newer editions are placed first.  See the related <xref ref="best-practice-chapter-zero"/>.</p>
             </note>
         </subsection>
 
@@ -3840,7 +3844,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <idx><h>index</h><h>cross-reference</h></idx>
             These are rendered as <q>See</q> and <q>See also.</q>  You can add <tag>see</tag> and <tag>seealso</tag> elements within an <tag>idx</tag>, so long as it is structured with <tag>h</tag>.  Then it is placed after the last <tag>h</tag>.  A <q>see</q> cross-reference is a direct pointer to another entry in the index.  It cannot have a locator as well.  When you build the <init>HTML</init> output, we will recognize this situation and produce a warning.  A <q>see also</q> cross-reference is an additional pointer, and so it must have a locator to go with it (you will author two <tag>idx</tag> with identical headings, the first without a <tag>seealso</tag> to create the locator, the second with the <tag>seealso</tag> to create the cross-reference.  Again, when you build the <init>HTML</init> output, we will recognize a <tag>seealso</tag> without a locator and produce a warning.</p>
 
-            <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <pubtitle>Chicago Manual of Style</pubtitle> (<acro>CMOS</acro>) for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
+            <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos"/> for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
 
             <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
 
@@ -3863,8 +3867,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>
               Indexing is a job for a skilled professional, and most authors produce poor indexes.
               The tips in this section will help you avoid the most common pitfalls.
-              We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle>
-              (specifically Chapter 18, 15th Edition),
+              We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="Chapter 18"/>,
               <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle>
               <xref ref="indexing-guide"/>,
               and Pilar Wyman of <url href="http://www.wymanindexing.com/" visual="www.wymanindexing.com/">Wyman Indexing</url>.

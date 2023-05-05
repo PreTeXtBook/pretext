@@ -1319,10 +1319,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </conclusion>
                 </reading-questions>
 
-                <glossary>
+                <glossary xml:id="glossary-specialized">
                     <idx>glossary</idx>
                     <headnote>
-                        <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.</p>
+                        <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is a specialized division within a section.  Placement in the back matter is another option, see the <xref ref="glossary-backmatter" text="title"/>.</p>
                     </headnote>
 
                     <gi>
@@ -7989,6 +7989,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Fourier: Making Waves <c>iframe</c></caption>
                     <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" aspect="15:10"/>
                 </figure>
+
+                <p>Anything that suggests you can <term>embed</term> an interactive widget via an iFrame is fair game for this feature.  This is a Google Map of the state of California, for use in a French language document, from Julien Giol.  The necessary <init>URL</init> is obtained by using the <q>Share</q> feature, and then the <q>Embed a map</q> option has <init>HTML</init> with the <init>URL</init> in a <attr>src</attr> attribute.</p>
+
+                <figure xml:id="map-california">
+                    <caption>California.</caption>
+                    <interactive xml:id="interactive-map-california" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" width="95%" aspect="15:10"/>
+                </figure>
             </subsection>
         </section>
 
@@ -8734,6 +8741,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A custom cross-reference: <xref ref="corollary-FTC-derivative" text="custom">Custom</xref></p></li>
                 <!-- Instructions for Interactives are not numbered, so use a simpler @text -->
                 <li><p>Cross-reference to <tag>instructions</tag> of an <tag>interactive</tag>: <xref ref="kinematics-instructions" text="title"/></p></li>
+                <li><p>A hyperlink to a <tag>subexercises</tag> via its required title (no number is assigned): <xref ref="hard-subexercises" text="title"/></p></li>
+                <!-- Accumulate examples here -->
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
@@ -11254,6 +11263,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </figure>
                     </sidebyside>
                 </figure>
+
+                <p>
+                    For <latex/>, in some circumstances it is desirable to print the image on the next line, but backed up by some amount.
+                    This <q>top-aligns</q> the image with a number of some sort off to the left. The following are tests for this behavior.
+                    Here is a list.
+                    <ol>
+                        <li>
+                            <image margins="0% 70%" source="images/nz-landscape.jpg"/>
+                        </li>
+                        <li>
+                            <image source="images/nz-landscape.jpg"/>
+                        </li>
+                    </ol>
+                </p>
+
+                <exercise>
+                    <task>
+                        <statement>
+                            <image margins="0% 70%" source="images/nz-landscape.jpg"/>
+                        </statement>
+                    </task>
+                    <task>
+                        <statement>
+                            <image source="images/nz-landscape.jpg"/>
+                        </statement>
+                    </task>
+                </exercise>
+
+                <exercises>
+                    <exercise>
+                        <task>
+                            <statement>
+                                <image margins="0% 70%" source="images/nz-landscape.jpg"/>
+                            </statement>
+                        </task>
+                        <task>
+                            <statement>
+                                <image source="images/nz-landscape.jpg"/>
+                            </statement>
+                        </task>
+                    </exercise>
+
+                    <exercisegroup cols="2">
+                        <exercise>
+                            <statement>
+                                <image margins="0% 70%" source="images/nz-landscape.jpg"/>
+                            </statement>
+                        </exercise>
+                        <exercise>
+                            <statement>
+                                <image source="images/nz-landscape.jpg"/>
+                            </statement>
+                        </exercise>
+                    </exercisegroup>
+                </exercises>
+
             </subsection>
 
             <subsection xml:id="atomic-video">
@@ -13444,7 +13509,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </subexercises>
 
-            <subexercises>
+            <subexercises xml:id="hard-subexercises">
                 <title>Hard Problems</title>
 
                 <exercise>
@@ -13894,6 +13959,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Most all of the index entries below to page 2 (PDF output) are just from a suite of non-sensical tests.  These are harder to recognize in the <init>HTML</init> output.</p>
                 </paragraphs>
             </appendix>
+
+            <glossary xml:id="glossary-backmatter">
+                <idx>glossary</idx>
+                <headnote>
+                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized" text="type-global"/>.</p>
+                </headnote>
+
+                <gi>
+                    <title>bar</title>
+                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined-two" text="title"/>.</p>
+                </gi>
+
+                <gi xml:id="foobar-defined-two">
+                    <title>foobar</title>
+                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                </gi>
+            </glossary>
 
             <appendix xml:id="references">
                 <title>Multiple References</title>

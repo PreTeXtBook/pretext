@@ -69,6 +69,7 @@ xsltproc ${MBXSL}/pretext-litprog.xsl pretext.xml
 
 # System trang conversion to RELAX-NG XML schema
 trang -I rnc -O rng pretext.rnc pretext.rng
+trang -I rnc -O rng pretext-dev.rnc pretext-dev.rng
 
 # System trang conversion to W3C XSD schema
 # "abstract groups" make schema browser too obtuse
