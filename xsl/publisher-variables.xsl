@@ -2837,35 +2837,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- There are also "compact" versions of the navigation buttons in the top right -->
-<xsl:variable name="nav-style">
-    <xsl:variable name="style-default" select="'full'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/html/navigation/@style = 'full'">
-            <xsl:text>full</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/navigation/@style = 'compact'">
-            <xsl:text>compact</xsl:text>
-        </xsl:when>
-        <!-- an attempt to set, but wrong -->
-        <xsl:when test="$publication/html/navigation/@style">
-            <xsl:message>PTX:WARNING: HTML navigation style setting in publisher file should be "full" or "compact", not "<xsl:value-of select="$publication/html/navigation/@style"/>". Proceeding with default value: "<xsl:value-of select="$style-default"/>"</xsl:message>
-            <xsl:value-of select="$style-default"/>
-        </xsl:when>
-        <!-- backwards compatibility, no error-checking -->
-        <xsl:when test="$html.navigation.style='full'">
-            <xsl:text>full</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.style='compact'">
-            <xsl:text>compact</xsl:text>
-        </xsl:when>
-        <!-- no effort to set this switch, so use default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$style-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
 
 <!--                              -->
 <!-- HTML CSS Style Specification -->
@@ -4842,6 +4813,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="date-string" select="'2023-01-11'" />
         <xsl:with-param name="message" select="'the  epub/@cover  publication file entry has been replaced, and likely you will only get a simple generic cover image.  Please read the documentation for how to transition to the new specification'" />
             <xsl:with-param name="incorrect-use" select="($publication/epub/@cover != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2023-05-05  HTML navigation buttons' style publication file entry removed -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2023-05-05'" />
+        <xsl:with-param name="message" select="'the  html/navigation/@style  publication file entry has been removed, since the &quot;compact&quot; option is no longer implemented, and the only option left is &quot;full&quot;.  Remove your publication file entry to stop this message re-appearing'" />
+            <xsl:with-param name="incorrect-use" select="($publication/html/navigation/@style != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>
