@@ -10939,16 +10939,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:copy-of select="$content" />
                     </div>
                     <div class="ptx-content-footer">
-                        <xsl:apply-templates select="." mode="previous-button">
-                            <xsl:with-param name="id-label" select="'previousbutton'" />
-                        </xsl:apply-templates>
+                        <xsl:apply-templates select="." mode="previous-button"/>
                         <a class="top-button button" href="#" title="Top">
                             <span class="icon">^</span>
                             <span class="name">Top</span>
                         </a> 
-                        <xsl:apply-templates select="." mode="next-button">
-                            <xsl:with-param name="id-label" select="'nextbutton'" />
-                        </xsl:apply-templates>
+                        <xsl:apply-templates select="." mode="next-button"/>
                     </div>
                 </main>
             </div>
@@ -11363,7 +11359,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Button code, <a href=""> when active   -->
 <!-- <span> with "disabled" class otherwise -->
 <xsl:template match="*" mode="previous-button">
-    <xsl:param name="id-label" select="''" />
     <xsl:variable name="previous-url">
         <xsl:choose>
             <xsl:when test="$nav-logic='linear'">
@@ -11475,7 +11470,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="next-button">
-    <xsl:param name="id-label" select="''" />
     <xsl:variable name="next-url">
         <xsl:choose>
             <xsl:when test="$nav-logic='linear'">
@@ -11521,7 +11515,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="up-button">
-    <xsl:param name="id-label" select="''" />
     <!-- up URL is identical for linear, tree logic -->
     <xsl:variable name="up-url">
         <xsl:apply-templates select="." mode="up-url" />
@@ -11695,17 +11688,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Span to encase Prev/Up/Next buttons and float right    -->
         <!-- Each button gets an id for keypress recognition/action -->
         <span class="treebuttons">
-            <xsl:apply-templates select="." mode="previous-button">
-                <xsl:with-param name="id-label" select="'previousbutton'" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="previous-button"/>
             <xsl:if test="$nav-upbutton='yes'">
-                <xsl:apply-templates select="." mode="up-button">
-                    <xsl:with-param name="id-label" select="'upbutton'" />
-                </xsl:apply-templates>
+                <xsl:apply-templates select="." mode="up-button"/>
             </xsl:if>
-            <xsl:apply-templates select="." mode="next-button">
-                <xsl:with-param name="id-label" select="'nextbutton'" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="next-button"/>
         </span>
         <!-- Annotations button was once here, see GitHub issue -->
         <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
