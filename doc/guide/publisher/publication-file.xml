@@ -626,7 +626,6 @@
             </cd>element can have the following attributes:<ul>
                 <li><attr>logic</attr> with values <c>linear</c> (default) and <c>tree</c>.</li>
                 <li><attr>upbutton</attr> with values <c>yes</c> (default) and <c>no</c>.</li>
-                <li><attr>style</attr> with values <c>full</c> (default) and <c>compact</c>.</li>
             </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
         </subsection>
     </section>
