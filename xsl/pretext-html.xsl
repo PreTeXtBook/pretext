@@ -11656,70 +11656,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
-
-<!--    Compact Buttons no longer supported, so this can be deleted, says David F -->
-<!-- Compact Buttons -->
-<!-- These get smashed consecutively into a single "tool-bar" -->
-<xsl:template match="*" mode="compact-buttons">
-    <!-- URL formation, maybe this could be consolidated with above versions -->
-    <xsl:variable name="previous-url">
-        <xsl:choose>
-            <xsl:when test="$nav-logic='linear'">
-                <xsl:apply-templates select="." mode="previous-linear-url" />
-            </xsl:when>
-            <xsl:when test="$nav-logic='tree'">
-                <xsl:apply-templates select="." mode="previous-tree-url" />
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="up-url">
-        <xsl:apply-templates select="." mode="up-url" />
-    </xsl:variable>
-    <xsl:variable name="next-url">
-        <xsl:choose>
-            <xsl:when test="$nav-logic='linear'">
-                <xsl:apply-templates select="." mode="next-linear-url" />
-            </xsl:when>
-            <xsl:when test="$nav-logic='tree'">
-                <xsl:apply-templates select="." mode="next-tree-url" />
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- toolbar-item when aligned right, get placed right: first in, first right -->
-    <!-- so they apparently seem in the reversed order here and in HTML output    -->
-    <!-- Empty URL, then no button                                                -->
-    <xsl:if test="not($next-url = '')">
-        <div class="toolbar-item">
-            <a href="{$next-url}">
-                <svg height="50" width="60" viewBox="0 50 110 100" xmlns="https://www.w3.org/2000/svg" >
-                    <polygon points="110,100 75,75 0,75 0,125 75,125 " style="fill:darkred;stroke:maroon;stroke-width:1" />
-                    <text x="13" y="108" fill="blanchedalmond" font-size="32">next</text>
-                </svg>
-            </a>
-        </div>
-    </xsl:if>
-    <xsl:if test="not($up-url = '')">
-        <div class="toolbar-item">
-            <a href="{$up-url}">
-                <svg height="50" width="60" viewBox="0 50 80 100" xmlns="https://www.w3.org/2000/svg" >
-                    <polygon points="75,75 37,65 0,75 0,125 75,125 " style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
-                    <text x="13" y="108" fill="maroon" font-size="32">up</text>
-                </svg>
-            </a>
-        </div>
-    </xsl:if>
-    <xsl:if test="not($previous-url = '')">
-        <div class="toolbar-item">
-            <a href="{$previous-url}">
-                <svg height="50" width="60" viewBox="-10 50 110 100" xmlns="https://www.w3.org/2000/svg" >
-                    <polygon points="-10,100 25,75 100,75 100,125 25,125 " style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
-                    <text x="28" y="108" fill="maroon" font-size="32">prev</text>
-                </svg>
-            </a>
-        </div>
-    </xsl:if>
-</xsl:template>
-
 <!-- Primary Navigation Panels -->
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
@@ -11733,52 +11669,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </span>
         </button>
-        <!-- Prev/Up/Next buttons on top, according to options -->
+        <!-- A page either has an/the index as    -->
+        <!-- a child, and gets the "jump to" bar, -->
+        <!-- or it deserves an index button       -->
         <xsl:choose>
-            <xsl:when test="$nav-style = 'full'">
-                <!-- A page either has an/the index as    -->
-                <!-- a child, and gets the "jump to" bar, -->
-                <!-- or it deserves an index button       -->
-                <xsl:choose>
-                    <xsl:when test="index-list">
-                        <xsl:apply-templates select="." mode="index-jump-nav" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="." mode="index-button" />
-                    </xsl:otherwise>
-                </xsl:choose>
-                <!-- Button to show/hide the calculator -->
-                <xsl:if test="$b-has-calculator">
-                    <xsl:call-template name="calculator-toggle" />
-                    <xsl:call-template name="calculator" />
-                </xsl:if>
-                <!-- Runestone user menu -->
-                <!-- Conditional on a build for Runestone hosting -->
-                <xsl:call-template name="runestone-bust-menu"/>
-                <!-- A scratch ActiveCode via a pencil icon, always -->
-                <xsl:call-template name="runestone-scratch-activecode"/>
-                <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
-                <xsl:call-template name="user-preferences-menu"/>
-                <!-- Span to encase Prev/Up/Next buttons and float right    -->
-                <!-- Each button gets an id for keypress recognition/action -->
-                <span class="treebuttons">
-                    <xsl:apply-templates select="." mode="previous-button">
-                        <xsl:with-param name="id-label" select="'previousbutton'" />
-                    </xsl:apply-templates>
-                    <xsl:if test="$nav-upbutton='yes'">
-                        <xsl:apply-templates select="." mode="up-button">
-                            <xsl:with-param name="id-label" select="'upbutton'" />
-                        </xsl:apply-templates>
-                    </xsl:if>
-                    <xsl:apply-templates select="." mode="next-button">
-                        <xsl:with-param name="id-label" select="'nextbutton'" />
-                    </xsl:apply-templates>
-                </span>
+            <xsl:when test="index-list">
+                <xsl:apply-templates select="." mode="index-jump-nav" />
             </xsl:when>
-            <xsl:when test="$nav-style = 'compact'">
-                <xsl:apply-templates select="." mode="compact-buttons" />
-            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="index-button" />
+            </xsl:otherwise>
         </xsl:choose>
+        <!-- Button to show/hide the calculator -->
+        <xsl:if test="$b-has-calculator">
+            <xsl:call-template name="calculator-toggle" />
+            <xsl:call-template name="calculator" />
+        </xsl:if>
+        <!-- Runestone user menu -->
+        <!-- Conditional on a build for Runestone hosting -->
+        <xsl:call-template name="runestone-bust-menu"/>
+        <!-- A scratch ActiveCode via a pencil icon, always -->
+        <xsl:call-template name="runestone-scratch-activecode"/>
+        <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
+        <xsl:call-template name="user-preferences-menu"/>
+        <!-- Span to encase Prev/Up/Next buttons and float right    -->
+        <!-- Each button gets an id for keypress recognition/action -->
+        <span class="treebuttons">
+            <xsl:apply-templates select="." mode="previous-button">
+                <xsl:with-param name="id-label" select="'previousbutton'" />
+            </xsl:apply-templates>
+            <xsl:if test="$nav-upbutton='yes'">
+                <xsl:apply-templates select="." mode="up-button">
+                    <xsl:with-param name="id-label" select="'upbutton'" />
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="next-button">
+                <xsl:with-param name="id-label" select="'nextbutton'" />
+            </xsl:apply-templates>
+        </span>
         <!-- Annotations button was once here, see GitHub issue -->
         <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
         <!-- Search box at end of ptx-navbar, so it can be sticky -->
