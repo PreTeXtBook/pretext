@@ -279,7 +279,7 @@
         to cause the input form to be an array of smaller fields instead of one big field.
       </p>
       <p>
-        A <tag>var</tag> can have <attr>form</attr> with value <c>popup</c> or <c>buttons</c> for multiple choice questions.
+        A <tag>var</tag> can have <attr>form</attr> with value <c>popup</c>, <c>buttons</c>, or <c>checkboxes</c> for multiple choice questions.
       </p>
       <p>
         If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator
