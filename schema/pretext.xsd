@@ -2429,6 +2429,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="popup"/>
             <xs:enumeration value="buttons"/>
+            <xs:enumeration value="checkboxes"/>
             <xs:enumeration value="none"/>
             <xs:enumeration value="essay"/>
           </xs:restriction>

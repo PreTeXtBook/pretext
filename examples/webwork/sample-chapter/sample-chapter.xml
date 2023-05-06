@@ -1087,40 +1087,114 @@
                 </webwork>
             </exercise>
 
-            <!--Checkboxes not yet implemented fully. See note in pretext-webwork-pg.xsl -->
-            <!--<exercise>
-                <title>Choose several</title>
-
+            <exercise>
+                <title>Choose a Subset of Options</title>
                 <webwork>
-
                     <pg-code>
-                        $expressions = new_checkbox_multiple_choice();
-                        $expressions -> qa (
-                        "A question can go here, but PTX ignores this",
-                        "\( e^{x^2} e^{1/x} \)$BR",
-                        "\( e^{x^2} e^{x^{-1}} \)$BR",
-                        "\( e^{ (x^3+1) / x } \)$BR",
+                        $checks = CheckboxList(
+                            [
+                                [
+                                    "${BM}e^{x^2} e^{1/x}${EM}",
+                                    "${BM}e^{x^2} e^{x^{-1}}${EM}",
+                                    "${BM}e^{ (x^3+1) / x}${EM}",
+                                    "${BM}\dfrac{ e^{x^2} }{ e^x }${EM}",
+                                    "${BM}e^{x^2} + e^{1/x}${EM}"
+                                ],
+                                "None of the above"
+                            ],
+                            [0, 1, 2]
                         );
-                        $expressions -> extra(
-                        "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
-                        "\( e^{x^2} + e^{1/x} \)$BR",
-                        );
-                        $expressions -> makeLast("None of the above");
                     </pg-code>
-
                     <statement>
-                        <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><var name="$expressions" form="checkboxes"/></p>
+                        <p>
+                            Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.
+                            There may be more than one correct answer.
+                        </p>
+                        <p>
+                            <var name="$checks" form="checkboxes"/>
+                        </p>
                     </statement>
-
                     <solution>
-                        <p>The correct answer is <var name="$expressions"/>.</p>
+                        <p>
+                            The correct answer is <var name="$checks"/>.
+                        </p>
                     </solution>
-
                 </webwork>
-            </exercise>-->
+            </exercise>
 
+            <exercise>
+                <title>Choose a Subset of Options with Automated Labeling</title>
+                <webwork>
+                    <pg-code>
+                        $checks = CheckboxList(
+                            [
+                                [
+                                    "${BM}e^{x^2} e^{1/x}${EM}",
+                                    "${BM}e^{x^2} e^{x^{-1}}${EM}",
+                                    "${BM}e^{ (x^3+1) / x}${EM}",
+                                    "${BM}\dfrac{ e^{x^2} }{ e^x }${EM}",
+                                    "${BM}e^{x^2} + e^{1/x}${EM}"
+                                ],
+                                "None of the above"
+                            ],
+                            [0, 1, 2],
+                            labels => "ABC",   # "abc", "123", "roman", "Roman"
+                        );
+                    </pg-code>
+                    <statement>
+                        <p>
+                            Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.
+                            There may be more than one correct answer.
+                        </p>
+                        <p>
+                            <var name="$checks" form="checkboxes"/>
+                        </p>
+                    </statement>
+                    <solution>
+                        <p>
+                            The correct answer is <var name="$checks"/>.
+                        </p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Choose a Subset of Options with Explicit Labeling</title>
+                <webwork>
+                    <pg-code>
+                        $checks = CheckboxList(
+                            [
+                                [
+                                    {TACO => "${BM}e^{x^2} e^{1/x}${EM}"},
+                                    {PIZZA => "${BM}e^{x^2} e^{x^{-1}}${EM}"},
+                                    {SUSHI => "${BM}e^{ (x^3+1) / x}${EM}"},
+                                    {BURGER => "${BM}\dfrac{ e^{x^2} }{ e^x }${EM}"},
+                                    {BURRITO => "${BM}e^{x^2} + e^{1/x}${EM}"}
+                                ],
+                                {HUNGRY => "None of the above"}
+                            ],
+                            [0, 1, 2],
+                            displayLabels => 1
+                        );
+                    </pg-code>
+                    <statement>
+                        <p>
+                            Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.
+                            There may be more than one correct answer.
+                        </p>
+                        <p>
+                            <var name="$checks" form="checkboxes"/>
+                        </p>
+                    </statement>
+                    <solution>
+                        <p>
+                            The correct answer is <var name="$checks"/>.
+                        </p>
+                    </solution>
+                </webwork>
+            </exercise>
         </section>
+
         <section>
             <title>Tables</title>
 
@@ -1564,45 +1638,28 @@
             </exercise>
 
             <exercise xml:id="multiple-choice-popup-or-radio-buttons">
-                <!--Checkbox not implemented yet; see note in pretext-webwork-pg.xsl  -->
-                <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
+                <title>Multiple Choice by Popup, Radio Buttons, or Checkboxes</title>
 
                 <webwork>
-
-                        <pg-code>
-                            $color1 = PopUp(["?","Red","Blue","Green"], 2);
-
-                            $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
-                        </pg-code>
-                        <!-- include below in pg-code once checkboxes implemented
-                            $mc = new_checkbox_multiple_choice();
-                            $mc -> qa (
-                            "A question can go here, but PTX ignores this",
-                            "\( e^{x^2} e^{1/x} \)$BR",
-                            "\( e^{x^2} e^{x^{-1}} \)$BR",
-                            "\( e^{ (x^3+1) / x } \)$BR",
-                            );
-                            $mc -> extra(
-                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
-                            "\( e^{x^2} + e^{1/x} \)$BR",
-                            );
-                            $mc -> makeLast("None of the above");
-                        -->
-
+                    <pg-code>
+                        $color1 = PopUp(["?","Red","Blue","Green"], 2);
+                        $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
+                        $color3 = CheckboxList(["Red","Blue","Green","None of these"], [1]);
+                    </pg-code>
                     <statement>
                         <p>My favorite color is <var name="$color1" form="popup"/>.</p>
 
                         <p>My favorite color is</p>
                         <p><var name="$color2" form="buttons"/></p>
 
-                        <!--<p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><var name="$mc" form="checkboxes"/></p>-->
+                        <p>My favorite color is</p>
+                        <p><var name="$color3" form="checkboxes"/></p>
                     </statement>
 
                     <solution>
                         <p>The correct answer is <var name="$color1"/>.</p>
                         <p>The correct answer is <var name="$color2"/>.</p>
-                        <!--<p>The correct answer is <var name="$mc"/>.</p>-->
+                        <p>The correct answer is <var name="$color3"/>.</p>
                     </solution>
 
                 </webwork>
