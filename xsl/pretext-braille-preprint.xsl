@@ -297,6 +297,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:apply-templates>
         </xsl:if>
+        <!-- mention how "tabular" are implenented and suggest possible improvements-->
+        <xsl:if test="//tabular">
+            <xsl:apply-templates select="." mode="transcriber-note">
+                <xsl:with-param name="message">
+                    <xsl:text>Tabular material is always implemented using a "linear table format".  A human transcriber may be able to improve small tables, or larger tables that could use multiple pages when embossed, by using a different format.</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
         <!-- process segments and blocks of "brf" -->
         <xsl:apply-templates select="*"/>
     </brf>
@@ -720,6 +728,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure|listing|table|list">
     <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <segment indentation="6" runover="4">
+            <!-- [BANA, 2016, 11.17.1a] "Leave a blank line after the title." -->
+            <!-- Guidance for tables, we mimic for PTX "list" block.          -->
+            <xsl:if test="self::table or self::list">
+                <xsl:attribute name="lines-after">
+                    <xsl:text>1</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
         <xsl:apply-templates/>
@@ -933,6 +948,152 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
 </xsl:template>
+
+
+<!-- ####################### -->
+<!-- Tabular (table content) -->
+<!-- ####################### -->
+
+<!-- Simple tables can be realized nicely in braille by a human transcriber. -->
+<!-- We are not even sure how to identify a table as being "simple enough."  -->
+<!--                                                                         -->
+<!-- So we implement "Wide Tables: Linear Table Format" [BANA, 2016, 11.17], -->
+<!-- which is never wrong, and is more or less sympatico with our markup.    -->
+<!--                                                                         -->
+<!-- TODO: Suppose a transcriber *does* replace one of our tables with       -->
+<!-- something better?  We could perhaps capture the BRF version in a new    -->
+<!-- "braille" element that lived in source and which was used               -->
+<!-- preferentially once discovered.                                         -->
+
+<xsl:template match="tabular">
+    <xsl:variable name="n-column-headings" select="count(row[(@header = 'yes') or (@header = 'vertical')])"/>
+    <xsl:variable name="b-column-headings" select="$n-column-headings > 0"/>
+    <xsl:variable name="b-row-headings" select="@row-headers = 'yes'"/>
+    <block breakable="no">
+        <!-- Transcriber note, if necessary to explain headings -->
+        <xsl:if test="$b-column-headings or $b-row-headings">
+            <xsl:apply-templates select="." mode="transcriber-note">
+                <xsl:with-param name="message">
+                    <xsl:if test="$b-column-headings">
+                        <xsl:text>The first </xsl:text>
+                        <xsl:value-of select="$n-column-headings"/>
+                        <xsl:text> rows are columm headings, described next.</xsl:text>
+                    </xsl:if>
+                    <!-- separate two sentences, if we have both -->
+                    <xsl:if test="$b-column-headings and $b-row-headings">
+                        <xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="$b-row-headings">
+                        <xsl:text>The first column of this table contains headings for the rows.</xsl:text>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+            <!-- [BANA, 2016] 11.17.1e "Leave a blank line after the note." -->
+            <segment lines-after="1"/>
+        </xsl:if>
+        <!-- enforce header row(s) first -->
+        <!-- BANA says put column headings inside the transcriber note, -->
+        <!-- but switch to 1-3 margins.  We ignore this and write the   -->
+        <!-- column headings out just tlike all the other rows.  One    -->
+        <!-- concession: a blank line separator.                        -->
+        <xsl:apply-templates select="row[(@header = 'yes') or (@header = 'vertical')]"/>
+        <xsl:if test="$b-column-headings">
+            <segment lines-after="1"/>
+        </xsl:if>
+        <!-- now the "regular" lines, possibly with row-headings -->
+        <xsl:apply-templates select="row[not((@header = 'yes') or (@header = 'vertical'))]"/>
+    </block>
+</xsl:template>
+
+<!-- [BANA, 2016] 11.17.1f Each row has 1-3 margins                     -->
+<!-- [BANA, 2016] 11.17.1g "Do not divide a row between braille pages." -->
+<xsl:template match="tabular/row">
+    <segment breakable="no" indentation="0" runover="2">
+        <xsl:choose>
+            <xsl:when test="(@header = 'yes') or (@header = 'vertical')">
+                <xsl:apply-templates select="cell[1]" mode="describe-column-headings"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="cell"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </segment>
+</xsl:template>
+
+<!-- "Regular" cells in non-header rows (more typical) -->
+<xsl:template match="tabular/row/cell">
+    <xsl:apply-templates/>
+    <xsl:choose>
+        <!-- First cell, trailed by a colon -->
+        <xsl:when test="not(preceding-sibling::cell)">
+            <xsl:text>: </xsl:text>
+        </xsl:when>
+        <!-- Last cell, trailed by nothing -->
+        <xsl:when test="not(following-sibling::cell)"/>
+        <!-- Interior cells, trailed by semi-colons -->
+        <xsl:otherwise>
+            <xsl:text>; </xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="@colspan">
+        <xsl:call-template name="duplicate-string">
+             <xsl:with-param name="count" select="@colspan - 1"/>
+             <xsl:with-param name="text" select="';'"/>
+         </xsl:call-template>
+     </xsl:if>
+</xsl:template>
+
+<xsl:template match="tabular/row/cell" mode="describe-column-headings">
+    <xsl:param name="prior-column-number" select="0"/>
+
+    <!-- Analyze  @colspan  implications.  Note this is correct for -->
+    <!-- no attribute at all and a (silly) attribute value of 1.    -->
+    <xsl:variable name="first-column" select="$prior-column-number + 1"/>
+    <xsl:variable name="n-columns">
+        <xsl:choose>
+            <xsl:when test="@colspan">
+                <xsl:value-of select="@colspan"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="last-column" select="$prior-column-number + $n-columns"/>
+    <xsl:variable name="b-multicolumns" select="$last-column > $first-column"/>
+
+    <xsl:text>Column</xsl:text>
+    <xsl:if test="$b-multicolumns">
+        <xsl:text>s</xsl:text>
+    </xsl:if>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$first-column"/>
+    <xsl:if test="$b-multicolumns">
+        <xsl:text> - </xsl:text>
+        <xsl:value-of select="$last-column"/>
+    </xsl:if>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:choose>
+        <!-- First cell, trailed by a colon -->
+        <xsl:when test="not(preceding-sibling::cell)">
+            <xsl:text>: </xsl:text>
+        </xsl:when>
+        <!-- Last cell, trailed by nothing -->
+        <xsl:when test="not(following-sibling::cell)"/>
+        <!-- Interior cells, trailed by semi-colons -->
+        <xsl:otherwise>
+            <xsl:text>; </xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- recurse if there is more to do -->
+    <xsl:if test="following-sibling::cell">
+        <xsl:apply-templates select="following-sibling::cell" mode="describe-column-headings">
+            <xsl:with-param name="prior-column-number" select="$last-column"/>
+        </xsl:apply-templates>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ########## -->
 <!-- References -->
@@ -1401,11 +1562,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- segment with placeholder content at this stage -->
 <xsl:template match="cd">
     <segment>CODE DISPLAY</segment>
-</xsl:template>
-
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="tabular">
-    <segment>TABULAR</segment>
 </xsl:template>
 
 <!-- segment with placeholder content at this stage -->
