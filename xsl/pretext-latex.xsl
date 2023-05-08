@@ -9781,25 +9781,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="valign" />
 
     <!-- a cell of a header row needs to be bold -->
-    <!-- NB: Named templates means context is a  -->
-    <!-- row, which is really wrong.  Tests      -->
-    <!-- should be on  parent::row/@header       -->
-    <xsl:variable name="header-row">
-        <xsl:choose>
-            <xsl:when test="parent::row/@header = 'yes'">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <xsl:when test="parent::row/@header = 'vertical'">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <!-- "no" is other choice, or no attribute at all  -->
-            <!-- controlled by schema, so now error-check here -->
-            <xsl:otherwise/>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="b-header" select="$header-row = 'true'"/>
-    <!-- and vertical text is a simpler check -->
+    <xsl:variable name="b-header-row" select="(parent::row/@header = 'yes') or (parent::row/@header = 'vertical')"/>
+    <!-- and vertical text is a refinement -->
     <xsl:variable name="b-vertical-header" select="parent::row/@header = 'vertical'"/>
+
     <xsl:choose>
         <xsl:when test="p">
             <!-- paragraph-halign-specification differs from halign-specification -->
@@ -9814,7 +9799,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="p" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:if test="$b-header">
+            <xsl:if test="$b-header-row">
                 <xsl:text>{\bfseries{}</xsl:text>
             </xsl:if>
             <xsl:if test="$b-vertical-header">
@@ -9828,7 +9813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-vertical-header">
                 <xsl:text>\space}</xsl:text>
             </xsl:if>
-            <xsl:if test="$b-header">
+            <xsl:if test="$b-header-row">
                 <xsl:text>}</xsl:text>
             </xsl:if>
         </xsl:otherwise>
