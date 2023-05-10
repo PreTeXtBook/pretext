@@ -2242,27 +2242,6 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                 raise OSError(msg.format(r.status_code, url))
     log.info("MyOpenMath static problem download complete")
 
-###########################
-# New Conversion to Braille
-###########################
-
-def braille_new(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
-
-    # Incomplete:
-    #     xml_source: not the author's source, output from a new stylesheet
-    #     page_format: ignored, producing  embossable  first
-    #     dest_dir: ignored, multi-file output will wait
-
-    # Needs:
-    #     Interpret author's source, account for publisher file, etc.
-    #     Support "electronic" format (squelch page formation)
-    #     Allow for multi-file (chapters) output
-
-    import braille_format as braille
-
-    # temporary entry point
-    braille.parse_segments(xml_source, out_file, page_format)
-
 
 #######################
 # Conversion to Braille
@@ -2311,6 +2290,10 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
         log.debug(msg)
         chunk_level = '0'
 
+    # Temporarily neuter all of above
+    log.warning("Any elective chunking is temporarily disabled")
+    chunk_level = '0'
+
     # Build into a scratch directory
     tmp_dir = get_temporary_directory()
     log.debug("Braille manufacture in temporary directory: {}".format(tmp_dir))
@@ -2321,52 +2304,33 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     math_representations = os.path.join(
         tmp_dir, "math-representations-{}.xml".format(math_format)
     )
-    braille_xslt = os.path.join(get_ptx_xsl_path(), "pretext-braille.xsl")
-    #  liblouis-precursor.xml  is hard-coded in  pretext-braille.xsl  stylesheet
-    liblouis_xml = os.path.join(tmp_dir, "liblouis-precursor.xml")
 
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
     mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
-    msg = "converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})"
-    log.debug(msg.format(xml_source, math_representations, liblouis_xml))
+    # use XSL to make a simplified BRF-like XML version, "preprint"
+    msg = "converting source ({}) and clean representations ({}) into preprint XML file ({})"
     stringparams["mathfile"] = math_representations.replace(os.sep, "/")
     # pass in the page format (for messages about graphics, etc.)
     stringparams["page-format"] = page_format
     if pub_file:
         stringparams["publisher"] = pub_file
-    xsltproc(braille_xslt, xml_source, None, tmp_dir, stringparams)
+    preprint = os.path.join(tmp_dir, "preprint.xml")
+    braille_xslt = os.path.join(get_ptx_xsl_path(), "pretext-braille-preprint.xsl")
+    xsltproc(braille_xslt, xml_source, preprint, tmp_dir, stringparams)
 
-    # Main configuration file, two page format files
-    liblouis_cfg = os.path.join(
-        get_ptx_path(), "script", "braille", "pretext-liblouis.cfg"
-    )
-    liblouis_emboss_cfg = os.path.join(
-        get_ptx_path(), "script", "braille", "pretext-liblouis-emboss.cfg"
-    )
-    liblouis_electronic_cfg = os.path.join(
-        get_ptx_path(), "script", "braille", "pretext-liblouis-electronic.cfg"
-    )
-    # comma-separated configuration files, with no space
-    # so as to not confuse the command construction
-    if page_format == "emboss":
-        cfg = liblouis_cfg + "," + liblouis_emboss_cfg
-    elif page_format == "electronic":
-        cfg = liblouis_cfg + "," + liblouis_electronic_cfg
-    else:
-        raise ValueError("PTX:BUG: braille page format not recognized")
+    # use Python to format simplified BRF as a real BRF
+    import braille_format as braille
 
     # Build a BRF in the *temporary* directory: final or chunkable
     temp_brf = os.path.join(tmp_dir, "temporary.brf")
-    liblouis_exec_cmd = get_executable_cmd("liblouis")
-    msg = "applying liblouis to {} with configurations {}, creating BRF {}"
-    log.debug(msg.format(liblouis_xml, cfg, temp_brf))
-    liblouis_cmd = liblouis_exec_cmd + ["-f", cfg, liblouis_xml, temp_brf]
-    subprocess.run(liblouis_cmd)
+    # Python formatting call
+    braille.parse_segments(preprint, temp_brf, page_format)
 
-    # chunk level is either '0' or '1' (exclusive "if")
+    # move out of temporary directory as final product(s)
+    # chunk level is either '0' or '1' (exclusive "if" follow)
     if chunk_level == '0':
         # monolithic file
         final_brf = get_output_filename(xml_source, out_file, dest_dir, ".brf")
