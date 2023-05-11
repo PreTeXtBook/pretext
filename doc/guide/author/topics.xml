@@ -3470,6 +3470,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>A table offers an excellent means of presenting a large number of individual similar facts so that they are easy to scan and compare.  A simple table can give information that would require several paragraphs to present textually, and it can do so more clearly. <ellipsis/> A table should be as simple as the material allows and understandable on its own; even a reader unfamiliar with the material presented should be able to make general sense of a table.</p>
             </blockquote>
 
+            <p>If you review the twenty tables presented in Chapter 13 of <init>CMOS</init>, that are of the type we implement, you will notice several things.<ul>
+                <li>Only the first column is ever used for row headings.</li>
+                <li>Cells do not span multiple rows.  (There is no analogue for <attr>colspan</attr>.)</li>
+                <li>Column headings appear at the top, other than <term>cut-in heads</term>, which have a very particular form.  (We have not implemented these, but would entertain a feature request.)</li>
+            </ul></p>
+
             <p>While our implementation allows for some presentational elements (borders, rules, alignment) our conversions will presume your table hews to the purposes described by CMOS.  In particular, it is not a device for spatial layout of complex elements.  You might find that the <tag>sidebyside</tag> and <tag>sbsgroup</tag> layout devices will suit that purpose better (see <xref ref="topic-sidebyside"/>).</p>
 
             <note>
