@@ -901,8 +901,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- themselves they have no real impact on the braille -->
 <!-- output.  The list items are another matter.        -->
 <!-- 2023-04-06: very prelimnary, e.g. no runover       -->
+<!-- 2023-04-10: excessive nesting => excessive run-in  -->
 <xsl:template match="ul|ol|dl">
-    <!-- <segment>LIST</segment> -->
     <xsl:apply-templates select="li"/>
 </xsl:template>
 
