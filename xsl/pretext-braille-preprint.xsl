@@ -1583,21 +1583,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="cd">
-    <segment>CODE DISPLAY</segment>
-</xsl:template>
-
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="pre">
-    <segment>PREFORMATTED TEXT</segment>
-</xsl:template>
-
-<!-- segment with placeholder content at this stage -->
-<xsl:template match="program">
-    <segment>PROGRAM</segment>
-</xsl:template>
-
 <!-- We support books and articles, though nothing in particular -->
 <!-- needs to be done at these root elements.  Yet?              -->
 <xsl:template match="book|article">
@@ -1668,6 +1653,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- captions get killed in -common so we don't need to see them here -->
 <xsl:template match="caption">
     <xsl:apply-imports/>
+</xsl:template>
+
+<!-- Larger structures, needing implementation, *along with* interior -->
+<!-- structures.  We report AND include a textual place holder.       -->
+
+<xsl:template match="sage">
+    <xsl:text>SAGECELL</xsl:text>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="notation-list">
+    <xsl:text>NOTATIONLIST</xsl:text>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="index-list">
+    <xsl:text>INDEXLIST</xsl:text>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="cd">
+    <segment>CODE DISPLAY</segment>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="pre">
+    <segment>PREFORMATTED TEXT</segment>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="program">
+    <segment>PROGRAM</segment>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="console">
+    <segment>CONSOLE</segment>
+    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<xsl:template match="poem">
+    <segment>POEM</segment>
+    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="*" mode="overlooked">
