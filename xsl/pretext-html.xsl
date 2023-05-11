@@ -7937,6 +7937,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but also probing for end of row (no more cells) -->
     <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" />
     <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" /> <!-- possibly empty -->
+
+    <!-- Check if row-headers are requested -->
+    <xsl:variable name="b-row-headers" select="boolean($the-cell/parent::row/parent::tabular[@row-headers = 'yes'])"/>
+    <!-- And if we are at the first cell -->
+    <xsl:variable name="b-row-header" select="$b-row-headers and not($the-cell/preceding-sibling::cell)"/>
+
+<xsl:message><xsl:value-of select="$b-row-header"/></xsl:message>
+
     <xsl:if test="$the-cell">
         <!-- build an HTML data cell, with CSS decorations              -->
         <!-- we set properties in various variables,                    -->
@@ -8095,6 +8103,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@header = 'vertical'">
                     <xsl:text>th</xsl:text>
                 </xsl:when>
+                <xsl:when test="$b-row-header">
+                    <xsl:text>th</xsl:text>
+                </xsl:when>
                 <!-- "no" is other choice, or no attribute at all -->
                 <!-- controlled by schema, so no error-check here -->
                 <xsl:otherwise>
@@ -8105,10 +8116,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- the HTML element for the cell -->
         <xsl:element name="{$header-row-elt}">
+            <!-- Scope attribute helps with accessibility: what          -->
+            <!-- is the table element/cell describing?                   -->
             <!-- if this is a row of column headers, declare scope="col" -->
+            <!-- if this is a column of row headers, declare scope="row" -->
             <xsl:if test="$header-row-elt = 'th'">
                 <xsl:attribute name="scope">
-                    <xsl:text>col</xsl:text>
+                    <!-- If in upper-left corner, let column headings dominate -->
+                    <xsl:choose>
+                        <xsl:when test="(@header = 'yes') or (@header = 'vertical')">
+                            <xsl:text>col</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$b-row-header">
+                            <xsl:text>row</xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:attribute>
             </xsl:if>
             <!-- and the class attribute -->
