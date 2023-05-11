@@ -9855,6 +9855,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
 </xsl:template>
 
+<!-- On the suspicion that the next template frequently "scans" the entire   -->
+<!-- document tree, we attempted to add a developer-only "debug" switch      -->
+<!-- that would bypass the tests here, and in "generic-warnings" and         -->
+<!-- "parameter-deprecation-warnings". For the sample article the speed-up   -->
+<!-- was about 1%, and for AATA the speed-up was apparently less.  Which was -->
+<!-- all not worth the danger that authors and publishers could "turn off"   -->
+<!-- deprecation warnings. (2023-05-11)                                      -->
 <xsl:template match="mathbook|pretext" mode="element-deprecation-warnings">
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->
