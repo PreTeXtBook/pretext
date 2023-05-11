@@ -9785,6 +9785,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- and vertical text is a refinement -->
     <xsl:variable name="b-vertical-header" select="parent::row/@header = 'vertical'"/>
 
+    <xsl:variable name="b-row-headers" select="(parent::row/parent::tabular[@row-headers = 'yes'])"/>
+    <xsl:variable name="b-first-cell" select="not(preceding-sibling::cell)"/>
+
+    <xsl:variable name="b-bold-face-cell" select="$b-header-row or ($b-row-headers and $b-first-cell)"/>
+
     <xsl:choose>
         <xsl:when test="p">
             <!-- paragraph-halign-specification differs from halign-specification -->
@@ -9799,7 +9804,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="p" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:if test="$b-header-row">
+            <xsl:if test="$b-bold-face-cell">
                 <xsl:text>{\bfseries{}</xsl:text>
             </xsl:if>
             <xsl:if test="$b-vertical-header">
@@ -9813,7 +9818,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-vertical-header">
                 <xsl:text>\space}</xsl:text>
             </xsl:if>
-            <xsl:if test="$b-header-row">
+            <xsl:if test="$b-bold-face-cell">
                 <xsl:text>}</xsl:text>
             </xsl:if>
         </xsl:otherwise>
