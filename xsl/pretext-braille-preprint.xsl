@@ -1094,6 +1094,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- A "p" normally becomes a "segment".  But an entire row of a "tabular" -->
+<!-- is a segment and we can't nest them.  So we just dribble out the      -->
+<!-- entire "p" without any indentation or anything, so it becomes one     -->
+<!-- very long cell in the braille.  Worse, two "p" in a cell will just    -->
+<!-- get concatenated and the distinction between the two will be lost.    -->
+<xsl:template match="cell/p">
+    <xsl:apply-templates select="node()"/>
+    <!-- At least provide a space between consecutive "p" -->
+    <xsl:if test="following-sibling::p">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ########## -->
 <!-- References -->
