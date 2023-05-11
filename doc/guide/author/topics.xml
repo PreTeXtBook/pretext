@@ -3572,7 +3572,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <row>
                         <cell><c>header</c></cell>
                         <cell></cell>
-                        <cell>p</cell>
+                        <cell></cell>
                         <cell><times/></cell>
                         <cell></cell>
                         <cell>yes/vertical/no*</cell>
@@ -3591,14 +3591,6 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <cell></cell>
                         <cell></cell>
                         <cell><times/></cell>
-                        <cell>1*, positive integer</cell>
-                    </row>
-                    <row>
-                        <cell><c>rowspan</c></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell>p</cell>
                         <cell>1*, positive integer</cell>
                     </row>
                     <row>
