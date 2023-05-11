@@ -13076,8 +13076,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                             <table>
                                 <title>Estimated hourly traffic flow for the road network</title>
-                                <tabular>
-                                    <row>
+                                <tabular row-headers="yes" halign="center">
+                                    <row header="yes">
                                         <cell>
                                         </cell>
                                         <cell>
@@ -13097,7 +13097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </cell>
                                     </row>
                                     <row>
-                                        <cell>
+                                        <cell halign="left">
                                             into
                                         </cell>
                                         <cell>
@@ -13117,7 +13117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </cell>
                                     </row>
                                     <row>
-                                        <cell>
+                                        <cell halign="left">
                                             out of
                                         </cell>
                                         <cell>
