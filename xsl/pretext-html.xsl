@@ -7943,8 +7943,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- And if we are at the first cell -->
     <xsl:variable name="b-row-header" select="$b-row-headers and not($the-cell/preceding-sibling::cell)"/>
 
-<xsl:message><xsl:value-of select="$b-row-header"/></xsl:message>
-
     <xsl:if test="$the-cell">
         <!-- build an HTML data cell, with CSS decorations              -->
         <!-- we set properties in various variables,                    -->
