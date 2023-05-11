@@ -190,8 +190,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- for a post-processing step to incorporate "runin"           -->
 <!-- title/heading elements into a subsequent segment.           -->
 <xsl:variable name="segmented-rtf">
+    <xsl:call-template name="warning-unimplemented"/>
     <xsl:apply-templates select="$root"/>
 </xsl:variable>
+
+<!-- And we sneak in a warning that this conversion is underway, but not complete. -->
+<xsl:template name="warning-unimplemented">
+    <xsl:message>** Some PreTeXt elements lack full implementation in the braille conversion.</xsl:message>
+    <xsl:message>** Smaller items will simply be missing from your output.</xsl:message>
+    <xsl:message>** Larger items may have all-caps placeholders in your output.</xsl:message>
+    <xsl:message>** These will all be reported as "Overlooked" in the log.</xsl:message>
+    <xsl:message>** Please report the complete list in the PreTeXt support forum,</xsl:message>
+    <xsl:message>** so we can prioritize making the output for your project complete.</xsl:message>
+</xsl:template>
 
 <!-- The entry template "waits" for the "$math-meld-rtf" and    -->
 <!-- "$segmented-rtf" global variables to form, then the actual -->
@@ -1640,10 +1651,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
 </xsl:template>
 
+<xsl:template match="*" mode="overlooked">
+    <xsl:message>Overlooked: <xsl:value-of select="local-name()"/></xsl:message>
+</xsl:template>
+
 <!-- *Every* element needs an implementation, or it ends up here being -->
 <!-- reported as overlooked.  This is temporary during development.    -->
 <xsl:template match="*">
-    <xsl:message>Overlooked: <xsl:value-of select="local-name()"/></xsl:message>
+    <xsl:apply-templates select="." mode="overlooked"/>
+    <!-- <xsl:message>Overlooked: <xsl:value-of select="local-name()"/></xsl:message> -->
     <!-- recurse into child elements to find more "missing" elements -->
     <xsl:apply-templates select="*"/>
 </xsl:template>
