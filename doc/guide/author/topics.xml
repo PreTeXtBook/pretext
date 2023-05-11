@@ -3394,7 +3394,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>So it should now be clear that, after much consideration, that we have chosen a <q>row first</q> approach to describing a table.</p>
 
-            <p>We plan to support row headers, in a manner similar to column headers, with an attribute possible on the initial <tage>col</tage> elements.</p>
+            <p>To encourage good style, we only support row headers as the first column.  So this is a property of the entire <tag>tabular</tag>.  So the attribute <attr>row-headers</attr> on <tag>tabular</tag> can have values <c>no</c> and <c>yes</c>, with the former as default.  Note that <q>major</q> and <q>minor</q> row headers should be accomplished in the first column by using indentation for the minor headers.  Please make a feature request if you would find this useful.</p>
         </subsection>
 
         <subsection>
@@ -3508,12 +3508,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <col/>
                     <col halign="left"/>
                     <!--  -->
-                    <row>
+                    <row header="yes">
                         <cell>Attributes</cell>
                         <cell colspan="4" halign="center">Elements</cell>
                         <cell>Values</cell>
                     </row>
-                    <row bottom="medium">
+                    <row header="yes" bottom="medium">
                         <cell></cell>
                         <cell><c>tabular</c></cell>
                         <cell><c>col</c></cell>
@@ -3576,6 +3576,14 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <cell><times/></cell>
                         <cell></cell>
                         <cell>yes/vertical/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>row-headers</c></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>yes/no*</cell>
                     </row>
                     <row>
                         <cell><c>valign</c></cell>
