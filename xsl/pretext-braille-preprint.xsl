@@ -1637,7 +1637,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- should have zero effect, except to generate more debugging    -->
 <!-- messages, since this reporting template will take precedence. -->
 
-<xsl:template match="nbsp|ndash|mdash|xref">
+<!-- "apply-imports" items necessary during development -->
+
+<!-- nbsp, ndash, mdash characters defined above -->
+<xsl:template match="nbsp|ndash|mdash">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- xref-number, xref-link defined above -->
+<xsl:template match="xref">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- pure text in -common -->
+<xsl:template match="today|timeofday">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- Latin Abbreviations -->
+<!-- Fully defined as text in -common, including an "abbreviation-period" -->
+<xsl:template match="ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz">
     <xsl:apply-imports/>
 </xsl:template>
 
