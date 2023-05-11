@@ -662,6 +662,8 @@ class BRF:
                     math_punctuation = c.attrib['punctuation']
                 else:
                     math_punctuation = None
+                # Following can help debug nested segments
+                # print("SUSPECT TYPEFACE", c.tag, c.text)
                 self.write_fragment(c.tag, c.text, math_punctuation, s)
             if c.tail:
                 self.write_fragment("text", c.tail, None, s)
@@ -862,9 +864,12 @@ class BRF:
         elif typeface == "code":
             typeforms = [BRF.trans1_bit] * len(aline)
         else:
-            print("BUG: did not recognize typeface", typeface)
-            # Just to keep going while developing, if necessary
-            # typeforms = None
+            print('BUG: did not recognize typeface "{}"'.format(typeface) )
+            # When this error message reports "segment" as the typeface,
+            # it means there are nested segments.  Search this module for
+            # "SUSPECT TYPEFACE" to find a useful debugging statement to use.
+            # Setting "typeforms = None" here can keep processing alive but is
+            # likely to lead to incorrect reesults.
 
         return louis.translateString(tableList, aline, typeforms, 0)
 
