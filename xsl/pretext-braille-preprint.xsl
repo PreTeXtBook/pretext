@@ -1215,6 +1215,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2014;</xsl:text>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Font Changes -->
+<!-- ############ -->
+
+<!-- Certain PreTeXt groupings in running text naturally yield just  -->
+<!-- a font change.  Braille and liblouis have facilities for italic -->
+<!-- and bold.  This is "internal" markup that eventually gets       -->
+<!-- interpreted by  lxml  in Python.                                -->
+
 <!-- Italics -->
 <xsl:template match="em|foreign|articletitle|pubtitle">
     <!-- Python will assume "italic" as element name -->
