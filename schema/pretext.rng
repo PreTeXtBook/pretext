@@ -2087,6 +2087,14 @@
   <define name="TableRow">
     <element name="row">
       <optional>
+        <attribute name="header">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <ref name="AlignmentHorizontal"/>
       </optional>
       <optional>
@@ -2129,6 +2137,14 @@
       </optional>
       <optional>
         <attribute name="margins"/>
+      </optional>
+      <optional>
+        <attribute name="row-headers">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <ref name="AlignmentHorizontal"/>

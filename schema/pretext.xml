@@ -1775,6 +1775,7 @@
                 }
             TableRow =
                 element row {
+                    attribute header {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderBottom?,
@@ -1793,6 +1794,7 @@
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute row-headers {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,

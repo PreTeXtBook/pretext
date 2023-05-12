@@ -1885,6 +1885,14 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="cell"/>
       </xs:sequence>
+      <xs:attribute name="header">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="halign">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1934,6 +1942,14 @@
       <xs:attribute name="permid"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
+      <xs:attribute name="row-headers">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="halign">
         <xs:simpleType>
           <xs:restriction base="xs:token">
