@@ -191,6 +191,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- title/heading elements into a subsequent segment.           -->
 <xsl:variable name="segmented-rtf">
     <xsl:call-template name="warning-unimplemented"/>
+    <xsl:call-template name="missing-warning"/>
     <xsl:apply-templates select="$root"/>
 </xsl:variable>
 
@@ -1793,42 +1794,134 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="sage">
     <xsl:text>SAGECELL</xsl:text>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="notation-list">
     <xsl:text>NOTATIONLIST</xsl:text>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="index-list">
     <xsl:text>INDEXLIST</xsl:text>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="cd">
     <segment>CODE DISPLAY</segment>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="pre">
     <segment>PREFORMATTED TEXT</segment>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="program">
     <segment>PROGRAM</segment>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="console">
     <segment>CONSOLE</segment>
-    <xsl:apply-templates select="." mode="overlooked"/>
 </xsl:template>
 
 <xsl:template match="poem">
     <segment>POEM</segment>
-    <xsl:apply-templates select="." mode="overlooked"/>
+</xsl:template>
+
+<!-- Next three are not structures, so as "text" -->
+
+<xsl:template match="quantity">
+    <xsl:text>QUANTITY</xsl:text>
+</xsl:template>
+
+<xsl:template match="kbd">
+</xsl:template>
+
+<xsl:template match="icon">
+    <xsl:text>ICON</xsl:text>
+</xsl:template>
+
+<xsl:template name="missing-warning">
+    <xsl:if test="//sage">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'sage'"/>
+            <xsl:with-param name="ntimes" select="count(//sage)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//notation-list">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'notation-list'"/>
+            <xsl:with-param name="ntimes" select="count(//notation-list)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//index-list">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'index-list'"/>
+            <xsl:with-param name="ntimes" select="count(//index-list)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//cd">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'cd'"/>
+            <xsl:with-param name="ntimes" select="count(//cd)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//pre">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'pre'"/>
+            <xsl:with-param name="ntimes" select="count(//pre)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//program">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'program'"/>
+            <xsl:with-param name="ntimes" select="count(//program)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//console">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'console'"/>
+            <xsl:with-param name="ntimes" select="count(//console)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//poem">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'poem'"/>
+            <xsl:with-param name="ntimes" select="count(//poem)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//quantity">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'quantity'"/>
+            <xsl:with-param name="ntimes" select="count(//quantity)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//kbd">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'kbd'"/>
+            <xsl:with-param name="ntimes" select="count(//kbd)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//icon">
+        <xsl:call-template name="missing-implementation">
+            <xsl:with-param name="element" select="'icon'"/>
+            <xsl:with-param name="ntimes" select="count(//icon)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+</xsl:template>
+
+<xsl:template name="missing-implementation">
+    <xsl:param name="element"/>
+    <xsl:param name="ntimes"/>
+
+    <xsl:message>Unimplemented: <xsl:value-of select="$element"/> (<xsl:value-of select="$ntimes"/> times)</xsl:message>
 </xsl:template>
 
 <xsl:template match="*" mode="overlooked">
