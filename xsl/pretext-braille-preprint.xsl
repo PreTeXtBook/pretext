@@ -1180,39 +1180,159 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>etc.</xsl:text>
 </xsl:template>
 
-<xsl:template match="copyright">
-    <xsl:text>(c)</xsl:text>
-</xsl:template>
-
-<!-- [BANA-2016] Appendix G                 -->
-<!-- Says UEB uses three periods (dots-256) -->
-<!-- liblouis seems to translate as such    -->
-<xsl:template match="ellipsis">
-    <xsl:text>...</xsl:text>
-</xsl:template>
-
 
 <!-- Empty Elements, Characters -->
 
-<!-- Unicode Character 'NO-BREAK SPACE' (U+00A0)     -->
-<!-- yields a template for "nbsp" in -common         -->
-<!-- liblouis seems to pass this through in-kind     -->
-<!-- Used in teh manufacture of a cross-reference,   -->
-<!--we'll want to strip just before it eds up in BRF -->
+<!-- Generally Unicode values get translated into UEB equivalents  -->
+<!-- by liblouis.  This is based on a reading of                   -->
+<!--                                                               -->
+<!--     /usr/share/liblouis/tables/en-ueb-chardefs.uti            -->
+<!--                                                               -->
+<!-- which is incorporated via the English-UEB Grade 1 and Grade 2 -->
+<!-- tables.  As of 2023-05-12.  We document the Unicode character -->
+<!-- and the cells described in the liblouis table.                -->
+
+<!-- Unicode Character 'NO-BREAK SPACE' (U+00A0)   -->
+<!-- yields a template for "nbsp" in -common       -->
+<!-- liblouis seems to pass this through in-kind   -->
+<!-- Used in the manufacture of a cross-reference, -->
+<!-- we will want to strip just before it ends up  -->
+<!-- in BRF .                                      -->
 <xsl:template name="nbsp-character">
     <xsl:text>&#x00A0;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'EN DASH' (U+2013) -->
-<!-- Seems to become ",-"                 -->
+<!-- Liblouis: 6-36                       -->
 <xsl:template name="ndash-character">
     <xsl:text>&#x2013;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'EM DASH' (U+2014) -->
-<!-- Seems to also become ",-"            -->
+<!-- Liblouis: 6-36                       -->
 <xsl:template name="mdash-character">
     <xsl:text>&#x2014;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'COPYRIGHT SIGN' (U+00A9) -->
+<!-- Liblouis: 45-14                             -->
+<xsl:template name="copyright-character">
+    <xsl:text>&#x00A9;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'REGISTERED SIGN' (U+00AE) -->
+<!-- Liblouis: 45-1235                            -->
+<xsl:template name="registered-character">
+    <xsl:text>&#x00AE;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'TRADE MARK SIGN' (U+2122) -->
+<!-- Liblouis: 45-2345                            -->
+<xsl:template name="trademark-character">
+    <xsl:text>&#x2122;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'DEGREE SIGN' (U+00B0) -->
+<!-- Liblouis: 45-245                         -->
+<xsl:template name="degree-character">
+    <xsl:text>&#x00B0;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'PRIME' (U+2032) -->
+<!-- Liblouis: 2356                     -->
+<xsl:template name="prime-character">
+    <xsl:text>&#x2032;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'DOUBLE PRIME' (U+2033) -->
+<!-- Liblouis: 2356-2356                       -->
+<xsl:template name="dblprime-character">
+    <xsl:text>&#x2033;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'LEFT SINGLE QUOTATION MARK' (U+2018) -->
+<!-- Liblouis: 6-236                                         -->
+<xsl:template name="lsq-character">
+    <xsl:text>&#x2018;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'RIGHT SINGLE QUOTATION MARK' (U+2019) -->
+<!-- Liblouis: 6-356                                          -->
+<xsl:template name="rsq-character">
+    <xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'LEFT DOUBLE QUOTATION MARK' (U+201C) -->
+<!-- Liblouis: 236                                           -->
+<xsl:template name="lq-character">
+    <xsl:text>&#x201C;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'RIGHT DOUBLE QUOTATION MARK' (U+201D) -->
+<!-- Liblouis: 356                                            -->
+<xsl:template name="rq-character">
+    <xsl:text>&#x201D;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'LEFT ANGLE BRACKET' (U+3008) -->
+<!-- Liblouis: 4-126                                 -->
+<xsl:template name="langle-character">
+    <xsl:text>&#x3008;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'RIGHT ANGLE BRACKET' (U+3009) -->
+<!-- Liblouis: 4-345                                  -->
+<xsl:template name="rangle-character">
+    <xsl:text>&#x3009;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'HORIZONTAL ELLIPSIS' (U+2026) -->
+<!-- Liblouis: 256-256-256                            -->
+<!-- [BANA-2016] Appendix G, UEB is three periods/256 -->
+<xsl:template name="ellipsis-character">
+    <xsl:text>&#x2026;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'MIDDLE DOT' (U+00B7) -->
+<!-- Liblouis: 4-16                          -->
+<xsl:template name="midpoint-character">
+    <xsl:text>&#x00B7;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'PILCROW SIGN' (U+00B6) -->
+<!-- Liblouis: 45-1234                         -->
+<xsl:template name="pilcrow-character">
+    <xsl:text>&#x00B6;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'SECTION SIGN' (U+00A7) -->
+<!-- Liblouis: 45-234                          -->
+<xsl:template name="section-mark-character">
+    <xsl:text>&#x00A7;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'MINUS SIGN' (U+2212) -->
+<!-- Liblouis: 5-36                          -->
+<xsl:template name="minus-character">
+    <xsl:text>&#x2212;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'MULTIPLICATION SIGN' (U+00D7) -->
+<!-- Liblouis: 5-236                                  -->
+<xsl:template name="times-character">
+    <xsl:text>&#x00D7;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'DIVISION SIGN' (U+00F7) -->
+<!-- Liblouis: 5-34                             -->
+<xsl:template name="obelus-character">
+    <xsl:text>&#x00F7;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'PLUS-MINUS SIGN' (U+00B1) -->
+<!-- Liblouis: 456-235                            -->
+<xsl:template name="plusminus-character">
+    <xsl:text>&#x00B1;</xsl:text>
 </xsl:template>
 
 <!-- ############ -->
@@ -1270,25 +1390,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="idx|notation"/>
 
-<!-- non-breaking space -->
-<!-- will liblouis preserve? -->
-<!-- or do we need markup for page-formatting? -->
-
-<!-- Groupings -->
-
-<xsl:template match="q">
-    <xsl:text>"</xsl:text>
-    <xsl:apply-templates select="node()"/>
-    <xsl:text>"</xsl:text>
-</xsl:template>
-
-<xsl:template match="sq">
-    <xsl:text>'</xsl:text>
-    <xsl:apply-templates select="node()"/>
-    <xsl:text>'</xsl:text>
-</xsl:template>
-
-
+<!-- Documenting PreText itself -->
 
 <xsl:template match="tag">
     <xsl:text>&lt;</xsl:text>
@@ -1635,6 +1737,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- nbsp, ndash, mdash characters defined above -->
 <xsl:template match="nbsp|ndash|mdash">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- empty elements, characters, defined above -->
+<xsl:template match="copyright|registered|trademark|degree|prime|dblprime|lsq|rsq|lq|rq|langle|rangle|ellipsis|midpoint|pilcrow|section-mark|minus|times|obelus|plusminus">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- These elements/characters lack translations in liblouis.      -->
+<!-- We get/use their versions in -common, which will throw an     -->
+<!-- "unimplemented character" warning, which is accurate now,     -->
+<!-- *and* accurate later when the "overlooked" warning goes away. -->
+<!-- As characters get implemented, move to above template         -->
+<!-- (in proper order) as a way to keep track of the situation.    -->
+<xsl:template match="phonomark|copyleft|servicemark|ldblbracket|rdblbracket|swungdash|permille|solidus">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- Groupings, based on characters defined above -->
+<!-- dblbrackets raises warnings since left/right -->
+<!-- characters are not implemented               -->
+<xsl:template match="q|sq|dblbrackets|angles">
     <xsl:apply-imports/>
 </xsl:template>
 
