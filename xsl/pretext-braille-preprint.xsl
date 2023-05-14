@@ -576,6 +576,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- Very lightweight, title is optional,    -->
+<!-- and does not default to "SubExercises". -->
+<xsl:template match="subexercises">
+    <xsl:if test="title">
+        <segment lines-before="1">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </segment>
+    </xsl:if>
+    <xsl:apply-templates select="introduction"/>
+    <xsl:apply-templates select="exercise|exercisegroup"/>
+    <xsl:apply-templates select="conclusion"/>
+</xsl:template>
+
 <!-- An "exercisegroup" is very visual, so  -->
 <!-- we delimit it with a transcriber note. -->
 <xsl:template match="exercisegroup">
