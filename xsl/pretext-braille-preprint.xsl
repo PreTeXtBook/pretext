@@ -561,6 +561,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ###################### -->
+<!-- Exceptional Containers -->
+<!-- ###################### -->
+
 <!-- A special division: "paragraphs" -->
 <xsl:template match="paragraphs">
     <!-- Should be run-in with automatic space afterward -->
@@ -570,6 +574,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </segment>
     </xsl:if>
     <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- An "exercisegroup" is very visual, so  -->
+<!-- we delimit it with a transcriber note. -->
+<xsl:template match="exercisegroup">
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>An exercise group follows.  </xsl:text>
+            <!-- optional, so with trailing space -->
+            <xsl:if test="introduction">
+                <xsl:text>It begins with an introduction.  </xsl:text>
+            </xsl:if>
+            <xsl:text>The exercises run from number </xsl:text>
+            <xsl:apply-templates select="exercise[1]" mode="serial-number"/>
+            <xsl:text> to number </xsl:text>
+            <xsl:apply-templates select="exercise[last()]" mode="serial-number"/>
+            <xsl:text>.</xsl:text>
+            <!-- optional, so with leading space -->
+            <xsl:if test="conclusion">
+                <xsl:text>  It finishes with a conclusion.</xsl:text>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!--  -->
+    <xsl:apply-templates select="introduction"/>
+    <xsl:apply-templates select="exercise"/>
+    <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 
 
