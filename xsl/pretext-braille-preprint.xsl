@@ -588,7 +588,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- about titles.                                                -->
 
 <!-- "Regular" blocks, including inline "exercise" (aka "Checkpoint") -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]|assemblage">
     <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <xsl:apply-templates select="." mode="block-title"/>
         <xsl:apply-templates select="*[not(self::title)]"/>
@@ -641,6 +641,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!--  -->
     </segment>
+</xsl:template>
+
+<!-- An assemblage is not numbered, it is just a box.  The title is optional. -->
+<xsl:template match="assemblage" mode="block-title">
+    <xsl:if test="title">
+        <segment lines-before="0">
+        <xsl:apply-templates select="." mode="title-full"/>
+        </segment>
+    </xsl:if>
 </xsl:template>
 
 <!-- Should be run-in with automatic space afterward -->
