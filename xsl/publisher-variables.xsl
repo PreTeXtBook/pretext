@@ -2178,6 +2178,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+<!-- For determining use in places such as static interactives -->
+<xsl:variable name="b-has-baseurl" select="not($baseurl = '')"/>
 
 <!--                 -->
 <!-- HTML Navigation -->
@@ -2804,7 +2806,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/latex/asymptote/@links = 'yes'">
             <xsl:choose>
                 <!-- fail when no base URL is given -->
-                <xsl:when test="$baseurl = ''">
+                <xsl:when test="not($b-has-baseurl)">
                     <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
                     <xsl:text>no</xsl:text>
                 </xsl:when>
@@ -2839,7 +2841,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/html/asymptote/@links = 'yes'">
             <xsl:choose>
                 <!-- fail when no base URL is given -->
-                <xsl:when test="$baseurl = ''">
+                <xsl:when test="not($b-has-baseurl)">
                     <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
                     <xsl:text>no</xsl:text>
                 </xsl:when>

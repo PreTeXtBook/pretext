@@ -11134,7 +11134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!-- og:image - if it's URL can be constructed -->
-    <xsl:if test="not($baseurl = '') and $docinfo/brandlogo">
+    <xsl:if test="$b-has-baseurl and $docinfo/brandlogo">
         <xsl:call-template name="open-graph-meta-element">
             <xsl:with-param name="namespace" select="'og'"/>
             <xsl:with-param name="property" select="'image'"/>
