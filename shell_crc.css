@@ -11,8 +11,8 @@
   html
     head
     body.pretext
-      header#ptx-masthead
-      nav#ptx-navbar
+      header.ptx-masthead
+      nav.ptx-navbar
       div.ptx-page
         div.sidebar
           nav.ptx-toc
@@ -46,7 +46,7 @@ body.pretext {
 }
 
 /* .ptx-masthead-wrapper  */
-#ptx-masthead {
+.ptx-masthead {
     border: 2px solid #ddd;
     border-bottom: none;
     border-top-left-radius: 5px;
@@ -54,23 +54,23 @@ body.pretext {
     /*     overflow: hidden;*/  /* otherwise the rounded corners are not visible */
     z-index: 100;
 }
-#ptx-masthead {
+.ptx-masthead {
     position: relative;
     background: #fafafa;
     min-height: inherit;
     box-shadow: none;
 }
-#ptx-masthead {
+.ptx-masthead {
     max-width: 904px;
     border-right: 1px solid #bababa;
 }
 @media only screen and (min-width: 600px) {
     /*   .ptx-masthead-wrapper {*/
-    #ptx-masthead {
+    .ptx-masthead {
         z-index: 100;
     }
 }
-#ptx-masthead .searchbox {
+.ptx-masthead .searchbox {
    bottom: 2px;
    margin-right: -19px;
 }
@@ -427,7 +427,7 @@ body.pretext {
 	display: none;
     }
 /* copied from shell_default.css   Wher is ptx-navbar set in the CRC style */
-.pretext #ptx-navbar {
+.pretext .ptx-navbar {
     position: fixed;
     top: auto;
     bottom: 0;

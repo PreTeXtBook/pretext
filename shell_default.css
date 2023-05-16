@@ -11,8 +11,8 @@
   html
     head
     body.pretext
-      header#ptx-masthead
-      nav#ptx-navbar
+      header.ptx-masthead
+      nav.ptx-navbar
       div.ptx-page
         div.sidebar
           nav.ptx-toc
@@ -22,7 +22,7 @@
       div.ptx-page-footer
 */
 
-.pretext #ptx-masthead {
+.pretext .ptx-masthead {
   position: relative;
   background: #fafafa;
   min-height: inherit;
@@ -31,7 +31,7 @@
   z-index: 100;
 }
 
-.pretext #ptx-navbar {
+.pretext .ptx-navbar {
   position: sticky;
   top: 0;
   max-width: 904px;
@@ -362,7 +362,7 @@
 }
 
 @media screen and (max-width: 800px) {
-  .pretext #ptx-navbar {
+  .pretext .ptx-navbar {
     position: fixed;
     top: auto;
     bottom: 0;
@@ -413,19 +413,19 @@
   .pretext .ptx-page-footer .mathjax-logo img{
     height: 1.8em;
   }
-  .pretext #ptx-navbar #calculator-toggle,
-  .pretext #ptx-navbar .index-button {
+  .pretext .ptx-navbar #calculator-toggle,
+  .pretext .ptx-navbar .index-button {
     display: none;
   }
-  .pretext #ptx-navbar .toc-toggle {
+  .pretext .ptx-navbar .toc-toggle {
     width: 25%;
   }
-  .pretext #ptx-navbar .treebuttons {
+  .pretext .ptx-navbar .treebuttons {
     width: 75%;
   }
-  .pretext #ptx-navbar .previous-button,
-  .pretext #ptx-navbar .up-button,
-  .pretext #ptx-navbar .next-button {
+  .pretext .ptx-navbar .previous-button,
+  .pretext .ptx-navbar .up-button,
+  .pretext .ptx-navbar .next-button {
     width: 33.2%;
     width: calc(33.3% - 1px);
   }

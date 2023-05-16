@@ -701,7 +701,7 @@
 .standalone.worksheet .next-button {
     display: none;
 }
-.standalone.worksheet #ptx-navbar .toc-toggle {
+.standalone.worksheet .ptx-navbar .toc-toggle {
     display: none;
 }
 .standalone.worksheet .ptx-content [data-knowl]:hover,

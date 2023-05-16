@@ -6,12 +6,12 @@ body.pretext {
   color: var(--bodyfontcolor);
 }
 
-#ptx-masthead .title-container > .heading, #ptx-masthead .title-container > .heading a, #ptx-masthead #logo-link:empty:hover:before, #ptx-masthead .byline a {
+.ptx-masthead .title-container > .heading, .ptx-masthead .title-container > .heading a, .ptx-masthead #logo-link:empty:hover:before, .ptx-masthead .byline a {
   color: #2a5ea4;
   color: var(--documenttitle);
 }
 
-#ptx-masthead .title-container > .heading a:active, #ptx-masthead #logo-link:empty:active:before, #ptx-masthead .byline a:active {
+.ptx-masthead .title-container > .heading a:active, .ptx-masthead #logo-link:empty:active:before, .ptx-masthead .byline a:active {
   color: #932c1c;
   color: var(--bodytitle);
 }
@@ -197,11 +197,11 @@ body.pretext {
 .pretext[data-atmosphere="pastel"] .ptx-toc {
   scrollbar-color: var(--documenttitlelight) #efe;
 }
-.pretext[data-atmosphere="pastel"] #ptx-navbar {
+.pretext[data-atmosphere="pastel"] .ptx-navbar {
     background: #efe;
   background: #dbf5ff;
 }
-.pretext[data-atmosphere="pastel"] #ptx-masthead {
+.pretext[data-atmosphere="pastel"] .ptx-masthead {
     background: #efe;
   background: #dbf5ff;
 }
@@ -379,31 +379,31 @@ body.pretext {
     background: var(--documenttitledark);
     background: var(--chaptertoc);
 }
-.pretext[data-atmosphere*="dark"] #ptx-navbar {
+.pretext[data-atmosphere*="dark"] .ptx-navbar {
     background: var(--navbarbackground);
 }
 .pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link,
 .pretext[data-atmosphere*="dark"] .ptx-content-footer .button,
-.pretext[data-atmosphere*="dark"] #ptx-navbar .button {
+.pretext[data-atmosphere*="dark"] .ptx-navbar .button {
   background-color: var(--buttonbackground);
   color: var(--bodyfontcolor);
 }
 .pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link:hover,
 .pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover,
-.pretext[data-atmosphere*="dark"] #ptx-navbar .button:hover,
+.pretext[data-atmosphere*="dark"] .ptx-navbar .button:hover,
 .pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
-.pretext[data-atmosphere*="dark"] #ptx-navbar #calculator-toggle {
+.pretext[data-atmosphere*="dark"] .ptx-navbar #calculator-toggle {
   background-color: var(--buttonbackground);
 }
-.pretext[data-atmosphere*="dark"] #ptx-navbar #calculator-toggle:hover {
+.pretext[data-atmosphere*="dark"] .ptx-navbar #calculator-toggle:hover {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
 
-.pretext[data-atmosphere*="dark"] #ptx-masthead {
+.pretext[data-atmosphere*="dark"] .ptx-masthead {
     background: var(--bannerbackground);
 }
 
@@ -416,11 +416,11 @@ body.pretext {
     background: #779;
     border-radius: 0.4em;
 }
-.pretext[data-atmosphere*="dark"] #ptx-masthead .title-container > .pretext .heading,
-.pretext[data-atmosphere*="dark"] #ptx-masthead .title-container > .heading a,
-.pretext[data-atmosphere*="dark"] #ptx-masthead #logo-link:empty:hover::before,
-.pretext[data-atmosphere*="dark"] #ptx-masthead .byline,
-.pretext[data-atmosphere*="dark"] #ptx-masthead .byline a {
+.pretext[data-atmosphere*="dark"] .ptx-masthead .title-container > .pretext .heading,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .title-container > .heading a,
+.pretext[data-atmosphere*="dark"] .ptx-masthead #logo-link:empty:hover::before,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .byline,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .byline a {
   color: var(--documenttitlelight);
 }
 .pretext[data-atmosphere*="dark"] .ptx-toc {

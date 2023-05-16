@@ -1,23 +1,23 @@
 
 /* Generic and large screen layout */
 
-#ptx-navbar .button {
+.ptx-navbar .button {
     padding: 0 24px 0 24px;
 }
 
-#ptx-navbar .treebuttons .button {
+.ptx-navbar .treebuttons .button {
     padding: 0 20px 0 20px;
 }
 
-#ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
-#ptx-navbar .treebuttons .next-button { padding-right: 12px; }
+.ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
+.ptx-navbar .treebuttons .next-button { padding-right: 12px; }
 
-#ptx-navbar .toc-toggle {
+.ptx-navbar .toc-toggle {
     padding: 0 10px 0 10px;
 }
 
 
-#ptx-navbar {
+.ptx-navbar {
     display: grid;
     grid-column-gap: 0em;
 
@@ -45,8 +45,8 @@
     min-height: unset; /* to thwart navbar.less */
     margin-bottom: 0; /* to thwart navbar.less */
 }
-#ptx-navbar::before,
-#ptx-navbar::after {
+.ptx-navbar::before,
+.ptx-navbar::after {
     content: none;  /* to thwart clearfix.less */
 }
 
@@ -112,8 +112,8 @@
 }
 
 
-/* #ptx-navbar button, */
-#ptx-navbar .button {
+/* .ptx-navbar button, */
+.ptx-navbar .button {
     display: inline-block;
     height: 32px;
     color: var(--bodytitle);
@@ -136,7 +136,7 @@
 
 /* Small screen layout  */
 @media only screen and (max-width: 800px) {
-    .pretext  #ptx-navbar {
+    .pretext  .ptx-navbar {
 	display: block;
 	position: fixed;
 	top: auto;
@@ -156,100 +156,100 @@
 	align-items: end;
     }
 
-    .pretext #ptx-navbar .button {
+    .pretext .ptx-navbar .button {
 	width: 24.95%;
 	height: 36px;
 	line-height: 40px;
 	margin: 0;
     }
-    #ptx-navbar    .toc-toggle {
+    .ptx-navbar    .toc-toggle {
 	width: 25%;
 	margin: 0;
     }
 
     /* Kill some white space between toc-toggle and treebuttons */
-    #ptx-navbar    .treebuttons {
+    .ptx-navbar    .treebuttons {
 	margin: 0 0 0 -4px;
     }
 
 }
 
-#ptx-navbar .button:hover {
+.ptx-navbar .button:hover {
     background-color: #fafafa;
     color: #888;
 }
 
-#ptx-navbar .button:focus {
+.ptx-navbar .button:focus {
     outline: thin dotted #333;
     outline-offset: -2px;
 }
 
-#ptx-navbar .button:active {
+.ptx-navbar .button:active {
     background-color: #e0e0e0;
 }
 
 
-#ptx-navbar .button.disabled {
+.ptx-navbar .button.disabled {
     opacity: .4;
     color: #333333;
     background: #ededed;
     cursor: default;
     box-shadow: none;
 }
-#ptx-navbar .toc-toggle .icon {
+.ptx-navbar .toc-toggle .icon {
     font-size: 1.5em;
     position: relative;
     bottom: 0.15em;
     padding-left: 0;
     padding-right: 0.4em;
 }
-#ptx-navbar .toc-toggle .name {
+.ptx-navbar .toc-toggle .name {
     font-size: 1.0em;
     position: relative;
     bottom: 0.25em;
 }
 
-#ptx-navbar .index-button .name {
+.ptx-navbar .index-button .name {
     /*  Nada */
 }
 
-#ptx-navbar .calculator-toggle .name {
+.ptx-navbar .calculator-toggle .name {
     /*  Nada */
 }
 
 
-#ptx-navbar .up-button {
+.ptx-navbar .up-button {
     text-align: center;
 }
 
-#ptx-navbar .name {
+.ptx-navbar .name {
     display: inline-block;
     position: relative;
     bottom: 0;
 }
-#ptx-navbar .treebuttons .name {
+.ptx-navbar .treebuttons .name {
     bottom: 0.2em;
 }
-#ptx-navbar .icon {
+.ptx-navbar .icon {
     display: inline-block;
     font-size: 1.5em;
 }
-#ptx-navbar .previous-button .icon {
+.ptx-navbar .previous-button .icon {
     margin-left: 0.3em;
     margin-right: 0.2em;
 }
-#ptx-navbar .up-button .icon {
+.ptx-navbar .up-button .icon {
     margin-left: 0;
     margin-right: 0.2em;
 }
-#ptx-navbar .up-button .name {
+.ptx-navbar .up-button .name {
     bottom: 0.3em;
 }
-#ptx-navbar .next-button .icon {
+.ptx-navbar .next-button .icon {
     margin-left: 0.2em;
     margin-right: 0.3em;
 }
-#ptx-navbar .user-preferences-button {
+.ptx-navbar .user-preferences-button {
   padding: 0 0.8em 0 0.8em;
   margin-left: 2em;
   border: 1px solid #bababa;
@@ -257,22 +257,22 @@
 }
 
 @media screen and (max-width: 800px) {
-    #ptx-navbar .index-button,
-    #ptx-navbar .user-preferences-button,
-    #ptx-navbar .calculator-toggle {
+    .ptx-navbar .index-button,
+    .ptx-navbar .user-preferences-button,
+    .ptx-navbar .calculator-toggle {
 	display: none;
     }
     
-    #ptx-navbar .toc-toggle .name,
-    #ptx-navbar .previous-button .name,
-    #ptx-navbar .up-button .name,
-    #ptx-navbar .up-button .disabled .name,
-    #ptx-navbar .next-button .name {
+    .ptx-navbar .toc-toggle .name,
+    .ptx-navbar .previous-button .name,
+    .ptx-navbar .up-button .name,
+    .ptx-navbar .up-button .disabled .name,
+    .ptx-navbar .next-button .name {
 	display: none;
     }
 
-    #ptx-navbar .up-button .icon,
-    #ptx-navbar .up-button .disabled .icon{
+    .ptx-navbar .up-button .icon,
+    .ptx-navbar .up-button .disabled .icon{
     }
     
 }

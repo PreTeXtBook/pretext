@@ -64,14 +64,14 @@ body.pretext > a.assistive:focus {
 }
 
 /* over-write bootstrap (in Runestone, for example) */
-nav #ptx-navbar {
+nav .ptx-navbar {
   border-top: none;
   border-right: none;
   border-left: none;
   min-height: unset;
 }
 /* next three: runestone hack for the bust nemu */
-#ptx-navbar .dropdown-content {
+.ptx-navbar .dropdown-content {
   left: 250px;
   position: absolute;
   left: unset;
@@ -80,7 +80,7 @@ nav #ptx-navbar {
   right: 150px;
 */
 }
-#ptx-navbar hr {
+.ptx-navbar hr {
   margin-bottom: 4px;
   margin-top: 4px;
   border-width: 3px;
@@ -92,7 +92,7 @@ nav #ptx-navbar {
    display: none;
 }
 */
-#ptx-navbar .activecode-toggle {
+.ptx-navbar .activecode-toggle {
   padding: 3px 5px;
   float: left;
   border-right: 1px solid #bababa;
@@ -100,7 +100,7 @@ nav #ptx-navbar {
   border-bottom: 1px solid #bababa;
   background: #eee;
 }
-#ptx-navbar .activecode-toggle .icon {
+.ptx-navbar .activecode-toggle .icon {
   display: inline-block;
   font-size: larger;
   transform: rotate(130deg);
@@ -121,17 +121,17 @@ nav #ptx-navbar {
 .pretext #brand-navbar > .container::after {
   display: none;
 }
-.pretext #brand-navbar + #ptx-masthead {
+.pretext #brand-navbar + .ptx-masthead {
   margin-top: 50px;
 }
 .pretext #brand-navbar .navbar-collapse.collapse {
   overflow: hidden !important;
 }
-.pretext #brand-navbar ~ #ptx-navbar {
+.pretext #brand-navbar ~ .ptx-navbar {
   top: 50px;
 }
 @media screen and (max-width: 800px) {
-  .pretext #brand-navbar ~ #ptx-navbar {
+  .pretext #brand-navbar ~ .ptx-navbar {
     top: auto;
   }
 }
@@ -741,8 +741,8 @@ button {
 }
 
 @media print {
-    .pretext #ptx-masthead,
-    .pretext #ptx-navbar,
+    .pretext .ptx-masthead,
+    .pretext .ptx-navbar,
      body.pretext > a.assistive,
     .pretext .ptx-page > .ptx-sidebar,
     .pretext > div.ptx-page-footer,
@@ -787,7 +787,7 @@ button {
     body.standalone .ptx-content section.worksheet {
         border: none;
     }
-    body.standalone.worksheet #ptx-masthead,
+    body.standalone.worksheet .ptx-masthead,
     body.standalone.worksheet #ptx-page-footer {
         display: none;
     }
@@ -848,25 +848,25 @@ button {
   display: none;
 }
 
-#ptx-navbar #preferences_menu_holder .active  > li {
+.ptx-navbar #preferences_menu_holder .active  > li {
   color: #ddd;
 }
-#ptx-navbar #preferences_menu_holder > ol > li:focus {
+.ptx-navbar #preferences_menu_holder > ol > li:focus {
   background: #eef;
   border: 2px solid #909;
   padding: 2px 24px 2px 8px;
 }
-#ptx-navbar #preferences_menu_holder > ol > li > ol > li:focus {
+.ptx-navbar #preferences_menu_holder > ol > li > ol > li:focus {
   background: #eef;
   border: 2px solid #909;
   padding: 4px 4px 2px 4px;
 }
 
-#ptx-navbar #preferences_menu_holder .active .selected {
+.ptx-navbar #preferences_menu_holder .active .selected {
   background: #eef;
   color: #111;
 }
-#ptx-navbar .button.user-preferences-button {
+.ptx-navbar .button.user-preferences-button {
   overflow: visible;
   display: none;
 }
