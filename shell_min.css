@@ -15,7 +15,7 @@
       nav#ptx-navbar
       div.ptx-page
         div.sidebar
-          nav#ptx-toc
+          nav.ptx-toc
         main.ptx-main
           div.ptx-content
           div.ptx-content-footer
@@ -46,7 +46,7 @@
   width: 240px;
 }
 
-.pretext #ptx-toc {
+.pretext .ptx-toc {
     position: sticky;
     top: 50px;
     box-sizing: border-box;
@@ -293,7 +293,7 @@
     margin-bottom: 60px;
   }
 */
-  .pretext #ptx-toc {
+  .pretext .ptx-toc {
     height: calc(100vh - 50px);
   }
   .pretext .ptx-page > .ptx-page-footer {

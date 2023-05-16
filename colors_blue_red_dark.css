@@ -113,9 +113,6 @@ body.pretext {
 .pretext #ptx-masthead .byline a {
   color: var(--documenttitlelight);
 }
-#ptx-toc {
-  scrollbar-color: var(--documenttitlelight) #666;
-}
 .pretext .ptx-content .code-inline {
   color: var(--documenttitledark);
 }

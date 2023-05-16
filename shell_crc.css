@@ -15,7 +15,7 @@
       nav#ptx-navbar
       div.ptx-page
         div.sidebar
-          nav#ptx-toc
+          nav.ptx-toc
         main.ptx-main
           div.ptx-content
           div.ptx-content-footer

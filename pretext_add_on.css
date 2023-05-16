@@ -2742,7 +2742,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
 
 /* GeoGebra calculator */
 
-#calculator-container {
+.calculator-container {
     position: fixed;
     z-index: 100;
     bottom: 5px;
@@ -2757,7 +2757,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
     height: 460px;
 }
 @media screen and (max-width: 800px) {
-    #calculator-container {
+    .calculator-container {
          bottom: 50px !important;
     }
 }

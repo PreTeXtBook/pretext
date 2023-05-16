@@ -15,7 +15,7 @@ body.pretext {
   color: #932c1c;
   color: var(--bodytitle);
 }
-#ptx-toc ul.structural li a {
+.ptx-toc ul.structural li a {
   color: #505050;
   color: var(--chaptertoctext);
   background-color: #dbf5ff;
@@ -23,79 +23,79 @@ body.pretext {
   border-color: #afc2e5;
   border-color: var(--tocborder);
 }
-#ptx-toc ul.structural li .toc-chevron-surround svg {
+.ptx-toc ul.structural li .toc-chevron-surround svg {
   fill: var(--chaptertoctext);
 }
 
-#ptx-toc ul.structural li ul.structural a {
+.ptx-toc ul.structural li ul.structural a {
   color: #404040;
   color: var(--sectiontoctext);
   background-color: var(--sectiontoc);
 }
-#ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a {
+.ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a {
   color: var(--chaptertoctextactive);
   background-color: var(--chaptertocactive);
   border-color: var(--highlighttocborder);
 }
-#ptx-toc.parts:not(.depth2) > ul.structural > li:first-child > ul.structural > li > .toc-item > a {
+.ptx-toc.parts:not(.depth2) > ul.structural > li:first-child > ul.structural > li > .toc-item > a {
   color: var(--sectiontoctext);
   background-color: var(--sectiontoc);
 }
-#ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a:hover {
+.ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a:hover {
   color: var(--sectiontoctextactive);
   background-color: var(--chaptertoc);
 }
-#ptx-toc ul.structural li ul.structural .toc-chevron-surround svg {
+.ptx-toc ul.structural li ul.structural .toc-chevron-surround svg {
   fill: var(--sectiontoctext);
 }
 
-#ptx-toc ul.structural li a.active {
+.ptx-toc ul.structural li a.active {
   color: #404040;
   color: var(--chaptertoctextactive);
   background-color: var(--chaptertocactive);
   border-color: var(--highlighttocborder);
 }
-#ptx-toc ul.structural li ul.structural a.active {
+.ptx-toc ul.structural li ul.structural a.active {
   color: var(--sectiontoctextactive);
   background-color: var(--sectiontocactive);
   border-color: var(--highlighttocborder);
 }
 
-#ptx-toc ul.structural li a:focus,
-#ptx-toc ul.structural li a:hover {
+.ptx-toc ul.structural li a:focus,
+.ptx-toc ul.structural li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
   background-color: var(--highlighttoc);
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
-#ptx-toc ul.structural li ul.structural a:focus,
-#ptx-toc ul.structural li ul.structural a:hover {
+.ptx-toc ul.structural li ul.structural a:focus,
+.ptx-toc ul.structural li ul.structural a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
   background-color: var(--highlighttoc);
   border-color: var(--highlighttocborder);
 }
 
-#ptx-toc ul.structural li.part a {
+.ptx-toc ul.structural li.part a {
     margin-top: 15px;
     border-bottom: none;
 }
-#ptx-toc ul.structural li.part a,
-#ptx-toc ul.structural li.frontmatter a:first-child,
-#ptx-toc ul.structural li.backmatter a:first-child {
+.ptx-toc ul.structural li.part a,
+.ptx-toc ul.structural li.frontmatter a:first-child,
+.ptx-toc ul.structural li.backmatter a:first-child {
     color: #222222;
     background-color: var(--bodytitlehighlight);
     font-size: 110%;
     padding-top: 7px;
     padding-bottom: 7px;
 }
-#ptx-toc ul.structural li.part a:focus,
-#ptx-toc ul.structural li.frontmatter a:focus,
-#ptx-toc ul.structural li.backmatter a:focus,
-#ptx-toc ul.structural li.part a:hover,
-#ptx-toc ul.structural li.frontmatter a:hover,
-#ptx-toc ul.structural li.backmatter a:hover {
+.ptx-toc ul.structural li.part a:focus,
+.ptx-toc ul.structural li.frontmatter a:focus,
+.ptx-toc ul.structural li.backmatter a:focus,
+.ptx-toc ul.structural li.part a:hover,
+.ptx-toc ul.structural li.frontmatter a:hover,
+.ptx-toc ul.structural li.backmatter a:hover {
     color: #ffffff;
     background-color: var(--highlighttoc);
 }
@@ -194,7 +194,7 @@ body.pretext {
   --knowlbackground: #f5f8ff;
 }
 
-.pretext[data-atmosphere="pastel"] #ptx-toc {
+.pretext[data-atmosphere="pastel"] .ptx-toc {
   scrollbar-color: var(--documenttitlelight) #efe;
 }
 .pretext[data-atmosphere="pastel"] #ptx-navbar {
@@ -423,7 +423,7 @@ body.pretext {
 .pretext[data-atmosphere*="dark"] #ptx-masthead .byline a {
   color: var(--documenttitlelight);
 }
-.pretext[data-atmosphere*="dark"] #ptx-toc {
+.pretext[data-atmosphere*="dark"] .ptx-toc {
   scrollbar-color: var(--documenttitlelight) var(--footerbackground);
 }
 .pretext[data-atmosphere*="dark"] .ptx-content .code-inline {
