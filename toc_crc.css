@@ -90,7 +90,7 @@
 
 /* comment out because we need to fix the fluttering effect.
    if this is hidden by default, the page is not usable without JavaScript
-#ptx-sidebar {
+.ptx-sidebar {
     display: none;
 }
 */

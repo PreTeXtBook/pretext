@@ -93,7 +93,7 @@ body.pretext {
 }
 
 /* MH-toc dropdown Content (Hidden by Default) */
-#ptx-sidebar {
+.ptx-sidebar {
     position: sticky;
     top: 34px;
     background-color: #f1f1f1;
@@ -398,13 +398,13 @@ body.pretext {
     /* No luck resizing */
 }
 
-.pretext #ptx-sidebar.visible {
+.pretext .ptx-sidebar.visible {
   display: block;
 }
 
 @media only screen and (max-width: 800px) {
 
-  .pretext #ptx-sidebar {
+  .pretext .ptx-sidebar {
     display: none;
   }
     .ptx-page-footer {
@@ -433,7 +433,7 @@ body.pretext {
     bottom: 0;
     z-index: 1100;
    }
-  .pretext #ptx-sidebar {
+  .pretext .ptx-sidebar {
     display: none;
     position: fixed;
     top: 10px;

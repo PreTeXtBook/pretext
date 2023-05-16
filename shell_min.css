@@ -39,7 +39,7 @@
   position: relative;
 }
 
-.pretext #ptx-sidebar {
+.pretext .ptx-sidebar {
   position: sticky;
   top: 41px;
   float: left;
@@ -282,7 +282,7 @@
     top: auto;
     bottom: 0;
    }
-  .pretext #ptx-sidebar {
+  .pretext .ptx-sidebar {
     display: none;
   }
   .pretext .ptx-content-footer {

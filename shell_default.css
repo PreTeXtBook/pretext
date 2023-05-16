@@ -45,7 +45,7 @@
   min-height: 60vh;
 } 
 
-.pretext #ptx-sidebar {
+.pretext .ptx-sidebar {
   position: sticky;
   top: 41px;
   left: 0;
@@ -70,7 +70,7 @@
   background: white;
   border-left: 1px solid #ccc;
 }
-.pretext .ptx-page #ptx-sidebar.hidden + .ptx-main {
+.pretext .ptx-page .ptx-sidebar.hidden + .ptx-main {
   margin-left: 0;
 }
 .pretext .ptx-page > .ptx-main.notoc {
@@ -357,7 +357,7 @@
     margin: 0;
 }
 
-.pretext #ptx-sidebar.visible {
+.pretext .ptx-sidebar.visible {
   display: block;
 }
 
@@ -368,7 +368,7 @@
     bottom: 0;
     z-index: 1100;
    }
-  .pretext #ptx-sidebar {
+  .pretext .ptx-sidebar {
     display: none;
     position: fixed;
     top: 10px;

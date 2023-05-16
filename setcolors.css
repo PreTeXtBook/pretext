@@ -205,7 +205,7 @@ body.pretext {
     background: #efe;
   background: #dbf5ff;
 }
-.pretext[data-atmosphere="pastel"] #ptx-sidebar {
+.pretext[data-atmosphere="pastel"] .ptx-sidebar {
     background: #ffd;
 }
 

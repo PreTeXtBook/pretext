@@ -2589,9 +2589,6 @@ body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
     background: yellow;
 }
 
-body.standalone.worksheet #ptx-sidebar-left {
-    display: none;
-}
 body.has-sidebar-left.mathbook-loaded.standalone.worksheet .ptx-page .ptx-main {
     margin-left: 0;
 }
