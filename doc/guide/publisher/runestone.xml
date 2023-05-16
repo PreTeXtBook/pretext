@@ -112,9 +112,7 @@
             </li>
             <li>
                 <p>
-                    Runestone servers are able to host both a <c>draft</c> and a <c>published</c> version of your book.
-                    When you open an issue (in the next step) inquire about how to specify this in your <c>project.ptx</c> file.
-                    Then let us know, so you are the only person to have to ask.  Thanks.
+                    With Runestone Academy and the author interface you can see a <c>draft</c> of your book on <c>staging.runestoneacademy.org</c> When you are ready you can make a <c>published</c> version of your book available with the click of a button.  We can set up up with access to the author interface when you open an issue (in the next step) to request that your book be added to Runestone Academy.
                 </p>
             </li>
             <li>
@@ -128,4 +126,50 @@
             </li>
         </ul>
     </section>
+
+    <section xml:id="sec-the-author-interface">
+        <title>The Author Interface</title>
+        <p>
+            The author interface is available at <url href="https://author.runestone.academy" visual="author.runestone.academy"/>.  You can log in with your Runestone account.  Once you have logged in you will see a list of your books.  You can click on the book title to to edit metadata about your book.  The author interface is also where you can build a new version of your book, see some analytics about your book,  publish your book to the Runestone Academy servers.  You can even get an anonymized data set from a large sample of the classes using your book.
+        </p>
+
+        <figure xml:id="img-author-interface">
+            <caption>The author interface main page</caption>                
+            <image source="author-interface.png" width="100%">
+                <description>The author interface lets you pull changes from github and rebuild your book.</description>
+            </image>
+        </figure>
+        <p>
+            The main page of the author interface gives you access to all of the different functions.  Clicking on the build button pulls the latest source from github and builds your book.  If you have a large book this can take a few minutes.  When the build is complete you deploy your book to the runestone servers.   You will see the build status change at the bottom of the page.  If there is a failure for any reason you can usually see the cause by clicking the button to view the latest log. 
+        </p>
+
+        <p>
+            Another feature of the author interface is to provide you with some analytics.  This page shows you the number of students that have enrolled in a course using your book year to date.  It also shows you usage patterns for the book by the week of the course.  You can click on any of the shaded cells to drill down and see how students are viewing the sections of each chapter.
+        </p>
+        <figure xml:id="img-analytics">
+            <caption>Some example analytics for your book</caption>
+            <image source="impact-report.png" width="100%">
+                <description>An impact report for Foundations of Python Programming</description>
+            </image>
+        </figure>
+        <p>
+            The Analytics are in their early stages so we encourage you to contact us with ideas for what kinds of data you would find useful.
+        </p>
+
+        <p>
+            If you click on the book's identifier you will be able to edit metadata about the book.  This is reflected in our library page so you can change the shelf section or update the "blurb" that describes your book to an audience. The Available for courses and Visible to Everyone in the Library checkboxes allow you to control the visibility of your book.  If you are in the early stages of development you probably don't want others to see the book, but you can always view it via a direct link.  When you are ready to make your book available to the world you can check the Visible to Everyone box and your book will appear in the Runestone Library.   When you are ready to let others create a course around your book you can check the Available for Courses box.  This will allow others to create a course using your book as the textbook.  You can always change these settings later.
+        </p>
+        <figure xml:id="img-edit-metadata">
+            <caption>Editing a books' metadata</caption>
+            <image source="edit-metadata.png" width="100%">
+                <description>Editing metatdata about a book</description>
+            </image>
+        </figure>        
+
+
+
+
+    </section>
+
+
 </chapter>
