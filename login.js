@@ -68,7 +68,7 @@ function login_form(mode="login") {
     the_form += '<form name="logoutform" class="modal-content animate" onSubmit="return removeLogin();" action="">';
     the_form += '<div class="container">\n';
     the_form += '<button type="submit">Yes, really logout</button>';
-    the_form += '<div id="dontlogout">Stay logged in</div>'
+    the_form += '<div id="dontlogout" class=dontlogout">Stay logged in</div>'
     the_form += '</div>\n';
     the_form += '</form>\n';
   }

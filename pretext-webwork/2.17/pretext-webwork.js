@@ -138,6 +138,38 @@ function handleWW(ww_id, action) {
 			ww_container.dataset.hasHint == 'true', ww_container.dataset.hasSolution == 'true',
 			ww_container.dataset.hintLabelText, ww_container.dataset.solutionLabelText)
 
+		// insert previous answers
+		if (runestone_logged_in) {
+			const answersObject = (wwList[ww_id.replace(/-ww-rs$/,'')].answers ? wwList[ww_id.replace(/-ww-rs$/,'')].answers : {'answers' : [], 'mqAnswers' : []});
+			const mqAnswers = answersObject.mqAnswers;
+			for (const mqAnswer in mqAnswers) {
+				const mqInput = body_div.querySelector('input[id=' + mqAnswer + ']');
+				if (mqInput && mqInput.value == '') {
+					mqInput.setAttribute('value', mqAnswers[mqAnswer]);
+				}
+			}
+			const answers = answersObject.answers;
+			for (const answer in answers) {
+				const input = body_div.querySelector('input[id=' + answer + ']');
+				if (input && input.value == '') {
+					input.setAttribute('value', answers[answer]);
+				}
+				if (input && input.type.toUpperCase() == 'RADIO') {
+					const buttons = body_div.querySelectorAll('input[name=' + answer + ']');
+					for (const button of buttons) {
+						if (button.value == answers[answer]) {
+							button.setAttribute('checked', 'checked');
+						}
+					}
+				}
+				const select = body_div.querySelector('select[id=' + answer + ']');
+				if (select) {
+					const option = body_div.querySelector('option[value=' + answers[answer] + ']');
+					option.setAttribute('selected', 'selected');
+				}
+			}
+		}
+
 		// insert our cleaned up problem text
 		form.appendChild(body_div);
 
@@ -184,7 +216,8 @@ function handleWW(ww_id, action) {
 				answers[id] = {
 					correct_ans: this[id].correct_ans,
 					correct_ans_latex_string: this[id].correct_ans_latex_string,
-					correct_choice: this[id].correct_choice
+					correct_choice: this[id].correct_choice,
+					correct_choices: this[id].correct_choices,
 				};
 			}, data.rh_result.answers);
 		}
@@ -316,19 +349,39 @@ function handleWW(ww_id, action) {
 	
 				}
 
-				if (input.type == 'radio' && answers[name]) {
+				if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
 					const score = data.rh_result.answers[name].score;
-					if (input.value == data.rh_result.answers[name].student_value) {
+					const student_ans = data.rh_result.answers[name].student_value || data.rh_result.answers[name].student_ans;
+					const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
+					if (input.value == student_ans) {
 						if (score == 1) {
 							input.parentNode.classList.add('correct');
 						} else {
 							input.parentNode.classList.add('incorrect');
 						}
 						const feedbackButton = createFeedbackButton(`${ww_id}-${name}`,
-							data.rh_result.answers[name].student_value == data.rh_result.answers[name].correct_choice
+							(student_ans == correct_ans)
 							? `<span class="correct">${localize_correct}</span>` : `<span class="incorrect">${localize_incorrect}.</span>`)
 						feedbackButton.style.marginRight = '0.25rem';
 						input.after(feedbackButton);
+					}
+				}
+
+				if (input.type.toUpperCase() == 'CHECKBOX' && answers[name]) {
+					const score = data.rh_result.answers[name].score;
+					const student_ans = data.rh_result.answers[name].student_ans;
+					const correct_ans = data.rh_result.answers[name].correct_ans;
+					if (input.value == data.rh_result.answers[name].firstElement) {
+						const checkbox_div = input.parentNode.parentNode;
+						if (score == 1) {
+							checkbox_div.classList.add('correct');
+						} else {
+							checkbox_div.classList.add('incorrect');
+						}
+						const feedbackButton = createFeedbackButton(`${ww_id}-${name}`,
+							(student_ans == correct_ans)
+							? `<span class="correct">${localize_correct}</span>` : `<span class="incorrect">${localize_incorrect}.</span>`)
+						checkbox_div.insertBefore(feedbackButton, checkbox_div.firstChild);
 					}
 				}
 			}
@@ -360,6 +413,12 @@ function handleWW(ww_id, action) {
 					feedbackButton.style.marginLeft = '0.5rem';
 					feedbackButton.dataset.bsContainer = 'body';
 					graphtoolContainer.appendChild(feedbackButton);
+					if (score == 1) {
+						graphtoolContainer.classList.add('correct');
+					} else {
+						graphtoolContainer.classList.add('incorrect');
+					}
+					
 				}
 			}
 
@@ -486,7 +545,7 @@ function handleWW(ww_id, action) {
 			`<style>
 			html { overflow-y: hidden; }
 			html body { background:unset; margin: 0; }
-			body { font-size: initial; line-height: initial; }
+			body { font-size: initial; line-height: initial; padding:2px; }
 			.hidden-content { display: none; }
 			input[type="text"], input[type="radio"], label, select {
 				height: auto;
@@ -533,17 +592,21 @@ function handleWW(ww_id, action) {
 			background-color: #CDF;
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%230049DB' text-anchor='end'>🡄</text></svg>");
 		}
-		input[type="text"].correct, select.correct {
+		input[type="text"].correct, select.correct, input[type="text"].correct + span.mq-editable-field {
 			background-color: #8F8;
 		}
 		input[type="text"].correct {
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%23060' text-anchor='end'>✓</text></svg>");
 		}
-		input[type="text"].partly-correct {
+			padding-left: 2rem;
+			background-repeat: no-repeat;
+			background-position-y: center;
+		}
+		input[type="text"].partly-correct, input[type="text"].partly-correct + span.mq-editable-field {
 			background-color: #CDF;
 			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='22px' width='30px'><text x='28' y='18' fill='%235C5C00' text-anchor='end'>⚠</text></svg>");
 		}
-		input[type="text"].incorrect, select.incorrect {
+		input[type="text"].incorrect, select.incorrect, input[type="text"].incorrect + span.mq-editable-field {
 			background-color: #DAA;
 		}
 		input[type="text"].incorrect {
@@ -551,6 +614,9 @@ function handleWW(ww_id, action) {
 		}
 		input[type="text"].partly-correct, input[type="text"].incorrect {
 			background-size: auto 70%;
+		}
+		label {
+			padding-left: 1.8em;
 		}
 		label.correct::before {
 			color: #060;
@@ -576,6 +642,32 @@ function handleWW(ww_id, action) {
 			content: '⚠';
 			margin-right: 2pt;
 			font-size: small;
+		}
+		.checkboxes-container.correct label input, .checkboxes-container.incorrect label input {
+			border-radius: 2px;
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+			position: relative;
+			top: 5px;
+			background-repeat: no-repeat;
+		}
+		.checkboxes-container.correct label input {
+			background-color: #8F8;
+			border: #060 solid;
+		}
+		.checkboxes-container.correct label input:checked {
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='14px' width='14px'><text x='13' y='13' text-anchor='end'>✓</text></svg>");
+		}
+		.checkboxes-container.incorrect label input {
+			background-color: #DAA;
+			border: #943D3D solid;
+		}
+		.checkboxes-container.incorrect label input:checked {
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='14px' width='14px'><text x='13' y='13' text-anchor='end'>✘</text></svg>");
 		}
 		div.PGML img.image-view-elt {
 			max-width:100%;
@@ -614,6 +706,23 @@ function handleWW(ww_id, action) {
 				margin: 0;
 				width: 300px;
 				height: 300px;
+			}
+			.graphtool-answer-container .graphtool-number-line {
+				height: 57px;
+			}
+			.checkboxes-container .ww-feedback {
+				position: absolute;
+				left: 2px;
+			}
+			.graphtool-container.correct .graphtool-graph {
+				background-color: #8F8;
+				background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%23060' text-anchor='end'>✓</text></svg>");
+				background-repeat: no-repeat;
+			}
+			.graphtool-container.incorrect .graphtool-graph {
+				background-color: #DAA;
+				background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='22px' width='30px'><text x='28' y='18' fill='%235C5C00' text-anchor='end'>⚠</text></svg>");
+				background-repeat: no-repeat;
 			}
 			</style>` +
 			'</head><body><main class="pretext-content">' + form.outerHTML + '</main></body>' +
@@ -734,14 +843,30 @@ function WWshowCorrect(ww_id, answers) {
 			input.parentElement.insertBefore(show_span, input);
 		}
 
-		if (input.type == 'radio' && answers[name]) {
+		if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
 			const feedbackButton = iframe.contentDocument.getElementById(`${ww_id}-${name}-feedback-button`);
 			if (feedbackButton) {
 				iframe.contentWindow.bootstrap.Popover.getInstance(feedbackButton)?.hide();
 				feedbackButton.remove();
 			}
-			correct_value = answers[name].correct_choice;
-			if (input.value == correct_value) input.checked = true;
+			const correct_ans = answers[name].correct_choice || answers[name].correct_ans;
+			if (input.value == correct_ans) {
+				input.checked = true;
+				//input.setAttribute('checked', 'checked');
+			} else {
+				input.checked = false;
+			}
+		}
+
+		if (input.type.toUpperCase() == 'CHECKBOX' && answers[name]) {
+			const correct_choices = answers[name].correct_choices;
+			if (correct_choices.includes(input.value)) {
+				input.checked = true;
+			//	input.setAttribute('checked', 'checked');
+			} else {
+				input.checked = false;
+			//	 input.setAttribute('checked', false);
+			}
 		}
 	}
 
@@ -837,13 +962,14 @@ function translateHintSol(ww_id, body_div, ww_domain, b_ptx_has_hint, b_ptx_has_
 	for (const hintSol of hintSols) {
 		const hintsolp = hintSol.parentNode;
 		if (!hintsolp) continue;
+		const hintsolpp = hintsolp.parentNode;  //the div that contains each p with a knowl anchor
 		const hintSolType = hintSol.dataset.type;
 
-		if (hintSol == hintSols[0])
+		if (hintsolpp.querySelectorAll(".webwork.solutions").length == 0)
 		{
 			solutionlikewrapper = document.createElement('div');
 			solutionlikewrapper.classList.add('webwork', 'solutions');
-			hintsolp.parentNode.insertBefore(solutionlikewrapper, hintsolp);
+			hintsolpp.insertBefore(solutionlikewrapper, hintsolp);
 		}
 
 		if ((hintSolType == 'solution' && !b_ptx_has_solution) ||
@@ -909,5 +1035,5 @@ function webworkSeedHash(string) {
 		hash  = ((hash << 5) - hash) + chr;
 		hash |= 0; //Convert to 32bit integer
 	}
-	return hash;
+	return Math.abs(hash);
 };

@@ -329,10 +329,10 @@ function logKeyDown(e) {
     prev_prev_char = prev_char;
     prev_char = this_char;
     this_char = e;
-    console.log("logKey",e,"XXX",e.code);
+    debugLog("logKey",e,"XXX",e.code);
 
     var input_region = document.activeElement;
-    console.log("input_region", input_region);
+    debugLog("input_region", input_region);
 
     if (input_region.id == "user-preferences-button") {
         if (e.code == "Enter") {
