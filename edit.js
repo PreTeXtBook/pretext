@@ -1952,6 +1952,7 @@ function edit_menu_for(this_obj_or_id, motion) {
 
     var edit_menu_holder = document.createElement('div');
     edit_menu_holder.setAttribute('id', 'edit_menu_holder');
+    edit_menu_holder.setAttribute('class', 'edit_menu_holder');
     edit_menu_holder.setAttribute('tabindex', '-1');
     editorLog("adding menu for", this_obj_or_id, "menu_location", menu_location);
     editorLog("which has tag", this_obj.tagName);
@@ -1974,6 +1975,7 @@ function edit_menu_for(this_obj_or_id, motion) {
             // need to code this better:  over-writing edit_option
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
+            edit_option.setAttribute('class', 'edit_menu');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["sourcetag"];
             edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-env">Change "' + this_obj_environment + '" to <div class="wrap_to_submenu"><span class="to_submenu">&#9659;</span></div></li>';
@@ -1987,12 +1989,13 @@ function edit_menu_for(this_obj_or_id, motion) {
             if (this_obj.classList.contains("caption")) { this_contained_type = "caption" }
             edit_option = document.createElement('ol');
             edit_option.setAttribute('id', 'edit_menu');
+            edit_option.setAttribute('class', 'edit_menu');
             editorLog("this_obj", this_obj);
             editorLog("this_obj.innerHTML", this_obj.innerHTML);
-            editorLog("menu only?", this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>');
+            editorLog("menu only?", this_obj.innerHTML == '<div id="edit_menu_holder" class="edit_menu_holder" tabindex="-1"></div>');
             this_obj_parent_id = this_obj.parentElement.parentElement.id;
             this_obj_environment = internalSource[this_obj_parent_id]["sourcetag"];
-            if (this_obj.innerHTML == '<div id="edit_menu_holder" tabindex="-1"></div>') {
+            if (this_obj.innerHTML == '<div id="edit_menu_holder" class="edit_menu_holder" tabindex="-1"></div>') {
                 edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-' + this_contained_type + '">Add a ' + this_contained_type + '</li>';
             } else {
                 edit_option.innerHTML = '<li id="choose_current" tabindex="-1" data-action="change-' + this_contained_type + '">Change ' + this_contained_type + '</li>';
@@ -2774,7 +2777,7 @@ function move_by_id_local(theid, thehandleid) {
     the_phantomobject.setAttribute("id", "phantomobject");
     the_phantomobject.setAttribute("data-moving_id", theid);
     the_phantomobject.setAttribute("data-handle_id", thehandleid);
-    the_phantomobject.setAttribute("class", "move");
+    the_phantomobject.setAttribute("class", "phantomobject move");
     the_phantomobject.setAttribute("tabindex", "-1");
     var these_instructions = '<div class="movearrow"><span class="arrow">&uarr;</span><p class="up">"shift-tab", or "up arrow", to move up</p></div>';
     these_instructions += '<div class="movearrow"><p class="done">"return" or "escape" to set in place </p></div>';
@@ -2978,6 +2981,7 @@ function create_local_menu() {
 
             var enter_option = document.createElement('ol');
             enter_option.setAttribute('id', 'edit_menu');
+            enter_option.setAttribute('class', 'edit_menu');
 
             enter_option.innerHTML = menu_options_for(this_obj_id, "XunusedX", "base");
 
@@ -3970,6 +3974,7 @@ function main_menu_navigator(e) {  // we are not currently editing
             } 
             var edit_submenu = document.createElement('ol');
             edit_submenu.setAttribute('id', 'edit_menu');
+            edit_submenu.setAttribute('class', 'edit_menu');
 
             var to_be_edited = object_of_interest;
             editorLog("to_be_edited", to_be_edited);
@@ -4277,6 +4282,7 @@ function main_menu_navigator(e) {  // we are not currently editing
                            // this may only hapen when adjusting workspace:
                         if (!current_env_id) {
                             edit_submenu.setAttribute('id', 'edit_menu');
+                            edit_submenu.setAttribute('class', 'edit_menu');
                             current_env_id = current_env.getAttribute("data-parent_id");
                             editorLog("current_env_id", current_env_id);
                         }
