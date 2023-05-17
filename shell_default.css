@@ -83,7 +83,7 @@
     margin-left: 0;
     left: auto;
   }
-  .pretext #ptx-page-footer {
+  .pretext .ptx-page-footer {
     /* Make space for navbar fixed to bottom of screen */
     margin-bottom: 38px;
   }

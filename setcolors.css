@@ -382,13 +382,13 @@ body.pretext {
 .pretext[data-atmosphere*="dark"] .ptx-navbar {
     background: var(--navbarbackground);
 }
-.pretext[data-atmosphere*="dark"] #ptx-page-footer .feedback-link,
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link,
 .pretext[data-atmosphere*="dark"] .ptx-content-footer .button,
 .pretext[data-atmosphere*="dark"] .ptx-navbar .button {
   background-color: var(--buttonbackground);
   color: var(--bodyfontcolor);
 }
-.pretext[data-atmosphere*="dark"] #ptx-page-footer .feedback-link:hover,
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link:hover,
 .pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover,
 .pretext[data-atmosphere*="dark"] .ptx-navbar .button:hover,
 .pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover {
@@ -407,12 +407,12 @@ body.pretext {
     background: var(--bannerbackground);
 }
 
-.pretext[data-atmosphere*="dark"] #ptx-page-footer {
+.pretext[data-atmosphere*="dark"] .ptx-page-footer {
     background: var(--footerbackground);
     border-top-color: #447;
     border-bottom-color: #447;
 }
-.pretext[data-atmosphere*="dark"] #ptx-page-footer .logo {
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .logo {
     background: #779;
     border-radius: 0.4em;
 }

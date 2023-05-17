@@ -313,7 +313,7 @@ body.pretext {
   }
 }
 
-.pretext #ptx-page-footer .feedback-link {
+.pretext .ptx-page-footer .feedback-link {
   cursor: pointer;
   text-align: center;
   color: #333333;
@@ -325,7 +325,7 @@ body.pretext {
   display: flex;
   align-items: center;
 }
-.pretext #ptx-page-footer {
+.pretext .ptx-page-footer {
     background: #f4f4f4;
     margin-top: 2em;
     padding-top: 0;
@@ -341,10 +341,10 @@ body.pretext {
 */
 }
 
-.pretext #ptx-page-footer > a {
+.pretext .ptx-page-footer > a {
   margin: 1em 0;
 }
-.pretext #ptx-page-footer > a > .logo:first-child {
+.pretext .ptx-page-footer > a > .logo:first-child {
     height: 3em;
     width: unset;
     margin: 0;

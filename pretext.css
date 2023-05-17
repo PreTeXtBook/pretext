@@ -739,7 +739,7 @@ button {
     .pretext .ptx-navbar,
      body.pretext > a.assistive,
     .pretext .ptx-page > .ptx-sidebar,
-    .pretext  #ptx-page-footer,
+    .pretext  .ptx-page-footer,
     .pretext .ptx-main > div.ptx-content-footer {
        display:none;
         border:none;
@@ -781,7 +781,7 @@ button {
         border: none;
     }
     body.standalone.worksheet .ptx-masthead,
-    body.standalone.worksheet #ptx-page-footer {
+    body.standalone.worksheet .ptx-page-footer {
         display: none;
     }
 
