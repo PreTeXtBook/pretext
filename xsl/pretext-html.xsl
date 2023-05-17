@@ -112,9 +112,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- point to a totally different server (rather than other  -->
 <!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.6'" />
+<xsl:param name="html.css.version" select="'0.7'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.2'" />
+<xsl:param name="html.js.version" select="'0.3'" />
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -7157,7 +7157,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="skip-to-content-link" />
                 <xsl:call-template name="latex-macros" />
                 <xsl:call-template name="enable-editing" />
-                 <header id="ptx-masthead">
+                 <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
@@ -10911,7 +10911,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- this *must* be first for maximum utility -->
             <xsl:call-template name="skip-to-content-link" />
             <!-- HTML5 body/header will be a "banner" landmark automatically -->
-            <header id="ptx-masthead">
+            <header id="ptx-masthead" class="ptx-masthead">
                 <div class="ptx-banner">
                     <xsl:call-template name="brand-logo" />
                     <div class="title-container">
@@ -10979,7 +10979,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </main>
             </div>
             <!-- formerly "extra" -->
-            <div id="ptx-page-footer">
+            <div id="ptx-page-footer" class="ptx-page-footer">
                 <xsl:apply-templates select="." mode="feedback-button"/>
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="runestone-link"/>
@@ -11602,9 +11602,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="user-preferences-menu">
     <button id="user-preferences-button" class="user-preferences-button button" title="Modify user preferences">
-      <span id="theavatarbutton" class="name">You!</span>
-      <div id="preferences_menu_holder" class="hidden">
-        <ol id="preferences_menu" style="font-family: 'Roboto Serif', serif;">
+      <span id="avatarbutton" class="avatarbutton name">You!</span>
+      <div id="preferences_menu_holder" class="preferences_menu_holder hidden">
+        <ol id="preferences_menu" class="preferences_menu" style="font-family: 'Roboto Serif', serif;">
           <li data-env="avatar" tabindex="-1">Choose avatar<div class="wrap_to_submenu"><span class="to_submenu">▻</span></div>
             <ol class="hidden avatar">
               <li data-val="You!" tabindex="-1"><span id="theYou!" class="avatarcheck">✔️</span>You!</li>
@@ -11683,7 +11683,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
-    <nav id="ptx-navbar" class="navbar">
+    <nav id="ptx-navbar" class="ptx-navbar navbar">
         <button class="toc-toggle button" aria-label="Show or hide table of contents">
             <span class="icon">☰</span>
             <span class="name">
@@ -11736,12 +11736,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Two HTML aside's for ToC (left), Annotations (right)       -->
 <!-- Need to pass node down into "toc-items", which is per-page -->
 <xsl:template match="*" mode="sidebars">
-    <div id="ptx-sidebar">
+    <div id="ptx-sidebar" class="ptx-sidebar">
         <nav id="ptx-toc">
             <xsl:attribute name="class">
+                <xsl:text>ptx-toc</xsl:text>
                 <!-- A class indicates how much of the ToC we want   -->
                 <!-- to see, as set in the publication file. Always. -->
-                <xsl:text>depth</xsl:text>
+                <xsl:text> depth</xsl:text>
                 <xsl:value-of select="$toc-level"/>
                 <!-- Optionally place a class name to allow for numbering  -->
                 <!-- parts and chapters, when parts are present (w/ space) -->
@@ -12756,8 +12757,8 @@ TODO:
     <xsl:if test="$has-native-search">
         <div class="searchbox">
             <div class="searchwidget">
-                <input id="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
-                <button id="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
+                <input id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
+                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
             </div>
         </div>
     </xsl:if>
@@ -12766,17 +12767,17 @@ TODO:
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
-        <div id="searchresultsplaceholder" style="display: none">
-            <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
+        <div id="searchresultsplaceholder" class="searchresultsplaceholder" style="display: none">
+            <button id="closesearchresults" class="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
             <h2>
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'search-results-heading'"/>
                 </xsl:apply-templates>
                 <xsl:text>: </xsl:text>
-                <span id="searchterms"></span>
+                <span id="searchterms" class="searchterms"></span>
             </h2>
             <!-- div#searchempty is not visible when there are results -->
-            <div id="searchempty">
+            <div id="searchempty" class="searchempty">
                 <span>
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'no-search-results'"/>
@@ -12784,7 +12785,7 @@ TODO:
                     <xsl:text>.</xsl:text>
                 </span>
             </div>
-            <ol id="searchresults">
+            <ol id="searchresults" class="searchresults">
             </ol>
         </div>
     </xsl:if>
@@ -13026,12 +13027,12 @@ TODO:
                 <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="$docinfo/brandlogo/@source"/>
             </xsl:variable>
-            <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
+            <a id="logo-link" class="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
                 <img src="{$location}" alt="Logo image"/>
             </a>
         </xsl:when>
         <xsl:otherwise>
-            <a id="logo-link" href=""/>
+            <a id="logo-link" class="logo-link" href=""/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
