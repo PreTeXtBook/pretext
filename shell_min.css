@@ -248,7 +248,7 @@
   .pretext .ptx-toc {
     height: calc(100vh - 50px);
   }
-  .pretext .ptx-navbar #calculator-toggle,
+  .pretext .ptx-navbar .calculator-toggle,
   .pretext .ptx-navbar .index-button {
     display: none;
   }

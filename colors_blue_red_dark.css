@@ -96,10 +96,10 @@ body.pretext {
   background-color: #fafafa;
   color: #000;
 }
-.ptx-navbar #calculator-toggle {
+.ptx-navbar .calculator-toggle {
   background-color: #336;
 }
-.ptx-navbar #calculator-toggle:hover {
+.ptx-navbar .calculator-toggle:hover {
   background-color: #fce;
 }
 
@@ -108,7 +108,7 @@ body.pretext {
 }
 .pretext .ptx-masthead .title-container > .pretext .heading,
 .pretext .ptx-masthead .title-container > .heading a,
-.pretext .ptx-masthead #logo-link:empty:hover::before,
+.pretext .ptx-masthead .logo-link:empty:hover::before,
 .pretext .ptx-masthead .byline,
 .pretext .ptx-masthead .byline a {
   color: var(--documenttitlelight);

@@ -6,12 +6,12 @@ body.pretext {
   color: var(--bodyfontcolor);
 }
 
-.ptx-masthead .title-container > .heading, .ptx-masthead .title-container > .heading a, .ptx-masthead #logo-link:empty:hover:before, .ptx-masthead .byline a {
+.ptx-masthead .title-container > .heading, .ptx-masthead .title-container > .heading a, .ptx-masthead .logo-link:empty:hover:before, .ptx-masthead .byline a {
   color: #2a5ea4;
   color: var(--documenttitle);
 }
 
-.ptx-masthead .title-container > .heading a:active, .ptx-masthead #logo-link:empty:active:before, .ptx-masthead .byline a:active {
+.ptx-masthead .title-container > .heading a:active, .ptx-masthead .logo-link:empty:active:before, .ptx-masthead .byline a:active {
   color: #932c1c;
   color: var(--bodytitle);
 }
@@ -395,10 +395,10 @@ body.pretext {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
-.pretext[data-atmosphere*="dark"] .ptx-navbar #calculator-toggle {
+.pretext[data-atmosphere*="dark"] .ptx-navbar .calculator-toggle {
   background-color: var(--buttonbackground);
 }
-.pretext[data-atmosphere*="dark"] .ptx-navbar #calculator-toggle:hover {
+.pretext[data-atmosphere*="dark"] .ptx-navbar .calculator-toggle:hover {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
@@ -418,7 +418,7 @@ body.pretext {
 }
 .pretext[data-atmosphere*="dark"] .ptx-masthead .title-container > .pretext .heading,
 .pretext[data-atmosphere*="dark"] .ptx-masthead .title-container > .heading a,
-.pretext[data-atmosphere*="dark"] .ptx-masthead #logo-link:empty:hover::before,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .logo-link:empty:hover::before,
 .pretext[data-atmosphere*="dark"] .ptx-masthead .byline,
 .pretext[data-atmosphere*="dark"] .ptx-masthead .byline a {
   color: var(--documenttitlelight);

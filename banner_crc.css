@@ -284,7 +284,7 @@
 
 
 /* .ptx-logobox  */
-#logo-link {
+.logo-link {
     grid-area: ptx-logobox;
     color: #000;
     padding: 15px 0px 0px 0px;
@@ -293,7 +293,7 @@
 
 /* Fix the width of logo to always be 50px */
 /* .ptx-logobox img  */
-#logo-link img {
+.logo-link img {
     width: 50px;
 }
 

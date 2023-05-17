@@ -93,7 +93,7 @@
     grid-area: MH-extras-area1;
     justify-self: right;
 }
-#calculator-toggle {
+.calculator-toggle {
     grid-area: MH-extras-area2;
     justify-self: left;
 }
