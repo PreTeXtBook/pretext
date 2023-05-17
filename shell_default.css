@@ -83,10 +83,6 @@
     margin-left: 0;
     left: auto;
   }
-  .pretext .ptx-page-footer {
-    /* Make space for navbar fixed to bottom of screen */
-    margin-bottom: 38px;
-  }
   .pretext #ptx-page-footer {
     /* Make space for navbar fixed to bottom of screen */
     margin-bottom: 38px;
@@ -251,112 +247,6 @@
   bottom: 0.4em;
 }
 
-.pretext .ptx-page-footer {
-    background: #f4f4f4;
-    margin-top: 2em;
-    padding-top: 0;
-    max-width: 900px;
-    border-top: 2px solid var(--sectiontoctext);
-    border-bottom: 2px solid var(--sectiontoctext);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-    position: relative;
-/*
-    z-index: 100;
-*/
-}
-.pretext .ptx-page-footer > a > div {
-  display: inline-block;
-}
-.pretext .ptx-page-footer .pretext-link,
-.pretext .ptx-page-footer .runestone-link {
-  margin: 1em 0 1em 0;
-/*
-  display: flex;
-*/
-  align-items: center;
-}
-.pretext .ptx-page-footer .runestone-link {
-  margin-top: 1.5em;
-}
-.pretext .ptx-page-footer .pretext-link .logo,
-.pretext .ptx-page-footer .runestone-link .logo {
-  display: block;
-  width: 6em;
-  margin-left: auto;
-  margin-right: auto;
-}
-.pretext .ptx-page-footer .runestone-link .logo {
-  width: 9em;
-  margin-top: 1.1em;
-}
-.pretext .ptx-page-footer .pretext-link .name,
-.pretext .ptx-page-footer .runestone-link .name {
-/*
-  margin-top: 1.5em;
-*/
-  display: block;
-  margin-bottom: 0.5em;
-}
-.pretext .ptx-page-footer .feedback-link {
-  cursor: pointer;
-  text-align: center;
-  color: #333333;
-  background-color: #ededed;
-  border: 1px solid #bababa;
-  margin: 3.2em 0 0 0;
-  padding: 0 1em 0 1em;
-  height: 2em;
-  display: flex;
-  align-items: center;
-}
-.pretext .ptx-page-footer .mathjax-logo {
-  margin-top: 3.0em;
-}
-.pretext .ptx-page-footer .mathjax-logo img{
-  height: 2.5em;
-}
-
-/* these are for the new (Jan 2023) "Powered by" logos */
-/* after 0.6, delete all .ptx-page-footer */
-.pretext #ptx-page-footer .feedback-link {
-  cursor: pointer;
-  text-align: center;
-  color: #333333;
-  background-color: #ededed;
-  border: 1px solid #bababa;
-  margin: 1.5em 0 0 0;
-  padding: 0 1em 0 1em;
-  height: 2em;
-  display: flex;
-  align-items: center;
-}
-.pretext #ptx-page-footer {
-    background: #f4f4f4;
-    margin-top: 2em;
-    padding-top: 0;
-    max-width: 900px;
-    border-top: 2px solid var(--sectiontoctext);
-    border-bottom: 2px solid var(--sectiontoctext);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-    position: relative;
-/*
-    z-index: 100;
-*/
-}
-
-.pretext #ptx-page-footer > a {
-  margin: 1em 0;
-}
-.pretext #ptx-page-footer > a > .logo:first-child {
-    height: 3em;
-    width: unset;
-    margin: 0;
-}
-
 .pretext .ptx-sidebar.visible {
   display: block;
 }
@@ -386,33 +276,6 @@
   .pretext .ptx-toc {
     height: calc(100vh - 50px);
   }
-  .pretext .ptx-page > .ptx-page-footer {
-    margin-bottom: 0;
-    padding-left: 10px;
-  }
-  .pretext .ptx-page-footer .pretext-link {
-    margin-top: 0.7em;
-    margin-bottom: 0.7em;
-  }
-  .pretext .ptx-page-footer .pretext-link .logo {
-    width: 4em;
-  }
-  .pretext .ptx-page-footer .pretext-link .name {
-    margin-top: 1.2em;
-    margin-right: 0.5em;
-    margin-bottom: 2.0em;
-    font-size: 90%;
-  }
-  .pretext .ptx-page-footer .feedback-link {
-    margin-top: 1.5em;
-    font-size: 90%;
-  }
-  .pretext .ptx-page-footer .mathjax-logo {
-    margin-top: 1.4em;
-  }
-  .pretext .ptx-page-footer .mathjax-logo img{
-    height: 1.8em;
-  }
   .pretext .ptx-navbar #calculator-toggle,
   .pretext .ptx-navbar .index-button {
     display: none;
@@ -428,9 +291,6 @@
   .pretext .ptx-navbar .next-button {
     width: 33.2%;
     width: calc(33.3% - 1px);
-  }
-  .pretext .ptx-page > .ptx-page-footer {
-    margin-left: 5em;
   }
 }
 

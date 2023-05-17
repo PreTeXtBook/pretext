@@ -35,12 +35,6 @@ a:hover,
 a:focus {
     text-decoration: none;
 }
-.ptx-page-footer a:hover,
-.ptx-content-footer a:hover,
-.ptx-page-footer a:hover,
-.ptx-content-footer a:hover {
-    text-decoration: none;
-}
 
 
 body.pretext > a.assistive {
@@ -745,7 +739,6 @@ button {
     .pretext .ptx-navbar,
      body.pretext > a.assistive,
     .pretext .ptx-page > .ptx-sidebar,
-    .pretext > div.ptx-page-footer,
     .pretext  #ptx-page-footer,
     .pretext .ptx-main > div.ptx-content-footer {
        display:none;
