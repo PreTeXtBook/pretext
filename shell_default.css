@@ -11,18 +11,18 @@
   html
     head
     body.pretext
-      header#ptx-masthead
-      nav#ptx-navbar
+      header.ptx-masthead
+      nav.ptx-navbar
       div.ptx-page
         div.sidebar
-          nav#ptx-toc
+          nav.ptx-toc
         main.ptx-main
           div.ptx-content
           div.ptx-content-footer
       div.ptx-page-footer
 */
 
-.pretext #ptx-masthead {
+.pretext .ptx-masthead {
   position: relative;
   background: #fafafa;
   min-height: inherit;
@@ -31,7 +31,7 @@
   z-index: 100;
 }
 
-.pretext #ptx-navbar {
+.pretext .ptx-navbar {
   position: sticky;
   top: 0;
   max-width: 904px;
@@ -39,9 +39,13 @@
 
 .pretext .ptx-page {
   position: relative;
+  min-height: 100vh;
 }
+.ptx-content {
+  min-height: 60vh;
+} 
 
-.pretext #ptx-sidebar {
+.pretext .ptx-sidebar {
   position: sticky;
   top: 41px;
   left: 0;
@@ -49,7 +53,7 @@
   width: 240px;
 }
 
-.pretext #ptx-toc {
+.pretext .ptx-toc {
     position: sticky;
     top: 50px;
     box-sizing: border-box;
@@ -65,6 +69,9 @@
   padding: 1px 0 0 0;
   background: white;
   border-left: 1px solid #ccc;
+}
+.pretext .ptx-page .ptx-sidebar.hidden + .ptx-main {
+  margin-left: 0;
 }
 .pretext .ptx-page > .ptx-main.notoc {
   margin-left: 0;
@@ -240,8 +247,25 @@
   bottom: 0.4em;
 }
 
+.pretext .ptx-sidebar.visible {
+  display: block;
+}
+
+
+.pretext .ptx-page-footer .feedback-link {
+  cursor: pointer;
+  text-align: center;
+  color: #333333;
+  background-color: #ededed;
+  border: 1px solid #bababa;
+  margin: 1.5em 0 0 0;
+  padding: 0 1em 0 1em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+}
 .pretext .ptx-page-footer {
-    background: #e8f4ff;
+    background: #f4f4f4;
     margin-top: 2em;
     padding-top: 0;
     max-width: 900px;
@@ -255,70 +279,31 @@
     z-index: 100;
 */
 }
-.pretext .ptx-page-footer > a > div {
-  display: inline-block;
+
+.pretext .ptx-page-footer > a {
+  margin: 1em 0;
 }
-.pretext .ptx-page-footer .pretext-link,
-.pretext .ptx-page-footer .runestone-link {
-  margin: 1em 0 1em 0;
-/*
-  display: flex;
-*/
-  align-items: center;
-}
-.pretext .ptx-page-footer .runestone-link {
-  margin-top: 1.5em;
-}
-.pretext .ptx-page-footer .pretext-link .logo,
-.pretext .ptx-page-footer .runestone-link .logo {
-  display: block;
-  width: 6em;
-  margin-left: auto;
-  margin-right: auto;
-}
-.pretext .ptx-page-footer .runestone-link .logo {
-  width: 9em;
-  margin-top: 1.1em;
-}
-.pretext .ptx-page-footer .pretext-link .name,
-.pretext .ptx-page-footer .runestone-link .name {
-/*
-  margin-top: 1.5em;
-*/
-  display: block;
-  margin-bottom: 0.5em;
-}
-.pretext .ptx-page-footer .feedback-link {
-  cursor: pointer;
-  text-align: center;
-  color: #333333;
-  background-color: #ededed;
-  border: 1px solid #bababa;
-  margin: 3.2em 0 0 0;
-  padding: 0 1em 0 1em;
-  height: 2em;
-  display: flex;
-  align-items: center;
-}
-.pretext .ptx-page-footer .mathjax-logo {
-  margin-top: 3.0em;
-}
-.pretext .ptx-page-footer .mathjax-logo img{
-  height: 2.5em;
+.pretext .ptx-page-footer > a > .logo:first-child {
+    height: 3em;
+    width: unset;
+    margin: 0;
 }
 
-.pretext #ptx-sidebar.visible {
-  display: block;
-}
+
 
 @media screen and (max-width: 800px) {
-  .pretext #ptx-navbar {
+  .pretext .ptx-navbar {
     position: fixed;
     top: auto;
     bottom: 0;
+    z-index: 1100;
    }
-  .pretext #ptx-sidebar {
+  .pretext .ptx-sidebar {
     display: none;
+    position: fixed;
+    top: 10px;
+    z-index: 1000;
+    background: white;
   }
   .pretext .ptx-content-footer {
     display: none;
@@ -328,54 +313,24 @@
     margin-bottom: 60px;
   }
 */
-  .pretext #ptx-toc {
+  .pretext .ptx-toc {
     height: calc(100vh - 50px);
   }
-  .pretext .ptx-page > .ptx-page-footer {
-    margin-bottom: 0;
-    padding-left: 10px;
-  }
-  .pretext .ptx-page-footer .pretext-link {
-    margin-top: 0.7em;
-    margin-bottom: 0.7em;
-  }
-  .pretext .ptx-page-footer .pretext-link .logo {
-    width: 4em;
-  }
-  .pretext .ptx-page-footer .pretext-link .name {
-    margin-top: 1.2em;
-    margin-right: 0.5em;
-    margin-bottom: 2.0em;
-    font-size: 90%;
-  }
-  .pretext .ptx-page-footer .feedback-link {
-    margin-top: 1.5em;
-    font-size: 90%;
-  }
-  .pretext .ptx-page-footer .mathjax-logo {
-    margin-top: 1.4em;
-  }
-  .pretext .ptx-page-footer .mathjax-logo img{
-    height: 1.8em;
-  }
-  .pretext #ptx-navbar #calculator-toggle,
-  .pretext #ptx-navbar .index-button {
+  .pretext .ptx-navbar .calculator-toggle,
+  .pretext .ptx-navbar .index-button {
     display: none;
   }
-  .pretext #ptx-navbar .toc-toggle {
+  .pretext .ptx-navbar .toc-toggle {
     width: 25%;
   }
-  .pretext #ptx-navbar .treebuttons {
+  .pretext .ptx-navbar .treebuttons {
     width: 75%;
   }
-  .pretext #ptx-navbar .previous-button,
-  .pretext #ptx-navbar .up-button,
-  .pretext #ptx-navbar .next-button {
+  .pretext .ptx-navbar .previous-button,
+  .pretext .ptx-navbar .up-button,
+  .pretext .ptx-navbar .next-button {
     width: 33.2%;
     width: calc(33.3% - 1px);
-  }
-  .pretext .ptx-page > .ptx-page-footer {
-    margin-left: 5em;
   }
 }
 

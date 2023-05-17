@@ -146,13 +146,13 @@
     background-color: #fcc;
 }
 
-#dontlogout {
+.dontlogout {
     float: right;
     font-size: 80%;
     cursor: pointer;
 }
 
-#dontlogout:hover { 
+.dontlogout:hover { 
     background-color: #fdd;
 }
 

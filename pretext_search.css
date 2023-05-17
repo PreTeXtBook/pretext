@@ -1,4 +1,4 @@
-#searchresultsplaceholder article {
+.searchresultsplaceholder article {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
@@ -16,10 +16,10 @@
   top: 35px;
   right: 0;
 }
-#ptxsearch {
+.ptxsearch {
   width: 196px;
 }
-#searchbutton {
+.searchbutton {
   position: absolute;
   right: 0;
 }
@@ -55,31 +55,26 @@
 .all_results a:hover {
     background-color: lightgray;
 }
-.pretext-article #masthead .banner,
-.pretext-book #masthead .banner,
-.pretext #masthead .banner {
-    padding-bottom: 0.25em;
-}
-#searchresults a:hover {
+.searchresults a:hover {
     background-color: #eee;
 }
 
-#searchresults a {
+.searchresults a {
     text-decoration: none;
     color: #222;
 }
-#searchresults a:hover {
+.searchresults a:hover {
     text-decoration: underline;
     color: #33f;
 }
-#searchresults ul li {
+.searchresults ul li {
     list-style-type: none;
 }
-ol#searchresults > li {
+ol.searchresults > li {
     list-style-type: none;
 }
-#searchresults ul > li > text,
-ol#searchresults > li > text {
+.searchresults ul > li > text,
+ol.searchresults > li > text {
     display: none;
 } 
 .high_result {
@@ -90,11 +85,19 @@ ol#searchresults > li > text {
     font-weight: 500;
 }
 
+
 .low_result {
+    font-weight: 200;
+}
+.no_result {
     font-weight: 200;
     color: #444;
 }
-#searchresultsplaceholder {
+.detailed_result .no_result {
+    font-size: 90%;
+}
+
+.searchresultsplaceholder {
     position: fixed;
     top: 4em;
     left: 10em;
@@ -106,13 +109,13 @@ ol#searchresults > li > text {
     overflow-y: auto;
     max-height: 80%;
 }
-#searchterms {
+.searchterms {
     font-weight: normal;
     font-style: italic;
     font-size: 90%;
     padding-right: 1.5em;
 }
-#closesearchresults {
+.closesearchresults {
     font-size: 150%;
     border: 2px solid grey;
     border-radius: 0.3em;
@@ -122,28 +125,18 @@ ol#searchresults > li > text {
     top: 0.2em;
     left: 96%;
 }
-#closesearchresults:hover {
+.closesearchresults:hover {
     color: #c00;
     background-color: #fee;
     border-color: #f00;
 }
-#closesearchresults + h2 {
+.closesearchresults + h2 {
     margin-top: -1em;
 }
-#secondsearch {
-    bottom: 0;
-    right: 0;
-    position: fixed;
-    z-index: 150;
-    display: none;
-}
-#searchempty {
+.searchempty {
     display: none;
 }
 @media screen and (max-width: 800px) {
-/*
-    #secondsearch { bottom: 38px; }
-*/
     .searchbox {
         top: -30px;
     }

@@ -85,36 +85,33 @@ body.pretext {
     background: var(--documenttitledark);
     background: var(--chaptertoc);
 }
-#ptx-navbar {
+.ptx-navbar {
     background: #333;
 }
-#ptx-navbar .button{
+.ptx-navbar .button{
   background-color: #635;
   color: #fff;
 }
-#ptx-navbar .button:hover {
+.ptx-navbar .button:hover {
   background-color: #fafafa;
   color: #000;
 }
-#ptx-navbar #calculator-toggle {
+.ptx-navbar .calculator-toggle {
   background-color: #336;
 }
-#ptx-navbar #calculator-toggle:hover {
+.ptx-navbar .calculator-toggle:hover {
   background-color: #fce;
 }
 
-.pretext #ptx-masthead {
+.pretext .ptx-masthead {
     background: #555;
 }
-.pretext #ptx-masthead .title-container > .pretext .heading,
-.pretext #ptx-masthead .title-container > .heading a,
-.pretext #ptx-masthead #logo-link:empty:hover::before,
-.pretext #ptx-masthead .byline,
-.pretext #ptx-masthead .byline a {
+.pretext .ptx-masthead .title-container > .pretext .heading,
+.pretext .ptx-masthead .title-container > .heading a,
+.pretext .ptx-masthead .logo-link:empty:hover::before,
+.pretext .ptx-masthead .byline,
+.pretext .ptx-masthead .byline a {
   color: var(--documenttitlelight);
-}
-#ptx-toc {
-  scrollbar-color: var(--documenttitlelight) #666;
 }
 .pretext .ptx-content .code-inline {
   color: var(--documenttitledark);

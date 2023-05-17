@@ -11,11 +11,11 @@
   html
     head
     body.pretext
-      header#ptx-masthead
-      nav#ptx-navbar
+      header.ptx-masthead
+      nav.ptx-navbar
       div.ptx-page
         div.sidebar
-          nav#ptx-toc
+          nav.ptx-toc
         main.ptx-main
           div.ptx-content
           div.ptx-content-footer
@@ -46,7 +46,7 @@ body.pretext {
 }
 
 /* .ptx-masthead-wrapper  */
-#ptx-masthead {
+.ptx-masthead {
     border: 2px solid #ddd;
     border-bottom: none;
     border-top-left-radius: 5px;
@@ -54,23 +54,23 @@ body.pretext {
     /*     overflow: hidden;*/  /* otherwise the rounded corners are not visible */
     z-index: 100;
 }
-#ptx-masthead {
+.ptx-masthead {
     position: relative;
     background: #fafafa;
     min-height: inherit;
     box-shadow: none;
 }
-#ptx-masthead {
+.ptx-masthead {
     max-width: 904px;
     border-right: 1px solid #bababa;
 }
 @media only screen and (min-width: 600px) {
     /*   .ptx-masthead-wrapper {*/
-    #ptx-masthead {
+    .ptx-masthead {
         z-index: 100;
     }
 }
-#ptx-masthead .searchbox {
+.ptx-masthead .searchbox {
    bottom: 2px;
    margin-right: -19px;
 }
@@ -79,6 +79,8 @@ body.pretext {
 .ptx-page {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.0em;
+  min-height: 100vh;
+
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-template-rows: auto;
@@ -86,9 +88,12 @@ body.pretext {
         "toc main-content"
         "toc content-footer";
 }
+.ptx-content {
+  min-height: 50vh;
+}
 
 /* MH-toc dropdown Content (Hidden by Default) */
-#ptx-sidebar {
+.ptx-sidebar {
     position: sticky;
     top: 34px;
     background-color: #f1f1f1;
@@ -283,145 +288,65 @@ body.pretext {
     padding-right:5px;
 } 
 
-/* Page footer wrapper playground */
-.ptx-page-footer {
-    display: grid;
-    max-width: 100%;
-/*
-    grid-template-columns: 1.1fr .68fr 1fr;
-*/
-    grid-template-columns: 1fr 1fr 0.7fr;
-/*
-    grid-template-areas:
-        "page-footer-feedback page-footer-pretext page-footer-runestone  page-footer-mathjax";
-*/
-    grid-template-areas:
-        "page-footer-pretext page-footer-runestone  page-footer-mathjax";
-    margin-top: 30px;
-    margin-bottom: 40px;
-    border-top: 2px solid var(--bodytitle);
-}
-
-.ptx-page-footer .feedback-link{
-    grid-area: page-footer-feedback;
-    justify-self: start;
-    align-self: center;
-    margin-top: 30px;
-
-
-    margin-left: 10px;
-    padding: 10px 20px 15px 20px;
-    height: 40px;
-    color: var(--bodytitle);
-    font-family: inherit; 
-    text-align: center;
-    font-size: .8em; 
-    font-weight: 700;
-    letter-spacing: .1rem;
-    text-transform: uppercase;
-    text-decoration: none;
-    white-space: nowrap;
-    background-color: #eee;
-    border-radius: 4px;
-    border: 1px solid #888;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-
-.ptx-page-footer .feedback-link:hover{
-    background-color: #fafafa;
-    color: #888;
-}
-
-.ptx-page-footer  .pretext-link,
-.ptx-page-footer  .runestone-link{
-/*
-    grid-area: page-footer-pretext;
-*/
-    align-self: center;
-    margin-top: 30px;
-    color: var(--bodytitle);
-}
-.ptx-page-footer .pretext-link,
-.ptx-page-footer .feedback-link + .pretext-link{
-    grid-area: page-footer-pretext;
-}
-.ptx-page-footer .pretext-link + .runestone-link {
-    grid-area: page-footer-runestone;
-}
-
-
-.ptx-page-footer  .pretext-link .name,
-.ptx-page-footer  .runestone-link .name {
-    display: grid;
-/*
-    justify-self: center;
-*/
-    text-align: center;
-    font-size: .9em; 
-    font-weight: 700;
-    letter-spacing: .1rem;
-    text-transform: uppercase;
-    margin-bottom: 0.5em;
-/*
-    padding-left: 8px;
-*/
-}
-
-.ptx-page-footer  .pretext-link .logo,
-.ptx-page-footer  .runestone-link .logo {
-    display: grid;
-    justify-item: center;
-    align-items: center;
-    height: 40px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-.ptx-page-footer .mathjax-logo {
-    grid-area: page-footer-mathjax;
-    display: block;
-    justify-self: end;
-    margin-top: 35px;
-    margin-right: 10px;
-    padding: 0px;
-
-}
-
-.ptx-page-footer .mathjax-logo .img {
-    /* No luck resizing */
-}
-
-.pretext #ptx-sidebar.visible {
+.pretext .ptx-sidebar.visible {
   display: block;
 }
 
 @media only screen and (max-width: 800px) {
 
-  .pretext #ptx-sidebar {
+  .pretext .ptx-sidebar {
     display: none;
   }
-    .ptx-page-footer {
-	grid-template-columns: 1.25fr .9fr 1fr;
-	margin-bottom: 80px;
-    }
+/* copied from shell_default.css   Wher is ptx-navbar set in the CRC style */
+.pretext .ptx-navbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    z-index: 1100;
+   }
+  .pretext .ptx-sidebar {
+    display: none;
+    position: fixed;
+    top: 10px;
+    z-index: 1000;
+    background: white;
+  }
+}
 
+.pretext .ptx-page-footer .feedback-link {
+  cursor: pointer;
+  text-align: center;
+  color: #333333;
+  background-color: #ededed;
+  border: 1px solid #bababa;
+  margin: 1.5em 0 0 0;
+  padding: 0 1em 0 1em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+}
+.pretext .ptx-page-footer {
+    background: #f4f4f4;
+    margin-top: 2em;
+    padding-top: 0;
+    max-width: 900px;
+    border-top: 2px solid var(--sectiontoctext);
+    border-bottom: 2px solid var(--sectiontoctext);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+    position: relative;
+/*
+    z-index: 100;
+*/
+}
 
-    .ptx-page-footer  .pretext-link .name,
-    .ptx-page-footer  .runestone-link .name {
-	display: grid;
-	justify-self: center;
-	font-size: .9em; 
-	font-weight: 600;
-	text-transform: uppercase;
-    }
-
-    .ptx-page-footer  .pretext-link .logo,
-    .ptx-page-footer  .runestone-link .logo {
-	display: none;
-    }
-
-
+.pretext .ptx-page-footer > a {
+  margin: 1em 0;
+}
+.pretext .ptx-page-footer > a > .logo:first-child {
+    height: 3em;
+    width: unset;
+    margin: 0;
 }
 

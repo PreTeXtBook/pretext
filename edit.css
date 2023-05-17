@@ -1,19 +1,19 @@
 /* CAT  */
 
-#edit_menu_holder {
+.edit_menu_holder {
     position: relative;
     left: 15em;
     bottom: 1.5em;
     z-index: 1000;
 }
-#edit_menu_holder li {
+.edit_menu_holder li {
     font-style: normal;
 }
-p > #edit_menu_holder,
-.creator > #edit_menu_holder {
+p > .edit_menu_holder,
+.creator > .edit_menu_holder {
     display: inline;
 }
-p > #edit_menu_holder {
+p > .edit_menu_holder {
     bottom: 4.2em;
 }
 #local_menu_holder {
@@ -22,7 +22,7 @@ p > #edit_menu_holder {
     bottom: 1.5em;
     z-index: 1000;
 }
-#edit_menu,
+.edit_menu,
 #enter_choice {
     background: #fee;
     position: absolute;
@@ -32,7 +32,7 @@ p > #edit_menu_holder {
     font-size: 95%;
     font-weight: normal;
 }
-#edit_menu.past {
+.edit_menu.past {
     background: #ffe;
     color: #999;
 }
@@ -61,24 +61,24 @@ p > #edit_menu_holder {
     background: #ffffdd !important;
 }
 
-p > #edit_menu_holder > #enter_choice {
+p > .edit_menu_holder > #enter_choice {
     bottom: -2.7em;
 }
-blockquote > #edit_menu_holder > #enter_choice {
+blockquote > .edit_menu_holder > #enter_choice {
     bottom: -1.2em;
 }
-blockquote.may_leave + #edit_menu_holder > #enter_choice {
+blockquote.may_leave + .edit_menu_holder > #enter_choice {
     bottom: -2.3em;
 }
-article.project-like > #edit_menu_holder > #enter_choice {
+article.project-like > .edit_menu_holder > #enter_choice {
     bottom: -0.5em;
 }
-article.theorem-like > #edit_menu_holder > #enter_choice,
-article.definition-like > #edit_menu_holder > #enter_choice {
+article.theorem-like > .edit_menu_holder > #enter_choice,
+article.definition-like > .edit_menu_holder > #enter_choice {
     bottom: -0.2em;
 }
 /*
-article.project-like > ol > #edit_menu_holder > #enter_choice {
+article.project-like > ol > .edit_menu_holder > #enter_choice {
     bottom: -1.3em;
 }
 */
@@ -87,13 +87,13 @@ article.project-like > ol > #edit_menu_holder > #enter_choice {
     background-color: inherit;
 }
 
-ol > #edit_menu_holder > #enter_choice {
+ol > .edit_menu_holder > #enter_choice {
     bottom: -1.3em;
 }
-ol.may_leave + #edit_menu_holder > #enter_choice {
+ol.may_leave + .edit_menu_holder > #enter_choice {
     bottom: -3.3em;
 }
-li > .para > #edit_menu_holder > #enter_choice {
+li > .para > .edit_menu_holder > #enter_choice {
     bottom: -4.1em;
 }
 #enter_choice[data-location="inline"] {
@@ -101,13 +101,13 @@ li > .para > #edit_menu_holder > #enter_choice {
     left: -0.5em;
 }
 
-#edit_menu_holder + .para {
+.edit_menu_holder + .para {
     margin-top: 0;
 }
-li > #edit_menu_holder {
+li > .edit_menu_holder {
     display: block;
 }
-.may_leave + #edit_menu_holder #enter_choice {
+.may_leave + .edit_menu_holder #enter_choice {
     position: absolute;
     padding: 0em 0.5em 0.25em 0.25em;
     background: #FFD6D9;
@@ -116,56 +116,56 @@ li > #edit_menu_holder {
     list-style-type: none;
     font-style: italic;
 }
-section.may_leave + #edit_menu_holder #enter_choice {
+section.may_leave + .edit_menu_holder #enter_choice {
     bottom: -3.3em;
 }
-article.may_leave + #edit_menu_holder #enter_choice {
+article.may_leave + .edit_menu_holder #enter_choice {
     bottom: -2.3em;
 }
-.may_leave + #edit_menu_holder #enter_choice li {
+.may_leave + .edit_menu_holder #enter_choice li {
     padding: 0;
     padding-left: 0.25em;
     padding-right: 0.25em;
 }
 
-#edit_menu li.chosen,
-#edit_menu #choose_current {
+.edit_menu li.chosen,
+.edit_menu #choose_current {
     background: #ddf;
     color: #000;
 }
-#edit_menu.past > .choose {
+.edit_menu.past > .choose {
     background: #eef;
     color: #000;
 }
-#edit_menu {
+.edit_menu {
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 0;
     list-style-type: none;
 }
-#edit_menu li {
+.edit_menu li {
     margin-top: 0;
     padding-right: 1.4em;
     padding-left: 0.4em;
     padding-bottom: 0.1em;
 }
-#edit_menu li:last-of-type {
+.edit_menu li:last-of-type {
     padding-bottom: 0.3em;
 }
-#edit_menu_holder ol.past {
+.edit_menu_holder ol.past {
     box-shadow: -0.25em 0.25em 0 #ccc;
 }
-#edit_menu_holder ol:not(.past) {
+.edit_menu_holder ol:not(.past) {
     border: 0.1em solid #999;
     box-shadow: 0.15em 0.15em 0.05em #ccc;
 }
-#edit_menu li#choose_current {
+.edit_menu li#choose_current {
     background: #ddf;
 }
-#edit_menu li.choosen {
+.edit_menu li.choosen {
     background: #ddf;
 }
-#edit_menu li ol {
+.edit_menu li ol {
     position: absolute;
     left: 8em;
 /*
@@ -177,24 +177,24 @@ article.may_leave + #edit_menu_holder #enter_choice {
     list-style-type: none;
     background: #fdd;
 }
-#edit_menu li ol li {
+.edit_menu li ol li {
     position: relative;
 }
-#edit_menu li ol ol {
+.edit_menu li ol ol {
     position: absolute;
     top: -1.5em;
     z-index: 500;
 }
-#edit_menu li.choose {
+.edit_menu li.choose {
     background: #eef;
 }
-#edit_menu .wrap_to_submenu {
+.edit_menu .wrap_to_submenu {
     float: right;
 }
 .past > li > .wrap_to_submenu {
     display: none;
 }
-#edit_menu .to_submenu {
+.edit_menu .to_submenu {
     position: absolute;
     padding-left: 0.5em;
 }
@@ -234,18 +234,18 @@ sbspanel:empty { /* can only happen when partially created */
     background: #fff;
     border: 1px dotted black;
 }
-.title > #edit_menu_holder {
+.title > .edit_menu_holder {
     display: inline;
 }
 .space + .title {
     margin-left: 0.5em;
 }
 
-#edit_menu .in_edit_tree {
+.edit_menu .in_edit_tree {
     border: none;
 }
-#edit_menu .in_edit_tree:before,
-#edit_menu .in_edit_tree:before {
+.edit_menu .in_edit_tree:before,
+.edit_menu .in_edit_tree:before {
     display: none;
 }
 
@@ -353,7 +353,7 @@ sbspanel:empty { /* can only happen when partially created */
     box-shadow: -2px -1px 1px #770000;
 }
 
-.ptx-content #phantomobject.move {
+.ptx-content .phantomobject.move {
     margin-left: 5em;
     margin-right: 2em;
     padding: 1.5em;
@@ -366,34 +366,34 @@ sbspanel:empty { /* can only happen when partially created */
     font-style: italic;
     position: relative;
 }
-.ptx-content #phantomobject.move + .para {
+.ptx-content .phantomobject.move + .para {
     margin-top: 0;
 }
-.ptx-content #phantomobject.move .done {
+.ptx-content .phantomobject.move .done {
     margin-left: 1em;
     margin-top: 0em;
 }
-.ptx-content #phantomobject.move .movearrow  {
+.ptx-content .phantomobject.move .movearrow  {
     position: relative;
     z-index: 101;
     background: rgba(243, 225,256,1);
 }
-.ptx-content #phantomobject.move .movearrow .arrow {
+.ptx-content .phantomobject.move .movearrow .arrow {
     font-size: 200%;
     margin-right: 0.6em;
     margin-top: -0.5em;
 }
-.ptx-content #phantomobject.move .movearrow .para {
+.ptx-content .phantomobject.move .movearrow .para {
     margin-top: 0.4em;
 }
-.ptx-content #phantomobject.move .movearrow .para.up {
+.ptx-content .phantomobject.move .movearrow .para.up {
     margin-top: 0;
     margin-bottom: -1em;
 }
-.ptx-content #phantomobject.move .movearrow .para.down {
+.ptx-content .phantomobject.move .movearrow .para.down {
     margin-top: 0.0em;
 }
-.ptx-content #phantomobject.move .movearrow > * {
+.ptx-content .phantomobject.move .movearrow > * {
     display: inline-block;
 }
 

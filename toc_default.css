@@ -1,5 +1,5 @@
 
-#ptx-toc {
+.ptx-toc {
   /* IMPORTANT height must be calculated by javascript. */
     width: 240px;
     margin: 0;
@@ -7,7 +7,7 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
-#ptx-toc::after {
+.ptx-toc::after {
     content: url("data:image/svg+xml; utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='338 3000 8772 6866'%3E%3Cg style='stroke-width:.025in; stroke:black; fill:none'%3E%3Cpolyline points='472,3590 472,9732 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:butt;' d='M 4724,9448 A 4660 4660 0 0 1 8598 9259 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:174;stroke-linecap:butt;' d='M 4488,9685 A 4228 4228 0 0 0 472 9732 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:butt;' d='M 4724,3590 A 4241 4241 0 0 1 8598 3496 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:round;' d='M 850,3496 A 4241 4241 0 0 1 4724 3590 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:round;' d='M 850,9259 A 4507 4507 0 0 1 4724 9448 '%3E%3C/path%3E%3Cpolyline points='5385,4299 4062,8125 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='8598,3496 8598,9259 ' style='stroke:%23000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='850,3496 850,9259 ' style='stroke:%23000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='4960,9685 4488,9685 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='3070,4582 1889,6141 3070,7700 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='6418,4582 7600,6141 6418,7700 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='8976,3590 8976,9732 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpath style='stroke:%23000000;stroke-width:174;stroke-linecap:butt;' d='M 4960,9685 A 4228 4228 0 0 1 8976 9732 '%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
     display: block;
     height: 13em;
@@ -15,12 +15,12 @@
     background: #fff;
 }
 
-#ptx-toc > ul:first-child > li:last-child {
+.ptx-toc > ul:first-child > li:last-child {
     border-bottom: 8px solid #999;
 }
 
 /* Aligns toc to the top and side of the allotted space, respectively */
-#ptx-toc ul {
+.ptx-toc ul {
     margin: 0px;
     padding: 0px;
     list-style-type: none;
@@ -28,7 +28,7 @@
 
 
 /* Places codenumbers */
-#ptx-toc .codenumber {
+.ptx-toc .codenumber {
     position: absolute;
     margin-right: 0;
     margin-left: 0em;
@@ -39,48 +39,58 @@
     display: inline-block;
 }
 /* no codenumbers on subsections */
-#ptx-toc ul.structural ul.structural a > .codenumber {
+.ptx-toc ul.structural ul.structural a > .codenumber {
+    font-size: 80%;
+    padding-top: 0.16em;
     display: none;
 }
-#ptx-toc ul.structural .title {
+.ptx-toc ul.structural ul.structural a:hover > .codenumber {
+    display: inline-block;
+}
+.ptx-toc.parts > ul.structural > li > ul.structural > li > .toc-item > a > .codenumber {
+    font-size: 100%;
+    padding-top: 0;
+    display: inline-block;
+}
+.ptx-toc ul.structural .title {
     margin-left: 1.4em;
     display: inline-block;
 }
-#ptx-toc ul.structural ul.structural .title {
+.ptx-toc ul.structural ul.structural .title {
     margin-left: 1.5em;
 }
-#ptx-toc ul.structural ul.structural .title:empty::after {
+.ptx-toc ul.structural ul.structural .title:empty::after {
     content: "empty heading!";
     font-weight: bold;
 }
-#ptx-toc ul.structural ul.structural ul.structural .title {
+.ptx-toc ul.structural ul.structural ul.structural .title {
     margin-left: 2.5em;
     font-size: 90%;
 }
-#ptx-toc ul.structural ul.structural ul.structural ul.structural .title {
+.ptx-toc ul.structural ul.structural ul.structural ul.structural .title {
     margin-left: 3.2em;
     font-size: 90%;
     font-style: italic;
 }
 
 /* more specific than something in toc_default (obsolete comment?) */
-#ptx-toc ul.structural li ul.structural li ul.structural li:last-child {
+.ptx-toc ul.structural li ul.structural li ul.structural li:last-child {
     margin-bottom: 0;
     border-bottom: 1px solid #ddd;
 }
 
-#ptx-toc .part > a .codenumber {
+.ptx-toc .part > a .codenumber {
     position: relative;
     display: block;
     float: left;
     margin-right: 0.7em;
 }
-#ptx-toc .part > a .title {
+.ptx-toc .part > a .title {
     display: block;
     margin-left: 1em;
 }
 
-#ptx-toc ul.structural li a {
+.ptx-toc ul.structural li a {
     position: relative;
     display: block;
     padding: 2.86957px;
@@ -91,30 +101,30 @@
     font-family: "PT Serif", "Times New Roman", Times, serif;
     font-weight: bold;
 }
-#ptx-toc ul.structural ul.structural li a {
+.ptx-toc ul.structural ul.structural li a {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
 //    padding-left: 2.0em;
 }
 
 /* Sets spacing between section headings*/
-#ptx-toc > ul.structural > li:not(:first-child) {
+.ptx-toc > ul.structural > li:not(:first-child) {
     margin-top: 0.3em;
 }
 /* But not at the start of a part */
 /* I cannot see that this actually does anything --DF */
-#ptx-toc > ul.structural > li.part + li,
-#ptx-toc > ul.structural > li.frontmatter + li,
-#ptx-toc > ul.structural > li.backmatter + li {
+.ptx-toc > ul.structural > li.part + li,
+.ptx-toc > ul.structural > li.frontmatter + li,
+.ptx-toc > ul.structural > li.backmatter + li {
     margin-top: 0;
 }
 /* Removes underlines from links in toc */
-#ptx-toc ul.structural li a, #ptx-toc ul.structural li a:link, #ptx-toc ul.structural li a:visited, #ptx-toc ul.structural li a:hover, #ptx-toc ul.structural li a:focus, #ptx-toc ul.structural li a:active {
+.ptx-toc ul.structural li a, .ptx-toc ul.structural li a:link, .ptx-toc ul.structural li a:visited, .ptx-toc ul.structural li a:hover, .ptx-toc ul.structural li a:focus, .ptx-toc ul.structural li a:active {
     text-decoration: none;
 }
 
 /*
-#ptx-toc > ul > li a, #ptx-toc > ul > li a:link, #ptx-toc > ul > li a:visited {
+.ptx-toc > ul > li a, .ptx-toc > ul > li a:link, .ptx-toc > ul > li a:visited {
     font-weight: bold;
     font-family: "PT Serif", "Times New Roman", Times, serif;
     padding-left: 0.2em;
@@ -122,51 +132,53 @@
 */
 
 /* Ensures that there is no double border between subsections */
-#ptx-toc ul.structural li ul.structural a {
+.ptx-toc ul.structural li ul.structural a {
     border-top: none;
 }
 
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
-#ptx-toc ul.structural li ul.structural a:hover {
+.ptx-toc ul.structural li ul.structural a:hover {
     border-top: 1px solid #3c110a;
     margin-top: -1px;
 }
 
 /* Removes the excess space between the last subsection and the next section (caused by
 the margin on top of sections being used to space out adjacent sections) */
-#ptx-toc ul.structural li ul.structural li:last-child {
+.ptx-toc ul.structural li ul.structural li:last-child {
     margin-bottom: -0.3em;
 }
 
 /* Removes double border between last subsection and next section */
-#ptx-toc ul.structural li ul.structural li:last-child a {
+/* did not work correctly
+.ptx-toc > ul.structural li ul.structural li:last-child a {
     border-bottom: none;
 }
+*/
 
-#ptx-toc ul.structural li a:active {
+.ptx-toc ul.structural li a:active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
 
-#ptx-toc ul.structural li a.has-chevron {
+.ptx-toc ul.structural li a.has-chevron {
   padding-right: 2em;
 }
-#ptx-toc .toc-item {
+.ptx-toc .toc-item {
   position: relative;
 }
 
-#ptx-toc.depth0 ul.structural {
+.ptx-toc.depth0 ul.structural {
     display: none;
 }
-#ptx-toc.depth1 ul.structural ul.structural {
+.ptx-toc.depth1 ul.structural ul.structural {
     display: none;
 }
-#ptx-toc.depth2 ul.structural ul.structural ul.structural {
+.ptx-toc.depth2 ul.structural ul.structural ul.structural {
     display: none;
 }
-#ptx-toc.depth3 ul.structural ul.structural ul.structural ul.structural {
+.ptx-toc.depth3 ul.structural ul.structural ul.structural ul.structural {
     display: none;
 }
-#ptx-toc.depth4 ul.structural ul.structural ul.structural ul.structural ul.structural {
+.ptx-toc.depth4 ul.structural ul.structural ul.structural ul.structural ul.structural {
     display: none;
 }
 

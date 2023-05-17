@@ -1,6 +1,6 @@
 /*** Some PreTeXt overrides ***/
 
-#ptx-masthead .ptx-banner {
+.ptx-masthead .ptx-banner {
     border-top: 1px solid transparent;
     border-bottom: none;
     overflow: hidden;
@@ -74,37 +74,37 @@
 
 
 
-#ptx-masthead .title-container {
+.ptx-masthead .title-container {
     font-size: 1em;
     padding-left: 9.68px;
     overflow: hidden;
 }
 
 @media screen and (max-width: 480px) {
-    #ptx-masthead .title-container {
+    .ptx-masthead .title-container {
 	padding: 0;
 	text-align: center;
     }
 }
 
-#ptx-masthead .title-container > .heading {
+.ptx-masthead .title-container > .heading {
     margin: 0;
     //  font-size: 2em;
 }
 
-#ptx-masthead .title-container > .heading.hide-type .type {
+.ptx-masthead .title-container > .heading.hide-type .type {
     display: none;
 }
-#ptx-masthead .title-container > .heading.hide-codenumber .codenumber {
+.ptx-masthead .title-container > .heading.hide-codenumber .codenumber {
     display: none;
 }
-#ptx-masthead .title-container > .heading.hide-title .title {
+.ptx-masthead .title-container > .heading.hide-title .title {
     display: none;
 }
 
 /*
 @media screen and (max-width: 480px) {
-  #ptx-masthead .title-container > .heading {
+  .ptx-masthead .title-container > .heading {
     font-size: 1.5em;
     line-height: 1.25em;
     margin: 0;
@@ -113,7 +113,7 @@
 }
 
 
-#ptx-masthead .title-container > .heading a {
+.ptx-masthead .title-container > .heading a {
     color: #932919;
     background: none;
     text-decoration: none;
@@ -121,31 +121,31 @@
 
 
 
-#ptx-masthead .title-container > .heading a:active {
+.ptx-masthead .title-container > .heading a:active {
     color: #3572a0;
 }
 */
 
-#ptx-masthead .title-container > .heading .subtitle {
+.ptx-masthead .title-container > .heading .subtitle {
     font-weight: normal;
 }
 
 
 @media screen and (max-width: 800px) {
-    #ptx-masthead .title-container > .heading .subtitle {
+    .ptx-masthead .title-container > .heading .subtitle {
 	/* Force the subtitle onto a separate line */
 	display: block;
 	/* De-emphasize relative to main title */
 	color: #595959;
 	/* Remove colon */
     }
-    #ptx-masthead .title-container > .heading .subtitle:before {
+    .ptx-masthead .title-container > .heading .subtitle:before {
 	content: normal;
     }
 }
 
 
-#ptx-masthead .byline {
+.ptx-masthead .byline {
     color: #333333;
     font-size: 1.2em;
     font-weight: normal;
@@ -156,7 +156,7 @@
 
 
 @media screen and (max-width: 480px) {
-    #ptx-masthead .byline {
+    .ptx-masthead .byline {
 	margin-top: 0;
 	font-size: 1em;
 	line-height: 1.25em;
@@ -166,20 +166,20 @@
 
 
 
-#ptx-masthead .byline a {
+.ptx-masthead .byline a {
     color: #333333;
 }
-#ptx-masthead .byline a:active {
+.ptx-masthead .byline a:active {
     color: #3572a0;
 }
 
 
-#ptx-masthead .ptx-banner .title-container .heading {
+.ptx-masthead .ptx-banner .title-container .heading {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* .ptx-masthead-banner  */
-#ptx-masthead .ptx-banner {  /* maybe #ptx-masthead > .ptx-banner? */
+.ptx-masthead .ptx-banner {  /* maybe .ptx-masthead > .ptx-banner? */
     max-width: 904px;
     display: grid;
     grid-gap: 1em;
@@ -284,7 +284,7 @@
 
 
 /* .ptx-logobox  */
-#logo-link {
+.logo-link {
     grid-area: ptx-logobox;
     color: #000;
     padding: 15px 0px 0px 0px;
@@ -293,7 +293,7 @@
 
 /* Fix the width of logo to always be 50px */
 /* .ptx-logobox img  */
-#logo-link img {
+.logo-link img {
     width: 50px;
 }
 

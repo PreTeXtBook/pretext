@@ -562,6 +562,12 @@
     margin-left: 1em;
 }
 
+.ptx-content tr th.r0.l0,
+.ptx-content tr td.r0.l0 {
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+}
+
 .ptx-content table tr td span.decimal {
     float: left;
     text-align: right;
@@ -695,7 +701,7 @@
 .standalone.worksheet .next-button {
     display: none;
 }
-.standalone.worksheet #ptx-navbar .toc-toggle {
+.standalone.worksheet .ptx-navbar .toc-toggle {
     display: none;
 }
 .standalone.worksheet .ptx-content [data-knowl]:hover,
@@ -799,7 +805,9 @@
     margin-top: 1.4em;
 }
 
-.ptx-content .subsubsection > .autopermalink,
+.ptx-content .subsubsection > .autopermalink {
+    margin-top: 0;
+}
 .ptx-content .exercisegroup > .autopermalink {
 /*
     margin-top: 0.3em;
@@ -1265,7 +1273,8 @@
 
 /* remove this when MathJax fixes the bug that was setting the width to 0 */
 /* as in  $x=0$.  becomes  $x=0\text{.}$ */
-.ptx-content .knowl mjx-mtext > mjx-utext {
+.ptx-content .knowl mjx-mtext > mjx-utext,
+.ptx-content mjx-mtext > mjx-utext {
     width: revert !important;
 }
 .ptx-content mjx-msup mjx-utext,
@@ -1373,6 +1382,32 @@ a.mjx-svg-href  {
     margin-right: 0.1em;
     margin-bottom: -0.25em;
 }
+.ptx-content .fillin.underline {
+    display: inline-block;
+    border-bottom-style: solid;
+    border-width: 1px;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+}
+.ptx-content .fillin.box {
+    display: inline-block;
+    border: none;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+    outline: 1px solid black;
+    height: 1.3em;
+}
+.ptx-content .fillin.shade {
+    display: inline-block;
+    border: none;
+    margin-right: 0.1em;
+    margin-left: 0.1em;
+    margin-bottom: -0.25em;
+    background-color: #eee;
+    height: 1.3em;
+}
+
 
 /*
  *  .hiddenproof
@@ -1398,6 +1433,9 @@ from Jiří Lebl */
     background-color: inherit;
     background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
     background-attachment: local, local, scroll, scroll;
+}
+.ptx-content .runestone .code-box {
+    background-image: none;
 }
 .ptx-content .knowl-output .MJXc-display {
     background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
@@ -1666,14 +1704,16 @@ from Jiří Lebl */
 }
 
 
-.ptx-content .solutions > a, .ptx-content .solutions > a:hover, .ptx-content .solutions > a.active {
+.ptx-content .solutions > a, .ptx-content .solutions > a:hover, .ptx-content .solutions > a.active,
+.ptx-content .instructions > a, .ptx-content .instructions > a:hover, .ptx-content .instructions > a.active {
     display: inline-block;
     margin-right: 1.5em;
 }
 
 /* When the knowl is a Hint, Answer, or Solution, put a little
    triangle in front of it */
-.ptx-content .solutions > a::before {
+.ptx-content .solutions > a::before,
+.ptx-content .instructions > a::before {
     content: '\25ba';
     font-size: 70%;
     color: #06a;
@@ -1681,13 +1721,15 @@ from Jiří Lebl */
     top: -2px;
     right: 3px;
 }
-.ptx-content .solutions > a.active::before {
+.ptx-content .solutions > a.active::before,
+.ptx-content .instructions > a.active::before {
     content: '\25bc';
     animation-name: solutiontriangle;
     animation-duration: 3s;
     animation-iteration-count: 1;
 }
-.ptx-content .solutions > a[data-knowl]::after {
+.ptx-content .solutions > a[data-knowl]::after,
+.ptx-content .instructions > a[data-knowl]::after {
     left: 12px;
 }
 @keyframes solutiontriangle {
@@ -1762,7 +1804,7 @@ from Jiří Lebl */
     max-width: 650px;
 }
 
-.ptx-content .tabular-box table {
+.ptx-content .tabular-box.natural-width table {
     margin-left: auto;
     margin-right: auto;
 }
@@ -1910,15 +1952,20 @@ from Jiří Lebl */
 
 /* These next are for Prism */
 .ptx-content pre.program,
-.ptx-content pre.program code {
+.ptx-content pre.program code,
+.ptx-content pre.code-block,
+.ptx-content pre.code-block code {
     line-height: 1.1;
 }
 .ptx-content section > .code-box,
-.ptx-content .para + .code-box {
+.ptx-content .para + .code-box,
+.ptx-content section > .code-block,
+.ptx-content .para + .code-block {
     margin-top: 1em;
 }
 
-.ptx-content pre.program {
+.ptx-content pre.program,
+.ptx-content pre.code-block {
     margin-top: 0;
     padding-left: 15px;
     border-left: 1px solid #aaa;
@@ -1926,7 +1973,8 @@ from Jiří Lebl */
     overflow: auto;
     background: inherit;  /* over-ride Prism's #f5f2f0 */
 }
-.ptx-content pre.program:before {
+.ptx-content pre.program:before,
+.ptx-content pre.code-block:before {
     content:' ';
     font-size: 50%;
     border-top: 1px solid #aaa;
@@ -1966,14 +2014,14 @@ from Jiří Lebl */
 .ptx-content ol > li {
     padding-left: 0.25em;
 }
-/*
 .ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: calc(49% - 1.75em); min-width: 190px}
-*/
-.ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: 50%; min-width: 240px}
 /*
-.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+.ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: 50%; min-width: 240px}
 */
-.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: 33%; min-width: 160px}
+.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+/*
+.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: 31%; min-width: 160px}
+*/
 .ptx-content ol.cols4 > li, .ptx-content ul.cols4 > li { width: calc(24.5% - 1.25em); min-width: 100px}
 .ptx-content ol.cols5 > li, .ptx-content ul.cols5 > li { width: calc(19.5% - 0.75em); min-width: 90px}
 .ptx-content ol.cols6 > li, .ptx-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}
@@ -1983,6 +2031,7 @@ from Jiří Lebl */
    padding-right: 2em;
 }
 
+/*
 .ptx-content .cols2 > li:first-child,
 .ptx-content .cols3 > li:first-child,
 .ptx-content .cols4 > li:first-child,
@@ -1990,7 +2039,15 @@ from Jiří Lebl */
 .ptx-content .cols6 > li:first-child {
     margin-top: 0.5em;
 }
+*/
 
+.ptx-content .cols2  ol,
+.ptx-content .cols3  ol,
+.ptx-content .cols4  ol,
+.ptx-content .cols5  ol,
+.ptx-content .cols6  ol {
+    padding-left: 0.7em;
+}
 .ptx-content .exercisegroup-exercises > article.exercise-like {
     margin-top: 1em;
 }
@@ -2366,7 +2423,8 @@ body.standalone.worksheet .ptx-content .onepage > .introduction {
 body.standalone.worksheet .ptx-content .onepage > .introduction > .heading {
     font-size: 1.1em;
 }
-body.standalone.worksheet .ptx-content .onepage .solutions {
+body.standalone.worksheet .ptx-content .onepage .solutions,
+body.standalone.worksheet .ptx-content .onepage .instructions {
     display: none;
 }
 body.standalone .ptx-content .worksheet {
@@ -2531,9 +2589,6 @@ body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
     background: yellow;
 }
 
-body.standalone.worksheet #ptx-sidebar-left {
-    display: none;
-}
 body.has-sidebar-left.mathbook-loaded.standalone.worksheet .ptx-page .ptx-main {
     margin-left: 0;
 }
@@ -2684,7 +2739,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
 
 /* GeoGebra calculator */
 
-#calculator-container {
+.calculator-container {
     position: fixed;
     z-index: 100;
     bottom: 5px;
@@ -2699,7 +2754,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
     height: 460px;
 }
 @media screen and (max-width: 800px) {
-    #calculator-container {
+    .calculator-container {
          bottom: 50px !important;
     }
 }
@@ -2934,13 +2989,16 @@ label.incorrect .feedback {
 .ptx-content .webwork-button.activate {
     width: 22px;
     height: 22px;
-    background-image:
-    url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
+    background-image: url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
     background-size: contain;
     position: absolute;
     right: -35px;
 }
 
+article.project-like > .heading + div.ptx-runestone-container > div.runestone,
+article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
+    margin-top: 0.5em;
+}
 
 /* hack for runestone */
 /*
@@ -2951,6 +3009,11 @@ label.incorrect .feedback {
 /* to undo Runestone's presentermode.css */
 .ptx-content .bottom {
     position: unset;
+}
+
+/* to undo Runestone's draganddrop.css */
+.ptx-content .rsdraggable {
+    font-size: 100%;
 }
 
 .ptx-content .exercise-wrapper form button:hover {
