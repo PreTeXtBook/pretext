@@ -101,7 +101,8 @@ nav .ptx-navbar {
 }
 
 /* Runestone nav for Runestone-wide features */
-.pretext #brand-navbar {
+.pretext #brand-navbar,
+.pretext .brand-navbar {
   left: 0;
   position: fixed;
   right: 0;
@@ -112,20 +113,26 @@ nav .ptx-navbar {
   margin-bottom: 0;
 }
 .pretext #brand-navbar > .container::before,
-.pretext #brand-navbar > .container::after {
+.pretext .brand-navbar > .container::before,
+.pretext #brand-navbar > .container::after,
+.pretext .brand-navbar > .container::after {
   display: none;
 }
-.pretext #brand-navbar + .ptx-masthead {
+.pretext #brand-navbar + .ptx-masthead,
+.pretext .brand-navbar + .ptx-masthead {
   margin-top: 50px;
 }
-.pretext #brand-navbar .navbar-collapse.collapse {
+.pretext #brand-navbar .navbar-collapse.collapse,
+.pretext .brand-navbar .navbar-collapse.collapse {
   overflow: hidden !important;
 }
-.pretext #brand-navbar ~ .ptx-navbar {
+.pretext #brand-navbar ~ .ptx-navbar,
+.pretext .brand-navbar ~ .ptx-navbar {
   top: 50px;
 }
 @media screen and (max-width: 800px) {
-  .pretext #brand-navbar ~ .ptx-navbar {
+  .pretext #brand-navbar ~ .ptx-navbar,
+  .pretext .brand-navbar ~ .ptx-navbar {
     top: auto;
   }
 }

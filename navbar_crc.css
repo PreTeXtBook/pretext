@@ -97,7 +97,7 @@
     grid-area: MH-extras-area2;
     justify-self: left;
 }
-#user-preferences-button {
+.user-preferences-button {
     grid-area: MH-preferences-area;
     justify-self: left;
 }
