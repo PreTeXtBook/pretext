@@ -56,7 +56,7 @@
                 <cline>    &lt;platform host="runestone"/&gt;</cline>
                 <cline>  &lt;/html&gt;</cline>
                 <cline>&lt;/publication&gt;</cline>
-            </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also be sure to specify the publication file.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the Runestone server, once hosted there.</p>
+            </cd>(See <xref ref="online-platform-options"/>.)  Then perform the usual steps for a conversion to online <init>HTML</init>, as described in <xref ref="online-html"/> but also be sure to specify the correct publication file.  The output should appear like a usual <pretext/> document, but will now include a new menu on each page.  This has options which allow a reader or instructor to interact with the Runestone server, once hosted there.  So it will not look entirely right when you view it locally, since you are not a Runestone server, but you should see subtle differences.</p>
 
         <p>
             While this HTML may be manually deployed to any Runestone server, authors who wish to publish their
@@ -66,27 +66,28 @@
         <ul>
             <li>
                 <p>
-                    Your project must be managed using the CLI (<xref ref="processing-CLI"/>). If you didn't
-                    create it using <c>pretext new</c>, run <c>pretext init</c> to get started upgrading.
-                    You'll also need to make it available to the public via GitHub (instructions below).
+                    Hoasting on Runestone assumes certain details conform to how a project is organized for use by the CLI (<xref ref="processing-CLI"/>).
+                    So if you are managing your project with the CLI already, you are in good shape.
+                    If you did not create your project using <c>pretext new</c>, run <c>pretext init</c> to get started upgrading.
+                    You will also need to make your project available to the public via GitHub (instructions below).
+                </p>
+            </li>
+            <li>
+                <p>
+                    Copy the publication file you usually use for your html-format build target and name it as
+                    <c>publication/runestone.ptx</c> (or something similar thst makes sens in your project).
+                    Edit this file so your <tag>html</tag> element matches the example at the start of this section.
                 </p>
             </li>
             <li>
                 <p>
                     You should create a new <c>&lt;target name="runestone"&gt;&lt;/target&gt;</c> in your <c>project.ptx</c>.
-                    The contents of this tag will differ from your usual html-format build target,
-                    in the following ways.  1) You should change your <tag>publication</tag> to point to a new file, perhaps named
-                    <c>publication/runestone.ptx</c>.  2) You should change your <tag>output-dir</tag> to point to <c>published/document-id</c>
+                    The contents of this tag will differ from your usual html-format build target in the following ways.
+                    1) You should change your <tag>publication</tag> to point to the new file you just created, perhaps named <c>publication/runestone.ptx</c>.
+                    2) You should change your <tag>output-dir</tag> to point to <c>published/document-id</c>,
                     where <tag>document-id</tag> is defined in your <tag>docinfo</tag>.  Note Runestone's preferred practice
-                    for the <tag>document-id</tag> is to have a simple lowercase string with no dashes or other special characters.  This value
-                    is visible to readers who want to register for your course on Runestone outside of any formal setting.
-                </p>
-            </li>
-            <li>
-                <p>
-                    Copy the usual publication file you use for your html-format build target and name it as
-                    <c>publication/runestone.ptx</c> (or whatever you chose in the previous step). Edit this file
-                    so your <tag>html</tag> element matches the example above.
+                    for the <tag>document-id</tag> is to have a simple lowercase string with no dashes or other special characters.
+                    This value is visible to readers who want to register for your course on Runestone outside of any formal setting.
                 </p>
             </li>
             <li>
@@ -97,17 +98,19 @@
                     It might even also be used automatically in the future for exactly that:
                     a blurb on the back cover of a hardback book.  So keep it simple<mdash/>straight ASCII text, nothing fancy.
                     The <attr>shelf</attr> tells the Runestone software where your book belongs in the categories
-                    on the Runestone library page.
+                    on the Runestone library page.  Look at the Runestone library page to see what values are in use
+                    and copy an existing one <em>exactly</em> including capitalization.
+                    If you think a new shelf is necessary in the library, please seek advice on what to use.
                 </p>
             </li>
             <li>
                 <p>
                     Use <c>pretext deploy</c> on the command line, or simply <c>git push</c> the changes described above
                     to GitHub if you are comfortable with git. The <c>deploy</c> command will walk
-                    you through setup if you haven't deployed your project to github before. You do <em>not</em> have to
-                    enable GitHub Pages unless you want to (GitHub Pages does not have the features of a Runestone
+                    you through setup if you have not deployed your project to github before. You do <em>not</em> have to
+                    enable GitHub Pages unless you want to. (GitHub Pages does not have the features of a Runestone
                     server, and will not render a build for the Runestone target properly.  You can host your regular
-                    html-format build on GitHub.).
+                    html-format build on GitHub.)
                 </p>
             </li>
             <li>
@@ -120,7 +123,7 @@
             </li>
             <li>
                 <p>
-                    Log into GitHub and open an Issue at
+                    Log into GitHub and open an issue at
                     <url href="https://github.com/RunestoneInteractive/RunestoneServer/issues/new" visual="github.com/RunestoneInteractive/RunestoneServer/issues/new"/>
                     to request that your project be added to Runestone Academy. Be sure to provide the URL
                     of your GitHub repository (e.g. <c>https://github.com/UserName/repo-name/</c>). Runestone
