@@ -1807,27 +1807,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                             <!-- allow @include attribute on <program> -->
                             <xsl:if test="@include">
-                                <xsl:variable name="tokens" select="str:tokenize(@include, ', ')"/>
+                                <!-- space-separated this time -->
                                 <xsl:attribute name="data-include">
-                                    <xsl:for-each select="$tokens">
-                                        <!-- attribute value is an xml:id, get target "program" -->
-                                        <xsl:variable name="the-id">
-                                            <xsl:value-of select="."/>
-                                        </xsl:variable>
-                                        <xsl:for-each select="$original">
-                                            <xsl:variable name="target" select="id($the-id)"/>
-                                            <xsl:if test="not($target)">
-                                                <xsl:message>PTX:ERROR:   an included "program" with @xml:id value <xsl:value-of select="$the-id"/> was not found</xsl:message>
-                                            </xsl:if>
-                                            <!-- build database id of the target -->
-                                            <xsl:apply-templates select="$target" mode="runestone-id"/>
-                                            <!-- n - 1 separators, required by receiving Javascript -->
-                                        </xsl:for-each>
-                                        <!-- space-separated this time -->
-                                        <xsl:if test="following-sibling::token">
-                                            <xsl:text> </xsl:text>
-                                        </xsl:if>
-                                    </xsl:for-each>
+                                    <xsl:apply-templates select="@include" mode="runestone-targets">
+                                        <xsl:with-param name="separator" select="' '"/>
+                                    </xsl:apply-templates>
                                 </xsl:attribute>
                             </xsl:if>
                             <!-- SQL (only) needs an attribute so it can find some code -->
@@ -2027,5 +2011,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </div>
 </xsl:template>
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Runestone components, such as data files and select questions,  -->
+<!-- frequently point to other Runestone components in the database. -->
+<!--   * Authors point in their source with @xml:id                  -->
+<!--     values in a space- or comma- separated list                 -->
+<!--   * We locate the targets in the orginal source                 -->
+<!--   * Compute the Runestone database id                           -->
+<!--   * Return a list (varying separator) to use in Runestone HTML. -->
+
+<xsl:template match="@*" mode="runestone-targets">
+    <xsl:param name="separator" select="'MISSING SEPARATOR'"/>
+
+    <!-- save off original context attribute for error-reporting -->
+    <xsl:variable name="original-attribute" select="."/>
+    <!-- comma or space separated in PreTeXt source -->
+    <xsl:variable name="tokens" select="str:tokenize(., ', ')"/>
+    <xsl:for-each select="$tokens">
+        <!-- attribute value is an xml:id, get target interactive -->
+        <xsl:variable name="the-id">
+            <xsl:value-of select="."/>
+        </xsl:variable>
+        <!-- context shift so  id()  functions properly -->
+        <xsl:for-each select="$original">
+            <xsl:variable name="target" select="id($the-id)"/>
+            <xsl:if test="not($target)">
+                <xsl:message>PTX:ERROR:   an interactive with @xml:id value "<xsl:value-of select="$the-id"/>" in a "@<xsl:value-of select="local-name($original-attribute)"/>" attribute was not found</xsl:message>
+            </xsl:if>
+            <!-- build Runestone database id of the target -->
+            <xsl:apply-templates select="$target" mode="runestone-id"/>
+            <!-- n - 1 separators, required by receiving Javascript -->
+        </xsl:for-each>
+        <xsl:if test="following-sibling::token">
+            <xsl:value-of select="$separator"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 
 </xsl:stylesheet>
