@@ -213,9 +213,7 @@
             <cline>           statcounter-security"72e1390a"/&gt;</cline>
         </cd></p>
 
-        <p>Google Analytics comes in several flavors.  We once supported Classic and Universal, but no longer, so we do not provide documentation here.  For the replacement, Google <term>Global Site Tag</term> is a single ID.    <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  Google once called this a tracking ID, which may also be called a property ID.  An example looks like <c>UA-6836004-1</c>.  Google is also using a <term>Meaurement ID</term> which might look similar to <c>G-CQG9X37H61</c>.  In either case your publication file would have an element under <c>html</c> like<cd>
-            <cline>&lt;analytics google-gst="UA-6836004-1"/&gt;</cline>
-        </cd> or <cd>
+        <p>Google Analytics comes in several flavors.  We once supported Classic and Universal, but no longer, so we do not provide documentation here.  For the replacement, Google <term>Global Site Tag</term> is a single ID.    <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em>  Google once called this a tracking ID, which may also be called a property ID; these looked like <c>UA-6836004-1</c>.  Google has now switched to Google Analytics 4 and is exclusively using the form of a <term>Google Tag ID</term>/<term>Measurement ID</term> which will look similar to <c>G-CQG9X37H61</c>; you will need to upgrade your analytics if you used the older style tag.  In any case your publication file would have an element under <c>html</c> like<cd>
             <cline>&lt;analytics google-gst="G-CQG9X37H61"/&gt;</cline>
         </cd>If you use both services, you can elect to use just one <tag>analytics</tag> element with several attributes.</p>
 
