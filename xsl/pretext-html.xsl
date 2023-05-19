@@ -9240,6 +9240,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Biological Names -->
 <!-- ################ -->
 
+<!-- See a potentially cleaner template in the braille conversion -->
+
 <xsl:template match="taxon[not(genus) and not(species)]">
     <span class="taxon">
         <xsl:apply-templates />
