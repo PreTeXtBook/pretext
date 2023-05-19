@@ -1403,6 +1403,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x00B1;</xsl:text>
 </xsl:template>
 
+<!-- Icons -->
+<!-- Just the four arrows, unsure about the rest -->
+<!-- Arrows are in liblouis table                -->
+
+<xsl:template match="icon">
+    <xsl:choose>
+        <xsl:when test="@name = 'arrow-left'">
+            <xsl:text>&#x2190;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@name ='arrow-up'">
+            <xsl:text>&#x2191;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@name = 'arrow-right'">
+            <xsl:text>&#x2192;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@name ='arrow-down'">
+            <xsl:text>&#x2193;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>WARNING:  &quot;icon&quot; with @name attribute value "<xsl:value-of select="@name"/>" does not have an implementation for braille.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ############ -->
 <!-- Font Changes -->
 <!-- ############ -->
@@ -1891,17 +1916,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <segment>POEM</segment>
 </xsl:template>
 
-<!-- Next three are not structures, so as "text" -->
+<!-- Next two are not structures, so as "text" -->
 
 <xsl:template match="quantity">
     <xsl:text>QUANTITY</xsl:text>
 </xsl:template>
 
 <xsl:template match="kbd">
-</xsl:template>
-
-<xsl:template match="icon">
-    <xsl:text>ICON</xsl:text>
+    <xsl:text>KBD</xsl:text>
 </xsl:template>
 
 <xsl:template name="missing-warning">
@@ -1972,13 +1994,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="missing-implementation">
             <xsl:with-param name="element" select="'kbd'"/>
             <xsl:with-param name="ntimes" select="count(//kbd)"/>
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
-    <xsl:if test="//icon">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'icon'"/>
-            <xsl:with-param name="ntimes" select="count(//icon)"/>
         </xsl:call-template>
     </xsl:if>
     <!--  -->
