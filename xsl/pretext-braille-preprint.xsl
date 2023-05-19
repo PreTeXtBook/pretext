@@ -1453,6 +1453,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </bold>
 </xsl:template>
 
+<!-- Biological Names -->
+<xsl:template match="taxon">
+    <!-- In italic font -->
+    <italic>
+        <xsl:choose>
+            <!-- both substructures -->
+            <xsl:when test="genus and species">
+                <xsl:apply-templates select="genus"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="species"/>
+            </xsl:when>
+            <!-- just one -->
+            <xsl:when test="genus">
+                <xsl:apply-templates select="genus"/>
+            </xsl:when>
+            <!-- just the other one -->
+            <xsl:when test="species">
+                <xsl:apply-templates select="species"/>
+            </xsl:when>
+            <!-- not structured, use content -->
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </italic>
+</xsl:template>
+
 <!-- Code -->
 <!-- Accomplished in UEB Grade 2, but with transcriber emphasis scheme 1 -->
 <!-- from liblouis (where is this defined?).  See liblouis table         -->
