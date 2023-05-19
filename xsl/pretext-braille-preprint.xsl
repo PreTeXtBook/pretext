@@ -1713,6 +1713,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()"/>
 </xsl:template>
 
+<!-- fillin blanks, outside math -->
+<!-- A fillin inside math will have disappeared on us by now, -->
+<!-- it was mixed into some LaTeX syntax and has been gobbled -->
+<!-- up by MathJax by now.  So the conditional here is really -->
+<!-- moot and not necessary.                                  -->
+<!-- [BANA, 2016] 10.6.2 and Michael Cantino: an underscore   -->
+<!-- Seems to translate as a "sign": 46-36 in liblouis table  -->
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
+<!-- Fillin blanks, inside math -->
+<!-- For math see https://nemeth.aphtech.org/lesson3.5 4x U+2824 -->
+
 <!-- ############ -->
 <!-- EXPERIMENTAL -->
 <!-- ############ -->
