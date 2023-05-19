@@ -1353,6 +1353,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x00B7;</xsl:text>
 </xsl:template>
 
+<!-- Unicode Character 'SWUNG DASH' (U+2053) -->
+<!-- instead faking it with                  -->
+<!-- Unicode Character 'TILDE' (U+007E)      -->
+<xsl:template name="swungdash-character">
+    <xsl:text>&#x007E;</xsl:text>
+</xsl:template>
+
 <!-- Unicode Character 'PILCROW SIGN' (U+00B6) -->
 <!-- Liblouis: 45-1234                         -->
 <xsl:template name="pilcrow-character">
@@ -1375,6 +1382,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Liblouis: 5-236                                  -->
 <xsl:template name="times-character">
     <xsl:text>&#x00D7;</xsl:text>
+</xsl:template>
+
+<!-- Unicode Character 'FRACTION SLASH' (U+2044) -->
+<!-- instead faking it with                      -->
+<!-- Unicode Character 'SOLIDUS' (U+002F)        -->
+<xsl:template name="solidus-character">
+    <xsl:text>&#x002F;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'DIVISION SIGN' (U+00F7) -->
