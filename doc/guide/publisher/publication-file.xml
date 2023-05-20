@@ -232,6 +232,14 @@
             <p>The content of the element<cd>
                 <cline>/publication/latex/page/geometry</cline>
             </cd> element will feed directly into a <latex/> <c>\geometry{}</c> element, with no modifications.  (In other words, all whitespace, such as newlines and indentation, will be preserved.)  Be sure to carefully read the advice, an example, and further detail at <xref ref="page-shape"/>.</p>
+
+            <p>The attribute<cd>
+                <cline>/publication/latex/page/@crop-marks</cline>
+            </cd>may be set to the value <c>none</c>, or not specified at all, and nothing will happen.  Otherwise, it is set to a paper size, then the logical page (whose size is presumably set by the <c>geometry</c> package) will be centered on the physical page specified, with marks at each corner delineating the logical page.  Some publishers request camera-ready copy to have these indications.  Paper sizes are arguments to the <c>crop</c> package, and as of 2023-05-19 the possible values were:<cd>
+                <cline>a0, a1, a2, a3, a4, a5, a6,</cline>
+                <cline>b0, b1, b2, b3, b4, b5, b6,</cline>
+                <cline>letter, legal, executive</cline>
+            </cd>There is no error-checking of these values.  See <xref ref="page-shape"/> for more and examples.</p>
         </subsection>
 
         <subsection xml:id="latex-xref-page-number-options">
