@@ -502,6 +502,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-page-geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <!-- Crop marks, as independent of author tools           -->
+    <!-- Always *after* geometry package, no driver selected, -->
+    <!-- since it should auto-detect.  Tested with xelatex.   -->
+    <!-- crop  package suggests explicitly turning off driver -->
+    <!-- options for the geometery package.  We don't.        -->
+    <xsl:if test="$b-latex-crop-marks">
+        <xsl:text>\usepackage[</xsl:text>
+        <xsl:value-of select="$latex-crop-papersize"/>
+        <xsl:text>,cam,center]{crop}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$latex-right-alignment = 'ragged'">
         <xsl:text>%% better handing of text alignment&#xa;</xsl:text>
         <xsl:text>\usepackage{ragged2e}&#xa;</xsl:text>
@@ -1671,7 +1681,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Collected author tools options (author-tools='yes')&#xa;</xsl:text>
         <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
-        <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>

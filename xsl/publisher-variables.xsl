@@ -3493,6 +3493,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- For crop marks to make sense, a paper size must be known -->
+<!-- There is no error-checking here, any non-empty value     -->
+<!-- initiates the crop marks and becomes the paper size.     -->
+<!-- Values from the  crop  package, 2023-05-19 are:          -->
+<!--     a0, a1, a2, a3, a4, a5, a6,                          -->
+<!--     b0, b1, b2, b3, b4, b5, b6,                          -->
+<!--     letter, legal, executive                             -->
+<xsl:variable name="latex-crop-papersize">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/page/@crop-marks = 'none'"/>
+        <xsl:when test="not($publication/latex/page/@crop-marks)"/>
+        <xsl:otherwise>
+            <xsl:value-of select="$publication/latex/page/@crop-marks"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- empty implies feature not selected -->
+<xsl:variable name="b-latex-crop-marks" select="not($latex-crop-papersize = '')"/>
+
 <!-- The default for the use of page references varies, so that  -->
 <!-- particular logic is in the -latex conversion.  Here we just -->
 <!-- sanitize to "yes", "no" or empty (i.e. ignored)             -->
