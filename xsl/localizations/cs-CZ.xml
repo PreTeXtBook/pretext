@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2022-05-05   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2023-05-21   -->
 
 <locale language="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -132,15 +132,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='outcome'>Výsledek</localization>
     <!--  -->
     <!-- "Open" means unsolved, a research question/problem -->
-    <!-- <localization string-id='openquestion'>Open Question</localization> -->
-    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
-    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <localization string-id='openquestion'>Nevyřešená otázka</localization>
+    <localization string-id='openproblem'>Nevyřešený problém</localization>
+    <localization string-id='openconjecture'>Nevyřešená domněnka</localization>
     <!-- "discussion" on open problems -->
-    <!-- <localization string-id='context'>Context</localization> -->
-    <!-- <localization string-id='discussion'>Discussion</localization> -->
-    <!-- <localization string-id='opinion'>Opinion</localization> -->
-    <!-- <localization string-id='status'>Status</localization> -->
-    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <localization string-id='context'>Kontext</localization>
+    <localization string-id='discussion'>Diskuse</localization>
+    <localization string-id='opinion'>Názor</localization>
+    <localization string-id='status'>Status</localization>
+    <localization string-id='suggestion'>Návrh</localization>
     <!--  -->
     <localization string-id='figure'>Obrázek</localization>
     <localization string-id='table'>Tabulka</localization>
@@ -170,7 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Nápověda</localization>
     <localization string-id='answer'>Odpověď</localization>
     <localization string-id='solution'>Řešení</localization>
-    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
+    <localization string-id='subexercises'>Dílčí cvičení</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Skupina cvičení</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
@@ -188,8 +188,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'>Věnování</localization>
     <localization string-id='colophon'>Kolofon</localization>
     <!-- Runestone Activities -->
-    <!-- <localization string-id='video'>Video</localization> -->
-    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='video'>Video</localization>
+    <localization string-id='program'>Program</localization>
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
@@ -249,17 +249,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='evaluate'>Ohodnotit</localization>
     <localization string-id='code'>Kód</localization>
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
-    <!-- <localization string-id='instructions'>Instructions</localization> -->
+    <localization string-id='instructions'>Instrukce</localization>
     <!-- Interactive exercise feedback messages -->
-    <!-- <localization string-id='correct'>Correct</localization> -->
-    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
-    <!-- <localization string-id='blank'>Blank</localization> -->
-    <!-- <localization string-id='submit'>Submit</localization> -->
-    <!-- <localization string-id='check-responses'>Check Responses</localization> -->
-    <!-- <localization string-id='reveal'>Reveal</localization> -->
-    <!-- <localization string-id='randomize'>Randomize</localization> -->
-    <!-- <localization string-id='activate'>Activate</localization> -->
-    <!-- <localization string-id='reset'>Reset</localization> -->
-    <!-- <localization string-id='array'>array</localization> -->
-    <!-- <localization string-id='print'>Print</localization> -->
+    <localization string-id='correct'>Správně</localization>
+    <localization string-id='incorrect'>Nesprávně</localization>
+    <localization string-id='blank'>Prázdné</localization>
+    <localization string-id='submit'>Podat</localization>
+    <localization string-id='check-responses'>Zkontrolvat odpovědi</localization>
+    <localization string-id='reveal'>Odkrýt</localization>
+    <localization string-id='randomize'>Randomizovat</localization>
+    <localization string-id='activate'>Aktivovat</localization>
+    <localization string-id='reset'>Reset</localization>
+    <localization string-id='array'>pole</localization>
+    <localization string-id='print'>Tisk</localization>
 </locale>
