@@ -41,6 +41,8 @@
             <li>Instructors may download a spreadsheet of scores at any time.</li>
 
             <li>If you preview some books in Runestone's library, you will notice the use of ethical advertisements.  This, along with donations, is how Runestone can offer free hosting to authors and courses.  Once a student logs in as a member of a course, <em>advertisements are no longer shown</em>.  So do not let an adversion to online advertising dissuade you from making courses possible on Runestone.</li>
+
+            <li>Interactive exercises may not function fully inide of knowls.  This bug is being tracked at <url href="https://github.com/PreTeXtBook/pretext/issues/1983">GitHub #1983</url>.</li>
         </ul></p>
 
         <p>We will not attempt to duplicate Runestone's documentation here.  Visit the <url href="https://runestone.academy" visual="runestone.academy">Runestone Academy</url> site to learn more about all the features designed for hosting your textbook for everybody's courses.</p>
