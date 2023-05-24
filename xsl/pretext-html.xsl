@@ -10888,12 +10888,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="aim-login-header" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
-            <!-- analytics services, if requested -->
-            <xsl:call-template name="google-classic"/>
-            <xsl:call-template name="google-universal"/>
-            <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="aim-login-footer" />
-            <xsl:call-template name="extra-js-footer"/>
         </head>
         <body>
             <!-- potential document-id per-page -->
