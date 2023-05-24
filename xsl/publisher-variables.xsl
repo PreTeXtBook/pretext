@@ -3201,12 +3201,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/html/platform/@host = 'runestone'">
             <xsl:text>runestone</xsl:text>
         </xsl:when>
+        <!-- Deprecated: 2023-05-24 (AIM experiments for UTMOST) -->
+        <!-- Perhaps not the best way to deprecate...see below   -->
         <xsl:when test="$publication/html/platform/@host = 'aim'">
-            <xsl:text>aim</xsl:text>
+            <xsl:message >PTX:WARNING: the platform/@host entry in publisher file should no longer be set to "aim", this value was deprecated 2023-05-24.  Proceeding with default value: "web"</xsl:message>
+            <xsl:text>web</xsl:text>
         </xsl:when>
         <!-- not recognized, so warn and default -->
         <xsl:when test="$publication/html/platform/@host">
-            <xsl:message >PTX:WARNING: HTML platform/@host in publisher file should be "web", "runestone", or "aim", not "<xsl:value-of select="$publication/html/platform/@host"/>".  Proceeding with default value: "web"</xsl:message>
+            <xsl:message >PTX:WARNING: HTML platform/@host in publisher file should be "web", or "runestone", not "<xsl:value-of select="$publication/html/platform/@host"/>".  Proceeding with default value: "web"</xsl:message>
             <xsl:text>web</xsl:text>
         </xsl:when>
         <!-- the default is the "open web" -->
@@ -3221,7 +3224,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2019-12-19: only 'web' vs. 'runestone' implemented    -->
 <xsl:variable name="b-host-web"       select="$host-platform = 'web'"/>
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
-<xsl:variable name="b-host-aim"       select="$host-platform = 'aim'"/>
 
 
 <!-- ##################### -->
