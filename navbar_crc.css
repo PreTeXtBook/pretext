@@ -17,7 +17,7 @@
 }
 
 
-.ptx-navbar {
+nav.ptx-navbar {
     display: grid;
     grid-column-gap: 0em;
 
@@ -45,8 +45,8 @@
     min-height: unset; /* to thwart navbar.less */
     margin-bottom: 0; /* to thwart navbar.less */
 }
-.ptx-navbar::before,
-.ptx-navbar::after {
+nav.ptx-navbar::before,
+nav.ptx-navbar::after {
     content: none;  /* to thwart clearfix.less */
 }
 
