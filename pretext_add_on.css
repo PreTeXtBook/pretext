@@ -3086,3 +3086,19 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
     .ptx-content .exercisegroup .cols2 .heading + .exercise-wrapper { max-width: 100%; }
 }
 
+.APEXlogo {
+    white-space: nowrap;
+}
+.APEXlogo .A {
+    margin-right: -0.07em;
+}
+.APEXlogo .P {
+    margin-right: -0.33em;
+    position: relative;
+    top: -0.30em;
+}
+.APEXlogo .E {
+    position: relative;
+   top: 0.33em;
+}
+ 
