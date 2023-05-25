@@ -133,6 +133,28 @@
 
             <p>In the text itself avoid obscure characters or symbols, and do not use any markup.   Keep it simple.  When used with <latex/> output the scharacters <c>\\</c> will survive in the text to create multiple lines of text in the watermark.  This feature is implemented for <latex/> and <init>HTML</init> output.  See <xref ref="watermarks"/> for more detail and an example.</p>
         </subsection>
+
+        <subsection xml:id="common-qrcode-image">
+            <title>QR code image</title>
+            <idx><h>common option</h><h>qrcode</h></idx>
+            <idx><h>qrcode</h><h>common option</h></idx>
+
+            <p>
+                QR codes for videos and interactive elements can have an image placed in their
+                center. This image file should be square, and stored in the external assets folder.
+                To use this image in your QR codes, use
+                <cd>
+                    <cline>/publication/common/qrcode/@image</cline>
+                </cd>
+                with a value of the file path, relative to external assets folder.
+            </p>
+
+            <p>
+                Note that the presence of such an image will increase the raw size of QR codes,
+                which are then genreally shrunk to fit. This will result in a finer grain for the
+                QR code pixels.
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">
