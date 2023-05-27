@@ -152,33 +152,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Fillin styles (underline, box, shade) -->
 <xsl:variable name="fillin-text-style">
-    <xsl:choose>
-        <xsl:when test="$publication/common/fillin/@textstyle = 'box'">
-            <xsl:text>box</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/common/fillin/@textstyle = 'shade'">
-            <xsl:text>shade</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>underline</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='textstyle']"/>
 </xsl:variable>
 
 <xsl:variable name="fillin-math-style">
-    <xsl:choose>
-        <xsl:when test="$publication/common/fillin/@mathstyle = 'underline'">
-            <xsl:text>underline</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/common/fillin/@mathstyle = 'box'">
-            <xsl:text>box</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>shade</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='mathstyle']"/>
 </xsl:variable>
 
 <!-- Em dash Width -->
@@ -1263,58 +1241,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- WeBWorK server location and credentials for the daemon course -->
 <xsl:variable name="webwork-server">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@server">
-            <xsl:value-of select="$publication/webwork/@server"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='server']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-course">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@course">
-            <xsl:value-of select="$publication/webwork/@course"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='course']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-coursepassword">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@coursepassword">
-            <xsl:value-of select="$publication/webwork/@coursepassword"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='coursepassword']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-user">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@user">
-            <xsl:value-of select="$publication/webwork/@user"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='user']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-userpassword">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@userpassword">
-            <xsl:value-of select="$publication/webwork/@userpassword"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='userpassword']"/>
 </xsl:variable>
 
 <!-- WeBWorK tasks can be revealed incrementally or all at once -->
@@ -1904,24 +1847,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                      -->
 
 <xsl:variable name="short-answer-responses">
-    <xsl:variable name="default-responses" select="'graded'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/html/@short-answer-responses = 'graded'">
-            <xsl:text>graded</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/@short-answer-responses = 'always'">
-            <xsl:text>always</xsl:text>
-        </xsl:when>
-        <!-- set, but not correct, so inform and use default -->
-        <xsl:when test="$publication/html/@short-answer-responses">
-            <xsl:message>PTX:WARNING: HTML @short-answer-responses in publisher file should be "graded" or "always", not "<xsl:value-of select="$publication/html/@short-answer-responses"/>". Proceeding with default value: "<xsl:value-of select="$default-responses"/>"</xsl:message>
-            <xsl:value-of select="$default-responses"/>
-        </xsl:when>
-        <!-- unset, so use default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-responses"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/pi:pub-attribute[@name='short-answer-responses']"/>
 </xsl:variable>
 
 <!--                          -->
@@ -2314,28 +2240,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:variable name="knowl-example-solution">
-    <xsl:variable name="knowl-default" select="'yes'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@example-solution">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@example-solution = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@example-solution = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "example-solution" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@example-solution"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example-solution']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-project">
@@ -3069,14 +2974,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This is the preferred Google method as of 2019-11-28 -->
 <xsl:variable name="google-gst-tracking">
-    <xsl:choose>
-        <xsl:when test="$publication/html/analytics/@google-gst">
-            <xsl:value-of select="$publication/html/analytics/@google-gst"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/analytics/pi:pub-attribute[@name='google-gst']"/>
 </xsl:variable>
 
 <!-- And boolean variables for the presence of these services -->
@@ -3165,26 +3063,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and possibly other platforms at a later date.            -->
 <!-- The default is for privacy (fewer tracking cookies)      -->
 <xsl:variable name="embedded-video-privacy">
-    <xsl:choose>
-        <xsl:when test="$publication/html/video/@privacy = 'yes'">
-            <xsl:value-of select="$publication/html/video/@privacy"/>
-        </xsl:when>
-        <xsl:when test="$publication/html/video/@privacy = 'no'">
-            <xsl:value-of select="$publication/html/video/@privacy"/>
-        </xsl:when>
-        <!-- set, but not correct, so inform and use default -->
-        <xsl:when test="$publication/html/video/@privacy">
-            <xsl:value-of select="$publication/html/video/@privacy"/>
-            <xsl:message>PTX WARNING:   HTML video/@privacy in publisher file should be "yes" (fewer cookies) or "no" (all cookies), not "<xsl:value-of select="$publication/html/video/@privacy"/>". Proceeding with default value: "yes" (disable cookies, if possible)</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- unset, so use default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/video/pi:pub-attribute[@name='privacy']"/>
 </xsl:variable>
-
 <xsl:variable name="b-video-privacy" select="$embedded-video-privacy = 'yes'"/>
 
 <!--                       -->
@@ -3234,7 +3114,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Author-specified relative to source external directory -->
 <xsl:variable name="epub-cover-base-filename">
-    <xsl:value-of select="$publication/epub/cover/@front"/>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/epub/cover/pi:pub-attribute[@name='front']"/>
 </xsl:variable>
 
 <!-- If the author does not say, eventually we will try to build a cover -->
@@ -3382,23 +3262,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://www.sascha-frank.com/page-break.html    -->
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
-    <xsl:variable name="default-align" select="'ragged'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/latex/page/@bottom-alignment = 'flush'">
-            <xsl:text>flush</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
-            <xsl:text>ragged</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/page/@bottom-alignment">
-            <xsl:message>PTX:WARNING: LaTeX bottom-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@bottom-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
-            <xsl:value-of select="$default-align"/>
-        </xsl:when>
-        <!-- no attempt at all, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-align"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/page/pi:pub-attribute[@name='bottom-alignment']"/>
 </xsl:variable>
 
 <!-- LaTeX worksheet formatting -->
@@ -3407,22 +3271,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher switch to format continuously with      -->
 <!-- other divisions here                              -->
 <xsl:variable name="latex-worksheet-formatted">
-    <xsl:choose>
-        <xsl:when test="$publication/latex/worksheet/@formatted = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/worksheet/@formatted = 'yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/worksheet/@formatted">
-            <xsl:message>PTX WARNING: LaTeX worksheet formatting in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/worksheet/@formatted"/>". Proceeding with default value: "yes"</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/worksheet/pi:pub-attribute[@name='formatted']"/>
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
 
@@ -3683,24 +3532,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
 
 <xsl:variable name="latex-snapshot">
-    <xsl:variable name="default-snapshot" select="'no'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/latex/@snapshot = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/@snapshot = 'yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- attempt to set, but wrong -->
-        <xsl:when test="$publication/latex/@snapshot">
-            <xsl:message>PTX WARNING: LaTeX snapshot record in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@snapshot"/>". Proceeding with default value: "<xsl:value-of select="$default-snapshot"/>"</xsl:message>
-            <xsl:value-of select="$default-snapshot"/>
-        </xsl:when>
-        <!-- no attempt to set, thus default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-snapshot"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='snapshot']"/>
 </xsl:variable>
 <xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
 
@@ -3767,115 +3599,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Reveal.js Theme -->
 
 <xsl:variable name="reveal-theme">
-    <xsl:choose>
-        <!-- if theme is specified, use it -->
-        <xsl:when test="$publication/revealjs/appearance/@theme">
-            <xsl:value-of select="$publication/revealjs/appearance/@theme"/>
-        </xsl:when>
-        <!-- otherwise use "simple" as the default -->
-        <xsl:otherwise>
-            <xsl:text>simple</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='theme']"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls Back Arrows -->
 
 <xsl:variable name="reveal-control-backarrow">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@backarrows = 'faded') or ($publication/revealjs/controls/@backarrows = 'hidden') or ($publication/revealjs/controls/@backarrows = 'visible')">
-            <xsl:value-of select="$publication/revealjs/controls/@backarrows"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@backarrows">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@backarrows" should be "faded", "hidden", or "visible" not "<xsl:value-of select="$publication/revealjs/controls/@backarrows"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>faded</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "faded" as the default -->
-        <xsl:otherwise>
-            <xsl:text>faded</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='backarrows']"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls (on-screen navigation) -->
 
-<xsl:variable name="control-display">
-    <xsl:choose>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@display = 'yes') or ($publication/revealjs/controls/@display = 'no')">
-            <xsl:value-of select="$publication/revealjs/controls/@display"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@display">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@display" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@display"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "yes" as the default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:variable name="reveal-control-display">
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='display']"/>
 </xsl:variable>
 <!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-reveal-control-display" select="$control-display= 'yes'"/>
+<xsl:variable name="b-reveal-control-display" select="$reveal-control-display= 'yes'"/>
 
 <!-- Reveal.js Controls Layout -->
 
 <xsl:variable name="reveal-control-layout">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@layout = 'edges') or ($publication/revealjs/controls/@layout = 'bottom-right')">
-            <xsl:value-of select="$publication/revealjs/controls/@layout"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@layout">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@layout" should be "edges" or "bottom-right" not "<xsl:value-of select="$publication/revealjs/controls/@layout"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>bottom-right</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "bottom-right" as the default -->
-        <xsl:otherwise>
-            <xsl:text>bottom-right</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='layout']"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls Tutorial (animated arrows) -->
 
-<xsl:variable name="control-tutorial">
-    <xsl:choose>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@tutorial = 'yes') or ($publication/revealjs/controls/@tutorial = 'no')">
-            <xsl:value-of select="$publication/revealjs/controls/@tutorial"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@tutorial">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@tutorial" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@tutorial"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "yes" as the default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:variable name="reveal-control-tutorial">
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='tutorial']"/>
 </xsl:variable>
 <!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-reveal-control-tutorial" select="$control-tutorial= 'yes'"/>
+<xsl:variable name="b-reveal-control-tutorial" select="$reveal-control-tutorial= 'yes'"/>
 
 <!-- Reveal.js Navigation Mode -->
 
 <xsl:variable name="reveal-navigation-mode">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/navigation/@mode = 'default') or ($publication/revealjs/navigation/@mode = 'linear') or ($publication/revealjs/navigation/@mode = 'grid')">
-            <xsl:value-of select="$publication/revealjs/navigation/@mode"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/navigation/@mode">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/navigation/@mode" should be "default", "linear", or "grid" not "<xsl:value-of select="$publication/revealjs/navigation/@mode"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>default</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "default" as the default -->
-        <xsl:otherwise>
-            <xsl:text>default</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/navigation/pi:pub-attribute[@name='mode']"/>
 </xsl:variable>
 
 <!-- Reveal.js Resources file location -->
@@ -3925,9 +3683,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- legacy-options: space separated list of retired options            -->
 
 <pi:publisher>
+    <common>
+        <fillin>
+            <pi:pub-attribute name="textstyle" default="underline" options="box shade"/>
+            <pi:pub-attribute name="mathstyle" default="shade" options="underline box"/>
+        </fillin>
+    </common>
+    <html>
+        <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
+        <knowl>
+            <pi:pub-attribute name="example-solution" default="yes" options="no"/>
+        </knowl>
+        <analytics>
+            <pi:pub-attribute name="google-gst" freeform="yes"/>
+        </analytics>
+        <video>
+            <pi:pub-attribute name="privacy" default="yes" options="no"/>
+        </video>
+    </html>
+    <epub>
+        <cover>
+            <pi:pub-attribute name="front" freeform="yes"/>
+        </cover>
+    </epub>
+    <latex>
+        <pi:pub-attribute name="snapshot" default="no" options="yes"/>
+        <page>
+            <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
+        </page>
+        <worksheet>
+            <pi:pub-attribute name="formatted" default="yes" options="no"/>
+        </worksheet>
+    </latex>
     <webwork>
+        <pi:pub-attribute name="server" default="https://webwork-ptx.aimath.org" freeform="yes"/>
+        <pi:pub-attribute name="course" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="coursepassword" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="user" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="userpassword" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="task-reveal" default="" options="all"/>
     </webwork>
+    <revealjs>
+        <appearance>
+            <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
+        </appearance>
+        <controls>
+            <pi:pub-attribute name="backarrows" default="faded" options="hidden visible"/>
+            <pi:pub-attribute name="display" default="yes" options="no"/>
+            <pi:pub-attribute name="layout" default="bottom-right" options="edges"/>
+            <pi:pub-attribute name="tutorial" default="yes" options="no"/>
+        </controls>
+        <navigation>
+            <pi:pub-attribute name="mode" default="default" options="linear grid"/>
+        </navigation>
+    </revealjs>
 </pi:publisher>
 
 <!-- global variable for pi:publisher tree above -->
