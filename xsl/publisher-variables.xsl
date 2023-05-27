@@ -96,21 +96,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.chunk" select="''"/>
 
 <xsl:variable name="chunks">
-    <xsl:choose>
-        <!-- debugging tool overrides anything else -->
-        <xsl:when test="not($debug.chunk = '')">
-            <xsl:value-of select="$debug.chunk"/>
-        </xsl:when>
-        <!-- consult publisher file -->
-        <xsl:when test="$publication/common/chunking/@level">
-            <xsl:value-of select="$publication/common/chunking/@level"/>
-        </xsl:when>
-        <!-- respect legacy string parameter -->
-        <xsl:when test="not($chunk.level = '')">
-            <xsl:value-of select="$chunk.level"/>
-        </xsl:when>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/chunking/pi:pub-attribute[@name='level']"/>
 </xsl:variable>
+
 <!-- We do not convert this to a number since various   -->
 <!-- conversions will consume this and produce their    -->
 <!-- own defaults, and we need to recognize "no choice" -->
@@ -121,14 +109,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An article need not have a section      -->
 <!-- This gets replaced in -latex stylehseet -->
 <xsl:variable name="toc-level-entered">
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/tableofcontents/pi:pub-attribute[@name='level']"/>
+</xsl:variable>
+<xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default">
     <xsl:choose>
-        <xsl:when test="$publication/common/tableofcontents/@level">
-            <xsl:value-of select="$publication/common/tableofcontents/@level"/>
-        </xsl:when>
-        <!-- legacy, respect string parameter -->
-        <xsl:when test="$toc.level != ''">
-            <xsl:value-of select="$toc.level" />
-        </xsl:when>
         <!-- defaults purely by structure, not by output format -->
         <xsl:when test="$assembly-root/book/part/chapter/section">3</xsl:when>
         <xsl:when test="$assembly-root/book/part/chapter">2</xsl:when>
@@ -144,7 +128,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:variable>
+</xsl:template>
 <xsl:variable name="toc-level" select="number($toc-level-entered)"/>
 
 <!-- Flag Table of Contents, or not, with boolean variable -->
@@ -2530,29 +2514,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2019-12-17:  Under development, not documented -->
 
 <xsl:variable name="host-platform">
-    <xsl:choose>
-        <xsl:when test="$publication/html/platform/@host = 'web'">
-            <xsl:text>web</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/platform/@host = 'runestone'">
-            <xsl:text>runestone</xsl:text>
-        </xsl:when>
-        <!-- Deprecated: 2023-05-24 (AIM experiments for UTMOST) -->
-        <!-- Perhaps not the best way to deprecate...see below   -->
-        <xsl:when test="$publication/html/platform/@host = 'aim'">
-            <xsl:message >PTX:WARNING: the platform/@host entry in publisher file should no longer be set to "aim", this value was deprecated 2023-05-24.  Proceeding with default value: "web"</xsl:message>
-            <xsl:text>web</xsl:text>
-        </xsl:when>
-        <!-- not recognized, so warn and default -->
-        <xsl:when test="$publication/html/platform/@host">
-            <xsl:message >PTX:WARNING: HTML platform/@host in publisher file should be "web", or "runestone", not "<xsl:value-of select="$publication/html/platform/@host"/>".  Proceeding with default value: "web"</xsl:message>
-            <xsl:text>web</xsl:text>
-        </xsl:when>
-        <!-- the default is the "open web" -->
-        <xsl:otherwise>
-            <xsl:text>web</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='host']"/>
 </xsl:variable>
 
 <!-- Intent is for exactly one of these boolean to be true -->
@@ -2610,40 +2572,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But if a third option aries, we can use it, and switch away  -->
 <!-- from the boolean variable without the author knowing. -->
 <xsl:variable name="latex-sides">
-    <!-- default depends on character of output -->
-    <xsl:variable name="default-sides">
-        <xsl:choose>
-            <xsl:when test="$b-latex-print">
-                <xsl:text>two</xsl:text>
-            </xsl:when>
-            <xsl:otherwise> <!-- electronic -->
-                <xsl:text>one</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='sides']"/>
+</xsl:variable>
+<xsl:template match="latex/pi:pub-attribute[@name='sides']" mode="get-default">
     <xsl:choose>
-        <xsl:when test="$publication/latex/@sides = 'two'">
+        <xsl:when test="$b-latex-print">
             <xsl:text>two</xsl:text>
         </xsl:when>
-        <xsl:when test="$publication/latex/@sides = 'one'">
+        <xsl:otherwise> <!-- electronic -->
             <xsl:text>one</xsl:text>
-        </xsl:when>
-        <!-- not recognized, so warn and default -->
-        <xsl:when test="$publication/latex/@sides">
-            <xsl:message>PTX:WARNING: LaTeX @sides in publisher file should be "one" or "two", not "<xsl:value-of select="$publication/latex/@sides"/>".  Proceeding with default value, which depends on if you are making electronic ("one") or print ("two") output</xsl:message>
-            <xsl:value-of select="$default-sides"/>
-        </xsl:when>
-        <!-- inspect deprecated string parameter  -->
-        <!-- no error-checking, shouldn't be used -->
-        <xsl:when test="not($latex.sides = '')">
-            <xsl:value-of select="$latex.sides"/>
-        </xsl:when>
-        <!-- default depends -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-sides"/>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:variable>
+</xsl:template>
 <!-- We have "one" or "two", or junk from the deprecated string parameter -->
 <xsl:variable name="b-latex-two-sides" select="$latex-sides = 'two'"/>
 
@@ -3046,6 +2986,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <pi:publisher>
     <common>
+        <pi:pub-attribute name="emdash-space" default="none" options="thin" legacy-stringparam="emdash.space"/>
+        <chunking>
+            <pi:pub-attribute name="level" default="" options="0 1 2 3 4 5 6" stringparam="debug.chunk" legacy-stringparam="chunk.level"/>
+        </chunking>
+        <tableofcontents>
+            <pi:pub-attribute name="level" options="0 1 2 3 4 5 6" legacy-stringparam="toc.level"/>
+        </tableofcontents>
         <fillin>
             <pi:pub-attribute name="textstyle" default="underline" options="box shade"/>
             <pi:pub-attribute name="mathstyle" default="shade" options="underline box"/>
@@ -3086,6 +3033,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <video>
             <pi:pub-attribute name="privacy" default="yes" options="no"/>
         </video>
+        <platform>
+            <pi:pub-attribute name="host" default="web" options="runestone" legacy-options="aim"/>
+        </platform>
     </html>
     <epub>
         <cover>
@@ -3093,6 +3043,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </cover>
     </epub>
     <latex>
+        <pi:pub-attribute name="sides" options="one two" legacy-stringparam="latex.sides"/>
         <pi:pub-attribute name="print" default="no" options="yes" legacy-stringparam="latex.print"/>
         <pi:pub-attribute name="snapshot" default="no" options="yes"/>
         <pi:pub-attribute name="pageref" options="yes no" legacy-stringparam="latex.pageref"/>
