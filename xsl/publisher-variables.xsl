@@ -96,7 +96,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.chunk" select="''"/>
 
 <xsl:variable name="chunks">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/chunking/pi:pub-attribute[@name='level']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/common/chunking/pi:pub-attribute[@name='level']"/>
 </xsl:variable>
 
 <!-- We do not convert this to a number since various   -->
@@ -109,7 +109,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An article need not have a section      -->
 <!-- This gets replaced in -latex stylehseet -->
 <xsl:variable name="toc-level-entered">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/tableofcontents/pi:pub-attribute[@name='level']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/common/tableofcontents/pi:pub-attribute[@name='level']"/>
 </xsl:variable>
 <xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default">
     <xsl:choose>
@@ -136,17 +136,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Fillin styles (underline, box, shade) -->
 <xsl:variable name="fillin-text-style">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='textstyle']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='textstyle']"/>
 </xsl:variable>
 
 <xsl:variable name="fillin-math-style">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='mathstyle']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='mathstyle']"/>
 </xsl:variable>
 
 <!-- Em dash Width -->
 
 <xsl:variable name="emdash-space">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/common/pi:pub-attribute[@name='emdash-space']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/common/pi:pub-attribute[@name='emdash-space']"/>
 </xsl:variable>
 
 <!-- Watermarking -->
@@ -1201,28 +1201,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- WeBWorK server location and credentials for the daemon course -->
 <xsl:variable name="webwork-server">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='server']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='server']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-course">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='course']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='course']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-coursepassword">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='coursepassword']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='coursepassword']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-user">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='user']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='user']"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-userpassword">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='userpassword']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='userpassword']"/>
 </xsl:variable>
 
 <!-- WeBWorK tasks can be revealed incrementally or all at once -->
 <xsl:variable name="webwork-task-reveal">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='task-reveal']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='task-reveal']"/>
 </xsl:variable>
 
 
@@ -1700,7 +1700,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- geogebra-geometry, geogebra-3d                          -->
 <!-- Default is empty, meaning the calculator is not wanted. -->
 <xsl:variable name="html-calculator">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/calculator/pi:pub-attribute[@name='model']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/calculator/pi:pub-attribute[@name='model']"/>
 </xsl:variable>
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
@@ -1777,7 +1777,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                      -->
 
 <xsl:variable name="short-answer-responses">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/pi:pub-attribute[@name='short-answer-responses']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/pi:pub-attribute[@name='short-answer-responses']"/>
 </xsl:variable>
 
 <!--                          -->
@@ -2050,75 +2050,75 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- than override these variables.                                        -->
 
 <xsl:variable name="knowl-theorem">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='theorem']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='theorem']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-proof">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='proof']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='proof']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-definition">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='definition']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='definition']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-example">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-example-solution">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example-solution']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example-solution']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-project">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='project']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='project']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-task">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='task']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='task']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-list">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='list']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='list']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-remark">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='remark']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='remark']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-objectives">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='objectives']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='objectives']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-outcomes">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='outcomes']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='outcomes']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-figure">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='figure']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='figure']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-table">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='table']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='table']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-listing">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='listing']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='listing']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-inline">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-inline']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-inline']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-divisional">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-divisional']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-divisional']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-worksheet">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-worksheet']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-worksheet']"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-readingquestion">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-readingquestion']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-readingquestion']"/>
 </xsl:variable>
 
 <!--               -->
@@ -2173,13 +2173,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--       Must follow a summary link to descend to finer subdivisions       -->
 <!--   'linear' is the default, 'tree' is an option                          -->
 <xsl:variable name="nav-logic">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='logic']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='logic']"/>
 </xsl:variable>
 
 <!-- The "up" button is optional given the contents sidebar, default is to have it -->
 <!-- An up button is very desirable if you use the tree-like logic                 -->
 <xsl:variable name="nav-upbutton">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='upbutton']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='upbutton']"/>
 </xsl:variable>
 
 
@@ -2414,7 +2414,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This is the preferred Google method as of 2019-11-28 -->
 <xsl:variable name="google-gst-tracking">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/analytics/pi:pub-attribute[@name='google-gst']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/analytics/pi:pub-attribute[@name='google-gst']"/>
 </xsl:variable>
 
 <!-- And boolean variables for the presence of these services -->
@@ -2503,7 +2503,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and possibly other platforms at a later date.            -->
 <!-- The default is for privacy (fewer tracking cookies)      -->
 <xsl:variable name="embedded-video-privacy">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/video/pi:pub-attribute[@name='privacy']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/video/pi:pub-attribute[@name='privacy']"/>
 </xsl:variable>
 <xsl:variable name="b-video-privacy" select="$embedded-video-privacy = 'yes'"/>
 
@@ -2514,7 +2514,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2019-12-17:  Under development, not documented -->
 
 <xsl:variable name="host-platform">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='host']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='host']"/>
 </xsl:variable>
 
 <!-- Intent is for exactly one of these boolean to be true -->
@@ -2532,7 +2532,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Author-specified relative to source external directory -->
 <xsl:variable name="epub-cover-base-filename">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/epub/cover/pi:pub-attribute[@name='front']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/epub/cover/pi:pub-attribute[@name='front']"/>
 </xsl:variable>
 
 <!-- If the author does not say, eventually we will try to build a cover -->
@@ -2572,7 +2572,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But if a third option aries, we can use it, and switch away  -->
 <!-- from the boolean variable without the author knowing. -->
 <xsl:variable name="latex-sides">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='sides']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='sides']"/>
 </xsl:variable>
 <xsl:template match="latex/pi:pub-attribute[@name='sides']" mode="get-default">
     <xsl:choose>
@@ -2591,7 +2591,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and that seems stable enough, as in, we don't need to    -->
 <!-- contemplate some third variant of LaTeX output.          -->
 <xsl:variable name="latex-print">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='print']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='print']"/>
 </xsl:variable>
 
 <!-- We have "yes" or "no", or possibly junk from the deprecated string    -->
@@ -2637,7 +2637,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://www.sascha-frank.com/page-break.html    -->
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/page/pi:pub-attribute[@name='bottom-alignment']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/page/pi:pub-attribute[@name='bottom-alignment']"/>
 </xsl:variable>
 
 <!-- LaTeX worksheet formatting -->
@@ -2646,7 +2646,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher switch to format continuously with      -->
 <!-- other divisions here                              -->
 <xsl:variable name="latex-worksheet-formatted">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/worksheet/pi:pub-attribute[@name='formatted']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/worksheet/pi:pub-attribute[@name='formatted']"/>
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
 
@@ -2742,7 +2742,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- particular logic is in the -latex conversion.  Here we just -->
 <!-- sanitize to "yes", "no" or empty (i.e. ignored)             -->
 <xsl:variable name="latex-pageref">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='pageref']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='pageref']"/>
 </xsl:variable>
 
 <!-- Draft Copies                                              -->
@@ -2752,7 +2752,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     presuming geometry sets smaller page size             -->
 <!--     with paperheight, paperwidth                          -->
 <xsl:variable name="latex-draft-mode">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='draft']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='draft']"/>
 </xsl:variable>
 <xsl:variable name="b-latex-draft-mode" select="$latex-draft-mode = 'yes'"/>
 
@@ -2834,7 +2834,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
 
 <xsl:variable name="latex-snapshot">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='snapshot']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='snapshot']"/>
 </xsl:variable>
 <xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
 
@@ -2901,19 +2901,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Reveal.js Theme -->
 
 <xsl:variable name="reveal-theme">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='theme']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='theme']"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls Back Arrows -->
 
 <xsl:variable name="reveal-control-backarrow">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='backarrows']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='backarrows']"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls (on-screen navigation) -->
 
 <xsl:variable name="reveal-control-display">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='display']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='display']"/>
 </xsl:variable>
 <!-- Convert "yes"/"no" to a boolean variable -->
 <xsl:variable name="b-reveal-control-display" select="$reveal-control-display= 'yes'"/>
@@ -2921,13 +2921,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Reveal.js Controls Layout -->
 
 <xsl:variable name="reveal-control-layout">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='layout']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='layout']"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls Tutorial (animated arrows) -->
 
 <xsl:variable name="reveal-control-tutorial">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='tutorial']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='tutorial']"/>
 </xsl:variable>
 <!-- Convert "yes"/"no" to a boolean variable -->
 <xsl:variable name="b-reveal-control-tutorial" select="$reveal-control-tutorial= 'yes'"/>
@@ -2935,7 +2935,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Reveal.js Navigation Mode -->
 
 <xsl:variable name="reveal-navigation-mode">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/revealjs/navigation/pi:pub-attribute[@name='mode']"/>
+    <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/revealjs/navigation/pi:pub-attribute[@name='mode']"/>
 </xsl:variable>
 
 <!-- Reveal.js Resources file location -->
@@ -3083,7 +3083,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="publisher-attribute-options" select="document('')/xsl:stylesheet/pi:publisher"/>
 
 <!-- context for a match below will be an attribute from the pi:publisher tree -->
-<xsl:template match="pi:pub-attribute" mode="set-pubfile-attribute-variable">
+<xsl:template match="pi:pub-attribute" mode="set-pubfile-variable">
     <xsl:variable name="all-options" select="str:tokenize(concat(@default, ' ', @options), ' ')"/>
     <xsl:variable name="legacy-options" select="str:tokenize(@legacy-options, ' ')"/>
     <!-- get the path to this attribute in the actual publisher file-->
