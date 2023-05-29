@@ -2377,11 +2377,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure|listing|table|list" mode="figure-caption">
     <xsl:param name="b-original"/>
 
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <!-- Subnumbered panels of a "sidebyside" get a simpler caption/title -->
+    <xsl:variable name="b-subnumbered" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
     <figcaption>
-        <!-- A normal caption, or a subcaption -->
+        <!-- A normal caption/title, or a subnumbered caption/title -->
         <xsl:choose>
-            <xsl:when test="$b-subcaptioned">
+            <xsl:when test="$b-subnumbered">
                 <span class="codenumber">
                     <xsl:apply-templates select="." mode="serial-number"/>
                 </span>
@@ -3551,9 +3552,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&FIGURE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
 
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <!-- Subnumbered caption/title go below, to help with alignment -->
+    <xsl:variable name="b-subnumbered" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
     <xsl:choose>
-        <!-- caption at the bottom, always        -->
+        <!-- caption at the bottom, always -->
         <xsl:when test="self::figure|self::listing">
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
@@ -3562,10 +3564,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original"/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- table only contains a tabular, if not subcaptioned -->
-        <!-- title is displayed before data/tabular             -->
+        <!-- table only contains a tabular; if not subnumbered  -->
+        <!-- then title is displayed before data/tabular        -->
         <xsl:when test="self::table">
-            <xsl:if test="not($b-subcaptioned)">
+            <xsl:if test="not($b-subnumbered)">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3573,15 +3575,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="tabular">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
-            <xsl:if test="$b-subcaptioned">
+            <xsl:if test="$b-subnumbered">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
             </xsl:if>
         </xsl:when>
-        <!-- "title" at the top, subcaption at the bottom -->
+        <!-- "title" at the top, subnumber at the bottom -->
         <xsl:when test="self::list">
-            <xsl:if test="not($b-subcaptioned)">
+            <xsl:if test="not($b-subnumbered)">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3591,7 +3593,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </div>
-            <xsl:if test="$b-subcaptioned">
+            <xsl:if test="$b-subnumbered">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>

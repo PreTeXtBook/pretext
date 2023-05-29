@@ -2134,7 +2134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- FIGURE-LIKE -->
-    <!-- subcaptioned are separate and next, condition on "figure"   -->
+    <!-- subnumbered are separate and next, condition on "figure"    -->
     <!-- ancestor to not mistakenly pick up a 'subtable' (say) here  -->
     <!-- instead of a 'plain' table (which was once a bug)           -->
     <xsl:variable name="figure-reps" select="
@@ -2151,18 +2151,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- (SUB)FIGURE-LIKE -->
-    <!-- subcaptioned versions, if contained by overall figure -->
-    <xsl:variable name="subfigure-reps" select="
+    <!-- subnumbered versions, if contained by overall figure -->
+    <xsl:variable name="subnumber-reps" select="
         ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure)[1]|
         ($document-root//figure/sidebyside/table|$document-root//figure/sbsgroup/sidebyside/table)[1]|
         ($document-root//figure/sidebyside/listing|$document-root//figure/sbsgroup/sidebyside/listing)[1]|
         ($document-root//figure/sidebyside/list|$document-root//figure/sbsgroup/sidebyside/list)[1]"/>
-    <xsl:if test="$subfigure-reps">
+    <xsl:if test="$subnumber-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for (SUB)FIGURE-LIKE&#xa;</xsl:text>
         <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
-    <xsl:for-each select="$subfigure-reps">
+    <xsl:for-each select="$subnumber-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
@@ -2927,14 +2927,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- slot 1, ancestor figure is in slot 2 or 3: -->
     <!--     figure/sidebyside/*                    -->
     <!--     figure/sbsgroup/sidebyside/*           -->
-    <xsl:variable name="b-subcaptioned" select="boolean(ancestor::*[self::figure])"/>
+    <xsl:variable name="b-subnumbered" select="boolean(ancestor::*[self::figure])"/>
     <xsl:variable name="environment-name">
         <xsl:apply-templates select="." mode="environment-name"/>
     </xsl:variable>
-    <!-- counters may run as subcaptions, independently, or with blocks -->
+    <!-- counters may run as: subnumbers, independently, or with blocks -->
     <xsl:variable name="counter">
         <xsl:choose>
-            <xsl:when test="$b-subcaptioned">
+            <xsl:when test="$b-subnumbered">
                 <xsl:text>subdisplay</xsl:text>
             </xsl:when>
             <xsl:when test="$b-number-figure-distinct">
@@ -2955,7 +2955,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="tcb-style"/>
     <xsl:text>} }&#xa;</xsl:text>
     <!-- subnumbered version requires manipulating low-level counters -->
-    <xsl:if test="$b-subcaptioned">
+    <xsl:if test="$b-subnumbered">
         <xsl:text>\makeatletter&#xa;</xsl:text>
     </xsl:if>
     <!-- create and configure the environment/tcolorbox -->
@@ -2975,7 +2975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <!-- begin: title/caption construction -->
     <xsl:choose>
-        <!-- Subcaptions of 2D displays within panels of a figure/sidebyside   -->
+        <!-- Captions/titlesof 2D displays within panels of figure/sidebyside  -->
         <!-- \thetcbcounter comes from subdisplay, looks like 25.3(b),         -->
         <!-- and this is what will render in a cross-reference via \label/\ref -->
         <!-- The enclosing figure is numbered from block or figure-distinct.   -->
@@ -2987,7 +2987,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- even if the LaTeX source is a subset (we can't optionally include -->
         <!-- panels of a "sidebyside").  Short answer, we ignore #3 in this    -->
         <!-- case.  Always.                                                    -->
-        <xsl:when test="$b-subcaptioned">
+        <xsl:when test="$b-subnumbered">
             <xsl:text>lower separated=false, </xsl:text>
             <xsl:text>before lower={{</xsl:text>
             <xsl:choose>
@@ -3053,7 +3053,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style, }&#xa;</xsl:text>
     <!-- end: options -->
     <!-- subnumbered version requires manipulating low-level counters -->
-    <xsl:if test="$b-subcaptioned">
+    <xsl:if test="$b-subnumbered">
         <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -3221,13 +3221,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- when these are the panels of a "sidebyside".  So within   -->
 <!-- environments we bold titles (table and list) as produced, -->
 <!-- and do not bold captions as produced.  This way titles    -->
-<!-- that migrate to the lower part when subcaptioned will be  -->
+<!-- that migrate to the lower part when subnumbered will be   -->
 <!-- bold.  So we also bold type names and numbers as          -->
 <!-- produced. Net result is that we do not apply font weights -->
 <!-- to titles via styles.                                     -->
 <!-- NB: there could be 4 more styles, conditioning all 8 on   -->
 <!-- "ancestor::*[self::figure]" (or "not()") to manage the    -->
-<!-- panels of a subcaptioned sidebyside.                      -->
+<!-- panels of a subnumbered sidebyside.                      -->
 <xsl:template match="figure|listing" mode="tcb-style">
     <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, fontlower=\blocktitlefont</xsl:text>
 </xsl:template>
@@ -8527,7 +8527,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: process meta-data, then restrict contents -->
     <!-- tabular, introduction|list|conclusion           -->
     <xsl:apply-templates select="*"/>
-    <!-- subcaption always goes in lower part -->
+    <!-- subnumbered caption/title always goes in lower part -->
     <xsl:if test="ancestor::*[self::figure]">
         <xsl:text>\tcblower&#xa;</xsl:text>
     </xsl:if>

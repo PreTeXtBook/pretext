@@ -4075,7 +4075,7 @@ Book (with parts), "section" at level 3
 <!-- Note that since these are captioned items:       -->
 <!-- If these live in "sidebyside", which is in       -->
 <!-- turn contained in a "figure", then they will     -->
-<!-- earn a subcaption with a subnumber, so we ignore -->
+<!-- earn a subnumber (e.g (a), (b),..), so we ignore -->
 <!-- them in these counts of top-level numbered items -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-figure-serial-number">
     <xsl:variable name="subtree-level">
@@ -4341,7 +4341,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Serial Numbers: Subfigures, Subtables, Sublisting-->
-<!-- Subcaptioning only happens with figures           -->
+<!-- Subnumbering only happens with figures            -->
 <!-- or tables arranged in a sidebyside, which         -->
 <!-- is again contained inside a figure, the           -->
 <!-- element providing the overall caption             -->
@@ -4360,7 +4360,7 @@ Book (with parts), "section" at level 3
     <xsl:text>)</xsl:text>
 </xsl:template>
 
-<!-- when inside a sbsgroup, subcaptions range across entire group -->
+<!-- when inside a sbsgroup, subnumbers range across entire group -->
 <xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="serial-number">
     <xsl:text>(</xsl:text>
     <xsl:number format="a" count="figure|table|listing|list" level="any" from="sbsgroup"/>
