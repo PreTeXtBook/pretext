@@ -2923,11 +2923,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="figure|table|listing|list" mode="environment">
-    <!-- could be more stringent, sidebyside in     -->
-    <!-- slot 1, ancestor figure is in slot 2 or 3: -->
-    <!--     figure/sidebyside/*                    -->
-    <!--     figure/sbsgroup/sidebyside/*           -->
-    <xsl:variable name="b-subnumbered" select="boolean(ancestor::*[self::figure])"/>
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
+    <xsl:variable name="b-subnumbered" select="$fig-placement = 'subnumber'"/>
     <xsl:variable name="environment-name">
         <xsl:apply-templates select="." mode="environment-name"/>
     </xsl:variable>
@@ -8527,8 +8526,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: process meta-data, then restrict contents -->
     <!-- tabular, introduction|list|conclusion           -->
     <xsl:apply-templates select="*"/>
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
     <!-- subnumbered caption/title always goes in lower part -->
-    <xsl:if test="ancestor::*[self::figure]">
+    <xsl:if test="$fig-placement = 'subnumber'">
         <xsl:text>\tcblower&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\end{</xsl:text>
