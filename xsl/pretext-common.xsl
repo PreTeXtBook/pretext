@@ -2405,6 +2405,45 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="false()" />
 </xsl:template>
 
+<!-- FIGURE-LIKE as panels of sidebyside -->
+<!-- A "figure", "table", "list", or "listing" has slightly different    -->
+<!-- behavior (potentially) when appearing as a panel of a "sidebyside". -->
+<!-- It can be "subnumbered" (e.g. (a), (b), (c),...) or it may normally -->
+<!-- be titled above, and we want to place the title below (more like a  -->
+<!-- caption) so the faux-titles and captions seem to (almost) align     -->
+<!-- vertically with each other.  Generally this means authoring the     -->
+<!-- panel with bottom alignment.                                        -->
+<!--                                                                     -->
+<!--   "block" - child of a division, captions below, titles above,      -->
+<!--     as according to CMoS.                                           -->
+<!--                                                                     -->
+<!--   "panel" - a panel of a side-by-side, but with a block number      -->
+<!--     of its own, since there is no enclosing "figure"                -->
+<!--     (Subsumed by "block" until after refactor)                      -->
+<!--                                                                     -->
+<!--   "subnumber" - a panel of a side-by-side, which in turn is a       -->
+<!--     child/descendant of a "figure" (a "sbsgroup" may intervene).    -->
+<!--     This triggers a block number foor the exterior "figure" and     -->
+<!--     a subnumber for the interior FIGURE-LIKE.                       -->
+<!--                                                                     -->
+<xsl:template match="&FIGURE-LIKE;" mode="figure-placement">
+    <!-- more specific first, reverse of description above -->
+    <xsl:choose>
+        <xsl:when test="parent::sidebyside and ancestor::figure">
+            <xsl:text>subnumber</xsl:text>
+        </xsl:when>
+        <!-- Holding until after refactor -->
+        <!--
+        <xsl:when test="parent::sidebyside">
+            <xsl:text>panel</xsl:text>
+        </xsl:when>
+        -->
+        <xsl:otherwise>
+            <xsl:text>block</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ####################### -->
 <!-- Chunking Document Nodes -->
