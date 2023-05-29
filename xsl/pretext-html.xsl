@@ -2378,7 +2378,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original"/>
 
     <!-- Subnumbered panels of a "sidebyside" get a simpler caption/title -->
-    <xsl:variable name="b-subnumbered" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
+    <xsl:variable name="b-subnumbered" select="$fig-placement = 'subnumber'"/>
     <figcaption>
         <!-- A normal caption/title, or a subnumbered caption/title -->
         <xsl:choose>
@@ -3553,7 +3556,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
 
     <!-- Subnumbered caption/title go below, to help with alignment -->
-    <xsl:variable name="b-subnumbered" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
+    <xsl:variable name="b-subnumbered" select="$fig-placement = 'subnumber'"/>
     <xsl:choose>
         <!-- caption at the bottom, always -->
         <xsl:when test="self::figure|self::listing">
