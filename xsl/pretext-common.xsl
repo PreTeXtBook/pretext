@@ -2419,7 +2419,6 @@ Book (with parts), "section" at level 3
 <!--                                                                     -->
 <!--   "panel" - a panel of a side-by-side, but with a block number      -->
 <!--     of its own, since there is no enclosing "figure"                -->
-<!--     (Subsumed by "block" until after refactor)                      -->
 <!--                                                                     -->
 <!--   "subnumber" - a panel of a side-by-side, which in turn is a       -->
 <!--     child/descendant of a "figure" (a "sbsgroup" may intervene).    -->
@@ -2432,12 +2431,9 @@ Book (with parts), "section" at level 3
         <xsl:when test="parent::sidebyside and ancestor::figure">
             <xsl:text>subnumber</xsl:text>
         </xsl:when>
-        <!-- Holding until after refactor -->
-        <!--
         <xsl:when test="parent::sidebyside">
             <xsl:text>panel</xsl:text>
         </xsl:when>
-        -->
         <xsl:otherwise>
             <xsl:text>block</xsl:text>
         </xsl:otherwise>
