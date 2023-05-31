@@ -10198,9 +10198,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </figure>
 
-                <p>These same two lists can individually be the panels of a <tag>sidebyside</tag>, where vertical alignment on the <c>top</c> aligns the titles.</p>
+                <p>These same two lists can individually be the panels of a <tag>sidebyside</tag>, where here vertical alignment on the <c>bottom</c> attempts to align the titles, which are placed below for panels of a <tag>sidebyside</tag>.</p>
 
-                <sidebyside widths="30% 60%" valign="top">
+                <sidebyside widths="30% 60%" valign="bottom">
                     <list>
                         <title>Sea Life</title>
                         <introduction>
