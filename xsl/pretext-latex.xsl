@@ -2134,20 +2134,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- FIGURE-LIKE -->
-    <!-- subnumbered are separate and next, condition on "figure"    -->
-    <!-- ancestor to not mistakenly pick up a 'subtable' (say) here  -->
-    <!-- instead of a 'plain' table (which was once a bug)           -->
+    <!-- FIGURE-LIKE come in three flavors: blocks (not in a side-by-side),  -->
+    <!-- panels (in a side-by-side, but not in an overall "figure"), or      -->
+    <!-- subnumbered (panel of a side-by-side, which is then in an overall   -->
+    <!-- "figure').  Selections must be careful (not like dropping through   -->
+    <!-- a choose/when).  Environments need to consider title/caption        -->
+    <!-- placement and counters.  So we might create twelve different        -->
+    <!-- environments here.  In -common, see the "figure-placement" template -->
+    <!-- for another determination, and a more careful explanation.          -->
+    <!-- (There was once a subtle bug when we were not so careful here.)     -->
     <xsl:variable name="figure-reps" select="
-        ($document-root//figure[not(ancestor::figure)])[1]|
-        ($document-root//table[not(ancestor::figure)])[1]|
-        ($document-root//listing[not(ancestor::figure)])[1]|
-        ($document-root//list[not(ancestor::figure)])[1]"/>
+        ($document-root//figure[not(parent::sidebyside)])[1]|
+        ($document-root//table[not(parent::sidebyside)])[1]|
+        ($document-root//listing[not(parent::sidebyside)])[1]|
+        ($document-root//list[not(parent::sidebyside)])[1]"/>
     <xsl:if test="$figure-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for FIGURE-LIKE&#xa;</xsl:text>
         <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
     <xsl:for-each select="$figure-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- (PANEL)FIGURE-LIKE -->
+    <!-- sidebyside panel versions, if not contained by overall figure -->
+    <xsl:variable name="panel-reps" select="
+        ($document-root//sidebyside/figure[not(ancestor::figure)])[1]|
+        ($document-root//sidebyside/table[not(ancestor::figure)])[1]|
+        ($document-root//sidebyside/listing[not(ancestor::figure)])[1]|
+        ($document-root//sidebyside/list[not(ancestor::figure)])[1]"/>
+    <xsl:if test="$panel-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for (PANEL)FIGURE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$panel-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- (SUB)FIGURE-LIKE -->
@@ -2927,6 +2948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="figure-placement"/>
     </xsl:variable>
     <xsl:variable name="b-subnumbered" select="$fig-placement = 'subnumber'"/>
+    <xsl:variable name="b-panel" select="$fig-placement = 'panel'"/>
     <xsl:variable name="environment-name">
         <xsl:apply-templates select="." mode="environment-name"/>
     </xsl:variable>
@@ -3000,8 +3022,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\space#2</xsl:text>
             <xsl:text>}}, </xsl:text>
         </xsl:when>
-        <!-- Only the type-number is bolded, caption in #1 is plain text -->
-        <xsl:when test="self::figure|self::listing">
+        <!-- Case for text placed below, but "regular" numbers.  "figure"  -->
+        <!-- and "listing" always, and always for panels of a side-by-side -->
+        <!-- not already handled as subnumbered panels.                    -->
+        <!-- Only the type-number is bolded, caption in #1 is plain text   -->
+        <xsl:when test="(self::figure|self::listing) or $b-panel">
             <xsl:text>lower separated=false, </xsl:text>
             <xsl:text>before lower={{</xsl:text>
             <xsl:text>\textbf{#1~</xsl:text>
@@ -3017,6 +3042,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\space#2</xsl:text>
             <xsl:text>}}, </xsl:text>
         </xsl:when>
+        <!-- Case for titles placed above with "regular" numbers,            -->
+        <!-- just remaining "table" and "list", as per CMoS                  -->
         <!-- Only the type-number is bolded here, caption in #1 is bold text -->
         <xsl:when test="self::table|self::list">
             <xsl:text>title={{</xsl:text>
@@ -8453,10 +8480,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="figure|table|list|listing" mode="environment-name">
-    <!-- subfigures, etc -->
-    <xsl:if test="ancestor::*[self::figure]">
-        <xsl:text>sub</xsl:text>
-    </xsl:if>
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
+    <!-- prefix first -->
+    <xsl:choose>
+        <xsl:when test="$fig-placement = 'subnumber'">
+            <xsl:text>sub</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fig-placement = 'panel'">
+            <xsl:text>panel</xsl:text>
+        </xsl:when>
+        <xsl:when test="$fig-placement = 'block'"/>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG: figure placement not recognized, plase report me</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- always element name and suffix -->
     <xsl:value-of select="local-name(.)"/>
     <!-- too many LaTeX names to clash with -->
     <xsl:text>ptx</xsl:text>
@@ -8529,8 +8569,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="fig-placement">
         <xsl:apply-templates select="." mode="figure-placement"/>
     </xsl:variable>
-    <!-- subnumbered caption/title always goes in lower part -->
-    <xsl:if test="$fig-placement = 'subnumber'">
+    <!-- title goes in lower part when in a sidebyside -->
+    <xsl:if test="($fig-placement = 'subnumber') or ($fig-placement = 'panel')">
         <xsl:text>\tcblower&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\end{</xsl:text>

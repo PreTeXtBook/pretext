@@ -2425,6 +2425,8 @@ Book (with parts), "section" at level 3
 <!--     This triggers a block number foor the exterior "figure" and     -->
 <!--     a subnumber for the interior FIGURE-LIKE.                       -->
 <!--                                                                     -->
+<!-- (These code comments are referenced in the LaTeX conversion.)       -->
+<!--                                                                     -->
 <xsl:template match="&FIGURE-LIKE;" mode="figure-placement">
     <!-- more specific first, reverse of description above -->
     <xsl:choose>
