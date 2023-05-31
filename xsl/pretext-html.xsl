@@ -3559,7 +3559,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="fig-placement">
         <xsl:apply-templates select="." mode="figure-placement"/>
     </xsl:variable>
-    <xsl:variable name="b-subnumbered" select="$fig-placement = 'subnumber'"/>
+    <xsl:variable name="b-place-title-below" select="($fig-placement = 'subnumber') or ($fig-placement = 'panel')"/>
     <xsl:choose>
         <!-- caption at the bottom, always -->
         <xsl:when test="self::figure|self::listing">
@@ -3573,7 +3573,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- table only contains a tabular; if not subnumbered  -->
         <!-- then title is displayed before data/tabular        -->
         <xsl:when test="self::table">
-            <xsl:if test="not($b-subnumbered)">
+            <xsl:if test="not($b-place-title-below)">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3581,7 +3581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="tabular">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
-            <xsl:if test="$b-subnumbered">
+            <xsl:if test="$b-place-title-below">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3589,7 +3589,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- "title" at the top, subnumber at the bottom -->
         <xsl:when test="self::list">
-            <xsl:if test="not($b-subnumbered)">
+            <xsl:if test="not($b-place-title-below)">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3599,7 +3599,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </div>
-            <xsl:if test="$b-subnumbered">
+            <xsl:if test="$b-place-title-below">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
