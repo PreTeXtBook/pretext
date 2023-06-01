@@ -11691,12 +11691,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="calculator" />
         </xsl:if>
         <!-- Runestone user menu -->
-        <!-- Conditional on a build for Runestone hosting -->
-        <xsl:call-template name="runestone-bust-menu"/>
-        <!-- A scratch ActiveCode via a pencil icon, always -->
-        <xsl:call-template name="runestone-scratch-activecode"/>
-        <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
-        <xsl:call-template name="user-preferences-menu"/>
+        <xsl:if test="not($b-debug-react)">
+            <!-- Conditional on a build for Runestone hosting -->
+            <xsl:call-template name="runestone-bust-menu"/>
+            <!-- A scratch ActiveCode via a pencil icon, always -->
+            <xsl:call-template name="runestone-scratch-activecode"/>
+            <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
+            <xsl:call-template name="user-preferences-menu"/>
+        </xsl:if>
         <!-- Span to encase Prev/Up/Next buttons and float right    -->
         <!-- Each button gets an id for keypress recognition/action -->
         <span class="treebuttons">
@@ -12695,7 +12697,7 @@ TODO:
 
 <!-- Program Listings highlighted by Prism -->
 <xsl:template name="syntax-highlight">
-    <xsl:if test="$b-has-program">
+    <xsl:if test="$b-has-program and not($b-debug-react)">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
@@ -12705,7 +12707,7 @@ TODO:
 <!-- JS setup for a Google Custom Search Engine box -->
 <!-- Empty if not enabled via presence of cx number -->
 <xsl:template name="google-search-box-js">
-    <xsl:if test="$b-google-cse">
+    <xsl:if test="$b-google-cse and not($b-debug-react)">
         <script async="">
             <xsl:attribute name="src">
                 <xsl:text>https://cse.google.com/cse.js?cx=</xsl:text>
@@ -12734,7 +12736,7 @@ TODO:
 <!-- NB: async attribute also on Lunr and PTX-JS        -->
 <!-- resulted in console errors (2022-02-08)            -->
 <xsl:template name="native-search-box-js">
-    <xsl:if test="$has-native-search">
+    <xsl:if test="$has-native-search and not($b-debug-react)">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js" integrity="sha512-4xUl/d6D6THrAnXAwGajXkoWaeMNwEKK4iNfq5DotEbLPAfk6FSxSP3ydNxqDgCw1c/0Z1Jg6L8h2j+++9BZmg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <!-- document-specific variables with search documents -->
         <script src="{$lunr-search-file}" async=""/>
