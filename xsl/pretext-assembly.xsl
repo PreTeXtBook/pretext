@@ -607,6 +607,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- preceding siblings"                                           -->
 <xsl:template match="webwork-reps/static//p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork"/>
 
+<!-- and likewise when a tabular cell contains only a fillin,      -->
+<!-- keep the cell but not the fillin                              -->
+<xsl:template match="webwork-reps/static//cell[not(normalize-space(text())) and count(fillin)=1 and count(*)=1]/fillin" mode="webwork"/>
+
 
 <!-- ################# -->
 <!-- Private Solutions -->
