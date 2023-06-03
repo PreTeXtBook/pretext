@@ -919,6 +919,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p><tag>remark</tag>, <tag>convention</tag>, <tag>note</tag>, <tag>observation</tag> and <tag>warning</tag> are designed to hold very simple contents, with no additional structure (no proofs, no solutions, <etc />).</p>
 
                         <p>But they do carry a title and a number, can be the target of a cross-reference, and may be optionally knowlized in HTML with the <c>html.knowl.remark</c> processing switch.</p>
+
+                        <p>And distinctly different from a <tag>note</tag> in a <tag>biblio</tag><fn>A gratuitous footnote to test prior bug confusing this with a <tag>note</tag> in a <tag>biblio</tag>.</fn>.</p>
                     </note>
 
                     <aside xml:id="an-aside">
@@ -4264,7 +4266,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </biblio>
 
                 <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
-                <note><p>An online, open-source offering.</p></note>
+                <note><p>An online, open-source<fn>A gratuitous footnote to test prior bug confusing this with a REMARK-LIKE <tag>note</tag>.</fn> offering.</p></note>
                 </biblio>
 
                 <biblio type="bibtex" xml:id="Dav">
