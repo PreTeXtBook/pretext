@@ -49,9 +49,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions"
     exclude-result-prefixes="svg pi"
     extension-element-prefixes="exsl date str"
 >
+
+<!-- Allow writing of JSON from structured HTML -->
+<xsl:import href="./xml-to-json.xsl"/>
 
 <!-- Standard conversion groundwork -->
 <xsl:import href="./publisher-variables.xsl"/>
@@ -10036,11 +10040,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@platform = 'sage']" mode="header-libraries">
     <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
     <script>
-        <xsl:text>sagecell.makeSagecell({&#xa;</xsl:text>
-        <xsl:text>    inputLocation: ".sage-interact",&#xa;</xsl:text>
-        <xsl:text>    autoeval: 'true',&#xa;</xsl:text>
-        <xsl:text>    hide: ["editor", "evalButton", "permalink"]&#xa;</xsl:text>
-        <xsl:text>});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">.sage-interact</string>
+                    <boolean key="autoeval">true</boolean>
+                    <array key="hide">
+                        <string>editor</string>
+                        <string>evalButton</string>
+                        <string>permalink</string>
+                    </array>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </script>
     <link rel="stylesheet" type="text/css" href="https://sagecell.sagemath.org/static/sagecell_embed.css" />
 </xsl:template>
@@ -12423,72 +12437,110 @@ TODO:
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
+        <xsl:text>&#xa;</xsl:text>
         <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
-        <xsl:text>window.MathJax = {&#xa;</xsl:text>
-        <xsl:text>  tex: {&#xa;</xsl:text>
-        <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
-        <xsl:text>    tags: "none",&#xa;</xsl:text>
-        <xsl:text>    tagSide: "right",&#xa;</xsl:text>
-        <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
-        <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'color', 'newcommand', 'knowl'</xsl:text>
-        <xsl:text>]}&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  options: {&#xa;</xsl:text>
-        <xsl:text>    ignoreHtmlClass: "tex2jax_ignore|ignore-math",&#xa;</xsl:text>
-        <xsl:text>    processHtmlClass: "process-math",&#xa;</xsl:text>
-        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
-            <xsl:text>    renderActions: {&#xa;</xsl:text>
-            <xsl:text>        findScript: [10, function (doc) {&#xa;</xsl:text>
-            <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
-            <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
-            <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
-            <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
-            <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
-            <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-            <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-            <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
-            <xsl:text>            });&#xa;</xsl:text>
-            <xsl:text>        }, '']&#xa;</xsl:text>
-            <xsl:text>    },&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  chtml: {&#xa;</xsl:text>
-        <xsl:text>    scale: 0.98,&#xa;</xsl:text>
-        <xsl:text>    mtextInheritFont: true&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  loader: {&#xa;</xsl:text>
-        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/color', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
-        <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  startup: {&#xa;</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-debug-react">
-                <xsl:text>    /* Mathjax typesetting operation is under the control of React */&#xa;</xsl:text>
-                <xsl:text>    typeset: false,&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- tell Runestone components that MathJax is all loaded -->
-                <xsl:text>    pageReady() {&#xa;</xsl:text>
-                <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
-                <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
-                <xsl:text>      rsMathReady();&#xa;</xsl:text>
-                <xsl:text>      }&#xa;</xsl:text>
-                <xsl:text>    )}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>  },&#xa;</xsl:text>
-        <!-- optional presentation mode gets clickable, large math -->
-        <xsl:if test="$b-html-presentation">
-            <xsl:text>  options: {&#xa;</xsl:text>
-            <xsl:text>    menuOptions: {&#xa;</xsl:text>
-            <xsl:text>      settings: {&#xa;</xsl:text>
-            <xsl:text>        zoom: 'Click',&#xa;</xsl:text>
-            <xsl:text>        zscale: '300%',&#xa;</xsl:text>
-            <xsl:text>      },&#xa;</xsl:text>
-            <xsl:text>    }&#xa;</xsl:text>
-            <xsl:text>  },&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:text>};&#xa;</xsl:text>
+        <xsl:text>window.MathJax = </xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <map key="tex">
+                        <array key="inlineMath">
+                            <array>
+                                <string>\(</string>
+                                <string>\)</string>
+                            </array>
+                        </array>
+                        <string key="tags">none</string>
+                        <string key="tagSide">right</string>
+                        <string key="tagIndent">.8em</string>
+                        <map key="packages">
+                            <array key="[+]">
+                                <string>base</string>
+                                <string>extpfeil</string>
+                                <string>ams</string>
+                                <string>amscd</string>
+                                <string>color</string>
+                                <string>newcommand</string>
+                                <string>knowl</string>
+                            </array>
+                        </map>
+                    </map>
+                    <map key="options">
+                        <string key="ignoreHtmlClass">tex2jax_ignore|ignore-math</string>
+                        <string key="processHtmlClass">process-math</string>
+                        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
+                            <map key="renderActions">
+                                <array key="findScript">
+                                    <number>10</number>
+                                    <raw>
+                                        <xsl:text>function (doc) {&#xa;</xsl:text>
+                                        <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
+                                        <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
+                                        <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
+                                        <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
+                                        <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
+                                        <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+                                        <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+                                        <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
+                                        <xsl:text>            });&#xa;</xsl:text>
+                                        <xsl:text>        }</xsl:text>
+                                    </raw>
+                                    <string></string>
+                                </array>
+                            </map>
+                        </xsl:if>
+                    </map>
+                    <map key="chtml">
+                        <number key="scale">0.98</number>
+                        <boolean key="mtextInheritFont">true</boolean>
+                    </map>
+                    <map key="loader">
+                        <array key="load">
+                            <string>input/asciimath</string>
+                            <string>[tex]/extpfeil</string>
+                            <string>[tex]/amscd</string>
+                            <string>[tex]/color</string>
+                            <string>[tex]/newcommand</string>
+                            <string>[pretext]/mathjaxknowl3.js</string>
+                        </array>
+                        <map key="paths">
+                            <string key="pretext">https://pretextbook.org/js/lib</string>
+                        </map>
+                    </map>
+                    <map key="startup">
+                        <xsl:choose>
+                            <xsl:when test="$b-debug-react">
+                                <boolean key="typeset">false</boolean>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <!-- tell Runestone components that MathJax is all loaded -->
+                                <raw>
+                                    <xsl:text>pageReady() {&#xa;</xsl:text>
+                                    <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
+                                    <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
+                                    <xsl:text>      rsMathReady();&#xa;</xsl:text>
+                                    <xsl:text>      }&#xa;</xsl:text>
+                                    <xsl:text>    )}</xsl:text>
+                                </raw>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </map>
+                    <!-- optional presentation mode gets clickable, large math -->
+                    <xsl:if test="$b-html-presentation">
+                        <map key="options">
+                            <map key="menuOptions">
+                                <map key="settings">
+                                    <string key="zoom">Click</string>
+                                    <string key="zscale">300%</string>
+                                </map>
+                            </map>
+                        </map>
+                    </xsl:if>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
@@ -12551,21 +12603,29 @@ TODO:
             <xsl:value-of select="$language-attribute" />
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sagecell-</xsl:text>
-            <xsl:value-of select="$language-attribute" />
-        <xsl:text>',&#xa;</xsl:text>
-        <xsl:text>                       linked: true,&#xa;</xsl:text>
-        <xsl:text>                       languages: ['</xsl:text>
-            <xsl:value-of select="$language-attribute" />
-        <xsl:text>'],&#xa;</xsl:text>
-        <xsl:text>                       evalButtonText: '</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'"/>
-            </xsl:apply-templates>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="$language-text" />
-            <xsl:text>)</xsl:text>
-        <xsl:text>'});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">pre.sagecell-<xsl:value-of select="$language-attribute" /></string>
+                    <boolean key="linked">true</boolean>
+                    <array key="languages">
+                        <string>
+                            <xsl:value-of select="$language-attribute" />
+                        </string>
+                    </array>
+                    <string key="evalButtonText">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'evaluate'"/>
+                        </xsl:apply-templates>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="$language-text" />
+                        <xsl:text>)</xsl:text>
+                    </string>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -12573,9 +12633,21 @@ TODO:
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
         <xsl:text>// Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
-        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sage-display',&#xa;</xsl:text>
-        <xsl:text>                       editor: 'codemirror-readonly',&#xa;</xsl:text>
-        <xsl:text>                       hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">pre.sage-display</string>
+                    <string key="editor">codemirror-readonly</string>
+                    <array key="hide">
+                        <string>evalButton</string>
+                        <string>editorToggle</string>
+                        <string>language</string>
+                    </array>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -12585,14 +12657,21 @@ TODO:
     <xsl:element name="script">
         <xsl:text>// Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sagecell-practice',&#xa;</xsl:text>
-        <xsl:text>                       linked: true,&#xa;</xsl:text>
-        <xsl:text>                       languages: sagecell.allLanguages,&#xa;</xsl:text>
-        <xsl:text>                       evalButtonText: '</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'"/>
-            </xsl:apply-templates>
-        <xsl:text>'});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">pre.sagecell-practice</string>
+                    <boolean key="linked">true</boolean>
+                    <string key="evalButtonText">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'evaluate'"/>
+                        </xsl:apply-templates>
+                    </string>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
