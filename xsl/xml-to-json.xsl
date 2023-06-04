@@ -109,18 +109,14 @@ done`
     <xsl:template name="json">
         <xsl:param name="content" />
         <xsl:param name="indentDepth" select="0" />
-        <xsl:variable
-            name="output">
-            <xsl:apply-templates
-                select="exsl:node-set($content)/*" />
+        <xsl:variable name="output">
+            <xsl:apply-templates select="exsl:node-set($content)/*" />
         </xsl:variable>
-        <xsl:variable
-            name="indentation">
+        <xsl:variable name="indentation">
             <xsl:call-template name="indent">
                 <xsl:with-param name="depth" select="$indentDepth" />
             </xsl:call-template></xsl:variable>
-        <xsl:call-template
-            name="printIndented">
+        <xsl:call-template name="printIndented">
             <xsl:with-param name="indent" select="$indentation" />
             <xsl:with-param name="text" select="$output" />
         </xsl:call-template>
@@ -146,23 +142,21 @@ done`
                 <xsl:value-of select="boolean(0)" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of
-                    select="boolean(normalize-space(text()))" />
+                <xsl:value-of select="boolean(normalize-space(text()))" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template match="fn:number">
         <xsl:apply-templates select="@key" mode="attr" />
-        <xsl:value-of
-            select="normalize-space(text())" />
+        <xsl:value-of select="normalize-space(text())" />
     </xsl:template>
 
     <xsl:template match="fn:string">
         <xsl:apply-templates select="@key" mode="attr" />
         <xsl:text>"</xsl:text>
-        <xsl:call-template
-            name="escape-for-json" /><xsl:text>"</xsl:text>
+        <xsl:call-template name="escape-for-json" />
+        <xsl:text>"</xsl:text>
     </xsl:template>
 
     <xsl:template match="fn:array">
@@ -171,20 +165,17 @@ done`
             select="@key"
             mode="attr" />
         <xsl:text>[&#xa;</xsl:text>
-        <xsl:for-each
-            select="./*">
-            <xsl:call-template
-                name="indent">
+        <xsl:for-each select="./*">
+            <xsl:call-template name="indent">
                 <xsl:with-param name="depth" select="$depth+1"></xsl:with-param>
             </xsl:call-template>
-            <xsl:apply-templates
-                select="." /><xsl:if
-                test="not(position() = last())"><xsl:text>,&#xa;</xsl:text>
+            <xsl:apply-templates select="." />
+            <xsl:if test="not(position() = last())">
+                <xsl:text>,&#xa;</xsl:text>
             </xsl:if>
         </xsl:for-each>
         <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template
-            name="indent">
+        <xsl:call-template name="indent">
             <xsl:with-param name="depth" select="$depth"></xsl:with-param>
         </xsl:call-template>
         <xsl:text>]</xsl:text>
@@ -192,25 +183,19 @@ done`
 
     <xsl:template match="fn:map">
         <xsl:variable name="depth" select="count(ancestor::*)" />
-        <xsl:apply-templates
-            select="@key"
-            mode="attr" />
+        <xsl:apply-templates select="@key" mode="attr" />
         <xsl:text>{&#xa;</xsl:text>
-        <xsl:for-each
-            select="./*">
-            <xsl:call-template
-                name="indent">
+        <xsl:for-each select="./*">
+            <xsl:call-template name="indent">
                 <xsl:with-param name="depth" select="$depth+1"></xsl:with-param>
             </xsl:call-template>
-            <xsl:apply-templates
-                select="." />
+            <xsl:apply-templates select="." />
             <xsl:if test="not(position() = last())">
                 <xsl:text>,&#xa;</xsl:text>
             </xsl:if>
         </xsl:for-each>
         <xsl:text>&#xa;</xsl:text>
-        <xsl:call-template
-            name="indent">
+        <xsl:call-template name="indent">
             <xsl:with-param name="depth" select="$depth"></xsl:with-param>
         </xsl:call-template>
         <xsl:text>}</xsl:text>
@@ -227,8 +212,7 @@ done`
 
     <xsl:template name="indent">
         <xsl:param name="depth" select="'0'" />
-        <xsl:for-each
-            select="//*[position() &lt;= $depth]">
+        <xsl:for-each select="//*[position() &lt;= $depth]">
             <xsl:if test="position() &lt;= $depth"><xsl:text>  </xsl:text></xsl:if>
         </xsl:for-each>
     </xsl:template>
@@ -243,94 +227,89 @@ done`
                 <xsl:with-param name="pText" select="$pText" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable
-            name="escaped2">
+        <xsl:variable name="escaped2">
             <xsl:call-template name="escapeQuotes">
                 <xsl:with-param name="pText" select="$escaped1" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable
-            name="escaped3">
+        <xsl:variable name="escaped3">
             <xsl:call-template name="escapeNewlines">
                 <xsl:with-param name="pText" select="$escaped2" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:value-of
-            select="$escaped3" />
+        <xsl:value-of select="$escaped3" />
     </xsl:template>
 
     <xsl:template name="escapeBackslash">
         <xsl:param name="pText" select="." />
-        <xsl:variable name="head"
-            select="substring-before($pText, '\')" />
-        <xsl:variable name="tail"
-            select="substring-after($pText, '\')" />
+        <xsl:variable name="head" select="substring-before($pText, '\')" />
+        <xsl:variable name="tail" select="substring-after($pText, '\')" />
         <xsl:choose>
             <xsl:when test="$head or $tail">
                 <xsl:value-of select="$head" />
                 <xsl:text>\\</xsl:text>
-                <xsl:call-template
-                    name="escapeBackslash">
+                <xsl:call-template name="escapeBackslash">
                     <xsl:with-param name="pText" select="$tail" />
                 </xsl:call-template>
             </xsl:when>
-            <xsl:otherwise><xsl:value-of select="$pText" /></xsl:otherwise>
+            <xsl:otherwise>
+                <xsl:value-of select="$pText" />
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template name="escapeQuotes">
         <xsl:param name="pText" select="." />
-        <xsl:variable name="head"
-            select="substring-before($pText, '&quot;')" />
-        <xsl:variable name="tail"
-            select="substring-after($pText, '&quot;')" />
+        <xsl:variable name="head" select="substring-before($pText, '&quot;')" />
+        <xsl:variable name="tail" select="substring-after($pText, '&quot;')" />
         <xsl:choose>
             <xsl:when test="$head or $tail">
                 <xsl:value-of select="$head" />
                 <xsl:text>\"</xsl:text>
-                <xsl:call-template
-                    name="escapeQuotes">
+                <xsl:call-template name="escapeQuotes">
                     <xsl:with-param name="pText" select="$tail" />
                 </xsl:call-template>
             </xsl:when>
-            <xsl:otherwise><xsl:value-of select="$pText" /></xsl:otherwise>
+            <xsl:otherwise>
+                <xsl:value-of select="$pText" />
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template name="escapeNewlines">
         <xsl:param name="pText" select="." />
-        <xsl:variable name="head"
-            select="substring-before($pText, '&#xa;')" />
-        <xsl:variable name="tail"
-            select="substring-after($pText, '&#xa;')" />
+        <xsl:variable name="head" select="substring-before($pText, '&#xa;')" />
+        <xsl:variable name="tail" select="substring-after($pText, '&#xa;')" />
         <xsl:choose>
             <xsl:when test="$head or $tail">
                 <xsl:value-of select="$head" />
                 <xsl:text>\n</xsl:text>
-                <xsl:call-template
-                    name="escapeNewlines">
+                <xsl:call-template name="escapeNewlines">
                     <xsl:with-param name="pText" select="$tail" />
                 </xsl:call-template>
             </xsl:when>
-            <xsl:otherwise><xsl:value-of select="$pText" /></xsl:otherwise>
+            <xsl:otherwise>
+                <xsl:value-of select="$pText" />
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
+    <!-- This function is from Stack Overflow
+    https://stackoverflow.com/questions/24513266/indent-multi-line-blocks-of-xsltext
+    CC-BY-SA license -->
     <xsl:template name="printIndented">
         <xsl:param name="text" />
         <xsl:param name="indent" />
       
         <xsl:if test="$text">
             <xsl:value-of select="$indent" />
-          <xsl:variable name="thisLine"
-                select="substring-before($text, '&#10;')" />
-          <xsl:choose>
+            <xsl:variable name="thisLine" select="substring-before($text, '&#10;')" />
+            <xsl:choose>
                 <xsl:when test="$thisLine"><!-- $text contains at least one newline -->
                     <!-- print this line -->
-              <xsl:value-of select="concat($thisLine, '&#10;')" />
+                    <xsl:value-of select="concat($thisLine, '&#10;')" />
                     <!-- and recurse to process the rest -->
-              <xsl:call-template
-                        name="printIndented">
+                    <xsl:call-template name="printIndented">
                         <xsl:with-param name="text" select="substring-after($text, '&#10;')" />
                         <xsl:with-param name="indent" select="$indent" />
                     </xsl:call-template>
@@ -341,5 +320,4 @@ done`
             </xsl:choose>
         </xsl:if>
     </xsl:template>
-
 </xsl:stylesheet>
