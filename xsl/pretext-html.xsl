@@ -49,9 +49,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    exclude-result-prefixes="svg pi"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    xmlns:foo="foo-namespace"
+    exclude-result-prefixes="svg pi foo"
     extension-element-prefixes="exsl date str"
 >
+
+<xsl:import href="./mmm.xsl"/>
 
 <!-- Standard conversion groundwork -->
 <xsl:import href="./publisher-variables.xsl"/>
@@ -12423,6 +12427,13 @@ TODO:
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:call-template name="mmm"/>
+        <myelm />
+        <foo:myfooelm />
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
         <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
         <xsl:text>window.MathJax = {&#xa;</xsl:text>
         <xsl:text>  tex: {&#xa;</xsl:text>
