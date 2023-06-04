@@ -50,7 +50,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
-    exclude-result-prefixes="svg pi foo"
+    exclude-result-prefixes="svg pi"
     extension-element-prefixes="exsl date str"
 >
 
