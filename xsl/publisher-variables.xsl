@@ -111,7 +111,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="toc-level-entered">
     <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/common/tableofcontents/pi:pub-attribute[@name='level']"/>
 </xsl:variable>
-<xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default">
+<xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default-pub-variable">
     <xsl:choose>
         <!-- defaults purely by structure, not by output format -->
         <xsl:when test="$assembly-root/book/part/chapter/section">3</xsl:when>
@@ -2574,7 +2574,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="latex-sides">
     <xsl:apply-templates mode="set-pubfile-variable" select="$publisher-attribute-options/latex/pi:pub-attribute[@name='sides']"/>
 </xsl:variable>
-<xsl:template match="latex/pi:pub-attribute[@name='sides']" mode="get-default">
+<xsl:template match="latex/pi:pub-attribute[@name='sides']" mode="get-default-pub-variable">
     <xsl:choose>
         <xsl:when test="$b-latex-print">
             <xsl:text>two</xsl:text>
@@ -3088,7 +3088,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="legacy-options" select="str:tokenize(@legacy-options, ' ')"/>
     <!-- get the path to this attribute in the actual publisher file-->
     <xsl:variable name="path">
-        <xsl:apply-templates select="." mode="path"/>
+        <xsl:apply-templates select="." mode="pub-entry-path"/>
     </xsl:variable>
     <!-- get the corresponding attribute from the publisher file -->
     <!-- which may not exist                                     -->
@@ -3099,7 +3099,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- when there is an error condition of some type, and is also echo'ed  -->
     <!-- back to the publisher in those cases.  So we grab it once..         -->
     <xsl:variable name="the-default">
-        <xsl:apply-templates select="." mode="get-default"/>
+        <xsl:apply-templates select="." mode="get-default-pub-variable"/>
     </xsl:variable>
     <xsl:choose>
         <!-- if we respect a stringparam override and it is provided, use it -->
@@ -3158,22 +3158,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- can be overrided when the default is dynamic -->
-<xsl:template match="pi:pub-attribute" mode="get-default">
+<xsl:template match="pi:pub-attribute" mode="get-default-pub-variable">
     <xsl:value-of select="@default"/>
 </xsl:template>
 
 <!-- Recurse back up the tree to get the path to an attribute -->
-<xsl:template match="pi:pub-attribute" mode="path">
-    <xsl:apply-templates select=".." mode="path"/>
+<xsl:template match="pi:pub-attribute" mode="pub-entry-path">
+    <xsl:apply-templates select=".." mode="pub-entry-path"/>
     <xsl:value-of select="concat('@', @name)"/>
 </xsl:template>
 
-<xsl:template match="*" mode="path">
-    <xsl:apply-templates select=".." mode="path"/>
+<xsl:template match="*" mode="pub-entry-path">
+    <xsl:apply-templates select=".." mode="pub-entry-path"/>
     <xsl:value-of select="concat(local-name(), '/')"/>
 </xsl:template>
 
-<xsl:template match="pi:publisher" mode="path"/>
+<xsl:template match="pi:publisher" mode="pub-entry-path"/>
 
 <!-- Expects a node set from tokenize()                       -->
 <!-- Produces a string where each token is wrapped in quotes  -->
