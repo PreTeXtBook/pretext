@@ -3094,6 +3094,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- which may not exist                                     -->
     <xsl:variable name="full-path" select="concat('$publication/', $path)"/>
     <xsl:variable name="pubfile-attribute" select="dyn:evaluate($full-path)"/>
+    <!-- The default value, which may be specified or may vary conditionally -->
+    <!-- (via a custom template) appears frequently as the provided value    -->
+    <!-- when there is an error condition of some type, and is also echo'ed  -->
+    <!-- back to the publisher in those cases.  So we grab it once..         -->
+    <xsl:variable name="the-default">
+        <xsl:apply-templates select="." mode="get-default"/>
+    </xsl:variable>
     <xsl:choose>
         <!-- if we respect a stringparam override and it is provided, use it -->
         <xsl:when test="@stringparam and dyn:evaluate(concat('$', @stringparam)) != ''">
@@ -3110,21 +3117,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and if there is an old stringparam that we still honor, and if  -->
         <!-- it is among the legacy options, use default and issue warning   -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) = $legacy-options">
-            <xsl:apply-templates select="." mode="get-default"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  from <xsl:apply-templates select="$all-options" mode="quoted-list"/>.</xsl:message>
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  from <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file, not even as null  -->
         <!-- and if there is an old stringparam that we still honor, but its -->
         <!-- value isn't legal, legacy, or the default strinigparam '',      -->
         <!-- then use default and issue warning                              -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) != ''">
-            <xsl:apply-templates select="." mode="get-default"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  from <xsl:apply-templates select="$all-options" mode="quoted-list"/>.</xsl:message>
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  from <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file or it is declared  -->
         <!-- as null, use the default, which might be null                   -->
         <xsl:when test="string($pubfile-attribute) = ''">
-            <xsl:apply-templates select="." mode="get-default"/>
+            <xsl:value-of select="$the-default"/>
         </xsl:when>
         <!-- if a non-empty string declared in the pubfile and if freeform   -->
         <!-- is permitted, use whatever the pubfile entry was                -->
@@ -3138,14 +3145,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- if it's among the legacy options, use default and issue warning  -->
         <xsl:when test="$pubfile-attribute = $legacy-options">
-            <xsl:apply-templates select="." mode="get-default"/>
-            <xsl:message>PTX:WARNING: your entry "<xsl:value-of select="$pubfile-attribute"/>"  for the publisher file  <xsl:value-of select="$path"/>  entry has been retired; use <xsl:apply-templates select="$all-options" mode="quoted-list"/>. The default "<xsl:value-of select="@default"/>" will be used.</xsl:message>
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: your entry "<xsl:value-of select="$pubfile-attribute"/>"  for the publisher file  <xsl:value-of select="$path"/>  entry has been retired; use <xsl:apply-templates select="$all-options" mode="quoted-list"/>. The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- pubfile has some string that is not among legal options, and    -->
         <!-- freeform is disallowed, so give an warning and use default      -->
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should be <xsl:apply-templates select="$all-options" mode="quoted-list"/>, not "<xsl:value-of select="$pubfile-attribute"/>".  The default "<xsl:value-of select="@default"/>" will be used instead.</xsl:message>
-            <xsl:apply-templates select="." mode="get-default"/>
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should be <xsl:apply-templates select="$all-options" mode="quoted-list"/>, not "<xsl:value-of select="$pubfile-attribute"/>".  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
