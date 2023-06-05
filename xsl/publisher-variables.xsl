@@ -96,21 +96,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.chunk" select="''"/>
 
 <xsl:variable name="chunks">
-    <xsl:choose>
-        <!-- debugging tool overrides anything else -->
-        <xsl:when test="not($debug.chunk = '')">
-            <xsl:value-of select="$debug.chunk"/>
-        </xsl:when>
-        <!-- consult publisher file -->
-        <xsl:when test="$publication/common/chunking/@level">
-            <xsl:value-of select="$publication/common/chunking/@level"/>
-        </xsl:when>
-        <!-- respect legacy string parameter -->
-        <xsl:when test="not($chunk.level = '')">
-            <xsl:value-of select="$chunk.level"/>
-        </xsl:when>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/common/chunking/pi:pub-attribute[@name='level']" mode="set-pubfile-variable"/>
 </xsl:variable>
+
 <!-- We do not convert this to a number since various   -->
 <!-- conversions will consume this and produce their    -->
 <!-- own defaults, and we need to recognize "no choice" -->
@@ -121,14 +109,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An article need not have a section      -->
 <!-- This gets replaced in -latex stylehseet -->
 <xsl:variable name="toc-level-entered">
+    <xsl:apply-templates select="$publisher-attribute-options/common/tableofcontents/pi:pub-attribute[@name='level']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default-pub-variable">
     <xsl:choose>
-        <xsl:when test="$publication/common/tableofcontents/@level">
-            <xsl:value-of select="$publication/common/tableofcontents/@level"/>
-        </xsl:when>
-        <!-- legacy, respect string parameter -->
-        <xsl:when test="$toc.level != ''">
-            <xsl:value-of select="$toc.level" />
-        </xsl:when>
         <!-- defaults purely by structure, not by output format -->
         <xsl:when test="$assembly-root/book/part/chapter/section">3</xsl:when>
         <xsl:when test="$assembly-root/book/part/chapter">2</xsl:when>
@@ -144,7 +128,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:variable>
+</xsl:template>
 <xsl:variable name="toc-level" select="number($toc-level-entered)"/>
 
 <!-- Flag Table of Contents, or not, with boolean variable -->
@@ -152,63 +136,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Fillin styles (underline, box, shade) -->
 <xsl:variable name="fillin-text-style">
-    <xsl:choose>
-        <xsl:when test="$publication/common/fillin/@textstyle = 'box'">
-            <xsl:text>box</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/common/fillin/@textstyle = 'shade'">
-            <xsl:text>shade</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>underline</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='textstyle']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="fillin-math-style">
-    <xsl:choose>
-        <xsl:when test="$publication/common/fillin/@mathstyle = 'underline'">
-            <xsl:text>underline</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/common/fillin/@mathstyle = 'box'">
-            <xsl:text>box</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>shade</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='mathstyle']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Em dash Width -->
 
 <xsl:variable name="emdash-space">
-    <xsl:variable name="default-width" select="'none'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/common/@emdash-space = 'none'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/common/@emdash-space = 'thin'">
-            <xsl:text>thin</xsl:text>
-        </xsl:when>
-        <!-- attempted to set, but wrong -->
-        <xsl:when test="$publication/common/@emdash-space">
-            <xsl:message>PTX:WARNING: em-dash width setting in publisher file should be "none" or "thin", not "<xsl:value-of select="$publication/common/@emdash-space"/>". Proceeding with default value: "<xsl:value-of select="$default-width"/>"</xsl:message>
-            <xsl:value-of select="$default-width"/>
-        </xsl:when>
-        <!-- backwards-compatability -->
-        <xsl:when test="$emdash.space = 'thin'">
-            <xsl:text>thin</xsl:text>
-        </xsl:when>
-        <xsl:when test="$emdash.space = 'none'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <!-- no attempt to set -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-width"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/common/pi:pub-attribute[@name='emdash-space']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Watermarking -->
@@ -1263,63 +1201,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- WeBWorK server location and credentials for the daemon course -->
 <xsl:variable name="webwork-server">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@server">
-            <xsl:value-of select="$publication/webwork/@server"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='server']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-course">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@course">
-            <xsl:value-of select="$publication/webwork/@course"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='course']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-coursepassword">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@coursepassword">
-            <xsl:value-of select="$publication/webwork/@coursepassword"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='coursepassword']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-user">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@user">
-            <xsl:value-of select="$publication/webwork/@user"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='user']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="webwork-userpassword">
-    <xsl:choose>
-        <xsl:when test="$publication/webwork/@userpassword">
-            <xsl:value-of select="$publication/webwork/@userpassword"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>anonymous</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='userpassword']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- WeBWorK tasks can be revealed incrementally or all at once -->
 <xsl:variable name="webwork-task-reveal">
-    <xsl:apply-templates mode="set-pubfile-attribute-variable" select="$publisher-attribute-options/webwork/@task-reveal"/>
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='task-reveal']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 
@@ -1797,38 +1700,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- geogebra-geometry, geogebra-3d                          -->
 <!-- Default is empty, meaning the calculator is not wanted. -->
 <xsl:variable name="html-calculator">
-    <xsl:choose>
-        <xsl:when test="$publication/html/calculator/@model = 'none'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/calculator/@model = 'geogebra-classic'">
-            <xsl:text>geogebra-classic</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/calculator/@model = 'geogebra-graphing'">
-            <xsl:text>geogebra-graphing</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/calculator/@model = 'geogebra-geometry'">
-            <xsl:text>geogebra-geometry</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/calculator/@model = 'geogebra-3d'">
-            <xsl:text>geogebra-3d</xsl:text>
-        </xsl:when>
-        <!-- an attempt was made, but failed to be correct -->
-        <xsl:when test="$publication/html/calculator/@model">
-            <xsl:message>PTX:WARNING: HTML calculator/@model in publisher file should be "geogebra-classic", "geogebra-graphing", "geogebra-geometry", "geogebra-3d", or "none", not "<xsl:value-of select="$publication/html/calculator/@model"/>". Proceeding with default value: "none"</xsl:message>
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <!-- or maybe the deprecated string parameter was used, as evidenced -->
-        <!-- by being non-empty, so we'll just run with it like in the past  -->
-        <xsl:when test="not($html.calculator = '')">
-            <xsl:value-of select="$html.calculator"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>none</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/calculator/pi:pub-attribute[@name='model']" mode="set-pubfile-variable"/>
 </xsl:variable>
-
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
 <!-- Scratch ActiveCode Window -->
@@ -1904,24 +1777,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                      -->
 
 <xsl:variable name="short-answer-responses">
-    <xsl:variable name="default-responses" select="'graded'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/html/@short-answer-responses = 'graded'">
-            <xsl:text>graded</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/@short-answer-responses = 'always'">
-            <xsl:text>always</xsl:text>
-        </xsl:when>
-        <!-- set, but not correct, so inform and use default -->
-        <xsl:when test="$publication/html/@short-answer-responses">
-            <xsl:message>PTX:WARNING: HTML @short-answer-responses in publisher file should be "graded" or "always", not "<xsl:value-of select="$publication/html/@short-answer-responses"/>". Proceeding with default value: "<xsl:value-of select="$default-responses"/>"</xsl:message>
-            <xsl:value-of select="$default-responses"/>
-        </xsl:when>
-        <!-- unset, so use default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-responses"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='short-answer-responses']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!--                          -->
@@ -2194,538 +2050,75 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- than override these variables.                                        -->
 
 <xsl:variable name="knowl-theorem">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@theorem">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@theorem = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@theorem = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "theorem" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@theorem"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.theorem = '')">
-            <xsl:value-of select="$html.knowl.theorem"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='theorem']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-proof">
-    <xsl:variable name="knowl-default" select="'yes'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@proof">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@proof = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@proof = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "proof" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@proof"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.proof = '')">
-            <xsl:value-of select="$html.knowl.proof"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='proof']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-definition">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@definition">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@definition = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@definition = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "definition" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@definition"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.definition = '')">
-            <xsl:value-of select="$html.knowl.definition"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='definition']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-example">
-    <xsl:variable name="knowl-default" select="'yes'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@example">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@example = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@example = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "example" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@example"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.example = '')">
-            <xsl:value-of select="$html.knowl.example"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-example-solution">
-    <xsl:variable name="knowl-default" select="'yes'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@example-solution">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@example-solution = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@example-solution = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "example-solution" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@example-solution"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='example-solution']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-project">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@project">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@project = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@project = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "project" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@project"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.project = '')">
-            <xsl:value-of select="$html.knowl.project"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='project']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-task">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@task">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@task = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@task = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "task" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@task"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.task = '')">
-            <xsl:value-of select="$html.knowl.task"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='task']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-list">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@list">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@list = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@list = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "list" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@list"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.list = '')">
-            <xsl:value-of select="$html.knowl.list"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='list']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-remark">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@remark">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@remark = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@remark = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "remark" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@remark"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.remark = '')">
-            <xsl:value-of select="$html.knowl.remark"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='remark']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-objectives">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@objectives">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@objectives = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@objectives = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "objectives" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@objectives"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.objectives = '')">
-            <xsl:value-of select="$html.knowl.objectives"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='objectives']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-outcomes">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@outcomes">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@outcomes = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@outcomes = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "outcomes" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@outcomes"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.outcomes = '')">
-            <xsl:value-of select="$html.knowl.outcomes"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='outcomes']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-figure">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@figure">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@figure = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@figure = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "figure" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@figure"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.figure = '')">
-            <xsl:value-of select="$html.knowl.figure"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='figure']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-table">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@table">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@table = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@table = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "table" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@table"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.table = '')">
-            <xsl:value-of select="$html.knowl.table"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='table']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-listing">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@listing">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@listing = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@listing = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "listing" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@listing"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.listing = '')">
-            <xsl:value-of select="$html.knowl.listing"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='listing']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-inline">
-    <xsl:variable name="knowl-default" select="'yes'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@exercise-inline">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@exercise-inline = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@exercise-inline = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-inline" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-inline"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.exercise.inline = '')">
-            <xsl:value-of select="$html.knowl.exercise.inline"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-inline']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-divisional">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@exercise-divisional">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@exercise-divisional = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@exercise-divisional = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-divisional" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-divisional"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.exercise.sectional = '')">
-            <xsl:value-of select="$html.knowl.exercise.sectional"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-divisional']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-worksheet">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@exercise-worksheet">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@exercise-worksheet = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@exercise-worksheet = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-worksheet" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-worksheet"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.exercise.worksheet = '')">
-            <xsl:value-of select="$html.knowl.exercise.worksheet"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-worksheet']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <xsl:variable name="knowl-exercise-readingquestion">
-    <xsl:variable name="knowl-default" select="'no'"/>
-    <xsl:choose>
-        <!-- observe publisher switch first -->
-        <xsl:when test="$publication/html/knowl/@exercise-readingquestion">
-            <xsl:choose>
-                <xsl:when test="$publication/html/knowl/@exercise-readingquestion = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/html/knowl/@exercise-readingquestion = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML knowl-ization switch for "exercise-readingquestion" in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/knowl/@exercise-readingquestion"/>". Proceeding with default value: "<xsl:value-of select="$knowl-default"/>"</xsl:message>
-                    <xsl:value-of select="$knowl-default"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- legacy behavior with old-style string parameter, deprecation  -->
-        <!-- elsewhere, accept whatever, as before, i.e. no error-checking -->
-        <xsl:when test="not($html.knowl.exercise.readingquestion = '')">
-            <xsl:value-of select="$html.knowl.exercise.readingquestion"/>
-        </xsl:when>
-        <!-- no attempt to set/manipulate, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$knowl-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-readingquestion']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!--               -->
@@ -2780,61 +2173,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--       Must follow a summary link to descend to finer subdivisions       -->
 <!--   'linear' is the default, 'tree' is an option                          -->
 <xsl:variable name="nav-logic">
-    <xsl:variable name="logic-default" select="'linear'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/html/navigation/@logic = 'linear'">
-            <xsl:text>linear</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/navigation/@logic = 'tree'">
-            <xsl:text>tree</xsl:text>
-        </xsl:when>
-        <!-- an attempt to set, but wrong -->
-        <xsl:when test="$publication/html/navigation/@logic">
-            <xsl:message>PTX:WARNING: HTML navigation logic setting in publisher file should be "linear" or "tree", not "<xsl:value-of select="$publication/html/navigation/@logic"/>". Proceeding with default value: "<xsl:value-of select="$logic-default"/>"</xsl:message>
-            <xsl:value-of select="$logic-default"/>
-        </xsl:when>
-        <!-- backwards compatibility, no error-checking -->
-        <xsl:when test="$html.navigation.logic='linear'">
-            <xsl:text>linear</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.logic='tree'">
-            <xsl:text>tree</xsl:text>
-        </xsl:when>
-        <!-- no effort to set this switch, so use default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$logic-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='logic']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- The "up" button is optional given the contents sidebar, default is to have it -->
 <!-- An up button is very desirable if you use the tree-like logic                 -->
 <xsl:variable name="nav-upbutton">
-    <xsl:variable name="upbutton-default" select="'yes'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/html/navigation/@upbutton = 'yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/navigation/@upbutton = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- an attempt to set, but wrong -->
-        <xsl:when test="$publication/html/navigation/@upbutton">
-            <xsl:message>PTX:WARNING: HTML navigation up-button setting in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/html/navigation/@upbutton"/>". Proceeding with default value: "<xsl:value-of select="$upbutton-default"/>"</xsl:message>
-            <xsl:value-of select="$upbutton-default"/>
-        </xsl:when>
-        <!-- backwards compatibility, no error-checking -->
-        <xsl:when test="$html.navigation.upbutton='yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.navigation.upbutton='no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- no effort to set this switch, so use default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$upbutton-default"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='upbutton']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 
@@ -3069,14 +2414,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This is the preferred Google method as of 2019-11-28 -->
 <xsl:variable name="google-gst-tracking">
-    <xsl:choose>
-        <xsl:when test="$publication/html/analytics/@google-gst">
-            <xsl:value-of select="$publication/html/analytics/@google-gst"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/analytics/pi:pub-attribute[@name='google-gst']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- And boolean variables for the presence of these services -->
@@ -3165,26 +2503,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and possibly other platforms at a later date.            -->
 <!-- The default is for privacy (fewer tracking cookies)      -->
 <xsl:variable name="embedded-video-privacy">
-    <xsl:choose>
-        <xsl:when test="$publication/html/video/@privacy = 'yes'">
-            <xsl:value-of select="$publication/html/video/@privacy"/>
-        </xsl:when>
-        <xsl:when test="$publication/html/video/@privacy = 'no'">
-            <xsl:value-of select="$publication/html/video/@privacy"/>
-        </xsl:when>
-        <!-- set, but not correct, so inform and use default -->
-        <xsl:when test="$publication/html/video/@privacy">
-            <xsl:value-of select="$publication/html/video/@privacy"/>
-            <xsl:message>PTX WARNING:   HTML video/@privacy in publisher file should be "yes" (fewer cookies) or "no" (all cookies), not "<xsl:value-of select="$publication/html/video/@privacy"/>". Proceeding with default value: "yes" (disable cookies, if possible)</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- unset, so use default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/video/pi:pub-attribute[@name='privacy']" mode="set-pubfile-variable"/>
 </xsl:variable>
-
 <xsl:variable name="b-video-privacy" select="$embedded-video-privacy = 'yes'"/>
 
 <!--                       -->
@@ -3194,29 +2514,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2019-12-17:  Under development, not documented -->
 
 <xsl:variable name="host-platform">
-    <xsl:choose>
-        <xsl:when test="$publication/html/platform/@host = 'web'">
-            <xsl:text>web</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/html/platform/@host = 'runestone'">
-            <xsl:text>runestone</xsl:text>
-        </xsl:when>
-        <!-- Deprecated: 2023-05-24 (AIM experiments for UTMOST) -->
-        <!-- Perhaps not the best way to deprecate...see below   -->
-        <xsl:when test="$publication/html/platform/@host = 'aim'">
-            <xsl:message >PTX:WARNING: the platform/@host entry in publisher file should no longer be set to "aim", this value was deprecated 2023-05-24.  Proceeding with default value: "web"</xsl:message>
-            <xsl:text>web</xsl:text>
-        </xsl:when>
-        <!-- not recognized, so warn and default -->
-        <xsl:when test="$publication/html/platform/@host">
-            <xsl:message >PTX:WARNING: HTML platform/@host in publisher file should be "web", or "runestone", not "<xsl:value-of select="$publication/html/platform/@host"/>".  Proceeding with default value: "web"</xsl:message>
-            <xsl:text>web</xsl:text>
-        </xsl:when>
-        <!-- the default is the "open web" -->
-        <xsl:otherwise>
-            <xsl:text>web</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='host']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Intent is for exactly one of these boolean to be true -->
@@ -3234,7 +2532,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Author-specified relative to source external directory -->
 <xsl:variable name="epub-cover-base-filename">
-    <xsl:value-of select="$publication/epub/cover/@front"/>
+    <xsl:apply-templates select="$publisher-attribute-options/epub/cover/pi:pub-attribute[@name='front']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- If the author does not say, eventually we will try to build a cover -->
@@ -3274,40 +2572,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But if a third option aries, we can use it, and switch away  -->
 <!-- from the boolean variable without the author knowing. -->
 <xsl:variable name="latex-sides">
-    <!-- default depends on character of output -->
-    <xsl:variable name="default-sides">
-        <xsl:choose>
-            <xsl:when test="$b-latex-print">
-                <xsl:text>two</xsl:text>
-            </xsl:when>
-            <xsl:otherwise> <!-- electronic -->
-                <xsl:text>one</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='sides']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:template match="latex/pi:pub-attribute[@name='sides']" mode="get-default-pub-variable">
     <xsl:choose>
-        <xsl:when test="$publication/latex/@sides = 'two'">
+        <xsl:when test="$b-latex-print">
             <xsl:text>two</xsl:text>
         </xsl:when>
-        <xsl:when test="$publication/latex/@sides = 'one'">
+        <xsl:otherwise> <!-- electronic -->
             <xsl:text>one</xsl:text>
-        </xsl:when>
-        <!-- not recognized, so warn and default -->
-        <xsl:when test="$publication/latex/@sides">
-            <xsl:message>PTX:WARNING: LaTeX @sides in publisher file should be "one" or "two", not "<xsl:value-of select="$publication/latex/@sides"/>".  Proceeding with default value, which depends on if you are making electronic ("one") or print ("two") output</xsl:message>
-            <xsl:value-of select="$default-sides"/>
-        </xsl:when>
-        <!-- inspect deprecated string parameter  -->
-        <!-- no error-checking, shouldn't be used -->
-        <xsl:when test="not($latex.sides = '')">
-            <xsl:value-of select="$latex.sides"/>
-        </xsl:when>
-        <!-- default depends -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-sides"/>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:variable>
+</xsl:template>
 <!-- We have "one" or "two", or junk from the deprecated string parameter -->
 <xsl:variable name="b-latex-two-sides" select="$latex-sides = 'two'"/>
 
@@ -3315,28 +2591,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and that seems stable enough, as in, we don't need to    -->
 <!-- contemplate some third variant of LaTeX output.          -->
 <xsl:variable name="latex-print">
-    <xsl:choose>
-        <xsl:when test="$publication/latex/@print = 'yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/@print = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- not recognized, so warn and default -->
-        <xsl:when test="$publication/latex/@print">
-            <xsl:message>PTX:WARNING: LaTeX @print in publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@print"/>".  Proceeding with default value: "no"</xsl:message>
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- inspect deprecated string parameter  -->
-        <!-- no error-checking, shouldn't be used -->
-        <xsl:when test="not($latex.print = '')">
-            <xsl:value-of select="$latex.print"/>
-        </xsl:when>
-        <!-- default is "no" -->
-        <xsl:otherwise>
-            <xsl:text>no</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='print']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- We have "yes" or "no", or possibly junk from the deprecated string    -->
@@ -3382,23 +2637,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://www.sascha-frank.com/page-break.html    -->
 <!-- N.B. makes no sense for HTML                    -->
 <xsl:variable name="latex-bottom-alignment">
-    <xsl:variable name="default-align" select="'ragged'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/latex/page/@bottom-alignment = 'flush'">
-            <xsl:text>flush</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/page/@bottom-alignment = 'ragged'">
-            <xsl:text>ragged</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/page/@bottom-alignment">
-            <xsl:message>PTX:WARNING: LaTeX bottom-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@bottom-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
-            <xsl:value-of select="$default-align"/>
-        </xsl:when>
-        <!-- no attempt at all, so default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-align"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/page/pi:pub-attribute[@name='bottom-alignment']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- LaTeX worksheet formatting -->
@@ -3407,22 +2646,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher switch to format continuously with      -->
 <!-- other divisions here                              -->
 <xsl:variable name="latex-worksheet-formatted">
-    <xsl:choose>
-        <xsl:when test="$publication/latex/worksheet/@formatted = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/worksheet/@formatted = 'yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/worksheet/@formatted">
-            <xsl:message>PTX WARNING: LaTeX worksheet formatting in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/worksheet/@formatted"/>". Proceeding with default value: "yes"</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/worksheet/pi:pub-attribute[@name='formatted']" mode="set-pubfile-variable"/>
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
 
@@ -3518,42 +2742,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- particular logic is in the -latex conversion.  Here we just -->
 <!-- sanitize to "yes", "no" or empty (i.e. ignored)             -->
 <xsl:variable name="latex-pageref">
-    <xsl:choose>
-        <!-- given in publication file -->
-        <xsl:when test="$publication/latex/@pageref">
-            <xsl:choose>
-                <xsl:when test="$publication/latex/@pageref = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/latex/@pageref = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- ignored = empty (as if not attempted -->
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the value of the publisher file entry  latex/@pageref  should be "yes" or "no" not "<xsl:value-of select="$publication/latex/@pageref"/>".  The value is being ignored.</xsl:message>
-                    <xsl:text/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- given by deprecated string parameter -->
-        <xsl:when test="($latex.pageref != '')">
-            <xsl:choose>
-                <xsl:when test="$latex.pageref = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$latex.pageref = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- ignored = empty (as if not attempted -->
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.pageref  should be "yes" or "no" not "<xsl:value-of select="$latex.pageref"/>".  The value is being ignored.</xsl:message>
-                    <xsl:text/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- empty if no attempt to influence -->
-        <xsl:otherwise/>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='pageref']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Draft Copies                                              -->
@@ -3563,45 +2752,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     presuming geometry sets smaller page size             -->
 <!--     with paperheight, paperwidth                          -->
 <xsl:variable name="latex-draft-mode">
-    <xsl:choose>
-        <xsl:when test="$publication/latex/@draft">
-            <xsl:choose>
-                <xsl:when test="$publication/latex/@draft = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/latex/@draft = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$publication/latex/@draft">
-                    <xsl:message>PTX WARNING: LaTeX draft mode in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@draft"/>". Proceeding with default value: "no"</xsl:message>
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- default -->
-                <xsl:otherwise>
-                    <xsl:text>no</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="($latex.draft != '')">
-            <xsl:choose>
-                <xsl:when test="$latex.draft = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$latex.draft = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- ignored = empty (as if not attempted -->
-                <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the value of the *deprecated* string parameter  latex.draft  should be "yes" or "no" not "<xsl:value-of select="$latex.draft"/>".  The default value of "no" is being used.</xsl:message>
-                    <xsl:text/>
-                </xsl:otherwise>
-            </xsl:choose>
-       </xsl:when>
-        <!-- ho effort to specify, default to "no" -->
-        <xsl:otherwise>
-            <xsl:text>no</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='draft']" mode="set-pubfile-variable"/>
 </xsl:variable>
 <xsl:variable name="b-latex-draft-mode" select="$latex-draft-mode = 'yes'"/>
 
@@ -3683,24 +2834,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-asymptote-html-links" select="$asymptote-html-links = 'yes'"/>
 
 <xsl:variable name="latex-snapshot">
-    <xsl:variable name="default-snapshot" select="'no'"/>
-    <xsl:choose>
-        <xsl:when test="$publication/latex/@snapshot = 'no'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <xsl:when test="$publication/latex/@snapshot = 'yes'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- attempt to set, but wrong -->
-        <xsl:when test="$publication/latex/@snapshot">
-            <xsl:message>PTX WARNING: LaTeX snapshot record in the publisher file should be "yes" or "no", not "<xsl:value-of select="$publication/latex/@snapshot"/>". Proceeding with default value: "<xsl:value-of select="$default-snapshot"/>"</xsl:message>
-            <xsl:value-of select="$default-snapshot"/>
-        </xsl:when>
-        <!-- no attempt to set, thus default -->
-        <xsl:otherwise>
-            <xsl:value-of select="$default-snapshot"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='snapshot']" mode="set-pubfile-variable"/>
 </xsl:variable>
 <xsl:variable name="b-latex-snapshot" select="$latex-snapshot = 'yes'"/>
 
@@ -3767,115 +2901,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Reveal.js Theme -->
 
 <xsl:variable name="reveal-theme">
-    <xsl:choose>
-        <!-- if theme is specified, use it -->
-        <xsl:when test="$publication/revealjs/appearance/@theme">
-            <xsl:value-of select="$publication/revealjs/appearance/@theme"/>
-        </xsl:when>
-        <!-- otherwise use "simple" as the default -->
-        <xsl:otherwise>
-            <xsl:text>simple</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls Back Arrows -->
 
 <xsl:variable name="reveal-control-backarrow">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@backarrows = 'faded') or ($publication/revealjs/controls/@backarrows = 'hidden') or ($publication/revealjs/controls/@backarrows = 'visible')">
-            <xsl:value-of select="$publication/revealjs/controls/@backarrows"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@backarrows">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@backarrows" should be "faded", "hidden", or "visible" not "<xsl:value-of select="$publication/revealjs/controls/@backarrows"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>faded</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "faded" as the default -->
-        <xsl:otherwise>
-            <xsl:text>faded</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='backarrows']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls (on-screen navigation) -->
 
-<xsl:variable name="control-display">
-    <xsl:choose>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@display = 'yes') or ($publication/revealjs/controls/@display = 'no')">
-            <xsl:value-of select="$publication/revealjs/controls/@display"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@display">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@display" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@display"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "yes" as the default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:variable name="reveal-control-display">
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='display']" mode="set-pubfile-variable"/>
 </xsl:variable>
 <!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-reveal-control-display" select="$control-display= 'yes'"/>
+<xsl:variable name="b-reveal-control-display" select="$reveal-control-display= 'yes'"/>
 
 <!-- Reveal.js Controls Layout -->
 
 <xsl:variable name="reveal-control-layout">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@layout = 'edges') or ($publication/revealjs/controls/@layout = 'bottom-right')">
-            <xsl:value-of select="$publication/revealjs/controls/@layout"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@layout">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@layout" should be "edges" or "bottom-right" not "<xsl:value-of select="$publication/revealjs/controls/@layout"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>bottom-right</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "bottom-right" as the default -->
-        <xsl:otherwise>
-            <xsl:text>bottom-right</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='layout']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Reveal.js Controls Tutorial (animated arrows) -->
 
-<xsl:variable name="control-tutorial">
-    <xsl:choose>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@tutorial = 'yes') or ($publication/revealjs/controls/@tutorial = 'no')">
-            <xsl:value-of select="$publication/revealjs/controls/@tutorial"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@tutorial">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@tutorial" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@tutorial"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "yes" as the default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:variable name="reveal-control-tutorial">
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/controls/pi:pub-attribute[@name='tutorial']" mode="set-pubfile-variable"/>
 </xsl:variable>
 <!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-reveal-control-tutorial" select="$control-tutorial= 'yes'"/>
+<xsl:variable name="b-reveal-control-tutorial" select="$reveal-control-tutorial= 'yes'"/>
 
 <!-- Reveal.js Navigation Mode -->
 
 <xsl:variable name="reveal-navigation-mode">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/navigation/@mode = 'default') or ($publication/revealjs/navigation/@mode = 'linear') or ($publication/revealjs/navigation/@mode = 'grid')">
-            <xsl:value-of select="$publication/revealjs/navigation/@mode"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/navigation/@mode">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/navigation/@mode" should be "default", "linear", or "grid" not "<xsl:value-of select="$publication/revealjs/navigation/@mode"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>default</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "default" as the default -->
-        <xsl:otherwise>
-            <xsl:text>default</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/navigation/pi:pub-attribute[@name='mode']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!-- Reveal.js Resources file location -->
@@ -3915,61 +2975,205 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########################################### -->
 
 <!-- The pi:publisher tree should mirror the official list of options   -->
-<!-- for publisher file attributes for each attribute that has a finite -->
-<!-- list of options.  The first option in the list is, by convention,  -->
-<!-- the default value.                                                 -->
+<!-- for publisher file attributes. Each pi:pub-attribute has a name.   -->
+<!-- The following attributes are optional.                             -->
+<!-- default: default string to use (should not contain spaces)         -->
+<!-- options: space-separated lits of options aside from the default    -->
+<!-- freeform: if 'yes' then pub attributee can be anything             -->
+<!-- stringparam: a stringparam that can override the pubfile entry     -->
+<!-- legacy-stringparam: a deprecated stringparam, last in chain        -->
+<!-- legacy-options: space separated list of retired options            -->
 
 <pi:publisher>
-    <webwork task-reveal="preceding-correct all"/>
+    <common>
+        <pi:pub-attribute name="emdash-space" default="none" options="thin" legacy-stringparam="emdash.space"/>
+        <chunking>
+            <pi:pub-attribute name="level" default="" options="0 1 2 3 4 5 6" stringparam="debug.chunk" legacy-stringparam="chunk.level"/>
+        </chunking>
+        <tableofcontents>
+            <pi:pub-attribute name="level" options="0 1 2 3 4 5 6" legacy-stringparam="toc.level"/>
+        </tableofcontents>
+        <fillin>
+            <pi:pub-attribute name="textstyle" default="underline" options="box shade"/>
+            <pi:pub-attribute name="mathstyle" default="shade" options="underline box"/>
+        </fillin>
+    </common>
+    <html>
+        <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
+        <calculator>
+            <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
+        </calculator>
+        <knowl>
+            <pi:pub-attribute name="theorem" default="no" options="yes" legacy-stringparam="html.knowl.theorem"/>
+            <pi:pub-attribute name="proof" default="yes" options="no" legacy-stringparam="html.knowl.proof"/>
+            <pi:pub-attribute name="definition" default="no" options="yes" legacy-stringparam="html.knowl.definition"/>
+            <pi:pub-attribute name="example" default="yes" options="no" legacy-stringparam="html.knowl.example"/>
+            <pi:pub-attribute name="example-solution" default="yes" options="no"/>
+            <pi:pub-attribute name="project" default="no" options="yes" legacy-stringparam="html.knowl.project"/>
+            <pi:pub-attribute name="task" default="no" options="yes" legacy-stringparam="html.knowl.task"/>
+            <pi:pub-attribute name="list" default="no" options="yes" legacy-stringparam="html.knowl.list"/>
+            <pi:pub-attribute name="remark" default="no" options="yes" legacy-stringparam="html.knowl.remark"/>
+            <pi:pub-attribute name="objectives" default="no" options="yes" legacy-stringparam="html.knowl.objectives"/>
+            <pi:pub-attribute name="outcomes" default="no" options="yes" legacy-stringparam="html.knowl.outcomes"/>
+            <pi:pub-attribute name="figure" default="no" options="yes" legacy-stringparam="html.knowl.figure"/>
+            <pi:pub-attribute name="table" default="no" options="yes" legacy-stringparam="html.knowl.table"/>
+            <pi:pub-attribute name="listing" default="no" options="yes" legacy-stringparam="html.knowl.listing"/>
+            <pi:pub-attribute name="exercise-inline" default="yes" options="no" legacy-stringparam="html.knowl.exercise.inline"/>
+            <pi:pub-attribute name="exercise-divisional" default="no" options="yes" legacy-stringparam="html.knowl.exercise.sectional"/>
+            <pi:pub-attribute name="exercise-worksheet" default="no" options="yes" legacy-stringparam="html.knowl.exercise.worksheet"/>
+            <pi:pub-attribute name="exercise-readingquestion" default="no" options="yes" legacy-stringparam="html.knowl.exercise.readingquestion"/>
+        </knowl>
+        <navigation>
+            <pi:pub-attribute name="logic" default="linear" options="tree" legacy-stringparam="html.navigation.logic"/>
+            <pi:pub-attribute name="upbutton" default="yes" options="no" legacy-stringparam="html.navigation.logic"/>
+        </navigation>
+        <analytics>
+            <pi:pub-attribute name="google-gst" freeform="yes"/>
+        </analytics>
+        <video>
+            <pi:pub-attribute name="privacy" default="yes" options="no"/>
+        </video>
+        <platform>
+            <pi:pub-attribute name="host" default="web" options="runestone" legacy-options="aim"/>
+        </platform>
+    </html>
+    <epub>
+        <cover>
+            <pi:pub-attribute name="front" freeform="yes"/>
+        </cover>
+    </epub>
+    <latex>
+        <pi:pub-attribute name="sides" options="one two" legacy-stringparam="latex.sides"/>
+        <pi:pub-attribute name="print" default="no" options="yes" legacy-stringparam="latex.print"/>
+        <pi:pub-attribute name="snapshot" default="no" options="yes"/>
+        <pi:pub-attribute name="pageref" options="yes no" legacy-stringparam="latex.pageref"/>
+        <pi:pub-attribute name="draft" default="no" options="yes" legacy-stringparam="latex.draft"/>
+        <page>
+            <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
+        </page>
+        <worksheet>
+            <pi:pub-attribute name="formatted" default="yes" options="no"/>
+        </worksheet>
+    </latex>
+    <webwork>
+        <pi:pub-attribute name="server" default="https://webwork-ptx.aimath.org" freeform="yes"/>
+        <pi:pub-attribute name="course" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="coursepassword" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="user" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="userpassword" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="task-reveal" default="" options="all"/>
+    </webwork>
+    <revealjs>
+        <appearance>
+            <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
+        </appearance>
+        <controls>
+            <pi:pub-attribute name="backarrows" default="faded" options="hidden visible"/>
+            <pi:pub-attribute name="display" default="yes" options="no"/>
+            <pi:pub-attribute name="layout" default="bottom-right" options="edges"/>
+            <pi:pub-attribute name="tutorial" default="yes" options="no"/>
+        </controls>
+        <navigation>
+            <pi:pub-attribute name="mode" default="default" options="linear grid"/>
+        </navigation>
+    </revealjs>
 </pi:publisher>
 
 <!-- global variable for pi:publisher tree above -->
 <xsl:variable name="publisher-attribute-options" select="document('')/xsl:stylesheet/pi:publisher"/>
 
 <!-- context for a match below will be an attribute from the pi:publisher tree -->
-<xsl:template match="@*" mode="set-pubfile-attribute-variable">
-    <!-- get the options that are in pi:publisher -->
-    <xsl:variable name="options" select="str:tokenize(., ' ')"/>
-    <!-- the first option is the default -->
-    <xsl:variable name="default" select="$options[1]"/>
-    <!-- get the path to this attribute -->
+<xsl:template match="pi:pub-attribute" mode="set-pubfile-variable">
+    <xsl:variable name="all-options" select="str:tokenize(concat(@default, ' ', @options), ' ')"/>
+    <xsl:variable name="legacy-options" select="str:tokenize(@legacy-options, ' ')"/>
+    <!-- get the path to this attribute in the actual publisher file-->
     <xsl:variable name="path">
-        <xsl:apply-templates select="." mode="path"/>
+        <xsl:apply-templates select="." mode="pub-entry-path"/>
     </xsl:variable>
     <!-- get the corresponding attribute from the publisher file -->
     <!-- which may not exist                                     -->
     <xsl:variable name="full-path" select="concat('$publication/', $path)"/>
     <xsl:variable name="pubfile-attribute" select="dyn:evaluate($full-path)"/>
+    <!-- The default value, which may be specified or may vary conditionally -->
+    <!-- (via a custom template) appears frequently as the provided value    -->
+    <!-- when there is an error condition of some type, and is also echo'ed  -->
+    <!-- back to the publisher in those cases.  So we grab it once..         -->
+    <xsl:variable name="the-default">
+        <xsl:apply-templates select="." mode="get-default-pub-variable"/>
+    </xsl:variable>
     <xsl:choose>
-        <!-- test catches when attribute is omitted from pubfile, -->
-        <!-- as well as present but null or only whitepsace       -->
-        <xsl:when test="string($pubfile-attribute) = ''">
-            <xsl:value-of select="$default"/>
+        <!-- if we respect a stringparam override and it is provided, use it -->
+        <xsl:when test="@stringparam and dyn:evaluate(concat('$', @stringparam)) != ''">
+            <xsl:value-of select="dyn:evaluate(concat('$', @stringparam))"/>
         </xsl:when>
-        <!-- a non-empty, non-whitespace string was used in the pubfile -->
-        <!-- next test checks if it is among the legal options          -->
-        <xsl:when test="$pubfile-attribute = $options">
+        <!-- if nothing is declared in the publisher file, not even as null  -->
+        <!-- and if there is an old stringparam that we still honor, and if  -->
+        <!-- it is among the legal options, use it and issue warning         -->
+        <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and (@freeform = 'yes' or dyn:evaluate(concat('$', @legacy-stringparam)) = $all-options)">
+            <xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>
+            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" will be used. However you should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  instead.</xsl:message>
+        </xsl:when>
+        <!-- if nothing is declared in the publisher file, not even as null  -->
+        <!-- and if there is an old stringparam that we still honor, and if  -->
+        <!-- it is among the legacy options, use default and issue warning   -->
+        <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) = $legacy-options">
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+        </xsl:when>
+        <!-- if nothing is declared in the publisher file, not even as null  -->
+        <!-- and if there is an old stringparam that we still honor, but its -->
+        <!-- value isn't legal, legacy, or the default strinigparam '',      -->
+        <!-- then use default and issue warning                              -->
+        <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) != ''">
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+        </xsl:when>
+        <!-- if nothing is declared in the publisher file or it is declared  -->
+        <!-- as null, use the default, which might be null                   -->
+        <xsl:when test="string($pubfile-attribute) = ''">
+            <xsl:value-of select="$the-default"/>
+        </xsl:when>
+        <!-- if a non-empty string declared in the pubfile and if freeform   -->
+        <!-- is permitted, use whatever the pubfile entry was                -->
+        <xsl:when test="@freeform = 'yes'">
             <xsl:value-of select="$pubfile-attribute"/>
         </xsl:when>
+        <!-- now freeform not permittted; check if entry is among the legal  -->
+        <!-- options and if so, use it                                       -->
+        <xsl:when test="$pubfile-attribute = $all-options">
+            <xsl:value-of select="$pubfile-attribute"/>
+        </xsl:when>
+        <!-- if it's among the legacy options, use default and issue warning  -->
+        <xsl:when test="$pubfile-attribute = $legacy-options">
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: your value "<xsl:value-of select="$pubfile-attribute"/>"  for the publisher file entry  <xsl:value-of select="$path"/>  has been retired; possible values are <xsl:apply-templates select="$all-options" mode="quoted-list"/>. The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+        </xsl:when>
+        <!-- pubfile has some string that is not among legal options, and    -->
+        <!-- freeform is disallowed, so give a warning and use default       -->
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should be <xsl:apply-templates select="$options" mode="quoted-list"/>, not "<xsl:value-of select="$pubfile-attribute"/>".  The default "<xsl:value-of select="$default"/>" will be used instead.</xsl:message>
-            <xsl:value-of select="$default"/>
+            <xsl:value-of select="$the-default"/>
+            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should not have value "<xsl:value-of select="$pubfile-attribute"/>".  Possible values are: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Recurse back up the tree to get the path to an attribute -->
-<xsl:template match="@*" mode="path">
-    <xsl:apply-templates select=".." mode="path"/>
-    <xsl:value-of select="concat('@', local-name())"/>
+<!-- can be overrided when the default is dynamic -->
+<xsl:template match="pi:pub-attribute" mode="get-default-pub-variable">
+    <xsl:value-of select="@default"/>
 </xsl:template>
 
-<xsl:template match="*" mode="path">
-    <xsl:apply-templates select=".." mode="path"/>
+<!-- Recurse back up the tree to get the path to an attribute -->
+<xsl:template match="pi:pub-attribute" mode="pub-entry-path">
+    <xsl:apply-templates select=".." mode="pub-entry-path"/>
+    <xsl:value-of select="concat('@', @name)"/>
+</xsl:template>
+
+<xsl:template match="*" mode="pub-entry-path">
+    <xsl:apply-templates select=".." mode="pub-entry-path"/>
     <xsl:value-of select="concat(local-name(), '/')"/>
 </xsl:template>
 
-<xsl:template match="pi:publisher" mode="path"/>
+<xsl:template match="pi:publisher" mode="pub-entry-path"/>
 
 <!-- Expects a node set from tokenize()                       -->
 <!-- Produces a string where each token is wrapped in quotes  -->
