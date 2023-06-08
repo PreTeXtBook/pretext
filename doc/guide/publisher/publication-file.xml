@@ -533,6 +533,17 @@
             </table>
         </subsection>
 
+        <subsection xml:id="online-tabbed-tasks">
+            <title>HTML Tabbed viewer</title>
+            <idx><h>tabbed viewer</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>tabbed viewer</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/exercises</cline>
+            </cd>element can have a <attr>tabbed-tasks</attr> attribute.  The value is a space-separated, or comma-separated, list of types of <tag>exercise</tag> or PROJECT-LIKE.  The values in this list come specify up to four of the five possible types of exercises: <c>divisional</c>, <c>inline</c>, <c>reading</c>, <c>project</c>.  Note that exercises inside a <tag>worksheet</tag> are explicity ineligible.  See <xref ref="overview-exercises"/> for careful descriptions of these types.</p>
+            <!-- 2023-06-08: no good place for a general discussion of "task", perhaps it has not been written. -->
+        </subsection>
+
         <subsection xml:id="online-platform-options">
             <title>HTML Platforms</title>
             <idx><h>platform</h><h>HTML</h></idx>
