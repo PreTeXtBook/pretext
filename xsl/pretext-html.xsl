@@ -4259,10 +4259,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- structured by "task" so let templates for tasks work -->
         <!-- down to terminal task with SOLUTION-LIKE appendages  -->
         <xsl:when test="task">
-            <xsl:apply-templates select="introduction|task|conclusion">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-            </xsl:apply-templates>
+            <!-- An "exercise" structured by task may electively be presented  -->
+            <!-- by a "tabbed" interface from Runestone components.            -->
+            <!-- *  Never for a "worksheet" - too messy for printing           -->
+            <!-- *  Not hitting PROJECT-LIKE here, see elsewhere               -->
+            <xsl:variable name="b-tabbed-tasks" select="
+                (@exercise-customization = 'divisional' and $b-html-tabbed-tasks-divisional) or
+                (@exercise-customization = 'inline' and $b-html-tabbed-tasks-inline) or
+                (@exercise-customization = 'reading' and $b-html-tabbed-tasks-reading)"/>
+            <xsl:choose>
+                <xsl:when test="$b-tabbed-tasks">
+                    <!-- Use tabbed viewer from Runestone Components -->
+                    <xsl:apply-templates select="."  mode="tabbed-tasks"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="introduction|task|conclusion">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                        <xsl:with-param name="block-type" select="$block-type"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!--  -->
         <!-- structured with "statement" and SOLUTION-LIKE, -->
@@ -4374,10 +4390,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="task">
-            <xsl:apply-templates select="introduction|task|conclusion">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-            </xsl:apply-templates>
+            <!-- An "PROJECT-LIKE" structured by task may electively  -->
+            <!-- be presented by a "tabbed" interface from Runestone  -->
+            <!-- components. Note: this test is simpler than for  -->
+            <!-- "exercise" since we know we have a PROJECT-LIKE and  -->
+            <!-- do not need to consult @exercise-customization. -->
+            <xsl:choose>
+                <xsl:when test="$b-html-tabbed-tasks-project">
+                    <!-- Use tabbed viewer from Runestone Components -->
+                    <xsl:apply-templates select="."  mode="tabbed-tasks"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="introduction|task|conclusion">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                        <xsl:with-param name="block-type" select="$block-type"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="."  mode="exercise-components">
