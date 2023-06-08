@@ -2121,6 +2121,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-readingquestion']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!--                   -->
+<!-- HTML Tabbed Tasks -->
+<!--                   -->
+
+<!-- Presentational choice for exercises and projects that are  -->
+<!-- structured by task.  Value is a list of possible types,    -->
+<!-- seen in creation of four boolean variables.  Never for the -->
+<!-- fifth type: "exercise" inside a "worksheet".               -->
+
+<xsl:variable name="html-tabbed-tasks" select="str:tokenize($publication/html/exercises/@tabbed-tasks, ' ,')"/>
+
+<!-- A string is equal to a node-set (the result of tokenize()) -->
+<!-- if it is equal to *one* child's text value.                -->
+<xsl:variable name="b-html-tabbed-tasks-divisional" select="'divisional' = $html-tabbed-tasks"/>
+<xsl:variable name="b-html-tabbed-tasks-inline" select="'inline' = $html-tabbed-tasks"/>
+<xsl:variable name="b-html-tabbed-tasks-reading" select="'reading' = $html-tabbed-tasks"/>
+<xsl:variable name="b-html-tabbed-tasks-project" select="'project' = $html-tabbed-tasks"/>
+
 <!--               -->
 <!-- HTML Base URL -->
 <!--               -->
