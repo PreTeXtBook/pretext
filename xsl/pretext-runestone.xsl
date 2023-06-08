@@ -2002,6 +2002,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Tabbed Viewer -->
+<!-- ############# -->
+
+<!-- Strictly a presentational device, but useful in certain situations  -->
+<!-- as a pedogogical device.  But we start with presentation.  An       -->
+<!-- "exercise" or PROJECT-LIKE, structured by "task" can have each      -->
+<!-- top-level task go into a tab, along with tabs for "introduction"    -->
+<!-- and "conclusion".  We *never* do this for worksheets, to avoid      -->
+<!-- gumming up printing and spacing.  And WeBWorK problems manage       -->
+<!-- their own tasks.  The "match" here is pretty selective for          -->
+<!-- "exercise", should perhaps be tighter for PROJECT-LIKE.  Of course, -->
+<!-- Runestone Components play nicely with this device, along with more  -->
+<!-- boring exercises.                                                   -->
+
+<xsl:template match="exercise[task and not(@exercise-customization = 'worksheet')]|&PROJECT-LIKE;" mode="tabbed-tasks">
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <div data-component="tabbedStuff">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:if test="introduction">
+                    <xsl:variable name="the-intro">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'introduction'"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <div data-component="tab" data-tabname="{$the-intro}">
+                        <xsl:apply-templates select="introduction"/>
+                    </div>
+                </xsl:if>
+                <!--  -->
+                <xsl:for-each select="task">
+                    <xsl:variable name="the-task-number">
+                        <xsl:text>(</xsl:text>
+                        <xsl:apply-templates select="." mode="serial-number"/>
+                        <xsl:text>)</xsl:text>
+                    </xsl:variable>
+                    <div data-component="tab" data-tabname="{$the-task-number}">
+                        <xsl:apply-templates select="."/>
+                    </div>
+                </xsl:for-each>
+                <!--  -->
+                <xsl:if test="conclusion">
+                    <xsl:variable name="the-outro">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'conclusion'"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <div data-component="tab" data-tabname="{$the-outro}">
+                        <xsl:apply-templates select="conclusion"/>
+                    </div>
+                </xsl:if>
+            </div>
+        </div>
+    </div>
+</xsl:template>
+
 <!-- ######### -->
 <!-- Utilities -->
 <!-- ######### -->
