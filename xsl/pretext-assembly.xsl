@@ -746,63 +746,66 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="enrichment"/>
     </xsl:copy>
-    <!-- manufacture a footnote with (private) attribute -->
-    <!-- as a signal to conversions as to its origin     -->
-    <xsl:choose>
-        <!-- explicitly opt-out, so no footnote -->
-        <xsl:when test="@visual = ''"/>
-        <!-- go for it, as requested by author -->
-        <xsl:when test="@visual">
-            <fn pi:url="{@visual}"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- When an author has not made an effort to provide a visual   -->
-            <!-- alternative, then attempt some obvious clean-up of the      -->
-            <!-- default, and if not possible, settle for an ugly visual URL -->
-            <!--                                                             -->
-            <!-- We get a candidate visual URI from the @href attribute      -->
-            <!-- link/reference/location may be external -->
-            <!-- (@href) or internal (dataurl[@source]) -->
-            <xsl:variable name="uri">
-                <xsl:choose>
-                    <!-- "url" and "dataurl" both support external @href -->
-                    <xsl:when test="@href">
-                        <xsl:value-of select="@href"/>
-                    </xsl:when>
-                    <!-- a "dataurl" might be local, @source is         -->
-                    <!-- indication, so prefix with a base URL,         -->
-                    <!-- add "external" directory, via template useful  -->
-                    <!-- also for visual URL formulation in -assembly   -->
-                    <!-- N.B. we are using the base URL, since this is  -->
-                    <!-- the most likely need by employing conversions. -->
-                    <!-- It would eem duplicative in a conversion to    -->
-                    <!-- HTML, so could perhaps be killed in that case. -->
-                    <!-- But it is what we want for LaTeX, and perhaps  -->
-                    <!-- for EPUB, etc.                                 -->
-                    <xsl:when test="self::dataurl and @source">
-                        <xsl:apply-templates select="." mode="static-url"/>
-                    </xsl:when>
-                    <!-- empty will be non-functional -->
-                    <xsl:otherwise/>
-                </xsl:choose>
-            </xsl:variable>
-            <!-- And clean-up automatically in the prevalent cases -->
-            <xsl:variable name="truncated-href">
-                <xsl:choose>
-                    <xsl:when test="substring(@href, 1, 8) = 'https://'">
-                        <xsl:value-of select="substring($uri, 9)"/>
-                    </xsl:when>
-                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
-                        <xsl:value-of select="substring($uri, 8)"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$uri"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <fn pi:url="{$truncated-href}"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- Now make footnote, as long as we don't create a footnote in a footnote -->
+    <xsl:if test="not(self::url and ancestor::fn)">
+        <!-- manufacture a footnote with (private) attribute -->
+        <!-- as a signal to conversions as to its origin     -->
+        <xsl:choose>
+            <!-- explicitly opt-out, so no footnote -->
+            <xsl:when test="@visual = ''"/>
+            <!-- go for it, as requested by author -->
+            <xsl:when test="@visual">
+                <fn pi:url="{@visual}"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- When an author has not made an effort to provide a visual   -->
+                <!-- alternative, then attempt some obvious clean-up of the      -->
+                <!-- default, and if not possible, settle for an ugly visual URL -->
+                <!--                                                             -->
+                <!-- We get a candidate visual URI from the @href attribute      -->
+                <!-- link/reference/location may be external -->
+                <!-- (@href) or internal (dataurl[@source]) -->
+                <xsl:variable name="uri">
+                    <xsl:choose>
+                        <!-- "url" and "dataurl" both support external @href -->
+                        <xsl:when test="@href">
+                            <xsl:value-of select="@href"/>
+                        </xsl:when>
+                        <!-- a "dataurl" might be local, @source is         -->
+                        <!-- indication, so prefix with a base URL,         -->
+                        <!-- add "external" directory, via template useful  -->
+                        <!-- also for visual URL formulation in -assembly   -->
+                        <!-- N.B. we are using the base URL, since this is  -->
+                        <!-- the most likely need by employing conversions. -->
+                        <!-- It would eem duplicative in a conversion to    -->
+                        <!-- HTML, so could perhaps be killed in that case. -->
+                        <!-- But it is what we want for LaTeX, and perhaps  -->
+                        <!-- for EPUB, etc.                                 -->
+                        <xsl:when test="self::dataurl and @source">
+                            <xsl:apply-templates select="." mode="static-url"/>
+                        </xsl:when>
+                        <!-- empty will be non-functional -->
+                        <xsl:otherwise/>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- And clean-up automatically in the prevalent cases -->
+                <xsl:variable name="truncated-href">
+                    <xsl:choose>
+                        <xsl:when test="substring(@href, 1, 8) = 'https://'">
+                            <xsl:value-of select="substring($uri, 9)"/>
+                        </xsl:when>
+                        <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                            <xsl:value-of select="substring($uri, 8)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <fn pi:url="{$truncated-href}"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
 </xsl:template>
 
 
