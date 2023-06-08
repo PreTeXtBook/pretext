@@ -4120,7 +4120,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <cline>&lt;url href="https://example.com/" visual="example.com"/&gt;</cline>
             </cd>This will render as <url href="https://example.com/" visual="example.com"/>.  Note that there is no footnote since the visual version is already apparent.</p>
 
-            <p>If you want to squelch the automatic footnote on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic footnote.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.  One example of this is a regular footnote, which contains a <init>URL</init>.  The automatic footnote, inside another footnote, becomes problematic in some conversions.  Better to squelch the footnote-within-a-footnote, and just list nearby a <init>URL</init>, likely using the <tag>c</tag> element to get a monospace font.</p>
+            <p>If you want to squelch the automatic footnote on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic footnote.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.</p>
+
+            <p>An extreme example of this behavior is a regular footnote which contains a <init>URL</init>.  Because an automatic footnote, inside another footnote, becomes problematic in some conversions, we squelch the footnote-within-a-footnote. A best practice here is to just list nearby a <init>URL</init>, likely using the <tag>c</tag> element to get a monospace font.</p>
 
             <p>A <tag>url</tag> inside a <tag>title</tag> has been accounted for, but should be used with caution.</p>
 
