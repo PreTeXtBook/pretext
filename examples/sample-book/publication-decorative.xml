@@ -60,6 +60,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- etc would not render correctly, so we turn off their  -->
         <!-- default knowlization.                                 -->
         <knowl exercise-inline="no"/>
+        <!-- A similar form of information-hiding is the tabbed    -->
+        <!-- viewer.  The elections here are meant to illustrate   -->
+        <!-- this, somewhat, in the sample book.                   -->
+        <exercises tabbed-tasks="inline project"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
