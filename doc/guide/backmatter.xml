@@ -21,6 +21,7 @@
     <xi:include href="appendices/editors.xml"/>
     <xi:include href="appendices/schema-install.xml"/>
     <xi:include href="appendices/offline-mathjax.xml"/>
+    <xi:include href="appendices/liblouis.xml"/>
     <xi:include href="appendices/git.xml"/>
     <xi:include href="appendices/latex-conversion.xml"/>
     <xi:include href="appendices/mac-os.xml"/>
