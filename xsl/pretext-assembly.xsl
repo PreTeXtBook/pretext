@@ -160,6 +160,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="fitb-update">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fitb-update"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="original-labels">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="original-labels"/>
@@ -247,8 +253,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="fitb-update-rtf">
+    <xsl:apply-templates select="$version" mode="fitb-update"/>
+</xsl:variable>
+<xsl:variable name="fitb-update" select="exsl:node-set($fitb-update-rtf)"/>
+
 <xsl:variable name="original-labeled-rtf">
-    <xsl:apply-templates select="$version" mode="original-labels"/>
+    <xsl:apply-templates select="$fitb-update" mode="original-labels"/>
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
@@ -389,6 +400,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:for-each>
     </xsl:copy>
+</xsl:template>
+
+<!-- ##################################################### -->
+<!-- Fill-in-the-Blank Old Style                           -->
+<!-- Convert to mode supported by updated Runestone        -->
+<!-- ##################################################### -->
+<xsl:template match="exercise/setup[./var]" mode="fitb-update">
+    <!-- Change setup to evaluation tag. -->
+    <xsl:element name="evaluation">
+        <xsl:apply-templates select="node()|@*" mode="fitb-update"/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="var[ancestor::exercise/setup/var]" mode="fitb-update">
+    <xsl:element name="fillin">
+        <xsl:apply-templates select="node()|@*[name() != 'case']" mode="fitb-update"/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="setup/var/condition" mode="fitb-update">
+    <xsl:element name="condition">
+        <xsl:if test="../@case">
+            <xsl:attribute name="case">
+            <xsl:value-of select="../@case"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()|@*[name() != 'case']" mode="fitb-update"/>
+    </xsl:element>
 </xsl:template>
 
 <!-- ##################################################### -->
