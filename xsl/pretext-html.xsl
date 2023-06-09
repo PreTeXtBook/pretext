@@ -10028,7 +10028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="header-libraries" />
             </head>
                 <!-- ignore MathJax signals everywhere, then enable selectively -->
-                <body class="pretext ignore-math">
+                <body class="ptx-content ignore-math">
                 <!-- potential document-id per-page -->
                 <xsl:call-template name="document-id"/>
                 <!-- React flag -->
