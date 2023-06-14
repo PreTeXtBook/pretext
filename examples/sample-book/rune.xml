@@ -930,7 +930,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercises xml:id="true-false-exercises">
         <title>True/False Exercises</title>
 
-        <exercise label="vector-space-dimension">
+        <exercise xml:id="true-false-one" label="vector-space-dimension">
             <title>True/False</title>
             <idx>vector space</idx>
             <statement correct="no">
@@ -948,7 +948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercises xml:id="multiple-choice-exercises">
         <title>Multiple Choice Exercises</title>
 
-        <exercise label="multiple-choice-not-randomized">
+        <exercise xml:id="multiple-choice-one" label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
             <idx>stop signs</idx>
             <statement>
@@ -1481,7 +1481,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>Matching Exercises</title>
 
         <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
-        <exercise label="matching-dates">
+        <exercise xml:id="matching-one" label="matching-dates">
             <title>Matching Problem, Dates</title>
             <idx>matching US dates</idx>
             <statement>
@@ -1651,6 +1651,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Python boolean variables are <c>True</c> and <c>False</c>.  A value in quotation marks is a string, not a boolean.</p>
             </feedback>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="select-exercises">
+        <title>Select Exercises</title>
+
+        <exercise>
+            <statement>
+                <p>Mock exercise, just to say this is all testing, 2023-05-19.</p>
+            </statement>
+        </exercise>
+
+        <!-- Select one at random -->
+        <exercise label="question-select">
+            <select questions="true-false-one multiple-choice-one matching-one"/>
+        </exercise>
+
+        <!-- Select according to a student's group (A or B) -->
+        <exercise label="ab-experiment">
+            <select ab-experiment="true-false-one multiple-choice-one" experiment-name="sample-book"/>
+        </exercise>
+
     </exercises>
 
     <exercises xml:id="short-answer-exercises">
