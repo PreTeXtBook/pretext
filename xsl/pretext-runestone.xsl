@@ -669,6 +669,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -679,6 +680,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -689,6 +691,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -699,6 +702,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -709,6 +713,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -719,6 +724,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]" mode="runestone-manifest">
@@ -1454,6 +1460,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates/>
     </span>
 </xsl:template>
+
+<!-- Select Questions -->
+
+<!-- "Select" questions come in three types                            -->
+<!--   * Question List - several equivalent problems,                  -->
+<!--     reader is assigned just one (good for exams)                  -->
+<!--   * A/B Experiment - two choices, experiment managed by Runestone -->
+<xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-interactive">
+    <div class="runestone sqcontainer">
+        <div data-component="selectquestion" data-points="1" data-limit-basecourse="false">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="runestone-id"/>
+            </xsl:attribute>
+            <!-- condition on an attribute of the "select" element -->
+            <xsl:choose>
+                <xsl:when test="select/@questions">
+                    <xsl:attribute name="data-questionlist">
+                        <xsl:apply-templates select="select/@questions" mode="runestone-targets">
+                            <xsl:with-param name="separator" select="', '"/>
+                        </xsl:apply-templates>
+                    </xsl:attribute>
+                    <p>Loading a dynamic question-list question...</p>
+                </xsl:when>
+                <xsl:when test="select/@ab-experiment">
+                    <xsl:attribute name="data-ab">
+                        <xsl:value-of select="select/@experiment-name"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-questionlist">
+                        <xsl:apply-templates select="select/@ab-experiment" mode="runestone-targets">
+                            <xsl:with-param name="separator" select="', '"/>
+                        </xsl:apply-templates>
+                    </xsl:attribute>
+                    <p>Loading a dynamic A/B question...</p>
+                </xsl:when>
+            </xsl:choose>
+        </div>
+    </div>
+</xsl:template>
+
 
 <!-- Fill-in-the-Blanks problem -->
 

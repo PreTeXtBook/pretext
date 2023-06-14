@@ -4877,6 +4877,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@exercise-interactive = 'htmlhack'">
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </xsl:when>
+        <!-- Select -->
+        <!-- Largely a Runestone/database operation referencing -->
+        <!-- existing questions supplied by the manifest,       -->
+        <!-- so we go straight to an HTML version               -->
+        <xsl:when test="@exercise-interactive = 'select'">
+            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+        </xsl:when>
         <!-- True/False        -->
         <!-- Multiple Choice   -->
         <!-- Parson problems   -->
