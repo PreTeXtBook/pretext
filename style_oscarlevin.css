@@ -1,3 +1,15 @@
+/* Since the detault style is loaded before the oscarlevin style, */
+/* some of the default style has to be undone */
+
+.ptx-content article.theorem-like::after, .ptx-content article.definition-like::after, .ptx-content article.example-like::after, .ptx-content article.project-like::after, .ptx-content article.remark-like::after, .ptx-content article.openproblem-like::after, .ptx-content article.openproblems-like::after, .ptx-content article.computation-like::after {
+   content: unset;
+}
+
+.ptx-content article.theorem-like, .ptx-content article.definition-like, .ptx-content article.example-like, .ptx-content article.project-like, .ptx-content article.remark-like, .ptx-content article.openproblem-like, .ptx-content article.openproblems-like, .ptx-content article.computation-like {
+  padding: unset;
+  border: unset;
+}
+
 
 :root {
 /* Set colors for environments */
@@ -52,41 +64,41 @@
 */
 
 /* definitions, theorems, assemblages, with theorem-like.theorem distinguished */
-.ptx-content .assemblage-like,
-.ptx-content .definition-like,
-.ptx-content .theorem-like.theorem {
+.ptx-content article.assemblage-like,
+.ptx-content article.definition-like,
+.ptx-content article.theorem-like.theorem {
     margin-top: 1.75em;
     padding: 1em;
     border-radius: 2px;
     margin-bottom: 1em;
 }
 
-.ptx-content .theorem-like {
+.ptx-content article.theorem-like {
   margin-top: 1.25em;
   padding: 1em;
   border-radius: 2px;
   margin-bottom: 1em;
 }
 
-.ptx-content .assemblage-like{
+.ptx-content article.assemblage-like{
     background-color: var(--assembbody);
     border: 2px solid var(--assembborder);
 }
 
-.ptx-content .definition-like {
+.ptx-content article.definition-like {
   background-color: var(--definitionbody);
   border: 2px solid var(--definitionborder);
 }
 
-.ptx-content .theorem-like.theorem,
-.ptx-content .theorem-like {
+.ptx-content article.theorem-like.theorem,
+.ptx-content article.theorem-like {
   background-color: var(--theorembody);
   border: 2px solid var(--theoremborder);
 }
 
-.ptx-content .assemblage-like .heading,
-.ptx-content .definition-like .heading,
-.ptx-content .theorem-like.theorem .heading {
+.ptx-content article.assemblage-like .heading,
+.ptx-content article.definition-like .heading,
+.ptx-content article.theorem-like.theorem .heading {
   margin-top: -1.75em;
   margin-left: -0.25em;
   display: table;
@@ -120,23 +132,23 @@
 }
 
 /* Examples and example-like; computation-like styled same as example-like with different colors */
-.ptx-content .example-like,
-.ptx-content .computation-like {
+.ptx-content article.example-like,
+.ptx-content article.computation-like {
   padding-left: 0.8em;
   padding-bottom: 0.5em;
 }
 
-.ptx-content .example-like.example {
+.ptx-content article.example-like.example {
   border-left: 0.1em solid var(--examplehead);
   border-bottom: 0.1em solid var(--examplehead);
 }
 
-.ptx-content .example-like {
+.ptx-content article.example-like {
   border-left: 0.1em solid var(--examplelikeborder);
   border-bottom: 0.1em solid var(--examplelikeborder);
 }
 
-.ptx-content .computation-like {
+.ptx-content article.computation-like {
   border-left: 0.1em solid var(--computationborder);
   border-bottom: 0.1em solid var(--computationborder);
 }
@@ -166,7 +178,7 @@
 }
 
 /* Project-like */
-.ptx-content .project-like {
+.ptx-content article.project-like {
   background-color: white;
   border: solid 3px var(--projectborder);
   border-radius: 10px;
@@ -174,11 +186,11 @@
   margin-bottom: 1em;
 }
 
-.ptx-content .project-like.investigation {
+.ptx-content article.project-like.investigation {
   border-color: var(--investigateborder);
 }
 
-.ptx-content .project-like > .heading {
+.ptx-content article.project-like > .heading {
   margin-top: -1.5em;
   background-color: white;
   display: table !important;
@@ -200,10 +212,14 @@
 .ptx-content .goal-like.objectives {
   border-top: solid 3px var(--goalborder);
   border-bottom: solid 3px var(--goalborder);
+  border-left: none;
+  border-right: none;
 }
 .ptx-content .goal-like.outcomes {
   border-top: solid 3px var(--goalborder);
   border-bottom: solid 3px var(--goalborder);
+  border-left: none;
+  border-right: none;
 }
 
 .ptx-content .goal-like .heading {
@@ -218,7 +234,7 @@
 
 /* remark-like */
 
-.ptx-content .remark-like {
+.ptx-content article.remark-like {
   margin-top: 1.25em;
   padding: 1em;
   padding-top: 0.7em;
@@ -237,11 +253,11 @@
 
 
 /* Common fixes? */
-.ptx-content .assemblage-like .heading::after,
-.ptx-content .theorem-like.theorem .heading::after,
-.ptx-content .theorem-like .heading::after,
-.ptx-content .example-like > .heading::after,
-.ptx-content .project-like > .heading::after {
+.ptx-content article.assemblage-like .heading::after,
+.ptx-content article.theorem-like.theorem .heading::after,
+.ptx-content article.theorem-like .heading::after,
+.ptx-content article.example-like > .heading::after,
+.ptx-content article.project-like > .heading::after {
   content: "";
 }
 
@@ -451,3 +467,5 @@ END OF STYLE_OSCARLEVIN
     position: absolute;
 }
 }
+
+

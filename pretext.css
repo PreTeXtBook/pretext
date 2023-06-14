@@ -9,6 +9,10 @@
 
 @import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");
 
+* {
+    box-sizing: border-box;
+}
+
 body.pretext {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
