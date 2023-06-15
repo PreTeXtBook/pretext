@@ -31,6 +31,72 @@
 }
 */
 
+/* over-ride some of the default style */
+
+.pretext .ptx-page > .ptx-main {
+  margin-left: unset;
+}
+.ptx-masthead .logo-link img {
+  width: unset;
+  height: unset;
+  max-height: unset;
+}
+.ptx-masthead .logo-link {
+  font-size: unset;
+  text-align: unset;
+  line-height: unset;
+} 
+.pretext .ptx-masthead {
+  position: unset;
+  background: unset;
+  min-height: unset;
+  border: unset;
+  position: unset;
+  z-index: unset;
+}
+.pretext .ptx-content-footer .button.previous-button, .pretext .ptx-content-footer .button.next-button {
+  height: unset;
+  width: unset;
+}
+.pretext .ptx-content-footer .previous-button {
+  width: unset;
+  float: unset;
+}
+.ptx-content-footer .previous-button .name {
+  margin-left: unset;
+  padding-right: unset;
+}
+.pretext .ptx-content-footer .name {
+  position: relative;
+  bottom: 0;
+}
+.pretext .ptx-content-footer .button.previous-button, .pretext .ptx-content-footer .button.next-button {
+  font-size: 0.8em;
+  margin-top: 1.5em;
+  padding: 0.4em;
+}
+.pretext .ptx-content-footer .top-button .icon, .pretext .ptx-content-footer .top-button .name {
+  display: unset;
+}
+.pretext .ptx-content-footer .previous-button .icon {
+  margin-left: unset;
+  margin-right: unset;
+}
+.pretext .ptx-content-footer .button.top-button {
+  width: unset;
+  height: unset;
+  display: unset;
+}
+.pretext .ptx-content-footer .button {
+  text-align: unset;
+/*
+  color: unset;
+  background-color: unset;
+*/
+  padding: 0;
+  display: unset;
+  align-items: unset;
+}
 
 /* Elements introduced in order of appearance */
 
@@ -46,7 +112,7 @@ body.pretext {
 }
 
 /* .ptx-masthead-wrapper  */
-.ptx-masthead {
+.pretext .ptx-masthead {
     border: 2px solid #ddd;
     border-bottom: none;
     border-top-left-radius: 5px;
@@ -54,13 +120,13 @@ body.pretext {
     /*     overflow: hidden;*/  /* otherwise the rounded corners are not visible */
     z-index: 100;
 }
-.ptx-masthead {
+.pretext .ptx-masthead {
     position: relative;
     background: #fafafa;
     min-height: inherit;
     box-shadow: none;
 }
-.ptx-masthead {
+.pretext .ptx-masthead {
     max-width: 904px;
     border-right: 1px solid #bababa;
 }

@@ -139,7 +139,9 @@
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
 .ptx-toc ul.structural li ul.structural a:hover {
     border-top: 1px solid #3c110a;
+/*
     margin-top: -1px;
+*/
 }
 
 /* Removes the excess space between the last subsection and the next section (caused by

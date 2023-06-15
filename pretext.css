@@ -9,6 +9,10 @@
 
 @import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");
 
+* {
+    box-sizing: border-box;
+}
+
 body.pretext {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -184,6 +188,11 @@ so that we can set our own later */
 /* .para and other block-level elements should have space at the top, and not the bottom */
 .ptx-content h1, .ptx-content h2, .ptx-content h3, .ptx-content h4, .ptx-content h5, .ptx-content h6 {
     margin: 0;
+    font-size: unset;
+}
+.pretext h1, .pretext h2, .pretext h3, .pretext h4, .pretext h5, .pretext h6 {
+    margin: 0;
+    font-size: unset;
 }
 
 .ptx-content .heading {

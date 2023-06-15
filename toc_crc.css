@@ -1,4 +1,22 @@
 
+/* over-ride default css */
+.ptx-toc > ul.structural > li:not(:first-child) {
+  margin-top: 0;
+}
+.ptx-toc ul.structural li a {
+  border-bottom: 0;
+}
+
+.ptx-toc ul.structural li li  a {
+  border-bottom: none;  /*solid #999 1px;  */
+}
+.ptx-toc ul.structural li ul.structural a {
+  border-top: solid #999 1px;
+}
+.ptx-toc ul.structural li ul.structural li:last-child {
+  margin-bottom: 0;
+}
+
 .ptx-toc {
     width: 240px;
     margin: 0;
@@ -70,10 +88,11 @@
     border-bottom: none;
 }
 
+/*
 .ptx-toc ul li ul a:hover {
-    padding-top: -1px;
-   // was margin-top: -1px; but that caused a little jiggling
+    padding-top: -10px;
 }
+*/
 
 .ptx-toc ul li a:active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;

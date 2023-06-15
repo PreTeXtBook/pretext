@@ -1,4 +1,25 @@
 
+/* Since CRC loads after default, we need to suppress some of the default styling */
+
+.ptx-navbar .treebuttons .next-button, .ptx-navbar .treebuttons .up-button,
+.ptx-navbar .treebuttons .previous-button {
+  float: unset;
+}
+
+.ptx-navbar .previous-button, .ptx-navbar .up-button, .ptx-navbar .next-button,
+.ptx-navbar .index-button, .ptx-navbar .calculator-toggle, .ptx-navbar .toc-toggle {
+  width: unset;
+}
+
+.ptx-navbar .calculator-toggle {
+  margin-left: unset;
+  margin-right: unset;
+}
+
+.ptx-navbar .index-button .name {
+  padding-top: unset;
+}
+
 /* Generic and large screen layout */
 
 .ptx-navbar .button {
