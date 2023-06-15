@@ -76,7 +76,7 @@ ol.searchresults > li {
 .searchresults ul > li > text,
 ol.searchresults > li > text {
     display: none;
-} 
+}
 .high_result {
     font-weight: 700;
 }

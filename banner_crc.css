@@ -60,7 +60,7 @@
 .ptx-content .summary-links ul,
 .ptx-content .summary-links ul li {
     display: grid;
-    list-style-type: none; 
+    list-style-type: none;
     min-width: 300px;
     padding-inline-start: 0px;
     font-family: "Open Sans", sans-serif;
@@ -74,7 +74,7 @@
 }
 
 @media screen and (min-width: 600px) {
-    .ptx-content .summary-links ul,    
+    .ptx-content .summary-links ul,
     .ptx-content .summary-links ul li {
 	width: 60vw;
 	max-width: 500px;
@@ -82,7 +82,7 @@
 }
 
 @media screen and (min-width: 700px) {
-    .ptx-content .summary-links ul,    
+    .ptx-content .summary-links ul,
     .ptx-content .summary-links ul li {
 	width: 55vw;
 	max-width: 500px;
@@ -90,12 +90,12 @@
 }
 
 @media screen and (min-width: 800px) {
-    .ptx-content .summary-links ul,    
+    .ptx-content .summary-links ul,
     .ptx-content .summary-links ul li {
 	width: 49vw;
 	max-width: 500px;
     }
-}  
+}
 /*** End PreTeXt overrides ***/
 
 
@@ -115,7 +115,7 @@
 
 .ptx-masthead .title-container > .heading {
     margin: 0;
-    font-size: 2em;  
+    font-size: 2em;
 }
 
 .ptx-masthead .title-container > .heading.hide-type .type {
@@ -218,7 +218,7 @@
 /*
     justify-self: stretch;
 */
-    
+
 }
 
 .title-container .title  {
@@ -242,7 +242,7 @@
 
 .title-container  .subtitle {
     font-weight: normal;
-    font-size: .5em; 
+    font-size: .5em;
 }
 
 
@@ -253,7 +253,7 @@
     .title-container {
 	margin-top: 0px;
     }
-    
+
     .title-container  .title {
 	font-size: .7em;
 	font-weight: 600;
@@ -261,7 +261,7 @@
 
     .title-container  .subtitle {
 	font-weight: normal;
-	font-size: .6em; 
+	font-size: .6em;
     }
 
 
@@ -273,7 +273,7 @@
     .title-container {
 	margin-top: 3px;
     }
-    
+
     .title-container  .title {
 	font-size: .9em;
 	font-weight: 600;
@@ -281,7 +281,7 @@
 
     .title-container  .subtitle {
 	font-weight: normal;
-	font-size: .7em; 
+	font-size: .7em;
     }
 
 
@@ -293,7 +293,7 @@
     .title-container {
 	margin-top: 5px;
     }
-    
+
     .title-container  .title {
 	font-size: 1.0em;
 	font-weight: 600;

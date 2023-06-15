@@ -21,7 +21,7 @@
 .ptx-content section > .heading + .heading,
 .ptx-content section section > .heading + .heading {
     margin-top: 0.5em;
-} 
+}
 .ptx-content section.solutions > h3.heading,
 .ptx-content section.solutions section > h3.heading {
     font-size: 1.6em;
@@ -232,7 +232,7 @@
 }
 
 .ptx-content .sidebyside figcaption {
-    padding-left: 1em; 
+    padding-left: 1em;
     padding-right: 0;
     padding-bottom: 0;
     margin: 0.75em 0 0 0;
@@ -469,7 +469,7 @@
 
 }
 
-.center table { 
+.center table {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -671,7 +671,7 @@
     margin-top: 0.5em;
 }
 
-/* should be the default 
+/* should be the default
 .ptx-content section.worksheet > .heading,
 .ptx-content section section.worksheet > .heading,
 .ptx-content section section section.worksheet > .heading {
@@ -1424,7 +1424,7 @@ a.mjx-svg-href  {
 from Jiří Lebl */
 .ptx-content .MJXc-display, .ptx-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
 .ptx-content pre.prettyprint,
-.ptx-content pre.plainprint, 
+.ptx-content pre.plainprint,
 .ptx-content pre.console,
 .ptx-content .code-box {
     background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
@@ -2065,7 +2065,7 @@ from Jiří Lebl */
 /* http://spot.pcc.edu/math/APEXCalculus/sec_prod_quot_rules.html
  * solution to Example 2.4.14
  */
-.ptx-content .solution ol li { 
+.ptx-content .solution ol li {
     margin-top: 1em;
     padding-left: 0.5em;
 }
@@ -2136,8 +2136,8 @@ from Jiří Lebl */
     max-width: 900px;
     position: absolute;
     right: 0;
-    bottom: 0; 
-    margin-bottom: 39px; 
+    bottom: 0;
+    margin-bottom: 39px;
 }
 
 .pretext .searchwrapper .cse .gsc-control-cse, .searchwrapper .gsc-control-cse  {
@@ -2239,7 +2239,7 @@ https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#
     white-space: pre;
     margin-left: 3em;
     margin-bottom: 2em;
-} 
+}
 .ptx-content .sageanswer .key {
     display: inline-block;
     vertical-align: top;
@@ -2389,7 +2389,7 @@ and condider having this replace line 3338 of the general code (which uses .head
 .ptx-content .summary-links a:active {
   position: relative;
   color: white;
-  background: #932919;  
+  background: #932919;
   text-decoration: none;
   box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
 }
@@ -2542,7 +2542,7 @@ body.standalone .autopermalink {
 body.standalone.worksheet .ptx-content .onepage .workspace {
     border: 2px dotted grey;
     background: #f3fff3;
-/*  Sally suggests light and dark blue 
+/*  Sally suggests light and dark blue
     background: linear-gradient(
         #eef 0px, #eef 200px,
         #eef 200px, #99f 205px,
@@ -2562,7 +2562,7 @@ body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
       #f33 10px,
       #000 10px,
       #000 20px
-    ) 20; 
+    ) 20;
 /*
     background: linear-gradient(
         #ff0 0%, #ff0 8%,
@@ -3029,7 +3029,7 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
 }
 
 .ptx-content .exercise-wrapper,
-.ptx-content .exercise-wrapper form, 
+.ptx-content .exercise-wrapper form,
 .ptx-content .exercise-wrapper form > div:first-child {
     display: inline-block;
     vertical-align: top;
@@ -3101,4 +3101,4 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
     position: relative;
    top: 0.33em;
 }
- 
+

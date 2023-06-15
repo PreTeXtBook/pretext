@@ -45,8 +45,8 @@ nav.ptx-navbar {
     grid-template-columns:  .76fr 6em 6em 1fr;  /* Even gaps */
     grid-template-areas:
         "MH-toc-area MH-extras-area1 MH-extras-area2 MH-preferences-area MH-page-navigation-area";
-    
-    background-color: #fff; 
+
+    background-color: #fff;
 /*
     padding: 20px 0px 0px 0px;
 */
@@ -77,7 +77,7 @@ nav.ptx-navbar::after {
     display: inline-block;
     height: 32px;
     color: #333;
-    font-family: inherit; 
+    font-family: inherit;
     text-align: center;
     font-size: .8em; /*11px; */
     font-weight: 600;
@@ -138,9 +138,9 @@ nav.ptx-navbar::after {
     display: inline-block;
     height: 32px;
     color: var(--bodytitle);
-    font-family: inherit; 
+    font-family: inherit;
     text-align: center;
-    font-size: .8em; 
+    font-size: .8em;
     font-weight: 600;
     line-height: 32px;
     letter-spacing: .1rem;
@@ -283,7 +283,7 @@ nav.ptx-navbar::after {
     .ptx-navbar .calculator-toggle {
 	display: none;
     }
-    
+
     .ptx-navbar .toc-toggle .name,
     .ptx-navbar .previous-button .name,
     .ptx-navbar .up-button .name,
@@ -295,6 +295,6 @@ nav.ptx-navbar::after {
     .ptx-navbar .up-button .icon,
     .ptx-navbar .up-button .disabled .icon{
     }
-    
+
 }
 
