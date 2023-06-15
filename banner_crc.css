@@ -1,4 +1,30 @@
 /*** Some PreTeXt overrides ***/
+/*
+@media (min-width: 801px) {
+  .title-container .title {
+    font-size: unset;
+    font-weight: unset;
+  }
+}
+*/
+.ptx-masthead .title-container > .heading {
+  line-height: unset;
+}
+/*
+.ptx-masthead .title-container > .heading {
+  font-family: unset;
+  font-weight: unset;
+  font-size: unset;
+  line-height: unset;
+  color: unset;
+}
+*/
+.ptx-masthead .byline {
+  margin: unset;
+  font-size: unset;
+  line-height: unset;
+  font-family: unset;
+}
 
 .ptx-masthead .ptx-banner {
     border-top: 1px solid transparent;
@@ -89,7 +115,7 @@
 
 .ptx-masthead .title-container > .heading {
     margin: 0;
-    //  font-size: 2em;
+    font-size: 2em;  
 }
 
 .ptx-masthead .title-container > .heading.hide-type .type {
