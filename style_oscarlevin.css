@@ -13,7 +13,7 @@
 
 :root {
 /* Set colors for environments */
-  
+
   --assembbody: var(--bluelight, hsl(210, 90%, 80%));
   --assembborder: var(--blue, hsl(210, 40%, 60%));
   --assembhead: var(--blue, hsl(210, 40%, 75%));
@@ -44,23 +44,23 @@
   --assemblageborder: var(--assembborder) !important;
 }
 
-/* We can style all the *-like environments: 
-    definition-like, 
-    theorem-like, 
-    example-like, 
-    project-like, 
-    remark-like, 
-    computation-like, 
+/* We can style all the *-like environments:
+    definition-like,
+    theorem-like,
+    example-like,
+    project-like,
+    remark-like,
+    computation-like,
     goal-like, and
-    assemblage-like. 
-  We also could do something for proofs, and commentary. 
+    assemblage-like.
+  We also could do something for proofs, and commentary.
 
   (should we style aside-like?  Or just copy from style_default?)
-  
+
   We define the style of environments in three steps: first the shape, then the color, and finally the shape and color of the heading/title.  The only reason to group these as such is that we can then have a common shape for differet *-like elements, but still allow for different colors to distinguish them.
 
   Start with the important custom environments (theorem might be different from the other theorem-like, etc.), then clean up any standard *-like.
-  
+
 */
 
 /* definitions, theorems, assemblages, with theorem-like.theorem distinguished */
@@ -120,7 +120,7 @@
   color: #000;
 }
 
-.ptx-content .example-like > .heading + .introduction, 
+.ptx-content .example-like > .heading + .introduction,
 .ptx-content .computation-like > .heading + .introduction,
 .ptx-content .assemblage-like .heading + .para,
 .ptx-content .computation-like > .heading + .para,
@@ -272,7 +272,7 @@
     background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
 
-/* 
+/*
 END OF STYLE_OSCARLEVIN
 (below is only stuff copied from style_default)
 */
@@ -281,7 +281,7 @@ END OF STYLE_OSCARLEVIN
 
 /* Assides, copied directly from style_default.css */
 /* next selector first part of the following is due to the mistake of
-   putting paragraph spacing in the margin-bottom 
+   putting paragraph spacing in the margin-bottom
    Redo when we fix that error */
 .ptx-content .aside-like {
  /*   margin-top: -1.25em;
@@ -315,12 +315,12 @@ END OF STYLE_OSCARLEVIN
   content  : "";
   position : absolute;
   z-index  : 1;
-  top   : 0em;  
+  top   : 0em;
   bottom   : 0;
   left     : 0;
   pointer-events   : none;
-  background-image : linear-gradient(to bottom, 
-                    rgba(255,255,255, 0.4), 
+  background-image : linear-gradient(to bottom,
+                    rgba(255,255,255, 0.4),
                     rgba(255,255,255, 1) 90%);
   width    : 550px;
   height   : 8em;

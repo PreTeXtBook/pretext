@@ -44,7 +44,7 @@ p > .edit_menu_holder {
     padding: 0.25em 0.5em 0 0.5em;
     background: yellow;
     bottom: -1.2em;
-    border-radius: 0.5em 0.5em 0 0; 
+    border-radius: 0.5em 0.5em 0 0;
     font-style: italic;
 }
 .may_enter #enter_choice {
@@ -263,11 +263,11 @@ sbspanel:empty { /* can only happen when partially created */
 /* why not collapse the next groups of 4? */
 .in_edit_tree > .placeholder.proof,
 .in_edit_tree > .placeholder.hint,
-.in_edit_tree > .placeholder.answer, 
+.in_edit_tree > .placeholder.answer,
 .in_edit_tree > .placeholder.solution {
     min-height: 1em;
     background: #fee;
-} 
+}
 .in_edit_tree > .placeholder.proof::before,
 .in_edit_tree > .placeholder.hint::before,
 .in_edit_tree > .placeholder.answer::before,
@@ -296,10 +296,10 @@ sbspanel:empty { /* can only happen when partially created */
 }
 [data-objecttype="theorem-like"] .para {
     font-style: italic;
-} 
+}
 [data-objecttype="theorem-like"] .para ol {
     font-style: normal;
-} 
+}
 
 .paragraph_input {
     width: 98%;
@@ -311,7 +311,7 @@ sbspanel:empty { /* can only happen when partially created */
     padding: 2px;
 }
 .displaymath_input {
-    width: 98%; 
+    width: 98%;
     min-height: 3em;
     border: 3px dotted #399;
 }

@@ -45,7 +45,7 @@
   font-size: unset;
   text-align: unset;
   line-height: unset;
-} 
+}
 .pretext .ptx-masthead {
   position: unset;
   background: unset;
@@ -238,9 +238,9 @@ body.pretext {
     display: inline-block;
     height: 32px;
     color: var(--bodytitle);
-    font-family: inherit; 
+    font-family: inherit;
     text-align: center;
-    font-size: .8em; 
+    font-size: .8em;
     font-weight: 700;
     letter-spacing: .1rem;
     text-transform: uppercase;
@@ -267,7 +267,7 @@ body.pretext {
 
 .ptx-content-footer .previous-button .icon{
     padding-left: 5px;
-} 
+}
 
 .ptx-content-footer .top-button{
     grid-area: content-footer-top;
@@ -279,9 +279,9 @@ body.pretext {
     display: inline-block;
     height: 32px;
     color: var(--bodytitle);
-    font-family: inherit; 
+    font-family: inherit;
     text-align: center;
-    font-size: .8em; 
+    font-size: .8em;
     font-weight: 700;
     letter-spacing: .1rem;
     text-transform: uppercase;
@@ -310,7 +310,7 @@ body.pretext {
 
 .ptx-content-footer .top-button .icon{
     padding-left: 5px;
-} 
+}
 
 .ptx-content-footer .next-button {
     grid-area: content-footer-next;
@@ -322,9 +322,9 @@ body.pretext {
     display: inline-block;
     height: 32px;
     color:  var(--bodytitle);
-    font-family: inherit; 
+    font-family: inherit;
     text-align: center;
-    font-size: .8em; 
+    font-size: .8em;
     font-weight: 700;
     letter-spacing: .1rem;
     text-transform: uppercase;
@@ -352,7 +352,7 @@ body.pretext {
 
 .ptx-content-footer .next-button .icon{
     padding-right:5px;
-} 
+}
 
 .pretext .ptx-sidebar.visible {
   display: block;

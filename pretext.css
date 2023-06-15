@@ -257,7 +257,7 @@ so that we can set our own later */
 }
 
 /* 1.25 = ol top + li top ?  looked too big with 0.75 below */
-.ptx-content .exercise-like .para + ol {  
+.ptx-content .exercise-like .para + ol {
     margin-top: 0.5em;
 }
 
@@ -417,8 +417,8 @@ so that we can set our own later */
     margin-top: 1em;
 }
 
-/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html 
-and ex 2.91 in 
+/* see Ex 29 https://yoshiwarabooks.org/linear-functions.html
+and ex 2.91 in
 https://yoshiwarabooks.org/mfg/MathModels.html */
 .ptx-content .introduction + .sidebyside,
 .ptx-content .para + .sidebyside,
@@ -907,7 +907,7 @@ button {
 }
 .preferences_menu_holder ol li ol li {
   padding: 6px 6px 4px 6px;
-  display: flex; 
+  display: flex;
   align-items: center;
 }
 .preferences_menu_holder ol.fonts:not(.hidden) {
