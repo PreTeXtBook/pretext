@@ -449,6 +449,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- A timed exam requires markup that wraps an entire collection -->
+<!-- of exercises, so we pass the exercises in as a parameter     -->
+<xsl:template match="exercises" mode="runestone-timed-exam">
+    <xsl:param name="the-exercises"/>
+
+    <!-- Since the component wraps the exercises, we do not need any  -->
+    <!-- restriction about being at teh Runestone "subchapter" level. -->
+    <xsl:if test="$b-host-runestone">
+        <div class="timedAssessment">
+            <ul data-component="timedAssessment" data-question_label="">
+                <!-- a Runestone id -->
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <!-- one mandatory attribute -->
+                <xsl:attribute name="data-time">
+                    <xsl:value-of select="@time-limit"/>
+                </xsl:attribute>
+                <!-- result, timer, feedback, pause are *on* by  -->
+                <!-- default if a PreTeXt attribute is "no" then -->
+                <!-- issue empty "data-no-*" Runestone attribute -->
+                <xsl:if test="@results = 'no'">
+                    <xsl:attribute name="data-no-result"/>
+                </xsl:if>
+                <xsl:if test="@timer = 'no'">
+                    <xsl:attribute name="data-no-timer"/>
+                </xsl:if>
+                <xsl:if test="@feedback = 'no'">
+                    <xsl:attribute name="data-no-feedback"/>
+                </xsl:if>
+                <xsl:if test="@pause = 'no'">
+                    <xsl:attribute name="data-no-pause"/>
+                </xsl:if>
+                <!-- the actual list of exercises -->
+                <xsl:copy-of select="$the-exercises"/>
+                <!-- only at "section" level. only when building for a Runestone server -->
+                <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
+            </ul>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- ################## -->
 <!-- Runestone Manifest -->
 <!-- ################## -->

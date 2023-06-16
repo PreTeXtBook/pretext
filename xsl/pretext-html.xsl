@@ -681,56 +681,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- This is identical to the default "structural-division-inner-content" -->
+<!-- template just below, excepting there are modifications for Runestone -->
+<!-- to accomodate timed exams and group work.                            -->
 <xsl:template match="exercises" mode="structural-division-inner-content">
     <xsl:param name="heading-level"/>
 
-    <!-- this is identical to the default template -->
     <xsl:variable name="the-exercises">
         <xsl:apply-templates select="*">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
-        <!-- only at "section" level. only when building for a Runestone server -->
-        <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
     </xsl:variable>
 
     <xsl:choose>
-        <!-- some extra wrapping for timed exercises -->
-        <!-- presence of @time-limit is the signal   -->
+        <!-- some extra wrapping for timed exercises      -->
+        <!-- so we pass the $the-exercises as a parameter -->
+        <!-- presence of @time-limit is the signal        -->
         <xsl:when test="@time-limit">
-            <!-- TODO: make this a template and move to RS-specific file -->
-            <div class="timedAssessment">
-                <ul data-component="timedAssessment" data-question_label="">
-                    <!-- a Runestone id -->
-                    <!-- TODO: use attribute template in RS file -->
-                    <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="runestone-id"/>
-                    </xsl:attribute>
-                    <!-- one mandatory attribute -->
-                    <xsl:attribute name="data-time">
-                        <xsl:value-of select="@time-limit"/>
-                    </xsl:attribute>
-                    <!-- result, timer, feedback, pause are *on* by  -->
-                    <!-- default if a PreTeXt attribute is "no" then -->
-                    <!-- issue empty "data-no-*" Runestone attribute -->
-                    <xsl:if test="@results = 'no'">
-                        <xsl:attribute name="data-no-result"/>
-                    </xsl:if>
-                    <xsl:if test="@timer = 'no'">
-                        <xsl:attribute name="data-no-timer"/>
-                    </xsl:if>
-                    <xsl:if test="@feedback = 'no'">
-                        <xsl:attribute name="data-no-feedback"/>
-                    </xsl:if>
-                    <xsl:if test="@pause = 'no'">
-                        <xsl:attribute name="data-no-pause"/>
-                    </xsl:if>
-                    <!-- the actual list of exercises -->
-                    <xsl:copy-of select="$the-exercises"/>
-                </ul>
-            </div>
+            <xsl:apply-templates select="." mode="runestone-timed-exam">
+                <xsl:with-param name="the-exercises" select="$the-exercises"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
+            <!-- the actual list of exercises -->
             <xsl:copy-of select="$the-exercises"/>
+            <!-- only at "section" level. only when building for a Runestone server -->
+            <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
