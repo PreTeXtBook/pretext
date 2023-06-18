@@ -3079,7 +3079,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="coursepassword" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="user" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="userpassword" default="anonymous" freeform="yes"/>
-        <pi:pub-attribute name="task-reveal" default="" options="all"/>
+        <pi:pub-attribute name="task-reveal" default="all" options="preceding-correct"/>
     </webwork>
     <revealjs>
         <appearance>
