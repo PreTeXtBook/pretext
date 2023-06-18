@@ -994,7 +994,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 
 def webwork_to_xml(
-    xml_source, pub_file, stringparams, xmlid_root, abort_early, server_params, dest_dir
+    xml_source, pub_file, stringparams, xmlid_root, abort_early, server_params, pgscript, dest_dir
 ):
     import urllib.parse  # urlparse()
     import base64  # b64encode()
@@ -1097,7 +1097,9 @@ def webwork_to_xml(
             log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
                   + "              -s argument will be ignored.\n"
                   + "              Using publication/webwork values (or defaults) instead.")
-        ww_domain       = sanitize_url(server_params_pub["ww_domain"])
+        ### FIXME: sanitize_url does not work offline
+        # ww_domain       = sanitize_url(server_params_pub["ww_domain"])
+        ww_domain       = server_params_pub["ww_domain"]
         courseID        = server_params_pub["courseID"]
         userID          = server_params_pub["userID"]
         password        = server_params_pub["password"]
@@ -1106,29 +1108,36 @@ def webwork_to_xml(
     ww_domain_ww2 = ww_domain + "/webwork2/"
     ww_domain_path = ww_domain_ww2 + "html2xml"
 
-    # Establish WeBWorK version
+    # # Establish WeBWorK version
 
     # First try to identify the WW version according to what a response hash says it is.
     # This should work for 2.17 and beyond.
-    try:
-        params_for_version_determination = dict(
-            problemSeed=1,
-            displayMode='PTX',
-            courseID=courseID,
-            userID=userID,
-            outputformat='raw'
+    if pgscript:
+        # TODO: use try, capture error if pgscript is not found or fails
+        ww_version = subprocess.Popen([pgscript, '-V'], stdout=subprocess.PIPE, text=True).communicate()[0]
+        ww_version_match = re.search(
+            r"((\d+)\.(\d+))", ww_version, re.I
         )
-        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
-        ww_version = ""
-        if "ww_version" in version_determination_json:
-            ww_version = version_determination_json["ww_version"]
-            ww_version_match = re.search(
-                r"((\d+)\.(\d+))", ww_version, re.I
+    else:
+        try:
+            params_for_version_determination = dict(
+                problemSeed=1,
+                displayMode='PTX',
+                courseID=courseID,
+                userID=userID,
+                outputformat='raw'
             )
-    except Exception as e:
-        root_cause = str(e)
-        msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
-        raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+            version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
+            ww_version = ""
+            if "ww_version" in version_determination_json:
+                ww_version = version_determination_json["ww_version"]
+                ww_version_match = re.search(
+                    r"((\d+)\.(\d+))", ww_version, re.I
+                )
+        except Exception as e:
+            root_cause = str(e)
+            msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
+            raise ValueError(msg.format(ww_domain_ww2) + root_cause)
 
     # Now if that failed, try to infer the version from what is printed on the landing page.
     if ww_version == "":
@@ -1192,16 +1201,16 @@ def webwork_to_xml(
         problem_identifier = problem if (origin[problem] == "ptx") else source[problem]
 
         if origin[problem] == "server":
-            msg = "building representations of server-based WeBWorK problem"
+            msg = "building representations of server-based WeBWorK problem: {}"
         elif origin[problem] == "ptx":
-            msg = "building representations of PTX-authored WeBWorK problem"
+            msg = "building representations of PTX-authored WeBWorK problem: {}"
         else:
             raise ValueError(
                 "PTX:ERROR: problem origin should be 'server' or 'ptx', not '{}'".format(
                     origin[problem]
                 )
             )
-        log.info(msg)
+        log.info(msg.format(problem))
 
         # If and only if the server is version 2.16, we adjust PG code to use PGtikz.pl
         # instead of PGlateximage.pl
@@ -1269,67 +1278,72 @@ def webwork_to_xml(
                 else ("problemSource", pgbase64["hint_yes_solution_yes"])
             )
 
-        server_params = (
-            ("answersSubmitted", "0"),
-            ("showSolutions", "1"),
-            ("showHints", "1"),
-            ("displayMode", "PTX"),
-            ("courseID", courseID),
-            ("userID", userID),
-            ("password", password),
-            ("course_password", course_password),
-            ("outputformat", "ptx"),
-            server_params_source,
-            ("problemSeed", seed[problem]),
-            ("problemUUID", problem),
-        )
-
-        msg = "sending {} to server to save in {}: origin is '{}'"
-        log.info(msg.format(problem, ww_reps_file, origin[problem]))
-        if origin[problem] == "server":
-            log.debug(
-                "server-to-ptx: {}\n{}\n{}\n{}".format(
-                    problem, ww_domain_path, source[problem], ww_reps_file
-                )
+        if pgscript:
+            # TODO: use try, capture errors
+            response = subprocess.Popen([pgscript, '-s', seed[problem], '--'+server_params_source[0], server_params_source[1]], text=True, stdout=subprocess.PIPE).communicate()[0]
+        else:
+            server_params = (
+                ("answersSubmitted", "0"),
+                ("showSolutions", "1"),
+                ("showHints", "1"),
+                ("showHints", "1"),
+                ("displayMode", "PTX"),
+                ("courseID", courseID),
+                ("userID", userID),
+                ("password", password),
+                ("course_password", course_password),
+                ("outputformat", "ptx"),
+                server_params_source,
+                ("problemSeed", seed[problem]),
+                ("problemUUID", problem),
             )
-        elif origin[problem] == "ptx":
-            if ww_reps_version == "2":
+
+            msg = "sending {} to server to save in {}: /    = is '{}'"
+            log.info(msg.format(problem, ww_reps_file, origin[problem]))
+            if origin[problem] == "server":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, ww_domain_path, pgdense[problem], ww_reps_file
+                        problem, ww_domain_path, source[problem], ww_reps_file
                     )
                 )
-            elif ww_reps_version == "1":
-                log.debug(
-                    "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem,
-                        ww_domain_path,
-                        pgdense["hint_yes_solution_yes"][problem],
-                        ww_reps_file,
+            elif origin[problem] == "ptx":
+                if ww_reps_version == "2":
+                    log.debug(
+                        "server-to-ptx: {}\n{}\n{}\n{}".format(
+                            problem, ww_domain_path, pgdense[problem], ww_reps_file
+                        )
                     )
-                )
+                elif ww_reps_version == "1":
+                    log.debug(
+                        "server-to-ptx: {}\n{}\n{}\n{}".format(
+                            problem,
+                            ww_domain_path,
+                            pgdense["hint_yes_solution_yes"][problem],
+                            ww_reps_file,
+                        )
+                    )
 
-        # Ready, go out on the wire
-        try:
-            response = session.get(ww_domain_path, params=server_params)
-            log.debug("Getting problem response from: " + response.url)
+            # Ready, go out on the wire
+            try:
+                response = session.get(ww_domain_path, params=server_params).text
+                log.debug("Getting problem response from: " + response.url)
 
-        except requests.exceptions.RequestException as e:
-            root_cause = str(e)
-            msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-            raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
+            except requests.exceptions.RequestException as e:
+                root_cause = str(e)
+                msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
+                raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
 
         # Check for errors with PG processing
         # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
-        file_empty = "ERROR:  This problem file was empty!" in response.text
+        file_empty = "ERROR:  This problem file was empty!" in response
 
         no_compile = (
-            "ERROR caught by Translator while processing problem file:" in response.text
+            "ERROR caught by Translator while processing problem file:" in response
         )
 
         bad_xml = False
         try:
-            response_root = ET.fromstring(response.text)
+            response_root = ET.fromstring(response)
         except:
             response_root = ET.Element("webwork")
             bad_xml = True
@@ -1379,7 +1393,8 @@ def webwork_to_xml(
         # If we are aborting upon recoverable errors...
         if abort_early:
             if badness:
-                debugging_help = response.text
+                # debugging_help = response.text
+                debugging_help = response
                 if origin[problem] == "ptx" and no_compile:
                     debugging_help += "\n" + pghuman[problem]
                 raise ValueError(
@@ -1410,7 +1425,7 @@ def webwork_to_xml(
         # something like \x85 would be vald XML, but may not be OK in some translations
 
         verbatim_split = re.split(
-            r"(\\verb\x85.*?\x85|\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response.text
+            r"(\\verb\x85.*?\x85|\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response
         )
         response_text = ""
         for item in verbatim_split:
@@ -1459,11 +1474,14 @@ def webwork_to_xml(
         count = 0
         # ww_image_url will be the URL to an image file used by the problem on the ww server
         for match in re.finditer(graphics_pattern, response_text):
-            ww_image_url = match.group(1)
-            # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
-            ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
-            ww_image_scheme = ww_image_url_parsed.scheme
-            ww_image_full_path = ww_image_url_parsed.path
+            if pgscript:
+                ww_image_full_path = match.group(1)
+            else:
+                ww_image_url = match.group(1)
+                # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
+                ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
+                ww_image_scheme = ww_image_url_parsed.scheme
+                ww_image_full_path = ww_image_url_parsed.path
             count += 1
             # split the full path into (path, file). path could theoretically be empty.
             ww_image_path, ww_image_filename = os.path.split(ww_image_full_path)
@@ -1476,10 +1494,6 @@ def webwork_to_xml(
                 ptx_image = ptx_image_name
             else:
                 ptx_image = ptx_image_name + image_extension
-            if ww_image_scheme:
-                image_url = ww_image_url
-            else:
-                image_url = ww_domain + "/" + ww_image_full_path
             # modify PTX problem source to include local versions
             if generated_dir:
                 if "xmlns:pi=" not in response_text:
@@ -1506,31 +1520,40 @@ def webwork_to_xml(
                 response_text = response_text.replace(
                     ww_image_full_path, "images/" + ptx_image
                 )
-            # download actual image files
-            # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
-            try:
-                image_response = session.get(image_url)
-            except requests.exceptions.RequestException as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
-                raise ValueError(msg.format(image_url) + root_cause)
-            # and save the image itself
-            destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
-            try:
-                with open(destination_image_file, "wb") as image_file:
-                    msg = "saving image file {} {} in {}"
-                    qualifier = ""
-                    if image_extension == ".tgz":
-                        qualifier = "(contents)"
-                    log.info(msg.format(ptx_image_filename, qualifier, ww_images_dir))
-                    image_file.write(image_response.content)
-            except Exception as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
-                raise ValueError(
-                    msg.format(destination_image_file)
-                    + root_cause
-                )
+            if pgscript:
+                # TODO: use try, capture errors
+                destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
+                msg = "cp {} {}"
+                os.system(msg.format(ww_image_full_path, destination_image_file))
+            else:
+                if ww_image_scheme:
+                    image_url = ww_image_url
+                else:
+                    image_url = ww_domain + "/" + ww_image_full_path
+                # download actual image files
+                # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
+                try:
+                    image_response = session.get(image_url)
+                except requests.exceptions.RequestException as e:
+                    root_cause = str(e)
+                    msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
+                    raise ValueError(msg.format(image_url) + root_cause)
+                # and save the image itself
+                try:
+                    with open(destination_image_file, "wb") as image_file:
+                        msg = "saving image file {} {} in {}"
+                        qualifier = ""
+                        if image_extension == ".tgz":
+                            qualifier = "(contents)"
+                        log.info(msg.format(ptx_image_filename, qualifier, ww_images_dir))
+                        image_file.write(image_response.content)
+                except Exception as e:
+                    root_cause = str(e)
+                    msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
+                    raise ValueError(
+                        msg.format(destination_image_file)
+                        + root_cause
+                    )
             # unpack if it's a tgz
             if image_extension == ".tgz":
                 tgzfile = tarfile.open(destination_image_file)
@@ -1739,6 +1762,7 @@ def webwork_to_xml(
         elif origin[problem] == "server":
             pg.set("source", source[problem])
 
+    log.info('representation building is complete')
     # write to file
     include_file_name = os.path.join(ww_reps_file)
     try:

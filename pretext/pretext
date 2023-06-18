@@ -438,6 +438,12 @@ def get_cli_arguments():
         action="store",
         dest="server",
     )
+    parser.add_argument(
+        "--pgscript",
+        help="path to local PG script (webwork only)",
+        action="store",
+        dest="pgscript",
+    )
 
     # recognize this switch, but only warn later that it is being ignored
     parser.add_argument(
@@ -661,6 +667,7 @@ def main():
             args.xmlid,
             args.abort,
             args.server,
+            args.pgscript,
             dest_dir,
         )
     elif args.component == "pg-macros":
