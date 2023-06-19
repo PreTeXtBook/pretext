@@ -301,6 +301,40 @@
           reports the progress.)
         </p>
       </subsection>
+
+      <subsection xml:id="tutorial-advanced">
+        <title>Using this guide and advanced features</title>
+        <p>
+          The rest of this guide will help you on your way. 
+          However, keep in mind that this guide is the work of many volunteers
+          over many years, and certain sections may assume the reader is using mechanisms for writing <pretext/>
+          besides VS Code and Codespaces.
+        </p>
+        <p>
+          In particular, there are two advanced mechanisms used by many <pretext/> authors: the
+          <term>PreTeXt developer script</term> (i.e. the <c>pretext/pretext</c> script) and the
+          <term>PreTeXt CLI</term>. 
+        </p>
+        <p>
+          Under the hood, the PreTeXt CLI is what you're using in Codespaces, and it also has the ability to
+          call the PreTeXt developer script as well. If you ever want to use a PreTeXt CLI command, you can open
+          a <term>Terminal</term> in your Codespace using the menus, or by pressing <kbd>Ctrl</kbd>+<kbd>`</kbd>
+          (the backtick key, found in upper left of many keyboards).
+        </p>
+        <p>
+          From the terminal, you can type in any PreTeXt CLI commands directly. For example,
+          typing in the CLI command <c>pretext build web</c> and running it by pressing <kbd>Enter</kbd> builds the
+          web target.
+        </p>
+        <p>
+          The CLI should be sufficient to do nearly everything you want to do for your project, and using
+          the developer script should be exercised with caution. Nonetheless,
+          to access a <c>pretext/pretext</c> developer script feature, you can use <c>pretext devscript</c>.
+          For example, if the
+          documentation suggests a command like <c>pretext/pretext -foo bar</m>, you would run
+          <c>pretext devscript -foo bar</c>.
+        </p>
+      </subsection>
     </section>
     <section xml:id="tutorial-videos">
       <title>Videos</title>
