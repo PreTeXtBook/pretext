@@ -1116,6 +1116,7 @@ def webwork_to_xml(
             displayMode='PTX',
             courseID=courseID,
             userID=userID,
+            course_password=course_password,
             outputformat='raw'
         )
         version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
@@ -1479,7 +1480,7 @@ def webwork_to_xml(
             if ww_image_scheme:
                 image_url = ww_image_url
             else:
-                image_url = ww_domain + "/" + ww_image_full_path
+                image_url = urllib.parse.urljoin(ww_domain,ww_image_full_path)
             # modify PTX problem source to include local versions
             if generated_dir:
                 if "xmlns:pi=" not in response_text:
