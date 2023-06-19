@@ -30,10 +30,6 @@
   width: 1em;
 }
 
-:not(.proof .displaymath).displaymath {
-  margin-right: .85em;
-}
-
 .ptx-content article.theorem-like,
 .ptx-content article.definition-like,
 .ptx-content article.example-like,
