@@ -13,7 +13,7 @@
     <introduction>
       <p>
         This chapter serves as a tutorial for quickly getting started with <pretext /> in your web browser
-        using the free <url href="https://github.com/features/codespaces">GitHub Codespaces service</url>.
+        using free services provided by <url href="https://github.com">GitHub</url>.
         (Advanced users who'd prefer to install our free and open-source software
         to their own machine may choose to skip ahead to <xref ref="quickstart-example"/>.)
       </p>
@@ -21,10 +21,10 @@
         <introduction><p>At the end of this tutorial you will have...</p></introduction>
         <ul>
           <li><p>Created a free GitHub account.</p></li>
-          <li><p>Created a GitHub Codespace for authoring <pretext/> in your web browser.</p></li>
+          <li><p>Created a GitHub Repository and Codespace for authoring <pretext/> in your web browser.</p></li>
           <li><p>Learned the first steps to editing a <pretext/> document.</p></li>
           <li><p>Converted your document to both <latex/> and accessible <init>HTML</init>.</p></li>
-          <li><p>Deployed your <init>HTML</init> to the web.</p></li>
+          <li><p>Deployed your <init>HTML</init> to the web via GitHub Pages.</p></li>
         </ul>
       </objectives>
       <p>
@@ -36,9 +36,9 @@
     </introduction>
 
     <section xml:id="tutorial-github">
-      <title>Using GitHub and Codespaces</title>
+      <title>Using GitHub</title>
       <subsection>
-        <title>GitHub</title>
+        <title>What is GitHub?</title>
         <p>
           <term>GitHub</term> is a freely-available service for authoring, sharing, and deploying
           documents and source code, owned by Microsoft. It uses the free and open-source <term>Git</term>
@@ -53,7 +53,7 @@
           (see <xref ref="quickstart-example"/> to learn more).
         </p>
         <p>
-          We will use GitHub's service for this tutorial as it the most popular way to share and disseminate
+          We will use GitHub for this tutorial as it the most popular way to share and disseminate
           <pretext/> documents, and provides the easiest pathway to getting started writing in the
           <pretext/> language.
         </p>
@@ -74,30 +74,70 @@
         <p>
           Apply at
           <url href="https://education.github.com/discount_requests/pack_application">Education.GitHub.com</url>
-          to unlock these features (in our experience, applications are usually processed quickly for <c>.edu</c>
-          email addresses).
+          to unlock these features. In our experience, applications are usually processed quickly for <c>.edu</c>
+          email addresses, but you do not need to wait for approval to continue on with this tutorial.
         </p>
       </subsection>
       <subsection>
-        <title>Codespaces</title>
+        <title>Three GitHub concepts</title>
         <p>
-          A <term>Codespace</term> is an authoring environment that lives in the <q>cloud</q>,
-          that is, a virtual machine hosted by GitHub that has all of the software needed to
-          author, convert, and deploy <pretext /> documents, accessible with just your web browser.
+          This tutorial uses three GitHub services:
+          <dl>
+            <li>
+              <title>Codespaces (<c>github.dev</c>)</title>
+              <p>
+                The Codespace for your project is an application
+                run in your web browser that gives you access to a virtual
+                computer with all the software recommended to author <pretext/>
+                installed for you automatically. This Codespace is private to you,
+                and lives at an address like
+                <c>https://username-random-words-abc123.github.dev</c>.
+              </p>
+            </li>
+            <li>
+              <title>Repository hosting (<c>github.com</c>)</title>
+              <p>
+                The <term>repository</term> for your project represents
+                the history of its edits that have been <q>committed and synced</q>
+                from your Codespace to it. This repository can be public
+                or private (though we encourage public repositories as they help
+                the community provide support for each other),
+                and lives at an address like
+                <c>https://github.com/username/reponame/</c>.
+              </p>
+            </li>
+            <li>
+              <title>GitHub Pages (<c>github.io</c>)</title>
+              <p>
+                The <term>GitHub Pages</term> service provides free hosting
+                for websites such as the HTML generated from a <pretext/> project.
+                This website is public, and lives at an address like
+                <c>https://username.github.io/reponame/</c>.
+              </p>
+            </li>
+          </dl>
         </p>
         <p>
-          This coding environment uses a web version of VS Code, an open-source text editor, along with the <pretext /> community's
-          custom plugins and software to get started authoring quickly.
+          Broadly speaking, you <q>author</q> within your Codespace, which you periodically
+          <q>commit and sync</q> to your repository, and then occassionally <q>deploy</q>
+          to your public GitHub Pages website.
         </p>
+      </subsection>
+      <subsection>
+        <title>Creating your repository and Codespace</title>
         <p>
           Follow the instructions at <url href="https://github.com/PreTeXtBook/pretext-codespace" />
-          to get started. You'll have the option to make your source files public (recommended if you want
-          support from the rest of the <pretext/> community) or private.  This choice will not affect your ability to publicly publish the output of your source, just the source itself.
+          to get started creating your repository and Codespace. You'll have the option to make your repository public
+          (recommended if you want support from the rest of the <pretext/> community) or private.
+          Either way, those instructions will also walk you through creating your private Codespace
+          for authoring.
         </p>
         <p>
-          Either way, this is a one-time process. Take note of the URL your new repository lives at
-          (something like <c>https://github.com/user-name/repository-name</c>) so you can find it
+          This takes a few moments, but is a one-time process. Take note of the <c>github.com</c>
+          URL your new repository lives at so you can find it
           the next time you want to work on your project.
+          (You can always access your <c>github.dev</c> Codespace link from there via the <c>Code</c>
+          menu.)
           Then you'll be ready for <xref ref="tutorial-first-document"/>.
         </p>
       </subsection>
@@ -107,11 +147,19 @@
       <title>Your First PreTeXt Document</title>
       <introduction>
         <p>
-          At this point, you should have a <pretext /> project set up in a Codespace, which you can explore in the VS Code editor running in your browser.  The left-hand menu should display a file tree, containing a folder called <c>source</c> with a file called <c>main.ptx</c>.  This file was created when you set up your Codespace, by running the command <c>pretext new</c> for you, and contains a complete, albeit very short, <pretext /> document.
+          At this point, you should have a <pretext /> project set up as a
+          <c>github.com</c> repository with a <c>github.dev</c> Codespace. You can use the
+          <c>Code</c> menu on the repository webpage to pull up the Codespace environment in
+          your web browser if you haven't already.
+        </p>
+        <p>
+          The left-hand menu should display a file tree, containing a folder called <c>source</c>
+          with a file called <c>main.ptx</c>.  These files were created when you set up your Codespace,
+          and form a complete, albeit very short, <pretext /> document.
         </p>
 
         <p>
-          Now you are ready to build the project.
+          Now you are ready to build it!
         </p>
       </introduction>
       <subsection>
@@ -121,7 +169,7 @@
           <ul>
             <li>
               <p>
-                Click the <q>PreTeXt</q> button in the center left of the bottom toolbar of the VS Code window (see <xref ref="tutorial-figure-codespaces-pretext"/>). A dialog will pop up asking which <pretext /> command you want to run.  Select <c>Build</c> to get a menu of options to select a <term>target</term> to build: choose <c>web</c>.  (You can do this in step by selecting <c>Quick Build</c>.)
+                Click the <q>PreTeXt</q> button in the center left of the bottom toolbar of the VS Code window (see <xref ref="tutorial-figure-codespaces-pretext"/>). A dialog will pop up asking which <pretext /> command you want to run.  Select <c>Build</c> to get a menu of options to select a <term>target</term> to build: choose <c>web</c>.
               </p>
             </li>
             <li>
@@ -156,7 +204,7 @@
         <title>Viewing</title>
         <p>
           You can preview these HTML files you just built using the <term>View</term> command.
-          Again, you can access this in multiple ways: <pretext /> buttom in the toolbar, <kbd>CTRL</kbd>+<kbd>ALT</kbd><kbd>p</kbd>, etc.
+          Again, you can access this in multiple ways: <pretext /> buttom in the toolbar, <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>p</kbd>, etc.
           Select <c>View</c> from the dialog.  You may be given options on how to view the document,
           depending on what VS Code plugins you have available to you. Try one or another until
           you're able to view your web build in either a new tab of your browser or a tab within VS Code.
@@ -174,7 +222,7 @@
       </subsection>
 
       <subsection xml:id="tutorial-pdf">
-        <title>Building <latex /> and PDF</title>
+        <title>Building for print</title>
         <p>
           The instructions above can be repeated to produce <latex /> code:
           just choose <c>print-latex</c> instead of <c>web</c> as your target.
@@ -194,24 +242,30 @@
       <subsection xml:id="tutorial-saving">
         <title>Saving your work</title>
         <p>
-          Using Codespaces will keep all your files <q>in the cloud</q> on GitHub's server,
+          Using Codespaces will keep all your files <q>in the cloud</q>,
           saved automatically as you edit.
           As long as your Codespace is active, your files will be saved there
-          for your private use.
+          for your private use. However, inactive Codespaces are periodically
+          cleaned up by GitHub (as of writing, this happens after one month of
+          inactivity), so you'll need to periodally
+          <term>commit &amp; sync</term> your work to your repository
+          where it will never be deleted.
         </p>
 
         <p>
-          However, you will want to periodically <term>commit &amp; sync</term> these files to your
-          <term>git repository</term> on GitHub (located on the web somewhere like
-          <c>https://github.com/user-name/repository-name</c>).
-          This creates a backup of your work, and has the added benefit of
-          allowing collaborators (not to mention members of the PreTeXt community who watch
+          Recall that your Codespace lives at <c>github.dev</c>, while your
+          repository has a <c>github.com</c> address like
+          <c>https://github.com/username/reponame</c>).
+          This repository serves as a backup of your work in the Codespace, and has the added benefit of
+          allowing collaborators to access your files as well. As a bonus, if you made your repository
+          public, members of the PreTeXt community who watch
           the <url href="https://groups.google.com/g/pretext-support">PreTeXt-support</url>
-          Google group) to access your files as well.
+          Google group can create their own Codespace based on your public repository and easily answer any
+          questions you have.
         </p>
 
         <p>
-          While Git and GitHub have a lot of features and a steep learning curve, there's a very simple way to use them
+          While Git and GitHub have a lot of features, there's a very simple way to use them
           via Codespaces. As you edit files, you'll notice that their filenames will turn orange, and new
           files will appear green. Likewise, a blue number will appear in the left sidebar.
         </p>
@@ -250,12 +304,13 @@
         </figure>
 
         <p>
-          To see that this is successful, return to <url href="https://github.com"/> (your
-          Codespace lives at <c>github.dev</c>), then find your public repository page
-          where you first created the Codespace. You should see your files with all your
+          To see that this is successful, return to your <c>github.com</c> repository webpage.
+          You should see your files with all your
           committed/synced changes. (That is, most of them: many files, such as log files and
-          temporary build files, are not tracked by Git. This is no problem: they are created
-          during a build automatically and don't need to be, and really shouldn't be, saved or shared with others.)
+          temporary build files that appear in gray within your Codespace, will not
+          be synced.
+          This is no problem: they are created during a build automatically and don't need to be,
+          and really shouldn't be, saved or shared with others.)
         </p>
       </subsection>
 
@@ -277,7 +332,10 @@
 
         <p>
           You can generate assets in much the same way you run a build,
-          though you may need to first install some extra software. You will see a <c>Generate</c> option in the <pretext /> command dialog, just below <c>Build</c>.  Select your target and wait for the process to complete.
+          though you may need to first install some extra software.
+          You will see a <c>Generate</c> option in the <pretext /> command dialog, just below <c>Build</c>.
+          Select your target and wait for the process to complete, then <c>Build</c> once more to
+          incorporate your generated assets.
         </p>
 
       </subsection>
@@ -291,7 +349,7 @@
         </p>
 
         <p>
-          With our Codespace setup this is simple.  From the <q>PreTeXt Commands</q> dialog, select
+          From the <q>PreTeXt Commands</q> dialog, select
           <q>Deploy</q>.  This will automatically take the most recent build of your web target
           and host it through <url href="https://pages.github.com/">GitHub Pages</url>.  Watch the output
           pane for a link to your published site; unlike the preview link you've been using on <c>github.dev</c>
@@ -328,12 +386,18 @@
           typing in the CLI command <c>pretext build web</c> and running it by pressing <kbd>Enter</kbd> builds the
           web target.
         </p>
+        <figure xml:id="tutorial-figure-codespaces-pretext-cli">
+          <caption>Using the PreTeXt CLI with a Codespaces terminal</caption>
+          <image width="80%" source="codespaces-pretext-cli.png">
+            <description>Screenshot of using the PreTeXt CLI within Codespaces</description>
+          </image>
+        </figure>
         <p>
           The CLI should be sufficient to do nearly everything you want to do for your project, and using
           the developer script should be exercised with caution. Nonetheless,
           to access a <c>pretext/pretext</c> developer script feature, you can use <c>pretext devscript</c>.
           For example, if the
-          documentation suggests a command like <c>pretext/pretext -foo bar</c>, you would run
+          documentation suggests a command like <c>pretext/pretext -foo bar</c>, you could try running
           <c>pretext devscript -foo bar</c>.
         </p>
       </subsection>
