@@ -11,7 +11,14 @@
     <title>Windows Subsystem for Linux</title>
 
     <p>
-      Windows Subsytem for Linux is no longer the recommended method for Windows <pretext /> users. Instead, consider using the handy <pretext />-CLI as discussed in <xref ref="quickstart-getting-pretext"/>. <pretext /> developers who use Windows may be interested in the information in this appendix but do note that some information may be out of date.
+      Windows Subsytem for Linux is no longer the recommended method for Windows <pretext /> users.
+      Instead, consider using either the web-based GitHub solution described in <xref ref="tutorial"/>
+      or the handy <pretext />-CLI as discussed in <xref ref="processing-CLI"/>.
+    </p>
+    
+    <p>
+      <pretext /> developers who use
+      Windows may be interested in the information in this appendix but do note that some information may be out of date.
     </p>
 
     <p>
