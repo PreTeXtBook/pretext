@@ -66,17 +66,20 @@
           Be sure to note your GitHub username and password in your password manager
           (or however you usually keep track of login credentials).
         </p>
-        <p>
-          Educators and non-profit researchers can get many of GitHub's paid features
-          for free. While this is not strictly required for the rest of the tutorial, it's a
-          useful way to increase GitHub's free Codespaces usage quotas.
-        </p>
-        <p>
-          Apply at
-          <url href="https://education.github.com/discount_requests/pack_application">Education.GitHub.com</url>
-          to unlock these features. In our experience, applications are usually processed quickly for <c>.edu</c>
-          email addresses, but you do not need to wait for approval to continue on with this tutorial.
-        </p>
+        <paragraphs>
+          <title>Tip!</title>
+          <p>
+            Educators and non-profit researchers can get many of GitHub's paid features
+            for free. While this is not strictly required for the rest of the tutorial, it's a
+            useful way to increase GitHub's free Codespaces usage quotas.
+          </p>
+          <p>
+            Apply at
+            <url href="https://education.github.com/discount_requests/pack_application">Education.GitHub.com</url>
+            to unlock these features. In our experience, applications are usually processed quickly for <c>.edu</c>
+            email addresses, but you do not need to wait for approval to continue on with this tutorial.
+          </p>
+        </paragraphs>
       </subsection>
       <subsection>
         <title>Three GitHub concepts</title>
