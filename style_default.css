@@ -147,6 +147,7 @@
     border: none;
     padding: 4px 10px 0 10px;
     color: #888;
+    z-index: 100;
 }
 .ptx-content .example-like .aside-like {
     margin-top: 0;

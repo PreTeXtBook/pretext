@@ -319,7 +319,7 @@
 
 /* Fix the width of logo to always be 50px */
 /* .ptx-logobox img  */
-.logo-link img {
+.ptx-masthead .logo-link img {
     width: 50px;
 }
 
