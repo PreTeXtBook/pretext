@@ -2141,7 +2141,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- write file infrastructure first -->
     <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <html lang="{$document-language}"> <!-- dir="rtl" here -->
+        <html>
+            <xsl:call-template name="language-attributes"/>
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html-no-date"/>
@@ -7154,7 +7155,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html-no-date"/>
-        <html lang="{$document-language}"> <!-- dir="rtl" here -->
+        <html>
+            <xsl:call-template name="language-attributes"/>
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <title>
@@ -10020,7 +10022,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html-no-date"/>
-        <html lang="{$document-language}">
+        <html>
+            <xsl:call-template name="language-attributes"/>
             <head>
                 <!-- configure MathJax by default for @platform variants -->
                 <xsl:call-template name="mathjax" />
@@ -10883,7 +10886,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html-no-date"/>
-    <html lang="{$document-language}"> <!-- dir="rtl" here -->
+    <html>
+        <xsl:call-template name="language-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
@@ -11042,7 +11046,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html-no-date"/>
-    <html lang="{$document-language}"> <!-- dir="rtl" here -->
+    <html>
+        <xsl:call-template name="language-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <meta name="Keywords" content="Authored in PreTeXt" />
@@ -13072,6 +13077,29 @@ TODO:
     <xsl:if test="not($html.js.extra = '')">
         <script src="{$html.js.extra}"></script>
     </xsl:if>
+</xsl:template>
+
+<!-- ################## -->
+<!-- Language Direction -->
+<!-- ################## -->
+
+<!-- Note: perhaps this should begin in a localization file, -->
+<!-- and come through as a key; but perhaps this template    -->
+<!-- can stay as is.                                         -->
+<xsl:template name="language-attributes">
+    <xsl:attribute name="lang">
+        <xsl:value-of select="$document-language"/>
+    </xsl:attribute>
+    <xsl:attribute name="dir">
+        <xsl:choose>
+            <xsl:when test="$document-language = 'ku-CKB'">
+                <xsl:text>rtl</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>ltr</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:attribute>
 </xsl:template>
 
 
