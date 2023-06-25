@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- ku-CKB, Kurdish (Cental Kurdish) -->
+<!-- Rebin Muhammad, reben80@gmail.com, 2023-06-24 -->
+
+<locale language="ku-CKB">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>بیردۆز</localization>
+    <localization string-id='corollary'>ئاکام</localization>
+    <localization string-id='lemma'>لێما</localization>
+    <localization string-id='algorithm'>ئەلگۆریزم</localization>
+    <localization string-id='proposition'>دەستەواژە</localization>
+    <localization string-id='claim'>بانگەشە</localization>
+    <localization string-id='fact'>ڕاستی</localization>
+    <localization string-id='identity'>بێلایەن</localization>
+    <!-- PROOF-LIKE -->
+    <!-- We know these five names for PROOF-LIKE have subtle shades of meaning. -->
+    <!-- Provide a good translation for "proof" itself, and do your best with   -->
+    <!-- the others.  It is highly likely authors will rename one or more of    -->
+    <!-- the others.                                                            -->
+    <localization string-id='proof'>سەلماندن</localization>
+    <localization string-id='argument'>ئەرگویمينت</localization>
+    <localization string-id='justification'>پاساو</localization>
+    <localization string-id='reasoning'>لێکدانەوە</localization>
+    <localization string-id='explanation'>ڕوونکردنەوە</localization>
+    <!-- used for a (logical) portion of a proof -->
+    <localization string-id='case'>‌‌دۆخ</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>بەڵگەنەویست</localization>
+    <localization string-id='conjecture'>کۆنجێکچەر</localization>
+    <localization string-id='principle'>پرەنسەپڵ</localization>
+    <localization string-id='heuristic'>ئیرشادی</localization>
+    <localization string-id='hypothesis'>گریمانە</localization>
+    <localization string-id='assumption'>گریمانکردن</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>پێناسە</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>هاوکێشە</localization>
+    <localization string-id='men'>هاوکیشە</localization>
+    <localization string-id='mrow'>هاوکیشە</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>بیرکاری پیشانبدە</localization>
+    <localization string-id='mdn'>بیرکاری پیشانبدە</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>بەرگ</localization>
+    <localization string-id='book'>کتێب</localization>
+    <localization string-id='article'>مەقالە</localization>
+    <localization string-id='letter'>نامە</localization>
+    <localization string-id='slideshow'>سلاید</localization>
+    <localization string-id='memo'>یادنامە</localization>
+    <localization string-id='presentation'>پێشكه‌شكاری</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+    <localization string-id='frontmatter'>بەرگی پشتەوە</localization>
+    <localization string-id='part'>بەش</localization>
+    <localization string-id='chapter'>بەش</localization>
+    <localization string-id='appendix'>پاشکۆ</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <localization string-id='appendices'>پاشکۆکان</localization>
+    <localization string-id='section'>بەش</localization>
+    <localization string-id='subsection'>کەرتەبەش</localization>
+    <localization string-id='subsubsection'>کەرتەبەش</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'>سلاید</localization>
+    <localization string-id='introduction'>پێشەکی</localization>
+    <localization string-id='conclusion'>دەرئەنجام</localization>
+    <localization string-id='exercises'>مەشق</localization>
+    <localization string-id='worksheet'>پەڕەیکار</localization>
+    <localization string-id='reading-questions'>پرسیاری خوێندنەوە</localization>
+    <localization string-id='solutions'>شیکار</localization>
+    <localization string-id='glossary'>فەرهەنگۆک</localization>
+    <localization string-id='references'>سەرچاوەکان</localization>
+    <localization string-id='backmatter'>بەرگی پشتەوە</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>پەڕەگرافەکان</localization>
+    <localization string-id='commentary'>شیکردنەوە</localization>
+    <localization string-id='subparagraph'>بەشە پەرەگراف</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>تێبینی</localization>
+    <localization string-id='convention'>ڕێکەوتن</localization>
+    <localization string-id='note'>تيبینی</localization>
+    <localization string-id='observation'>لێ وردبوونەوە</localization>
+    <localization string-id='warning'>وریاکردنەوە</localization>
+    <localization string-id='insight'>دووربینی</localization>
+    <!-- COMPUTATION-LIKE blocks -->
+    <localization string-id='computation'>کۆمپیوتەیشن</localization>
+    <localization string-id='technology'>تەکنەلۆجی</localization>
+    <localization string-id='data'>بەروار</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>بەجیا</localization>
+    <localization string-id='biographical'>ژیاننامە بە جیا</localization>
+    <localization string-id='historical'>مێژووی بە جیا</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>نموونە</localization>
+    <localization string-id='question'>پرسیار</localization>
+    <localization string-id='problem'>کێشە</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>پڕۆژە</localization>
+    <localization string-id='activity'>چالاکی</localization>
+    <localization string-id='exploration'>کنەکردن</localization>
+    <localization string-id='task'>ئەرک</localization>
+    <localization string-id='investigation'>پشکنین</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>پێکەوەنان</localization>
+    <localization string-id='poem'>هۆنراوە</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>ئامانجەکان</localization>
+    <localization string-id='objective'>ئامانج</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'>دەرهاویشتەکان</localization>
+    <localization string-id='outcome'>دەرهاویشتە</localization>
+    <!-- "Open" means unsolved, a research question/problem -->
+    <localization string-id='openquestion'>پرسیاری کراوە</localization>
+    <localization string-id='openproblem'>کێشەی کراوە</localization>
+    <localization string-id='openconjecture'>کۆنجێکچەری کراوە</localization>
+    <!-- "discussion" on open problems -->
+    <localization string-id='context'>کۆنتێکست</localization>
+    <localization string-id='discussion'>گفتووگۆ</localization>
+    <localization string-id='opinion'>بۆچوون</localization>
+    <localization string-id='status'>‌‌دۆخ</localization>
+    <localization string-id='suggestion'>پێشنیاز</localization>
+    <!--  -->
+    <localization string-id='figure'>وێنە</localization>
+    <localization string-id='table'>خشتە</localization>
+    <localization string-id='listing'>لیستەگرتن</localization>
+    <localization string-id='fn'>پەراوێز</localization>
+    <localization string-id='contributor'>بەژداربوو</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>لیست</localization>
+    <localization string-id='li'>بڕگە</localization>
+    <!-- A term (word) defined in a glossary item -->
+    <localization string-id='gi'>تێرم</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>پەرەگراف</localization>
+    <localization string-id='blockquote'>ووتەی وەرگیراو</localization>
+    <!-- The "pre" element is short for "preformatted text".  PreTeXt uses it -->
+    <!-- more as paragraph, rendered in monospace, with newlines respected. -->
+    <localization string-id='pre'>بلۆکی کۆد</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <localization string-id='fragment'>پارچە</localization>
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>مەشق</localization>
+    <localization string-id='inlineexercise'>خاڵی پشکنین</localization>
+    <localization string-id='worksheetexercise'>پەڕەکاری ڕاهێنانەکان</localization>
+    <localization string-id='readingquestion'>پرسیارەکانی خوێندنەوە</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>یارمەتی</localization>
+    <localization string-id='answer'>وەڵام</localization>
+    <localization string-id='solution'>شیکار</localization>
+    <!-- A subdivision of an "exercises" section -->
+    <localization string-id='subexercises'>بەشە-ڕاهێنانەکان</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>گروپی ڕاهێنانەکان</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>پيڕستی بایۆلۆگرافیا</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>ناوەڕۆک</localization>
+    <localization string-id='abstract'>پوختە</localization>
+    <localization string-id='preface'>پێشەکی</localization>
+    <localization string-id='acknowledgement'>پێزانین</localization>
+    <localization string-id='biography'>ژیاننامەی نووسەر</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>دەربارەی نوسەر</localization>
+    <localization string-id='about-authors'>دەربارەی نوسەرەکان</localization>
+    <localization string-id='foreword'>پێشەکی</localization>
+    <localization string-id='dedication'>پێشکەشە </localization>
+    <localization string-id='colophon'>هاوپلان</localization>
+    <!-- Runestone Activities -->
+    <!-- These terms will appear in student activity/engagement -->
+    <!-- reports for an instructor of a Runestone course.       -->
+    <!-- Normally they will not be apparent to a reader.        -->
+    <localization string-id='video'>ڤیدیۆ</localization>
+    <localization string-id='program'>پرۆگرام</localization>
+    <!-- "ActiveCode" and "CodeLens" are Runestone-constructs -->
+    <!-- and so really *should not* be translated.            -->
+    <localization string-id='program-activecode'>کۆد-چالاکردن</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>پێرست</localization>
+    <localization string-id='jump-to'>بچۆرە سەر</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>پێرست</localization>
+    <localization string-id='see'>تەماشا بکە</localization>
+    <localization string-id='also'>تەماشای ئەمەیش بکە</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>سیمبول</localization>
+    <localization string-id='description'>وەسفکردن</localization>
+    <localization string-id='location'>شوێن</localization>
+    <localization string-id='page'>پەڕە</localization>
+    <localization string-id='continued'>بەردەوەمبە بۆ سەر پەڕەی داهاتوو</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>بازبدە بۆ سەر بابەتە سەرەکیەکە</localization>
+    <localization string-id='previous'>پێشووتر</localization>
+    <localization string-id='up'>سەرەوە</localization>
+    <localization string-id='next'>داهاتوو</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>پێشوو</localization>
+    <localization string-id='up-short'>سەرەوە</localization>
+    <localization string-id='next-short'>داهاتوو</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>په‌راوێزنووسینەکان</localization>
+    <localization string-id='feedback'>فیدباک</localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'>بەرهەمهاتووە PreTeXt لەڕیگای </localization>
+    <!-- Search Results display/dialog -->
+    <!-- The result of a search as part of HTML output will throw up       -->
+    <!-- an overlay window with the search results.  "Search Results"      -->
+    <!-- is like a heading.  It renders like "Search Results: algorithm".  -->
+    <!-- When a reader uses a term that produces no results (perhaps they  -->
+    <!-- misspell the search term) then they get a message to that effect. -->
+    <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
+    <localization string-id='search-results-heading'>ئەنجامی گەڕان</localization>
+    <!-- Short phrase, no punctuation -->
+    <localization string-id='no-search-results'></localization>
+   <!-- Parts of memos and letters -->
+    <localization string-id='to'>بۆ</localization>
+    <localization string-id='from'>لە</localization>
+    <localization string-id='subject'>بابەت</localization>
+    <localization string-id='date'>بەروار</localization>
+    <localization string-id='copy'>cc</localization>
+    <localization string-id='enclosure'>پیچانەوە</localization>
+    <!-- Various -->
+    <localization string-id='todo'>بۆ کردنی</localization>
+    <localization string-id='editor'>دەستکاریکار</localization>
+    <localization string-id='edition'>چاپ</localization>
+    <localization string-id='website'>وێبسایت</localization>
+    <localization string-id='copyright'>مافی پاراستن</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>بەستەری چەسپاو</localization>
+    <localization string-id='incontext'>ناو-کۆنتێکستدا</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <localization string-id='evaluate'>نرخ دۆزینەوە</localization>
+    <!-- <localization string-id='code'>Code</localization> -->
+    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <localization string-id='instructions'>ڕێنماییەکان</localization>
+    <!-- Interactive exercise feedback messages                   -->
+    <!-- These might be part of a feedback message for submitting -->
+    <!-- an answer, e.g. "Correct!" or "Correct: 50%".            -->
+    <localization string-id='correct'>ڕاست</localization>
+    <localization string-id='incorrect'>ناڕاست</localization>
+    <!-- To signal that a reader left an answer blank             -->
+    <localization string-id='blank'>بەتاڵ</localization>
+    <!-- Submit or check responses                                -->
+    <localization string-id='submit'>پشتڕاستی بکەوە</localization>
+    <localization string-id='check-responses'>وەڵامەکەت ساغبکەرەوە</localization>
+    <!-- Reveal correct answers                                   -->
+    <localization string-id='reveal'>پیشانی بدە</localization>
+    <!-- Randomize parameters for a randomizable exercise         -->
+    <localization string-id='randomize'>هەرەمەکیکردن</localization>
+    <!-- Activate an interactive (from a static preview)          -->
+    <localization string-id='activate'>چالاکردن</localization>
+    <!-- Reset an interactive to its original state               -->
+    <localization string-id='reset'>ڕێکخستنەوە</localization>
+    <!-- Describe an array of fill-in-the-blanks, say for a matrix -->
+    <localization string-id='array'>ڕیزکراو</localization>
+    <!-- Print page button text -->
+    <localization string-id='print'>پرنت</localization>
+
+</locale>
