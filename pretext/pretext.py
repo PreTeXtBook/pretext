@@ -1116,6 +1116,7 @@ def webwork_to_xml(
             displayMode='PTX',
             courseID=courseID,
             userID=userID,
+            course_password=course_password,
             outputformat='raw'
         )
         version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
