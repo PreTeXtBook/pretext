@@ -259,7 +259,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
     <localization string-id='search-results-heading'>ئەنجامی گەڕان</localization>
     <!-- Short phrase, no punctuation -->
-    <localization string-id='no-search-results'></localization>
+    <localization string-id='no-search-results'>ەنجامی-گەڕانەکان-نیە</localization>
    <!-- Parts of memos and letters -->
     <localization string-id='to'>بۆ</localization>
     <localization string-id='from'>لە</localization>
