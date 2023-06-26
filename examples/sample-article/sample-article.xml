@@ -23,6 +23,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
 <pretext>
+<!-- <pretext xml:lang="ku-CKB"> -->    <!-- an RTL language -->
 <!-- <pretext xml:lang="pt-BR"> -->
 <!-- <pretext xml:lang="fr-FR"> -->
 <!-- <pretext xml:lang="cs-CZ"> -->
