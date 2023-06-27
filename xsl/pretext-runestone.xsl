@@ -729,6 +729,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]" mode="runestone-manifest">
     <question>
+        <!-- A divisional exercise ("exercises/../exercise") is not really   -->
+        <!-- a reading activity in the Runestone model, so we flag these     -->
+        <!-- exercises as such.  Also, interactive "task" come through here, -->
+        <!-- so we need to look to an ancestor to see if the containing      -->
+        <!-- "exercise" is divisional. The @optional attribute matches the   -->
+        <!-- "optional" flag in the Runestone database.  We simply set the   -->
+        <!-- value to "yes" and nevver bother to say "no".  The  only        -->
+        <!-- consumer is the import into the Runestone database, so any      -->
+        <!-- change needs only coordinate there.                             -->
+        <xsl:if test="(@exercise-customization = 'divisional') or
+                      (self::task and ancestor::exercise[@exercise-customization = 'divisional'])">
+            <xsl:attribute name="optional">
+                <xsl:text>yes</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <!-- Duplicate, but still should look like original (ID, etc.),  -->
