@@ -1795,6 +1795,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercises>
 
+    <exercises>
+        <title>Hodgepodge></title>
+
+        <exercise label="true-false-exercise-with-tasks-in-exercises">
+            <title>With Tasks in an Exercises Division</title>
+            <introduction>
+                <p>Structured with task, recycled earlier from earlier, to make sure that the tasks do not get counted as Runestone reading activities (since they are inside an <tag>exercise</tag> inside of an <tag>exercises</tag> division.</p>
+            </introduction>
+
+            <task label="true-false-task-in-exercises">
+                <title>True/False</title>
+                <idx>vector space</idx>
+                <statement correct="no">
+                    <p>Every vector space has finite dimension.</p>
+                </statement>
+                <feedback>
+                    <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+                </feedback>
+                <hint>
+                    <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                </hint>
+            </task>
+
+            <task label="short-answer-task-in-exercises">
+                <statement>
+                    <p>Explain your reasoning in the previous question.</p>
+                </statement>
+                <response/>
+            </task>
+        </exercise>
+    </exercises>
+
     <section xml:id="exercises-timed">
         <title>Exercises that are Timed</title>
 
