@@ -3503,6 +3503,22 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="local-name(.)"/>
 </xsl:template>
 
+<!-- ################## -->
+<!-- Language direction -->
+<!-- ################## -->
+
+<!-- Every localiztion should specify the direction of the  -->
+<!-- language, which we record as a variable and as a flag. -->
+<xsl:variable name="document-language-direction">
+    <xsl:value-of select="$localizations/locale[@language = $document-language]/@direction"/>
+</xsl:variable>
+
+<!-- We consider right-to-left as exceptional, so we set a flag   -->
+<!-- for this case.  This should be the primary determinant in    -->
+<!-- code such as the LaTeX coionversion, though the actual value -->
+<!-- of "$language-direction" is meant to be used in attributes   -->
+<!-- for HTML pages.                                              -->
+<xsl:variable name="b-rtl" select="$document-language-direction = 'rtl'"/>
 
 <!-- ##### -->
 <!-- Icons -->
