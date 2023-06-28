@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it-IT, Italian (Italy) -->
 <!-- Valerio Monti, gedeonedepaperoni@gmail.com, 2020-07-27   -->
 
-<locale language="it-IT">
+<locale language="it-IT" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Teorema</localization>

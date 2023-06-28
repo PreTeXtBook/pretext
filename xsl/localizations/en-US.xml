@@ -24,8 +24,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- en-US, English (United States) -->
 <!-- Robert A. Beezer, beezer@pugetsound.edu, 2014-08-11   -->
 
-<!-- <locale language="en-US"> -->
-<locale language="en-US">
+<!-- Every localization should specify the direction of the language, -->
+<!-- there is no assumed default.  Left-to-right is "ltr" and         -->
+<!-- right-to-left is "rtl".  Provide these exactly as written since  -->
+<!-- they can migrate untouched into output (e.g. HTML).              -->
+<locale language="en-US" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Theorem</localization>

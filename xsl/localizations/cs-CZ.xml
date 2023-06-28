@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cs-CZ, Czech (Czechia) -->
 <!-- Jiri Lebl, lebl@okstate.edu, 2023-05-21   -->
 
-<locale language="cs-CZ">
+<locale language="cs-CZ" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Teorém</localization>

@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- bg-BG, Bulgarian (Bulgaria) -->
 <!-- Boyko Bantchev, bantchev@gmail.com, 2019-07-04 -->
 
-<locale language="bg-BG">
+<locale language="bg-BG" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Теорема</localization>

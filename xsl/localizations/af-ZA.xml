@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- af-ZA, Afrikaans (South Africa) -->
 <!-- Dirk Basson, djbasson@sun.ac.za, 2018-03-23 -->
 
-<locale language="af-ZA">
+<locale language="af-ZA" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Stelling</localization>

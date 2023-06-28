@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ca-ES, Catalan (Spain) -->
 <!-- Jordi Saludes, jordi.saludes@upc.edu, 2021-07-13 -->
 
-<locale language="ca-ES">
+<locale language="ca-ES" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>

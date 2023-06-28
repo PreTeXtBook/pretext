@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ku-CKB, Kurdish (Cental Kurdish) -->
 <!-- Rebin Muhammad, reben80@gmail.com, 2023-06-24 -->
 
-<locale language="ku-CKB">
+<locale language="ku-CKB" direction="rtl">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>بیردۆز</localization>

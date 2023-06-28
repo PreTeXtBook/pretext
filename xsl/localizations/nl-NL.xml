@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- nl-NL, Dutch (The Netherlands) -->
 <!-- Gosia Wrzesinska, gosia@coderso.com, 2022-12-21   -->
 
-<locale language="nl-NL">
+<locale language="nl-NL" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Stelling</localization>
