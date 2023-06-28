@@ -2273,7 +2273,16 @@ Book (with parts), "section" at level 3
         <xsl:when test="self::backmatter">
             <xsl:value-of select="false()" />
         </xsl:when>
+        <!-- The presence of a traditional division is emblematic of a structured -->
+        <!-- division, so not a leaf of the structural/document tree              -->
         <xsl:when test="part or chapter or section or subsection or subsubsection">
+            <xsl:value-of select="false()" />
+        </xsl:when>
+        <!-- One exception, a division full of only "worksheet" (as a subdivision, -->
+        <!-- there could be metadata, "introduction", etc.)  We know there are no  -->
+        <!-- traditional divisions as subdiivisions at this point.  So we test for -->
+        <!-- at least one worksheet and no other specialized divisions.            -->
+        <xsl:when test="worksheet and not(exercises|references|glossary|reading-questions|solutions)">
             <xsl:value-of select="false()" />
         </xsl:when>
         <xsl:otherwise>
