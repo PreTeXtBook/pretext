@@ -12787,7 +12787,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <introduction>
                 <title>About Worksheets</title>
 
-                <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is a necessary initial <tag>subsection</tag> to the current <tag>section</tag>, since we will have multiple worksheets.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
+                <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is an optional <tag>introduction</tag> to the current <tag>section</tag>.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
 
                 <p>If you make PDF output you will notice an increased amount of control over layout.  Also, if the publication file elects <latex/> draft mode, then there will be visual indicators of prescribed whitespace.</p>
             </introduction>
