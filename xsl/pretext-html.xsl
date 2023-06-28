@@ -13091,14 +13091,7 @@ TODO:
         <xsl:value-of select="$document-language"/>
     </xsl:attribute>
     <xsl:attribute name="dir">
-        <xsl:choose>
-            <xsl:when test="$document-language = 'ku-CKB'">
-                <xsl:text>rtl</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>ltr</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="$document-language-direction"/>
     </xsl:attribute>
 </xsl:template>
 
