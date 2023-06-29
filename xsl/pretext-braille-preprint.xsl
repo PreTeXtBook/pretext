@@ -273,49 +273,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need an overall container   -->
     <!-- Maybe copy a language code? -->
     <brf>
-        <segment indentation="4" lines-after="1">Temporary Transcriber Notes</segment>
-        <!-- TODO: engineer bullet points (numbered list would vary?),    -->
-        <!-- formatted as individual notes helps delimit one from another -->
+        <!-- centered heading on line 1 -->
+        <segment centered="yes" lines-after="1">Transcriber Notes</segment>
+        <!-- Literal text for each note, control whitespace,  -->
+        <!-- etc here, since it will not be handled otherwise -->
         <xsl:if test="//c">
         <!-- See "c" template for explanation -->
-            <xsl:apply-templates select="." mode="transcriber-note">
-                <xsl:with-param name="message">
-                    <xsl:text>Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</xsl:text>
-                </xsl:with-param>
-            </xsl:apply-templates>
+            <segment indentation="2">
+                <xsl:text>Literal, or verbatim, computer code used in sentences is indicated by a set of transcriber-defined emphasis given by the following indicators, which all begin with the two cells dot-4 and dot-3456.  Single letter: 4-3456-23.  Begin, end word: 4-3456-2, 4-3456-3.  Begin, end phrase: 4-3456-2356, 4-3456-3.</xsl:text>
+            </segment>
         </xsl:if>
         <!--  -->
         <xsl:if test="//image">
-            <xsl:apply-templates select="." mode="transcriber-note">
-                <xsl:with-param name="message">
-                    <xsl:text>Images are replaced by authors' descriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
-                </xsl:with-param>
-            </xsl:apply-templates>
+            <segment indentation="2">
+                <xsl:text>Images are replaced by authors' descriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
+            </segment>
         </xsl:if>
         <!--  -->
         <xsl:if test="//sidebyside">
-            <xsl:apply-templates select="." mode="transcriber-note">
-                <xsl:with-param name="message">
-                    <xsl:text>A "side-by-side" is a horizontal layout of document elements.  The components of a side-by-side are called "panels".  Typically panels are images or figures, but can also be items like program listings, tables, or paragraphs.  For braille, we let each panel use the full width of the page, so we announce the start, indicating the total number of panels.  Then we preface each panel with its number in the sequence.  Finally we announce the end because it may be hard to distinguish a final panel from the ensuing text.</xsl:text>
-                </xsl:with-param>
-            </xsl:apply-templates>
+            <segment indentation="2">
+                <xsl:text>A "side-by-side" is a horizontal layout of document elements.  The components of a side-by-side are called "panels".  Typically panels are images or figures, but can also be items like program listings, tables, or paragraphs.  For braille, we let each panel use the full width of the page, so we announce the start, indicating the total number of panels.  Then we preface each panel with its number in the sequence.  Finally we announce the end because it may be hard to distinguish a final panel from the ensuing text.</xsl:text>
+            </segment>
         </xsl:if>
         <!--  -->
         <!-- automatically infers we have a note already for "sidebyside" -->
         <xsl:if test="//sbsgroup">
-            <xsl:apply-templates select="." mode="transcriber-note">
-                <xsl:with-param name="message">
-                    <xsl:text>A "side-by-side group" is a sequence down the page of "side-by-side" (see previous note).  We announce the start with the number of side-by-side in the group to expect, and let the beginning and ending notes for each side-by-side delineate the sequence.</xsl:text>
-                </xsl:with-param>
-            </xsl:apply-templates>
+            <segment indentation="2">
+                <xsl:text>A "side-by-side group" is a sequence down the page of "side-by-side" (see previous note).  We announce the start with the number of side-by-side in the group to expect, and let the beginning and ending notes for each side-by-side delineate the sequence.</xsl:text>
+            </segment>
         </xsl:if>
         <!-- mention how "tabular" are implenented and suggest possible improvements-->
         <xsl:if test="//tabular">
-            <xsl:apply-templates select="." mode="transcriber-note">
-                <xsl:with-param name="message">
-                    <xsl:text>Tabular material is always implemented using a "linear table format".  A human transcriber may be able to improve small tables, or larger tables that could use multiple pages when embossed, by using a different format.</xsl:text>
-                </xsl:with-param>
-            </xsl:apply-templates>
+            <segment indentation="2">
+                <xsl:text>Tabular material is always implemented using a "linear table format".  A human transcriber may be able to improve small tables, or larger tables that could use multiple pages when embossed, by using a different format.</xsl:text>
+            </segment>
         </xsl:if>
         <!-- process segments and blocks of "brf" -->
         <xsl:apply-templates select="*"/>
