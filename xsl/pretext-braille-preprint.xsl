@@ -1720,11 +1720,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- [BANA-2016] 16.1.5(c): (braille placement)   -->
 <!-- At the end of the chapter or volume.         -->
 
-<!-- See BANA 16.2.2 for superscripted number (two-cell indicator, number sign, number). -->
+<!-- BANA 16.2.2: superscripted number          -->
+<!-- (two-cell indicator, number sign, number). -->
+<!-- TODO: collect footnote *content* at division ends -->
 <xsl:template match="fn">
-    <xsl:text> [</xsl:text>
+    <!--  5-6  3-5  -->
+    <xsl:text>&#x2830;&#x2814;</xsl:text>
+    <!-- A number sign is supplied by liblouis translation -->
+    <!-- 2-4-5-6  U+283C                                   -->
     <xsl:apply-templates select="." mode="number"/>
-    <xsl:text>]</xsl:text>
+    <!-- trailing space necessary to end superscript?  -->
+    <!-- will get merged with any that already exists? -->
+    <xsl:text> </xsl:text>
 </xsl:template>
 
 <!-- ############# -->
