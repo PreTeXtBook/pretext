@@ -754,6 +754,18 @@ class BRF:
         if blk.ownpage and self.cursor.embossing():
             self.advance_page()
 
+        # We don't want to start block material right at the bottom of
+        # the page when there are not enough lines to really get moving.
+        # Never start when there is one line left.  Most box material needs
+        # three lines, a preceding blank line, a box line, and a heading
+        # (maybe four lines? but three seems OK experimentally).
+        # Likely this needs refinement.
+        initial_lines = 1
+        if blk.box:
+            initial_lines += 2
+        if (self.cursor.remaining_lines() < initial_lines) and self.cursor.embossing():
+            self.advance_page()
+
         # Lines before (but not if at the start of a page)
         if not(self.cursor.at_page_start()):
             for i in range(blk.lines_before):
