@@ -1725,6 +1725,183 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
 </xsl:template>
 
+
+<!-- ################# -->
+<!-- Verbatim, Program -->
+<!-- ################# -->
+
+<!-- Various templates elsewhere manipulate large chunks of verbatim text, -->
+<!-- such as for a "program".  We leverage those as much as possible.      -->
+<!-- Ideally we easily get a chunk of text, given as a sequence of lines   -->
+<!-- defined by newline characters.   The recursive "braille-source-code"  -->
+<!-- template makes a "segment" for each line, this will allow for runover -->
+<!-- and *code* indentation without any ambiguity.  So most of the braille -->
+<!-- formatting happens in this template.                                  -->
+<!--                                                                       -->
+<!-- IMPORTANT: ensure that $text has a final newline character.           -->
+
+<xsl:template name="braille-source-code">
+    <xsl:param name="text"/>
+
+    <xsl:choose>
+        <!-- $text always ends in a newline, so final recursive call will    -->
+        <!-- have an empty string.  This is the indication that we are done. -->
+        <xsl:when test="$text = ''"/>
+        <!-- Nonempty $text, so split it, and recurse -->
+        <xsl:otherwise>
+            <segment indentation="0" runover="0">
+                <code>
+                    <xsl:value-of select="substring-before($text, '&#xa;')"/>
+                </code>
+            </segment>
+            <xsl:call-template name="braille-source-code">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A "cd" is structured with "cline" or not.  We do not sanitize, that   -->
+<!-- tis what the "cline"element is for - control over leading whitespace. -->
+<!-- We provide a final newline here for a bare "cd", otherwise the        -->
+<!-- "cline" template provides it.                                         -->
+<xsl:template match="cd">
+    <block breakable="no">
+        <xsl:call-template name="braille-source-code">
+            <xsl:with-param name="text">
+                <xsl:choose>
+                    <xsl:when test="cline">
+                        <xsl:apply-templates select="cline"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="."/>
+                        <xsl:text>&#xa;</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+    </block>
+</xsl:template>
+
+<!-- "pre" and "pre[cline]" are handled by the "interior" -->
+<!-- modal template in -common.                           -->
+<!-- "pre" uses "sanitize-text", which provides a final   -->
+<!-- newline, while "pre[cline]" uses the base "cline"    -->
+<!-- template, which also provides a final newline.       -->
+<xsl:template match="pre">
+    <block breakable="no">
+        <xsl:call-template name="braille-source-code">
+            <xsl:with-param name="text">
+                <xsl:apply-templates select="." mode="interior"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </block>
+</xsl:template>
+
+<!-- A "program" gets a lot of treatment in other formats to recognize   -->
+<!-- the language an author specifies and then do some sort of syntax    -->
+<!-- highlighting with fonts and colors.  That would be hard in braille, -->
+<!-- and we don't know of a good tool anyway.  So we just echo the       -->
+<!-- "input" portion.                                                    -->
+<!-- "sanitize-text" provides a final newline, always                    -->
+<xsl:template match="program">
+    <block breakable="no">
+        <xsl:call-template name="braille-source-code">
+            <xsl:with-param name="text">
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="input" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </block>
+</xsl:template>
+
+<!-- For a "console" session, we work hardest on the "input", pulling in -->
+<!-- a preceding prompt, and considering the possibility of no "output". -->
+<!-- For "output", if extant, we provide necessary separators.           -->
+
+<xsl:template match="console">
+    <!-- entire session as a block -->
+    <block breakable="no" lines-before="1" lines-after="1">
+        <!-- respect authored order, so don't split these -->
+        <xsl:apply-templates select="input|output"/>
+    </block>
+</xsl:template>
+
+<xsl:template match="console/input">
+    <xsl:variable name="console-input">
+        <!-- prompt first, if provided; author provides -->
+        <!-- any space that prompt would create         -->
+        <xsl:value-of select="preceding-sibling::*[1][self::prompt]"/>
+        <!-- remainder of the input -->
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="."/>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- now feed to braille-ification -->
+    <xsl:call-template name="braille-source-code">
+        <xsl:with-param name="text" select="$console-input"/>
+    </xsl:call-template>
+    <!-- add a blank line, only when not provided by the output -->
+    <xsl:if test="not(following-sibling::*[1][self::output])">
+        <segment lines-before="1"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="console/output">
+    <xsl:variable name="console-output">
+        <!-- separate from the input -->
+        <!-- NB: newline here necessary for textual version -->
+        <xsl:text>---------------&#xa;</xsl:text>
+        <!-- remainder of the input -->
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="."/>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- now feed to braille-ification -->
+    <xsl:call-template name="braille-source-code">
+        <xsl:with-param name="text" select="$console-output"/>
+    </xsl:call-template>
+    <!-- and a blank line to help with session -->
+    <segment lines-before="1"/>
+</xsl:template>
+
+<!-- Sage cells rely on per-conversion overrides of presumed   -->
+<!-- abstract templates, to handle the numerous possibilities. -->
+<!-- Using a long line to simulate input/output split          -->
+
+<xsl:template match="sage" mode="sage-active-markup">
+    <xsl:param name="in" />
+    <xsl:param name="out" />
+
+    <block breakable="no" lines-before="1" lines-after="1">
+        <xsl:call-template name="braille-source-code">
+            <xsl:with-param name="text" select="$in"/>
+        </xsl:call-template>
+
+        <xsl:if test="not($out = '')">
+            <segment>
+                <xsl:text>-----------------</xsl:text>
+            </segment>
+            <xsl:call-template name="braille-source-code">
+                <xsl:with-param name="text" select="$out"/>
+            </xsl:call-template>
+        </xsl:if>
+    </block>
+</xsl:template>
+
+<!-- Display only, just input -->
+<xsl:template name="sage-display-markup">
+    <xsl:param name="in" />
+
+    <block breakable="no" lines-before="1" lines-after="1">
+        <xsl:call-template name="braille-source-code">
+            <xsl:with-param name="text" select="$in"/>
+        </xsl:call-template>
+    </block>
+</xsl:template>
+
+
 <!-- ############# -->
 <!-- Miscellaneous -->
 <!-- ############# -->
@@ -1920,12 +2097,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
 </xsl:template>
 
+<!-- We expect the simple template in -common to be active -->
+<xsl:template match="cline">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- Action is in -common, this will catch all occurences? -->
+<xsl:template match="sage">
+    <xsl:apply-imports/>
+</xsl:template>
+
+
 <!-- Larger structures, needing implementation, *along with* interior -->
 <!-- structures.  We report AND include a textual place holder.       -->
-
-<xsl:template match="sage">
-    <xsl:text>SAGECELL</xsl:text>
-</xsl:template>
 
 <xsl:template match="notation-list">
     <xsl:text>NOTATIONLIST</xsl:text>
@@ -1933,22 +2117,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="index-list">
     <xsl:text>INDEXLIST</xsl:text>
-</xsl:template>
-
-<xsl:template match="cd">
-    <segment>CODE DISPLAY</segment>
-</xsl:template>
-
-<xsl:template match="pre">
-    <segment>PREFORMATTED TEXT</segment>
-</xsl:template>
-
-<xsl:template match="program">
-    <segment>PROGRAM</segment>
-</xsl:template>
-
-<xsl:template match="console">
-    <segment>CONSOLE</segment>
 </xsl:template>
 
 <xsl:template match="poem">
@@ -1966,13 +2134,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="missing-warning">
-    <xsl:if test="//sage">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'sage'"/>
-            <xsl:with-param name="ntimes" select="count(//sage)"/>
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
     <xsl:if test="//notation-list">
         <xsl:call-template name="missing-implementation">
             <xsl:with-param name="element" select="'notation-list'"/>
@@ -1986,35 +2147,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="ntimes" select="count(//index-list)"/>
         </xsl:call-template>
     </xsl:if>
-    <!--  -->
-    <xsl:if test="//cd">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'cd'"/>
-            <xsl:with-param name="ntimes" select="count(//cd)"/>
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
-    <xsl:if test="//pre">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'pre'"/>
-            <xsl:with-param name="ntimes" select="count(//pre)"/>
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
-    <xsl:if test="//program">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'program'"/>
-            <xsl:with-param name="ntimes" select="count(//program)"/>
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
-    <xsl:if test="//console">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'console'"/>
-            <xsl:with-param name="ntimes" select="count(//console)"/>
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
     <xsl:if test="//poem">
         <xsl:call-template name="missing-implementation">
             <xsl:with-param name="element" select="'poem'"/>
