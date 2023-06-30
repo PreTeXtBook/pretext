@@ -2041,7 +2041,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             numAttempt = numAttempt + 1
             log.info(f"Opening subprocess http.server with port={port}")
             # -u so that stdout and stderr are not cached
-            server = subprocess.Popen(["python", "-u", "-m", "http.server", f"{port}", "-d", tmp_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            server = subprocess.Popen([sys.executable, "-u", "-m", "http.server", f"{port}", "-d", tmp_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             # Check if terminated. Allow 1 second to start-up.
             try:
                 result = server.wait(1)
