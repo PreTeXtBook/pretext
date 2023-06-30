@@ -1780,6 +1780,9 @@ Book (with parts), "section" at level 3
 <!-- be universal and the only efffect is to add a newline -->
 <!-- character, which the output format should recognize   -->
 <!-- via its own devices.                                  -->
+<!-- NB: the newline provide by the last "cline" of a      -->
+<!-- structure is used by some recursive text utilities as -->
+<!-- a signal, such as the "braille-source-code" template. -->
 <xsl:template match="cline">
     <xsl:value-of select="." />
     <xsl:text>&#xa;</xsl:text>
