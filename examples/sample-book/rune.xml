@@ -945,8 +945,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercises>
 
-    <exercises xml:id="multiple-choice-exercises">
+    <exercises xml:id="multiple-choice-exercises" group-work="yes" group-size="5">
         <title>Multiple Choice Exercises</title>
+
+        <introduction>
+            <p>When this <tag>exercises</tag> division is hosted on Runestone Academy, it will be enabled for group work.  See group selection and submission features at the end of the division. (2023-07-03: experimental.)</p>
+        </introduction>
 
         <exercise xml:id="multiple-choice-one" label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
