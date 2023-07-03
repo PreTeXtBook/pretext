@@ -694,6 +694,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:choose>
+        <xsl:when test="@time-limit and (@group-work = 'yes')">
+            <xsl:message>PTX:ERROR:   an &quot;exercises&quot; division cannot simultaneously be a timed exam AND group work</xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+        <xsl:when test="@group-work = 'yes'">
+            <!-- the actual list of exercises -->
+            <xsl:copy-of select="$the-exercises"/>
+            <!-- group selection and submission features, if hosted on Runestone -->
+            <xsl:apply-templates select="." mode="runestone-group-work"/>
+        </xsl:when>
         <!-- some extra wrapping for timed exercises      -->
         <!-- so we pass the $the-exercises as a parameter -->
         <!-- presence of @time-limit is the signal        -->
