@@ -1841,8 +1841,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- https://tex.stackexchange.com/questions/231361/                    -->
     <!-- table-of-contents-labels-not-directing-hyperlinks-to-correct-page  -->
     <xsl:text>%% Less-clever names for hyperlinks are more reliable, *especially* for structural parts&#xa;</xsl:text>
-    <xsl:text>%% See comments in the code to learn more about the importance of tnis setting&#xa;</xsl:text>
+    <xsl:text>%% See comments in the code to learn more about the importance of this setting&#xa;</xsl:text>
     <xsl:text>\hypersetup{hypertexnames=false}&#xa;</xsl:text>
+    <!-- Index entries now have the correct (printed) page number, but the -->
+    <!-- hyperlink is way off (owing to significant front matter) and uses -->
+    <!-- a page number that is way too early.  Fix comes from the answer:  -->
+    <!--     https://tex.stackexchange.com/a/516275                        -->
+    <!-- on the post:                                                      -->
+    <!--     https://tex.stackexchange.com/questions/516267/               -->
+    <!--     compatibility-of-hypertexnames-false-and-indexes              -->
+    <xsl:text>%%The  hypertexnames  setting then confuses the hyperlinking from the index&#xa;</xsl:text>
+    <xsl:text>%%This patch resolves the incorrect links, see code for StackExchange post.&#xa;</xsl:text>
+    <xsl:text>\makeatletter&#xa;</xsl:text>
+    <xsl:text>\patchcmd\Hy@EveryPageBoxHook{\Hy@EveryPageAnchor}{\Hy@hypertexnamestrue\Hy@EveryPageAnchor}{}{\fail}&#xa;</xsl:text>
+    <xsl:text>\makeatother&#xa;</xsl:text>
     <!-- Title goes interesting places in a PDF -->
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="." mode="title-short" />
