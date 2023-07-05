@@ -2107,6 +2107,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
 </xsl:template>
 
+<!-- Localizations happen in -common, so need the "rename" template there -->
+<xsl:template match="rename">
+    <xsl:apply-imports/>
+</xsl:template>
+
 
 <!-- Larger structures, needing implementation, *along with* interior -->
 <!-- structures.  We report AND include a textual place holder.       -->
