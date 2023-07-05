@@ -842,6 +842,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | exploration[(@exercise-interactive = 'webwork-reps')]
                    | investigation[(@exercise-interactive = 'webwork-reps')]" mode="runestone-manifest">
     <question>
+        <xsl:if test="(@exercise-customization = 'divisional') or
+                      (self::task and ancestor::exercise[@exercise-customization = 'divisional'])">
+            <xsl:attribute name="optional">
+                <xsl:text>yes</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <htmlsrc>
             <xsl:apply-templates select="." mode="webwork-core">
