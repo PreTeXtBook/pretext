@@ -735,7 +735,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every "exercise" with fill-in blanks         -->
 <!--   - every "exercise" with additional "program"   -->
 <!--   - every "exercise" elected as "shortanswer"    -->
+<!--   - every "exercise" with a WeBWorK core         -->
 <!--   - every PROJECT-LIKE with additional "program" -->
+<!--     NB: "task" does not have "webwork" children  -->
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
@@ -745,7 +747,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                       |
                       project[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -756,7 +759,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                      activity[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -767,7 +771,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                   exploration[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -778,7 +783,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                 investigation[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -789,7 +795,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                          task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -823,36 +830,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- not knowled. Solutions are available in the originals, via  -->
         <!-- an "in context" link off the Assignment page                -->
         <htmlsrc>
-            <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()"/>
-                <xsl:with-param name="block-type" select="'visible'"/>
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="false()" />
-                <xsl:with-param name="b-has-answer"    select="false()" />
-                <xsl:with-param name="b-has-solution"  select="false()" />
-            </xsl:apply-templates>
-        </htmlsrc>
-    </question>
-</xsl:template>
-
-<!-- exercise and PROJECT-LIKE with WeBWorK guts -->
-<xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
-                   | project[(@exercise-interactive = 'webwork-reps')]
-                   | activity[(@exercise-interactive = 'webwork-reps')]
-                   | exploration[(@exercise-interactive = 'webwork-reps')]
-                   | investigation[(@exercise-interactive = 'webwork-reps')]" mode="runestone-manifest">
-    <question>
-        <xsl:if test="(@exercise-customization = 'divisional') or
-                      (self::task and ancestor::exercise[@exercise-customization = 'divisional'])">
-            <xsl:attribute name="optional">
-                <xsl:text>yes</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <htmlsrc>
-            <xsl:apply-templates select="." mode="webwork-core">
-                <xsl:with-param name="b-original" select="true()"/>
-            </xsl:apply-templates>
+            <xsl:choose>
+                <!-- with "webwork" guts, the HTML is exceptional -->
+                <xsl:when test="@exercise-interactive = 'webwork-reps'">
+                    <xsl:apply-templates select="." mode="webwork-core">
+                        <xsl:with-param name="b-original" select="true()"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="."  mode="exercise-components">
+                        <xsl:with-param name="b-original" select="true()"/>
+                        <xsl:with-param name="block-type" select="'visible'"/>
+                        <xsl:with-param name="b-has-statement" select="true()" />
+                        <xsl:with-param name="b-has-hint"      select="false()" />
+                        <xsl:with-param name="b-has-answer"    select="false()" />
+                        <xsl:with-param name="b-has-solution"  select="false()" />
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </htmlsrc>
     </question>
 </xsl:template>
