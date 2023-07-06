@@ -11118,6 +11118,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global" />).  For other examples see <xref ref="section-video" text="type-global"/> and <xref ref="atomic-video" text="type-global"/>.</p>
         </section>
 
+        <section xml:id="open-problems">
+            <title>Open Problems</title>
+
+            <p>Like for mathematical research.  Experimental as of 2023-07-06.</p>
+
+            <openproblem>
+                <statement>
+                    <p>Solve the Riemann Hypothesis<fn>Footnotes were once incomplete on open problems.</fn> <em>and</em> provide a short proof of Fermat's Last Theorem.</p>
+                </statement>
+            </openproblem>
+
+        </section>
+
         <section xml:id="poetry">
             <title>Poetry</title>
 
