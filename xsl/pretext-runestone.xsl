@@ -1224,7 +1224,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <div class="runestone" style="max-width: none;">
             <div data-component="hparsons" class="hparsons_section">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <div class="hp_question col-md-12">
+                <div class="hp_question">
                     <!-- the prompt -->
                     <xsl:apply-templates select="statement"/>
                 </div>
@@ -1888,7 +1888,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                         <!-- add some lead-in text to the window -->
                         <xsl:if test="$exercise-statement">
-                            <div class="ac_question col-md-12">
+                            <div class="ac_question">
                                 <xsl:attribute name="id">
                                     <xsl:value-of select="concat($hid, '_question')"/>
                                 </xsl:attribute>
