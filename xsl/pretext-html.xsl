@@ -11706,7 +11706,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
-    <nav id="ptx-navbar" class="ptx-navbar navbar">
+    <nav id="ptx-navbar">
+        <xsl:attribute name="class">
+            <xsl:text>ptx-navbar navbar</xsl:text>
+            <xsl:if test="$b-host-runestone">
+                <xsl:text> ptx-runestone-container</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
         <button class="toc-toggle button" aria-label="Show or hide table of contents">
             <span class="icon">☰</span>
             <span class="name">
