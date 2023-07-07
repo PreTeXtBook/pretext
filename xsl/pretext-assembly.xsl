@@ -599,15 +599,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Good time to clean-up what comes back from a WW server.  With -->
-<!-- "webwork-reps" in the match, this will only be applied in the -->
-<!-- second (non-extraction) pass, only within a WW problem.  From -->
-<!-- the code comment when this was done with Python: "p with only -->
-<!-- a single fillin, not counting those inside an li without      -->
-<!-- preceding siblings"                                           -->
-<xsl:template match="webwork-reps/static//p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork"/>
-
-
 <!-- ################# -->
 <!-- Private Solutions -->
 <!-- ################# -->
@@ -1983,6 +1974,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Good time to clean-up what came back from a WW server.     -->
+<!-- As part of the "webwork-rep-to-static" mode, we can be     -->
+<!-- sure that only returns from the server are being adjusted. -->
+
+<!-- From the code comment when this was done with Python: "p with -->
+<!-- only a single fillin, not counting those inside an li without -->
+<!-- preceding siblings"                                           -->
+<!-- NB: prefixing the @match here with "webwork-reps/static"      -->
+<!-- (which is known anyway (?)) seems to take the entire assembly -->
+<!-- phase for the WW sample chapter to a runtime of 4 seconds,    -->
+<!-- up from 0.4 seconds.  Removing this line takes the runtime    -->
+<!-- down to 0.12 seconds.                                         -->
+<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork-rep-to-static"/>
+
+<!-- Default xeroxing template -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-static">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
