@@ -200,53 +200,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- *non-login* versions of books hosted at Runestone      -->
             <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"/>
 
-            <!-- We only show the Runestone "bust" menu icon if we are building        -->
-            <!-- for a Runestone server, so this CSS is only needed in that case.      -->
-            <!-- Perhaps it should exist in Runestone's CSS or maybe in PreTeXt's CSS? -->
-            <style>
-                <xsl:text>.dropdown {&#xa;</xsl:text>
-                <xsl:text>    position: relative;&#xa;</xsl:text>
-                <xsl:text>    display: inline-block;&#xa;</xsl:text>
-                <xsl:text>    height: 39px;&#xa;</xsl:text>
-                <xsl:text>    width: 50px;&#xa;</xsl:text>
-                <xsl:text>    margin-left: auto;&#xa;</xsl:text>
-                <xsl:text>    margin-right: auto;&#xa;</xsl:text>
-                <xsl:text>    padding: 7px;&#xa;</xsl:text>
-                <xsl:text>    text-align: center;&#xa;</xsl:text>
-                <xsl:text>    background-color: #eeeeee;&#xa;</xsl:text>
-                <xsl:text>    border: 1px solid;&#xa;</xsl:text>
-                <xsl:text>    border-color: #aaaaaa;&#xa;</xsl:text>
-                <xsl:text> }&#xa;</xsl:text>
-                <xsl:text> .dropdown-content {&#xa;</xsl:text>
-                <xsl:text>    position: absolute;&#xa;</xsl:text>
-                <xsl:text>    display: none;&#xa;</xsl:text>
-                <xsl:text>    left: 300px;&#xa;</xsl:text>
-                <xsl:text>    text-align: left;&#xa;</xsl:text>
-                <xsl:text>    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown:hover {&#xa;</xsl:text>
-                <xsl:text>    background-color: #ddd;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown:hover .dropdown-content {&#xa;</xsl:text>
-                <xsl:text>    display: block;&#xa;</xsl:text>
-                <xsl:text>    position: fixed;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown-content {&#xa;</xsl:text>
-                <xsl:text>    background-color: white;&#xa;</xsl:text>
-                <xsl:text>    z-index: 1800;&#xa;</xsl:text>
-                <xsl:text>    min-width: 100px;&#xa;</xsl:text>
-                <xsl:text>    padding: 5px;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown-content a {&#xa;</xsl:text>
-                <xsl:text>    display: block;&#xa;</xsl:text>
-                <xsl:text>    text-decoration: none;&#xa;</xsl:text>
-                <xsl:text>    color: #662211;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown-content a:hover {&#xa;</xsl:text>
-                <xsl:text>    background-color: #671d12;&#xa;</xsl:text>
-                <xsl:text>    color: #ffffff;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-            </style>
         </xsl:when>
         <!-- Runestone for All build -->
         <!-- Hosted without a Runestone Server, just using Javascript -->
