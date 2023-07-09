@@ -79,7 +79,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These may duplicate variables in disjoint conversions.          -->
 
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
-<xsl:variable name="b-has-webwork-var"  select="boolean($document-root//statement//var[@form])" />
+<xsl:variable name="b-has-webwork-var"  select="boolean($document-root//statement//ul[@pi:ww-form])" />
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
 <xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
@@ -1530,7 +1530,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
-        <!-- next test is simpler than necessary, only needed for 'checkboxes' and 'popup' versions of @form -->
+        <!-- next test is simpler than necessary, only needed for 'popup' versions of @form -->
         <xsl:if test="$b-has-webwork-var">
             <xsl:text>[inline]</xsl:text>
         </xsl:if>
@@ -6015,50 +6015,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A few WW-specific items need special interpretation     -->
 <!-- answer blank for other kinds of answers                 -->
-<!-- TODO: gradually eliminate "var"'s presence from static  -->
-<!-- coming from a WeBWorK server, similar to how the above  -->
-<!-- replaced var with fillin for quantitative answers.      -->
-<xsl:template match="statement//var[@form]">
+<xsl:template match="ul[@pi:ww-form]">
     <xsl:choose>
-        <!-- TODO: make semantic list style in preamble -->
-        <xsl:when test="@form='popup'" >
+        <xsl:when test="@pi:ww-form = 'popup'" >
             <xsl:text>\quad(\begin{itemize*}[label=$\square$,leftmargin=3em,itemjoin=\hspace{1em}]&#xa;</xsl:text>
-            <xsl:for-each select="li">
-                <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
-                    <xsl:text>\item{}</xsl:text>
-                    <xsl:apply-templates select='.' />
-                    <xsl:text>&#xa;</xsl:text>
-                </xsl:if>
-            </xsl:for-each>
+            <xsl:apply-templates select="li"/>
             <xsl:text>\end{itemize*})\quad&#xa;</xsl:text>
         </xsl:when>
         <!-- Radio button alternatives:                                -->
         <!--     \ocircle (wasysym), \circledcirc (amssymb),           -->
         <!--     \textopenbullet, \textbigcircle (textcomp)            -->
         <!-- To adjust in preamble, see use of $b-has-webwork-var      -->
-        <xsl:when test="@form='buttons'" >
+        <xsl:when test="@pi:ww-form = 'buttons'" >
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="li">
-                <xsl:text>\item{}</xsl:text>
-                <xsl:apply-templates select='.' />
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:for-each>
+            <xsl:apply-templates select="li"/>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@form='checkboxes'" >
-            <xsl:text>\begin{itemize*}[label=$\square$,leftmargin=3em,itemjoin=\hspace{4em plus 1em minus 3em}]&#xa;</xsl:text>
-            <xsl:for-each select="li">
-                <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
-                    <xsl:text>\item{}</xsl:text>
-                    <xsl:apply-templates select='.' />
-                    <xsl:text>&#xa;</xsl:text>
-                </xsl:if>
-            </xsl:for-each>
-            <xsl:text>\end{itemize*}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:when test="@form='essay'" >
-            <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
-        </xsl:when>
+        <!-- var[@form = 'checkboxes'] comes back from the server as a  -->
+        <!-- description list ("dl") so we will need to wait for the    -->
+        <!-- server to tag it with @pi:ww-form so we can customize it   -->
+        <!-- here with a new match on dl[@pi:ww-form = 'checkboxes'].   -->
     </xsl:choose>
 </xsl:template>
 
