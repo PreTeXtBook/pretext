@@ -1841,11 +1841,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->
 
-<!-- PG Code from webwork-reps for problem sets -->
+<!-- Mine webwork-reps for relevant application -->
 
 <!-- Matching with the filter means this will only happen on     -->
 <!-- the non-extraction pass, since the 'webwork-reps' value     -->
 <!-- is placed after the WW representations file has been built. -->
+<!-- We split three ways, for PGML, static, and dynamic (HTML)   -->
+<!-- employment, via modal templates.                            -->
 <!-- NB: including "task" though this may not be supported.      -->
 <xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
                    | project[(@exercise-interactive = 'webwork-reps')]
@@ -1942,6 +1944,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (iii) by removing them, we just disrupt any                  -->
 <!--         sequences, and uniqueness is preserved                 -->
 <!--   (iv) we could figure out which ones to copy where, if needed -->
+<!-- NB: a possible refactor here:                                  -->
+<!-- (i)  kill all the children of "webwork-reps", barring "static" -->
+<!--      (currently they are just ignored)                         -->
+<!-- (ii) rerwrite this template to have "static" as the context.   -->
+<!--      This would mean adjust some paths to go one more step up  -->
+<!--      to find things like "introduction".                       -->
+<!-- Consequence: when leveraged for HTML previews this rearrangment-->
+<!-- will be a big change.  Not clear if it is a desirable change.  -->
 <xsl:template match="webwork-reps" mode="webwork-rep-to-static">
     <xsl:choose>
         <!-- a WW "staged" exercise, may have an top-level introduction and -->
@@ -2041,7 +2051,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- apply this modal template to "static" which is a level lower down  -->
 <!-- than its complete implementation, which starts at "webwork-reps".  -->
 <!-- This means that there is no rearrangement of the overall           -->
-<!-- "introduction" into the "statement".                               -->
+<!-- "introduction" into the "statement".  But see the comments about a -->
+<!-- potential refactor of the "webwork-rep-to-static" templates.       -->
 <xsl:template match="static" mode="webwork-rep-to-html">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
