@@ -1994,6 +1994,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This may only be needed as support for older servers' generated PreTeXt. -->
 <xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 
+<!-- "var/@form" come back from the server as a result of authored -->
+<!-- "answer forms" and should be rendered as lists in static      -->
+<!-- representations.                                              -->
+<!-- NB: this does not preclude the match below (scrubbing default -->
+<!-- items) from functioning.                                      -->
+<xsl:template match="statement//var[@form]" mode="webwork-rep-to-static">
+    <ul>
+        <!-- duplicate attributes, but for @form -->
+        <xsl:apply-templates select="@*[not(name() = 'form')]" mode="repair"/>
+        <!-- internal attribute to indicate WW origins -->
+        <xsl:attribute name="pi:ww-form">
+            <xsl:value-of select="@form"/>
+        </xsl:attribute>
+        <!-- add a marker for an unordered list -->
+        <xsl:attribute name="marker">
+            <xsl:choose>
+                <xsl:when test="@form = 'popup'">
+                    <xsl:text>square</xsl:text>
+                </xsl:when>
+                <xsl:when test="@form = 'buttons'">
+                    <xsl:text>circle</xsl:text>
+                </xsl:when>
+                <xsl:when test="@form = 'checkboxes'">
+                    <xsl:text>square</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
+    </ul>
+</xsl:template>
+
 <!-- Default xeroxing template -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-static">
     <xsl:copy>
