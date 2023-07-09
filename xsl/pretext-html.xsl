@@ -8879,28 +8879,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="var[@form='checkboxes']">
-    <ul style="list-style:circle;">
-        <xsl:apply-templates select="li"/>
-    </ul>
-</xsl:template>
-
-<xsl:template match="var[@form='buttons']">
-    <ul style="list-style:circle;">
-        <xsl:apply-templates select="li"/>
-    </ul>
-</xsl:template>
-
-<xsl:template match="var[@form='popup']">
-    <ul style="list-style:circle;">
-        <xsl:for-each select="li">
-            <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
-                <xsl:apply-templates select='.' />
-            </xsl:if>
-        </xsl:for-each>
-    </ul>
-</xsl:template>
-
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">
