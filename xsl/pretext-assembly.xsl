@@ -1988,6 +1988,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- down to 0.12 seconds.                                         -->
 <xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork-rep-to-static"/>
 
+<!-- Some answer forms return a default/initial choice that is -->
+<!-- simply a question-mark.  We scrub them here, with care.   -->
+<xsl:template match="statement//var[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+<!-- This may only be needed as support for older servers' generated PreTeXt. -->
+<xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+
 <!-- Default xeroxing template -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-static">
     <xsl:copy>
