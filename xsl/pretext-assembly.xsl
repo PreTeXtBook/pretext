@@ -1879,7 +1879,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- to/for HTML conversion                                         -->
         <xsl:otherwise>
             <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="representations"/>
+                <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-html"/>
             </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
@@ -2029,6 +2029,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="webwork-rep-to-static">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Edit a "webwork-reps" from the server into just HTML material -->
+
+<!-- We have a static version that gets employed in the HTML conversion -->
+<!-- as a "preview" before a reader hits an "Activate" button.  We are  -->
+<!-- leveraging the clean-up of static versions here.                   -->
+<!-- NB: for historical reasons, and so as to get a clean refactor, we  -->
+<!-- apply this modal template to "static" which is a level lower down  -->
+<!-- than its complete implementation, which starts at "webwork-reps".  -->
+<!-- This means that there is no rearrangement of the overall           -->
+<!-- "introduction" into the "statement".                               -->
+<xsl:template match="static" mode="webwork-rep-to-html">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Default xeroxing template -->
+<xsl:template match="node()|@*" mode="webwork-rep-to-html">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-html"/>
     </xsl:copy>
 </xsl:template>
 
