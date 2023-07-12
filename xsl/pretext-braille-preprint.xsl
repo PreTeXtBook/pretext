@@ -623,7 +623,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- about titles.                                                -->
 
 <!-- "Regular" blocks, including inline "exercise" (aka "Checkpoint") -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]|assemblage">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|exercise[&INLINE-EXERCISE-FILTER;]|assemblage">
     <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <xsl:apply-templates select="." mode="block-title"/>
         <xsl:apply-templates select="*[not(self::title)]"/>
@@ -745,7 +745,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </runin>
 </xsl:template>
 
-<!-- TODO: GOAL-LIKE -->
+<!-- Print is "Type: Title", no number, since there is only one per     -->
+<!-- division and the number is implicitly that of the parent division. -->
+<xsl:template match="&GOAL-LIKE;" mode="block-title">
+    <segment lines-before="0">
+        <!--  -->
+        <xsl:apply-templates select="." mode="type-name"/>
+        <!--  -->
+        <xsl:if test="title">
+            <xsl:text>: </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+        <!--  -->
+    </segment>
+</xsl:template>
+
 
 <!-- ########### -->
 <!-- FIGURE-LIKE -->
