@@ -404,6 +404,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+    <xsl:text>%% The rotating package provides sidewaysfigure and sidewaystables environments&#xa;</xsl:text>
+    <xsl:text>\usepackage{rotating}&#xa;</xsl:text>
     <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
     <xsl:text>%% Always loaded, for: add/delete text, author tools&#xa;</xsl:text>
     <xsl:text>%% Here, since tcolorbox loads tikz, and tikz loads xcolor&#xa;</xsl:text>
@@ -8496,6 +8498,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2: standard identifier for cross-references   -->
 <!-- 3: empty, or a hard-coded number from -common -->
 <xsl:template match="figure|listing">
+    <xsl:if test="@landscape and $b-latex-print">
+      <xsl:text>\begin{sidewaysfigure}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}{</xsl:text>
@@ -8524,6 +8529,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:if test="@landscape and $b-latex-print">
+      <xsl:text>\end{sidewaysfigure}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
@@ -8533,6 +8541,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2: standard identifier for cross-references    -->
 <!-- 3: empty, or a hard-coded number from -common  -->
 <xsl:template match="table|list">
+    <xsl:if test="@landscape and $b-latex-print">
+      <xsl:text>\begin{sidewaystable}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}{</xsl:text>
@@ -8564,6 +8575,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:if test="@landscape and $b-latex-print">
+        <xsl:text>\end{sidewaystable}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
@@ -8712,8 +8726,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
-    <xsl:text>{</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth</xsl:text>
+    <xsl:if test="@rotate">
+      <xsl:text>,angle=</xsl:text>
+      <xsl:value-of select="@rotate"/>
+      <xsl:text>,origin=c</xsl:text>
+    </xsl:if>
+    <xsl:text>]{</xsl:text>
     <xsl:choose>
         <xsl:when test="@pi:generated">
             <xsl:value-of select="$generated-directory"/>
