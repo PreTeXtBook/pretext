@@ -3102,3 +3102,53 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
    top: 0.33em;
 }
 
+/* testing */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    height: 39px;
+    width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 7px;
+    text-align: center;
+    background-color: #eeeeee;
+    border: 1px solid;
+    border-color: #aaaaaa;
+ }
+ .dropdown-content {
+    position: absolute;
+    display: none;
+    left: 300px;
+    text-align: left;
+    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';
+}
+.dropdown:hover {
+    background-color: #ddd;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content {
+    background-color: white;
+    z-index: 1800;
+    min-width: 100px;
+    padding: 5px;
+}
+.dropdown-content a {
+    display: block;
+    text-decoration: none;
+    color: #662211;
+}
+.dropdown .dropdown-content a:hover {
+    background-color: #671d12;
+    color: #ffffff;
+    text-decoration: none;
+}
+.dropdown .dropdown-content hr {
+  margin-bottom: 4px;
+  margin-top: 4px;
+  border-width: 3px;
+  border-color: #600;
+}
