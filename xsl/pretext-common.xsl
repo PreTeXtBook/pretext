@@ -1512,7 +1512,9 @@ Book (with parts), "section" at level 3
     <xsl:variable name="latex-left-justified">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text">
-                <xsl:value-of select="$docinfo/macros" />
+                <xsl:for-each select="$docinfo/macros">
+                    <xsl:value-of select="." />
+                </xsl:for-each>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
