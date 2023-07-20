@@ -2421,14 +2421,14 @@ def _split_brf(filename):
     def is_chapter_name(line):
         # If a TOC line starts with two spaces followed by "," (capital letter sign) or "#"
         # then it is a chapter line
-        if len(re.findall("^[ ]{2}[,|#]", line)) > 0:
+        if len(re.findall(r"^[ ]{2}[,|#]", line)) > 0:
             chapter_name = True
-            if len(re.findall("^[ ]{2}#([a-j]+?) ", line)) > 0:
+            if len(re.findall(r"^[ ]{2}#([a-j]+?) ", line)) > 0:
                 numbered_chapter = True
                 chapter_number = brf_to_num(re.findall("^[ ]{2}#([a-j]+?) ", line)[0])
-            elif len(re.findall("^[ ]{2},\*apt} #([a-j]+?) ", line)) > 0:
+            elif len(re.findall(r"^[ ]{2},\*apt} #([a-j]+?) ", line)) > 0:
                 numbered_chapter = True
-                chapter_number = brf_to_num(re.findall("^[ ]{2},\*apt} #([a-j]+?) ", line)[0])
+                chapter_number = brf_to_num(re.findall(r"^[ ]{2},\*apt} #([a-j]+?) ", line)[0])
             else:
                 numbered_chapter = False
                 chapter_number = -1
