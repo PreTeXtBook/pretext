@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- bg-BG, Bulgarian (Bulgaria) -->
 <!-- Boyko Bantchev, bantchev@gmail.com, 2019-07-04 -->
 
-<locale language="bg-BG">
+<locale language="bg-BG" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Теорема</localization>
@@ -184,6 +184,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Подсказка</localization>
     <localization string-id='answer'>Отговор</localization>
     <localization string-id='solution'>Решение</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
 <!--
     <localization string-id='exercisegroup'>Exercise Group</localization>
@@ -286,4 +287,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activate'>Activate</localization> -->
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
+    <!-- <localization string-id='print'>Print</localization> -->
 </locale>

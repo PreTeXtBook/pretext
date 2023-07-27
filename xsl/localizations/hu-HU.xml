@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hu-HU, Hungarian (Hungary) -->
 <!-- Sándor Czirbusz, czirbusz@gmail.com, 2017-04-09 -->
 
-<locale language="hu-HU">
+<locale language="hu-HU" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Tétel</localization>
@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Tipp</localization>
     <localization string-id='answer'>Vélasz</localization>
     <localization string-id='solution'>Megoldás</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Feladatcsoport</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
@@ -260,4 +261,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activate'>Activate</localization> -->
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
+    <!-- <localization string-id='print'>Print</localization> -->
 </locale>

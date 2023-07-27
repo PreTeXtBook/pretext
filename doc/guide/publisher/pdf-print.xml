@@ -99,6 +99,14 @@
             <li>Subtract quarter-inch top and bottom margins to obtain text height</li>
         </ol>Then you can provide the <c>geometry</c> package the overall size as the <c>papersize</c> and the text width and text height as the <c>total</c> size of the body, resulting in equal (tight) margins all around, and good use of limited screen real estate.  These parameters create a <init>PDF</init> that is very legible on a larger smart phone, and for fine detail, rotating the device to landscape works well.  Really.</p>
 
+        <p>Suppose you are a publisher, or an author who is also your publisher, and you wish to manufacture a paperback copy of your book in a 6-inch wide by 9-inch tall version.  It is unlikely your printer has paper of this size.  Use the <c>geometry</c> option above to specify the logical size of the paper for your book and then set margins, etc. to determine exactly how the text block sits on the page.  Then there is a <attr>crop-marks</attr> option available though the publication file.  You set it to a paper size describing the paper in your printer, likely <c>letter</c> (US) or <c>a4</c> (Europe).  Then your logical page will be centered on the physical page, and indications in each corner will describe the boundaries of the page.</p>
+
+        <p>To see this in action, you need to explicity set a smaller page size.  So the value of the <c>geometry</c> could be set to<cd>
+            <cline>paperwidth=6in,paperheight=9in,total={5in,7in}</cline>
+        </cd>Do not forget to turn off any page-scaling in your printer configuration before printing onto paper.  See <xref ref="latex-page-options"/> for the exact syntax of how to enable crop marks.</p>
+
+        <p>Crop marks may be requested by a publisher, when it is understood that you are providing camera-ready copy.  Or you may find it useful for visualizing how your text and margins will look at a smaller page size.  The <c>crop</c> package has other useful options, such as framing the entire logical page.  You can hand-edit these into your <latex/> file, or make a feature request.</p>
+
         <note xml:id="best-practice-too-much-text">
             <title>Avoid Too Much Text on a Printed Page</title>
             <p>With freedom comes responsibility.  Resist the temptation to pack in as much text on the page as you can.  <pretext/> varies the width of the text in reaction to the font size and is already very close to the maximum number of characters per line for comfortable reading by humans.  Similarly, very narrow margins can be uncomfortable for reading (or holding a printed book).</p>

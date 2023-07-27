@@ -196,71 +196,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </script>
             <xsl:text>&#xa;</xsl:text>
 
-            <!-- Google Ads: only on Runestone server, only visible in -->
-            <!-- *non-login* versions of books hosted at Runestone     -->
-            <!--                                                       -->
-            <!-- @data-ad-client attribute of upcoming script tag is   -->
-            <!-- templated for Runestone serving.  We form it as a     -->
-            <!-- variable, so that we can place it using an XSL AVT    -->
-            <xsl:variable name="id-attr">
-                <xsl:value-of select="$rso"/>
-                <xsl:text> settings.adsenseid </xsl:text>
-                <xsl:value-of select="$rsc"/>
-            </xsl:variable>
-            <!--  -->
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>{% if serve_ad and settings.adsenseid %}&#xa;</xsl:text>
-            <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>{% endif %}&#xa;</xsl:text>
+            <!-- Ethical Ads: only on Runestone server, only visible in -->
+            <!-- *non-login* versions of books hosted at Runestone      -->
+            <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"/>
 
-            <!-- We only show the Runestone "bust" menu icon if we are building        -->
-            <!-- for a Runestone server, so this CSS is only needed in that case.      -->
-            <!-- Perhaps it should exist in Runestone's CSS or maybe in PreTeXt's CSS? -->
-            <style>
-                <xsl:text>.dropdown {&#xa;</xsl:text>
-                <xsl:text>    position: relative;&#xa;</xsl:text>
-                <xsl:text>    display: inline-block;&#xa;</xsl:text>
-                <xsl:text>    height: 39px;&#xa;</xsl:text>
-                <xsl:text>    width: 50px;&#xa;</xsl:text>
-                <xsl:text>    margin-left: auto;&#xa;</xsl:text>
-                <xsl:text>    margin-right: auto;&#xa;</xsl:text>
-                <xsl:text>    padding: 7px;&#xa;</xsl:text>
-                <xsl:text>    text-align: center;&#xa;</xsl:text>
-                <xsl:text>    background-color: #eeeeee;&#xa;</xsl:text>
-                <xsl:text>    border: 1px solid;&#xa;</xsl:text>
-                <xsl:text>    border-color: #aaaaaa;&#xa;</xsl:text>
-                <xsl:text> }&#xa;</xsl:text>
-                <xsl:text> .dropdown-content {&#xa;</xsl:text>
-                <xsl:text>    position: absolute;&#xa;</xsl:text>
-                <xsl:text>    display: none;&#xa;</xsl:text>
-                <xsl:text>    left: 300px;&#xa;</xsl:text>
-                <xsl:text>    text-align: left;&#xa;</xsl:text>
-                <xsl:text>    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown:hover {&#xa;</xsl:text>
-                <xsl:text>    background-color: #ddd;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown:hover .dropdown-content {&#xa;</xsl:text>
-                <xsl:text>    display: block;&#xa;</xsl:text>
-                <xsl:text>    position: fixed;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown-content {&#xa;</xsl:text>
-                <xsl:text>    background-color: white;&#xa;</xsl:text>
-                <xsl:text>    z-index: 1800;&#xa;</xsl:text>
-                <xsl:text>    min-width: 100px;&#xa;</xsl:text>
-                <xsl:text>    padding: 5px;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown-content a {&#xa;</xsl:text>
-                <xsl:text>    display: block;&#xa;</xsl:text>
-                <xsl:text>    text-decoration: none;&#xa;</xsl:text>
-                <xsl:text>    color: #662211;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-                <xsl:text>.dropdown-content a:hover {&#xa;</xsl:text>
-                <xsl:text>    background-color: #671d12;&#xa;</xsl:text>
-                <xsl:text>    color: #ffffff;&#xa;</xsl:text>
-                <xsl:text>}&#xa;</xsl:text>
-            </style>
         </xsl:when>
         <!-- Runestone for All build -->
         <!-- Hosted without a Runestone Server, just using Javascript -->
@@ -462,6 +401,79 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <div id="scprogresscontainer">You have attempted <span id="scprogresstotal"/> of <span id="scprogressposs"/> activities on this page.<div id="subchapterprogress" aria-label="Page progress"/></div>
     </xsl:if>
 </xsl:template>
+
+<!-- A timed exam requires markup that wraps an entire collection -->
+<!-- of exercises, so we pass the exercises in as a parameter     -->
+<xsl:template match="exercises" mode="runestone-timed-exam">
+    <xsl:param name="the-exercises"/>
+
+    <!-- Since the component wraps the exercises, we do not need any  -->
+    <!-- restriction about being at teh Runestone "subchapter" level. -->
+    <xsl:if test="$b-host-runestone">
+        <div class="timedAssessment">
+            <ul data-component="timedAssessment" data-question_label="">
+                <!-- a Runestone id -->
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <!-- one mandatory attribute -->
+                <xsl:attribute name="data-time">
+                    <xsl:value-of select="@time-limit"/>
+                </xsl:attribute>
+                <!-- result, timer, feedback, pause are *on* by  -->
+                <!-- default if a PreTeXt attribute is "no" then -->
+                <!-- issue empty "data-no-*" Runestone attribute -->
+                <xsl:if test="@results = 'no'">
+                    <xsl:attribute name="data-no-result"/>
+                </xsl:if>
+                <xsl:if test="@timer = 'no'">
+                    <xsl:attribute name="data-no-timer"/>
+                </xsl:if>
+                <xsl:if test="@feedback = 'no'">
+                    <xsl:attribute name="data-no-feedback"/>
+                </xsl:if>
+                <xsl:if test="@pause = 'no'">
+                    <xsl:attribute name="data-no-pause"/>
+                </xsl:if>
+                <!-- the actual list of exercises -->
+                <xsl:copy-of select="$the-exercises"/>
+                <!-- only at "section" level. only when building for a Runestone server -->
+                <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
+            </ul>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- An "exercises" division can be a group work exercise, by virtue -->
+<!-- of selection and submission features at the bottom of the page. -->
+<!-- NB: this assumes that the "exercises" is an entire page, so     -->
+<!-- checks if it is a subdivision of a "chapter" (or "appendix").   -->
+<xsl:template match="exercises" mode="runestone-group-work">
+    <xsl:if test="$b-host-runestone and (parent::chapter or parent::appendix)">
+        <div class="runestone">
+            <div data-component="groupsub">
+                <!-- the Runestone id -->
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:attribute name="data-size_limit">
+                    <xsl:choose>
+                        <xsl:when test="@group-size">
+                            <xsl:value-of select="@group-size"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>3</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <!-- students select their partners in their group -->
+                <div>
+                    <select multiple="" class="assignment_partner_select"  style="width: 100%"/>
+                </div>
+                <!-- and a submit button once done -->
+                <div class="groupsub_button"/>
+                <div class="para">The Submit Group button will submit the answer for each each question on this page for each member of your group. It also logs you as the official group submitter.</div>
+            </div>
+        </div>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ################## -->
 <!-- Runestone Manifest -->
@@ -676,16 +688,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every "exercise" with fill-in blanks         -->
 <!--   - every "exercise" with additional "program"   -->
 <!--   - every "exercise" elected as "shortanswer"    -->
+<!--   - every "exercise" with a WeBWorK core         -->
 <!--   - every PROJECT-LIKE with additional "program" -->
+<!--     NB: "task" does not have "webwork" children  -->
 <xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                       |
                       project[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -693,9 +709,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                      activity[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -703,9 +721,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                   exploration[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -713,9 +733,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                 investigation[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -723,9 +745,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
+                               (@exercise-interactive = 'shortanswer') or
+                               (@exercise-interactive = 'webwork-reps')]
                      |
                          task[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
@@ -733,40 +757,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]" mode="runestone-manifest">
     <question>
+        <!-- A divisional exercise ("exercises/../exercise") is not really   -->
+        <!-- a reading activity in the Runestone model, so we flag these     -->
+        <!-- exercises as such.  Also, interactive "task" come through here, -->
+        <!-- so we need to look to an ancestor to see if the containing      -->
+        <!-- "exercise" is divisional. The @optional attribute matches the   -->
+        <!-- "optional" flag in the Runestone database.  We simply set the   -->
+        <!-- value to "yes" and nevver bother to say "no".  The  only        -->
+        <!-- consumer is the import into the Runestone database, so any      -->
+        <!-- change needs only coordinate there.                             -->
+        <xsl:if test="(@exercise-customization = 'divisional') or
+                      (self::task and ancestor::exercise[@exercise-customization = 'divisional'])">
+            <xsl:attribute name="optional">
+                <xsl:text>yes</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <!-- label is from the "exercise" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <!-- Duplicate, but still should look like original (ID, etc.),  -->
         <!-- not knowled. Solutions are available in the originals, via  -->
         <!-- an "in context" link off the Assignment page                -->
         <htmlsrc>
-            <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="true()"/>
-                <xsl:with-param name="block-type" select="'visible'"/>
-                <xsl:with-param name="b-has-statement" select="true()" />
-                <xsl:with-param name="b-has-hint"      select="false()" />
-                <xsl:with-param name="b-has-answer"    select="false()" />
-                <xsl:with-param name="b-has-solution"  select="false()" />
-            </xsl:apply-templates>
-        </htmlsrc>
-    </question>
-</xsl:template>
-
-<!-- exercise and PROJECT-LIKE with WeBWorK guts -->
-<xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
-                   | project[(@exercise-interactive = 'webwork-reps')]
-                   | activity[(@exercise-interactive = 'webwork-reps')]
-                   | exploration[(@exercise-interactive = 'webwork-reps')]
-                   | investigation[(@exercise-interactive = 'webwork-reps')]" mode="runestone-manifest">
-    <question>
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <htmlsrc>
-            <xsl:apply-templates select="." mode="webwork-core">
-                <xsl:with-param name="b-original" select="true()"/>
-            </xsl:apply-templates>
+            <xsl:choose>
+                <!-- with "webwork" guts, the HTML is exceptional -->
+                <xsl:when test="@exercise-interactive = 'webwork-reps'">
+                    <xsl:apply-templates select="." mode="webwork-core">
+                        <xsl:with-param name="b-original" select="true()"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="."  mode="exercise-components">
+                        <xsl:with-param name="b-original" select="true()"/>
+                        <xsl:with-param name="block-type" select="'visible'"/>
+                        <xsl:with-param name="b-has-statement" select="true()" />
+                        <xsl:with-param name="b-has-hint"      select="false()" />
+                        <xsl:with-param name="b-has-answer"    select="false()" />
+                        <xsl:with-param name="b-has-solution"  select="false()" />
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </htmlsrc>
     </question>
 </xsl:template>
@@ -1143,7 +1177,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <div class="runestone" style="max-width: none;">
             <div data-component="hparsons" class="hparsons_section">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <div class="hp_question col-md-12">
+                <div class="hp_question">
                     <!-- the prompt -->
                     <xsl:apply-templates select="statement"/>
                 </div>
@@ -1292,13 +1326,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:choose>
                         <!-- just go with authored order as canonical -->
                         <xsl:when test="$b-randomize">
-                            <xsl:apply-templates select="$unique-blocks" mode="horizontal-blocks"/>
+                            <xsl:apply-templates select="$unique-blocks" mode="horizontal-blocks">
+                                <xsl:with-param name="b-natural" select="$b-natural"/>
+                            </xsl:apply-templates>
                         </xsl:when>
                         <!-- sort by the order provided  by author -->
                         <xsl:otherwise>
                             <xsl:for-each select="$unique-blocks">
                                 <xsl:sort select="@order"/>
-                                <xsl:apply-templates select="." mode="horizontal-blocks"/>
+                                <xsl:apply-templates select="." mode="horizontal-blocks">
+                                    <xsl:with-param name="b-natural" select="$b-natural"/>
+                                </xsl:apply-templates>
                             </xsl:for-each>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -1319,7 +1357,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Non-reused block.  Perhaps text should be massaged here?       -->
 <!-- We do not ever dump duplicates into HTML or to the reader      -->
 <xsl:template match="blocks/block[not(@ref)]" mode="horizontal-blocks">
-    <xsl:apply-templates select="."/>
+    <xsl:param name="b-natural"/>
+
+    <xsl:choose>
+        <xsl:when test="$b-natural">
+            <xsl:apply-templates select="."/>
+        </xsl:when>
+        <!-- Now this a problem with code, requiring a "c" wrapper -->
+        <!-- 2023-03-07: can move to warnings or validation-plus, semi-deprecated -->
+        <xsl:when test="not(c)">
+            <xsl:message>PTX:WARNING:  a block of a horizontal Parson problem with</xsl:message>
+            <xsl:message>              code needs to be enclosed in a "c" element</xsl:message>
+            <xsl:apply-templates select="."/>
+            <xsl:text> (NEEDS "c" ELEMENT)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="c"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -1447,6 +1502,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates/>
     </span>
 </xsl:template>
+
+<!-- Select Questions -->
+
+<!-- "Select" questions come in three types                            -->
+<!--   * Question List - several equivalent problems,                  -->
+<!--     reader is assigned just one (good for exams)                  -->
+<!--   * A/B Experiment - two choices, experiment managed by Runestone -->
+<xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-interactive">
+    <div class="runestone sqcontainer">
+        <div data-component="selectquestion" data-points="1" data-limit-basecourse="false">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="runestone-id"/>
+            </xsl:attribute>
+            <!-- condition on an attribute of the "select" element -->
+            <xsl:choose>
+                <xsl:when test="select/@questions">
+                    <xsl:attribute name="data-questionlist">
+                        <xsl:apply-templates select="select/@questions" mode="runestone-targets">
+                            <xsl:with-param name="separator" select="', '"/>
+                        </xsl:apply-templates>
+                    </xsl:attribute>
+                    <p>Loading a dynamic question-list question...</p>
+                </xsl:when>
+                <xsl:when test="select/@ab-experiment">
+                    <xsl:attribute name="data-ab">
+                        <xsl:value-of select="select/@experiment-name"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-questionlist">
+                        <xsl:apply-templates select="select/@ab-experiment" mode="runestone-targets">
+                            <xsl:with-param name="separator" select="', '"/>
+                        </xsl:apply-templates>
+                    </xsl:attribute>
+                    <p>Loading a dynamic A/B question...</p>
+                </xsl:when>
+            </xsl:choose>
+        </div>
+    </div>
+</xsl:template>
+
 
 <!-- Fill-in-the-Blanks problem -->
 
@@ -1672,10 +1766,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
 
-    <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
-         data-video-height="{$height}" data-video-width="{$width}"
-         data-video-videoid="{@youtube}" data-video-divid="{$hid}"
-         data-video-start="0" data-video-end="-1"/>
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
+                 data-video-height="{$height}" data-video-width="{$width}"
+                 data-video-videoid="{@youtube}" data-video-divid="{$hid}"
+                 data-video-start="0" data-video-end="-1"/>
+        </div>
+    </div>
 </xsl:template>
 
 <!-- ########### -->
@@ -1743,7 +1841,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                         <!-- add some lead-in text to the window -->
                         <xsl:if test="$exercise-statement">
-                            <div class="ac_question col-md-12">
+                            <div class="ac_question">
                                 <xsl:attribute name="id">
                                     <xsl:value-of select="concat($hid, '_question')"/>
                                 </xsl:attribute>
@@ -1786,27 +1884,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                             <!-- allow @include attribute on <program> -->
                             <xsl:if test="@include">
-                                <xsl:variable name="tokens" select="str:tokenize(@include, ', ')"/>
+                                <!-- space-separated this time -->
                                 <xsl:attribute name="data-include">
-                                    <xsl:for-each select="$tokens">
-                                        <!-- attribute value is an xml:id, get target "program" -->
-                                        <xsl:variable name="the-id">
-                                            <xsl:value-of select="."/>
-                                        </xsl:variable>
-                                        <xsl:for-each select="$original">
-                                            <xsl:variable name="target" select="id($the-id)"/>
-                                            <xsl:if test="not($target)">
-                                                <xsl:message>PTX:ERROR:   an included "program" with @xml:id value <xsl:value-of select="$the-id"/> was not found</xsl:message>
-                                            </xsl:if>
-                                            <!-- build database id of the target -->
-                                            <xsl:apply-templates select="$target" mode="runestone-id"/>
-                                            <!-- n - 1 separators, required by receiving Javascript -->
-                                        </xsl:for-each>
-                                        <!-- space-separated this time -->
-                                        <xsl:if test="following-sibling::token">
-                                            <xsl:text> </xsl:text>
-                                        </xsl:if>
-                                    </xsl:for-each>
+                                    <xsl:apply-templates select="@include" mode="runestone-targets">
+                                        <xsl:with-param name="separator" select="' '"/>
+                                    </xsl:apply-templates>
                                 </xsl:attribute>
                             </xsl:if>
                             <!-- SQL (only) needs an attribute so it can find some code -->
@@ -2006,5 +2088,103 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </div>
 </xsl:template>
+
+<!-- ############# -->
+<!-- Tabbed Viewer -->
+<!-- ############# -->
+
+<!-- Strictly a presentational device, but useful in certain situations  -->
+<!-- as a pedogogical device.  But we start with presentation.  An       -->
+<!-- "exercise" or PROJECT-LIKE, structured by "task" can have each      -->
+<!-- top-level task go into a tab, along with tabs for "introduction"    -->
+<!-- and "conclusion".  We *never* do this for worksheets, to avoid      -->
+<!-- gumming up printing and spacing.  And WeBWorK problems manage       -->
+<!-- their own tasks.  The "match" here is pretty selective for          -->
+<!-- "exercise", should perhaps be tighter for PROJECT-LIKE.  Of course, -->
+<!-- Runestone Components play nicely with this device, along with more  -->
+<!-- boring exercises.                                                   -->
+
+<xsl:template match="exercise[task and not(@exercise-customization = 'worksheet')]|&PROJECT-LIKE;" mode="tabbed-tasks">
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <div data-component="tabbedStuff">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:if test="introduction">
+                    <xsl:variable name="the-intro">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'introduction'"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <div data-component="tab" data-tabname="{$the-intro}">
+                        <xsl:apply-templates select="introduction"/>
+                    </div>
+                </xsl:if>
+                <!--  -->
+                <xsl:for-each select="task">
+                    <xsl:variable name="the-task-number">
+                        <xsl:text>(</xsl:text>
+                        <xsl:apply-templates select="." mode="serial-number"/>
+                        <xsl:text>)</xsl:text>
+                    </xsl:variable>
+                    <div data-component="tab" data-tabname="{$the-task-number}">
+                        <xsl:apply-templates select="."/>
+                    </div>
+                </xsl:for-each>
+                <!--  -->
+                <xsl:if test="conclusion">
+                    <xsl:variable name="the-outro">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'conclusion'"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <div data-component="tab" data-tabname="{$the-outro}">
+                        <xsl:apply-templates select="conclusion"/>
+                    </div>
+                </xsl:if>
+            </div>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Runestone components, such as data files and select questions,  -->
+<!-- frequently point to other Runestone components in the database. -->
+<!--   * Authors point in their source with @xml:id                  -->
+<!--     values in a space- or comma- separated list                 -->
+<!--   * We locate the targets in the orginal source                 -->
+<!--   * Compute the Runestone database id                           -->
+<!--   * Return a list (varying separator) to use in Runestone HTML. -->
+
+<xsl:template match="@*" mode="runestone-targets">
+    <xsl:param name="separator" select="'MISSING SEPARATOR'"/>
+
+    <!-- save off original context attribute for error-reporting -->
+    <xsl:variable name="original-attribute" select="."/>
+    <!-- comma or space separated in PreTeXt source -->
+    <xsl:variable name="tokens" select="str:tokenize(., ', ')"/>
+    <xsl:for-each select="$tokens">
+        <!-- attribute value is an xml:id, get target interactive -->
+        <xsl:variable name="the-id">
+            <xsl:value-of select="."/>
+        </xsl:variable>
+        <!-- context shift so  id()  functions properly -->
+        <xsl:for-each select="$original">
+            <xsl:variable name="target" select="id($the-id)"/>
+            <xsl:if test="not($target)">
+                <xsl:message>PTX:ERROR:   an interactive with @xml:id value "<xsl:value-of select="$the-id"/>" in a "@<xsl:value-of select="local-name($original-attribute)"/>" attribute was not found</xsl:message>
+            </xsl:if>
+            <!-- build Runestone database id of the target -->
+            <xsl:apply-templates select="$target" mode="runestone-id"/>
+            <!-- n - 1 separators, required by receiving Javascript -->
+        </xsl:for-each>
+        <xsl:if test="following-sibling::token">
+            <xsl:value-of select="$separator"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 
 </xsl:stylesheet>

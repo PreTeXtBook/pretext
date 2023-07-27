@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it-IT, Italian (Italy) -->
 <!-- Valerio Monti, gedeonedepaperoni@gmail.com, 2020-07-27   -->
 
-<locale language="it-IT">
+<locale language="it-IT" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Teorema</localization>
@@ -134,15 +134,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='outcome'>Risultato</localization>
     <!--  -->
     <!-- "Open" means unsolved, a research question/problem -->
-    <!-- <localization string-id='openquestion'>Open Question</localization> -->
-    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
-    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <localization string-id='openquestion'>Domanda aperta</localization>
+    <localization string-id='openproblem'>Problema aperto</localization>
+    <localization string-id='openconjecture'>Congettura aperta</localization>
     <!-- "discussion" on open problems -->
-    <!-- <localization string-id='context'>Context</localization> -->
-    <!-- <localization string-id='discussion'>Discussion</localization> -->
-    <!-- <localization string-id='opinion'>Opinion</localization> -->
-    <!-- <localization string-id='status'>Status</localization> -->
-    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <localization string-id='context'>Contesto</localization>
+    <localization string-id='discussion'>Discussione</localization>
+    <localization string-id='opinion'>Opinione</localization>
+    <localization string-id='status'>Stato</localization>
+    <localization string-id='suggestion'>Idea</localization>
     <!--  -->
     <localization string-id='figure'>Figura</localization>
     <localization string-id='table'>Tabella</localization>
@@ -170,6 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Suggerimento</localization>
     <localization string-id='answer'>Risposta</localization>
     <localization string-id='solution'>Soluzione</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Gruppo di esercizi</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
@@ -240,14 +241,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='copyright'>Copyright</localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>permalink</localization>
-    <localization string-id='incontext'>Contesto</localization>
+    <localization string-id='incontext'>Nel contesto</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsfolete -->
     <!-- This needs to be defined to *something* (always)       -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <localization string-id='evaluate'>Calcola</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
+    <localization string-id='code'>Codice</localization>
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
     <localization string-id='instructions'>Istruzioni</localization>
     <!-- Interactive exercise feedback messages -->
@@ -260,5 +261,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='randomize'>Casuale</localization>
     <localization string-id='activate'>Attiva</localization>
     <localization string-id='reset'>Azzera</localization>
-    <!-- <localization string-id='array'>array</localization> -->
+    <localization string-id='array'>tabella</localization>
+    <localization string-id='print'>Stampa</localization>
 </locale>

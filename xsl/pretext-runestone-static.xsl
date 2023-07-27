@@ -620,8 +620,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
             </xsl:for-each>
             <xsl:text>.</xsl:text>
-            <xsl:copy-of select="feedback/node()"/>
         </p>
+        <xsl:copy-of select="feedback/node()"/>
     </answer>
     <!-- Any authored solutions, not derived from problem formulation. -->
     <!-- *Before* automatic ones, so numbering matches interactive     -->

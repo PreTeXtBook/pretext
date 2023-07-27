@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- de-DE, German (Germany) -->
 <!-- Karl-Dieter Crisman, kcrisman@gmail.com, 2020-06-01   -->
 
-<locale language="de-DE">
+<locale language="de-DE" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Satz</localization>
@@ -173,6 +173,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Andeutung</localization>
     <localization string-id='answer'>Antwort</localization>
     <localization string-id='solution'>Lösung</localization>
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Übungsgruppe</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
@@ -271,4 +272,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activate'>Activate</localization> -->
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
+    <!-- <localization string-id='print'>Print</localization> -->
 </locale>

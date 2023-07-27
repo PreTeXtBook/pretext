@@ -1,6 +1,6 @@
 
-            grammar {
-            
+                    grammar {
+                
             start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
             
             Pretext =
@@ -766,7 +766,7 @@
                     attribute margins {text}?,
                     attribute archive {text}?,
                     attribute decorative {"yes" | "no"}?,
-                    element description {TextShort}?,
+                    element description {(TextShort | WWVariable)*}?,
                     (
                         element latex-image {text} |
                         element asymptote {text} |
@@ -816,6 +816,7 @@
                 }
             TableRow =
                 element row {
+                    attribute header {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderBottom?,
@@ -834,6 +835,7 @@
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute row-headers {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
@@ -1073,7 +1075,7 @@
                                       | "limit" | "number" | "point"
                                       | "syntax" | "quantity" | "vector"
                                       }?,
-                    attribute form {"popup"|"buttons"|"none"}?) |
+                    attribute form {"popup"|"buttons"|"checkboxes"|"none"}?) |
                     (attribute form {"essay"},
                     attribute width {text}?)
                 }
@@ -1554,12 +1556,12 @@
             NotationList =
                 element notation-list {empty}
             
-            Demonstration = element demonstration {
-                Title,
-                Paragraph,
-                Sage
-            }
-            
+                    Demonstration = element demonstration {
+                    Title,
+                    Paragraph,
+                    Sage
+                    }
+                
             DocInfo =
                 element docinfo {
                     XMLBase?,
@@ -1628,5 +1630,5 @@
                     }?
                 }
             
-            }
-            
+                    }
+                

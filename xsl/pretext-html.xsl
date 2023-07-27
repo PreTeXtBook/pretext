@@ -49,9 +49,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    exclude-result-prefixes="svg pi"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    exclude-result-prefixes="svg pi fn"
     extension-element-prefixes="exsl date str"
 >
+
+<!-- Allow writing of JSON from structured HTML -->
+<xsl:import href="./xml-to-json.xsl"/>
 
 <!-- Standard conversion groundwork -->
 <xsl:import href="./publisher-variables.xsl"/>
@@ -112,9 +116,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- point to a totally different server (rather than other  -->
 <!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.6'" />
+<xsl:param name="html.css.version" select="'0.7'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.2'" />
+<xsl:param name="html.js.version" select="'0.3'" />
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -678,56 +682,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- This is identical to the default "structural-division-inner-content" -->
+<!-- template just below, excepting there are modifications for Runestone -->
+<!-- to accomodate timed exams and group work.                            -->
 <xsl:template match="exercises" mode="structural-division-inner-content">
     <xsl:param name="heading-level"/>
 
-    <!-- this is identical to the default template -->
     <xsl:variable name="the-exercises">
         <xsl:apply-templates select="*">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
-        <!-- only at "section" level. only when building for a Runestone server -->
-        <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
     </xsl:variable>
 
     <xsl:choose>
-        <!-- some extra wrapping for timed exercises -->
-        <!-- presence of @time-limit is the signal   -->
+        <xsl:when test="@time-limit and (@group-work = 'yes')">
+            <xsl:message>PTX:ERROR:   an &quot;exercises&quot; division cannot simultaneously be a timed exam AND group work</xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+        <xsl:when test="@group-work = 'yes'">
+            <!-- the actual list of exercises -->
+            <xsl:copy-of select="$the-exercises"/>
+            <!-- group selection and submission features, if hosted on Runestone -->
+            <xsl:apply-templates select="." mode="runestone-group-work"/>
+        </xsl:when>
+        <!-- some extra wrapping for timed exercises      -->
+        <!-- so we pass the $the-exercises as a parameter -->
+        <!-- presence of @time-limit is the signal        -->
         <xsl:when test="@time-limit">
-            <!-- TODO: make this a template and move to RS-specific file -->
-            <div class="timedAssessment">
-                <ul data-component="timedAssessment" data-question_label="">
-                    <!-- a Runestone id -->
-                    <!-- TODO: use attribute template in RS file -->
-                    <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="runestone-id"/>
-                    </xsl:attribute>
-                    <!-- one mandatory attribute -->
-                    <xsl:attribute name="data-time">
-                        <xsl:value-of select="@time-limit"/>
-                    </xsl:attribute>
-                    <!-- result, timer, feedback, pause are *on* by  -->
-                    <!-- default if a PreTeXt attribute is "no" then -->
-                    <!-- issue empty "data-no-*" Runestone attribute -->
-                    <xsl:if test="@results = 'no'">
-                        <xsl:attribute name="data-no-result"/>
-                    </xsl:if>
-                    <xsl:if test="@timer = 'no'">
-                        <xsl:attribute name="data-no-timer"/>
-                    </xsl:if>
-                    <xsl:if test="@feedback = 'no'">
-                        <xsl:attribute name="data-no-feedback"/>
-                    </xsl:if>
-                    <xsl:if test="@pause = 'no'">
-                        <xsl:attribute name="data-no-pause"/>
-                    </xsl:if>
-                    <!-- the actual list of exercises -->
-                    <xsl:copy-of select="$the-exercises"/>
-                </ul>
-            </div>
+            <xsl:apply-templates select="." mode="runestone-timed-exam">
+                <xsl:with-param name="the-exercises" select="$the-exercises"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
+            <!-- the actual list of exercises -->
             <xsl:copy-of select="$the-exercises"/>
+            <!-- only at "section" level. only when building for a Runestone server -->
+            <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -771,6 +761,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:with-param>
+        <xsl:with-param name="b-printable" select="true()"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2137,7 +2128,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- write file infrastructure first -->
     <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <html lang="{$document-language}"> <!-- dir="rtl" here -->
+        <html>
+            <xsl:call-template name="language-attributes"/>
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html-no-date"/>
@@ -2377,11 +2369,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure|listing|table|list" mode="figure-caption">
     <xsl:param name="b-original"/>
 
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <!-- Subnumbered panels of a "sidebyside" get a simpler caption/title -->
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
+    <xsl:variable name="b-subnumbered" select="$fig-placement = 'subnumber'"/>
     <figcaption>
-        <!-- A normal caption, or a subcaption -->
+        <!-- A normal caption/title, or a subnumbered caption/title -->
         <xsl:choose>
-            <xsl:when test="$b-subcaptioned">
+            <xsl:when test="$b-subnumbered">
                 <span class="codenumber">
                     <xsl:apply-templates select="." mode="serial-number"/>
                 </span>
@@ -3551,9 +3547,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&FIGURE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
 
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <!-- Subnumbered caption/title go below, to help with alignment -->
+    <xsl:variable name="fig-placement">
+        <xsl:apply-templates select="." mode="figure-placement"/>
+    </xsl:variable>
+    <xsl:variable name="b-place-title-below" select="($fig-placement = 'subnumber') or ($fig-placement = 'panel')"/>
     <xsl:choose>
-        <!-- caption at the bottom, always        -->
+        <!-- caption at the bottom, always -->
         <xsl:when test="self::figure|self::listing">
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
@@ -3562,10 +3562,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original"/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- table only contains a tabular, if not subcaptioned -->
-        <!-- title is displayed before data/tabular             -->
+        <!-- table only contains a tabular; if not subnumbered  -->
+        <!-- then title is displayed before data/tabular        -->
         <xsl:when test="self::table">
-            <xsl:if test="not($b-subcaptioned)">
+            <xsl:if test="not($b-place-title-below)">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3573,15 +3573,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="tabular">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
-            <xsl:if test="$b-subcaptioned">
+            <xsl:if test="$b-place-title-below">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
             </xsl:if>
         </xsl:when>
-        <!-- "title" at the top, subcaption at the bottom -->
+        <!-- "title" at the top, subnumber at the bottom -->
         <xsl:when test="self::list">
-            <xsl:if test="not($b-subcaptioned)">
+            <xsl:if test="not($b-place-title-below)">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -3591,7 +3591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </div>
-            <xsl:if test="$b-subcaptioned">
+            <xsl:if test="$b-place-title-below">
                 <xsl:apply-templates select="." mode="figure-caption">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
@@ -4247,10 +4247,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- structured by "task" so let templates for tasks work -->
         <!-- down to terminal task with SOLUTION-LIKE appendages  -->
         <xsl:when test="task">
-            <xsl:apply-templates select="introduction|task|conclusion">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-            </xsl:apply-templates>
+            <!-- An "exercise" structured by task may electively be presented  -->
+            <!-- by a "tabbed" interface from Runestone components.            -->
+            <!-- *  Never for a "worksheet" - too messy for printing           -->
+            <!-- *  Not hitting PROJECT-LIKE here, see elsewhere               -->
+            <xsl:variable name="b-tabbed-tasks" select="
+                (@exercise-customization = 'divisional' and $b-html-tabbed-tasks-divisional) or
+                (@exercise-customization = 'inline' and $b-html-tabbed-tasks-inline) or
+                (@exercise-customization = 'reading' and $b-html-tabbed-tasks-reading)"/>
+            <xsl:choose>
+                <xsl:when test="$b-tabbed-tasks">
+                    <!-- Use tabbed viewer from Runestone Components -->
+                    <xsl:apply-templates select="."  mode="tabbed-tasks"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="introduction|task|conclusion">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                        <xsl:with-param name="block-type" select="$block-type"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!--  -->
         <!-- structured with "statement" and SOLUTION-LIKE, -->
@@ -4362,10 +4378,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="task">
-            <xsl:apply-templates select="introduction|task|conclusion">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-            </xsl:apply-templates>
+            <!-- An "PROJECT-LIKE" structured by task may electively  -->
+            <!-- be presented by a "tabbed" interface from Runestone  -->
+            <!-- components. Note: this test is simpler than for  -->
+            <!-- "exercise" since we know we have a PROJECT-LIKE and  -->
+            <!-- do not need to consult @exercise-customization. -->
+            <xsl:choose>
+                <xsl:when test="$b-html-tabbed-tasks-project">
+                    <!-- Use tabbed viewer from Runestone Components -->
+                    <xsl:apply-templates select="."  mode="tabbed-tasks"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="introduction|task|conclusion">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                        <xsl:with-param name="block-type" select="$block-type"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="."  mode="exercise-components">
@@ -4834,6 +4863,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- signal on intentional, temporary, hack      -->
         <!-- simply duplicated in assembly, no solutions -->
         <xsl:when test="@exercise-interactive = 'htmlhack'">
+            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+        </xsl:when>
+        <!-- Select -->
+        <!-- Largely a Runestone/database operation referencing -->
+        <!-- existing questions supplied by the manifest,       -->
+        <!-- so we go straight to an HTML version               -->
+        <xsl:when test="@exercise-interactive = 'select'">
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </xsl:when>
         <!-- True/False        -->
@@ -5695,6 +5731,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- All but the first is p/@data-braille="continuation" -->
 <!-- so later HTML "p" can be styled for Braille as if   -->
 <!-- they are part of a logical PreTeXt paragraph        -->
+<!-- Note: a simpler version of this appears in the      -->
+<!-- braille conversion, with a few improvements         -->
+<!-- (such as using "node()").                           -->
 <xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -6161,9 +6200,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mathematics").   We did this by breaking up strings with a zero-width -->
 <!-- space (U+200B), but a better device is wrapping a delimiter in a span -->
 <!-- (see this technique in the "text-processing" template in the Jupyter  -->
-<!-- conversion.  However, MathJax 3 lets us target/ignore spcific         -->
+<!-- conversion).  However, MathJax 3 lets us target/ignore specific       -->
 <!-- locations for its translation.  So the "text-processing" template     -->
-<!-- that was once here is now gone.                                       -->
+<!-- that was once here is now gone.  But now it is back, to upgrade a     -->
+<!-- keyboard "plain" apostrophe to a Unicode "curly" apostrophe.          -->
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+
+    <!-- 'RIGHT SINGLE QUOTATION MARK' (U+2019) -->
+    <xsl:variable name="apostophe-fixed" select="str:replace($text, $apos, '&#x2019;')"/>
+
+    <xsl:value-of select="$apostophe-fixed"/>
+</xsl:template>
 
 <!-- We cruise knowled content for necessity of hidden knowls -->
 <xsl:template match="*" mode="is-hidden">
@@ -7093,7 +7142,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html-no-date"/>
-        <html lang="{$document-language}"> <!-- dir="rtl" here -->
+        <html>
+            <xsl:call-template name="language-attributes"/>
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <title>
@@ -7144,7 +7194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="skip-to-content-link" />
                 <xsl:call-template name="latex-macros" />
                 <xsl:call-template name="enable-editing" />
-                 <header id="ptx-masthead">
+                 <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
@@ -7192,6 +7242,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
+                <xsl:call-template name="runestone-ethical-ads"/>
                 <!-- analytics services, if requested -->
                 <xsl:call-template name="statcounter"/>
                 <xsl:call-template name="google-classic"/>
@@ -7924,6 +7975,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but also probing for end of row (no more cells) -->
     <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" />
     <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" /> <!-- possibly empty -->
+
+    <!-- Check if row-headers are requested -->
+    <xsl:variable name="b-row-headers" select="boolean($the-cell/parent::row/parent::tabular[@row-headers = 'yes'])"/>
+    <!-- And if we are at the first cell -->
+    <xsl:variable name="b-row-header" select="$b-row-headers and not($the-cell/preceding-sibling::cell)"/>
+
     <xsl:if test="$the-cell">
         <!-- build an HTML data cell, with CSS decorations              -->
         <!-- we set properties in various variables,                    -->
@@ -8082,6 +8139,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@header = 'vertical'">
                     <xsl:text>th</xsl:text>
                 </xsl:when>
+                <xsl:when test="$b-row-header">
+                    <xsl:text>th</xsl:text>
+                </xsl:when>
                 <!-- "no" is other choice, or no attribute at all -->
                 <!-- controlled by schema, so no error-check here -->
                 <xsl:otherwise>
@@ -8092,10 +8152,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- the HTML element for the cell -->
         <xsl:element name="{$header-row-elt}">
+            <!-- Scope attribute helps with accessibility: what          -->
+            <!-- is the table element/cell describing?                   -->
             <!-- if this is a row of column headers, declare scope="col" -->
+            <!-- if this is a column of row headers, declare scope="row" -->
             <xsl:if test="$header-row-elt = 'th'">
                 <xsl:attribute name="scope">
-                    <xsl:text>col</xsl:text>
+                    <!-- If in upper-left corner, let column headings dominate -->
+                    <xsl:choose>
+                        <xsl:when test="(@header = 'yes') or (@header = 'vertical')">
+                            <xsl:text>col</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$b-row-header">
+                            <xsl:text>row</xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:attribute>
             </xsl:if>
             <!-- and the class attribute -->
@@ -8809,28 +8880,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="var[@form='checkboxes']">
-    <ul style="list-style:circle;">
-        <xsl:apply-templates select="li"/>
-    </ul>
-</xsl:template>
-
-<xsl:template match="var[@form='buttons']">
-    <ul style="list-style:circle;">
-        <xsl:apply-templates select="li"/>
-    </ul>
-</xsl:template>
-
-<xsl:template match="var[@form='popup']">
-    <ul style="list-style:circle;">
-        <xsl:for-each select="li">
-            <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
-                <xsl:apply-templates select='.' />
-            </xsl:if>
-        </xsl:for-each>
-    </ul>
-</xsl:template>
-
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">
@@ -9206,6 +9255,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 <!-- Biological Names -->
 <!-- ################ -->
+
+<!-- See a potentially cleaner template in the braille conversion -->
 
 <xsl:template match="taxon[not(genus) and not(species)]">
     <span class="taxon">
@@ -9704,28 +9755,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="runestone-to-interactive"/>
 </xsl:template>
 
-<xsl:template name="aim-login-header">
-    <xsl:if test="$b-host-aim">
-        <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
-        <script>
-            <xsl:text>var logged_in = false;&#xa;</xsl:text>
-            <xsl:text>var role = 'student';&#xa;</xsl:text>
-            <xsl:text>var guest_access = true;&#xa;</xsl:text>
-            <xsl:text>var login_required = false;&#xa;</xsl:text>
-            <xsl:text>var js_version = </xsl:text>
-            <xsl:value-of select='$html.js.version'/>
-            <xsl:text>;&#xa;</xsl:text>
-        </script>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template name="aim-login-footer">
-    <xsl:if test="$b-host-aim">
-        <div class="login-link"><span id="loginlogout" class="login">login</span></div>
-        <script src="{$html.js.server}/js/{$html.js.version}/login.js"></script>
-    </xsl:if>
-</xsl:template>
-
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console" mode="code-inclusion">
@@ -9958,7 +9987,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html-no-date"/>
-        <html lang="{$document-language}">
+        <html>
+            <xsl:call-template name="language-attributes"/>
             <head>
                 <!-- configure MathJax by default for @platform variants -->
                 <xsl:call-template name="mathjax" />
@@ -9973,7 +10003,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="header-libraries" />
             </head>
                 <!-- ignore MathJax signals everywhere, then enable selectively -->
-                <body class="pretext ignore-math">
+                <body class="ptx-content ignore-math">
                 <!-- potential document-id per-page -->
                 <xsl:call-template name="document-id"/>
                 <!-- React flag -->
@@ -10014,11 +10044,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@platform = 'sage']" mode="header-libraries">
     <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
     <script>
-        <xsl:text>sagecell.makeSagecell({&#xa;</xsl:text>
-        <xsl:text>    inputLocation: ".sage-interact",&#xa;</xsl:text>
-        <xsl:text>    autoeval: 'true',&#xa;</xsl:text>
-        <xsl:text>    hide: ["editor", "evalButton", "permalink"]&#xa;</xsl:text>
-        <xsl:text>});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">.sage-interact</string>
+                    <boolean key="autoeval">true</boolean>
+                    <array key="hide">
+                        <string>editor</string>
+                        <string>evalButton</string>
+                        <string>permalink</string>
+                    </array>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </script>
     <link rel="stylesheet" type="text/css" href="https://sagecell.sagemath.org/static/sagecell_embed.css" />
 </xsl:template>
@@ -10688,6 +10728,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="aria-live">
             <xsl:value-of select="'polite'"/>
         </xsl:attribute>
+        <div class="problem-buttons">
+            <button class="webwork-button" onclick="handleWW('{$inner-id}')">
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'activate'"/>
+                </xsl:apply-templates>
+            </button>
+        </div>
         <div class="problem-contents">
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original"      select="$b-original"/>
@@ -10696,13 +10743,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
-        </div>
-        <div class="problem-buttons">
-            <button class="webwork-button" onclick="handleWW('{$inner-id}')">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'activate'"/>
-                </xsl:apply-templates>
-            </button>
         </div>
     </div>
 </xsl:template>
@@ -10786,6 +10826,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Hack, include leading space for now -->
     <xsl:param name="extra-body-classes"/>
     <xsl:param name="filename" select="''"/>
+    <xsl:param name="b-printable" select="false()"/>
 
     <xsl:variable name="the-filename">
         <xsl:choose>
@@ -10810,7 +10851,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exsl:document href="{$the-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html-no-date"/>
-    <html lang="{$document-language}"> <!-- dir="rtl" here -->
+    <html>
+        <xsl:call-template name="language-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
@@ -10848,15 +10890,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
-            <xsl:call-template name="aim-login-header" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
-            <!-- analytics services, if requested -->
-            <xsl:call-template name="google-classic"/>
-            <xsl:call-template name="google-universal"/>
-            <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="aim-login-footer" />
-            <xsl:call-template name="extra-js-footer"/>
         </head>
         <body>
             <!-- potential document-id per-page -->
@@ -10877,7 +10912,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- this *must* be first for maximum utility -->
             <xsl:call-template name="skip-to-content-link" />
             <!-- HTML5 body/header will be a "banner" landmark automatically -->
-            <header id="ptx-masthead">
+            <header id="ptx-masthead" class="ptx-masthead">
                 <div class="ptx-banner">
                     <xsl:call-template name="brand-logo" />
                     <div class="title-container">
@@ -10920,6 +10955,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="ptx-main">
                     <div id="ptx-content" class="ptx-content">
+                        <xsl:if test="$b-printable">
+                            <xsl:apply-templates select="." mode="print-button"/>
+                        </xsl:if>
                         <xsl:if test="$b-watermark">
                             <xsl:attribute name="style">
                                 <xsl:value-of select="$watermark-css" />
@@ -10932,32 +10970,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:copy-of select="$content" />
                     </div>
                     <div class="ptx-content-footer">
-                        <xsl:apply-templates select="." mode="previous-button">
-                            <xsl:with-param name="id-label" select="'previousbutton'" />
-                        </xsl:apply-templates>
+                        <xsl:apply-templates select="." mode="previous-button"/>
                         <a class="top-button button" href="#" title="Top">
                             <span class="icon">^</span>
                             <span class="name">Top</span>
                         </a> 
-                        <xsl:apply-templates select="." mode="next-button">
-                            <xsl:with-param name="id-label" select="'nextbutton'" />
-                        </xsl:apply-templates>
+                        <xsl:apply-templates select="." mode="next-button"/>
                     </div>
                 </main>
             </div>
             <!-- formerly "extra" -->
-            <div id="ptx-page-footer">
+            <div id="ptx-page-footer" class="ptx-page-footer">
                 <xsl:apply-templates select="." mode="feedback-button"/>
                 <xsl:call-template name="pretext-link" />
                 <xsl:call-template name="runestone-link"/>
                 <xsl:call-template name="mathjax-link" />
             </div>
+            <xsl:call-template name="runestone-ethical-ads"/>
             <!-- analytics services, if requested -->
             <xsl:call-template name="statcounter"/>
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="aim-login-footer" />
             <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
@@ -10977,7 +11011,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html-no-date"/>
-    <html lang="{$document-language}"> <!-- dir="rtl" here -->
+    <html>
+        <xsl:call-template name="language-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <meta name="Keywords" content="Authored in PreTeXt" />
@@ -11356,7 +11391,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Button code, <a href=""> when active   -->
 <!-- <span> with "disabled" class otherwise -->
 <xsl:template match="*" mode="previous-button">
-    <xsl:param name="id-label" select="''" />
     <xsl:variable name="previous-url">
         <xsl:choose>
             <xsl:when test="$nav-logic='linear'">
@@ -11468,7 +11502,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="next-button">
-    <xsl:param name="id-label" select="''" />
     <xsl:variable name="next-url">
         <xsl:choose>
             <xsl:when test="$nav-logic='linear'">
@@ -11514,7 +11547,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="up-button">
-    <xsl:param name="id-label" select="''" />
     <!-- up URL is identical for linear, tree logic -->
     <xsl:variable name="up-url">
         <xsl:apply-templates select="." mode="up-url" />
@@ -11557,11 +11589,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container"><span class="name">Calc</span></button>
 </xsl:template>
 
+<xsl:template match="*" mode="print-button"/>
+
+<xsl:template match="worksheet" mode="print-button">
+    <xsl:variable name="print-text">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'print'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button class="print-button" title="{$print-text}" onClick="window.print()">
+        <span class="name"><xsl:value-of select="$print-text"/></span>
+    </button>
+</xsl:template>
+
 <xsl:template name="user-preferences-menu">
     <button id="user-preferences-button" class="user-preferences-button button" title="Modify user preferences">
-      <span id="theavatarbutton" class="name">You!</span>
-      <div id="preferences_menu_holder" class="hidden">
-        <ol id="preferences_menu" style="font-family: 'Roboto Serif', serif;">
+      <span id="avatarbutton" class="avatarbutton name">You!</span>
+      <div id="preferences_menu_holder" class="preferences_menu_holder hidden">
+        <ol id="preferences_menu" class="preferences_menu" style="font-family: 'Roboto Serif', serif;">
           <li data-env="avatar" tabindex="-1">Choose avatar<div class="wrap_to_submenu"><span class="to_submenu">▻</span></div>
             <ol class="hidden avatar">
               <li data-val="You!" tabindex="-1"><span id="theYou!" class="avatarcheck">✔️</span>You!</li>
@@ -11636,75 +11681,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
-
-<!--    Compact Buttons no longer supported, so this can be deleted, says David F -->
-<!-- Compact Buttons -->
-<!-- These get smashed consecutively into a single "tool-bar" -->
-<xsl:template match="*" mode="compact-buttons">
-    <!-- URL formation, maybe this could be consolidated with above versions -->
-    <xsl:variable name="previous-url">
-        <xsl:choose>
-            <xsl:when test="$nav-logic='linear'">
-                <xsl:apply-templates select="." mode="previous-linear-url" />
-            </xsl:when>
-            <xsl:when test="$nav-logic='tree'">
-                <xsl:apply-templates select="." mode="previous-tree-url" />
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="up-url">
-        <xsl:apply-templates select="." mode="up-url" />
-    </xsl:variable>
-    <xsl:variable name="next-url">
-        <xsl:choose>
-            <xsl:when test="$nav-logic='linear'">
-                <xsl:apply-templates select="." mode="next-linear-url" />
-            </xsl:when>
-            <xsl:when test="$nav-logic='tree'">
-                <xsl:apply-templates select="." mode="next-tree-url" />
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- toolbar-item when aligned right, get placed right: first in, first right -->
-    <!-- so they apparently seem in the reversed order here and in HTML output    -->
-    <!-- Empty URL, then no button                                                -->
-    <xsl:if test="not($next-url = '')">
-        <div class="toolbar-item">
-            <a href="{$next-url}">
-                <svg height="50" width="60" viewBox="0 50 110 100" xmlns="https://www.w3.org/2000/svg" >
-                    <polygon points="110,100 75,75 0,75 0,125 75,125 " style="fill:darkred;stroke:maroon;stroke-width:1" />
-                    <text x="13" y="108" fill="blanchedalmond" font-size="32">next</text>
-                </svg>
-            </a>
-        </div>
-    </xsl:if>
-    <xsl:if test="not($up-url = '')">
-        <div class="toolbar-item">
-            <a href="{$up-url}">
-                <svg height="50" width="60" viewBox="0 50 80 100" xmlns="https://www.w3.org/2000/svg" >
-                    <polygon points="75,75 37,65 0,75 0,125 75,125 " style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
-                    <text x="13" y="108" fill="maroon" font-size="32">up</text>
-                </svg>
-            </a>
-        </div>
-    </xsl:if>
-    <xsl:if test="not($previous-url = '')">
-        <div class="toolbar-item">
-            <a href="{$previous-url}">
-                <svg height="50" width="60" viewBox="-10 50 110 100" xmlns="https://www.w3.org/2000/svg" >
-                    <polygon points="-10,100 25,75 100,75 100,125 25,125 " style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
-                    <text x="28" y="108" fill="maroon" font-size="32">prev</text>
-                </svg>
-            </a>
-        </div>
-    </xsl:if>
-</xsl:template>
-
 <!-- Primary Navigation Panels -->
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
-    <nav id="ptx-navbar" class="navbar">
+    <nav id="ptx-navbar">
+        <xsl:attribute name="class">
+            <xsl:text>ptx-navbar navbar</xsl:text>
+            <xsl:if test="$b-host-runestone">
+                <xsl:text> ptx-runestone-container</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
         <button class="toc-toggle button" aria-label="Show or hide table of contents">
             <span class="icon">☰</span>
             <span class="name">
@@ -11713,52 +11700,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </span>
         </button>
-        <!-- Prev/Up/Next buttons on top, according to options -->
+        <!-- A page either has an/the index as    -->
+        <!-- a child, and gets the "jump to" bar, -->
+        <!-- or it deserves an index button       -->
         <xsl:choose>
-            <xsl:when test="$nav-style = 'full'">
-                <!-- A page either has an/the index as    -->
-                <!-- a child, and gets the "jump to" bar, -->
-                <!-- or it deserves an index button       -->
-                <xsl:choose>
-                    <xsl:when test="index-list">
-                        <xsl:apply-templates select="." mode="index-jump-nav" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="." mode="index-button" />
-                    </xsl:otherwise>
-                </xsl:choose>
-                <!-- Button to show/hide the calculator -->
-                <xsl:if test="$b-has-calculator">
-                    <xsl:call-template name="calculator-toggle" />
-                    <xsl:call-template name="calculator" />
-                </xsl:if>
-                <!-- Runestone user menu -->
-                <!-- Conditional on a build for Runestone hosting -->
-                <xsl:call-template name="runestone-bust-menu"/>
-                <!-- A scratch ActiveCode via a pencil icon, always -->
-                <xsl:call-template name="runestone-scratch-activecode"/>
-                <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
-                <xsl:call-template name="user-preferences-menu"/>
-                <!-- Span to encase Prev/Up/Next buttons and float right    -->
-                <!-- Each button gets an id for keypress recognition/action -->
-                <span class="treebuttons">
-                    <xsl:apply-templates select="." mode="previous-button">
-                        <xsl:with-param name="id-label" select="'previousbutton'" />
-                    </xsl:apply-templates>
-                    <xsl:if test="$nav-upbutton='yes'">
-                        <xsl:apply-templates select="." mode="up-button">
-                            <xsl:with-param name="id-label" select="'upbutton'" />
-                        </xsl:apply-templates>
-                    </xsl:if>
-                    <xsl:apply-templates select="." mode="next-button">
-                        <xsl:with-param name="id-label" select="'nextbutton'" />
-                    </xsl:apply-templates>
-                </span>
+            <xsl:when test="index-list">
+                <xsl:apply-templates select="." mode="index-jump-nav" />
             </xsl:when>
-            <xsl:when test="$nav-style = 'compact'">
-                <xsl:apply-templates select="." mode="compact-buttons" />
-            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="index-button" />
+            </xsl:otherwise>
         </xsl:choose>
+        <!-- Button to show/hide the calculator -->
+        <xsl:if test="$b-has-calculator">
+            <xsl:call-template name="calculator-toggle" />
+            <xsl:call-template name="calculator" />
+        </xsl:if>
+        <!-- Runestone user menu -->
+        <xsl:if test="not($b-debug-react)">
+            <!-- Conditional on a build for Runestone hosting -->
+            <xsl:call-template name="runestone-bust-menu"/>
+            <!-- A scratch ActiveCode via a pencil icon, always -->
+            <xsl:call-template name="runestone-scratch-activecode"/>
+            <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
+            <xsl:call-template name="user-preferences-menu"/>
+        </xsl:if>
+        <!-- Span to encase Prev/Up/Next buttons and float right    -->
+        <!-- Each button gets an id for keypress recognition/action -->
+        <span class="treebuttons">
+            <xsl:apply-templates select="." mode="previous-button"/>
+            <xsl:if test="$nav-upbutton='yes'">
+                <xsl:apply-templates select="." mode="up-button"/>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="next-button"/>
+        </span>
         <!-- Annotations button was once here, see GitHub issue -->
         <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
         <!-- Search box at end of ptx-navbar, so it can be sticky -->
@@ -11771,12 +11746,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Two HTML aside's for ToC (left), Annotations (right)       -->
 <!-- Need to pass node down into "toc-items", which is per-page -->
 <xsl:template match="*" mode="sidebars">
-    <div id="ptx-sidebar">
+    <div id="ptx-sidebar" class="ptx-sidebar">
         <nav id="ptx-toc">
             <xsl:attribute name="class">
+                <xsl:text>ptx-toc</xsl:text>
                 <!-- A class indicates how much of the ToC we want   -->
                 <!-- to see, as set in the publication file. Always. -->
-                <xsl:text>depth</xsl:text>
+                <xsl:text> depth</xsl:text>
                 <xsl:value-of select="$toc-level"/>
                 <!-- Optionally place a class name to allow for numbering  -->
                 <!-- parts and chapters, when parts are present (w/ space) -->
@@ -12429,6 +12405,17 @@ TODO:
     </a>
 </xsl:template>
 
+<!-- Runestone build only, revenue generator -->
+<xsl:template name="runestone-ethical-ads">
+    <xsl:if test="$b-host-runestone">
+        <xsl:text>{% if show_ethical_ad %}</xsl:text>
+        <div style="width: 100%">
+            <div data-ea-publisher="runestoneacademy" data-ea-type="image" style="display: flex; justify-content: center"/>
+        </div>
+        <xsl:text>{% endif %}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Tooltip Text -->
 <!-- Text for an HTML "title" attribute      -->
 <!-- Always leverage the PreTeXt title, e.g. -->
@@ -12462,72 +12449,110 @@ TODO:
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
+        <xsl:text>&#xa;</xsl:text>
         <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
-        <xsl:text>window.MathJax = {&#xa;</xsl:text>
-        <xsl:text>  tex: {&#xa;</xsl:text>
-        <xsl:text>    inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
-        <xsl:text>    tags: "none",&#xa;</xsl:text>
-        <xsl:text>    tagSide: "right",&#xa;</xsl:text>
-        <xsl:text>    tagIndent: ".8em",&#xa;</xsl:text>
-        <xsl:text>    packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'color', 'newcommand', 'knowl'</xsl:text>
-        <xsl:text>]}&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  options: {&#xa;</xsl:text>
-        <xsl:text>    ignoreHtmlClass: "tex2jax_ignore|ignore-math",&#xa;</xsl:text>
-        <xsl:text>    processHtmlClass: "process-math",&#xa;</xsl:text>
-        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
-            <xsl:text>    renderActions: {&#xa;</xsl:text>
-            <xsl:text>        findScript: [10, function (doc) {&#xa;</xsl:text>
-            <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
-            <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
-            <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
-            <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
-            <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
-            <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-            <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-            <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
-            <xsl:text>            });&#xa;</xsl:text>
-            <xsl:text>        }, '']&#xa;</xsl:text>
-            <xsl:text>    },&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  chtml: {&#xa;</xsl:text>
-        <xsl:text>    scale: 0.98,&#xa;</xsl:text>
-        <xsl:text>    mtextInheritFont: true&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  loader: {&#xa;</xsl:text>
-        <xsl:text>    load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/color', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],&#xa;</xsl:text>
-        <xsl:text>    paths: {pretext: "https://pretextbook.org/js/lib"},&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  startup: {&#xa;</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-debug-react">
-                <xsl:text>    /* Mathjax typesetting operation is under the control of React */&#xa;</xsl:text>
-                <xsl:text>    typeset: false,&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- tell Runestone components that MathJax is all loaded -->
-                <xsl:text>    pageReady() {&#xa;</xsl:text>
-                <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
-                <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
-                <xsl:text>      rsMathReady();&#xa;</xsl:text>
-                <xsl:text>      }&#xa;</xsl:text>
-                <xsl:text>    )}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>  },&#xa;</xsl:text>
-        <!-- optional presentation mode gets clickable, large math -->
-        <xsl:if test="$b-html-presentation">
-            <xsl:text>  options: {&#xa;</xsl:text>
-            <xsl:text>    menuOptions: {&#xa;</xsl:text>
-            <xsl:text>      settings: {&#xa;</xsl:text>
-            <xsl:text>        zoom: 'Click',&#xa;</xsl:text>
-            <xsl:text>        zscale: '300%',&#xa;</xsl:text>
-            <xsl:text>      },&#xa;</xsl:text>
-            <xsl:text>    }&#xa;</xsl:text>
-            <xsl:text>  },&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:text>};&#xa;</xsl:text>
+        <xsl:text>window.MathJax = </xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <map key="tex">
+                        <array key="inlineMath">
+                            <array>
+                                <string>\(</string>
+                                <string>\)</string>
+                            </array>
+                        </array>
+                        <string key="tags">none</string>
+                        <string key="tagSide">right</string>
+                        <string key="tagIndent">.8em</string>
+                        <map key="packages">
+                            <array key="[+]">
+                                <string>base</string>
+                                <string>extpfeil</string>
+                                <string>ams</string>
+                                <string>amscd</string>
+                                <string>color</string>
+                                <string>newcommand</string>
+                                <string>knowl</string>
+                            </array>
+                        </map>
+                    </map>
+                    <map key="options">
+                        <string key="ignoreHtmlClass">tex2jax_ignore|ignore-math</string>
+                        <string key="processHtmlClass">process-math</string>
+                        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
+                            <map key="renderActions">
+                                <array key="findScript">
+                                    <number>10</number>
+                                    <raw>
+                                        <xsl:text>function (doc) {&#xa;</xsl:text>
+                                        <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
+                                        <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
+                                        <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
+                                        <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
+                                        <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
+                                        <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+                                        <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+                                        <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
+                                        <xsl:text>            });&#xa;</xsl:text>
+                                        <xsl:text>        }</xsl:text>
+                                    </raw>
+                                    <string></string>
+                                </array>
+                            </map>
+                        </xsl:if>
+                    </map>
+                    <map key="chtml">
+                        <number key="scale">0.98</number>
+                        <boolean key="mtextInheritFont">true</boolean>
+                    </map>
+                    <map key="loader">
+                        <array key="load">
+                            <string>input/asciimath</string>
+                            <string>[tex]/extpfeil</string>
+                            <string>[tex]/amscd</string>
+                            <string>[tex]/color</string>
+                            <string>[tex]/newcommand</string>
+                            <string>[pretext]/mathjaxknowl3.js</string>
+                        </array>
+                        <map key="paths">
+                            <string key="pretext">https://pretextbook.org/js/lib</string>
+                        </map>
+                    </map>
+                    <map key="startup">
+                        <xsl:choose>
+                            <xsl:when test="$b-debug-react">
+                                <boolean key="typeset">false</boolean>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <!-- tell Runestone components that MathJax is all loaded -->
+                                <raw>
+                                    <xsl:text>pageReady() {&#xa;</xsl:text>
+                                    <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
+                                    <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
+                                    <xsl:text>      rsMathReady();&#xa;</xsl:text>
+                                    <xsl:text>      }&#xa;</xsl:text>
+                                    <xsl:text>    )}</xsl:text>
+                                </raw>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </map>
+                    <!-- optional presentation mode gets clickable, large math -->
+                    <xsl:if test="$b-html-presentation">
+                        <map key="options">
+                            <map key="menuOptions">
+                                <map key="settings">
+                                    <string key="zoom">Click</string>
+                                    <string key="zscale">300%</string>
+                                </map>
+                            </map>
+                        </map>
+                    </xsl:if>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
@@ -12590,21 +12615,29 @@ TODO:
             <xsl:value-of select="$language-attribute" />
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sagecell-</xsl:text>
-            <xsl:value-of select="$language-attribute" />
-        <xsl:text>',&#xa;</xsl:text>
-        <xsl:text>                       linked: true,&#xa;</xsl:text>
-        <xsl:text>                       languages: ['</xsl:text>
-            <xsl:value-of select="$language-attribute" />
-        <xsl:text>'],&#xa;</xsl:text>
-        <xsl:text>                       evalButtonText: '</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'"/>
-            </xsl:apply-templates>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="$language-text" />
-            <xsl:text>)</xsl:text>
-        <xsl:text>'});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">pre.sagecell-<xsl:value-of select="$language-attribute" /></string>
+                    <boolean key="linked">true</boolean>
+                    <array key="languages">
+                        <string>
+                            <xsl:value-of select="$language-attribute" />
+                        </string>
+                    </array>
+                    <string key="evalButtonText">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'evaluate'"/>
+                        </xsl:apply-templates>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="$language-text" />
+                        <xsl:text>)</xsl:text>
+                    </string>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -12612,9 +12645,21 @@ TODO:
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
         <xsl:text>// Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
-        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sage-display',&#xa;</xsl:text>
-        <xsl:text>                       editor: 'codemirror-readonly',&#xa;</xsl:text>
-        <xsl:text>                       hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">pre.sage-display</string>
+                    <string key="editor">codemirror-readonly</string>
+                    <array key="hide">
+                        <string>evalButton</string>
+                        <string>editorToggle</string>
+                        <string>language</string>
+                    </array>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -12624,14 +12669,21 @@ TODO:
     <xsl:element name="script">
         <xsl:text>// Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
-        <xsl:text>sagecell.makeSagecell({inputLocation: 'pre.sagecell-practice',&#xa;</xsl:text>
-        <xsl:text>                       linked: true,&#xa;</xsl:text>
-        <xsl:text>                       languages: sagecell.allLanguages,&#xa;</xsl:text>
-        <xsl:text>                       evalButtonText: '</xsl:text>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'evaluate'"/>
-            </xsl:apply-templates>
-        <xsl:text>'});&#xa;</xsl:text>
+        <xsl:text>sagecell.makeSagecell(</xsl:text>
+        <xsl:call-template name="json">
+            <xsl:with-param name="content">
+                <map xmlns="http://www.w3.org/2005/xpath-functions">
+                    <string key="inputLocation">pre.sagecell-practice</string>
+                    <boolean key="linked">true</boolean>
+                    <string key="evalButtonText">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'evaluate'"/>
+                        </xsl:apply-templates>
+                    </string>
+                </map>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>);&#xa;</xsl:text>
     </xsl:element>
 </xsl:template>
 
@@ -12736,7 +12788,7 @@ TODO:
 
 <!-- Program Listings highlighted by Prism -->
 <xsl:template name="syntax-highlight">
-    <xsl:if test="$b-has-program">
+    <xsl:if test="$b-has-program and not($b-debug-react)">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
@@ -12746,7 +12798,7 @@ TODO:
 <!-- JS setup for a Google Custom Search Engine box -->
 <!-- Empty if not enabled via presence of cx number -->
 <xsl:template name="google-search-box-js">
-    <xsl:if test="$b-google-cse">
+    <xsl:if test="$b-google-cse and not($b-debug-react)">
         <script async="">
             <xsl:attribute name="src">
                 <xsl:text>https://cse.google.com/cse.js?cx=</xsl:text>
@@ -12775,8 +12827,8 @@ TODO:
 <!-- NB: async attribute also on Lunr and PTX-JS        -->
 <!-- resulted in console errors (2022-02-08)            -->
 <xsl:template name="native-search-box-js">
-    <xsl:if test="$has-native-search">
-        <script src="https://unpkg.com/lunr/lunr.js"/>
+    <xsl:if test="$has-native-search and not($b-debug-react)">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js" integrity="sha512-4xUl/d6D6THrAnXAwGajXkoWaeMNwEKK4iNfq5DotEbLPAfk6FSxSP3ydNxqDgCw1c/0Z1Jg6L8h2j+++9BZmg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <!-- document-specific variables with search documents -->
         <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
@@ -12791,8 +12843,8 @@ TODO:
     <xsl:if test="$has-native-search">
         <div class="searchbox">
             <div class="searchwidget">
-                <input id="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
-                <button id="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
+                <input id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
+                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
             </div>
         </div>
     </xsl:if>
@@ -12801,17 +12853,17 @@ TODO:
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
-        <div id="searchresultsplaceholder" style="display: none">
-            <button id="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
+        <div id="searchresultsplaceholder" class="searchresultsplaceholder" style="display: none">
+            <button id="closesearchresults" class="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
             <h2>
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'search-results-heading'"/>
                 </xsl:apply-templates>
                 <xsl:text>: </xsl:text>
-                <span id="searchterms"></span>
+                <span id="searchterms" class="searchterms"></span>
             </h2>
             <!-- div#searchempty is not visible when there are results -->
-            <div id="searchempty">
+            <div id="searchempty" class="searchempty">
                 <span>
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'no-search-results'"/>
@@ -12819,7 +12871,7 @@ TODO:
                     <xsl:text>.</xsl:text>
                 </span>
             </div>
-            <ol id="searchresults">
+            <ol id="searchresults" class="searchresults">
             </ol>
         </div>
     </xsl:if>
@@ -12998,6 +13050,22 @@ TODO:
     </xsl:if>
 </xsl:template>
 
+<!-- ################## -->
+<!-- Language Direction -->
+<!-- ################## -->
+
+<!-- Note: perhaps this should begin in a localization file, -->
+<!-- and come through as a key; but perhaps this template    -->
+<!-- can stay as is.                                         -->
+<xsl:template name="language-attributes">
+    <xsl:attribute name="lang">
+        <xsl:value-of select="$document-language"/>
+    </xsl:attribute>
+    <xsl:attribute name="dir">
+        <xsl:value-of select="$document-language-direction"/>
+    </xsl:attribute>
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- LaTeX Preamble -->
@@ -13061,12 +13129,12 @@ TODO:
                 <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="$docinfo/brandlogo/@source"/>
             </xsl:variable>
-            <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
+            <a id="logo-link" class="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
                 <img src="{$location}" alt="Logo image"/>
             </a>
         </xsl:when>
         <xsl:otherwise>
-            <a id="logo-link" href=""/>
+            <a id="logo-link" class="logo-link" href=""/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

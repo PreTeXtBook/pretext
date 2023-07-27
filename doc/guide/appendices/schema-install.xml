@@ -37,7 +37,7 @@
             <p>Presumably something similar to the above will work for any Linux distribution that has packages for <c>jing</c>.</p>
 
             <!-- warning about using single source also in "from source" section -->
-            <p>Note that if you have modularized your source files (see <xref ref="processing-modular"/>), you only need to provide the top-level file as an argument to <c>jing</c>, just like when you use <c>xsltproc</c>.  In particular, the subsidiary files are certain to fail validation since they do not have a <tag>pretext</tag> root element.</p>
+            <p>Note that if you have modularized your source files (see <xref ref="processing-modular"/>), you only need to provide the top-level file as an argument to <c>jing</c>. In particular, the subsidiary files are certain to fail validation since they do not have a <tag>pretext</tag> root element.</p>
         </subsection>
 
         <subsection xml:id="jing-from-source">
@@ -123,7 +123,7 @@
         <title><pretext/> Validation Plus</title>
 
         <p>The second step of validation is our <q>validation-plus</q> stylesheet.  Fortunately, there is nothing to install.  Use it just like the conversions you have already been doing.  In the <pretext/> distribution, in the <c>schema</c> directory you will find <c>pretext-validation-plus.xsl</c>.  This is a stylesheet, unique to <pretext/>, which will carefully analyze your source to find any exceptions that the <acro>RELAX-NG</acro> schema was not designed to catch.  You use the stylesheet like any other,<cd>
-            <cline>xsltproc ~/mathbook/schema/pretext-validation-plus.xsl ~/books/aota/animals.xml</cline>
+            <cline>xsltproc ~/pretext/schema/pretext-validation-plus.xsl ~/books/aota/animals.xml</cline>
         </cd>with suitably adjusted paths, and be sure to provide the <c>-xinclude</c> switch if your source is modularized across multiple files (<xref ref="processing-modular" />).  No news is good news, but each exception found should provide enough explanation for you to locate, and correct, the problem.  These messages are under <pretext/>'s control, so please report any that are not helpful enough.  That's it<mdash/>easy.</p>
     </section>
 

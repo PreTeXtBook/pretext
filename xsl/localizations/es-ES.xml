@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Juan José Torrens, jjtorrens@unavarra.es, 2014-10-27 -->
 <!-- Julian Pfeifle, julian.pfeifle@upc.edu, 2020-05-28 -->
 
-<locale language="es-ES">
+<locale language="es-ES" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>
@@ -175,6 +175,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'>Respuesta</localization>
     <localization string-id='solution'>Solución</localization>
     <!-- Translation needed for Spain Spanish -->
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
@@ -266,4 +267,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activate'>Activate</localization> -->
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
+    <!-- <localization string-id='print'>Print</localization> -->
 </locale>

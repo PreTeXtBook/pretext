@@ -1355,13 +1355,17 @@
             <title>Glossary</title>
             <idx>glossary</idx>
 
-            <p>A <tag>glossary</tag> division may be placed in any main matter division, and once in the <tag>backmatter</tag>.</p>
+            <p>A glossary is a list, in alphabetical order, of foreign or unfamiliar words, along with definitions. <xref ref="cmos" detail="1.87"/></p>
 
-            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about a particular glossary.</p>
+            <p>A <tag>glossary</tag> division may be placed inside any main matter division, and at most once in the <tag>backmatter</tag>.   In either event, the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="1.87"/> indicates that it should be placed right before a <tag>references</tag>.</p>
 
-            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained. The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in the desired order.  Automatic divisions (by initial letter) could be reasonable feature request, perhaps especially for a final, overall, back matter glossary, much like an index.</p>
+            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about the construction of a particular glossary.</p>
 
-            <p>For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
+            <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained.  <pretext/> will provide a period after each defined word, so there should not be any punctuation in your source at this location.  The term should not have any markup, <em>unless</em> the markup is used in every occurence of the term in the text.  Similarly, a term is capitalized only if it is capitalized routinely in the text.</p>
+
+            <p>The explanation itself follows, typically in a sequence of paragraphs, but unnumbered items, such as an <tag>image</tag> may also be used.  It is the author's responsibility to create the list in alphabetical order.  Automatic groupss (according to initial letter) are a pending feature request, perhaps especially for a final, overall, back matter glossary, much like an index.  See <url href="https://github.com/PreTeXtBook/pretext/issues/1971">GitHub #1971</url>.</p>
+
+            <p>Many of the preceding recommendations can be found in <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="2.28"/>.  For an example, see the <xref ref="glossary" text="custom">glossary</xref> in the back matter of this Guide.</p>
         </subsection>
 
         <subsection xml:id="topic-worksheet">
@@ -1634,7 +1638,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>If you prefer to not have this behavior, insert an intervening <tag>p</tag>, and output will be identical, but without the <c>\displaystyle</c>.</p>
 
-            <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the Chicago Manual of Style, 14e, 6.127, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
+            <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="6.127"/>, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
         </subsection>
 
         <subsection xml:id="mathematics-latex-packages">
@@ -2002,6 +2006,18 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Each type of interactive question has a <term>static</term> version for use in output formats like print, <init>PDF</init>, or braille.  Details are given below.  Note that since the ability for instant evaluation of a reader's answer means an author provides the solution and other feedback, this can then be incorporated into a static version as an automatically-generated <tag>answer</tag> and/or <tag>solution</tag> (in addition to any others an author provides).  Note that an author can provide a <tag>hint</tag> for use in all output formats, but there are not any  automatically-generated <tag>hint</tag> for static versions of interactive problems.  Visibility of these solutions can be controlled via the mechanism applicable to all exercises, see <xref ref="exercise-component-visibility"/>.</p>
 
             <p>Note the opportunity to provide feeback to the reader using a <tag>feedback</tag> element in various locations.  These are generally optional, but highly encouraged as a way to improve the quality of your reader's experience.</p>
+
+            <p>These interactive questions are enabled by software from Runestone Academy (<xref ref="runestone"/>) and have extra capabilities when the online version of our output is hosted on Runestone servers.  But you <em>must</em> use a <attr>label</attr> attribute.  This is described more carefully next, so that we can make reference to it from other locations.</p>
+
+            <note xml:id="best-practice-label">
+                <title>Use <c>label</c> attribute for Runestone Components</title>
+
+                <p>Many of our interactive exercises and programming environments are powered by software from Runestone Academy (<xref ref="runestone"/>).  Not suprisingly, when you build online <init>HTML</init> for hosting on Runestone servers these components have more features than otherwise.  This is managed by locating each component in a (massive) database.  And so each exercise needs an identifier.</p>
+
+                <p>You accomplish this by placing a unique value in a <attr>label</attr> attribute on an outermost element, such as an <tag>exercise</tag>, <tag>task</tag>, <tag>project</tag>, <tag>video</tag>, <tag>program</tag>, etc.  You should choose these strings carefully, as they should not be changed, lest the database entries become confused.  Under the hood, we get the content of <c>docinfo/document-id</c> element, and the <attr>edition</attr> attribute of <tag>document-id</tag>, to form a database identifier such as <c>AATA_2_easy-exercise</c>.  The <tag>document-id</tag> distinguishes your book from other books, and the edition allows you some flexibility.  In other words, if you declare a new edition, you can change some of your <attr>label</attr> as part of that process and you will get new database entries while preserving the old.</p>
+
+                <p>Short answer: <em>before</em> hosting your project on Runestone, decide on permanent values for <tag>document-id</tag>, <attr>edition</attr>, and all necessary <attr>label</attr>.  (We expect to add a warning for Runestone builds when these values are not set.)</p>
+            </note>
         </introduction>
 
         <subsection xml:id="true-false-exercises">
@@ -2047,7 +2063,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Parsons problems are named for Dale Parsons, one of their creators, along with Patricia Haden.  They could also be called <term>mixed-up blocks</term>.  A reader is presented with a set of blocks containing text, either computer code or natural language, and their goal is to assemble the blocks into a correct order.  This could be a computer problem with a stated purpose, or could be a logical argument such as proof, or it could be a procedure such as a recipe.  An interactive drag-and-drip interface is a very efficient presentation for a reader.</p>
 
-            <p>Similar to multiple-choice exercises, a <tag>statement</tag> is followed by a <tag>blocks</tag> element containing a sequence of <tag>block</tag> elements.  The <tag>blocks</tag> element is teh signal that this is a Parsons problem.  The <tag>blocks</tag> element may have several attributes:<ul>
+            <p>Similar to multiple-choice exercises, a <tag>statement</tag> is followed by a <tag>blocks</tag> element containing a sequence of <tag>block</tag> elements.  The <tag>blocks</tag> element is the signal that this is a Parsons problem.  The overall <tag>exercise</tag> element may have several attributes:<ul>
                 <li><attr>numbered</attr> set to <c>left</c> or <c>right</c> indicates the blocks should be numbered, and on which side the numbers go.  The default value is <c>no</c>.</li>
                 <li><attr>language</attr> set to <c>natural</c> indicates the text of the blocks is natural language, while the use of a computer language should be indicated by naming the actual language employed.  A list of languages will soon be added in <xref ref="topic-program-console"/>.  The default is <c>natural</c>.</li>
                 <li><attr>indentation</attr> set to <c>hide</c> indicates that a computer code exercise will not include indentation common to each line of a block.  In other words, the problem is slightly harder, as the interactive interface will require the reader to adjust the block horizontally to provide common indentation for the block.  The default is <c>show</c>.</li>
@@ -3158,6 +3174,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>caption</tag> displayed below, and a number assigned.  So, in particular, if your program or console is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
 
             <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  We will eventually provide a table of attribute values here.  They are always lowercase, and a good first guess is likely to succeed.</p>
+
+            <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
         </subsection>
 
         <subsection xml:id="interactive-program-codelens">
@@ -3390,7 +3408,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>So it should now be clear that, after much consideration, that we have chosen a <q>row first</q> approach to describing a table.</p>
 
-            <p>We plan to support row headers, in a manner similar to column headers, with an attribute possible on the initial <tage>col</tage> elements.</p>
+            <p>To encourage good style, we only support row headers as the first column.  So this is a property of the entire <tag>tabular</tag>.  So the attribute <attr>row-headers</attr> on <tag>tabular</tag> can have values <c>no</c> and <c>yes</c>, with the former as default.  Note that <q>major</q> and <q>minor</q> row headers should be accomplished in the first column by using indentation for the minor headers.  Please make a feature request if you would find this useful.</p>
         </subsection>
 
         <subsection>
@@ -3460,11 +3478,17 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Table Philosophy</title>
 
-            <p>The <pubtitle>Chicago Manual of Style</pubtitle> (15e, 13.1) says:</p>
+            <p>The <pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="13.1"/> says:</p>
 
             <blockquote>
                 <p>A table offers an excellent means of presenting a large number of individual similar facts so that they are easy to scan and compare.  A simple table can give information that would require several paragraphs to present textually, and it can do so more clearly. <ellipsis/> A table should be as simple as the material allows and understandable on its own; even a reader unfamiliar with the material presented should be able to make general sense of a table.</p>
             </blockquote>
+
+            <p>If you review the twenty tables presented in Chapter 13 of <init>CMOS</init>, that are of the type we implement, you will notice several things.<ul>
+                <li>Only the first column is ever used for row headings.</li>
+                <li>Cells do not span multiple rows.  (There is no analogue for <attr>colspan</attr>.)</li>
+                <li>Column headings appear at the top, other than <term>cut-in heads</term>, which have a very particular form.  (We have not implemented these, but would entertain a feature request.)</li>
+            </ul></p>
 
             <p>While our implementation allows for some presentational elements (borders, rules, alignment) our conversions will presume your table hews to the purposes described by CMOS.  In particular, it is not a device for spatial layout of complex elements.  You might find that the <tag>sidebyside</tag> and <tag>sbsgroup</tag> layout devices will suit that purpose better (see <xref ref="topic-sidebyside"/>).</p>
 
@@ -3504,12 +3528,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <col/>
                     <col halign="left"/>
                     <!--  -->
-                    <row>
+                    <row header="yes">
                         <cell>Attributes</cell>
                         <cell colspan="4" halign="center">Elements</cell>
                         <cell>Values</cell>
                     </row>
-                    <row bottom="medium">
+                    <row header="yes" bottom="medium">
                         <cell></cell>
                         <cell><c>tabular</c></cell>
                         <cell><c>col</c></cell>
@@ -3568,10 +3592,18 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <row>
                         <cell><c>header</c></cell>
                         <cell></cell>
-                        <cell>p</cell>
+                        <cell></cell>
                         <cell><times/></cell>
                         <cell></cell>
                         <cell>yes/vertical/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>row-headers</c></cell>
+                        <cell><times/></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>yes/no*</cell>
                     </row>
                     <row>
                         <cell><c>valign</c></cell>
@@ -3587,14 +3619,6 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <cell></cell>
                         <cell></cell>
                         <cell><times/></cell>
-                        <cell>1*, positive integer</cell>
-                    </row>
-                    <row>
-                        <cell><c>rowspan</c></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell>p</cell>
                         <cell>1*, positive integer</cell>
                     </row>
                     <row>
@@ -3746,7 +3770,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>(*) Acknowledgements</title>
 
-            <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style (15th Edition, 1.52) suggests that if these are short, they may be contained in a preface.</p>
+            <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style  <xref ref="cmos" detail="1.52"/> suggests that if these are short, they may be contained in a preface.</p>
         </subsection>
 
         <subsection>
@@ -3765,7 +3789,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <note xml:id="best-practice-preface">
                 <title>Understand the Role of a Preface</title>
 
-                <p>Chicago Manual of Style (15th Edition, 1.49) begins with <q>Material normally contained in an author's preface includes reasons for undertaking the work, method of research, <ellipsis/></q>  Note that a preface is not introductory content and is not an introduction.  It is written from the author's point-of-view, and may include information about why they are qualified to write on the topic of the book.  If there are several editions, the prefaces to the newer editions are placed first.  See the related <xref ref="best-practice-chapter-zero"/>.</p>
+                <p><pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="1.49"/> begins with <q>Material normally contained in an author's preface includes reasons for undertaking the work, method of research, <ellipsis/></q>  Note that a preface is not introductory content and is not an introduction.  It is written from the author's point-of-view, and may include information about why they are qualified to write on the topic of the book.  If there are several editions, the prefaces to the newer editions are placed first.  See the related <xref ref="best-practice-chapter-zero"/>.</p>
             </note>
         </subsection>
 
@@ -3840,7 +3864,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <idx><h>index</h><h>cross-reference</h></idx>
             These are rendered as <q>See</q> and <q>See also.</q>  You can add <tag>see</tag> and <tag>seealso</tag> elements within an <tag>idx</tag>, so long as it is structured with <tag>h</tag>.  Then it is placed after the last <tag>h</tag>.  A <q>see</q> cross-reference is a direct pointer to another entry in the index.  It cannot have a locator as well.  When you build the <init>HTML</init> output, we will recognize this situation and produce a warning.  A <q>see also</q> cross-reference is an additional pointer, and so it must have a locator to go with it (you will author two <tag>idx</tag> with identical headings, the first without a <tag>seealso</tag> to create the locator, the second with the <tag>seealso</tag> to create the cross-reference.  Again, when you build the <init>HTML</init> output, we will recognize a <tag>seealso</tag> without a locator and produce a warning.</p>
 
-            <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <pubtitle>Chicago Manual of Style</pubtitle> (<acro>CMOS</acro>) for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
+            <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos"/> for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
 
             <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
 
@@ -3863,8 +3887,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>
               Indexing is a job for a skilled professional, and most authors produce poor indexes.
               The tips in this section will help you avoid the most common pitfalls.
-              We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle>
-              (specifically Chapter 18, 15th Edition),
+              We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="Chapter 18"/>,
               <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle>
               <xref ref="indexing-guide"/>,
               and Pilar Wyman of <url href="http://www.wymanindexing.com/" visual="www.wymanindexing.com/">Wyman Indexing</url>.
@@ -4097,7 +4120,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <cline>&lt;url href="https://example.com/" visual="example.com"/&gt;</cline>
             </cd>This will render as <url href="https://example.com/" visual="example.com"/>.  Note that there is no footnote since the visual version is already apparent.</p>
 
-            <p>If you want to squelch the automatic footnote on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic footnote.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.  One example of this is a regular footnote, which contains a <init>URL</init>.  The automatic footnote, inside another footnote, becomes problematic in some conversions.  Better to squelch the footnote-within-a-footnote, and just list nearby a <init>URL</init>, likely using the <tag>c</tag> element to get a monospace font.</p>
+            <p>If you want to squelch the automatic footnote on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic footnote.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.</p>
+
+            <p>An extreme example of this behavior is a regular footnote which contains a <init>URL</init>.  Because an automatic footnote, inside another footnote, becomes problematic in some conversions, we squelch the footnote-within-a-footnote. A best practice here is to just list nearby a <init>URL</init>, likely using the <tag>c</tag> element to get a monospace font.</p>
 
             <p>A <tag>url</tag> inside a <tag>title</tag> has been accounted for, but should be used with caution.</p>
 
@@ -4269,6 +4294,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             </figure>
 
             <p>Make a feature-request if a scheme similar to the one for YouTube, but for some other video-hosting service, would be useful for your project.</p>
+
+            <p>Note that when a project is hosted at Runestone Academy (<xref ref="runestone"/>) a YouTube video becomes an activity that is part of a student's reading assignement.  So just like an interactive exercise, it needs a <attr>label</attr> attribute.  See <xref ref="best-practice-label"/> for more.</p>
         </subsection>
     </section>
 

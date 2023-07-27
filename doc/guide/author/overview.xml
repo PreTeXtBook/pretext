@@ -207,7 +207,7 @@
         See <xref ref="topic-figure"/> for full details.
         </p>
 
-        <p>A <tag>table</tag> is the container for a <tag>tabular</tag>, an atomic element which is the only allowed content of a table.  A <tag>title</tag> is the identifying information, and renders above the rows and columns of the table.  A variety of notes (to appear below the table) are possible (not implemented as of 2021-12-10).  The elements we provide to describe a table are heavily influenced by the discussion in <pubtitle>Chicago Manual of Style</pubtitle> (15e, Chapter 13), which is worth reading if your project has many important tables.  See <xref ref="topic-tabular"/> for full details.</p>
+        <p>A <tag>table</tag> is the container for a <tag>tabular</tag>, an atomic element which is the only allowed content of a table.  A <tag>title</tag> is the identifying information, and renders above the rows and columns of the table.  A variety of notes (to appear below the table) are possible (not implemented as of 2021-12-10).  The elements we provide to describe a table are heavily influenced by the discussion in <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="Chapter 13"/>, which is worth reading if your project has many important tables.  See <xref ref="topic-tabular"/> for full details.</p>
 
         <p>A <tag>listing</tag> is a container for computer code or programs, to support projects in computer science and other technical disciplines.  These languages often rely on indentation (Python) or even exact column numbers of text (<acro>FORTRAN</acro>), hence a planar quality.  Other languages can be written syntactically-correct as one long reflowable line (C, Pascal), but are impractical to do so as part of an exposition.  So the allowed content is a <tag>program</tag> or <tag>console</tag>, which will respect indentation, use monospace fonts, and include syntax highlighting.  Otherwise, a listing is very similar to a figure in how a caption and title are handled. See <xref ref="topic-listing"/> for full details.</p>
 
@@ -416,7 +416,7 @@
 
         <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
 
-        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-exceptional-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-exceptional-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the <pretext /> conversion tool, the <pretext />-CLI.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
     </section>
 
     <section xml:id="overview-sage">

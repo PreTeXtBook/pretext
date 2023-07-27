@@ -169,8 +169,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- used in a string in XSLT functions, not even as   -->
 <!-- &apos;. But if it is stored as a variable, then   -->
 <!-- XSLT 1.0 will be OK with using $apos.             -->
-<!-- Use like "contat('L',$apos,'Hospital')"           -->
-<xsl:variable name="apos">'</xsl:variable>
+<!-- Use like "concat('L',$apos,'Hospital')"           -->
+<!-- Unicode Character 'APOSTROPHE' (U+0027)           -->
+<xsl:variable name="apos">&#x0027;</xsl:variable>
 
 <!-- Here we perform manipulations of math elements and subsequent  -->
 <!-- text nodes that lead with punctuation.  Basically, punctuation -->
@@ -1793,6 +1794,9 @@ Book (with parts), "section" at level 3
 <!-- be universal and the only efffect is to add a newline -->
 <!-- character, which the output format should recognize   -->
 <!-- via its own devices.                                  -->
+<!-- NB: the newline provide by the last "cline" of a      -->
+<!-- structure is used by some recursive text utilities as -->
+<!-- a signal, such as the "braille-source-code" template. -->
 <xsl:template match="cline">
     <xsl:value-of select="." />
     <xsl:text>&#xa;</xsl:text>
@@ -1994,13 +1998,26 @@ Book (with parts), "section" at level 3
 <!-- A corresponding event happens with the following    -->
 <!-- text() node: the punctuation will get scrubbed      -->
 <!-- from there iff the punctuation migrates in this     -->
-<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
+
+<!-- Sometimes we just need the mark itself (e.g. braille).  Note -->
+<!-- that the "mark" could well be plural, but usuually is not.   -->
+<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation-mark">
     <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
         <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
+        <xsl:call-template name="leading-clause-punctuation">
+            <xsl:with-param name="text" select="$trailing-text" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Usually we wrap the punctuation with \text{} for use   -->
+<!-- inside LaTeX rendering.                                -->
+<!-- NB: this mode name is not great, but we leave it as-is -->
+<!-- from a refactor. A cosmetic refactor could improve it. -->
+<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
         <xsl:variable name="punctuation">
-            <xsl:call-template name="leading-clause-punctuation">
-                <xsl:with-param name="text" select="$trailing-text" />
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:variable>
         <xsl:if test="not($punctuation = '')">
             <xsl:text>\text{</xsl:text>
@@ -2009,7 +2026,6 @@ Book (with parts), "section" at level 3
         </xsl:if>
     </xsl:if>
 </xsl:template>
-
 
 
 <!-- ################################## -->
@@ -2274,7 +2290,16 @@ Book (with parts), "section" at level 3
         <xsl:when test="self::backmatter">
             <xsl:value-of select="false()" />
         </xsl:when>
+        <!-- The presence of a traditional division is emblematic of a structured -->
+        <!-- division, so not a leaf of the structural/document tree              -->
         <xsl:when test="part or chapter or section or subsection or subsubsection">
+            <xsl:value-of select="false()" />
+        </xsl:when>
+        <!-- One exception, a division full of only "worksheet" (as a subdivision, -->
+        <!-- there could be metadata, "introduction", etc.)  We know there are no  -->
+        <!-- traditional divisions as subdiivisions at this point.  So we test for -->
+        <!-- at least one worksheet and no other specialized divisions.            -->
+        <xsl:when test="worksheet and not(exercises|references|glossary|reading-questions|solutions)">
             <xsl:value-of select="false()" />
         </xsl:when>
         <xsl:otherwise>
@@ -2404,6 +2429,43 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="*" mode="is-block">
     <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- FIGURE-LIKE as panels of sidebyside -->
+<!-- A "figure", "table", "list", or "listing" has slightly different    -->
+<!-- behavior (potentially) when appearing as a panel of a "sidebyside". -->
+<!-- It can be "subnumbered" (e.g. (a), (b), (c),...) or it may normally -->
+<!-- be titled above, and we want to place the title below (more like a  -->
+<!-- caption) so the faux-titles and captions seem to (almost) align     -->
+<!-- vertically with each other.  Generally this means authoring the     -->
+<!-- panel with bottom alignment.                                        -->
+<!--                                                                     -->
+<!--   "block" - child of a division, captions below, titles above,      -->
+<!--     as according to CMoS.                                           -->
+<!--                                                                     -->
+<!--   "panel" - a panel of a side-by-side, but with a block number      -->
+<!--     of its own, since there is no enclosing "figure"                -->
+<!--                                                                     -->
+<!--   "subnumber" - a panel of a side-by-side, which in turn is a       -->
+<!--     child/descendant of a "figure" (a "sbsgroup" may intervene).    -->
+<!--     This triggers a block number foor the exterior "figure" and     -->
+<!--     a subnumber for the interior FIGURE-LIKE.                       -->
+<!--                                                                     -->
+<!-- (These code comments are referenced in the LaTeX conversion.)       -->
+<!--                                                                     -->
+<xsl:template match="&FIGURE-LIKE;" mode="figure-placement">
+    <!-- more specific first, reverse of description above -->
+    <xsl:choose>
+        <xsl:when test="parent::sidebyside and ancestor::figure">
+            <xsl:text>subnumber</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::sidebyside">
+            <xsl:text>panel</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>block</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -2894,8 +2956,8 @@ Book (with parts), "section" at level 3
 <xsl:template match="paragraphs|case|exercisegroup" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
-<!-- Titled: list items, tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE -->
-<xsl:template match="ol/li|ul/li|task" mode="title-wants-punctuation">
+<!-- Titled: list items; tasks of exercise, PROJECT-LIKE, EXAMPLE-LIKE; glossary items -->
+<xsl:template match="ol/li|ul/li|task|gi" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->
@@ -3320,14 +3382,13 @@ Book (with parts), "section" at level 3
 <!-- with standard XSLT.                                              -->
 <!-- NB: the $localizations variable has multiple root nodes, so when -->
 <!-- used in a context-switch before looking up a key, the "for-each" -->
-<!-- is actually looping over multiple root nodes.  Perhaps a single  -->
-<!-- "for-each" here should do a "copy-of" without the root node, all -->
-<!-- captured in a variable, then converted back to a node-set with   -->
-<!-- just one root.                                                   -->
+<!-- is actually looping over multiple root nodes.  So when we switch -->
+<!-- context with a "for-each" we restrict to the root node for the   -->
+<!-- specific language in play.                                       -->
 <xsl:variable name="locale-files" select="document('localizations/localizations.xml')/localizations/filename" />
 <xsl:variable name="localizations" select="document($locale-files)" />
 <!-- Key to lookup a particular localization -->
-<xsl:key name="localization-key" match="localization" use="concat(../@language, @string-id)"/>
+<xsl:key name="localization-key" match="localization" use="@string-id"/>
 
 <!-- Ultimately translations are all contained in the files of  -->
 <!-- the xsl/localizations directory, which provides            -->
@@ -3336,7 +3397,6 @@ Book (with parts), "section" at level 3
 <!-- Template is intentionally modal.                           -->
 <xsl:template match="*" mode="type-name">
     <xsl:param name="string-id" select="''"/>
-
     <!-- The $string-id parameter allows for an override on        -->
     <!-- semi-automatic determination of the object being named    -->
     <!-- (see the modal "string-id" templates).  This is necessary -->
@@ -3385,10 +3445,11 @@ Book (with parts), "section" at level 3
                 <xsl:apply-templates select="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]"/>
             </xsl:when>
             <!-- Finally, default to a lookup from the localization file's nodes -->
-            <!-- Use a "for-each" to effect a context switch for the look-up     -->
+            <!-- Use a "for-each" to effect a context switch for the look-up and -->
+            <!-- restrict the context to the language in play.                   -->
             <xsl:otherwise>
-                <xsl:for-each select="$localizations">
-                    <xsl:value-of select="key('localization-key', concat($lang,$str-id) )"/>
+                <xsl:for-each select="$localizations/locale[@language = $lang]">
+                    <xsl:value-of select="key('localization-key', $str-id)"/>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
@@ -3468,6 +3529,22 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="local-name(.)"/>
 </xsl:template>
 
+<!-- ################## -->
+<!-- Language direction -->
+<!-- ################## -->
+
+<!-- Every localiztion should specify the direction of the  -->
+<!-- language, which we record as a variable and as a flag. -->
+<xsl:variable name="document-language-direction">
+    <xsl:value-of select="$localizations/locale[@language = $document-language]/@direction"/>
+</xsl:variable>
+
+<!-- We consider right-to-left as exceptional, so we set a flag   -->
+<!-- for this case.  This should be the primary determinant in    -->
+<!-- code such as the LaTeX coionversion, though the actual value -->
+<!-- of "$language-direction" is meant to be used in attributes   -->
+<!-- for HTML pages.                                              -->
+<xsl:variable name="b-rtl" select="$document-language-direction = 'rtl'"/>
 
 <!-- ##### -->
 <!-- Icons -->
@@ -3664,6 +3741,18 @@ Book (with parts), "section" at level 3
 <!-- ########### -->
 <!-- Identifiers -->
 <!-- ########### -->
+
+<!-- Identifiers are in flux, as of 2023-03-30.  The "internal-id" is  -->
+<!-- an attribute built during the descent of the tree during the      -->
+<!-- pre-processor/assembly phase.  As such, it is fast and ugly.      -->
+<!-- Do not let a reader catch sight of it in output ever, beacuase it -->
+<!-- is ugly, and because it is not really permanant.  That is what    -->
+<!-- "visible-id" is for.  But constructing "visible-id" is very slow  -->
+<!-- (we hope to speed htat up as well).  So we are transitioning to   -->
+<!-- the "internal-id" wherever possible, but with careful testing.    -->
+<xsl:template match="*" mode="internal-id">
+    <xsl:value-of select="@internal-id"/>
+</xsl:template>
 
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
@@ -4065,7 +4154,7 @@ Book (with parts), "section" at level 3
 <!-- Note that since these are captioned items:       -->
 <!-- If these live in "sidebyside", which is in       -->
 <!-- turn contained in a "figure", then they will     -->
-<!-- earn a subcaption with a subnumber, so we ignore -->
+<!-- earn a subnumber (e.g (a), (b),..), so we ignore -->
 <!-- them in these counts of top-level numbered items -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-figure-serial-number">
     <xsl:variable name="subtree-level">
@@ -4331,7 +4420,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Serial Numbers: Subfigures, Subtables, Sublisting-->
-<!-- Subcaptioning only happens with figures           -->
+<!-- Subnumbering only happens with figures            -->
 <!-- or tables arranged in a sidebyside, which         -->
 <!-- is again contained inside a figure, the           -->
 <!-- element providing the overall caption             -->
@@ -4350,7 +4439,7 @@ Book (with parts), "section" at level 3
     <xsl:text>)</xsl:text>
 </xsl:template>
 
-<!-- when inside a sbsgroup, subcaptions range across entire group -->
+<!-- when inside a sbsgroup, subnumbers range across entire group -->
 <xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="serial-number">
     <xsl:text>(</xsl:text>
     <xsl:number format="a" count="figure|table|listing|list" level="any" from="sbsgroup"/>
@@ -8148,7 +8237,7 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
@@ -9845,6 +9934,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
 </xsl:template>
 
+<!-- On the suspicion that the next template frequently "scans" the entire   -->
+<!-- document tree, we attempted to add a developer-only "debug" switch      -->
+<!-- that would bypass the tests here, and in "generic-warnings" and         -->
+<!-- "parameter-deprecation-warnings". For the sample article the speed-up   -->
+<!-- was about 1%, and for AATA the speed-up was apparently less.  Which was -->
+<!-- all not worth the danger that authors and publishers could "turn off"   -->
+<!-- deprecation warnings. (2023-05-11)                                      -->
 <xsl:template match="mathbook|pretext" mode="element-deprecation-warnings">
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->

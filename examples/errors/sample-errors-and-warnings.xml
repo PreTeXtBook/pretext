@@ -175,6 +175,9 @@ systems.
             <!-- <, >, [, ], *, /, `, braces and brackets  -->
             <p>And similarly, nine other elements were made redundant:  <less/> <greater/> <lbracket/> <rbracket/> <asterisk/> <slash/> <backtick/> <braces>braces</braces> <brackets>brackets</brackets>.</p>
 
+            <!-- Unicode for degree, times, en-dash, em-dash, no-length space, and several quotes -->
+            <p>There are also several Unicode characters which show up a lot in copy-paste: °×​–—‘’“”, especially from Windows.  However, they look okay and can be useful in text in math mode (which cannot use normal <sq>tags</sq> like &lt;sq&gt;), so we leave them alone there: <m>z\text{×}z\text{​}\text{–}z\text{ isn’t “z”}</m>.</p>
+
             <p>Tables once looked like this, but now are really different.</p>
 
              <table xml:id="table-euler1">

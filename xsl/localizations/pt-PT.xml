@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pt-PT, Portugese (Portugal) -->
 <!-- António Pereira, apereiraua@gmail.com, 2015-07-26 -->
 
-<locale language="pt-PT">
+<locale language="pt-PT" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>
@@ -177,6 +177,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='solution'>Solução</localization>
     <!-- Translation needed for Portugal Portugese -->
     <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- the term 'Bibliographic Item' could be just 'Referência'... -->
@@ -272,4 +273,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activate'>Activate</localization> -->
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
+    <!-- <localization string-id='print'>Print</localization> -->
 </locale>

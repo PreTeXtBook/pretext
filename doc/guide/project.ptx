@@ -15,11 +15,13 @@
     <target name="latex">
       <format>latex</format>
       <source>guide.xml</source>
+      <publication>publication.xml</publication>
       <output-dir>output/latex</output-dir>
     </target>
     <target name="pdf" pdf-method="pdflatex">
       <format>pdf</format>
       <source>guide.xml</source>
+      <publication>publication.xml</publication>
       <output-dir>output/pdf</output-dir>
     </target>
   </targets>

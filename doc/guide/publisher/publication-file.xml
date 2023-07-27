@@ -232,6 +232,14 @@
             <p>The content of the element<cd>
                 <cline>/publication/latex/page/geometry</cline>
             </cd> element will feed directly into a <latex/> <c>\geometry{}</c> element, with no modifications.  (In other words, all whitespace, such as newlines and indentation, will be preserved.)  Be sure to carefully read the advice, an example, and further detail at <xref ref="page-shape"/>.</p>
+
+            <p>The attribute<cd>
+                <cline>/publication/latex/page/@crop-marks</cline>
+            </cd>may be set to the value <c>none</c>, or not specified at all, and nothing will happen.  Otherwise, it is set to a paper size, then the logical page (whose size is presumably set by the <c>geometry</c> package) will be centered on the physical page specified, with marks at each corner delineating the logical page.  Some publishers request camera-ready copy to have these indications.  Paper sizes are arguments to the <c>crop</c> package, and as of 2023-05-19 the possible values were:<cd>
+                <cline>a0, a1, a2, a3, a4, a5, a6,</cline>
+                <cline>b0, b1, b2, b3, b4, b5, b6,</cline>
+                <cline>letter, legal, executive</cline>
+            </cd>There is no error-checking of these values.  See <xref ref="page-shape"/> for more and examples.</p>
         </subsection>
 
         <subsection xml:id="latex-xref-page-number-options">
@@ -308,7 +316,7 @@
             <p>The<cd>
                 <cline>/publication/html/analytics</cline>
             </cd>element can have the following attributes:<ul>
-                <li><attr>google-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em></li>
+                <li><attr>google-gst</attr>: a Google <term>global site tag</term>, which is an ID you get from Google.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em></li>
                 <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.  <em>Do not copy the identification numbers from another project<mdash/>be sure to obtain your own for your project.</em></li>
             </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
         </subsection>
@@ -525,6 +533,17 @@
             </table>
         </subsection>
 
+        <subsection xml:id="online-tabbed-tasks">
+            <title>HTML Tabbed viewer</title>
+            <idx><h>tabbed viewer</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>tabbed viewer</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/exercises</cline>
+            </cd>element can have a <attr>tabbed-tasks</attr> attribute.  The value is a space-separated, or comma-separated, list of types of <tag>exercise</tag> or PROJECT-LIKE.  The values in this list come specify up to four of the five possible types of exercises: <c>divisional</c>, <c>inline</c>, <c>reading</c>, <c>project</c>.  Note that exercises inside a <tag>worksheet</tag> are explicity ineligible.  See <xref ref="overview-exercises"/> for careful descriptions of these types.</p>
+            <!-- 2023-06-08: no good place for a general discussion of "task", perhaps it has not been written. -->
+        </subsection>
+
         <subsection xml:id="online-platform-options">
             <title>HTML Platforms</title>
             <idx><h>platform</h><h>HTML</h></idx>
@@ -567,7 +586,7 @@
             <p>The<cd>
                 <cline>/publication/html/search</cline>
             </cd>element can have the following attributes:<ul>
-                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>default</c> and <c>none</c>.  The default value is<ellipsis/><c>default</c>.  This is search provided natively.</li>
+                <li><attr>variant</attr>: a string specifying how search queries are handled.  Possible values are <c>textbook</c>, <c>reference</c>, <c>default</c> and <c>none</c>.  For historical reasons, using the value <c>default</c> is synonymous with using <c>textbook</c>, so it is not necessary.  If you do not specify this entry, then that is equivalent to setting the value to <c>textbook</c>.  This is search provided natively.</li>
                 <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.  Setting this attribute to a non-empty string is the signal to add the relevant code for a search box in the masthead.</li>
             </ul>Note that if you elect both native search and Google search the two search boxes will overlay each other and one will not be usable.  See <xref ref="native-search"/> and <xref ref="google-search"/> (respectively) for more.</p>
         </subsection>
@@ -626,7 +645,6 @@
             </cd>element can have the following attributes:<ul>
                 <li><attr>logic</attr> with values <c>linear</c> (default) and <c>tree</c>.</li>
                 <li><attr>upbutton</attr> with values <c>yes</c> (default) and <c>no</c>.</li>
-                <li><attr>style</attr> with values <c>full</c> (default) and <c>compact</c>.</li>
             </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
         </subsection>
     </section>

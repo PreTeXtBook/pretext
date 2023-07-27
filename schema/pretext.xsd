@@ -1742,7 +1742,10 @@
           <xs:sequence>
             <xs:element minOccurs="0" name="description">
               <xs:complexType mixed="true">
-                <xs:group ref="TextShort"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="TextShort"/>
+                  <xs:element ref="var"/>
+                </xs:choice>
               </xs:complexType>
             </xs:element>
             <xs:choice>
@@ -1882,6 +1885,14 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="cell"/>
       </xs:sequence>
+      <xs:attribute name="header">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="halign">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1931,6 +1942,14 @@
       <xs:attribute name="permid"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
+      <xs:attribute name="row-headers">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="halign">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -2426,6 +2445,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="popup"/>
             <xs:enumeration value="buttons"/>
+            <xs:enumeration value="checkboxes"/>
             <xs:enumeration value="none"/>
             <xs:enumeration value="essay"/>
           </xs:restriction>

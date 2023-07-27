@@ -123,7 +123,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- snapshot default is "no", but we elect to stress the supported package -->
     <latex print="no" sides="two" font-size="10" draft="no" snapshot="yes">
         <!-- these are the default alignments, given just as an example -->
-        <page right-alignment="flush" bottom-alignment="ragged"/>
+        <!-- Even if you set  @crop-marks  to something like "letter" or "a4"    -->
+        <!-- you may not see a change.  You need to use the  geometery  package  -->
+        <!-- to set a smaller (logical) page size.                               -->
+        <page right-alignment="flush" bottom-alignment="ragged" crop-marks="none"/>
         <!-- worksheets are formatted separately by default.   -->
         <!-- change to "no" to format as regular sections.     -->
         <worksheet formatted="yes"/>

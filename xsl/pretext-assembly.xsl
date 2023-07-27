@@ -332,6 +332,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
+<!--                        IMPORTANT                           -->
+<!--                                                            -->
+<!-- Definitions that follow may be overridden after additional -->
+<!-- per-conversion passes that takeoff from the final tree,    -->
+<!-- here $augment.                                             -->
+<!--                                                            -->
+<!--    IF $augment CHANGES, SEARCH FOR AFFECTED CONVERSIONS    -->
+<!--                                                            -->
+<!-- 2023-03-20: braille conversion incorporares Nemeth braille -->
+
 <!-- The main "pretext" element only has two possible children      -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
@@ -589,15 +599,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Good time to clean-up what comes back from a WW server.  With -->
-<!-- "webwork-reps" in the match, this will only be applied in the -->
-<!-- second (non-extraction) pass, only within a WW problem.  From -->
-<!-- the code comment when this was done with Python: "p with only -->
-<!-- a single fillin, not counting those inside an li without      -->
-<!-- preceding siblings"                                           -->
-<xsl:template match="webwork-reps/static//p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork"/>
-
-
 <!-- ################# -->
 <!-- Private Solutions -->
 <!-- ################# -->
@@ -736,63 +737,66 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- we drop the @visual attribute, a decision we might revisit -->
         <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="enrichment"/>
     </xsl:copy>
-    <!-- manufacture a footnote with (private) attribute -->
-    <!-- as a signal to conversions as to its origin     -->
-    <xsl:choose>
-        <!-- explicitly opt-out, so no footnote -->
-        <xsl:when test="@visual = ''"/>
-        <!-- go for it, as requested by author -->
-        <xsl:when test="@visual">
-            <fn pi:url="{@visual}"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- When an author has not made an effort to provide a visual   -->
-            <!-- alternative, then attempt some obvious clean-up of the      -->
-            <!-- default, and if not possible, settle for an ugly visual URL -->
-            <!--                                                             -->
-            <!-- We get a candidate visual URI from the @href attribute      -->
-            <!-- link/reference/location may be external -->
-            <!-- (@href) or internal (dataurl[@source]) -->
-            <xsl:variable name="uri">
-                <xsl:choose>
-                    <!-- "url" and "dataurl" both support external @href -->
-                    <xsl:when test="@href">
-                        <xsl:value-of select="@href"/>
-                    </xsl:when>
-                    <!-- a "dataurl" might be local, @source is         -->
-                    <!-- indication, so prefix with a base URL,         -->
-                    <!-- add "external" directory, via template useful  -->
-                    <!-- also for visual URL formulation in -assembly   -->
-                    <!-- N.B. we are using the base URL, since this is  -->
-                    <!-- the most likely need by employing conversions. -->
-                    <!-- It would eem duplicative in a conversion to    -->
-                    <!-- HTML, so could perhaps be killed in that case. -->
-                    <!-- But it is what we want for LaTeX, and perhaps  -->
-                    <!-- for EPUB, etc.                                 -->
-                    <xsl:when test="self::dataurl and @source">
-                        <xsl:apply-templates select="." mode="static-url"/>
-                    </xsl:when>
-                    <!-- empty will be non-functional -->
-                    <xsl:otherwise/>
-                </xsl:choose>
-            </xsl:variable>
-            <!-- And clean-up automatically in the prevalent cases -->
-            <xsl:variable name="truncated-href">
-                <xsl:choose>
-                    <xsl:when test="substring(@href, 1, 8) = 'https://'">
-                        <xsl:value-of select="substring($uri, 9)"/>
-                    </xsl:when>
-                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
-                        <xsl:value-of select="substring($uri, 8)"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$uri"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <fn pi:url="{$truncated-href}"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- Now make footnote, as long as we don't create a footnote in a footnote -->
+    <xsl:if test="not(self::url and ancestor::fn)">
+        <!-- manufacture a footnote with (private) attribute -->
+        <!-- as a signal to conversions as to its origin     -->
+        <xsl:choose>
+            <!-- explicitly opt-out, so no footnote -->
+            <xsl:when test="@visual = ''"/>
+            <!-- go for it, as requested by author -->
+            <xsl:when test="@visual">
+                <fn pi:url="{@visual}"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- When an author has not made an effort to provide a visual   -->
+                <!-- alternative, then attempt some obvious clean-up of the      -->
+                <!-- default, and if not possible, settle for an ugly visual URL -->
+                <!--                                                             -->
+                <!-- We get a candidate visual URI from the @href attribute      -->
+                <!-- link/reference/location may be external -->
+                <!-- (@href) or internal (dataurl[@source]) -->
+                <xsl:variable name="uri">
+                    <xsl:choose>
+                        <!-- "url" and "dataurl" both support external @href -->
+                        <xsl:when test="@href">
+                            <xsl:value-of select="@href"/>
+                        </xsl:when>
+                        <!-- a "dataurl" might be local, @source is         -->
+                        <!-- indication, so prefix with a base URL,         -->
+                        <!-- add "external" directory, via template useful  -->
+                        <!-- also for visual URL formulation in -assembly   -->
+                        <!-- N.B. we are using the base URL, since this is  -->
+                        <!-- the most likely need by employing conversions. -->
+                        <!-- It would eem duplicative in a conversion to    -->
+                        <!-- HTML, so could perhaps be killed in that case. -->
+                        <!-- But it is what we want for LaTeX, and perhaps  -->
+                        <!-- for EPUB, etc.                                 -->
+                        <xsl:when test="self::dataurl and @source">
+                            <xsl:apply-templates select="." mode="static-url"/>
+                        </xsl:when>
+                        <!-- empty will be non-functional -->
+                        <xsl:otherwise/>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- And clean-up automatically in the prevalent cases -->
+                <xsl:variable name="truncated-href">
+                    <xsl:choose>
+                        <xsl:when test="substring(@href, 1, 8) = 'https://'">
+                            <xsl:value-of select="substring($uri, 9)"/>
+                        </xsl:when>
+                        <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                            <xsl:value-of select="substring($uri, 8)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <fn pi:url="{$truncated-href}"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
 </xsl:template>
 
 
@@ -1146,6 +1150,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (filenames, fragment identifiers).  Subsequent passes        -->
 <!-- should not introduce or remove elements.                     -->
 
+<!-- 2023-03-30: This is old commentary about the use of the -->
+<!-- "internal-id" identifier in the LaTeX conversion, which -->
+<!-- has now become more universal.  Once identifiers settle -->
+<!-- down, we can clean up the parts of this worth keeping.  -->
+<!--  -->
+<!-- This produces unique strings that are internal to the  -->
+<!-- LaTeX (intermediate) file.  Since neither author nor   -->
+<!-- reader will ever see these, they can be as fast and as -->
+<!-- wild as necessary.  But for mature works, likely with  -->
+<!-- @permid on many relevant objects, or many @xml:id      -->
+<!-- provided for URLs in HTML, these can be predictable    -->
+<!-- across runs (and therefore help with tweaking the LaTeX-->
+<!-- output under revision control) These are employed with -->
+<!-- \label{}, \ref{}, \cite{}, \pageref{}, \eqref{}, etc.  -->
+<!-- We can change this at will, with no adverse effects    -->
+<!-- NB: colons are banned from PTX @xml:id, and will not   -->
+<!-- appear in @permid, though we could use dashes instead  -->
+<!-- without getting duplicates.  The prefixes guarantee    -->
+<!-- that the three uniqueness schemes do not overlap.      -->
+
 <!-- NB: this template is "in progresss".  Likely we will -->
 <!-- generate manufactured @label (recursively) for many  -->
 <!-- elements, which will cause changes in how the        -->
@@ -1182,7 +1206,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- * Colons as separators might create confusion with namespaces                -->
         <!-- * Prefixed with a full element name aids debugging                           -->
         <!-- * Salt (digits) added to authored values may decrease risk of collision      -->
-        <xsl:variable name="new-latex-id">
+        <xsl:variable name="new-internal-id">
             <xsl:choose>
                 <xsl:when test="@label">
                     <xsl:value-of select="@label"/>
@@ -1208,12 +1232,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <!-- aids debugging/portabiity somewhat -->
         <xsl:variable name="element-name" select="local-name()"/>
-        <xsl:attribute name="latex-id">
-            <xsl:value-of select="concat($element-name, '-', $new-latex-id)"/>
+        <xsl:attribute name="internal-id">
+            <xsl:value-of select="concat($element-name, '-', $new-internal-id)"/>
         </xsl:attribute>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="identification">
-            <xsl:with-param name="parent-id" select="$new-latex-id"/>
+            <xsl:with-param name="parent-id" select="$new-internal-id"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -1644,6 +1668,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
             </xsl:when>
+            <xsl:when test="select">
+                <xsl:text>select</xsl:text>
+            </xsl:when>
             <!-- noted WeBWork earlier, so this is Runestone fillin -->
             <xsl:when test="statement//var">
                 <xsl:text>fillin-basic</xsl:text>
@@ -1734,6 +1761,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -1744,6 +1772,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -1754,6 +1783,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -1764,6 +1794,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -1774,6 +1805,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
@@ -1784,6 +1816,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
+                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]" mode="representations">
@@ -1808,11 +1841,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->
 
-<!-- PG Code from webwork-reps for problem sets -->
+<!-- Mine webwork-reps for relevant application -->
 
 <!-- Matching with the filter means this will only happen on     -->
 <!-- the non-extraction pass, since the 'webwork-reps' value     -->
 <!-- is placed after the WW representations file has been built. -->
+<!-- We split three ways, for PGML, static, and dynamic (HTML)   -->
+<!-- employment, via modal templates.                            -->
 <!-- NB: including "task" though this may not be supported.      -->
 <xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
                    | project[(@exercise-interactive = 'webwork-reps')]
@@ -1846,7 +1881,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- to/for HTML conversion                                         -->
         <xsl:otherwise>
             <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="representations"/>
+                <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-html"/>
             </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
@@ -1909,6 +1944,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (iii) by removing them, we just disrupt any                  -->
 <!--         sequences, and uniqueness is preserved                 -->
 <!--   (iv) we could figure out which ones to copy where, if needed -->
+<!-- NB: a possible refactor here:                                  -->
+<!-- (i)  kill all the children of "webwork-reps", barring "static" -->
+<!--      (currently they are just ignored)                         -->
+<!-- (ii) rerwrite this template to have "static" as the context.   -->
+<!--      This would mean adjust some paths to go one more step up  -->
+<!--      to find things like "introduction".                       -->
+<!-- Consequence: when leveraged for HTML previews this rearrangment-->
+<!-- will be a big change.  Not clear if it is a desirable change.  -->
 <xsl:template match="webwork-reps" mode="webwork-rep-to-static">
     <xsl:choose>
         <!-- a WW "staged" exercise, may have an top-level introduction and -->
@@ -1941,9 +1984,85 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Good time to clean-up what came back from a WW server.     -->
+<!-- As part of the "webwork-rep-to-static" mode, we can be     -->
+<!-- sure that only returns from the server are being adjusted. -->
+
+<!-- From the code comment when this was done with Python: "p with -->
+<!-- only a single fillin, not counting those inside an li without -->
+<!-- preceding siblings"                                           -->
+<!-- NB: prefixing the @match here with "webwork-reps/static"      -->
+<!-- (which is known anyway (?)) seems to take the entire assembly -->
+<!-- phase for the WW sample chapter to a runtime of 4 seconds,    -->
+<!-- up from 0.4 seconds.  Removing this line takes the runtime    -->
+<!-- down to 0.12 seconds.                                         -->
+<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork-rep-to-static"/>
+
+<!-- Some answer forms return a default/initial choice that is -->
+<!-- simply a question-mark.  We scrub them here, with care.   -->
+<xsl:template match="statement//var[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+<!-- This may only be needed as support for older servers' generated PreTeXt. -->
+<xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+
+<!-- "var/@form" come back from the server as a result of authored -->
+<!-- "answer forms" and should be rendered as lists in static      -->
+<!-- representations.                                              -->
+<!-- NB: this does not preclude the match below (scrubbing default -->
+<!-- items) from functioning.                                      -->
+<xsl:template match="statement//var[@form]" mode="webwork-rep-to-static">
+    <ul>
+        <!-- duplicate attributes, but for @form -->
+        <xsl:apply-templates select="@*[not(name() = 'form')]" mode="repair"/>
+        <!-- internal attribute to indicate WW origins -->
+        <xsl:attribute name="pi:ww-form">
+            <xsl:value-of select="@form"/>
+        </xsl:attribute>
+        <!-- add a marker for an unordered list -->
+        <xsl:attribute name="marker">
+            <xsl:choose>
+                <xsl:when test="@form = 'popup'">
+                    <xsl:text>square</xsl:text>
+                </xsl:when>
+                <xsl:when test="@form = 'buttons'">
+                    <xsl:text>circle</xsl:text>
+                </xsl:when>
+                <xsl:when test="@form = 'checkboxes'">
+                    <xsl:text>square</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
+    </ul>
+</xsl:template>
+
+<!-- Default xeroxing template -->
 <xsl:template match="node()|@*" mode="webwork-rep-to-static">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Edit a "webwork-reps" from the server into just HTML material -->
+
+<!-- We have a static version that gets employed in the HTML conversion -->
+<!-- as a "preview" before a reader hits an "Activate" button.  We are  -->
+<!-- leveraging the clean-up of static versions here.                   -->
+<!-- NB: for historical reasons, and so as to get a clean refactor, we  -->
+<!-- apply this modal template to "static" which is a level lower down  -->
+<!-- than its complete implementation, which starts at "webwork-reps".  -->
+<!-- This means that there is no rearrangement of the overall           -->
+<!-- "introduction" into the "statement".  But see the comments about a -->
+<!-- potential refactor of the "webwork-rep-to-static" templates.       -->
+<xsl:template match="static" mode="webwork-rep-to-html">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Default xeroxing template -->
+<xsl:template match="node()|@*" mode="webwork-rep-to-html">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-html"/>
     </xsl:copy>
 </xsl:template>
 

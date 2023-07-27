@@ -557,7 +557,7 @@
         <idx>xsltproc</idx>
         <title>xsltproc</title>
         <p>A command-line program which takes as input an XSL file and and XML file, using the contents of the XSL
-           file to transform the contents of the XML file.</p>
+           file to transform the contents of the XML file. It is now preferred to use the <pretext /> CLI for transforming.</p>
     </gi>
 
     <gi>
