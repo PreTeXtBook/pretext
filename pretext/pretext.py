@@ -246,7 +246,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 
 
 def asymptote_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
+    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, server_url="http://asymptote.ualberta.ca:10007"
 ):
     """Extract asymptote code for diagrams and convert to graphics formats"""
     # stringparams is a dictionary, best for lxml parsing
@@ -330,7 +330,7 @@ def asymptote_conversion(
             elif outform in ["svg", "png"]:
                 asy_cli += ["-render=4", "-tex", "xelatex", "-iconify"]
         if method == "server":
-            alberta = "http://asymptote.ualberta.ca:10007?f={}".format(outform)
+            server_url = "{}?f={}".format(server_url,outform)
         # loop over .asy files, doing conversions
         for asydiagram in glob.glob(os.path.join(tmp_dir, "*.asy")):
             filebase, _ = os.path.splitext(asydiagram)
@@ -342,11 +342,11 @@ def asymptote_conversion(
                 log.debug("asymptote conversion {}".format(asy_cmd))
                 subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if method == "server":
-                log.debug("asymptote server query {}".format(alberta))
+                log.debug("asymptote server query {}".format(server_url))
                 with open(asydiagram) as f:
                     # protect against Unicode (in comments?)
                     data = f.read().encode("utf-8")
-                    response = requests.post(url=alberta, data=data)
+                    response = requests.post(url=server_url, data=data)
                     open(asyout, "wb").write(response.content)
             # copy resulting image file, or warn/advise about failure
             if os.path.exists(asyout):
