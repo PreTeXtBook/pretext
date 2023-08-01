@@ -404,8 +404,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
-    <xsl:text>%% The rotating package provides sidewaysfigure and sidewaystables environments&#xa;</xsl:text>
-    <xsl:text>\usepackage{rotating}&#xa;</xsl:text>
     <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
     <xsl:text>%% Always loaded, for: add/delete text, author tools&#xa;</xsl:text>
     <xsl:text>%% Here, since tcolorbox loads tikz, and tikz loads xcolor&#xa;</xsl:text>
@@ -1527,6 +1525,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
      <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//@landscape">
+    	<xsl:text>%% The rotating package provides sidewaysfigure and sidewaystables environments&#xa;</xsl:text>
+    	<xsl:text>\usepackage{rotating}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//ol or $document-root//ul or $document-root//task or $document-root//references or $b-has-webwork-var">
         <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
