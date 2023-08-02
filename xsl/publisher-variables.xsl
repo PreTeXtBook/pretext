@@ -1258,6 +1258,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:variable>
 
+<!-- Dynamic problem substitutions are formed by Python routines    -->
+<!-- in the   pretext.py  module that opens HTML representations    -->
+<!-- on a local http.server process. The summary of all             -->
+<!-- are recorded in the dynamic-substitutions-file.                -->
+<xsl:variable name="dynamic-substitutions-file">
+    <!-- Only relevant if there are dynamic exercises present.      -->
+    <xsl:if test="$original//exercise//setup">
+        <xsl:choose>
+            <!-- Look in the publication file for the generated directory -->
+            <xsl:when test="$publication/source/directories/@generated">
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'dynamic_subs/dynamic_substitutions.xml'), '&#x20;', '%20')"/>
+            </xsl:when>
+            <!-- no specification, so empty string for filename -->
+            <!-- this will be noted where it is employed        -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:if>
+</xsl:variable>
+
 <!-- File of  custom/@name  elements, whose content is a custom -->
 <!-- replacement for a corresponding  custom/@ref  element in   -->
 <!-- the source.                                                -->
