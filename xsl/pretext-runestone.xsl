@@ -343,8 +343,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <a href="/runestone/assignments/practice">Practice</a>
                 <hr/>
                 <!-- if reader is not an instructor the next link will be removed by javascript -->
-                <a id="inst_peer_link" href='/{{appname}}/peer/instructor.html'>Peer Instruction (Instructor)</a>
-                <a href='/{{appname}}/peer/student.html'>Peer Instruction (Student)</a>
+                <a id="inst_peer_link" href='/~._ appname _.~/peer/instructor.html'>Peer Instruction (Instructor)</a>
+                <a href='/~._ appname _.~/peer/student.html'>Peer Instruction (Student)</a>
                 <hr/>
                 <a href="/runestone/default/courses">Change Course</a>
                 <hr/>

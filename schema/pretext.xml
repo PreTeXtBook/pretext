@@ -757,6 +757,7 @@
                 element permille {empty} |
                 element pilcrow {empty} |
                 element section-mark {empty} |
+                element copyleft {empty} |
                 element copyright {empty} |
                 element registered {empty} |
                 element trademark {empty} |

@@ -1330,7 +1330,7 @@ def webwork_to_xml(
 
         bad_xml = False
         try:
-            response_root = ET.fromstring(response.text)
+            response_root = ET.fromstring(bytes(response.text, encoding='utf-8'))
         except:
             response_root = ET.Element("webwork")
             bad_xml = True
@@ -1551,7 +1551,7 @@ def webwork_to_xml(
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
         # Start appending XML children
-        response_root = ET.fromstring(response_text)
+        response_root = ET.fromstring(bytes(response_text, encoding='utf-8'))
         # Use "webwork-reps" as parent tag for the various representations of a problem
         webwork_reps = ET.SubElement(webwork_representations, "webwork-reps")
         webwork_reps.set("version", ww_reps_version)

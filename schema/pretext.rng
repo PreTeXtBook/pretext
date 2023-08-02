@@ -3809,6 +3809,9 @@
       <element name="section-mark">
         <empty/>
       </element>
+      <element name="copyleft">
+        <empty/>
+      </element>
       <element name="copyright">
         <empty/>
       </element>

@@ -3365,6 +3365,7 @@
         <xs:element ref="permille"/>
         <xs:element ref="pilcrow"/>
         <xs:element ref="section-mark"/>
+        <xs:element ref="copyleft"/>
         <xs:element ref="copyright"/>
         <xs:element ref="registered"/>
         <xs:element ref="trademark"/>
@@ -3442,6 +3443,9 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="section-mark">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="copyleft">
     <xs:complexType/>
   </xs:element>
   <xs:element name="copyright">
