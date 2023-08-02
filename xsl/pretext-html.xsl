@@ -9725,6 +9725,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-has-input">
         <!-- always identify as coming from "program" -->
         <pre class="program">
+            
+            <!-- Setup line highlighting and numbering --> 
+            <xsl:if test="@highlight-lines != ''">
+                <xsl:attribute name="data-line">
+                    <!-- force , or space separated list to commas -->
+                    <xsl:value-of select="translate(normalize-space(translate(@highlight-lines, ',', ' ')), ' ', ',')"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:attribute name="class" xml:space="default">
+                <xsl:text>program</xsl:text>
+                <xsl:if test="@line-numbers = 'yes'">
+                    <xsl:text> line-numbers</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
+
             <code>
                 <!-- Prism only needs a single class name, per language  -->
                 <!-- placed on "code" but will migrate to the "pre" also -->
@@ -12791,6 +12806,10 @@ TODO:
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.css" integrity="sha512-nXlJLUeqPMp1Q3+Bd8Qds8tXeRVQscMscwysJm821C++9w6WtsFbJjPenZ8cQVMXyqSAismveQJc0C1splFDCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha512-93uCmm0q+qO5Lb1huDqr7tywS8A2TFA+1/WHvyiWaK6/pvsFl6USnILagntBx8JnVbQH5s3n0vQZY6xNthNfKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </xsl:if>
 </xsl:template>
 

@@ -120,6 +120,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        
+        <p>A <tag>program</tag> may include line numbers.</p>
+
+        <listing xml:id="program-line-numbers">
+            <caption>A static Java program with line numbers</caption>
+            <program interactive='no' language="java" line-numbers="yes">
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>A <tag>program</tag> may also include highlighted lines.</p>
+
+        <listing xml:id="program-highlight-lines">
+            <caption>A static Java program with line numbers</caption>
+            <program interactive='no' language="java" line-numbers="yes" highlight-lines="1,3-5">
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
         <p>An Octave program will only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
 
         <listing xml:id="program-activecode-octave">
@@ -3643,4 +3688,3 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </section>
 
 </chapter>
-

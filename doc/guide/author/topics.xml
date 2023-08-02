@@ -3175,6 +3175,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  We will eventually provide a table of attribute values here.  They are always lowercase, and a good first guess is likely to succeed.</p>
 
+            <p>In HTML output, the syntax highlighter can add lines or highlight individual lines of code. To display line numbers, set the <attr>line-numbers</attr> attribute to <c>yes</c>. To highlight particular lines, set <attr>highlight-lines</attr> to a comma separated list consisting of individual lines and/or ranges indicated with dashes - examples: <c>5</c>, <c>2,5</c>,  <c>2,5-8,10-15,15</c>.</p>
+
             <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
         </subsection>
 
