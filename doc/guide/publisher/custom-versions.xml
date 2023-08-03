@@ -127,6 +127,18 @@
 
                 <p>This is an example similar to one Sean Fitzpatrick uses.  His <tag>docinfo</tag> configures the way color is used in his TikZ diagrams.  But instead he has two configurations, one for full color (HTML, electronic PDF), and another for black-and-white (printed hardcopy).  The former is in the <c>color</c> component, and the second is in the <c>nocolor</c> component.  If his project has color photographs, he could make careful gray-scale versions with specialized tools, and then place the resulting pair of <tag>image</tag> into each of the two components separately.</p>
             </paragraphs>
+
+            <paragraphs>
+                <title>Releasing Material over Time</title>
+
+                <p>Many authors are simultaneously publishers, and some are also instructors.  And a few author-publisher-instructors like to <q>release</q> their material over time.  This could be accomplished with versions.  First there will be some base material like the front matter, back matter, and a preparatory Chapter 1.  Now, mark Chapters 2 and 3 each with the component <c>week1</c>.  Mark Chapter 4 with component <c>week2</c>.  Mark Chapters 5, 6 and 7 with component <c>week3</c>.  And so on.</p>
+
+                <p>Then the publisher file can be edited each week, or there can be multiple publisher files (one per week), which successively accumulate more components to include.  For example,<cd>
+                    <cline>&lt;version include="week1"/&gt;</cline>
+                    <cline>&lt;version include="week1 week2"/&gt;</cline>
+                    <cline>&lt;version include="week1 week2 week3"/&gt;</cline>
+                </cd>Note how the numbering of older material will not be affected by the addition of newer material, you will just want to be careful about forward cross-references from released material into un-released material.  Of course, this example just uses chapters as the granular unit<mdash/>you could use other divisions, or a mix.</p>
+            </paragraphs>
         </subsection>
 
         <subsection>
