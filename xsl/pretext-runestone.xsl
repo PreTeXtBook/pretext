@@ -342,9 +342,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <a href="/runestone/assignments/chooseAssignment">Assignments</a>
                 <a href="/runestone/assignments/practice">Practice</a>
                 <hr/>
+                <!-- NB: next two entries were once templated with "appname" and           -->
+                <!-- the requisite spaces were percent-encoded by XSLT since it is         -->
+                <!-- known to be forming a  a/@href.                                       -->
+                <!-- Short-term fix: hard-code "runestone" as the appname, which should    -->
+                <!-- migrate to "assignment" when peer-instruction code moves.             -->
+                <!-- Long-term might suggest some XSL variables for the names of the apps. -->
                 <!-- if reader is not an instructor the next link will be removed by javascript -->
-                <a id="inst_peer_link" href='/~._ appname _.~/peer/instructor.html'>Peer Instruction (Instructor)</a>
-                <a href='/~._ appname _.~/peer/student.html'>Peer Instruction (Student)</a>
+                <a id="inst_peer_link" href="/runestone/peer/instructor.html">Peer Instruction (Instructor)</a>
+                <a href="/runestone/peer/student.html">Peer Instruction (Student)</a>
                 <hr/>
                 <a href="/runestone/default/courses">Change Course</a>
                 <hr/>
