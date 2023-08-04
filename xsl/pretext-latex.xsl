@@ -1486,15 +1486,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
+            <!-- This variant style is what will turn on line numbering -->
+            <xsl:text>\lstdefinestyle{programcodenumberedstyle}{style=programcodestyle, numbers=left}&#xa;</xsl:text>
             <!-- We want a "program" to be able to break across pages -->
             <!-- 2020-10-07: "breakable" seems ineffective            -->
+            <!-- 3 ex left margin moves code off of leftrule by a generous amount -->
             <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
             <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
+            <!-- Repeat the box style, but move numbers out of the margin and past -->
+            <!-- the left rule with a 6ex space.  Plenty of room for double-digit  -->
+            <!-- line numbers, and should be OK for triple-digits                   -->
+            <xsl:text>%% Overwrite the margin to make room for numbers (up to line 999)&#xa;</xsl:text>
+            <xsl:text>\tcbset{ programboxnumberedstyle/.style={programboxstyle, left=6ex} }&#xa;</xsl:text>
+            <!-- Two "tcblisting" environments for numbered v. not numbered,            -->
+            <!-- see switching between them in employment in body                       -->
             <!-- Arguments: language, left margin, width, right margin (latter ignored) -->
             <xsl:text>\newtcblisting{program}[4]{programboxstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{programnumbered}[4]{programboxnumberedstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodenumberedstyle}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
@@ -8287,7 +8298,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- area supporting some language                      -->
     <xsl:variable name="b-has-input" select="not(normalize-space(input) = '')"/>
     <xsl:if test="$b-has-input">
-        <xsl:text>\begin{program}</xsl:text>
+        <!-- Style choices for numbering lines filter though into different    -->
+        <!-- "tcblisting" environments.  We set the environment in a variable, -->
+        <!-- so the begin/end are consistent.                                  -->
+        <xsl:variable name="program-env">
+            <xsl:choose>
+                <xsl:when test="@line-numbers = 'yes'">
+                    <xsl:text>programnumbered</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>program</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="$program-env"/>
+        <xsl:text>}</xsl:text>
         <xsl:text>{</xsl:text>
         <xsl:choose>
             <xsl:when test="$b-has-language">
@@ -8315,7 +8341,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- so *any* extra characters will produce a LaTeX warning  -->
         <!-- starting with "Character dropped after \end{program}"   -->
         <!-- So...do not put a % (or anything else extra) here       -->
-        <xsl:text>\end{program}&#xa;</xsl:text>
+        <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="$program-env"/>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
