@@ -1315,6 +1315,17 @@
         <attribute name="language"/>
       </optional>
       <optional>
+        <attribute name="line-numberss">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="highlight-lines"/>
+      </optional>
+      <optional>
         <attribute name="interactive">
           <value>codelens</value>
         </attribute>

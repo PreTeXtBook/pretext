@@ -1167,6 +1167,15 @@
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
       <xs:attribute name="language"/>
+      <xs:attribute name="line-numberss">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="highlight-lines"/>
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">

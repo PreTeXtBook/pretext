@@ -1432,6 +1432,8 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
+                    attribute line-numberss {"yes"|"no"}?,
+                    attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
                     element input {text}
                 }
