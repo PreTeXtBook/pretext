@@ -141,7 +141,7 @@
             </paragraphs>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="version-caveats">
             <title>Caveats for Creating Versions</title>
 
             <p>There are some subtleties when you get fancy with manipulating your source this way, and we cannot protect you from every pitfall.  You may get warnings for some of this.  If you find new gotchas the hard way, please let us know.</p>
@@ -162,6 +162,16 @@
                 <title>Identifiers</title>
 
                 <p>Allied with cross-referencing, be careful not to create source that had duplicate identifiers that are meant to be unique.  You may get warnings about this situation.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Generated and External Files</title>
+
+                <p>Some portions of your <pretext/> source get manipulated into additional files in particular formats (<q>generated</q>).  Examples would include images given in <latex/> or Asymptote syntax, and trace files for Runestone CodeLens environments.  Depending on what you include or exclude in different versions, these files could have different characteristics.  As one example, suppose you define different color palettes for use in images described using the TikZ language (inside a <pretext/> <tag>latex-image</tag> element).  And then you employ the two different palettes by using versions and components to control which palette is used for each version.  If you want to save these images (say, by commiting to a repository) rather than repeatedly regenerate them, then you need to save two different collections of generated images.</p>
+
+                <p>Versions are given by a publication file (<xref ref="publication-file-reference"/>), and the publication file allows you to specify which directory has these generated images (<xref ref="processing-directory-management"/>) so you can easily coordinate the generation and employment of these images with a coherent publication file.</p>
+
+                <p>You also sometimes bring <q>external</q> files to your project, such as <init>JPEG</init> images, which are not derived from your <pretext/> source.  As in the example above, you could have color images for a version used to produce electronic formats and grayscale images for a version produced for physical printing.  Again, the publication file could be used to employ a different collection/directory of external images for different versions via the options described in <xref ref="processing-directory-management"/>.</p>
             </paragraphs>
         </subsection>
     </section>

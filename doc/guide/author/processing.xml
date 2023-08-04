@@ -596,6 +596,8 @@
             <p>As these files are added to your project, you want to organize them in a specific (but flexible) way.  First, make a directory (folder) for your <em>external</em> files.  You can use any name you like, including <c>external</c>.  Within reason you can place it wherever you want.  Natural choices are as a peer of a <c>source</c> directory that holds your <pretext/> files, or as a subdirectory of your project's top-level directory that may hold all your <pretext/> files.  You can also organize this directory with subdirectories of your own choice, if that helps you stay organized.</p>
 
             <p>Similarly, you need a separate directory for your <em>generated</em> files.  As above, it can be named anything, including <c>generated</c>, and you can place it almost anywhere (close by).  But now, it must have a precise directory structure, described below in <xref ref="subdirectories-of-generated"/>, according to what sort of generation produced the files.</p>
+
+            <p>After you have read this section, see the discussion of generated and external files in <xref ref="version-caveats"/> for some good examples of why this flexibility is useful.</p>
         </subsection>
 
         <subsection>
