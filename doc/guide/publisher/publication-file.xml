@@ -197,6 +197,22 @@
             </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
         </subsection>
 
+        <subsection xml:id="latex-open-odd-options">
+            <title><latex/> Page Matching</title>
+            <idx><h>page matching</h><h>LaTeX, PDF</h></idx>
+            <idx><h>open odd option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>page matching</h></idx>
+            <idx><h>LaTeX</h><h>open odd option</h></idx>
+            <idx><h>PDF</h><h>page matching</h></idx>
+            <idx><h>PDF</h><h>open odd option</h></idx>
+
+            <p>A two-sided <init>PDF</init> will contain extra blank pages to ensure that certain divisions (usually parts and chapters) always open on an odd-numbered page. Since a one-sided <init>PDF</init> will omit these extra blank pages, the page numbers may get out of sync between the two versions. The<cd>
+                <cline>/publication/latex/@open-odd</cline>
+            </cd>attribute can be used to force the page numbers back into sync by either also inserting the extra blank pages in a one-side <init>PDF</init> version (by setting the attribute to value <c>add-blanks</c>) or by simply skipping the page number for pages that would have been blank in the pagination (by setting the attribute to value <cd>skip-pages</cd>). If the attribute value is <c>no</c> for a one-sided <init>PDF</init> output (the default), then no adjustment is made and divisions open on the next consecutive page whether odd- or even-numbered.</p>
+
+            <p>Note that this attribute is ignored for two-sided <init>PDF</init> output, where extra blank pages are always inserted. Also note that page-matching between one- and two-sided <init>PDF</init> versions is only possible when <c>/publication/latex/@pageref</c> has value <c>no</c>.</p>
+        </subsection>
+
         <subsection xml:id="latex-font-size-options">
             <title><latex/> Font Sizes</title>
             <idx><h>font size options</h><h>LaTeX, PDF</h></idx>
