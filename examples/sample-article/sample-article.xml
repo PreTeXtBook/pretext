@@ -11294,6 +11294,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </ol>
                 </p>
 
+                <p>A <c>rotation="n"</c> attribute applied to a bare image will rotate the image by n<degree/>. The vertical space adjusts to accomodate the rotated image in the latex version but not in the html version.</p>
+                <figure>
+                    <caption>Rotated Images</caption>
+
+                    <sidebyside width="33%" valign="bottom">
+                        <figure>
+                            <caption><c>rotate="180"</c></caption>
+                            <image source="images/Yellow_Duck.png" rotate="180"/>
+                        </figure>
+                        <figure>
+                            <caption><c>rotate="15"</c></caption>
+                            <image source="images/Yellow_Duck.png" rotate="15"/></figure>
+                    </sidebyside>
+                </figure>
+
+                <p>For pdf output destined for print, <ie/> when the publication file entry <c>latex/@print="yes"</c>, a <c>@landscape="yes"</c> attribute applied to a <tag>figure</tag>, <tag>table</tag>, <tag>list</tag> or <tag>listing</tag> will cause the object to be rotated 90<degree/> and presented on its own page.  Placement of the float is determined by <latex/> and multipage objects are not supported.</p>
+
+                <figure xml:id="propulsion_system2" landscape="yes">
+                    <caption>This landscape figure will be rotated so the long edge is vertical, and will appear on its own page in <em>print PDF</em> output.</caption>
+                    <image source="images/propulsion_system"/>
+                </figure>
+                <figure xml:id="rotated-fig-with-sbs" landscape="yes">
+                    <caption>Wide figure containing a sidebyside containing a rotated image.  This will be rotated and appear on its own page in <term>print PDF</term> output.</caption>
+                    <sidebyside widths="25% 70%" margins="0%" valign="bottom" landscape="true">
+                        <figure>
+                            <caption>Quack</caption>
+                            <image rotate="10" source="images/Yellow_Duck.png"/>
+                        </figure>
+                        <figure>
+                            <caption>Propulsion System</caption>
+                            <image source="images/propulsion_system"/>
+                        </figure>
+                    </sidebyside>
+                </figure>
+
                 <exercise>
                     <task>
                         <statement>
