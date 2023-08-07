@@ -1526,6 +1526,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$document-root//@landscape">
+        <xsl:text>%% The rotating package provides sidewaysfigure and sidewaystables environments&#xa;</xsl:text>
+        <xsl:text>\usepackage{rotating}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$document-root//ol or $document-root//ul or $document-root//task or $document-root//references or $b-has-webwork-var">
         <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
@@ -8496,6 +8500,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2: standard identifier for cross-references   -->
 <!-- 3: empty, or a hard-coded number from -common -->
 <xsl:template match="figure|listing">
+    <xsl:if test="@landscape and $b-latex-print">
+      <xsl:text>\begin{sidewaysfigure}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}{</xsl:text>
@@ -8524,6 +8531,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:if test="@landscape and $b-latex-print">
+      <xsl:text>\end{sidewaysfigure}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
@@ -8533,6 +8543,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2: standard identifier for cross-references    -->
 <!-- 3: empty, or a hard-coded number from -common  -->
 <xsl:template match="table|list">
+    <xsl:if test="@landscape and $b-latex-print">
+      <xsl:text>\begin{sidewaystable}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}{</xsl:text>
@@ -8564,6 +8577,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:if test="@landscape and $b-latex-print">
+        <xsl:text>\end{sidewaystable}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
