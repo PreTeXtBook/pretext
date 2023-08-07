@@ -8712,8 +8712,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
-    <xsl:text>{</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth</xsl:text>
+    <xsl:if test="@rotate">
+      <xsl:text>,angle=</xsl:text>
+      <xsl:value-of select="@rotate"/>
+      <xsl:text>,origin=c</xsl:text>
+    </xsl:if>
+    <xsl:text>]{</xsl:text>
     <xsl:choose>
         <xsl:when test="@pi:generated">
             <xsl:value-of select="$generated-directory"/>
