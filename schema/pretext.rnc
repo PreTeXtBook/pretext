@@ -655,9 +655,12 @@
             
             Caption =
                 element caption {TextLong}
+            Landscape =
+                attribute landscape {"yes" | "no"}
             Figure =
                 element figure {
                     MetaDataCaption,
+                    Landscape?,
                     (
                         Image |
                         Video |
@@ -668,10 +671,12 @@
                 } |
                 element table {
                     MetaDataAltTitle,
+                    Landscape?,
                     Tabular
                 } |
                 element listing {
                     MetaDataCaption,
+                    Landscape?,
                     (
                         Program |
                         Console
@@ -679,6 +684,7 @@
                 } |
                 element list {
                     MetaDataAltTitle,
+                    Landscape?,
                     IntroductionText?,
                     List,
                     ConclusionText?
@@ -753,6 +759,7 @@
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
                     attribute decorative {"yes" | "no"}?,

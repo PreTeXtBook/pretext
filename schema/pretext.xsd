@@ -1548,6 +1548,16 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
+  <xs:attributeGroup name="Landscape">
+    <xs:attribute name="landscape" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
   <xs:group name="Figure">
     <xs:choice>
       <xs:element ref="figure"/>
@@ -1567,6 +1577,14 @@
             <xs:group ref="SideBySideGroup"/>
             <xs:element ref="score"/>
           </xs:choice>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1578,6 +1596,14 @@
           <xs:sequence>
             <xs:element ref="tabular"/>
           </xs:sequence>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1590,6 +1616,14 @@
             <xs:element ref="program"/>
             <xs:element ref="console"/>
           </xs:choice>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1603,6 +1637,14 @@
             <xs:group ref="List"/>
             <xs:group minOccurs="0" ref="ConclusionText"/>
           </xs:sequence>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1721,6 +1763,7 @@
           <xs:attribute name="permid"/>
           <xs:attribute name="width"/>
           <xs:attribute name="margins"/>
+          <xs:attribute name="rotate"/>
           <xs:attribute name="archive"/>
           <xs:attribute name="source" use="required"/>
           <xs:attribute name="decorative">

@@ -1704,7 +1704,7 @@
     <section>
         <title>Figures, Tables, Listings and Named Lists</title>
 
-        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.</p>
+        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print, and not within a <c>sidebyside</c>.</p>
         <!-- 2021-12-29: should add audio and interacive to figure, once ready -->
 
         <fragment xml:id="table-figure">
@@ -1712,9 +1712,12 @@
             <code>
             Caption =
                 element caption {TextLong}
+            Landscape =
+                attribute landscape {"yes" | "no"}
             Figure =
                 element figure {
                     MetaDataCaption,
+                    Landscape?,
                     (
                         Image |
                         Video |
@@ -1725,10 +1728,12 @@
                 } |
                 element table {
                     MetaDataAltTitle,
+                    Landscape?,
                     Tabular
                 } |
                 element listing {
                     MetaDataCaption,
+                    Landscape?,
                     (
                         Program |
                         Console
@@ -1736,6 +1741,7 @@
                 } |
                 element list {
                     MetaDataAltTitle,
+                    Landscape?,
                     IntroductionText?,
                     List,
                     ConclusionText?
@@ -1927,6 +1933,7 @@
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
                     attribute decorative {"yes" | "no"}?,

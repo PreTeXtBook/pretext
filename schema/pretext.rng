@@ -1755,10 +1755,21 @@
       <ref name="TextLong"/>
     </element>
   </define>
+  <define name="Landscape">
+    <attribute name="landscape">
+      <choice>
+        <value>yes</value>
+        <value>no</value>
+      </choice>
+    </attribute>
+  </define>
   <define name="Figure">
     <choice>
       <element name="figure">
         <ref name="MetaDataCaption"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <choice>
           <ref name="Image"/>
           <ref name="Video"/>
@@ -1769,10 +1780,16 @@
       </element>
       <element name="table">
         <ref name="MetaDataAltTitle"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <ref name="Tabular"/>
       </element>
       <element name="listing">
         <ref name="MetaDataCaption"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <choice>
           <ref name="Program"/>
           <ref name="Console"/>
@@ -1780,6 +1797,9 @@
       </element>
       <element name="list">
         <ref name="MetaDataAltTitle"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <optional>
           <ref name="IntroductionText"/>
         </optional>
@@ -1900,6 +1920,9 @@
       </optional>
       <optional>
         <attribute name="margins"/>
+      </optional>
+      <optional>
+        <attribute name="rotate"/>
       </optional>
       <optional>
         <attribute name="archive"/>
