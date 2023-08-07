@@ -106,6 +106,8 @@
 
         <p>The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
 
+        <p>The optional <attr>rotate</attr> attribute controls the angular rotation of the image about its center, for example <c>image/@rotate="30"</c> will rotate the image 30<degree/> counterclockwise.</p>
+
         <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
 
         <p>You can also place an <q>anonymous</q> image (no caption, no number) almost anywhere you might place a paragraph (but not <em>within</em> a paragraph).  Note also that the <tag>sidebyside</tag> tag provides some very flexible options for placing several images (<xref ref="overview-sidebyside" />) together, or combining figures with subcaptions.</p>
