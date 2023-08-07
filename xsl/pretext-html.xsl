@@ -6519,6 +6519,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
+                <xsl:if test="@rotate">
+                    <xsl:attribute name="style">
+                        <xsl:text>transform: rotate(</xsl:text>
+                        <xsl:value-of select="@rotate"/>
+                        <xsl:text>deg)</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
             </img>
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
