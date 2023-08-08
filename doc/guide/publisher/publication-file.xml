@@ -208,9 +208,9 @@
 
             <p>A two-sided <init>PDF</init> will contain extra blank pages to ensure that certain divisions (usually parts and chapters) always open on an odd-numbered page. Since a one-sided <init>PDF</init> will omit these extra blank pages, the page numbers may get out of sync between the two versions. The<cd>
                 <cline>/publication/latex/@open-odd</cline>
-            </cd>attribute can be used to force the page numbers back into sync by either also inserting the extra blank pages in a one-side <init>PDF</init> version (by setting the attribute to value <c>add-blanks</c>) or by simply skipping the page number for pages that would have been blank in the pagination (by setting the attribute to value <cd>skip-pages</cd>). If the attribute value is <c>no</c> for a one-sided <init>PDF</init> output (the default), then no adjustment is made and divisions open on the next consecutive page whether odd- or even-numbered.</p>
+            </cd>attribute can be used to force the page numbers back into sync by either also inserting the extra blank pages in a one-side <init>PDF</init> version (by setting the attribute to value <c>add-blanks</c>) or by simply skipping the page number for pages that would have been blank in the pagination (by setting the attribute to value <c>skip-pages</c>). If the attribute value is <c>no</c> for a one-sided <init>PDF</init> output (the default), then no adjustment is made and divisions open on the next consecutive page whether odd- or even-numbered.</p>
 
-            <p>Note that this attribute is ignored for two-sided <init>PDF</init> output, where extra blank pages are always inserted. Also note that page-matching between one- and two-sided <init>PDF</init> versions is only possible when <c>/publication/latex/@pageref</c> has value <c>no</c>.</p>
+            <p>Note that this attribute is ignored for two-sided <init>PDF</init> output, where extra blank pages are always inserted. Also note that page-matching between one- and two-sided <init>PDF</init> versions may require a consistent specification of the  <c>/publication/latex/@pageref</c> option (<xref ref="latex-xref-page-number-options"/>).  See <xref ref="latex-page-fidelity"/> for a more thorough discussion of page number fidelity.</p>
         </subsection>
 
         <subsection xml:id="latex-font-size-options">
