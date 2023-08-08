@@ -1081,12 +1081,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="type-name" />
         </b>
         <xsl:text> </xsl:text>
-        <xsl:variable name="web-address">
-            <xsl:apply-templates select="address" />
-        </xsl:variable>
-        <a href="{$web-address}">
-            <xsl:apply-templates select="name" />
-        </a>
+        <!-- URL for canonical project website                -->
+        <!-- NB: interior of "website" is a "url" in author's -->
+        <!-- source, but the pre-processor adds a footnote    -->
+        <!-- Only one presumed, and thus enforced here        -->
+        <xsl:apply-templates select="url[1]|fn[1]" />
     </p>
 </xsl:template>
 
