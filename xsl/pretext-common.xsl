@@ -10538,6 +10538,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the string parameter &quot;commentary&quot; will be removed on, or after, 2024-02-13 (but not yet).  Any &quot;commentary&quot; elements present should be adjusted to have their visibility controlled by version support, specifically by first being placed in a &quot;component&quot;, and then controlled by entries of a publisher file.  Then &quot;commentary&quot; elements can be hidden just with version support.  To be visible you will need to use version support AND continue to use the string parameter.  On, or after, 2024-02-13, this warning will become a fatal error.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2023-08-08  Simplify, and make more reliable, the URL for website entry of copyright page -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//colophon/website[address]" />
+        <xsl:with-param name="date-string" select="'2023-08-08'" />
+        <xsl:with-param name="message" select="'a &quot;website&quot; element with &quot;address&quot; and &quot;name&quot; children has changed.  Continue to use the &quot;website&quot; element as before, but replace the &quot;address&quot; and &quot;name&quot; children with a single &quot;url&quot; element, which is more flexible and reliable.  We will try to honor your intent, but you may prefer your own adjustments.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

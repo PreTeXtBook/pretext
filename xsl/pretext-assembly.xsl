@@ -1036,6 +1036,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </dataurl>
 </xsl:template>
 
+<xsl:template match="colophon/website[address]" mode="repair">
+    <website>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <url>
+            <xsl:attribute name="href">
+                <xsl:value-of select="address"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="name/node()" mode="repair"/>
+        </url>
+    </website>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
