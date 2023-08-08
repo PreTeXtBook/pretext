@@ -3949,14 +3949,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
 
-    <!-- We accomodate zero to many "website" via a context shift. -->
-    <xsl:for-each select="frontmatter/colophon/website" >
-        <xsl:text>\noindent{\bfseries </xsl:text>
-        <xsl:apply-templates select="." mode="type-name"/>
-        <xsl:text>}: </xsl:text>
-        <xsl:apply-templates select="." />
-        <xsl:text>\par\medskip&#xa;</xsl:text>
-    </xsl:for-each>
+    <!-- We accomodate zero to many "website". -->
+    <xsl:apply-templates select="frontmatter/colophon/website"/>
 
     <!-- There may be multiple copyrights (a fork under the GFDL -->
     <!-- requires as much).  This accomodates zero to many.  The -->
@@ -3982,13 +3976,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- URL for canonical project website -->
-<xsl:template match="frontmatter/colophon/website" >
-    <xsl:text>\href{</xsl:text>
-    <xsl:apply-templates select="address" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="name" />
-    <xsl:text>}</xsl:text>
+<xsl:template match="frontmatter/colophon/website">
+    <xsl:text>\noindent{\bfseries </xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>}: </xsl:text>
+    <!-- NB: interior of "website" is a "url" in author's -->
+    <!-- source, but the pre-processor adds a footnote    -->
+    <!-- Only one presumed, and thus enforced here        -->
+    <xsl:apply-templates select="url[1]|fn[1]" />
+    <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- Author biographies -->
 <!-- Verso of title page, we call this the front colophon -->
