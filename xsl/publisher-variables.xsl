@@ -2616,6 +2616,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameter, so we want the default (false) to be more likely than not. -->
 <xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
 
+<!-- Always open on odd page in one-sided version, to        -->
+<!-- to faciltate matching page-for-page with two-sided      -->
+<!-- version.                                                -->
+<!-- "add-blanks" means make a blank page on the even page   -->
+<!--              preceding open odd page, when necessary    -->
+<!-- "skip-pages" means skip over an even page number in the -->
+<!--              pagination to open on an odd page number,  -->
+<!--              when necessary                             -->
+<!-- "no"         continuous pagination, parts/chapters/etc  -->
+<!--              can open on either even or odd pages       -->
+<xsl:variable name="latex-open-odd">
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='open-odd']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- LaTeX/Page -->
 
 <!-- Right Alignment -->
@@ -3066,6 +3080,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="snapshot" default="no" options="yes"/>
         <pi:pub-attribute name="pageref" options="yes no" legacy-stringparam="latex.pageref"/>
         <pi:pub-attribute name="draft" default="no" options="yes" legacy-stringparam="latex.draft"/>
+        <pi:pub-attribute name="open-odd" default="no" options="add-blanks skip-pages"/>
         <page>
             <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
         </page>

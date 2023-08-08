@@ -390,6 +390,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="not($b-latex-two-sides)">
+        <xsl:choose>
+            <xsl:when test="$latex-open-odd = 'add-blanks'">
+                <!-- Redefines \cleardoublepage as suggested:                                 -->
+                <!-- https://tex.stackexchange.com/questions/185821/openright-in-oneside-book -->
+                <xsl:text>%% Always open on odd page&#xa;</xsl:text>
+                <xsl:text>%%   The following adjusts cleardoublepage to remove twosided&#xa;</xsl:text>
+                <xsl:text>%%   check so that we open on odd pages even in one-sided mode&#xa;</xsl:text>
+                <xsl:text>%%   by adding an extra blank page on the preceding even page.&#xa;</xsl:text>
+                <xsl:text>\makeatletter%&#xa;</xsl:text>
+                <xsl:text>\def\cleardoublepage{%&#xa;</xsl:text>
+                <xsl:text>\clearpage\ifodd\c@page\else\hbox{}\newpage\if@twocolumn\hbox{}\newpage\fi\fi%&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>\makeatother%&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="$latex-open-odd = 'skip-pages'">
+                <xsl:text>%% Always open on odd page&#xa;</xsl:text>
+                <xsl:text>%%   The following adjusts cleardoublepage to remove twosided&#xa;</xsl:text>
+                <xsl:text>%%   check so that we open on odd pages even in one-sided mode&#xa;</xsl:text>
+                <xsl:text>%%   by incrementing the page number to skip over the preceding&#xa;</xsl:text>
+                <xsl:text>%%   even page.&#xa;</xsl:text>
+                <xsl:text>\makeatletter%&#xa;</xsl:text>
+                <xsl:text>\def\cleardoublepage{%&#xa;</xsl:text>
+                <xsl:text>\clearpage\ifodd\c@page\else\addtocounter{page}{1}\fi%&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+                <xsl:text>\makeatother%&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
     <!-- Following need to be mature, robust, powerful, flexible, well-maintained -->
     <xsl:text>%% Default LaTeX packages&#xa;</xsl:text>
     <xsl:text>%%   1.  always employed (or nearly so) for some purpose, or&#xa;</xsl:text>
@@ -3763,7 +3792,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- need an empty page, obverse of half-title    -->
         <!-- could also be left-side of title page spread -->
-        <xsl:when test="$b-latex-two-sides">
+        <xsl:when test="($b-latex-two-sides) or ($latex-open-odd = 'add-blanks')">
             <xsl:text>%% begin: adcard (empty)&#xa;</xsl:text>
             <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
             <xsl:text>\null%&#xa;</xsl:text>
