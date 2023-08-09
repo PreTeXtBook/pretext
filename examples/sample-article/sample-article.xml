@@ -182,7 +182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     The "xml:id" attribute will be used for the filename of the
     HTML output.
     -->
-    <article xml:id="derivatives">
+    <article xml:id="derivatives" label="derivatives">
         <title>Derivatives and Integrals</title>
         <subtitle>An Annotated Discourse</subtitle>
 
@@ -194,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         that a reader will actually see.
         -->
 
-        <frontmatter xml:id="frontmatter">
+        <frontmatter xml:id="frontmatter" label="frontmatter">
             <!--
             Items typically on the main title page of a book,
             but here as an article they are handled more compactly
@@ -239,7 +239,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         source readable.
         -->
 
-        <section>
+        <section label="section-introduction">
             <title>Introduction</title>
 
             <!--
@@ -269,7 +269,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         so keep it wrapped tight.  Lots can go on in a paragraph.
         -->
 
-        <section xml:id="section-fundamental-theorem">
+        <section xml:id="section-fundamental-theorem" label="section-fundamental-theorem">
             <title>The Fundamental Theorem</title>
 
             <p>There is a remarkable theorem:<fn xml:id="footnote-fermat">And fortunately we do not need to try to write it in the margin!</fn></p>
@@ -354,7 +354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         the first non-trivial character.
         -->
 
-        <section permid="Abc" xml:id="section-sage-cells">
+        <section permid="Abc" xml:id="section-sage-cells" label="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
             <!-- A version of the title with no markup at all,     -->
             <!-- math is now a Unicode symbol for an integral sign -->
@@ -603,7 +603,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         paragraphs and other blocks.)
         -->
 
-        <section xml:id="interesting-corollary">
+        <section xml:id="interesting-corollary" label="section-interesting-corollary">
             <title>An Interesting Corollary</title>
 
             <objectives permid="dEf" xml:id="objectives-structures">
@@ -1250,7 +1250,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </paragraphs>
                 </subsubsection>
 
-                <exercises xml:id="exercises-subsection-solo">
+                <exercises xml:id="exercises-subsection-solo" label="exercises-subsection-solo">
                     <exercise xml:id="exercise-test-number">
                         <statement>
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
@@ -1563,7 +1563,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         in HTML, which are similar, but not identical.
         -->
 
-        <section permid="Bcd">
+        <section permid="Bcd" label="section-facts-figures">
             <title>Some Facts and Figures</title>
             <idx>footnotes</idx>
 
@@ -1678,6 +1678,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         on the presence of ampersands, or not, respectively.
         -->
 
+        <!-- There is intentionally no @xml:id nor @label on this division, -->
+        <!-- to include testing of the out-of-the-box experience            -->
         <section>
             <title>Some Advanced Ideas</title>
 
@@ -1761,7 +1763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section>
+        <section label="section-mathematics">
             <title>Mathematics</title>
 
             <introduction>
@@ -2100,7 +2102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="text-in-paragraphs">
+        <section xml:id="text-in-paragraphs" label="section-text-paragraphs">
             <title>Entering Text in Paragraphs, Titles, Captions</title>
             <shorttitle>Text in Paragraphs</shorttitle>
             <!-- a "plaintitle" has no markup, meant for browser tabs, etc -->
@@ -2759,7 +2761,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="graphics">
+        <section xml:id="graphics" label="section-graphics">
             <title>Graphics</title>
 
             <introduction>
@@ -3972,7 +3974,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section>
+        <section label="section-demonstrations">
             <title>Demonstrations</title>
 
             <demonstration>
@@ -3986,7 +3988,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section>
+        <section label="section-further-reading">
             <title>Further Reading</title>
 
             <subsection>
@@ -4292,7 +4294,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="lists">
+        <section xml:id="lists" label="section-lists">
             <title>List Calisthenics</title>
 
             <subsection>
@@ -5084,7 +5086,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </references>
         </section>
 
-        <section xml:id="table-calisthenics">
+        <section xml:id="table-calisthenics" label="section-table-calisthenics">
             <title>Table Calisthenics</title>
 
             <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  Footnotes inside cells are tested here.</p>
@@ -7196,7 +7198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>The <c>longtable</c> package allows for headers and footers indicating continued tables.  A possible enhancement is to support this feature in the case of a long table.</p>
         </section>
 
-        <section xml:id="section-interactive-authored">
+        <section xml:id="section-interactive-authored" label="section-interactive-authored">
             <title>Interactive Elements, Authored in Javascript</title>
             <!-- short for table of contents, etc -->
             <shorttitle>Interactive Elements, Authored</shorttitle>
@@ -7904,7 +7906,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-server">
+        <section xml:id="section-interactive-server" label="section-interactive-server">
             <title>Interactive Elements, Server</title>
             <idx><h>interactive elements</h><h>server</h></idx>
             <idx><h>embedded interactive elements</h><h>server</h></idx>
@@ -8002,7 +8004,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-exercises">
+        <section xml:id="section-interactive-exercises" label="section-interactive-exercises">
             <title>Interactive Exercises</title>
 
             <introduction>
@@ -8281,7 +8283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-code">
+        <section xml:id="section-interactive-code" label="section-interactive-code">
             <title>Interactive Coding</title>
 
             <introduction>
@@ -8348,7 +8350,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-audio">
+        <section xml:id="section-audio" label="section-audio">
             <title>Audio</title>
 
             <p>2019-05-24: this is preliminary, and mostly based on the code for <tag>video</tag> so read the next section and mimic the style from there.  But use an <tag>audio</tag> element and have the <attr>source</attr> attribute point to an OGG, MP3, or WAV file.  Plus, an <attr>aspect</attr> attribute will be ignored.</p>
@@ -8374,7 +8376,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </sidebyside>
         </section>
 
-        <section xml:id="section-video">
+        <section xml:id="section-video" label="section-video">
             <title>Video</title>
 
             <introduction>
@@ -8660,7 +8662,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         A "preview" XSL transform to HTML could be especially useful.
         -->
 
-        <section xml:id="section-cross-referencing">
+        <section xml:id="section-cross-referencing" label="section-cross-referencing">
             <title>Cross-Referencing</title>
 
             <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
@@ -8794,7 +8796,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Foo <dataurl source="data/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
         </section>
 
-        <section xml:id="section-internationalization">
+        <section xml:id="section-internationalization" label="section-internationalization">
             <title>Internationalization</title>
             <idx>internationalization</idx>
 
@@ -9064,7 +9066,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of the more advanced sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  The more advanced sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
 
-        <section>
+        <section label="section-pre-formatted">
             <title>Pre-Formatted Text</title>
 
             <p>In Sage, if you wanted to build a matrix<idx>matrix</idx>, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
@@ -9132,7 +9134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>We use a Unicode right arrow (Unicode Character 'RIGHTWARDS ARROW', U+2192) to sometimes indicate the truncation of long lines in a text file.  It is available in our usual monospace font for <latex/>/PDF, but we include a use here in order to make certain that is always the case.  Here: <c>&#x2192;</c>.</p>
         </section>
 
-        <section xml:id="section-programs">
+        <section xml:id="section-programs" label="section-programs">
             <title>Program Listings (with <c>code</c> in the title)</title>
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
@@ -9519,7 +9521,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </listing>
         </section>
 
-        <section>
+        <section label="section-units-measure">
             <title>Units of Measure</title>
 
             <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by <pretext/> in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
@@ -9538,7 +9540,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="section-side-by-side">
+        <section xml:id="section-side-by-side" label="section-side-by-side">
             <title>Side-By-Side Panels</title>
 
             <introduction>
@@ -10946,7 +10948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section>
+        <section label="section-side-by-side-gallery">
             <title>Side-by-Side Gallery</title>
 
             <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" text="type-global" /> for that). The layout is identical for each <c>sidebyside</c>, 5% margins, panel widths of 40% and 45%, leaving 5% for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
@@ -11162,7 +11164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global" />).  For other examples see <xref ref="section-video" text="type-global"/> and <xref ref="atomic-video" text="type-global"/>.</p>
         </section>
 
-        <section xml:id="open-problems">
+        <section xml:id="open-problems" label="section-open-problems">
             <title>Open Problems</title>
 
             <p>Like for mathematical research.  Experimental as of 2023-07-06.</p>
@@ -11175,7 +11177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="poetry">
+        <section xml:id="poetry" label="section-poetry">
             <title>Poetry</title>
 
             <p>There is support for poems via the <c>poem</c><idx>poem</idx> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  There are many very flexible options for horizontal alignment and indentation.  Further extensive examples, constructed by Jahrme Risner, are available in the example Humanities document.</p>
@@ -11240,7 +11242,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="atomic-items">
+        <section xml:id="atomic-items" label="section-atomic-items">
             <title>Atomic Objects</title>
 
             <introduction>
@@ -12514,7 +12516,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="advanced-numbering">
+        <section xml:id="advanced-numbering" label="section-advanced-numbering">
             <title>Advanced Numbering</title>
 
             <introduction>
@@ -12753,7 +12755,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </solutions>
         </section>
 
-        <section>
+        <section label="section-customizations">
             <title>Customizations</title>
 
             <subsection xml:id="rename-facility">
@@ -12822,7 +12824,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="section-myopenmath">
+        <section xml:id="section-myopenmath" label="section-myopenmath">
             <title>MyOpenMath Interactive Problems</title>
 
             <p>This is a <em>test</em> with two inline exercises containing MyOpenMath (MOM) problems.  None of this is in the schema, and all of it is subject to change.</p>
@@ -12845,7 +12847,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </section>
 
 
-        <section xml:id="ancillaries">
+        <section xml:id="ancillaries" label="section-ancillaries">
             <title>Ancillaries</title>
 
             <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set the string parameter <c>commentary</c> to the value <c>yes</c>. Other distinctions are:<ul>
@@ -12873,7 +12875,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Mauris fringilla nulla arcu, sagittis ultrices quam malesuada eleifend. Proin tristique elit eu bibendum tincidunt. Donec commodo lorem in magna egestas, vitae malesuada velit ornare. Pellentesque finibus neque in venenatis tristique. In id blandit est, in euismod urna. Donec commodo sagittis ligula, in venenatis nulla porttitor in. Donec nec tortor sit amet felis posuere ultricies. Suspendisse euismod quis ex eu placerat.</p>
         </section>
 
-        <section xml:id="worksheets">
+        <section xml:id="worksheets" label="section-worksheets">
             <title>Worksheets</title>
 
             <introduction>
@@ -13421,7 +13423,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </worksheet>
         </section>
 
-        <section xml:id="exercises-single">
+        <section xml:id="exercises-single" label="section-exercises-single">
             <title>Exercises, One Subsection</title>
 
             <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global" />.</p>
@@ -13576,7 +13578,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </references>
         </section>
 
-        <exercises>
+        <exercises label="exercises-structured">
             <title>Exercise Section, Structured</title>
 
             <introduction>
@@ -13655,7 +13657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subexercises>
         </exercises>
 
-        <section xml:id="exercises-multiple">
+        <section xml:id="exercises-multiple" label="section-exercises-multiple">
             <title>Exercises, Multiple Subsections</title>
 
             <introduction>
@@ -13796,7 +13798,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </references>
         </section>
 
-        <exercises xml:id="exercises">
+        <exercises xml:id="exercises" label="exercises-top-level">
             <title>Exercises, Top-Level</title>
 
             <introduction>
@@ -13931,10 +13933,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercises>
 
 
-        <backmatter xml:id="backmatter">
+        <backmatter xml:id="backmatter" label="backmatter">
             <title>Reference</title>
 
-            <appendix>
+            <appendix  label="appendix-notation">
                 <title>Notation</title>
                 <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
 
@@ -13947,7 +13949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
             </appendix>
 
-            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
+            <solutions xml:id="solutions-backmatter" label="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
                 <title>Solutions to Selected Exercises</title>
                 <idx><h>solutions</h><h>as an appendix</h></idx>
 
@@ -13962,7 +13964,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </conclusion>
             </solutions>
 
-            <solutions inline="hint solution answer" divisional="hint solution" scope="exercises-section-multiple">
+            <solutions label="solutions-single-exercises" inline="hint solution answer" divisional="hint solution" scope="exercises-section-multiple">
                 <title>Solutions to a Single Exercises Division</title>
                 <idx><h>solutions</h><h>for one group of exercises</h></idx>
 
@@ -13973,7 +13975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- content will happen here automatically -->
             </solutions>
 
-            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer">
+            <solutions label="solutions-answers" inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer">
                 <title>All Solutions that are Answers</title>
                 <idx><h>solutions</h><h>all answers</h></idx>
 
@@ -13984,7 +13986,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- content will happen here automatically -->
             </solutions>
 
-            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
+            <solutions label="solutions-odd-answers" inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
                 <title>All Solutions that are Answers to Odd Exercises</title>
                 <idx><h>solutions</h><h>all even answers</h></idx>
 
@@ -13995,7 +13997,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- content will happen here automatically -->
             </solutions>
 
-            <appendix xml:id="appendix-results">
+            <appendix xml:id="appendix-results" label="appendix-results">
                 <title>List of Results</title>
 
                 <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" text="type-global" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
@@ -14003,7 +14005,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
             </appendix>
 
-            <appendix xml:id="appendix-exercise-lists">
+            <appendix xml:id="appendix-exercise-lists" label="appendix-exercise-lists">
                 <title>Lists of Exercises</title>
 
                 <p>Since <tag>exercise</tag> come in several flavors, we use <term>pseudo-elements</term> to specify the distinct types.  There are not many reading questions<mdash/>but here is a list of all of them, by section, using a <c>readingquestion</c> pseudo-element.</p>
@@ -14016,7 +14018,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </appendix>
 
-            <appendix>
+            <appendix label="appendix-structured">
                 <title>A Structured Appendix</title>
                 <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
                 <subsection>
@@ -14033,7 +14035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </subsection>
             </appendix>
 
-            <appendix>
+            <appendix label="appendix-index">
                 <title>Index</title>
 
                 <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <tag>idx</tag>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
@@ -14055,7 +14057,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </paragraphs>
             </appendix>
 
-            <glossary xml:id="glossary-backmatter">
+            <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
                 <idx>glossary</idx>
                 <headnote>
                     <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized" text="type-global"/>.</p>
@@ -14072,7 +14074,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </gi>
             </glossary>
 
-            <appendix xml:id="references">
+            <appendix xml:id="references" label="appendix-multiple-references">
                 <title>Multiple References</title>
 
                 <subsection>
@@ -14099,7 +14101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Bibliography/References can appear anywhere,  -->
             <!-- but these are in the backmatter, hence global -->
 
-            <references xml:id="references-backmatter">
+            <references xml:id="references-backmatter" label="references-backmatter">
                 <title>References</title>
 
                 <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
@@ -14110,12 +14112,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </references>
 
-            <index>
+            <index label="the-index">
                 <title>Index</title>
                 <index-list />
             </index>
 
-            <colophon>
+            <colophon label="colophon-back">
                 <p>This article was authored in, and produced with, <pretext />.  It is typeset with the Latin Modern font.</p>
             </colophon>
         </backmatter>
