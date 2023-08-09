@@ -12874,7 +12874,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>If you make PDF output you will notice an increased amount of control over layout.  Also, if the publication file elects <latex/> draft mode, then there will be visual indicators of prescribed whitespace.</p>
             </introduction>
 
-            <worksheet>
+            <worksheet label="worksheet-geometric-prelude">
               <title>A Geometric Prelude</title>
               <!-- <author>Dave Rosoff</author> -->
               <objectives xml:id="objectives">
@@ -13004,7 +13004,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </conclusion>
             </worksheet>
 
-            <worksheet top="3cm" bottom="100pt">
+            <worksheet label="worksheet-networks" top="3cm" bottom="100pt">
                 <title>Networks Worksheet</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
@@ -13230,7 +13230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </page>
             </worksheet>
 
-            <worksheet margin="1cm">
+            <worksheet label="worksheet-testing" margin="1cm">
                 <introduction>
                     <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
@@ -13317,7 +13317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </page>
             </worksheet>
 
-            <worksheet courseid="MAT-150" series="Activity" seriescode="13">
+            <worksheet label="worksheet-dot-products" courseid="MAT-150" series="Activity" seriescode="13">
               <title>Dot products and projection</title>
                 <page>
                     <sidebyside width="45%" margins="0%">
