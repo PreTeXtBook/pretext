@@ -3198,7 +3198,6 @@
             <fragref ref="siunit" />
             <fragref ref="character" />
             <fragref ref="listgenerator" />
-            <fragref ref="bad-bank" />
             <fragref ref="docinfo" />
             <code>
                     }
@@ -3234,17 +3233,6 @@
             <code>
                 }
             </code>
-            </fragment>
-        </section>
-
-    <section xml:id="badbank">
-        <title>Bad
-                Bank</title>
-
-        <fragment xml:id="bad-bank">
-            <title>Bad bank</title>
-            <code>
-                </code>
             </fragment>
         </section>
 
