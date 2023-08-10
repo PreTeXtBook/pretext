@@ -8378,7 +8378,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
+                    <video label="ups-promo-frame-one" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
                 </figure>
 
                 <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/PreTeXtBook/pretext/issues/853" visual="github.com/PreTeXtBook/pretext/issues/853">Issue #853</url>.)
@@ -8388,14 +8388,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-preview.jpg" />
+                    <video label="ups-promo-preview" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-preview.jpg" />
                 </figure>
 
                 <p>If you find the posters provided automatically for a video to be distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="video/ups-visitor-guide-360" width="80%" preview="generic" />
+                    <video label="ups-promo-generic" source="video/ups-visitor-guide-360" width="80%" preview="generic" />
                 </figure>
 
                 <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are several examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations, and has asymmetric margins.</p>
@@ -8404,32 +8404,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>Big Buck Bunny from  <url href="http://camendesign.com/code/video_for_everybody/test.htm" visual="camendesign.com/code/video_for_everybody/test.htm"><q>Video for Everybody</q> Test Page</url></caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-frame-one" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-margins" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-ogg" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, MP4 format</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-mp4" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, WebM format</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-webm" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-best-format" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -8519,7 +8519,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                     <figure>
                         <caption>YouTube playlist ID specified in a <q>named</q> playlist</caption>
-                        <video youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" />
+                        <video label="zeppelin-playlist-named" youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" />
                         <!-- https://www.youtube.com/embed?listType=playlist&list=PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_ -->
                     </figure>
                 </sidebyside>
@@ -8612,6 +8612,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Now with an author-supplied poster.</p>
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki" visual="vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
+                    <!-- NB: we intentionally do not put an xml:id or label attribute on  -->
+                    <!-- this video to test its default filename, which was once "video-35" -->
                     <video vimeo="27246366" width="80%" preview="preview/move.png"/>
                 </figure>
             </subsection>
@@ -8622,14 +8624,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                    <video label="big-buck-bunny-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                         <track kind="subtitles" listing="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                <video label="big-buck-bunny-two-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                     <track kind="subtitles" listing="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
@@ -11142,7 +11144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
-                <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
+                <video label="ups-promo-side-by-side" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
                 <!-- Airborne Toxic Event -->
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
