@@ -921,7 +921,6 @@
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
       <xs:element ref="fragment"/>
-      <xs:element ref="demonstration"/>
     </xs:choice>
   </xs:group>
   <xs:element name="prelude">
@@ -3684,15 +3683,6 @@
   </xs:element>
   <xs:element name="notation-list">
     <xs:complexType/>
-  </xs:element>
-  <xs:element name="demonstration">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="Title"/>
-        <xs:group ref="Paragraph"/>
-        <xs:element ref="sage"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
   <xs:element name="docinfo">
     <xs:complexType>

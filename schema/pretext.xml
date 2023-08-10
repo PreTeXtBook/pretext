@@ -429,7 +429,7 @@
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | WorksheetExercise | Project |
                 Poem | Assemblage | ListGenerator | Fragment |
-                Demonstration |WorksheetSideBySide
+                WorksheetSideBySide
             # Allow exercise in sidebyside
             WorksheetSideBySide =
                 element sidebyside {
@@ -1126,8 +1126,6 @@
 
         <p>Other division blocks include <c>poem</c>, <c>aside</c>, and <c>assemblage</c>.  These are never numbered, but can have titles.  The <c>list-of</c> mechanism is a convenience device to automatically create lists of contents, and so we leave surrounding divisional structure to the author.  A <c>sidebyside</c>, and its cousin, <c>sbsgroup</c>, are strictly layout devices.  The <c>sage</c> element is unique for its possibilities in certain electronic formats.</p>
 
-        <p><c>demonstration</c> is slated for removal or an overhaul, and so is in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
-
         <!-- BlockText is enforced via XSL for assemblage, keep synchronized -->
         <!-- BlockText is enforced via XSL for Aside, keep synchronized      -->
         <fragment xml:id="block">
@@ -1149,8 +1147,7 @@
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                Demonstration
+                Poem | Assemblage | ListGenerator | Fragment
             </code>
         </fragment>
 
@@ -3247,11 +3244,6 @@
         <fragment xml:id="bad-bank">
             <title>Bad bank</title>
             <code>
-                    Demonstration = element demonstration {
-                    Title,
-                    Paragraph,
-                    Sage
-                    }
                 </code>
             </fragment>
         </section>

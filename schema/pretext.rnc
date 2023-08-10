@@ -389,8 +389,7 @@
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                Demonstration
+                Poem | Assemblage | ListGenerator | Fragment
             
             Prelude =
                 element prelude {BlockText+}
@@ -1566,11 +1565,6 @@
             NotationList =
                 element notation-list {empty}
             
-                    Demonstration = element demonstration {
-                    Title,
-                    Paragraph,
-                    Sage
-                    }
                 
             DocInfo =
                 element docinfo {
