@@ -1678,6 +1678,9 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
+        <xsl:with-param name="autoeval-attribute">
+            <xsl:value-of select="@autoeval" />
+        </xsl:with-param>
         <xsl:with-param name="in" select="''"/>
         <xsl:with-param name="out" select="''" />
     </xsl:apply-templates>
@@ -1731,6 +1734,10 @@ Book (with parts), "section" at level 3
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
+        </xsl:with-param>
+        <xsl:with-param name="autoeval-attribute">
+            <xsl:if test="not(@autoeval)">false</xsl:if>
+            <xsl:value-of select="@autoeval" />
         </xsl:with-param>
         <xsl:with-param name="in">
             <xsl:call-template name="sanitize-text">

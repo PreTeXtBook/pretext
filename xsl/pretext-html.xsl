@@ -9591,6 +9591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="block-type"/>
     <xsl:param name="language-attribute" />
+    <xsl:param name="autoeval-attribute" />
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:param name="b-original"/>
@@ -9609,7 +9610,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>sage</xsl:text>
             </xsl:if>
             <xsl:value-of select="$language-attribute" />
+            <xsl:text>-</xsl:text>
+            <xsl:value-of select="$autoeval-attribute" />
         </xsl:attribute>
+        <xsl:attribute name="autoeval">
+            <xsl:value-of select="$autoeval-attribute" />
+        </xsl:attribute>
+
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
@@ -10058,7 +10065,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
                     <string key="inputLocation">.sage-interact</string>
-                    <boolean key="autoeval">true</boolean>
                     <array key="hide">
                         <string>editor</string>
                         <string>evalButton</string>
@@ -12619,17 +12625,27 @@ TODO:
 <xsl:template name="makesagecell">
     <xsl:param name="language-attribute" />
     <xsl:param name="language-text" />
+    <xsl:param name="autoeval-attribute" />
     <xsl:element name="script">
         <xsl:text>// Make *any* pre with class 'sagecell-</xsl:text>
             <xsl:value-of select="$language-attribute" />
+            <xsl:text>-</xsl:text>
+            <xsl:value-of select="$autoeval-attribute" />
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
         <xsl:text>sagecell.makeSagecell(</xsl:text>
         <xsl:call-template name="json">
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <string key="inputLocation">pre.sagecell-<xsl:value-of select="$language-attribute" /></string>
+                    <string key="inputLocation">pre.sagecell-<xsl:value-of select="$language-attribute" />-<xsl:value-of select="$autoeval-attribute" /></string>
                     <boolean key="linked">true</boolean>
+                    <string key="linkKey">linked-<xsl:value-of select="$language-attribute" /></string>
+                    <xsl:if test="$autoeval-attribute='true'">
+                        <boolean key="autoeval">true</boolean>
+                    </xsl:if> 
+                    <xsl:if test="$autoeval-attribute='false'">
+                        <boolean key="autoeval">false</boolean>
+                    </xsl:if> 
                     <array key="languages">
                         <string>
                             <xsl:value-of select="$language-attribute" />
@@ -12643,6 +12659,12 @@ TODO:
                         <xsl:value-of select="$language-text" />
                         <xsl:text>)</xsl:text>
                     </string>
+                    <xsl:if test="$autoeval-attribute='true'">
+                    <array key="hide">
+                        <string>evalButton</string>
+                    </array>
+                    </xsl:if> 
+
                 </map>
             </xsl:with-param>
         </xsl:call-template>
@@ -12706,6 +12728,7 @@ TODO:
         <xsl:call-template name="makesagecell">
             <xsl:with-param name="language-attribute">sage</xsl:with-param>
             <xsl:with-param name="language-text">Sage</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12725,6 +12748,7 @@ TODO:
                 <xsl:text>gap</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">GAP</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12734,6 +12758,7 @@ TODO:
                 <xsl:text>gp</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">GP</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12743,6 +12768,7 @@ TODO:
                 <xsl:text>html</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">HTML</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12752,6 +12778,7 @@ TODO:
                 <xsl:text>maxima</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">Maxima</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12761,15 +12788,27 @@ TODO:
                 <xsl:text>octave</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">Octave</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
-    <xsl:if test=".//sage[@language='python']">
+    <xsl:if test=".//sage[@language='python' and @autoeval and @autoeval='true']">
         <xsl:call-template name="makesagecell">
             <xsl:with-param name="language-attribute">
                 <xsl:text>python</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">Python</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">true</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='python' and (not(@autoeval) or not(@autoeval='true'))]">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>python</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">Python</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12780,6 +12819,7 @@ TODO:
                 <!-- <xsl:text></xsl:text> -->
             </xsl:with-param>
             <xsl:with-param name="language-text">R</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
@@ -12789,6 +12829,7 @@ TODO:
                 <xsl:text>singular</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="language-text">Singular</xsl:with-param>
+            <xsl:with-param name="autoeval-attribute">false</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
