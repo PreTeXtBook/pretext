@@ -9529,21 +9529,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="idx" />
 
 
-<!-- Demonstrations -->
-<!-- A simple page with no constraints -->
-<xsl:template match="demonstration">
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="visible-id" />.html</xsl:variable>
-    <a href="{$url}" target="_blank" class="link">
-        <xsl:apply-templates select="." mode="title-full" />
-    </a>
-    <xsl:apply-templates select="." mode="simple-file-wrap" >
-        <xsl:with-param name="content">
-            <xsl:apply-templates />
-        </xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-
 <!-- ############################ -->
 <!-- Literate Programming Support -->
 <!-- ############################ -->

@@ -10545,6 +10545,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'a &quot;website&quot; element with &quot;address&quot; and &quot;name&quot; children has changed.  Continue to use the &quot;website&quot; element as before, but replace the &quot;address&quot; and &quot;name&quot; children with a single &quot;url&quot; element, which is more flexible and reliable.  We will try to honor your intent, but you may prefer your own adjustments.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2023-08-10  Kill the half-baked "demonstration" element-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//demonstration" />
+        <xsl:with-param name="date-string" select="'2023-08-10'" />
+        <xsl:with-param name="message" select="'the &quot;demonstration&quot; element has been removed with no natural replacement.  The &quot;interactive&quot; element may be sufficiently flexible to do something similar and will produce a standalone page that might serve a similar purpose.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
