@@ -3974,20 +3974,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section label="section-demonstrations">
-            <title>Demonstrations</title>
-
-            <demonstration>
-                <title>A Simple Demonstration</title>
-
-                <p>Hey!</p>
-
-                <sage type="practice" />
-
-            </demonstration>
-
-        </section>
-
         <section label="section-further-reading">
             <title>Further Reading</title>
 
