@@ -7126,6 +7126,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Use this to ensure consistency -->
+<!-- NB: it could be tempting to change this template to stuff     -->
+<!-- these "iframe" files into a dedicated directory.  Even though -->
+<!-- this template ensures some consistency, a pile of links still -->
+<!-- need to change, such as the "script" tag for locations of     -->
+<!-- extra JS as part of making one of these go.                   -->
 <xsl:template match="*" mode="iframe-filename">
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-if.html</xsl:text>
