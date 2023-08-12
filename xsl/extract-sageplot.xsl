@@ -68,7 +68,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Second, the (unique) name of the graphics object in Sage  -->
     <!-- (We do this first, so we can use "$filebase" below)       -->
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="visible-id" />
+        <xsl:apply-templates select="." mode="image-source-basename"/>
     </xsl:variable>
     <xsl:variable name="plot-name">
         <xsl:text>plot_</xsl:text>

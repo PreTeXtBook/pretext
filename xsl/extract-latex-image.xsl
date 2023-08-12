@@ -107,7 +107,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intercept "extraction" process in extract-identity.xsl stylesheet. -->
 <xsl:template match="image[latex-image]" mode="extraction">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
     </xsl:variable>
     <!-- Do not use directories here, as Windows paths will get mangled -->
     <!-- Instead, set working directory before applying stylesheet      -->
