@@ -858,11 +858,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
     </span>
-    <xsl:text> </xsl:text>
+    <xsl:call-template name="space-styled"/>
     <span class="codenumber">
         <xsl:apply-templates select="." mode="number" />
     </span>
-    <xsl:text> </xsl:text>
+    <xsl:call-template name="space-styled"/>
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
@@ -883,7 +883,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
     </span>
-    <xsl:text> </xsl:text>
+    <xsl:call-template name="space-styled"/>
     <!-- be selective about displaying numbers at birth-->
     <xsl:variable name="is-numbered">
         <xsl:apply-templates select="." mode="is-specialized-own-number"/>
@@ -893,7 +893,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="number"/>
         </xsl:if>
     </span>
-    <xsl:text> </xsl:text>
+    <xsl:call-template name="space-styled"/>
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
