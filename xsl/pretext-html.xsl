@@ -6553,7 +6553,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>latex-image/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
     </xsl:variable>
     <xsl:call-template name="svg-png-wrapper">
         <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
@@ -6577,7 +6577,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>sageplot/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
     </xsl:variable>
     <!-- 2d are SVG, 3d are HTML -->
     <xsl:choose>
@@ -6621,7 +6621,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>asymptote/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
     </xsl:variable>
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
     <!-- We also need a path to the *source* file, for examination -->
@@ -6632,7 +6632,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>asymptote/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
         <xsl:text>.html</xsl:text>
     </xsl:variable>
     <!-- Assumes filename is relative to primary source file, -->

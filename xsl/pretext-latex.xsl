@@ -8816,7 +8816,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>asymptote/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
         <xsl:text>.pdf</xsl:text>
     </xsl:variable>
     <xsl:choose>
@@ -8827,7 +8827,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-managed-directories">
                 <xsl:text>asymptote/</xsl:text>
             </xsl:if>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
             <xsl:text>.html</xsl:text>
         </xsl:variable>
         <xsl:text>\href{</xsl:text>
@@ -8860,7 +8860,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-managed-directories">
         <xsl:text>sageplot/</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
     <xsl:choose>
         <xsl:when test="not(sageplot/@variant) or (sageplot/@variant = '2d')">
             <xsl:text>.pdf</xsl:text>
