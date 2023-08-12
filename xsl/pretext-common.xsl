@@ -3724,9 +3724,9 @@ Book (with parts), "section" at level 3
 
 <xsl:key name="kbdkey-key" match="kbdkeyinfo" use="@name"/>
 
-<!-- ########### -->
-<!-- Identifiers -->
-<!-- ########### -->
+<!-- ###################### -->
+<!-- Identifiers and Labels -->
+<!-- ###################### -->
 
 <!-- Identifiers are in flux, as of 2023-03-30.  The "internal-id" is  -->
 <!-- an attribute built during the descent of the tree during the      -->
@@ -3775,6 +3775,29 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="local-name(.)" />
             <xsl:text>-</xsl:text>
             <xsl:number from="book|article|letter|memo" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An image described by source code, using languages Asymptote,     -->
+<!-- Sage, or LaTeX, should have its filename determined by properties -->
+<!-- of the associated language-specific element, specifically this is -->
+<!-- the province of the @label attribute.  So this is the preference  -->
+<!-- from approximately 2023-08-12.  Looking to the enclosing (parent) -->
+<!-- "image" is historical, preserving backward-compatibility.         -->
+<xsl:template match="asymptote|sageplot|latex-image" mode="image-source-basename">
+    <xsl:choose>
+        <!-- 2023-08-12: presently a no-change refactor, -->
+        <!-- turn this on soon to support new behavior   -->
+        <!-- <xsl:when test="@label">           -->
+        <!--    <xsl:value-of select="@label"/> -->
+        <!-- </xsl:when>                        -->
+        <xsl:when test="parent::image">
+            <xsl:apply-templates select="parent::image" mode="visible-id"/>
+        </xsl:when>
+        <!-- Well-formed PTX source means we never reach the "otherwise" -->
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:  parent of a "<xsl:value-of select="local-name()"/>" element in your PreTeXt source is not an "image".  If you think this is a programming error (not an error in your source), please report me.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
