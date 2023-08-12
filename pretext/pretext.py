@@ -259,6 +259,9 @@ def asymptote_conversion(
     #   curl --data-binary @source.asy 'asymptote.ualberta.ca:10007?f=svg' > output.svg
     import glob
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     try:
         import requests  # post()
     except ImportError:
@@ -428,6 +431,9 @@ def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
 ):
     # stringparams is a dictionary, best for lxml parsing
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     # external module, often forgotten
     try:
@@ -637,6 +643,9 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     """Convert certain  files in source to text representations in XML files"""
     # stringparams is a dictionary, best for lxml parsing
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     import base64
 
     msg = 'converting data files from {} to text representations in XML files for placement in {}'
@@ -748,6 +757,9 @@ def latex_tactile_image_conversion(
     #     7.  Process with XSL to insert braille and other modifications
 
     # NB: latex (in (5)) and dvisvgm (in (6)) are hard-coded
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     log.info(
         "converting latex-image from {} to {} graphics for placement in {}".format(
@@ -901,6 +913,9 @@ def latex_tactile_image_conversion(
 # CodeLens tool in Runestone
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     try:
         import requests  # post()
@@ -1769,6 +1784,9 @@ def webwork_to_xml(
 
 
 def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     if pub_file:
         stringparams["publisher"] = pub_file
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -1799,6 +1817,9 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
 
 def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     if pub_file:
         stringparams["publisher"] = pub_file
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -1814,6 +1835,9 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
 
 def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     try:
         import requests  # YouTube server
@@ -1884,6 +1908,9 @@ def play_button(dest_dir):
 
 
 def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     # https://pypi.org/project/qrcode/
     try:
@@ -2199,6 +2226,9 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     try:
         import requests  # MyOpenMath server
     except ImportError:
@@ -2251,6 +2281,9 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
 def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     # general message for this entire procedure
     log.info(
@@ -2678,6 +2711,10 @@ def _split_brf(filename):
 
 
 def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+    
     """Produce complete document in an EPUB container"""
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
@@ -3200,6 +3237,10 @@ def html(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
     """Convert XML source to HTML files, in destination directory or as zip file"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+    
     import distutils.dir_util  # copy_tree()
 
     # Consult publisher file for locations of images
@@ -3296,6 +3337,9 @@ def html(
 def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
     """Convert XML source to pre-processed PreTeXt in destination directory"""
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     # support publisher file, not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -3326,6 +3370,9 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     # support publisher file, not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -3349,6 +3396,9 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
 
 def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     """Convert XML source to a PDF (incomplete)"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
