@@ -71,9 +71,8 @@
 <!-- copies can be made.                                                   -->
 <xsl:variable name="b-extracting-pg" select="true()"/>
 
-<!-- We are outputting Python code, and there is no reason to output       -->
-<!-- anything other than "text"                                            -->
-<xsl:output method="text" encoding="UTF-8" />
+<!-- Output XML to be read in by Python -->
+<xsl:output method="xml" encoding="UTF-8" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -98,42 +97,33 @@
 
 <!-- Initialize empty dictionaries, then define key-value pairs             -->
 <xsl:template match="*" mode="extraction-wrapper">
-    <xsl:text>localization = '</xsl:text>
-    <xsl:value-of select="$document-language"/>
-    <xsl:text>'&#xa;</xsl:text>
-    <!-- Record the server address and credentials from publisher variables -->
-    <!-- This will be an empty dictionary if there was no publication file. -->
-    <xsl:text>server_params_pub = {&#xa;</xsl:text>
-    <xsl:if test="$publisher">
-        <xsl:text>    "ww_domain":"</xsl:text>
-        <xsl:value-of select="$webwork-server"/>
-        <xsl:text>",&#xa;</xsl:text>
-        <xsl:text>    "courseID":"</xsl:text>
-        <xsl:value-of select="$webwork-course"/>
-        <xsl:text>",&#xa;</xsl:text>
-        <xsl:text>    "userID":"</xsl:text>
-        <xsl:value-of select="$webwork-user"/>
-        <xsl:text>",&#xa;</xsl:text>
-        <xsl:text>    "password":"</xsl:text>
-        <xsl:value-of select="$webwork-userpassword"/>
-        <xsl:text>",&#xa;</xsl:text>
-        <xsl:text>    "course_password":"</xsl:text>
-        <xsl:value-of select="$webwork-coursepassword"/>
-        <xsl:text>"&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:text>}&#xa;</xsl:text>
-    <!-- Initialize empty dictionaries, then define key-value pairs -->
-    <xsl:text>origin = {}&#xa;</xsl:text>
-    <xsl:text>copiedfrom = {}&#xa;</xsl:text>
-    <xsl:text>seed = {}&#xa;</xsl:text>
-    <xsl:text>source = {}&#xa;</xsl:text>
-    <xsl:text>pghuman = {}&#xa;</xsl:text>
-    <xsl:text>pgdense = {}&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_no_solution_no'] = {}&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_no_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_yes_solution_no'] = {}&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-imports/>
+    <ww-extraction>
+        <localization>
+            <xsl:value-of select="$document-language"/>
+        </localization>
+        <!-- Record the server address and credentials from publisher variables -->
+        <!-- This will be an empty element if there was no publication file. -->
+        <server-params-pub>
+            <xsl:if test="$publisher">
+                <ww-domain>
+                    <xsl:value-of select="$webwork-server"/>
+                </ww-domain>
+                <course-id>
+                    <xsl:value-of select="$webwork-course"/>
+                </course-id>
+                <user-id>
+                    <xsl:value-of select="$webwork-user"/>
+                </user-id>
+                <password>
+                    <xsl:value-of select="$webwork-userpassword"/>
+                </password>
+                <course-password>
+                    <xsl:value-of select="$webwork-coursepassword"/>
+                </course-password>
+            </xsl:if>
+        </server-params-pub>
+        <xsl:apply-imports/>
+    </ww-extraction>
 </xsl:template>
 
 <xsl:template match="webwork[@source]" mode="extraction">
@@ -141,22 +131,23 @@
     <xsl:variable name="problem">
         <xsl:value-of select="@ww-id"/>
     </xsl:variable>
-    <!-- 1. a ptx|copy|server flag (authored in PTX, a copy, or from server)   -->
-    <xsl:text>origin["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = "server"&#xa;</xsl:text>
-    <!-- 2. a seed for randomization (with a default explicitly declared)      -->
-    <xsl:text>seed["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = "</xsl:text>
-    <xsl:apply-templates select="." mode="get-seed" />
-    <xsl:text>"&#xa;</xsl:text>
-    <!-- 3. source (a problem's file path if it is server-based)               -->
-    <xsl:text>source["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = "</xsl:text>
-    <xsl:value-of select="@source" />
-    <xsl:text>"&#xa;</xsl:text>
+    <problem>
+        <xsl:attribute name="id">
+            <xsl:value-of select="$problem" />
+        </xsl:attribute>
+        <!-- 1. a ptx|copy|server flag (authored in PTX, a copy, or from server)   -->
+        <xsl:attribute name="origin">
+            <xsl:text>server</xsl:text>
+        </xsl:attribute>
+        <!-- 2. a seed for randomization (with a default explicitly declared)      -->
+        <xsl:attribute name="seed">
+            <xsl:apply-templates select="." mode="get-seed" />
+        </xsl:attribute>
+        <!-- 3. source (a problem's file path if it is server-based)               -->
+        <source>
+            <xsl:value-of select="@source" />
+        </source>
+    </problem>
 </xsl:template>
 
 <xsl:template match="webwork[statement|task]" mode="extraction">
@@ -164,82 +155,64 @@
     <xsl:variable name="problem">
         <xsl:value-of select="@ww-id"/>
     </xsl:variable>
-    <!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
-    <xsl:text>origin["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = "ptx"&#xa;</xsl:text>
-    <!-- 1b. if this problem is a copy, record where it was copied from        -->
-    <xsl:if test="@copied-from">
-        <xsl:text>copiedfrom["</xsl:text>
-        <xsl:value-of select="$problem" />
-        <xsl:text>"] = "</xsl:text>
-        <xsl:value-of select="@copied-from"/>
-        <xsl:text>"&#xa;</xsl:text>
-    </xsl:if>
-    <!-- 2. a seed for randomization (with a default explicitly declared)      -->
-    <xsl:text>seed["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = "</xsl:text>
-    <xsl:apply-templates select="." mode="get-seed" />
-    <xsl:text>"&#xa;</xsl:text>
-    <!-- 4. human readable PG (for PTX-authored)                               -->
-    <xsl:text>pghuman["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = """</xsl:text>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-hint" select="true()" />
-        <xsl:with-param name="b-solution" select="true()" />
-        <xsl:with-param name="b-human-readable" select="true()" />
-    </xsl:apply-templates>
-    <xsl:text>"""&#xa;</xsl:text>
-    <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
-    <xsl:text>pgdense["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = """</xsl:text>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-hint" select="true()" />
-        <xsl:with-param name="b-solution" select="true()" />
-        <xsl:with-param name="b-human-readable" select="false()" />
-    </xsl:apply-templates>
-    <xsl:text>"""&#xa;</xsl:text>
-    <!-- Below are only needed for WeBWorK 2.15 and earlier, -->
-    <!-- where we use an iframe for the embedding. Otherwise -->
-    <xsl:text>pgdense['hint_no_solution_no']["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = """</xsl:text>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-hint" select="false()" />
-        <xsl:with-param name="b-solution" select="false()" />
-        <xsl:with-param name="b-human-readable" select="false()" />
-    </xsl:apply-templates>
-    <xsl:text>"""&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_no_solution_yes']["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = """</xsl:text>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-hint" select="false()" />
-        <xsl:with-param name="b-solution" select="true()" />
-        <xsl:with-param name="b-human-readable" select="false()" />
-    </xsl:apply-templates>
-    <xsl:text>"""&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_yes_solution_no']["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = """</xsl:text>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-hint" select="true()" />
-        <xsl:with-param name="b-solution" select="false()" />
-        <xsl:with-param name="b-human-readable" select="false()" />
-    </xsl:apply-templates>
-    <xsl:text>"""&#xa;</xsl:text>
-    <xsl:text>pgdense['hint_yes_solution_yes']["</xsl:text>
-    <xsl:value-of select="$problem" />
-    <xsl:text>"] = """</xsl:text>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-hint" select="true()" />
-        <xsl:with-param name="b-solution" select="true()" />
-        <xsl:with-param name="b-human-readable" select="false()" />
-    </xsl:apply-templates>
-    <xsl:text>"""&#xa;</xsl:text>
+    <problem>
+        <xsl:attribute name="id">
+            <xsl:value-of select="$problem" />
+        </xsl:attribute>
+        <!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
+        <xsl:attribute name="origin">
+            <xsl:text>ptx</xsl:text>
+        </xsl:attribute>
+        <!-- 1b. if this problem is a copy, record where it was copied from        -->
+        <xsl:if test="@copied-from">
+            <xsl:attribute name="copied-from">
+                <xsl:value-of select="@copied-from"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- 2. a seed for randomization (with a default explicitly declared)      -->
+        <xsl:attribute name="seed">
+            <xsl:apply-templates select="." mode="get-seed" />
+        </xsl:attribute>
+        <!-- 4. human readable PG (for PTX-authored)                               -->
+        <pghuman>
+            <xsl:apply-templates select=".">
+                <xsl:with-param name="b-hint" select="true()" />
+                <xsl:with-param name="b-solution" select="true()" />
+                <xsl:with-param name="b-human-readable" select="true()" />
+            </xsl:apply-templates>
+        </pghuman>
+        <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
+        <pgdense hint="yes" solution="yes">
+            <xsl:apply-templates select=".">
+                <xsl:with-param name="b-hint" select="true()" />
+                <xsl:with-param name="b-solution" select="true()" />
+                <xsl:with-param name="b-human-readable" select="false()" />
+            </xsl:apply-templates>
+        </pgdense>
+        <!-- Below are only needed for WeBWorK 2.15 and earlier, -->
+        <!-- where we use an iframe for the embedding. Otherwise -->
+        <pgdense hint="no" solution="no">
+            <xsl:apply-templates select=".">
+                <xsl:with-param name="b-hint" select="false()" />
+                <xsl:with-param name="b-solution" select="false()" />
+                <xsl:with-param name="b-human-readable" select="false()" />
+            </xsl:apply-templates>
+        </pgdense>
+        <pgdense hint="no" solution="yes">
+            <xsl:apply-templates select=".">
+                <xsl:with-param name="b-hint" select="false()" />
+                <xsl:with-param name="b-solution" select="true()" />
+                <xsl:with-param name="b-human-readable" select="false()" />
+            </xsl:apply-templates>
+        </pgdense>
+        <pgdense hint="yes" solution="no">
+            <xsl:apply-templates select=".">
+                <xsl:with-param name="b-hint" select="false()" />
+                <xsl:with-param name="b-solution" select="true()" />
+                <xsl:with-param name="b-human-readable" select="false()" />
+            </xsl:apply-templates>
+        </pgdense>
+    </problem>
 </xsl:template>
 
 <!-- ################ -->
