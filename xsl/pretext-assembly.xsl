@@ -2157,6 +2157,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
+            <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <xsl:choose>
                     <!-- @preview present, so author provides a static image  -->
@@ -2229,16 +2230,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>.png</xsl:text>
                         </xsl:attribute>
                     </image>
-                    <p>
-                        <url>
-                            <xsl:attribute name="href">
-                                <xsl:apply-templates select="." mode="static-url"/>
-                            </xsl:attribute>
-                            <!-- Kill the automatic footnote    -->
-                            <!-- <xsl:attribute name="visual"/> -->
-                            <xsl:text>Interactive</xsl:text>
-                        </url>
-                    </p>
+                    <!-- URL templates create empty strings as signals URLs do not (yet) exist -->
+                    <!-- We kill the automatic footnotes, a debatable decision                 -->
+                    <!--  -->
+                    <xsl:variable name="standalone-url">
+                        <xsl:apply-templates select="." mode="standalone-url"/>
+                    </xsl:variable>
+                    <xsl:if test="not($standalone-url = '')">
+                        <p>
+                            <url href="{$standalone-url}" visual="">
+                                <xsl:text>Standalone</xsl:text>
+                            </url>
+                        </p>
+                    </xsl:if>
+                    <!--  -->
                 </stack>
             </sidebyside>
         </xsl:when>

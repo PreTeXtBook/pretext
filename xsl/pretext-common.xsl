@@ -3263,6 +3263,17 @@ Book (with parts), "section" at level 3
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
+<!--  -->
+<!-- NB: it could be tempting to change this template to stuff     -->
+<!-- these "iframe" files into a dedicated directory.  Even though -->
+<!-- this template ensures some consistency, a pile of links still -->
+<!-- need to change, such as the "script" tag for locations of     -->
+<!-- extra JS as part of making one of these go.                   -->
+<xsl:template match="*" mode="iframe-filename">
+    <xsl:apply-templates select="." mode="visible-id-early" />
+    <xsl:text>-if.html</xsl:text>
+</xsl:template>
+
 <xsl:template match="audio|video|interactive" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id-early" />
     <xsl:text>.html</xsl:text>
@@ -3270,6 +3281,14 @@ Book (with parts), "section" at level 3
 <xsl:template match="*" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
+<xsl:template match="audio|video|interactive" mode="standalone-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="standalone-filename" />
+    </xsl:if>
+    <!-- empty without a baseurl -->
 </xsl:template>
 
 <!-- Static URL's -->
