@@ -2244,6 +2244,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </xsl:if>
                     <!--  -->
+                    <xsl:variable name="embed-iframe-url">
+                        <xsl:apply-templates select="." mode="embed-iframe-url"/>
+                    </xsl:variable>
+                    <xsl:if test="not($embed-iframe-url = '')">
+                        <p>
+                            <!-- Kill the automatic footnote    -->
+                            <url href="{$embed-iframe-url}" visual="">
+                                <xsl:text>Embed</xsl:text>
+                            </url>
+                        </p>
+                    </xsl:if>
+                    <!--  -->
                 </stack>
             </sidebyside>
         </xsl:when>

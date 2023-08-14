@@ -3291,6 +3291,24 @@ Book (with parts), "section" at level 3
     <!-- empty without a baseurl -->
 </xsl:template>
 
+<xsl:template match="audio|video|interactive" mode="embed-iframe-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="iframe-filename" />
+    </xsl:if>
+    <!-- empty without a baseurl -->
+</xsl:template>
+
+<!-- These interactives *are* iFrames, so we don't build a dedicated   -->
+<!-- page to make them into iFrames.  Over in -html we construct a URL -->
+<!-- for each one, embedded in a iFrame construction.  We need to work -->
+<!-- out the right thing to do for an "Embed" link in static formats.  -->
+<!-- For now, an empty result means no link in sttic formats.          -->
+<!-- NB: coordinate with "create-iframe-page" in -html                 -->
+<xsl:template match="audio|video"  mode="embed-iframe-url"/>
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]"  mode="embed-iframe-url"/>
+
+
 <!-- Static URL's -->
 <!-- Predictable and/or stable URLs for versions         -->
 <!-- of interactives available online.  These are        -->
