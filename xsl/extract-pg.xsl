@@ -144,9 +144,9 @@
             <xsl:apply-templates select="." mode="get-seed" />
         </xsl:attribute>
         <!-- 3. source (a problem's file path if it is server-based)               -->
-        <source>
+        <xsl:attribute name="source">
             <xsl:value-of select="@source" />
-        </source>
+        </xsl:attribute>
     </problem>
 </xsl:template>
 

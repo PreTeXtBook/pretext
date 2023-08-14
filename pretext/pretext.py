@@ -1071,19 +1071,16 @@ def webwork_to_xml(
     ww_filename = os.path.join(tmp_dir, "webwork-dicts.xml")
     log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
     xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
-    # "run" an assignment for the list of triples of strings
-    with open(ww_filename, "r") as ww_file:
-        problem_dictionaries_xml = ww_file.read()
     # build necessary variables by reading xml with lxml
-    ww_xml = ET.parse(problem_dictionaries_xml).getroot()
+    ww_xml = ET.parse(ww_filename).getroot()
     localization = ww_xml.find("localization").text
-    if ww.xsml.find("server-params-pub").find("ww-domain"):
+    if ww_xml.find("server-params-pub").find("ww-domain") is not None:
         server_params_pub = {
-            "ww_domain": ww.xsml.find("server-params-pub").find("ww-domain"),
-            "courseID": ww.xsml.find("server-params-pub").find("course-id"),
-            "userID": ww.xsml.find("server-params-pub").find("user-id"),
-            "password": ww.xsml.find("server-params-pub").find("password"),
-            "course_password": ww.xsml.find("server-params-pub").find("course-password"),
+            "ww_domain": ww_xml.find("server-params-pub").find("ww-domain").text,
+            "courseID": ww_xml.find("server-params-pub").find("course-id").text,
+            "userID": ww_xml.find("server-params-pub").find("user-id").text,
+            "password": ww_xml.find("server-params-pub").find("password").text,
+            "course_password": ww_xml.find("server-params-pub").find("course-password").text,
         }
     else:
         server_params_pub = {}
@@ -1106,12 +1103,17 @@ def webwork_to_xml(
         else:
             if ele.get("copied-from") is not None:
                 copiedfrom[ele.get("id")] = ele.get("copied-from")
-            pghuman[ele.get("id")] = ele.find("pghuman").
-            pgdense[ele.get("id")] = ele.find("pgdense[@hint='yes' and @solution='yes']")
-            pgdense["hint_no_solution_no"][ele.get("id")] = ele.find("pgdense[@hint='no' and @solution='no']")
-            pgdense["hint_yes_solution_no"][ele.get("id")] = ele.find("pgdense[@hint='yes' and @solution='no']")
-            pgdense["hint_no_solution_yes"][ele.get("id")] = ele.find("pgdense[@hint='no' and @solution='yes']")
-            pgdense["hint_yes_solution_yes"][ele.get("id")] = ele.find("pgdense[@hint='yes' and @solution='yes']")
+            pghuman[ele.get("id")] = ele.find("pghuman").text
+            for dense in ele.iter("pgdense"):
+                if dense.get("hint")=="yes" and dense.get("solution")=="yes":
+                    pgdense[ele.get("id")] = dense.text
+                    pgdense["hint_yes_solution_yes"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="yes" and dense.get("solution")=="no":
+                    pgdense["hint_yes_solution_no"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="no" and dense.get("solution")=="yes":
+                    pgdense["hint_no_solution_yes"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="no" and dense.get("solution")=="no":
+                    pgdense["hint_no_solution_no"][ele.get("id")] = dense.text
 
     # ideally, pub_file is in use, in which case server_params_pub is nonempty.
     # if no pub_file in use, rely on server_params.
