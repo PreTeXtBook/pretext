@@ -946,7 +946,7 @@ function adjustSrcHrefs(container,ww_domain) {
 		if (href !== '#' && !href.match(/^[a-z]+:\/\//i)) node.href = ww_domain + '/' + href;
 	});
 	container.querySelectorAll('[src]').forEach((node) => {
-		node.src = ww_domain + '/' + node.attributes.src.value;
+		node.src = new URL(node.attributes.src.value, ww_domain).href;
 	});
 }
 
