@@ -1,0 +1,14 @@
+@import url("banner_default.css");
+
+.pretext .ptx-masthead {
+  max-width: unset;
+}
+
+.pretext .ptx-masthead .ptx-banner {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: var(--page-width);
+  padding: 8px 0;
+} 
