@@ -177,7 +177,6 @@ so that we can set our own later */
 }
 /* these are to over-ride "pre" styling in code.less */
 .ptx-content pre {
-    background: inherit;
     border-radius: 0;
 }
 
