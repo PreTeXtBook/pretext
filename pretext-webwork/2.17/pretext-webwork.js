@@ -157,13 +157,14 @@ function handleWW(ww_id, action) {
 				if (input && input.type.toUpperCase() == 'RADIO') {
 					const buttons = body_div.querySelectorAll('input[name=' + answer + ']');
 					for (const button of buttons) {
-						if (button.value == answers[answer]) {
+						// button.value is like "B0" and answers[answer] is like "Choice 1"
+						if (button.value == 'B' + String(Number(answers[answer].replace(/^Choice /, '')) - 1)) {
 							button.setAttribute('checked', 'checked');
 						}
 					}
 				}
-				const select = body_div.querySelector('select[id=' + answer + ']');
-				if (select) {
+				var select = body_div.querySelector('select[id=' + answer + ']');
+				if (select && answers[answer]) {
 					const option = body_div.querySelector('option[value=' + answers[answer] + ']');
 					option.setAttribute('selected', 'selected');
 				}
