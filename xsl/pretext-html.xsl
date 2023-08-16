@@ -12626,6 +12626,10 @@ TODO:
                         </xsl:call-template>
                     </string>
                     <boolean key="linked">true</boolean>
+                    <string key="linkKey">
+                        <xsl:text>linked-</xsl:text>
+                        <xsl:value-of select="$language-attribute" />
+                    </string>
                     <array key="languages">
                         <string>
                             <xsl:value-of select="$language-attribute" />
