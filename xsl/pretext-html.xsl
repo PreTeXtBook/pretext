@@ -9593,12 +9593,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$block-type = 'embed'">
                 <xsl:text>hidden-</xsl:text>
             </xsl:if>
-            <xsl:text>sagecell-</xsl:text>
-            <xsl:if test="$language-attribute=''">
-                <xsl:text>sage</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$language-attribute" />
+            <xsl:call-template name="sagecell-class-name">
+                <xsl:with-param name="language-attribute" select="$language-attribute"/>
+            </xsl:call-template>
         </xsl:attribute>
+
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
@@ -12610,15 +12609,22 @@ TODO:
     <xsl:param name="language-attribute" />
     <xsl:param name="language-text" />
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class 'sagecell-</xsl:text>
-            <xsl:value-of select="$language-attribute" />
+        <xsl:text>// Make *any* pre with class '</xsl:text>
+        <xsl:call-template name="sagecell-class-name">
+            <xsl:with-param name="language-attribute" select="$language-attribute"/>
+        </xsl:call-template>
         <xsl:text>' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
         <xsl:text>sagecell.makeSagecell(</xsl:text>
         <xsl:call-template name="json">
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <string key="inputLocation">pre.sagecell-<xsl:value-of select="$language-attribute" /></string>
+                    <string key="inputLocation">
+                        <xsl:text>pre.</xsl:text>
+                        <xsl:call-template name="sagecell-class-name">
+                            <xsl:with-param name="language-attribute" select="$language-attribute"/>
+                        </xsl:call-template>
+                    </string>
                     <boolean key="linked">true</boolean>
                     <array key="languages">
                         <string>
