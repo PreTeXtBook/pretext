@@ -10946,7 +10946,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:call-template name="native-search-results"/>
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
-            <xsl:apply-templates select="." mode="primary-navigation"/>
+
+            <xsl:choose>
+                <xsl:when test="$html-css-navbarfile='navbar_wide.css'">
+                    <xsl:apply-templates select="." mode="primary-navigation-wide"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="primary-navigation"/>
+                </xsl:otherwise>
+            </xsl:choose>
+
             <xsl:call-template name="latex-macros"/>
             <xsl:call-template name="enable-editing"/>
             <div class="ptx-page">
@@ -11691,14 +11700,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> ptx-runestone-container</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        <button class="toc-toggle button" aria-label="Show or hide table of contents">
-            <span class="icon">☰</span>
-            <span class="name">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'toc'"/>
-                </xsl:apply-templates>
-            </span>
-        </button>
+
+        <xsl:apply-templates select="." mode="primary-navigation-toc" />
+
         <!-- A page either has an/the index as    -->
         <!-- a child, and gets the "jump to" bar, -->
         <!-- or it deserves an index button       -->
@@ -11738,6 +11742,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Search box at end of ptx-navbar, so it can be sticky -->
         <xsl:call-template name="google-search-box" />
         <xsl:call-template name="native-search-box" />
+    </nav>
+</xsl:template>
+
+
+<xsl:template match="*" mode="primary-navigation-toc">
+    <button class="toc-toggle button" aria-label="Show or hide table of contents">
+        <span class="icon">☰</span>
+        <span class="name">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'toc'"/>
+            </xsl:apply-templates>
+        </span>
+    </button>
+</xsl:template>
+
+<!-- Wide template primary-navigation -->
+<xsl:template match="*" mode="primary-navigation-wide">
+    <nav id="ptx-navbar">
+        <xsl:attribute name="class">
+            <xsl:text>ptx-navbar navbar</xsl:text>
+            <xsl:if test="$b-host-runestone">
+                <xsl:text> ptx-runestone-container</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <span class="book-nav">
+            <xsl:apply-templates select="." mode="primary-navigation-toc" />
+            <xsl:choose>
+                <xsl:when test="index-list">
+                    <xsl:apply-templates select="." mode="index-jump-nav" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="index-button" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="google-search-box" />
+            <xsl:call-template name="native-search-box" />
+        </span>
+
+        <span class="treebuttons">
+            <xsl:apply-templates select="." mode="previous-button"/>
+            <xsl:if test="$nav-upbutton='yes'">
+                <xsl:apply-templates select="." mode="up-button"/>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="next-button"/>
+        </span>
+
+        <span class="other-controls">
+            <xsl:if test="$b-has-calculator">
+                <xsl:call-template name="calculator-toggle" />
+                <xsl:call-template name="calculator" />
+            </xsl:if>
+            <!-- Runestone user menu -->
+            <xsl:if test="not($b-debug-react)">
+                <!-- A scratch ActiveCode via a pencil icon, always -->
+                <xsl:call-template name="runestone-scratch-activecode"/>
+                <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
+                <xsl:call-template name="user-preferences-menu"/>
+                <!-- Conditional on a build for Runestone hosting -->
+                <xsl:call-template name="runestone-bust-menu"/>
+            </xsl:if>
+        </span>
     </nav>
 </xsl:template>
 
