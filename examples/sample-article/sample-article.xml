@@ -1377,6 +1377,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Sage cells</h><h>linking</h></idx>
 
                 <p>Sage cells share their results on a per-webpage basis, or a per-knowl basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location by placing the code in an external file, which is pure text, freed from any need to format for XML processing.  So, in particular, there is no need to escape ampersands and angle brackets, nor is there employment of the <c>CDATA</c> mechanism.  But the real value is that there is just one version to edit, and any changes will be reflected in both copies.  We demonstrate this in the sample book, since it has the <c>xinclude</c> mechanism in place.  In the chapter on groups, find the section on Sage and then find the discussion of subgroups, and you will find an example of two identical Sage cells produced from one source file.</p>
+
+                <p>You can also specify certain cells to be auto-evaluated, by setting the <attr>auto-evaluate</attr> attribute to <c>yes</c>.  The resulting cell will not have a button for evaluation (so editing it would be pointless).  See the source of this sample article for the two examples below.</p>
+
+                <p>2023-08-17: support just now is for the use case of a small portion of code, not a huge library of helper routines.</p>
+
+                <p>Two cells with the default language <c>sage</c>.</p>
+
+                <sage auto-evaluate="yes">
+                    <input>k = 404</input>
+                </sage>
+
+                <sage>
+                    <input>2*k</input>
+                </sage>
+
+                <p>Two cells with language <c>python</c>.</p>
+
+                <sage language="python" auto-evaluate="yes">
+                    <input>
+                        k = 4112
+                        print("Assigned an initial value to the variable k")
+                    </input>
+                </sage>
+
+                <sage language="python">
+                    <input>
+                        k = 2*k
+                        print(k)
+                    </input>
+                </sage>
+
             </subsection>
 
             <subsection>
