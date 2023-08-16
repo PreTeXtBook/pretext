@@ -1665,6 +1665,27 @@ Book (with parts), "section" at level 3
 <!-- Two abstract named templates in other files -->
 <!-- provide the necessary wrapping, per format  -->
 
+<!-- Utility: Class Names -->
+<!-- This is the class we place on "pre" elements to have them configure    -->
+<!-- as Sage cells.  This is given in the Javascript call in the head, and  -->
+<!-- on the actual instances of Sage cells.  So this provides consistency.  -->
+<!-- Passing an empty string for the language is historical, and could      -->
+<!-- perhaps be unwound to be the default language in the parameter.        -->
+<xsl:template name="sagecell-class-name">
+    <xsl:param name="language-attribute"/>
+
+    <xsl:text>sagecell</xsl:text>
+    <xsl:text>-</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$language-attribute=''">
+            <xsl:text>sage</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$language-attribute"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Type; empty element                      -->
 <!-- Provide an empty cell to scribble in     -->
 <!-- Or break text cells in the Sage notebook -->
