@@ -896,7 +896,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone multiplechoice_section">
             <!-- ul can have multiple answer attribute -->
             <ul data-component="multiplechoice" data-multipleanswers="false">
                 <xsl:attribute name="id">
@@ -961,7 +961,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone multiplechoice_section">
             <!-- ul can have multiple answer attribute -->
             <ul data-component="multiplechoice">
                 <xsl:attribute name="id">
@@ -1180,7 +1180,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="unique-blocks" select="blocks/block[not(@ref)]"/>
 
      <div class="ptx-runestone-container">
-        <div class="runestone" style="max-width: none;">
+        <div class="runestone hparsons_section">
             <div data-component="hparsons" class="hparsons_section">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <div class="hp_question">
@@ -1391,7 +1391,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone matching_section">
             <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
                 <xsl:attribute name="id">
                     <xsl:value-of select="$html-id"/>
@@ -1437,7 +1437,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone clickablearea_section">
             <div data-component="clickablearea" data-question_label="" style="visibility: hidden;">
                 <xsl:attribute name="id">
                     <xsl:value-of select="$html-id"/>
@@ -1516,7 +1516,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     reader is assigned just one (good for exams)                  -->
 <!--   * A/B Experiment - two choices, experiment managed by Runestone -->
 <xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-interactive">
-    <div class="runestone sqcontainer">
+    <div class="runestone sqcontainer selectquestion_section">
         <div data-component="selectquestion" data-points="1" data-limit-basecourse="false">
             <xsl:attribute name="id">
                 <xsl:apply-templates select="." mode="runestone-id"/>
@@ -1553,7 +1553,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone structure -->
 <xsl:template match="*[@exercise-interactive = 'fillin-basic']" mode="runestone-to-interactive">
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone fillintheblank_section">
             <!-- dropped "visibility: hidden" on next div -->
             <div data-component="fillintheblank" data-question_label="">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
@@ -1727,7 +1727,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-host-runestone or ($short-answer-responses = 'always')">
             <!-- when "response" has attributes, perhaps they get interpreted here -->
             <div class="ptx-runestone-container">
-                <div class="runestone">
+                <div class="runestone shortanswer_section">
                     <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
                         <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                         <!-- showing a box, but it can't be graded, so warn reader -->
@@ -1773,7 +1773,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone yt_section">
             <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
                  data-video-height="{$height}" data-video-width="{$width}"
                  data-video-videoid="{@youtube}" data-video-divid="{$hid}"
@@ -2112,7 +2112,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[task and not(@exercise-customization = 'worksheet')]|&PROJECT-LIKE;" mode="tabbed-tasks">
     <div class="ptx-runestone-container">
-        <div class="runestone">
+        <div class="runestone tabbed_section">
             <div data-component="tabbedStuff">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:if test="introduction">
