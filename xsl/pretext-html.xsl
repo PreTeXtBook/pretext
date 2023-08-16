@@ -12690,6 +12690,11 @@ TODO:
 <!-- Make Sage Cell Server headers on a per-language basis -->
 <!-- Examine the subtree of the page, which can still be   -->
 <!-- excessive for summary pages, so room for improvement  -->
+<!-- Note: this template employs the context given in a    -->
+<!-- "select" attribute so that only the Javascript        -->
+<!-- necessary for a page is invoked.  Further,            -->
+<!-- cross-reference knowls also have these bits of set-up -->
+<!-- javascript, but only for what the knowl content needs.-->
 <xsl:template match="*" mode="sagecell">
     <!-- making a Sage version now very liberally, could be more precise -->
     <xsl:if test=".//sage">
