@@ -1673,6 +1673,7 @@ Book (with parts), "section" at level 3
 <!-- perhaps be unwound to be the default language in the parameter.        -->
 <xsl:template name="sagecell-class-name">
     <xsl:param name="language-attribute"/>
+    <xsl:param name="b-autoeval"/>
 
     <xsl:text>sagecell</xsl:text>
     <xsl:text>-</xsl:text>
@@ -1684,6 +1685,10 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="$language-attribute"/>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="$b-autoeval">
+        <xsl:text>-</xsl:text>
+        <xsl:text>autoeval</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Type; empty element                      -->
@@ -1699,6 +1704,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
+        <xsl:with-param name="b-autoeval" select="@auto-evaluate = 'yes'"/>
         <xsl:with-param name="in" select="''"/>
         <xsl:with-param name="out" select="''" />
     </xsl:apply-templates>
@@ -1753,6 +1759,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
+        <xsl:with-param name="b-autoeval" select="@auto-evaluate = 'yes'"/>
         <xsl:with-param name="in">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="input" />
