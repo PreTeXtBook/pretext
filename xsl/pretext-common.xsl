@@ -3852,11 +3852,14 @@ Book (with parts), "section" at level 3
 <!-- "image" is historical, preserving backward-compatibility.         -->
 <xsl:template match="asymptote|sageplot|latex-image" mode="image-source-basename">
     <xsl:choose>
-        <!-- 2023-08-12: presently a no-change refactor, -->
-        <!-- turn this on soon to support new behavior   -->
-        <!-- <xsl:when test="@label">           -->
-        <!--    <xsl:value-of select="@label"/> -->
-        <!-- </xsl:when>                        -->
+        <!-- 2023-08-12: new behavior, prefer a @label (not @xml:id) -->
+        <!-- on the source code element to provide the filename      -->
+        <xsl:when test="@label">
+           <xsl:value-of select="@label"/>
+        </xsl:when>
+        <!-- Next stanza preserves backward-compatibility: previously an       -->
+        <!-- @xml:id value was used to form the filename of an image described -->
+        <!-- by source code (or a default was provided, like image-37).        -->
         <xsl:when test="parent::image">
             <xsl:apply-templates select="parent::image" mode="visible-id"/>
         </xsl:when>
