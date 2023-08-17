@@ -1068,16 +1068,52 @@ def webwork_to_xml(
 
     # Build dictionaries and localization string into a scratch directory/file
     tmp_dir = get_temporary_directory()
-    ww_filename = os.path.join(tmp_dir, "webwork-dicts.txt")
+    ww_filename = os.path.join(tmp_dir, "webwork-dicts.xml")
     log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
     xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
-    # "run" an assignment for the list of triples of strings
-    with open(ww_filename, "r") as ww_file:
-        problem_dictionaries = ww_file.read()
-    # "run" the dictionaries and localization string
-    # protect backslashes in LaTeX code
-    # globals() necessary for success
-    exec(problem_dictionaries.replace("\\", "\\\\"), globals())
+    # build necessary variables by reading xml with lxml
+    ww_xml = ET.parse(ww_filename).getroot()
+    localization = ww_xml.find("localization").text
+    if ww_xml.find("server-params-pub").find("ww-domain") is not None:
+        server_params_pub = {
+            "ww_domain": ww_xml.find("server-params-pub").find("ww-domain").text,
+            "courseID": ww_xml.find("server-params-pub").find("course-id").text,
+            "userID": ww_xml.find("server-params-pub").find("user-id").text,
+            "password": ww_xml.find("server-params-pub").find("password").text,
+            "course_password": ww_xml.find("server-params-pub").find("course-password").text,
+        }
+    else:
+        server_params_pub = {}
+    origin = {}
+    copiedfrom = {}
+    seed = {}
+    source = {}
+    pghuman = {}
+    pgdense = {
+        "hint_no_solution_no": {},
+        "hint_no_solution_yes": {},
+        "hint_yes_solution_no": {},
+        "hint_yes_solution_yes": {},
+    }
+    for ele in ww_xml.iter("problem"):
+        origin[ele.get("id")] = ele.get("origin")
+        seed[ele.get("id")] = ele.get("seed")
+        if ele.get("source") is not None:
+            source[ele.get("id")] = ele.get("source")
+        else:
+            if ele.get("copied-from") is not None:
+                copiedfrom[ele.get("id")] = ele.get("copied-from")
+            pghuman[ele.get("id")] = ele.find("pghuman").text
+            for dense in ele.iter("pgdense"):
+                if dense.get("hint")=="yes" and dense.get("solution")=="yes":
+                    pgdense[ele.get("id")] = dense.text
+                    pgdense["hint_yes_solution_yes"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="yes" and dense.get("solution")=="no":
+                    pgdense["hint_yes_solution_no"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="no" and dense.get("solution")=="yes":
+                    pgdense["hint_no_solution_yes"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="no" and dense.get("solution")=="no":
+                    pgdense["hint_no_solution_no"][ele.get("id")] = dense.text
 
     # ideally, pub_file is in use, in which case server_params_pub is nonempty.
     # if no pub_file in use, rely on server_params.
