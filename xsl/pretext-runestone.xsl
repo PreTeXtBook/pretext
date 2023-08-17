@@ -2112,7 +2112,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise[task and not(@exercise-customization = 'worksheet')]|&PROJECT-LIKE;" mode="tabbed-tasks">
     <div class="ptx-runestone-container">
-        <div class="runestone tabbed_section">
+        <div>
+            <xsl:attribute name="class">
+                <xsl:text>runestone tabbed_section</xsl:text>
+                <!-- need to know if it contains an element that wants to be wide in wide layout -->
+                <xsl:if test=".//program[@interactive = 'activecode'] or .//program[@interactive = 'codelens'] or .//exercise/blocks">
+                    <xsl:text> contains-wide</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
             <div data-component="tabbedStuff">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:if test="introduction">
