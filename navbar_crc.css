@@ -20,6 +20,7 @@
   padding-top: unset;
 }
 
+
 /* Generic and large screen layout */
 
 .ptx-navbar .button {
@@ -233,11 +234,27 @@ nav.ptx-navbar::after {
 .ptx-navbar .index-button .name {
     /*  Nada */
 }
+.ptx-navbar .index-button .icon {
+    display: none;
+}
 
 .ptx-navbar .calculator-toggle .name {
     /*  Nada */
 }
+.ptx-navbar .calculator-toggle .icon {
+    display: none;
+}
 
+.ptx-navbar .runestone-profile .name {
+    display: none;
+}
+
+.ptx-navbar .activecode-toggle .name {
+    display: none;
+}
+
+.ptx-navbar .dropdown {
+    height: 35px;
 
 .ptx-navbar .up-button {
     text-align: center;
