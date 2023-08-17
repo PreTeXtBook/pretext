@@ -1983,6 +1983,7 @@
                 PermanentID?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
+                attribute auto-evaluate {'no'|'yes'}?,
                 attribute language {text}?,
                 attribute type {text}?,
                 (element input {text}, element output {text}?)?

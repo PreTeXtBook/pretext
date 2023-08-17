@@ -2217,6 +2217,14 @@
         <attribute name="tolerance"/>
       </optional>
       <optional>
+        <attribute name="auto-evaluate">
+          <choice>
+            <value>no</value>
+            <value>yes</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="language"/>
       </optional>
       <optional>

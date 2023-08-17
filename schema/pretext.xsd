@@ -2035,6 +2035,14 @@
       <xs:attribute name="permid"/>
       <xs:attribute name="doctest"/>
       <xs:attribute name="tolerance"/>
+      <xs:attribute name="auto-evaluate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="no"/>
+            <xs:enumeration value="yes"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="language"/>
       <xs:attribute name="type"/>
     </xs:complexType>
