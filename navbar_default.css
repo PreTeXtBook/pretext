@@ -10,7 +10,7 @@ nav.ptx-navbar {
   background: #ededed;
   border-bottom: 1px solid #bababa;
   margin: 0;
-  z-index: 20;
+  z-index: 100;
   min-height: unset;  /* to combat navbar.less */
 /*
   height: 35.36px;
