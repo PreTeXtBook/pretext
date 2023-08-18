@@ -83,7 +83,8 @@ body.pretext {
 .ptx-content
   .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section),
 .ptx-content pre.program,
-.ptx-content .runestone.datafile {
+.ptx-content .runestone.datafile,
+.ptx-content .contains-wide {
   width: var(--content-width-wide);
   max-width: unset;
   margin-left: var(--xl-margin);
@@ -129,6 +130,22 @@ body.pretext {
   margin-left: auto;
   margin-right: auto;
 }
+
+
+/* limit width of content inside contains-wide */
+.ptx-content .runestone.contains-wide .tab-content {
+  max-width: var(--content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* but widen item that needs it */
+.ptx-content .runestone.contains-wide .tab-content
+  .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section) {
+    width: calc(var(--content-width-wide) - 20px);
+    margin-left: calc(var(--xl-margin) + 8px);
+  }
+
 
 /* limit width of content inside parsons except for actual parsons */
 .ptx-content .runestone.parsons_section > .parsons {
@@ -272,12 +289,25 @@ body.pretext {
       .computation-like
     )
     > .ptx-runestone-container
-    > .runestone.datafile {
+    > .runestone.datafile,
+  .ptx-content
+  article:is(
+    .theorem-like,
+    .definition-like,
+    .example-like,
+    .project-like,
+    .remark-like,
+    .openproblem-like,
+    .openproblems-like,
+    .computation-like
+  )
+  > .ptx-runestone-container
+  > .runestone.contains-wide {
     width: calc(var(--content-width-wide) + 10px);
   }
 
   .ptx-content
-    .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section) {
+    .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section, .contains-wide) {
     border-left: 0;
     border-right: 0;
     border-top: 1px solid #aaa;

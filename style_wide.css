@@ -53,7 +53,18 @@
     .computation-like
   )
   > .ptx-runestone-container
-  > .runestone.datafile {
+  > .runestone.datafile,
+.ptx-content
+  article:is(
+  .theorem-like,
+  .definition-like,
+  .example-like,
+  .project-like,
+  .remark-like,
+  .openproblem-like,
+  .openproblems-like,
+  .computation-like
+) .contains-wide {
   margin-left: calc(var(--xl-margin) - 10px);
 }
 
