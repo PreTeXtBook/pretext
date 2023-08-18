@@ -112,7 +112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- visit the "css" directory and make an update there      -->
 <!-- for the benefit of offline formats                      -->
 <!-- N.B. leave this as parameters.  A developer of a        -->
-<!-- comprehensive approach to new JS and CSS may qwant to   -->
+<!-- comprehensive approach to new JS and CSS may want to   -->
 <!-- point to a totally different server (rather than other  -->
 <!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
@@ -11686,6 +11686,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
+
     <nav id="ptx-navbar">
         <xsl:attribute name="class">
             <xsl:text>ptx-navbar navbar</xsl:text>
@@ -11693,54 +11694,84 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> ptx-runestone-container</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        <button class="toc-toggle button" aria-label="Show or hide table of contents">
-            <span class="icon">☰</span>
-            <span class="name">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'toc'"/>
-                </xsl:apply-templates>
-            </span>
-        </button>
-        <!-- A page either has an/the index as    -->
-        <!-- a child, and gets the "jump to" bar, -->
-        <!-- or it deserves an index button       -->
-        <xsl:choose>
-            <xsl:when test="index-list">
-                <xsl:apply-templates select="." mode="index-jump-nav" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="index-button" />
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- Button to show/hide the calculator -->
-        <xsl:if test="$b-has-calculator">
-            <xsl:call-template name="calculator-toggle" />
-            <xsl:call-template name="calculator" />
+        
+        <!-- Pick an ordering for the nav components based on layout needs -->
+        <xsl:apply-templates select="." mode="primary-navigation-toc" />
+        <xsl:apply-templates select="." mode="primary-navigation-index" />
+        <xsl:apply-templates select="." mode="primary-navigation-other-controls" />
+        <xsl:apply-templates select="." mode="primary-navigation-runestone" />
+        <xsl:apply-templates select="." mode="primary-navigation-treebuttons" />
+        <xsl:apply-templates select="." mode="primary-navigation-search" />
+
+        <!-- Annotations button was once here, see GitHub issue -->
+        <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+    </nav>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-search">
+    <xsl:call-template name="google-search-box" />
+    <xsl:call-template name="native-search-box" />
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-treebuttons">
+    <!-- Span to encase Prev/Up/Next buttons and float right    -->
+    <!-- Each button gets an id for keypress recognition/action -->
+    <span class="treebuttons">
+        <xsl:apply-templates select="." mode="previous-button"/>
+        <xsl:if test="$nav-upbutton='yes'">
+            <xsl:apply-templates select="." mode="up-button"/>
         </xsl:if>
-        <!-- Runestone user menu -->
-        <xsl:if test="not($b-debug-react)">
-            <!-- Conditional on a build for Runestone hosting -->
-            <xsl:call-template name="runestone-bust-menu"/>
+        <xsl:apply-templates select="." mode="next-button"/>
+    </span>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-runestone">
+    <!-- Runestone user menu -->
+    <xsl:if test="not($b-debug-react)">
+        <span class="nav-runestone-controls">
             <!-- A scratch ActiveCode via a pencil icon, always -->
             <xsl:call-template name="runestone-scratch-activecode"/>
             <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
             <xsl:call-template name="user-preferences-menu"/>
-        </xsl:if>
-        <!-- Span to encase Prev/Up/Next buttons and float right    -->
-        <!-- Each button gets an id for keypress recognition/action -->
-        <span class="treebuttons">
-            <xsl:apply-templates select="." mode="previous-button"/>
-            <xsl:if test="$nav-upbutton='yes'">
-                <xsl:apply-templates select="." mode="up-button"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="next-button"/>
+            <!-- Conditional on a build for Runestone hosting -->
+            <xsl:call-template name="runestone-bust-menu"/>
         </span>
-        <!-- Annotations button was once here, see GitHub issue -->
-        <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
-        <!-- Search box at end of ptx-navbar, so it can be sticky -->
-        <xsl:call-template name="google-search-box" />
-        <xsl:call-template name="native-search-box" />
-    </nav>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-other-controls">
+    <!-- Button to show/hide the calculator -->
+    <span class="nav-other-controls">
+        <xsl:if test="$b-has-calculator">
+            <xsl:call-template name="calculator-toggle" />
+            <xsl:call-template name="calculator" />
+        </xsl:if>
+    </span>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-index">
+    <!-- A page either has an/the index as    -->
+    <!-- a child, and gets the "jump to" bar, -->
+    <!-- or it deserves an index button       -->
+    <xsl:choose>
+        <xsl:when test="index-list">
+            <xsl:apply-templates select="." mode="index-jump-nav" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="index-button" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-toc">
+    <button class="toc-toggle button" aria-label="Show or hide table of contents">
+        <span class="icon">☰</span>
+        <span class="name">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'toc'"/>
+            </xsl:apply-templates>
+        </span>
+    </button>
 </xsl:template>
 
 <!-- Sidebars -->
