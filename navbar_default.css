@@ -98,38 +98,24 @@ nav.ptx-navbar {
   bottom: 0.53em;
 }
 
-.ptx-navbar .up-button {
-  text-align: center;
-}
-
 .ptx-navbar .name {
   display: inline-block;
   position: relative;
   bottom: 0;
 }
-.ptx-navbar .treebuttons .name {
-  bottom: 0.2em;
-}
+
 .ptx-navbar .icon {
   display: inline-block;
-  font-size: 1.5em;
+  font-size: 1em;
 }
-.ptx-navbar .previous-button .icon {
-  margin-left: 0.3em;
-  margin-right: 0.2em;
+
+.ptx-navbar .treebuttons > :is(a, span) {
+  display: flex;
+  gap: 0.2em;
+  align-items: center;
+  justify-content: center;
 }
-.ptx-navbar .up-button .icon {
-  margin-left: 00;
-  margin-right: 0.2em;
-  padding-top: 2px;
-}
-.ptx-navbar .up-button .name {
-  bottom: 0.3em;
-}
-.ptx-navbar .next-button .icon {
-  margin-left: 0.2em;
-  margin-right: 0.3em;
-}
+
 .ptx-navbar .index-button .name {
   padding-top: 0.3em;
 }
@@ -138,6 +124,22 @@ nav.ptx-navbar {
 }
 .ptx-navbar .avatarbutton {
   font-size: 1.0em;
+}
+
+.ptx-navbar .index-button .icon {
+  display: none;
+}
+.ptx-navbar .calculator-toggle .icon {
+  display: none;
+}
+.ptx-navbar .runestone-profile .name {
+  display: none;
+}
+.ptx-navbar .activecode-toggle .name {
+  display: none;
+}
+.ptx-navbar .searchbutton .name {
+  display: none;
 }
 
 @media screen and (max-width: 800px) {
