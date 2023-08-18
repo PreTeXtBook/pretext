@@ -1,0 +1,52 @@
+article {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: sans-serif;
+}
+
+.searchbox {
+    height: 60px;
+    border: solid;
+    border-radius: 5px;
+    background-color: #eeee;
+}
+
+.searchwidget {
+    padding-top: 15px;
+    padding-left: 20px;
+    font-size: larger;
+}
+
+.searchwidget input {
+    font-size: larger;
+}
+
+.helpbox {
+    display: none;
+}
+
+.detailed_result {
+    margin-bottom: 10px;
+}
+
+.all_results a:link {
+    text-decoration: none;
+    font-size: large;
+}
+
+.all_results a:hover {
+    background-color: lightgray;
+}
+
+.high_result {
+    color: red;
+}
+
+.medium_result {
+    color: orange;
+}
+
+.low_result {
+    color: green;
+}
