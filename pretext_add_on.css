@@ -1971,7 +1971,6 @@ from Jiří Lebl */
     border-left: 1px solid #aaa;
     font-size: 93%;
     overflow: auto;
-    background: inherit;  /* over-ride Prism's #f5f2f0 */
 }
 .ptx-content pre.program:before,
 .ptx-content pre.code-block:before {
