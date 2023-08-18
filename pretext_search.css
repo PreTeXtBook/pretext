@@ -70,6 +70,10 @@
 .searchresults ul li {
     list-style-type: none;
 }
+ol.searchresults {
+    max-width: 420px;
+    padding-left: 10px;
+}
 ol.searchresults > li {
     list-style-type: none;
 }
@@ -100,7 +104,7 @@ ol.searchresults > li > text {
 .searchresultsplaceholder {
     position: fixed;
     top: 4em;
-    left: 10em;
+    left: 8em;
     padding: 0 1em 3em 1em;
     border: 0.2em solid #009;
     background: aliceblue;
