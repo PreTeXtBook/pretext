@@ -334,8 +334,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="runestone-bust-menu">
     <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon -->
     <xsl:if test="$b-host-runestone">
-        <div class="dropdown">
-            <xsl:text>&#x1F464;</xsl:text>
+        <button class="runestone-profile dropdown" title="Profile">
+            <span class="icon"><xsl:text>&#x1F464;</xsl:text></span>
+            <span class="name"><xsl:text>Profile</xsl:text></span>
             <div class="dropdown-content">
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
@@ -369,7 +370,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <a href="/runestone/default/user/login">Login</a>
                 <xsl:text>&#xa;{% endif %}&#xa;</xsl:text>
             </div>
-        </div>
+        </button>
     </xsl:if>
 </xsl:template>
 
@@ -379,9 +380,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unicode Character 'PENCIL' (U+270F)                               -->
 <xsl:template name="runestone-scratch-activecode">
     <xsl:if test="$b-has-scratch-activecode">
-        <a href="javascript:runestoneComponents.popupScratchAC()" class="activecode-toggle" title="Scratch ActiveCode">
+        <button onclick="runestoneComponents.popupScratchAC()" class="activecode-toggle" title="Open Scratch ActiveCode">
             <span class="icon">&#x270F;</span>
-        </a>
+            <span class="name">Scratch ActiveCode</span>
+        </button>
     </xsl:if>
 </xsl:template>
 
