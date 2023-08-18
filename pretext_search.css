@@ -24,6 +24,10 @@
   right: 0;
 }
 
+.searchbutton .name {
+  display: none;
+}
+
 .searchwidget {
 /*
     padding-top: 15px;
