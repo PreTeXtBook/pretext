@@ -1984,6 +1984,41 @@ from Jiří Lebl */
     width: 3.0em;
 }
 
+.ptx-content pre[data-line].program, 
+.ptx-content pre[data-line].code-block
+{
+    padding-left: 2.5em;
+}
+
+.ptx-content pre[data-line].program:before,
+.ptx-content pre[data-line].code-block:before {
+    margin-left: -5em;
+}
+
+.ptx-content pre.program.line-numbers,
+.ptx-content pre.code-block.line-numbers
+{
+    padding-left: 3.5em;
+    overflow: visible;
+}
+
+.ptx-content pre.program.line-numbers:before,
+.ptx-content pre.code-block.line-numbers:before {
+    margin-left: -7em;
+}
+
+/* fine tune next 3 based on line-height of surrounding pre  */
+.ptx-content pre[data-line].line-numbers code {
+    padding-top: 0em;  /* increase with line-height */
+}
+.ptx-content pre[data-line].line-numbers .line-highlight {
+    margin-top: 0em; /* decreases as line-height increases */
+}
+.ptx-content pre[data-line]:not(.line-numbers) .line-highlight {
+    margin-top: 0.6em; /* decreases as line-height increases */
+}
+
+
 /* next is for the old code formatting js */
 .ptx-content pre.prettyprint,
 .ptx-content pre.plainprint {
