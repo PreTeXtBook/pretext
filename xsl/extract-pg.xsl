@@ -954,10 +954,12 @@
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:apply-templates>
         <!-- popup menu multiple choice answers -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'PopUp'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
+        <xsl:if test="contains(.//pg-code,'PopUp') or contains(.//pg-code,'DropDown')">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'parserPopUp.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
         <!-- checkboxes multiple choice answers -->
         <xsl:apply-templates select="." mode="parser">
             <xsl:with-param name="parser" select="'CheckboxList'"/>

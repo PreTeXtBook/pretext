@@ -1642,7 +1642,7 @@
 
                 <webwork>
                     <pg-code>
-                        $color1 = PopUp(["?","Red","Blue","Green"], 2);
+                        $color1 = DropDown(["Red","Blue","Green"], 1);
                         $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
                         $color3 = CheckboxList(["Red","Blue","Green","None of these"], [1]);
                     </pg-code>
