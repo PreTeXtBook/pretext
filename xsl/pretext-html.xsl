@@ -10980,7 +10980,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="ptx-content-footer">
                         <xsl:apply-templates select="." mode="previous-button"/>
                         <a class="top-button button" href="#" title="Top">
-                            <span class="icon">&#x2B9D;</span>
+                            <xsl:call-template name="icon">
+                                <xsl:with-param name="name" select="'caret-up'"/>
+                            </xsl:call-template>
                             <span class="name">Top</span>
                         </a> 
                         <xsl:apply-templates select="." mode="next-button"/>
@@ -11421,7 +11423,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'previous'"/>
                     </xsl:apply-templates>
                 </xsl:attribute>
-                <span class="icon">&#x2B9C;</span>
+                <xsl:call-template name="icon">
+                    <xsl:with-param name="name" select="'caret-left'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'previous-short'"/>
@@ -11432,7 +11436,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">previous-button button disabled</xsl:attribute>
-                <span class="icon">&#x2B9C;</span>
+                <xsl:call-template name="icon">
+                    <xsl:with-param name="name" select="'caret-left'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'previous-short'"/>
@@ -11460,7 +11466,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="string-id" select="'index-part'"/>
                 </xsl:apply-templates>
             </xsl:attribute>
-            <span class="icon">&#x1F6C8;</span>
+            <xsl:call-template name="icon">
+                <xsl:with-param name="name" select="'info-circle'"/>
+            </xsl:call-template>
             <span class="name">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'index-part'"/>
@@ -11538,7 +11546,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'next-short'"/>
                     </xsl:apply-templates>
                 </span>
-                <span class="icon">&#x2B9E;</span>
+                <xsl:call-template name="icon">
+                    <xsl:with-param name="name" select="'caret-right'"/>
+                </xsl:call-template>
             </xsl:element>
         </xsl:when>
         <xsl:otherwise>
@@ -11549,7 +11559,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'next-short'"/>
                     </xsl:apply-templates>
                 </span>
-                <span class="icon">&#x2B9E;</span>
+                <xsl:call-template name="icon">
+                    <xsl:with-param name="name" select="'caret-right'"/>
+                </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -11572,7 +11584,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'up'"/>
                     </xsl:apply-templates>
                 </xsl:attribute>
-                <span class="icon">&#x2B9D;</span>
+                <xsl:call-template name="icon">
+                    <xsl:with-param name="name" select="'caret-up'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'up-short'"/>
@@ -11583,7 +11597,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">up-button button disabled</xsl:attribute>
-                <span class="icon">&#x2B9D;</span>
+                <xsl:call-template name="icon">
+                    <xsl:with-param name="name" select="'caret-up'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'up-short'"/>
@@ -11595,7 +11611,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator-toggle">
-    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container"><span class="icon">&#x1F5A9;</span><span class="name">Calc</span></button>
+    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">
+        <xsl:call-template name="icon">
+            <xsl:with-param name="name" select="'calculator'"/>
+        </xsl:call-template>
+        <span class="name">Calc</span>
+    </button>
 </xsl:template>
 
 <xsl:template match="*" mode="print-button"/>
@@ -11773,7 +11794,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="primary-navigation-toc">
     <button class="toc-toggle button" aria-label="Show or hide table of contents">
-        <span class="icon">☰</span>
+        <xsl:call-template name="icon">
+            <xsl:with-param name="name" select="'menu'"/>
+        </xsl:call-template>
         <span class="name">
             <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'toc'"/>
@@ -13020,7 +13043,12 @@ TODO:
         <div class="searchbox">
             <div class="searchwidget">
                 <input id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
-                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()" title="Search book"><span class="icon">&#x1F50D;</span><span class="name">Search Book</span></button>
+                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()" title="Search book">
+                    <xsl:call-template name="icon">
+                        <xsl:with-param name="name" select="'search'"/>
+                    </xsl:call-template>
+                    <span class="name">Search Book</span>
+                </button>
             </div>
         </div>
     </xsl:if>
