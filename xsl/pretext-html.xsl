@@ -13204,9 +13204,7 @@ TODO:
 <!-- Treated as characters, these could show up often, -->
 <!-- so load into every possible HTML page instance    -->
 <xsl:template name="font-awesome">
-    <xsl:if test="$b-has-icon">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
-    </xsl:if>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
 </xsl:template>
 
 <!-- A place to put *one* Javascript file at the *end* of an  -->
