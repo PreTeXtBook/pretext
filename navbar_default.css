@@ -91,15 +91,11 @@ nav.ptx-navbar {
   padding-left: 0.5em;
   padding-right: 0.4em;
 }
-
 .ptx-navbar .name {
   display: inline-block;
-  position: relative;
-  bottom: 0;
 }
 
 .ptx-navbar .icon {
-  display: inline-block;
   font-size: 1em;
 }
 
@@ -136,6 +132,16 @@ nav.ptx-navbar {
   display: none;
 }
 
+
+.ptx-navbar .treebuttons {
+  display: block;
+  float: right;
+}
+.ptx-navbar .treebuttons .next-button, .ptx-navbar .treebuttons .up-button, .ptx-navbar .treebuttons .previous-button {
+  float: left;
+}
+
+
 @media screen and (max-width: 800px) {
   .ptx-navbar .button {
     /*@include button-hide-text($navbar-icon-box-size);*/
@@ -160,12 +166,7 @@ nav.ptx-navbar {
     margin-left: 0;
     margin-right: 0;
   }
-  .ptx-navbar .toc-toggle .icon {
-    position: relative;
-    bottom: 0.25em;
-    padding-left: 0;
-    padding-right: 0;
-  }
+ 
   .ptx-navbar .treebuttons .icon {
     position: relative;
     bottom: 0;
@@ -180,10 +181,11 @@ nav.ptx-navbar {
       width: 25%;
   }
   .ptx-navbar .treebuttons {
-    width: 75%;
+    width: auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    float: none;
   }
   .ptx-navbar .treebuttons .button {
 /*
@@ -258,13 +260,5 @@ nav.ptx-navbar {
 .ptx-navbar .calculator-toggle.open {
     background: #fee;
     border: 2px solid #f66;
-}
-
-.ptx-navbar .treebuttons {
-    display: block;
-    float: right;
-}
-.ptx-navbar .treebuttons .next-button, .ptx-navbar .treebuttons .up-button, .ptx-navbar .treebuttons .previous-button {
-    float: left;
 }
 
