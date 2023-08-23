@@ -11844,6 +11844,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="$b-has-parts">
                     <xsl:text> parts</xsl:text>
                 </xsl:if>
+                <xsl:if test="$b-html-toc-focused">
+                    <xsl:text> focused</xsl:text>
+                </xsl:if>
             </xsl:attribute>
             <!-- now, all the actual ToC entries -->
             <xsl:apply-templates select="." mode="toc-items"/>
@@ -11902,11 +11905,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- record the page which is receiving this ToC       -->
     <!-- pass this along for consultation at each ToC item -->
     <xsl:variable name="this-page" select="self::*" />
+    <!-- also record the ancestors to the page creating TOC  -->
+    <xsl:variable name="this-page-ancestors" select="ancestor::*" />
     <!-- start recursion at the top, since the  -->
     <!-- ToC is global for the whole document   -->
-    <ul class="structural">
+    <ul class="structural contains-active toc-item-list">
         <xsl:apply-templates select="$document-root" mode="toc-item">
             <xsl:with-param name="possessing-page" select="$this-page"/>
+            <xsl:with-param name="possessing-page-ancestors" select="$this-page-ancestors"/>
         </xsl:apply-templates>
     </ul>
 </xsl:template>
@@ -11914,17 +11920,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB no "book", "article" -->
 <xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item">
     <xsl:param name="possessing-page"/>
+    <xsl:param name="possessing-page-ancestors"/>
 
     <li>
         <xsl:apply-templates select="." mode="toc-item-properties">
             <xsl:with-param name="possessing-page" select="$possessing-page"/>
+            <xsl:with-param name="possessing-page-ancestors" select="$possessing-page-ancestors"/>
         </xsl:apply-templates>
         <!-- Recurse into children divisions (if any)-->
         <xsl:variable name="child-list" select="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon"/>
         <xsl:if test="$child-list">
-            <ul class="structural">
+            <ul>
+                <xsl:attribute name="class">
+                    <xsl:text>structural toc-item-list</xsl:text>
+                    <xsl:if test="count($possessing-page-ancestors|.) = count($possessing-page-ancestors)">
+                        <!-- ToC item contains active page -->
+                        <xsl:text> contains-active</xsl:text>
+                    </xsl:if>
+                </xsl:attribute>
                 <xsl:apply-templates select="*" mode="toc-item">
                     <xsl:with-param name="possessing-page" select="$possessing-page"/>
+                    <xsl:with-param name="possessing-page-ancestors" select="$possessing-page-ancestors"/>
                 </xsl:apply-templates>
             </ul>
         </xsl:if>
@@ -11936,15 +11952,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Will pickup blocks, etc on unstructured divisions while picking up specialized divisions -->
 <xsl:template match="*" mode="toc-item">
     <xsl:param name="possessing-page"/>
+    <xsl:param name="possessing-page-ancestors"/>
 
     <xsl:apply-templates select="*" mode="toc-item">
         <xsl:with-param name="possessing-page" select="$possessing-page"/>
+        <xsl:with-param name="possessing-page-ancestors" select="$possessing-page-ancestors"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <!-- The contents of a division's "li" -->
 <xsl:template match="*" mode="toc-item-properties">
     <xsl:param name="possessing-page"/>
+    <xsl:param name="possessing-page-ancestors"/>
 
     <xsl:variable name="the-url">
         <xsl:apply-templates select="." mode="url"/>
@@ -11953,27 +11972,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
 
-    <xsl:if test="count($possessing-page|.) = 1">
-        <xsl:attribute name="class">
+    <xsl:attribute name="class">
+        <xsl:text>toc-item</xsl:text>
+        <xsl:text> toc-</xsl:text><xsl:value-of select="translate(local-name(), '/', '-')"/>
+        <xsl:if test="count($possessing-page-ancestors|.) = count($possessing-page-ancestors)">
+            <!-- ToC item contains active page -->
+            <xsl:text> contains-active</xsl:text>
+        </xsl:if>
+        <xsl:if test="count($possessing-page|.) = 1">
             <!-- ToC item equals the page receiving this ToC -->
-            <xsl:text>active</xsl:text>
-        </xsl:attribute>
-    </xsl:if>
-    <div class="toc-item">
-        <a href="{$the-url}" class="internal">
-            <xsl:if test="not($the-number = '')">
-                <span class="codenumber">
-                    <xsl:value-of select="$the-number" />
-                </span>
-                <!-- separating space, only if needed -->
-                <xsl:text> </xsl:text>
-            </xsl:if>
-            <!-- *always* a title for divisions -->
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-short" />
+            <xsl:text> active</xsl:text>
+        </xsl:if>
+    </xsl:attribute>
+    <a href="{$the-url}" class="internal">
+        <xsl:if test="not($the-number = '')">
+            <span class="codenumber">
+                <xsl:value-of select="$the-number" />
             </span>
-        </a>
-    </div>
+            <!-- separating space, only if needed -->
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <!-- *always* a title for divisions -->
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-short" />
+        </span>
+    </a>
 </xsl:template>
 
 <!-- A standalone XML file with ToC necessities  -->
