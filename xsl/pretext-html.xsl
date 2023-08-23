@@ -9210,19 +9210,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Presumes CSS headers have been loaded -->
 <xsl:template match="icon">
-    <!-- the name attribute of the "icon" in text as a string -->
-    <xsl:variable name="icon-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:call-template name="icon">
+        <xsl:with-param name="name" select="@name"/>
+    </xsl:call-template>
+</xsl:template>
 
-    <!-- for-each is just one node, but sets context for key() -->
+<xsl:template name="icon">
+    <xsl:param name = "name" />
     <xsl:variable name="fa-name">
         <xsl:for-each select="$icon-table">
-            <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome"/>
+            <xsl:value-of select="key('icon-key', $name)/@font-awesome"/>
         </xsl:for-each>
     </xsl:variable>
 
-    <span class ="fas fa-{$fa-name}"/>
+    <xsl:choose>
+        <xsl:when test="$fa-name != ''">
+            <span class ="icon fas fa-{$fa-name}" aria-hidden="true"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: the icon name <xsl:value-of select="$name"/> is not a known icon. It will not render.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
