@@ -80,22 +80,16 @@ nav.ptx-navbar {
   box-shadow: none;
 }
 .ptx-navbar .toc-toggle {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 240px;
   border-bottom: 1px solid #bababa;
   border-right: 1px solid #bababa;
 }
 .ptx-navbar .toc-toggle .icon {
-  font-size: 1.75em;
-  position: relative;
-  bottom: 0.30em;
+  font-size: 1.25em;
   padding-left: 0.5em;
   padding-right: 0.4em;
-}
-.ptx-navbar .toc-toggle .name {
-  font-size: 1.05em;
-  position: relative;
-  bottom: 0.53em;
 }
 
 .ptx-navbar .name {
