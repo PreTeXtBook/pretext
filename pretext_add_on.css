@@ -3139,15 +3139,6 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
 /* testing */
 
 .dropdown {
-    position: relative;
-    display: inline-block;
-    height: 39px;
-    width: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 7px;
-    text-align: center;
-    background-color: #eeeeee;
     border: 1px solid;
     border-color: #aaaaaa;
  }
