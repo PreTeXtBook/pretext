@@ -7,98 +7,56 @@ body.pretext {
 }
 
 .ptx-masthead .title-container > .heading, .ptx-masthead .title-container > .heading a, .ptx-masthead .logo-link:empty:hover:before, .ptx-masthead .byline a {
-  color: #2a5ea4;
-  color: var(--documenttitle);
+  color: var(--documenttitle, #2a5ea4);
 }
 
 .ptx-masthead .title-container > .heading a:active, .ptx-masthead .logo-link:empty:active:before, .ptx-masthead .byline a:active {
-  color: #932c1c;
-  color: var(--bodytitle);
-}
-.ptx-toc ul.structural li a {
-  color: #505050;
-  color: var(--chaptertoctext);
-  background-color: #dbf5ff;
-  background-color: var(--chaptertoc);
-  border-color: #afc2e5;
-  border-color: var(--tocborder);
-}
-.ptx-toc ul.structural li .toc-chevron-surround svg {
-  fill: var(--chaptertoctext);
+  color: var(--bodytitle, #932c1c);
 }
 
-.ptx-toc ul.structural li ul.structural a {
-  color: #404040;
-  color: var(--sectiontoctext);
-  background-color: var(--sectiontoc);
-}
-.ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a {
-  color: var(--chaptertoctextactive);
-  background-color: var(--chaptertocactive);
-  border-color: var(--highlighttocborder);
-}
-.ptx-toc.parts:not(.depth2) > ul.structural > li:first-child > ul.structural > li > .toc-item > a {
-  color: var(--sectiontoctext);
-  background-color: var(--sectiontoc);
-}
-.ptx-toc.parts:not(.depth2) > ul.structural > li > ul.structural > li > .toc-item > a:hover {
-  color: var(--sectiontoctextactive);
-  background-color: var(--chaptertoc);
-}
-.ptx-toc ul.structural li ul.structural .toc-chevron-surround svg {
-  fill: var(--sectiontoctext);
-}
 
-.ptx-toc ul.structural li a.active {
-  color: #404040;
-  color: var(--chaptertoctextactive);
-  background-color: var(--chaptertocactive);
-  border-color: var(--highlighttocborder);
+/* Start by assuming any TOC item is a section, change others as appropriate */
+.ptx-toc .toc-item {
+  color: var(--sectiontoctext, #404040);
+  background-color: var(--sectiontoc);
+  border-color: var(--tocborder, #afc2e5);
 }
-.ptx-toc ul.structural li ul.structural a.active {
+.ptx-toc .toc-item.active {
   color: var(--sectiontoctextactive);
   background-color: var(--sectiontocactive);
   border-color: var(--highlighttocborder);
 }
 
-.ptx-toc ul.structural li a:focus,
-.ptx-toc ul.structural li a:hover {
-  color: #321a0c;
-  color: var(--highlighttoctext);
-  background-color: var(--highlighttoc);
-  border-color: #ec704b;
-  border-color: var(--highlighttocborder);
+/* this looks weird but it matches previous ways the colors were applied */
+.ptx-toc:not(.depth2) .toc-chapter {
+  background-color: var(--chaptertocactive);
+  color: var(--chaptertoctextactive);
 }
-.ptx-toc ul.structural li ul.structural a:focus,
-.ptx-toc ul.structural li ul.structural a:hover {
-  color: #321a0c;
-  color: var(--highlighttoctext);
-  background-color: var(--highlighttoc);
+/* override for focused view */
+.ptx-toc.focused:not(.depth2) .toc-chapter {  
+  background-color: var(--chaptertoc);
+  color: var(--chaptertoctext);
+}
+
+
+/* All top level items styled like chapters to match old styling */
+.ptx-toc > .toc-item-list > .toc-item {
+  color: var(--chaptertoctext);
+  background-color: var(--chaptertoc);
+}
+.ptx-toc > .toc-item-list > .toc-item.active { 
+  color: var(--chaptertoctextactive);
+  background-color: var(--chaptertocactive);
   border-color: var(--highlighttocborder);
 }
 
-.ptx-toc ul.structural li.part a {
-    margin-top: 15px;
-    border-bottom: none;
+
+.ptx-toc .toc-item > .toc-title-box > a:is(:hover, :focus) {
+  color: var(--highlighttoctext, #321a0c);
+  background-color: var(--highlighttoc);
+  border-color: var(--highlighttocborder, #ec704b);
 }
-.ptx-toc ul.structural li.part a,
-.ptx-toc ul.structural li.frontmatter a:first-child,
-.ptx-toc ul.structural li.backmatter a:first-child {
-    color: #222222;
-    background-color: var(--bodytitlehighlight);
-    font-size: 110%;
-    padding-top: 7px;
-    padding-bottom: 7px;
-}
-.ptx-toc ul.structural li.part a:focus,
-.ptx-toc ul.structural li.frontmatter a:focus,
-.ptx-toc ul.structural li.backmatter a:focus,
-.ptx-toc ul.structural li.part a:hover,
-.ptx-toc ul.structural li.frontmatter a:hover,
-.ptx-toc ul.structural li.backmatter a:hover {
-    color: #ffffff;
-    background-color: var(--highlighttoc);
-}
+
 
 .ptx-content .summary-links a {
   color: var(--sectiontoctext);
