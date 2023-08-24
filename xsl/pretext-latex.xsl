@@ -474,6 +474,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% and is necessary for some smaller documents that use partial tcolor boxes&#xa;</xsl:text>
     <xsl:text>%% See:  https://github.com/PreTeXtBook/pretext/issues/1624&#xa;</xsl:text>
     <xsl:text>\usetikzlibrary{calc}&#xa;</xsl:text>
+    <xsl:text>%% We use some more exotic tcolorbox keys to restore indentation to parboxes&#xa;</xsl:text>
+    <xsl:text>\tcbuselibrary{hooks}&#xa;</xsl:text>
+    <!-- This should save-off the indentation used for the first line of  -->
+    <!-- a paragraph, in effect for the chosen document class.  Then the  -->
+    <!-- "parbox" used by "tcolorbox" can restore indentation rather than -->
+    <!-- run with none.  Part of                                          -->
+    <!-- https://tex.stackexchange.com/questions/250165/                  -->
+    <!-- normal-body-text-within-tcolorbox                                -->
+    <xsl:text>%% Save default paragraph indentation for use later, when adjusting parboxes&#xa;</xsl:text>
+    <xsl:text>\newlength{\normalparindent}&#xa;</xsl:text>
+    <xsl:text>\AtBeginDocument{\setlength{\normalparindent}{\parindent}}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
