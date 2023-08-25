@@ -1043,6 +1043,14 @@ xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
 }
 
 
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
 /*******************************************************************************
  *
  * Authors: David Farmer, Rob Beezer
