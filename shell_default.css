@@ -170,6 +170,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .pretext .ptx-content-footer .button:hover,
 .pretext .ptx-content-footer .button:active,
 .pretext .ptx-content-footer .button:focus {
@@ -245,19 +246,6 @@
 */
   .pretext .ptx-toc {
     height: calc(100vh - 50px);
-  }
-  .pretext .ptx-navbar .calculator-toggle,
-  .pretext .ptx-navbar .index-button {
-    display: none;
-  }
-  .pretext .ptx-navbar .toc-toggle {
-    width: 25%;
-  }
-  .pretext .ptx-navbar .previous-button,
-  .pretext .ptx-navbar .up-button,
-  .pretext .ptx-navbar .next-button {
-    width: 33.2%;
-    width: calc(33.3% - 1px);
   }
 }
 
