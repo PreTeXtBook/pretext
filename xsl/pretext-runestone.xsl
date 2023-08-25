@@ -335,8 +335,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon -->
     <xsl:if test="$b-host-runestone">
         <button class="runestone-profile dropdown button" title="Profile">
-            <xsl:call-template name="icon">
-                <xsl:with-param name="name" select="'user'"/>
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'person'"/>
             </xsl:call-template>
             <span class="name"><xsl:text>Profile</xsl:text></span>
             <div class="dropdown-content">
@@ -383,7 +383,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="runestone-scratch-activecode">
     <xsl:if test="$b-has-scratch-activecode">
         <button onclick="runestoneComponents.popupScratchAC()" class="activecode-toggle button" title="Open Scratch ActiveCode">
-            <xsl:call-template name="icon">
+            <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'edit'"/>
             </xsl:call-template>
             <span class="name">Scratch ActiveCode</span>
