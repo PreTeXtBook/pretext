@@ -29,6 +29,9 @@
 
 .ptx-navbar .treebuttons .button {
     padding: 0 20px 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
@@ -128,6 +131,7 @@ nav.ptx-navbar::after {
 .treebuttons {
     grid-area: MH-page-navigation-area;
     justify-self: end;
+    display: flex;
 /*
     align-self: start;
 */
@@ -221,7 +225,7 @@ nav.ptx-navbar::after {
 .ptx-navbar .toc-toggle .icon {
     font-size: 1.5em;
     position: relative;
-    bottom: 0.15em;
+    bottom: -0.1em;
     padding-left: 0;
     padding-right: 0.4em;
 }
