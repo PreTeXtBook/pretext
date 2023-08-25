@@ -148,25 +148,20 @@
 .pretext .ptx-content-footer {
   margin-top: 2em;
   display: flex;
-  flex-direction: row;
   justify-content: space-around;
   max-width: 600px;
   margin-left: 32px;
 }
+
 .pretext .ptx-content-footer .button {
-  cursor: pointer;
-  text-align: center;
-  width: 65px;
+  min-width: 80px;
   height: 35px;
   color: #333333;
   background-color: #ededed;
   border: 1px solid #bababa;
   padding: 0;
-  margin-top: 0.5em;
   display: flex;
-  align-items: center;
-  display: flex;
-  gap: 0.2em;
+  gap: 0;
   align-items: center;
   justify-content: center;
   /* Disable accidental text-selection */
