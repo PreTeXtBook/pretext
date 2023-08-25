@@ -540,6 +540,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
             </latex-macros>
+            <!-- Report major and minor versions from WW so Runestone knows what's up.   -->
+            <!-- These variables are formed in  -html  and could be empty/blank. Hoever, -->
+            <!-- they should always be defined as global variables.                      -->
+            <webwork-version major="{$webwork-major-version}" minor="{$webwork-minor-version}"/>
             <xsl:choose>
                 <xsl:when test="self::book">
                     <!-- Now recurse into chapters, appendix -->
