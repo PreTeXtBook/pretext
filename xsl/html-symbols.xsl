@@ -1,5 +1,8 @@
 <?xml version='1.0'?> <!-- As XML file -->
 
+<!-- Contains an xsl list of symbols provided by the Material Symbols font -->
+<!-- Used by the insert-symbol template in pretext-html                    -->
+
 <!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
 <!DOCTYPE xsl:stylesheet [
     <!ENTITY % entities SYSTEM "entities.ent">
