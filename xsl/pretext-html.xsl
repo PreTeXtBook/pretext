@@ -9230,7 +9230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Could also just use $name here if assume browser supports ligatures. (Just about all do)  -->
     <span class="icon material-symbols-outlined" aria-hidden="true">
-        <xsl:text disable-output-escaping="yes"><![CDATA[&#x]]></xsl:text><xsl:value-of select="$entity-name"/><xsl:text>;</xsl:text>
+        <xsl:text disable-output-escaping="yes">&amp;#x</xsl:text><xsl:value-of select="$entity-name"/><xsl:text>;</xsl:text>
     </span>
 </xsl:template>
 
