@@ -10,7 +10,7 @@
 .ptx-toc ul.structural li li  a {
   border-bottom: none;  /*solid #999 1px;  */
 }
-.ptx-toc ul.structural li ul.structural a {
+.ptx-toc ul.structural .toc-title-box {
   border-top: solid #999 1px;
 }
 .ptx-toc ul.structural li ul.structural li:last-child {
@@ -42,20 +42,18 @@
     font-weight: 400;
 }
 
-/* no codenumbers on subsections */
-.ptx-toc ul ul a > .codenumber {
+.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
     font-size: 80%;
     padding-top: 0.16em;
+}
+/* no codenumbers on subsections (anything under section) */
+.ptx-toc .toc-section .toc-item-list .toc-item a > .codenumber {
     display: none;
 }
-.ptx-toc ul ul a:hover > .codenumber {
+.ptx-toc .toc-section .toc-item-list .toc-item a:hover > .codenumber {
     display: inline-block;
 }
-.ptx-toc.parts > ul.structural > li > ul.structural > li > .toc-item > a > .codenumber {
-    font-size: 100%;
-    padding-top: 0;
-    display: inline-block;
-}
+
 .ptx-toc ul ul a > .title {
     margin-left: 0;
 }
@@ -82,12 +80,6 @@
     font-family: "PT Serif", "Times New Roman", Times, serif;
     padding-left: 0.2em;
 }
-
-.ptx-toc ul li a {
-    border-top: 1px solid;
-    border-bottom: none;
-}
-
 /*
 .ptx-toc ul li ul a:hover {
     padding-top: -10px;
@@ -204,3 +196,80 @@
     display: none;
 }
 
+
+/* Hide all but active area of book */
+.ptx-toc.focused ul.structural:not(.contains-active) > li {
+    display: none;
+}
+.ptx-toc.focused ul.structural li.active > ul > li {
+    display: block;
+}
+
+/* Hooks for js based switching */
+.ptx-toc.focused ul.structural:not(.contains-active) > li.visible {
+    display: block;
+}
+.ptx-toc.focused ul.structural li.active > ul > li.hidden {
+    display: none ;
+}
+
+
+.ptx-toc.focused  > ul.structural > li:not(:first-child) {
+    margin-top: 0em;
+}
+.ptx-toc.focused ul.structural li ul.structural a:hover {
+    border: 0;
+}
+
+
+.toc-title-box {
+    display: flex;
+}
+
+.ptx-toc ul.structural li .toc-title-box a {
+    flex: 1 1;
+}
+
+.ptx-toc.focused .toc-expander {
+    border: 0;
+    padding: 2px 5px;
+    background: inherit;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.ptx-toc.focused .toc-expander .icon {
+    font-size: 30px;
+    line-height: 18px;
+    font-variation-settings: 'wght' 200;
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) {
+    background-color: var(--highlighttoc);
+    color: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) .icon {
+    fill: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
+    transform: rotate(-90deg);
+}
+
+/* Part colors fall back to same as chapter if not defined 
+   Defined here and not in setcolors so that colors_ file can override as include
+    order is toc/colors/setcolors */
+:root {
+    --parttoc: var(--chaptertoc);
+    --parttoctext: var(--chaptertoctext);
+    --parttocactive: var(--documenttitle);
+    --parttoctextactive: var(--chaptertoctextactive);
+}
+/* But if browser supports, make parts very slightly darker than chapters */
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+    :root {
+        --parttoc: color-mix(in srgb, var(--chaptertoc), black 15%);
+    }
+}
