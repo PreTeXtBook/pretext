@@ -1775,14 +1775,6 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Console Session -->
-<!-- An interactive command-line session with a prompt, input and output -->
-<!-- Generic template here, specifics of input and output elsewhere      -->
-<xsl:template match="console">
-    <!-- ignore prompt, and pick it up in trailing input -->
-    <xsl:apply-templates select="input|output" />
-</xsl:template>
-
 <!-- ################# -->
 <!-- Preformatted Text -->
 <!-- ################# -->
