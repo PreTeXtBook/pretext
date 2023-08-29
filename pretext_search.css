@@ -107,7 +107,7 @@ ol.searchresults > li > text {
 
 .searchresultsplaceholder {
     position: fixed;
-    top: 4em;
+    top: 9em;
     left: 8em;
     padding: 0 1em 3em 1em;
     border: 0.2em solid #009;
