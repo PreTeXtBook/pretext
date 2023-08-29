@@ -28,7 +28,6 @@
   min-height: inherit;
   border: none;
   position: relative;
-  z-index: 100;
 }
 
 .pretext .ptx-navbar {
