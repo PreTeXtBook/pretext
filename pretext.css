@@ -68,22 +68,7 @@ nav .ptx-navbar {
   border-left: none;
   min-height: unset;
 }
-/* next three: runestone hack for the bust nemu */
-.ptx-navbar .dropdown-content {
-  left: 250px;
-  position: absolute;
-  left: unset;
-  min-width: 200px;
-/*
-  right: 150px;
-*/
-}
-.ptx-navbar hr {
-  margin-bottom: 4px;
-  margin-top: 4px;
-  border-width: 3px;
-  border-color: #600;
-}
+
 /* next for the Activecode popup */
 /*
 .modal-backdrop.fade.in {
@@ -92,16 +77,6 @@ nav .ptx-navbar {
 */
 .ptx-navbar .activecode-toggle {
   padding: 3px 5px;
-  float: left;
-  border-right: 1px solid #bababa;
-  border-top: 1px solid #bababa;
-  border-bottom: 1px solid #bababa;
-  background: #eee;
-}
-.ptx-navbar .activecode-toggle .icon {
-  display: inline-block;
-  font-size: larger;
-  transform: rotate(130deg);
 }
 
 /* Runestone nav for Runestone-wide features */
@@ -1048,6 +1023,14 @@ xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
     margin-left: -5px;
 }
 
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
 
 /*******************************************************************************
  *

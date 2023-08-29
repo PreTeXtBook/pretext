@@ -147,25 +147,20 @@
 .pretext .ptx-content-footer {
   margin-top: 2em;
   display: flex;
-  flex-direction: row;
   justify-content: space-around;
   max-width: 600px;
   margin-left: 32px;
 }
+
 .pretext .ptx-content-footer .button {
-  cursor: pointer;
-  text-align: center;
-  width: 65px;
+  min-width: 80px;
   height: 35px;
   color: #333333;
   background-color: #ededed;
   border: 1px solid #bababa;
   padding: 0;
-  margin-top: 0.5em;
   display: flex;
-  align-items: center;
-  display: flex;
-  gap: 0.2em;
+  gap: 0;
   align-items: center;
   justify-content: center;
   /* Disable accidental text-selection */
@@ -174,6 +169,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .pretext .ptx-content-footer .button:hover,
 .pretext .ptx-content-footer .button:active,
 .pretext .ptx-content-footer .button:focus {
@@ -249,22 +245,6 @@
 */
   .pretext .ptx-toc {
     height: calc(100vh - 50px);
-  }
-  .pretext .ptx-navbar .calculator-toggle,
-  .pretext .ptx-navbar .index-button {
-    display: none;
-  }
-  .pretext .ptx-navbar .toc-toggle {
-    width: 25%;
-  }
-  .pretext .ptx-navbar .treebuttons {
-    width: 75%;
-  }
-  .pretext .ptx-navbar .previous-button,
-  .pretext .ptx-navbar .up-button,
-  .pretext .ptx-navbar .next-button {
-    width: 33.2%;
-    width: calc(33.3% - 1px);
   }
 }
 

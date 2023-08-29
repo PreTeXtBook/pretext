@@ -54,14 +54,7 @@
   position: unset;
   z-index: unset;
 }
-.pretext .ptx-content-footer .button.previous-button, .pretext .ptx-content-footer .button.next-button {
-  height: unset;
-  width: unset;
-}
-.pretext .ptx-content-footer .previous-button {
-  width: unset;
-  float: unset;
-}
+
 .ptx-content-footer .previous-button .name {
   margin-left: unset;
   padding-right: unset;
@@ -82,11 +75,6 @@
   margin-left: unset;
   margin-right: unset;
 }
-.pretext .ptx-content-footer .button.top-button {
-  width: unset;
-  height: unset;
-  display: unset;
-}
 .pretext .ptx-content-footer .button {
   text-align: unset;
 /*
@@ -94,8 +82,11 @@
   background-color: unset;
 */
   padding: 0;
-  display: unset;
-  align-items: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  min-width: 85px;
 }
 
 /* Elements introduced in order of appearance */

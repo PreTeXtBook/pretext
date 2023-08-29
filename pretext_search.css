@@ -13,11 +13,12 @@
     background-color: #eeee;
 */
   position: absolute;
-  top: 35px;
+  top: 37px;
   right: 0;
 }
 .ptxsearch {
   width: 196px;
+  height: 35px;
 }
 .searchbutton {
   position: absolute;
@@ -146,7 +147,7 @@ ol.searchresults > li > text {
 }
 @media screen and (max-width: 800px) {
     .searchbox {
-        top: -30px;
+        top: -36px;
     }
 
 }

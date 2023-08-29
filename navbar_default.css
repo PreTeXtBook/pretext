@@ -6,24 +6,120 @@
  *
  *******************************************************************************
  */
+
 nav.ptx-navbar {
   background: #ededed;
+  border: 0;
+  border-top: 1px solid #bababa;
   border-bottom: 1px solid #bababa;
   margin: 0;
   z-index: 100;
-  min-height: unset;  /* to combat navbar.less */
-/*
-  height: 35.36px;
-*/
-  font-family: "PT Serif", "Times New Roman", Times, serif;
   font-family: "Open Sans";
   overflow: visible;
+  display: flex;
 }
-.ptx-navbar::after {
-  clear: both;  /* necessary, but not sure why */
-  content: " ";
-  display: table;
+
+.ptx-navbar .button {
+  font-size: 1.0em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #333333;
+  background-color: #ededed;
+  border: 0;
+  border-right: 1px solid #bababa;
+
+  /* Disable accidental text-selection */
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+.ptx-navbar .button:focus {
+  outline: thin dotted #333;
+  outline-offset: -2px;
+}
+
+.ptx-navbar .button:active {
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+
+.ptx-navbar .button:hover {
+  background-color: #fafafa;
+}
+
+.ptx-navbar .button:active {
+  background-color: #e0e0e0;
+}
+
+.ptx-navbar .button.disabled {
+  opacity: .4;
+  color: #333333;
+  background: #ededed;
+  box-shadow: none;
+}
+
+.ptx-navbar .toc-toggle {
+  width: 240px;
+  gap: 0.4em;
+}
+
+.ptx-navbar .button .icon {
+  font-size: 1.5em;
+}
+
+.ptx-navbar :is(.treebuttons, .nav-runestone-controls) {
+  display: flex;
+  flex-grow: 1;
+  justify-content: right;
+}
+
+.ptx-navbar :is(.treebuttons, .nav-runestone-controls) > *:first-child {
+  border-left: 1px solid #bababa;
+}
+
+
+.ptx-navbar .treebuttons > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 75px;
+}
+
+.ptx-navbar .treebuttons .icon {
+  margin: 0 -3px;  /* chevrons have lots of horizontal padding */
+}
+
+.ptx-navbar :is(.index-button, .calculator-toggle)  .icon {
+  display: none;
+}
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton) .name {
+  display: none;
+}
+
+.ptx-navbar .index-button {
+  width: 70px;
+}
+
+.ptx-navbar .calculator-toggle {
+  width: 60px;
+  height: 33px;
+  text-align: center;
+  border-radius: 20px;
+  margin-left: 5px;
+  border: 2px solid #66f;
+  line-height: 25px;
+  margin-top: 2px;
+  background-color: #eef;
+}
+
+.ptx-navbar .calculator-toggle.open {
+  background: #fee;
+  border: 2px solid #f66;
+}
+
 @media screen and (max-width: 800px) {
   .ptx-navbar {
     position: fixed;
@@ -34,243 +130,44 @@ nav.ptx-navbar {
     background: #ededed;
     box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
   }
-}
-.ptx-navbar .button {
-  font-size: 1.0em;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-  height: 35px;
-/*
-  height: 44px;
-*/
-  /* Disable accidental text-selection */
-  user-select: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  float: left;
-  text-align: left;
-  position: relative;
-  /* subtract border and padding from width
-   * so we can set width precisely as percent */
-}
-.ptx-navbar .button:focus {
-  outline: thin dotted #333;
-  outline-offset: -2px;
-}
-.ptx-navbar .button:active {
-  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
-}
-.ptx-navbar .button {
-  color: #333333;
-  background-color: #ededed;
-}
-.ptx-navbar .button:hover {
-  background-color: #fafafa;
-}
-.ptx-navbar .button:active {
-  background-color: #e0e0e0;
-}
-.ptx-navbar .button.disabled {
-  opacity: .4;
-  color: #333333;
-  background: #ededed;
-  cursor: default;
-  box-shadow: none;
-}
-.ptx-navbar .toc-toggle {
-  display: block;
-  width: 240px;
-  border-bottom: 1px solid #bababa;
-  border-right: 1px solid #bababa;
-}
-.ptx-navbar .toc-toggle .icon {
-  font-size: 1.75em;
-  position: relative;
-  bottom: 0.30em;
-  padding-left: 0.5em;
-  padding-right: 0.4em;
-}
-.ptx-navbar .toc-toggle .name {
-  font-size: 1.05em;
-  position: relative;
-  bottom: 0.53em;
-}
-
-.ptx-navbar .name {
-  display: inline-block;
-  position: relative;
-  bottom: 0;
-}
-
-.ptx-navbar .icon {
-  display: inline-block;
-  font-size: 1em;
-}
-
-.ptx-navbar .treebuttons > :is(a, span) {
-  display: flex;
-  gap: 0.2em;
-  align-items: center;
-  justify-content: center;
-}
-
-.ptx-navbar .index-button .name {
-  padding-top: 0.3em;
-}
-.ptx-navbar .next-button {
-  text-align: right;
-}
-.ptx-navbar .avatarbutton {
-  font-size: 1.0em;
-}
-
-.ptx-navbar .index-button .icon {
-  display: none;
-}
-.ptx-navbar .calculator-toggle .icon {
-  display: none;
-}
-.ptx-navbar .runestone-profile .name {
-  display: none;
-}
-.ptx-navbar .activecode-toggle .name {
-  display: none;
-}
-.ptx-navbar .searchbutton .name {
-  display: none;
-}
-
-@media screen and (max-width: 800px) {
-  .ptx-navbar .button {
-    /*@include button-hide-text($navbar-icon-box-size);*/
-    float: left;
-    text-align: center;
-    margin: 0;
-    border: 1px solid #bababa;
-    display: inline;
-  }
-  .ptx-navbar {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .ptx-navbar .index-button,
-  .ptx-navbar .user-preferences-button,
-  .ptx-navbar .calculator-button {
-    display: none;
-  }
-  .ptx-navbar .button {
-    border-bottom: none;
-    text-align: center;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .ptx-navbar .toc-toggle .icon {
-    position: relative;
-    bottom: 0.25em;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .ptx-navbar .treebuttons .icon {
-    position: relative;
-    bottom: 0;
-  }
-  .ptx-navbar .toc-toggle .name,
-  .ptx-navbar .previous-button .name,
-  .ptx-navbar .up-button .name,
-  .ptx-navbar .next-button .name {
-    display: none;
+  
+  .ptx-navbar .nav-runestone-controls {
+    flex: 0;
   }
   .ptx-navbar .toc-toggle {
-      width: 25%;
+    flex: 2 1 100px;
   }
   .ptx-navbar .treebuttons {
-    width: 75%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex: 3 1 150px; /* 3:2 ratio with toc-toggle */
   }
-  .ptx-navbar .treebuttons .button {
-/*
-    because the Prev is next to the TOC toggle
-*/
-    border-left: none;
+  .ptx-navbar .treebuttons > * {
+    flex: 1 1;
+    min-width: 35px
+  }
+  .ptx-navbar .index-button {
+    display: none;
+  }
+
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+    display: none;
+  }
+
+  .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+    display: inline-block;
+  }
+
+  .ptx-navbar .nav-runestone-controls > *:first-child {
+    border-left: 0
+  }
+
+  .ptx-navbar .calculator-toggle {
+    width: auto;
+    height: 35px;
+    border-radius: 0;
+    margin-left: 0;
+    border: 0;
+    line-height: inherit;
+    margin-top: 0;
+    background-color: inherit;
   }
 }
-@media screen and (max-width: 800px) {
-  .ptx-navbar .settings-button {
-    /* Disable ellipsis */
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    /* center the icon */
-    text-align: center;
-    position: relative;
-    /* hide the text */
-    text-indent: 110%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-}
-
-.ptx-navbar .button {
-    border-top: 1px solid #bababa;
-}
-
-.ptx-navbar {
-    background-color: #fafafa;
-    border-bottom: 1px solid #bababa;
-}
-.ptx-navbar .index-button {
-    width: 70px;
-    text-align: center;
-    border-right: 1px solid #bababa;
-    border-bottom: 1px solid #bababa;
-}
-.ptx-navbar .user-preferences-button {
-    padding: 0 0.8em 0 0.8em;
-    margin-left: 8em;
-    border: 1px solid #bababa;
-}
-.ptx-navbar .up-button {
-    width: 60px;
-    float: right;
-    border-right: 1px solid #bababa;
-}
-.ptx-navbar .previous-button {
-    width: 70px;
-    float: right;
-    border-left: 1px solid #bababa;
-    border-right: 1px solid #bababa;
-}
-.ptx-navbar .next-button {
-    width: 70px;
-    float: right;
-    border-right: 1px solid #bababa;
-}
-
-.ptx-navbar .calculator-toggle {
-    width: 60px;
-    height: 33px;
-    text-align: center;
-    border-radius: 20px;
-    margin-left: 5px;
-    border: 2px solid #66f;
-    line-height: 25px;
-    margin-top: 2px;
-    background-color: #eef;
-}
-.ptx-navbar .calculator-toggle.open {
-    background: #fee;
-    border: 2px solid #f66;
-}
-
-.ptx-navbar .treebuttons {
-    display: block;
-    float: right;
-}
-.ptx-navbar .treebuttons .next-button, .ptx-navbar .treebuttons .up-button, .ptx-navbar .treebuttons .previous-button {
-    float: left;
-}
-
