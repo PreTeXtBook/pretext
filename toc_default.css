@@ -44,6 +44,7 @@
     padding-top: 0.16em;
     display: none;
 }
+.ptx-toc ul.structural ul.structural a:focus > .codenumber,
 .ptx-toc ul.structural ul.structural a:hover > .codenumber {
     display: inline-block;
 }
@@ -138,7 +139,10 @@
 
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
 .ptx-toc ul.structural li ul.structural a:hover {
+/*
+omitting, because it caused a "jump"
     border-top: 1px solid #3c110a;
+*/
 /*
     margin-top: -1px;
 */
