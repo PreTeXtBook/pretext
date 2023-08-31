@@ -3197,6 +3197,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Note also that a data file may be provided independently for consumption by an ActiveCode program.  See <xref ref="topic-datafile"/>.</p>
 
+            <p>ActiveCode elements that are language <c>sql</c> can make use of an SQLite database file. This is different than a <c>datafile</c> (which is expected to be text or an image). To include a database file, use the <attr>database</attr> on the <tag>program</tag> element and specify the file to load as a string relative to the <attr>@external</attr> top-level directory</p>
+
             <p>If you want to include code from one or more preceding <tag>program</tag> elements, use the <attr>include</attr> attribute whose value is a list (comma-separated or space-separated) of <attr>xml:id</attr>s for the code you want included.</p>
         </subsection>
 
