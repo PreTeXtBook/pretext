@@ -1906,6 +1906,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:attribute name="data-wasm">
                                     <xsl:text>/_static</xsl:text>
                                 </xsl:attribute>
+                                <!-- A SQL database can be provided for automated  -->
+                                <!-- testing of correct answers via unit tests.    -->
+                                <!-- This is a location in the external directory. -->
+                                <xsl:if test="@database">
+                                    <xsl:attribute name="data-dburl">
+                                        <xsl:choose>
+                                            <xsl:when test="$b-managed-directories">
+                                                <xsl:value-of select="$external-directory"/>
+                                                <xsl:value-of select="@database"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="@database"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:attribute>
+                                </xsl:if>
                             </xsl:if>
                             <!-- the code itself as text -->
                             <xsl:call-template name="sanitize-text">
