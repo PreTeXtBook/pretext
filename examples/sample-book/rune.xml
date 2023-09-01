@@ -233,11 +233,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <program xml:id="sql-using-db" interactive='activecode' language="sql" label="sql-using-db" database="sql/test.db">
                 <input>
                     SELECT * FROM test
-                    ====
+                </input>
+                <tests>
                     assert 1,1 == world
                     assert 0,1 == hello
                     assert 2,1 == 35
-                </input>
+                </tests>
             </program>
         </exercise>
 
