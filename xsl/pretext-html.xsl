@@ -72,7 +72,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- radically different "strip-space" and "preserve-space"         -->
 <!-- declarations, which seem to *not* provide overrrides, and are  -->
 <!-- simply "local" to that stylesheet.                             -->
-<xsl:include href="./pretext-view-source.xsl"/>
+<xsl:import href="./pretext-view-source.xsl"/>
 
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
 <!-- create a header in the old style that browsers will recognize  -->
@@ -112,7 +112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- visit the "css" directory and make an update there      -->
 <!-- for the benefit of offline formats                      -->
 <!-- N.B. leave this as parameters.  A developer of a        -->
-<!-- comprehensive approach to new JS and CSS may qwant to   -->
+<!-- comprehensive approach to new JS and CSS may want to   -->
 <!-- point to a totally different server (rather than other  -->
 <!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
@@ -7170,6 +7170,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="pretext-js" />
                 <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
+                <xsl:call-template name="font-awesome" />
                 <xsl:call-template name="css" />
                 <xsl:call-template name="runestone-header"/>
                 <xsl:call-template name="font-awesome" />
@@ -9204,6 +9205,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </i>
 </xsl:template>
 
+<!-- Symbols -->
+<!-- Symbols are for internal use within theme designs.            -->
+<!-- Compare to "icons" which are designed for author use.         -->
+<!-- Presumes material symbols font was loaded in "fonts" template -->
+<xsl:include href="./html-symbols.xsl"/>
+<xsl:key name="symbol-key" match="symbolinfo" use="@name"/>
+<xsl:variable name="symbol-table" select="exsl:node-set($available-symbols-list)"/>
+
+<xsl:template name="insert-symbol">
+    <xsl:param name = "name" />
+    <!-- List of available html symbols for symbol    -->
+
+    <!-- lookup entity code as sanity check -->
+    <xsl:variable name="entity-name">
+        <xsl:for-each select="$symbol-table">
+            <xsl:value-of select="key('symbol-key', $name)/@entity"/>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <xsl:if test="$entity-name=''">
+        <xsl:message>PTX:ERROR: the symbol name <xsl:value-of select="$name"/> is not a known symbol. It will not render correctly.</xsl:message>
+    </xsl:if>
+
+    <!-- Could also just use $name here if assume browser supports ligatures. (Just about all do)  -->
+    <span class="icon material-symbols-outlined" aria-hidden="true">
+        <xsl:text disable-output-escaping="yes">&amp;#x</xsl:text><xsl:value-of select="$entity-name"/><xsl:text>;</xsl:text>
+    </span>
+</xsl:template>
+
 <!-- ##### -->
 <!-- Icons -->
 <!-- ##### -->
@@ -10972,7 +11002,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="ptx-content-footer">
                         <xsl:apply-templates select="." mode="previous-button"/>
                         <a class="top-button button" href="#" title="Top">
-                            <span class="icon">^</span>
+                            <xsl:call-template name="insert-symbol">
+                                <xsl:with-param name="name" select="'expand_less'"/>
+                            </xsl:call-template>
                             <span class="name">Top</span>
                         </a> 
                         <xsl:apply-templates select="." mode="next-button"/>
@@ -11413,7 +11445,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'previous'"/>
                     </xsl:apply-templates>
                 </xsl:attribute>
-                <span class="icon">&lt;</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'chevron_left'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'previous-short'"/>
@@ -11424,7 +11458,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">previous-button button disabled</xsl:attribute>
-                <span class="icon">&lt;</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'chevron_left'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'previous-short'"/>
@@ -11452,6 +11488,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="string-id" select="'index-part'"/>
                 </xsl:apply-templates>
             </xsl:attribute>
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'info'"/>
+            </xsl:call-template>
             <span class="name">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'index-part'"/>
@@ -11529,7 +11568,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'next-short'"/>
                     </xsl:apply-templates>
                 </span>
-                <span class="icon">&gt;</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'chevron_right'"/>
+                </xsl:call-template>
             </xsl:element>
         </xsl:when>
         <xsl:otherwise>
@@ -11540,7 +11581,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'next-short'"/>
                     </xsl:apply-templates>
                 </span>
-                <span class="icon">&gt;</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'chevron_right'"/>
+                </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -11563,7 +11606,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="string-id" select="'up'"/>
                     </xsl:apply-templates>
                 </xsl:attribute>
-                <span class="icon">^</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'expand_less'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'up-short'"/>
@@ -11574,7 +11619,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">up-button button disabled</xsl:attribute>
-                <span class="icon">^</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'expand_less'"/>
+                </xsl:call-template>
                 <span class="name">
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'up-short'"/>
@@ -11586,7 +11633,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator-toggle">
-    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container"><span class="name">Calc</span></button>
+    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'calculate'"/>
+        </xsl:call-template>
+        <span class="name">Calc</span>
+    </button>
 </xsl:template>
 
 <xsl:template match="*" mode="print-button"/>
@@ -11685,6 +11737,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
+
     <nav id="ptx-navbar">
         <xsl:attribute name="class">
             <xsl:text>ptx-navbar navbar</xsl:text>
@@ -11692,54 +11745,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> ptx-runestone-container</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        <button class="toc-toggle button" aria-label="Show or hide table of contents">
-            <span class="icon">☰</span>
-            <span class="name">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'toc'"/>
-                </xsl:apply-templates>
-            </span>
-        </button>
-        <!-- A page either has an/the index as    -->
-        <!-- a child, and gets the "jump to" bar, -->
-        <!-- or it deserves an index button       -->
-        <xsl:choose>
-            <xsl:when test="index-list">
-                <xsl:apply-templates select="." mode="index-jump-nav" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="index-button" />
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- Button to show/hide the calculator -->
-        <xsl:if test="$b-has-calculator">
-            <xsl:call-template name="calculator-toggle" />
-            <xsl:call-template name="calculator" />
+        
+        <!-- Pick an ordering for the nav components based on layout needs -->
+        <xsl:apply-templates select="." mode="primary-navigation-toc" />
+        <xsl:apply-templates select="." mode="primary-navigation-index" />
+        <xsl:apply-templates select="." mode="primary-navigation-other-controls" />
+        <xsl:apply-templates select="." mode="primary-navigation-treebuttons" />
+        <xsl:apply-templates select="." mode="primary-navigation-search" />
+        <xsl:apply-templates select="." mode="primary-navigation-runestone" />
+
+        <!-- Annotations button was once here, see GitHub issue -->
+        <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+    </nav>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-search">
+    <xsl:call-template name="google-search-box" />
+    <xsl:call-template name="native-search-box" />
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-treebuttons">
+    <!-- Span to encase Prev/Up/Next buttons and float right    -->
+    <!-- Each button gets an id for keypress recognition/action -->
+    <span class="treebuttons">
+        <xsl:apply-templates select="." mode="previous-button"/>
+        <xsl:if test="$nav-upbutton='yes'">
+            <xsl:apply-templates select="." mode="up-button"/>
         </xsl:if>
-        <!-- Runestone user menu -->
-        <xsl:if test="not($b-debug-react)">
-            <!-- Conditional on a build for Runestone hosting -->
-            <xsl:call-template name="runestone-bust-menu"/>
+        <xsl:apply-templates select="." mode="next-button"/>
+    </span>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-runestone">
+    <!-- Runestone user menu -->
+    <xsl:if test="not($b-debug-react)">
+        <span class="nav-runestone-controls">
             <!-- A scratch ActiveCode via a pencil icon, always -->
             <xsl:call-template name="runestone-scratch-activecode"/>
             <!-- The user-preferences-menu needs to be unified with the runestone-bust-menu -->
             <xsl:call-template name="user-preferences-menu"/>
-        </xsl:if>
-        <!-- Span to encase Prev/Up/Next buttons and float right    -->
-        <!-- Each button gets an id for keypress recognition/action -->
-        <span class="treebuttons">
-            <xsl:apply-templates select="." mode="previous-button"/>
-            <xsl:if test="$nav-upbutton='yes'">
-                <xsl:apply-templates select="." mode="up-button"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="next-button"/>
+            <!-- Conditional on a build for Runestone hosting -->
+            <xsl:call-template name="runestone-bust-menu"/>
         </span>
-        <!-- Annotations button was once here, see GitHub issue -->
-        <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
-        <!-- Search box at end of ptx-navbar, so it can be sticky -->
-        <xsl:call-template name="google-search-box" />
-        <xsl:call-template name="native-search-box" />
-    </nav>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-other-controls">
+    <!-- Button to show/hide the calculator -->
+    <span class="nav-other-controls">
+        <xsl:if test="$b-has-calculator">
+            <xsl:call-template name="calculator-toggle" />
+            <xsl:call-template name="calculator" />
+        </xsl:if>
+    </span>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-index">
+    <!-- A page either has an/the index as    -->
+    <!-- a child, and gets the "jump to" bar, -->
+    <!-- or it deserves an index button       -->
+    <xsl:choose>
+        <xsl:when test="index-list">
+            <xsl:apply-templates select="." mode="index-jump-nav" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="index-button" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="primary-navigation-toc">
+    <button class="toc-toggle button" aria-label="Show or hide table of contents">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'menu'"/>
+        </xsl:call-template>
+        <span class="name">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'toc'"/>
+            </xsl:apply-templates>
+        </span>
+    </button>
 </xsl:template>
 
 <!-- Sidebars -->
@@ -12980,7 +13065,12 @@ TODO:
         <div class="searchbox">
             <div class="searchwidget">
                 <input id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
-                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()">&#x1F50D;</button>
+                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()" title="Search book">
+                    <xsl:call-template name="insert-symbol">
+                        <xsl:with-param name="name" select="'search'"/>
+                    </xsl:call-template>
+                    <span class="name">Search Book</span>
+                </button>
             </div>
         </div>
     </xsl:if>
@@ -13098,6 +13188,8 @@ TODO:
     <!-- A variable font from Google, sans serif -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&amp;display=swap" rel="stylesheet"/>
     <!-- NB: not loading (binary) italic axis for variable fonts, tests seem to indicate this is OK -->
+    <!-- Material Symbols font used for symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </xsl:template>
 
 <!-- Hypothes.is Annotations -->
@@ -13166,6 +13258,14 @@ TODO:
         <xsl:comment> for testing purposes, and the developer who chose to use it </xsl:comment>
         <xsl:comment> must supply it.                                             </xsl:comment>
         <link href="developer.css" rel="stylesheet" type="text/css" />
+    </xsl:if>
+</xsl:template>
+
+<!-- Treated as characters, these could show up often, -->
+<!-- so load into every possible HTML page instance    -->
+<xsl:template name="sybol-font-setup">
+    <xsl:if test="$b-has-icon">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
     </xsl:if>
 </xsl:template>
 
