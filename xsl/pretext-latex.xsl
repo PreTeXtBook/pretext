@@ -3139,7 +3139,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>unbreakable, </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>parbox=false, </xsl:text>
+    <xsl:text>parbox=true, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style, }&#xa;</xsl:text>
     <!-- end: options -->
