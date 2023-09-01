@@ -3129,11 +3129,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- end: title/caption construction -->
     <!-- label in argument 2             -->
     <xsl:text>phantomlabel={#3}, </xsl:text>
-    <!-- always unbreakable, except for "list"           -->
-    <!-- list will be unbreakable once inside sidebyside -->
+    <!-- always unbreakable, except for "list"               -->
+    <!-- and list needs paragraph=style indentation restored -->
+    <!-- 2023-09-01: next comment seems incorrect?           -->
+    <!-- list will be unbreakable once inside sidebyside     -->
     <xsl:choose>
         <xsl:when test="self::list">
-            <xsl:text>breakable, </xsl:text>
+            <xsl:text>breakable, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>unbreakable, </xsl:text>
