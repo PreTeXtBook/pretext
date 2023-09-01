@@ -1503,7 +1503,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
-            <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=true,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
             <!-- Repeat the box style, but move numbers out of the margin and past -->
             <!-- the left rule with a 6ex space.  Plenty of room for double-digit  -->
@@ -1529,7 +1529,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, boxrule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
-            <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=true,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
             <!-- Arguments: left margin, width, right margin (latter ignored) -->
             <xsl:text>\newtcblisting{console}[3]{consoleboxstyle, left skip=#1\linewidth, width=#2\linewidth, listing options={style=consolecodestyle}}&#xa;</xsl:text>
@@ -1548,7 +1548,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
             <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
-            <xsl:text>breakable, parbox=false, &#xa;</xsl:text>
+            <xsl:text>breakable, parbox=true, &#xa;</xsl:text>
             <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
             <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, }&#xa;</xsl:text>
             <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
