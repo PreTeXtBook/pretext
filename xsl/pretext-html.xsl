@@ -11745,7 +11745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> ptx-runestone-container</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        
+
         <!-- Pick an ordering for the nav components based on layout needs -->
         <xsl:apply-templates select="." mode="primary-navigation-toc" />
         <xsl:apply-templates select="." mode="primary-navigation-index" />

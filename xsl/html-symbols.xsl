@@ -18,7 +18,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 <!-- From Material Symbols: https://github.com/google/material-design-icons/blob/master -->
-<!-- License: Apache 2.0 https://github.com/google/material-design-icons/blob/master/LICENSE --> 
+<!-- License: Apache 2.0 https://github.com/google/material-design-icons/blob/master/LICENSE -->
 
 <xsl:variable name="available-symbols-list">
     <symbolinfo name="10k" entity="e951"/>
