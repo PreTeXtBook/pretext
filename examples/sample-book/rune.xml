@@ -222,6 +222,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tests>
             </program>
         </exercise>
+        
+        <p>Here is an activecode with <attr>language</attr> set to <c>sql</c> uses the <attr>database</attr> to load a SQLite database file.</p>
+
+        <exercise xml:id="exercise-sql-using-db">
+            <title>An SQL program that uses an SQLite database file</title>
+            <statement>
+                <p>Select all the columns of all the rows in the <c>test</c> database table.</p>
+            </statement>
+            <program xml:id="sql-using-db" interactive='activecode' language="sql" label="sql-using-db" database="sql/test.db">
+                <input>
+                    SELECT * FROM test
+                    ====
+                    assert 1,1 == world
+                    assert 0,1 == hello
+                    assert 2,1 == 35
+                </input>
+            </program>
+        </exercise>
 
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
