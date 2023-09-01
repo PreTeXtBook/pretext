@@ -2278,17 +2278,32 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>To use these images, you simply provide the complete filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  Your <pretext/> source would look like:</p>
 
             <pre>
-            <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
+            <![CDATA[<image source="images/crocodiles.png" width="50%"/>]]>
             </pre>
 
             <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).</p>
 
-            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example:</p>
+            <p>
+                You should also provide a <tag>description</tag> and/or <tag>short-description</tag>
+                as a child of the <tag>image</tag>, or else explicitly declare the image to be
+                decorative with an attribute <attr>decorative</attr> set to <c>yes</c>.
+                A <tag>short-description</tag> should be text-only (but perhaps with <tag>var</tag>
+                children) and be less than 100<ndash/>140 characters long. A <tag>description</tag>
+                should be structured with <tag>p</tag> and <tag>tabular</tag> elements. For example:
+            </p>
 
             <pre>
             <![CDATA[
             <image source="images/crocodiles.jpeg" width="50%">
-                <description>Five crocodiles partially submerged.</description>
+                <short-description>Five crocodiles partially submerged.</short-description>
+                <description>
+                    <p>
+                        Five crocodiles are in a pond. Three of them have their eyes above
+                        the water line, looking in the direction of the camera. The other
+                        two are in the background and only their tails are visible above
+                        the water line.
+                    </p>
+                </description>
             </image>
             ]]>
             </pre>

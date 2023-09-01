@@ -114,7 +114,24 @@
 
         <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex/> macros, <pretext/> provides support for authoring with graphics languages such as Asymptote, TikZ, PGF, PSTricks, and xy-pic in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable <init>SVG</init> images, in addition to other formats like <init>PDF</init> or <init>PNG</init>.  Making all this happen is one of the more technical aspects of <pretext/>, so read the details in <xref ref="topic-images"/> along with frequent references there to the <c>pretext</c> script described in <xref ref="pretext-script"/>.</p>
 
-        <p>For accessibility, every <tag>image</tag> should either have a <tag>description</tag> child, or it should explicitly declare itself to be a decorative image setting <attr>decorative</attr> to the value <c>yes</c>. A description should minimally describe the important information in the image that is not already present in the surrounding text. Some screen readers may cut off reading a full descritption after the first 125 characters. For a complex technical diagram or an image from which the reader is expected to extract important information on their own, it can be challenging to write a description with the 125-character limit. It may be advisable to seek advice from an expert.</p>
+        <p>
+            For accessibility, every <tag>image</tag> should either have a description or it should
+            explicitly declare itself to be a decorative image setting <attr>decorative</attr> to
+            the value <c>yes</c>. Descriptions are of two types. A <tag>short-description</tag>
+            should minimally describe the important information in the image that is not already
+            present in the surrounding text. It should have no element children except possibly
+            <tag>var</tag> children. This content will be used as the <attr>alt</attr> attribute
+            for the HTML <tag>img</tag>. Some screen readers may cut off reading this content after
+            the first 100<ndash/>140 characters, therefore you should keep this element short.
+            A <tag>description</tag> element should be structured with <tag>p</tag> and
+            <tag>tabular</tag> children and has no technical limit on length. It may describe the
+            image more completely. The content of the <tag>description</tag> should describe the
+            image, but should not be necessary for a sighted reader to take in the important
+            features of the image. (If there are features of the image that need to be explained to
+            all readers, this should happen in the main body of the text.) An <tag>image</tag> may
+            have one or both types of description, but it is incorrect to have neither unless
+            <attr>decorative</attr> is set to value <c>yes</c>.
+        </p>
     </section>
 
     <section xml:id="overview-lists">
