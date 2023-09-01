@@ -339,6 +339,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <div class="dropdown-content">
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
+                <a href="/ns/course/index">Course Home</a>
                 <a href="/runestone/assignments/chooseAssignment">Assignments</a>
                 <a href="/runestone/assignments/practice">Practice</a>
                 <hr/>
