@@ -11848,6 +11848,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> focused</xsl:text>
                 </xsl:if>
             </xsl:attribute>
+            <!-- if focused, add info for js to pick up about levels -->
+            <xsl:if test="$b-html-toc-focused">
+                <xsl:attribute name="data-preexpanded-levels">
+                    <xsl:value-of select="$html-toc-preexpanded-levels"/>
+                </xsl:attribute>
+                <xsl:attribute name="data-max-levels">
+                    <xsl:value-of select="$toc-level"/>
+                </xsl:attribute>
+            </xsl:if>
             <!-- now, all the actual ToC entries -->
             <xsl:apply-templates select="." mode="toc-items"/>
         </nav>
@@ -11984,19 +11993,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text> active</xsl:text>
         </xsl:if>
     </xsl:attribute>
-    <a href="{$the-url}" class="internal">
-        <xsl:if test="not($the-number = '')">
-            <span class="codenumber">
-                <xsl:value-of select="$the-number" />
+    <div class="toc-title-box">
+        <a href="{$the-url}" class="internal">
+            <xsl:if test="not($the-number = '')">
+                <span class="codenumber">
+                    <xsl:value-of select="$the-number" />
+                </span>
+                <!-- separating space, only if needed -->
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <!-- *always* a title for divisions -->
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-short" />
             </span>
-            <!-- separating space, only if needed -->
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <!-- *always* a title for divisions -->
-        <span class="title">
-            <xsl:apply-templates select="." mode="title-short" />
-        </span>
-    </a>
+        </a>
+    </div>
 </xsl:template>
 
 <!-- A standalone XML file with ToC necessities  -->
