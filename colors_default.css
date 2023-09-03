@@ -48,6 +48,12 @@
        (The second condition will guarantee an adequate contrast with white.)
      */
 
+  /* Part colors are not used in non-focused TOC */
+  --parttoc: #932c1c;   
+  --parttoctext: white;
+  --parttocactive: var(--documenttitle);
+  --parttoctextactive: white;
+
   --chaptertoc: #3572a0;
   --chaptertoctext: white;
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
