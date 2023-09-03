@@ -10974,7 +10974,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                         </p>
                     </div>  <!-- title-container -->
-                    <xsl:call-template name="native-search-results"/>
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
@@ -13072,6 +13071,8 @@ TODO:
                     <span class="name">Search Book</span>
                 </button>
             </div>
+            
+            <xsl:call-template name="native-search-results"/>
         </div>
     </xsl:if>
 </xsl:template>
