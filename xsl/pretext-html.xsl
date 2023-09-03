@@ -11668,9 +11668,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Pick an ordering for the nav components based on layout needs -->
         <xsl:apply-templates select="." mode="primary-navigation-toc" />
         <xsl:apply-templates select="." mode="primary-navigation-index" />
+        <xsl:apply-templates select="." mode="primary-navigation-search" />
         <xsl:apply-templates select="." mode="primary-navigation-other-controls" />
         <xsl:apply-templates select="." mode="primary-navigation-treebuttons" />
-        <xsl:apply-templates select="." mode="primary-navigation-search" />
         <xsl:apply-templates select="." mode="primary-navigation-runestone" />
 
         <!-- Annotations button was once here, see GitHub issue -->
@@ -12986,8 +12986,7 @@ TODO:
     <xsl:if test="$has-native-search">
         <div class="searchbox">
             <div class="searchwidget">
-                <input id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
-                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()" title="Search book">
+                <button id="searchbutton" class="searchbutton button" type="button" title="Search book">
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'search'"/>
                     </xsl:call-template>
@@ -13004,13 +13003,15 @@ TODO:
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
         <div id="searchresultsplaceholder" class="searchresultsplaceholder" style="display: none">
-            <button id="closesearchresults" class="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
-            <h2>
+            <div class="search-results-controls">
+                <input aria-label="Search term" id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search term"/>
+                <button title="Close search" id="closesearchresults" class="closesearchresults"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <h2 class="search-results-heading">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'search-results-heading'"/>
                 </xsl:apply-templates>
                 <xsl:text>: </xsl:text>
-                <span id="searchterms" class="searchterms"></span>
             </h2>
             <!-- div#searchempty is not visible when there are results -->
             <div id="searchempty" class="searchempty">
