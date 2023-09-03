@@ -57,6 +57,35 @@ body.pretext {
   border-color: var(--highlighttocborder, #ec704b);
 }
 
+/* top level parts/front/backmatter styled as parts*/
+.ptx-toc.focused > .toc-item-list > :is(.toc-frontmatter, .toc-part, .toc-backmatter) {
+  background-color: var(--parttoc);
+  color: var(--parttoctext);
+}
+.ptx-toc.focused > .toc-item-list > :is(.toc-frontmatter, .toc-part, .toc-backmatter).active { 
+  background-color: var(--parttocactive);
+  color: var(--parttoctextactive);
+}
+
+.ptx-toc.focused .toc-chapter {
+  background-color: var(--chaptertoc);
+  color: var(--chaptertoctext);
+}
+.ptx-toc.focused .toc-chapter.active { 
+  background-color: var(--chaptertocactive);
+  color: var(--chaptertoctextactive);
+}
+
+/* Anything under a chapter, front matter, back matter styled as section */
+.ptx-toc.focused :is(.toc-chapter, .toc-frontmatter, .toc-backmatter) > ul > .toc-item {
+  background-color: var(--sectiontoc);
+  color: var(--sectiontoctext);
+}
+.ptx-toc.focused :is(.toc-chapter, .toc-frontmatter, .toc-backmatter) > ul > .toc-item.active {
+  background-color: var(--sectiontocactive);
+  color: var(--sectiontoctextactive);
+}
+
 
 .ptx-content .summary-links a {
   color: var(--sectiontoctext);
