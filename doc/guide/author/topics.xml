@@ -2284,10 +2284,10 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).</p>
 
             <p>
-                You should also provide a <tag>description</tag> and/or <tag>short-description</tag>
+                You should also provide a <tag>description</tag> and/or <tag>shortdescription</tag>
                 as a child of the <tag>image</tag>, or else explicitly declare the image to be
                 decorative with an attribute <attr>decorative</attr> set to <c>yes</c>.
-                A <tag>short-description</tag> should be text-only (but perhaps with <tag>var</tag>
+                A <tag>shortdescription</tag> should be text-only (but perhaps with <tag>var</tag>
                 children) and be less than 100<ndash/>140 characters long. A <tag>description</tag>
                 should be structured with <tag>p</tag> and <tag>tabular</tag> elements. For example:
             </p>
@@ -2295,7 +2295,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <pre>
             <![CDATA[
             <image source="images/crocodiles.jpeg" width="50%">
-                <short-description>Five crocodiles partially submerged.</short-description>
+                <shortdescription>Five crocodiles partially submerged.</shortdescription>
                 <description>
                     <p>
                         Five crocodiles are in a pond. Three of them have their eyes above

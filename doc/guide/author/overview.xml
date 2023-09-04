@@ -117,7 +117,7 @@
         <p>
             For accessibility, every <tag>image</tag> should either have a description or it should
             explicitly declare itself to be a decorative image setting <attr>decorative</attr> to
-            the value <c>yes</c>. Descriptions are of two types. A <tag>short-description</tag>
+            the value <c>yes</c>. Descriptions are of two types. A <tag>shortdescription</tag>
             should minimally describe the important information in the image that is not already
             present in the surrounding text. It should have no element children except possibly
             <tag>var</tag> children. This content will be used as the <attr>alt</attr> attribute
