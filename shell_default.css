@@ -158,9 +158,9 @@
   color: #333333;
   background-color: #ededed;
   border: 1px solid #bababa;
-  padding: 0;
+  padding: 0 10px;
   display: flex;
-  gap: 0;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   /* Disable accidental text-selection */
@@ -168,6 +168,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.pretext .ptx-content-footer .button .icon {
+  margin: 0 -7px; /* icons have lots of whitespace */
 }
 
 .pretext .ptx-content-footer .button:hover,
