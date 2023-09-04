@@ -1643,7 +1643,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
                 <image width="50%" source="images/cubic-function.png">
-                    <description>A third degree polynomial with a local max and a local min, along with its second degree derivative plotted on the same axes</description>
+                    <shortdescription>
+                        a third degree polynomial with a local max and a local min;
+                        its derivative is plotted on the same axes
+                    </shortdescription>
                 </image>
             </figure>
 
@@ -2843,7 +2846,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
-                        <description>A pile of electronic components wired together</description>
+                        <shortdescription>
+                            a pile of electronic components wired together
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
@@ -3018,7 +3023,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-pgfplots-demo">
                     <caption>Sample pgfplots plot</caption>
                     <image xml:id="pgfplots-demo">
-                        <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
+                        <shortdescription>
+                            a Cartesian plane with a function graph, a parametric curve, and some points
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
@@ -3068,7 +3075,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-pgfplots-data-demo">
                     <caption>External data in a pgfplots plot</caption>
                     <image xml:id="pgfplots-data-demo">
-                        <description>A pgfplots example, with external data plotted.</description>
+                        <shortdescription>
+                            a Cartesian plot of electric potential over time;
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[
@@ -3115,7 +3124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-asymptote-levers">
                     <caption>Asymptote Lever Demonstration</caption>
                     <image xml:id="asymptote-lever">
-                        <description>Moments on a lever</description>
+                        <shortdescription>moments on a lever</shortdescription>
                         <asymptote>
                         size(200,0);
 
@@ -3323,7 +3332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
                     <image xml:id="sageplot-parabola" width="50%">
-                        <description>A standard parabola on the interval [-2,4]</description>
+                        <shortdescription>a standard parabola on the interval [-2,4]</shortdescription>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
@@ -3596,7 +3605,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>An Asymptote image, with zero layout control, so 100% width.</p>
 
                     <image xml:id="asymptote-lever-solo">
-                        <description>Moments on a lever</description>
+                        <shortdescription>moments on a lever</shortdescription>
                         <asymptote>
                         // The next comment was seen in the wild, and the angle brackets
                         // are non-ASCII Unicode characters, which was disrupting communication
@@ -3633,7 +3642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>A Sage example, pushed to the right margin.</p>
 
                     <image xml:id="sageplot-parabola-solo" width="30%" margins="70% 0%">
-                        <description>A standard parabola on the interval [-2,4]</description>
+                        <shortdescription>a standard parabola on the interval [-2,4]</shortdescription>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
@@ -9587,7 +9596,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <figure xml:id="fig-sidebyside-subfigure">
                             <caption></caption>
                             <image source="images/cross-square.png">
-                                <description>Trefoil image</description>
+                                <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                             </image>
                         </figure>
                         <figure>
@@ -13347,7 +13356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <statement>
                                 <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
                                 <image width="100%" source="images/projection1.png">
-                                    <description>two vectors...</description>
+                                    <shortdescription>two vectors in a Cartesian plane</shortdescription>
                                 </image>
                             </statement>
                         </exercise>
