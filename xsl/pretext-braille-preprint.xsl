@@ -286,7 +286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--  -->
         <xsl:if test="//image">
             <segment indentation="2">
-                <xsl:text>Images are replaced by authors' descriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
+                <xsl:text>Images are replaced by authors' shortdescriptions, and then in an embossed version, a full (numbered) page comes next, which can be manually replaced by a tactile version of the image.</xsl:text>
             </segment>
         </xsl:if>
         <!--  -->
