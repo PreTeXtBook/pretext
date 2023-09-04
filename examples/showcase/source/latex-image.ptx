@@ -17,10 +17,10 @@
       <sidebyside margins="0%" widths="41% 53%" valign="bottom">
         <image xml:id="image-building-parabola">
           <!-- diagram from ORCCA by Ross Kouzes and Alex Jordan -->
-          <description>
+          <shortdescription>
             a drawing of a tall building and a tennis ball being launched upward;
             the path of the ball is an arc that goes upward and then downward to the ground
-          </description>
+          </shortdescription>
           <latex-image>
             \definecolor{ruby}{HTML}{9e0c0f}
             \definecolor{turquoise}{HTML}{008099}
@@ -50,15 +50,19 @@
 
         <image xml:id="image-gaussian-sum-proof">
           <!-- design by Alex Jordan -->
+          <shortdescription>
+            visual proof of the identity that the sum of k from k=1 to k=n is equal to n+1 choose 2
+          </shortdescription>
           <description>
-            a visual proof of the identity that the sum of k from k = 1 to n is (n + 1) choose 2;
-            there is a single ball at the top;
-            beneath that there are two balls;
-            beneath that there are three, then four, then five, then 6;
-            this collection of balls represents the sum of k from k = 1 to 6;
-            below all this are seven balls;
-            the diagram illustrates a correspondence from any of the balls from the upper collection
-            to a unique pair of two balls in the row of seven
+            <p>
+              There is a single ball at the top; beneath that there is a row with two balls;
+              beneath that there is a row with three balls, then four, then five, then six.
+            </p>
+            <p>
+              Below all this is a row with seven balls and a particular subset of two of those balls
+              is highlighted. The diagram illustrates a correspondence from that pair to a particular
+              ball in the upper collection.
+            </p>
           </description>
           <latex-image>
             {
@@ -90,10 +94,10 @@
       <sidebyside margins="0%" widths="47% 47%" valign="bottom">
         <image xml:id="image-implicitly-defined-curve">
           <!-- plot from CLM by Alex Jordan -->
-          <description>
+          <shortdescription>
             a plot of the implicitly defined curve x cos(x y) = 4 - y;
             the viewing window is [-7,7] x [-4,10.6]
-          </description>
+          </shortdescription>
           <latex-image>
             \begin{tikzpicture}[
               declare function={
@@ -206,9 +210,9 @@
 
         <image xml:id="image-parametrized-surface">
           <!-- plot by Alex Jordan -->
-          <description>
+          <shortdescription>
             a 3D partial plot of the surface defined by r(u,v) = (u + v, u^2, v^2)
-          </description>
+          </shortdescription>
           <latex-image>
             \begin{tikzpicture}
               \begin{axis}[
@@ -350,7 +354,7 @@
     <figure>
       <caption>Canada</caption>
       <image xml:id="cflag" archive="asy">
-        <description>Image of a Canadian flag</description>
+        <shortdescription>Canadian flag</shortdescription>
         <asymptote>
         size(4cm,6cm);
         pen canadared=rgb(235/256,45/256,55/256);
@@ -379,7 +383,7 @@
     <figure>
       <caption>European Union</caption>
       <image xml:id="eflag" archive="asy">
-        <description>Image of European Union flag</description>
+        <shortdescription>European Union flag</shortdescription>
         <asymptote>
         size(4cm,6cm);
         pen euflagblue=rgb(31/256,68/256,186/256);
@@ -397,7 +401,7 @@
     <figure>
       <caption>United States</caption>
       <image xml:id="usflag" archive="asy">
-        <description>Image of the American flag</description>
+        <shortdescription>American flag</shortdescription>
         <asymptote>
         size(4cm,6cm);
         pen usflagred=rgb(178/256,34/256,52/256);
@@ -430,7 +434,9 @@
     <figure>
       <caption>Area under the curve <m>f(x)=e^{-x^2}</m></caption>
       <image xml:id="AreaUnderCurve" archive="asy" width="70%">
-        <description>A graphic showing the area under the plot of the function <m>=e^{-x^2}</m>.</description>
+        <shortdescription>
+          graphic showing the area under the plot of the function e^(-x^2)
+        </shortdescription>
         <asymptote>
         import graph;
         size (3 inch,0);
@@ -454,7 +460,7 @@
     <figure>
       <caption>Five set Venn diagram using ellipses</caption>
       <image xml:id="FiveVenn" archive="asy" width="50%">
-        <description>Venn diagram with five sets using ellipses</description>
+        <shortdescription>Venn diagram with five sets using ellipses</shortdescription>
         <asymptote>
         size(6cm,5cm);
         path [] P ;
@@ -498,7 +504,7 @@
       <url href="https://pretextbook.org/examples/sample-article/annotated/graphics.html#graphics-asymptote-webgl" visual="pretextbook.org/examples/sample-article/annotated/graphics.html#graphics-asymptote-webgl"/>
       Deathstar</caption>
       <image xml:id="Deathstar" archive="asy" width="70%">
-        <description>Three dimensional graphic of stellated icosahedron</description>
+        <shortdescription>three-dimensional graphic of stellated icosahedron</shortdescription>
         <asymptote>
         size (3 inch,0);
         import three ;
