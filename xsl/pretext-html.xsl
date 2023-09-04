@@ -12067,6 +12067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  this.ref('id')&#xa;</xsl:text>
         <xsl:text>  this.field('title')&#xa;</xsl:text>
         <xsl:text>  this.field('body')&#xa;</xsl:text>
+        <xsl:text>  this.metadataWhitelist = ['position']&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
         <xsl:text>    this.add(doc)&#xa;</xsl:text>
