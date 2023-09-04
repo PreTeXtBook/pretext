@@ -11815,7 +11815,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="primary-navigation-toc">
-    <button class="toc-toggle button" aria-label="Show or hide table of contents">
+    <button class="toc-toggle button">
+        <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'toc'"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'menu'"/>
         </xsl:call-template>
