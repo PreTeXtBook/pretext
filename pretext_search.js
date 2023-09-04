@@ -14,6 +14,9 @@ function doSearch(searchlocation="A") {
     } else {
         terms = document.getElementById("ptxsearchB").value;
     }
+    
+    localStorage.setItem('last-search-terms', JSON.stringify({terms: terms, time: Date.now()}));
+    
     // Where do we want to put the results?
     let resultArea = document.getElementById("searchresults")
     resultArea.innerHTML = "";  // clear out any previous results
@@ -24,14 +27,20 @@ function doSearch(searchlocation="A") {
         console.log("ptxsearch value", document.getElementById("ptxsearch").value);
     } else {
         searchterms = terms;
-//        document.getElementById("ptxsearchB").value = searchterms;
     }
-    searchterms = searchterms.trim();
-    searchterms = searchterms.replace(/ +/g, " ");
-    searchterms = searchterms.replaceAll(" ", " +");
-    searchterms = "+".concat(searchterms);
-    // do the search using the provided index
-    let pageResult = ptx_lunr_idx.search(searchterms);
+
+    searchterms = searchterms.toLowerCase().trim();
+    let pageResult = [];
+    if(searchterms != "") {
+        pageResult = ptx_lunr_idx.query((q) => {
+            for(let term of searchterms.split(' ')) {
+                q.term(term, { fields: ["title"], boost: 20 }); //exact title match with 20x weight
+                q.term(term, { wildcard: lunr.Query.wildcard.TRAILING, fields: ["title"], boost: 10 }); //inexact title 10x weight
+                q.term(term, { fields: ["body"], boost: 5 }); //exact body 5x weight
+                q.term(term, { wildcard: lunr.Query.wildcard.TRAILING, fields: ["body"] }); //inexact body
+            }
+        });
+    }
     // Number the documents from first to last so we can order the results by their
     // position in the book.
     snum = 0;
@@ -39,12 +48,17 @@ function doSearch(searchlocation="A") {
         doc.snum = snum;
         snum += 1;
     }
+
+    //Limit to a sane number of results - otherwise search like 'e' matches every page
+    const MAX_RESULTS = 100;
+    let numUnshown = (pageResult.length > MAX_RESULTS) ? pageResult.length - MAX_RESULTS : 0;
+    pageResult.slice(0, MAX_RESULTS);
+
     // Transfer meta data from the document to the results to make it easy to add 
     // our lists later.
-// console.log("pageResult", pageResult.length, "which are", pageResult);
     augmentResults(pageResult, ptx_lunr_docs);
-    pageResult.sort(comparePosition)
-    addResultToPage(terms, pageResult, ptx_lunr_docs, resultArea);
+    pageResult.sort(comparePosition);
+    addResultToPage(terms, pageResult, ptx_lunr_docs, numUnshown, resultArea);
     MathJax.typeset();
 }
 
@@ -68,8 +82,43 @@ function augmentResults(result, docs) {
         res.level = info.level;
         res.snum = info.snum;
         res.score = parseFloat(res.score);
+
+        //extra score multiplier based on level - prioritize sections over subsections/exercises/etc...
+        const LEVEL_WEIGHTS = [3, 2, 1.5]
+        if( res.level < 2 ) 
+            res.score *= LEVEL_WEIGHTS[res.level];
+
+        res.body = '';
+        //Add body snippets and highlights
+        const REVEAL_WINDOW = 30;
+        let titleMarked = false;
+        for (const hit in res.matchData.metadata) {
+            if(res.matchData.metadata[hit].title) {
+                //only show one match in title as locations change after first markup
+                if(!titleMarked) {
+                    let positionData = res.matchData.metadata[hit].title.position[0];
+                    const startClipInd = positionData[0];
+                    const endClipInd = positionData[0] + positionData[1];
+                    res.title = res.title.substring(0, endClipInd) + '</span>' + res.title.substring(endClipInd);
+                    res.title = res.title.substring(0, startClipInd) + '<span class="search-result-clip-highlight">' + res.title.substring(startClipInd);
+                    titleMarked = true;
+                }
+            } else if (res.matchData.metadata[hit].body) {
+                const bodyContent = info.body;
+                let positionData = res.matchData.metadata[hit].body.position[0];
+                const startInd = positionData[0] - REVEAL_WINDOW;
+                const endInd = positionData[0] + positionData[1] + REVEAL_WINDOW;
+                const startClipInd = positionData[0];
+                const endClipInd = positionData[0] + positionData[1];
+                let resultSnippet = (startInd > 0 ? '...' : '' ) + bodyContent.substring(startInd, startClipInd);
+                resultSnippet += '<span class="search-result-clip-highlight">' + bodyContent.substring(startClipInd, endClipInd) + '</span>';
+                resultSnippet += bodyContent.substring(endClipInd, endInd) + (endInd < bodyContent.length ? '...' : '' ) + '<br/>';
+                res.body += resultSnippet;
+            }
+        }
     }
 }
+
 function rearrangedArray(arry) {
    // return a new array which is arry (with depth) sorted according to meas,
    // again as an array with depth.
@@ -126,7 +175,7 @@ function compareScoreDesc(a, b) {
     return 0;
 }
 
-function addResultToPage(searchterms, result, docs, resultArea) {
+function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
     /* backward compatibility for old html */
     if (document.getElementById("searchempty")) {
         document.getElementById("searchempty").style.display = "none";
@@ -163,7 +212,7 @@ function addResultToPage(searchterms, result, docs, resultArea) {
     let low = allScores[Math.floor(len*0.75)];
     if (ptx_lunr_search_style == "reference") {
         result = rearrangedArray(result);
-        }
+    }
     let indent = "1";
     let currIndent = indent;
     let origResult = resultArea;
@@ -192,16 +241,31 @@ function addResultToPage(searchterms, result, docs, resultArea) {
             resultArea = origResult;
             indent = currIndent;
         }
-        let bullet = document.createElement("li")
-        bullet.style.marginTop = "5px";
         link.href = `${res.url}`;
         link.innerHTML = `${res.type} ${res.number} ${res.title}`;
-        bullet.appendChild(link)
+        let clip = document.createElement("div");
+        clip.classList.add("search-result-clip");
+        clip.innerHTML = `${res.body}`;
+        let bullet = document.createElement("li");
+        bullet.classList.add('search-result-bullet');
+        bullet.appendChild(link);
+        bullet.appendChild(clip);
         let p = document.createElement("text");
+        p.classList.add('search-result-score');
         p.innerHTML = `  (${res.score.toFixed(2)})`;
         bullet.appendChild(p);
         resultArea.appendChild(bullet);
     }
+    //Could print message about how many results are not shown. No way to localize it though...
+    // if(numUnshown > 0) {
+    //     let bullet = document.createElement("li");
+    //     bullet.classList.add('search-results-bullet');
+    //     bullet.classList.add('search-results-unshown-count');
+    //     let p = document.createElement("text");
+    //     p.innerHTML = `${parseInt(numUnshown)} unshown results...`;
+    //     bullet.appendChild(p);
+    //     resultArea.appendChild(bullet);
+    // }
     document.getElementById("searchresultsplaceholder").style.display = null;
     MathJax.typesetPromise();
 }
@@ -222,11 +286,16 @@ function showHelp() {
 window.addEventListener("load",function(event) {
     document.getElementById("searchbutton").addEventListener('click', (e) => {
         document.getElementById('searchresultsplaceholder').style.display = null;
-        document.getElementById('ptxsearch').focus();
+        let searchInput = document.getElementById("ptxsearch");
+        searchInput.value = JSON.parse(localStorage.getItem("last-search-terms")).terms;
+        searchInput.select();
+        doSearch();
     });
+
     document.getElementById("ptxsearch").addEventListener('input', (e) => {
         doSearch();
     });
+
     document.getElementById("closesearchresults").addEventListener('click', (e) => {
         document.getElementById('searchresultsplaceholder').style.display = 'none';
         document.getElementById('searchbutton').focus();
