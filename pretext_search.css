@@ -81,8 +81,7 @@ ol.searchresults {
 ol.searchresults > li {
     list-style-type: none;
 }
-.searchresults ul > li > text,
-ol.searchresults > li > text {
+.search-result-score {
     display: none;
 }
 .high_result {
@@ -149,6 +148,21 @@ ol.searchresults > li > text {
     display: none;
     padding-left: 10px;
     padding-top: 5px;
+}
+.search-result-bullet {
+    margin-top: 0.3em;
+}
+.search-result-clip {
+    font-size: 80%;
+    font-style: italic;
+    color: #444;
+    padding-left: 15px;
+}
+.search-results-unshown-count {
+    margin-top: 0.6em;
+}
+.search-result-clip-highlight {
+    background: rgba(255,255,0,0.5);
 }
 @media screen and (max-width: 800px) {
     .searchresultsplaceholder {
