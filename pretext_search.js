@@ -96,6 +96,8 @@ function augmentResults(result, docs) {
             if(res.matchData.metadata[hit].title) {
                 //only show one match in title as locations change after first markup
                 if(!titleMarked) {
+                    if(!res.matchData.metadata[hit].title.position)
+                        continue;
                     let positionData = res.matchData.metadata[hit].title.position[0];
                     const startClipInd = positionData[0];
                     const endClipInd = positionData[0] + positionData[1];
@@ -104,6 +106,8 @@ function augmentResults(result, docs) {
                     titleMarked = true;
                 }
             } else if (res.matchData.metadata[hit].body) {
+                if(!res.matchData.metadata[hit].body.position)
+                    continue;
                 const bodyContent = info.body;
                 let positionData = res.matchData.metadata[hit].body.position[0];
                 const startInd = positionData[0] - REVEAL_WINDOW;
