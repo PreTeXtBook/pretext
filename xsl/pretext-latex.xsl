@@ -2716,6 +2716,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "commentary" -->
 <!-- Body:  \begin{commentary}{title}      -->
 <!-- Title comes with punctuation, always. -->
+<!-- 2023-09-05: parbox=false  should be "fixed" but   -->
+<!-- this element is in mid-deprecation, so we'll just -->
+<!-- leave it as-is.                                   -->
 <xsl:template match="commentary" mode="environment">
     <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
     <xsl:text>\tcbset{ commentarystyle/.style={</xsl:text>
