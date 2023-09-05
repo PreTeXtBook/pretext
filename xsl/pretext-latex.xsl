@@ -2516,9 +2516,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Notes: -->
 <!-- *  Generally, all boxes should be "breakable"     -->
-<!-- *  If the contents can be reasonably expected to  -->
-<!--    be organized by paragraphs, then use the       -->
-<!--    tcolorbox style option "parbox=false"          -->
+<!--    tcolorbox uses minipages and parboxes, which   -->
+<!--    seem to kill indentation and line spacing to   -->
+<!--    delineate paragraphs. If the contents can be   -->
+<!--    reasonably expected toto be organized as       -->
+<!--    paragraphs we add to the style:                -->
+<!--                                                   -->
+<!--    before upper app={\setlength{\parindent}{\normalparindent}} -->
+<!--                                                   -->
+<!--    which *appends* to the "before upper" code     -->
+<!--    and requires the tcolorbox "hooks" library.    -->
+<!--    Order may be important (such as after          -->
+<!--    "runinstyle") and we may not  have it right    -->
+<!--    everywhere.                                    -->
 <!-- *  The  etoolbox  package has some good tools     -->
 <!-- *  Some items need a "phantom={\hypertarget{}{}}" -->
 <!--    search on mode="xref-as-ref" for more          -->
