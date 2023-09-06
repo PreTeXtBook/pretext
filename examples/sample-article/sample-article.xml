@@ -575,7 +575,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <output>1/2*x - 1/4*sin(2*x)</output>
                 </sage>
 
-                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex/> output if they are the first piece of content, so we test that here also.  A defensive <c>\leavevmode</c> solves the problem.</p>
+                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc/>.</p>
             </paragraphs>
         </section>
 
@@ -5105,6 +5105,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <section xml:id="table-calisthenics" label="section-table-calisthenics">
             <title>Table Calisthenics</title>
+
+            <sage>
+                <input>
+                c = 832
+                c
+                </input>
+            </sage>
+
+            <p>That was a Sage cell just now, which has nothing to do with tables.  But we needed someplace to test placement right after a division heading.  Carry on.</p>
 
             <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  Footnotes inside cells are tested here.</p>
 
