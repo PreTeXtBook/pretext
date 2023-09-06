@@ -8236,11 +8236,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
-    <!-- Surrounding box gets clobbered if it is the first -->
-    <!-- thing after a heading.  This could be excessive   -->
-    <!-- if the cell is empty, but should not be harmful.  -->
-    <!-- NB: maybe this should not even be called if all empty -->
-    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
+
     <xsl:if test="$in!=''">
         <xsl:text>\begin{sageinput}&#xa;</xsl:text>
         <xsl:value-of select="$in" />
@@ -8537,12 +8533,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Potential alternate solution: write a leading "empty" \mbox{}    -->
 <!-- http://tex.stackexchange.com/questions/171220/                   -->
 <!-- include-non-floating-graphic-in-a-theorem-environment            -->
-<xsl:template match="sage" mode="leave-vertical-mode">
-    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:text>\leavevmode%&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
 <xsl:template match="sidebyside" mode="leave-vertical-mode">
     <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs">
         <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
