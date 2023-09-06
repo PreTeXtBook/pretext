@@ -1078,7 +1078,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- solutions to inline exercises -->
         <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{inlinesolution}[4]</xsl:text>
             <xsl:text>{inlinesolutionstyle, title={\hyperref[#4]{#1~#2}\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1087,7 +1087,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
             <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
             <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolution}[4]</xsl:text>
             <xsl:text>{divisionsolutionstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1096,7 +1096,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercisegroup[not(@cols)]">
             <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
             <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolutioneg}[4]</xsl:text>
             <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1105,7 +1105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercisegroup/@cols">
             <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
             <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolutionegcol}[4]</xsl:text>
             <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1123,7 +1123,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- set the style -->
             <xsl:text>\tcbset{ </xsl:text>
             <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
             <!-- create the environment -->
             <xsl:text>\newtcolorbox{</xsl:text>
             <xsl:value-of select="$elt-name"/>
@@ -1144,7 +1144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Numbered, styled with a hanging indent -->
     <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
         <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
         <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
         <xsl:if test="$b-pageref">
@@ -1157,7 +1157,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- boxes and get good page breaks (as these problems could be long)        -->
     <xsl:if test="$document-root//exercisegroup[not(@cols)]">
         <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
         <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
         <xsl:if test="$b-pageref">
@@ -1169,7 +1169,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
     <xsl:if test="$document-root//exercisegroup/@cols">
         <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
         <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
         <xsl:if test="$b-pageref">
@@ -1503,7 +1503,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
-            <xsl:text>breakable, parbox=true,&#xa;</xsl:text>
+            <xsl:text>breakable,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
             <!-- Repeat the box style, but move numbers out of the margin and past -->
             <!-- the left rule with a 6ex space.  Plenty of room for double-digit  -->
@@ -1529,7 +1529,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, boxrule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
-            <xsl:text>breakable, parbox=true,&#xa;</xsl:text>
+            <xsl:text>breakable,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
             <!-- Arguments: left margin, width, right margin (latter ignored) -->
             <xsl:text>\newtcblisting{console}[3]{consoleboxstyle, left skip=#1\linewidth, width=#2\linewidth, listing options={style=consolecodestyle}}&#xa;</xsl:text>
@@ -1548,7 +1548,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
             <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
-            <xsl:text>breakable, parbox=true, &#xa;</xsl:text>
+            <xsl:text>breakable, &#xa;</xsl:text>
             <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
             <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, }&#xa;</xsl:text>
             <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
@@ -2743,7 +2743,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#3}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#3}{}}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, after={\par}, </xsl:text>
+    <xsl:text>\hypertarget{#3}{}}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, after={\par}, </xsl:text>
     <xsl:value-of select="$proof-name"/>
     <xsl:text>style }&#xa;</xsl:text>
 </xsl:template>
@@ -2785,7 +2785,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ objectivesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, objectivesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, objectivesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
@@ -2796,7 +2796,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ outcomesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, outcomesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
@@ -2810,7 +2810,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, backcolophonstyle}&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, backcolophonstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
@@ -2831,7 +2831,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#3}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2844,7 +2844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ glossaryitemstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1\space}, phantomlabel={#2}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, glossaryitemstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1\space}, phantomlabel={#2}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, glossaryitemstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "paragraphs" -->
@@ -2887,7 +2887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#3}, breakable, parbox=true, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2998,7 +2998,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- always breakable -->
-    <xsl:text>breakable, parbox=true, after={\par}, </xsl:text>
+    <xsl:text>breakable, after={\par}, </xsl:text>
     <!-- italic body (this should be set elsewhere) -->
     <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
         <xsl:text>fontupper=\itshape, </xsl:text>
@@ -3141,7 +3141,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>unbreakable, </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>parbox=true, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style, }&#xa;</xsl:text>
     <!-- end: options -->
