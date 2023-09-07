@@ -9345,30 +9345,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <listing xml:id="console-raspberry-pi">
                 <caption>Console Session: <c>int</c> and <c>float</c></caption>
-                <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <console prompt="pi@raspberrypi ~/progs/chap02 $ ">
                     <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input>./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input />
                 </console>
             </listing>
 
             <p>Here is the plain version, some layout control.  We simply place a small margin on the left (at 4% width).</p>
 
-            <console margins="4%">
-                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+            <console prompt="pi@raspberrypi ~/progs/chap02 $ " margins="4%">
                 <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                 <input>./intAndFloat</input>
                 <output>
                 The integer is 19088743 and the float is 19088.742188
                 </output>
-                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                 <input />
             </console>
 
@@ -9376,18 +9370,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <listing xml:id="console-raspberry-pi-multi">
                 <caption>Console Session: <c>int</c> and <c>float</c> (multi-line input)</caption>
-                <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <console prompt="pi@raspberrypi ~/progs/chap02 $ ">
                     <input>
                     gcc -Wall
                         -o intAndFloat intAndFloat.c
                     </input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input>./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input />
                 </console>
             </listing>
@@ -9399,36 +9390,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing>
                 <caption>Console Session: problematic <latex /> characters</caption>
                 <console>
-                    <prompt>A backslash \ here  </prompt>
-                    <input>A backslash \ here</input>
+                    <input prompt="A backslash \ here  ">A backslash \ here</input>
                     <output>A backslash \ here</output>
 
-                    <prompt>A begin group { here  </prompt>
-                    <input>A begin group { here</input>
+                    <input prompt="A begin group { here  ">A begin group { here</input>
                     <output>A begin group { here</output>
 
-                    <prompt>An end group { here  </prompt>
-                    <input>An end group } here</input>
+                    <input prompt="An end group { here  ">An end group } here</input>
                     <output>An end group } here</output>
 
-                    <prompt>An open escape sequence (* here  </prompt>
-                    <input>An open escape sequence (* here</input>
+                    <input prompt="An open escape sequence (* here  ">An open escape sequence (* here</input>
                     <output>An open escape sequence (* here</output>
 
-                    <prompt>An end escape sequence *) here  </prompt>
-                    <input>An end escape sequence *) here</input>
+                    <input prompt="An end escape sequence *) here  ">An end escape sequence *) here</input>
                     <output>An end escape sequence *) here</output>
 
-                    <prompt>Some quotation marks ` ' " here  </prompt>
-                    <input>Some quotation marks ` ' " here</input>
+                    <input prompt="Some quotation marks ` ' &quot; here  ">Some quotation marks ` ' " here</input>
                     <output>Some quotation marks ` ' " here</output>
 
-                    <prompt>The rest &amp; % $ # _ ~ ^ of LaTeX  </prompt>
-                    <input>The rest &amp; % $ # _ ~ ^ of LaTeX</input>
+                    <input prompt="The rest &amp; % $ # _ ~ ^ of LaTeX  ">The rest &amp; % $ # _ ~ ^ of LaTeX</input>
                     <output>The rest &amp; % $ # _ ~ ^ of LaTeX</output>
 
-                    <prompt>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß  </prompt>
-                    <input>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</input>
+                    <input prompt="Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß  ">Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</input>
                     <output>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</output>
                 </console>
             </listing>
@@ -11029,15 +11012,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </input>
                     </program>
                     <console>
-                        <prompt>pi@rpi ~$ </prompt>
-                        <input>gcc -o intAndFloat intAndFloat.c</input>
-                        <prompt>pi@rpi ~$ </prompt>
-                        <input>./intAndFloat</input>
+                        <input prompt="pi@rpi ~$ ">gcc -o intAndFloat intAndFloat.c</input>
+                        <input prompt="pi@rpi ~$ ">./intAndFloat</input>
                         <output>
                         19088743 (integer) and 19088.742188 (float)
                         </output>
-                        <prompt>pi@rpi ~$ </prompt>
-                        <input />
+                        <input prompt="pi@rpi ~$ "/>
                     </console>
                 </sidebyside>
             </figure>
@@ -11595,15 +11575,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>And a <tag>console</tag> element, also with no layout control.</p>
 
                 <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>gcc -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>./intAndFloat</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -o intAndFloat intAndFloat.c</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input />
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                 </console>
 
                 <p>Now similar examples, but with layout control: margins and width.</p>
@@ -11640,15 +11617,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A longer <tag>console</tag>, with margins so significant the appearance is ill-advised.</p>
 
                 <console margins="50% 15%">
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>./intAndFloat</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input />
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                 </console>
 
                 <p>Two <tag>listing</tag>, with <tag>caption</tag>, and no layout control.</p>
@@ -11672,15 +11646,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>A console session on a Raspberry Pi</caption>
                         <console>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>./intAndFloat</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input />
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                 </listing>
 
@@ -11705,15 +11676,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>A console session on a Raspberry Pi</caption>
                         <console margins="10% 10%">
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>./intAndFloat</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input />
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                 </listing>
 
@@ -11733,15 +11701,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </input>
                     </program>
                     <console>
-                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                        <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                        <input>./intAndFloat</input>
+                        <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                        <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                         <output>
                         The integer is 19088743 and the float is 19088.742188
                         </output>
-                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                        <input />
+                        <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                     </console>
                     <program language="r">
                         <input>
@@ -11774,15 +11739,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </input>
                         </program>
                         <console>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>./intAndFloat</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input />
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                         <program language="r">
                             <input>
@@ -11821,14 +11783,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <listing>
                         <caption>Raspberry Pi</caption>
                         <console>
-                            <prompt>$ </prompt>
                             <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>$ </prompt>
                             <input>./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>$ </prompt>
                             <input />
                         </console>
                     </listing>
@@ -11858,14 +11817,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <listing>
                             <caption>Raspberry Pi</caption>
                             <console>
-                                <prompt>$ </prompt>
                                 <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                                <prompt>$ </prompt>
                                 <input>./intAndFloat</input>
                                 <output>
                                 The integer is 19088743 and the float is 19088.742188
                                 </output>
-                                <prompt>$ </prompt>
                                 <input />
                             </console>
                         </listing>
