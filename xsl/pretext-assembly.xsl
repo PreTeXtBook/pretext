@@ -1048,6 +1048,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </website>
 </xsl:template>
 
+<!-- 2023-08-28: deprecate the "console" "prompt" element -->
+
+<!-- Removing this entire line typically orphans a text node    -->
+<!-- just prior with a newline and indentation, but this should -->
+<!-- not harm subsequent processing since we do not assume      -->
+<!-- source is carefully authored as one element per line.      -->
+<xsl:template match="console/prompt" mode="repair"/>
+
+<!-- If there was a "prompt" element just preceding an "input"      -->
+<!-- element, then we reach up and grab it and make it an attribute -->
+<!-- of the "input" - but not if somebody happened to already start -->
+<!-- using a @prompt attribute.                                     -->
+<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
+<xsl:template match="console/input" mode="repair">
+    <xsl:copy>
+        <xsl:if test="not(@prompt) and preceding-sibling::*[1][self::prompt]">
+            <xsl:attribute name="prompt">
+                <xsl:value-of select="preceding-sibling::*[1][self::prompt]"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->

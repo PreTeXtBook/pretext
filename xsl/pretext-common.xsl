@@ -10634,6 +10634,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2023-08-10'" />
         <xsl:with-param name="message" select="'the &quot;demonstration&quot; element has been removed with no natural replacement.  The &quot;interactive&quot; element may be sufficiently flexible to do something similar and will produce a standalone page that might serve a similar purpose.'"/>
     </xsl:call-template>
+    <!-- 2023-08-28  Deprecate console/prompt in favor of attributes-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//console/prompt" />
+        <xsl:with-param name="date-string" select="'2023-08-28'" />
+        <xsl:with-param name="message" select="'the &quot;prompt&quot; element of a &quot;console&quot; has been deprecated.  In its place, an &quot;input&quot; can have a @prompt attribute, or you can place a session-wide (not document-wide) @prompt attribute on the &quot;console&quot; element.  Until then, we will try to honor your intent.'"/>
+    </xsl:call-template>
     <!--  -->
 </xsl:template>
 
