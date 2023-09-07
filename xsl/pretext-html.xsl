@@ -9793,17 +9793,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </pre>
 </xsl:template>
 
-<!-- do not run through generic text() template -->
-<xsl:template match="console/prompt">
-    <span class="prompt unselectable">
-        <xsl:value-of select="." />
-    </span>
-</xsl:template>
-
-<!-- match immediately preceding, only if a prompt:                   -->
-<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
+    <!-- place prompt in a span (but not if empty) -->
+    <xsl:variable name="prompt">
+        <xsl:apply-templates select="." mode="determine-console-prompt"/>
+    </xsl:variable>
+    <xsl:if test="not($prompt = '')">
+        <span class="prompt unselectable">
+            <xsl:value-of select="$prompt"/>
+        </span>
+    </xsl:if>
     <b>
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
