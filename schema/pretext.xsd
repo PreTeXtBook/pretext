@@ -1145,22 +1145,24 @@
   <xs:element name="console">
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
-        <xs:element minOccurs="0" ref="prompt"/>
-        <xs:element minOccurs="0" ref="input"/>
+        <xs:element name="input">
+          <xs:complexType mixed="true">
+            <xs:attribute name="prompt"/>
+          </xs:complexType>
+        </xs:element>
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="prompt"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="prompt" type="xs:string"/>
-  <xs:element name="input" type="xs:string"/>
   <xs:element name="output" type="xs:string"/>
   <xs:element name="program">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="input"/>
+        <xs:element name="input" type="xs:string"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
       <xs:attribute name="width"/>
@@ -2029,7 +2031,7 @@
   <xs:element name="sage">
     <xs:complexType>
       <xs:sequence minOccurs="0">
-        <xs:element ref="input"/>
+        <xs:element name="input" type="xs:string"/>
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute name="permid"/>

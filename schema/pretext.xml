@@ -1415,11 +1415,14 @@
             Console =
                 element console {
                     PermanentID?,
+                    attribute prompt {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     (
-                        element prompt {text}?,
-                        element input {text}?,
+                        element input {
+                            attribute prompt {text}?,
+                            text
+                        },
                         element output {text}?
                     )+
                 }

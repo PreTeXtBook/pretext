@@ -1275,22 +1275,21 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <attribute name="prompt"/>
+      </optional>
+      <optional>
         <attribute name="width"/>
       </optional>
       <optional>
         <attribute name="margins"/>
       </optional>
       <oneOrMore>
-        <optional>
-          <element name="prompt">
-            <text/>
-          </element>
-        </optional>
-        <optional>
-          <element name="input">
-            <text/>
-          </element>
-        </optional>
+        <element name="input">
+          <optional>
+            <attribute name="prompt"/>
+          </optional>
+          <text/>
+        </element>
         <optional>
           <element name="output">
             <text/>
