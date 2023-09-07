@@ -13314,24 +13314,28 @@ TODO:
 
 <!-- Brand Logo -->
 <!-- Place image in masthead -->
-<!-- TODO: separate url and image, now need both or neither -->
-<!-- should allow specifying just URL and get default image -->
 <xsl:template name="brand-logo">
-    <xsl:choose>
-        <xsl:when test="$docinfo/brandlogo">
+    <a id="logo-link" class="logo-link" target="_blank" >
+        <xsl:attribute name="href">
+            <xsl:choose>
+                <xsl:when test="not($docinfo/brandlogo/@url = '')">
+                    <xsl:value-of select="$docinfo/brandlogo/@url"/>
+                </xsl:when>
+                <xsl:when test="$b-has-baseurl">
+                    <xsl:value-of select="$baseurl"/>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:if test="$docinfo/brandlogo/@source">
             <xsl:variable name="location">
                 <!-- empty when not using managed directories -->
                 <xsl:value-of select="$external-directory"/>
                 <xsl:value-of select="$docinfo/brandlogo/@source"/>
             </xsl:variable>
-            <a id="logo-link" class="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
-                <img src="{$location}" alt="Logo image"/>
-            </a>
-        </xsl:when>
-        <xsl:otherwise>
-            <a id="logo-link" class="logo-link" href=""/>
-        </xsl:otherwise>
-    </xsl:choose>
+            <img src="{$location}" alt="Logo image"/>
+        </xsl:if>
+    </a>
 </xsl:template>
 
 <!-- Analytics Footers -->
