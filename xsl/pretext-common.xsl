@@ -1775,6 +1775,34 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Console Session, prompt on input line-->
+<!-- An interactive command-line session with pairs of input and output -->
+<!-- Determining the prompt is a bit complicated, but always the same   -->
+<!-- and always a pure textual result.  It becomes a part of the input  -->
+<!-- line, so this modal template has an "input" as its context.        -->
+<!--                                                                    -->
+<!-- Priority:                                                          -->
+<!--   1.  a specific @prompt on the "input" element                    -->
+<!--   2.  an overall session-wide @prompt on the "console" element     -->
+<!--   3.  a default, which can be superseded by a session-wide version -->
+<!-- NB: could add a "docinfo" element for use just before the default? -->
+<xsl:template match="console/input" mode="determine-console-prompt">
+    <xsl:choose>
+        <xsl:when test="@prompt">
+            <xsl:value-of select="@prompt"/>
+        </xsl:when>
+        <!-- parent is guaranteed to be a "console", which can -->
+        <!-- carry a default prompt for the entire session     -->
+        <xsl:when test="parent::console/@prompt">
+            <xsl:value-of select="parent::console/@prompt"/>
+        </xsl:when>
+        <!-- Default is a $-space, could just as well have been >-space -->
+        <xsl:otherwise>
+            <xsl:text>$&#x20;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ################# -->
 <!-- Preformatted Text -->
 <!-- ################# -->
