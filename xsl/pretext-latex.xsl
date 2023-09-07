@@ -8421,7 +8421,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="console/input">
     <!-- Prompt first, assumes does not exceed one line -->
     <xsl:call-template name="escape-console-prompt-output">
-        <xsl:with-param name="text"  select="preceding-sibling::*[1][self::prompt]"/>
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="." mode="determine-console-prompt"/>
+        </xsl:with-param>
     </xsl:call-template>
     <!-- sanitize left-margin, etc                    -->
     <!-- then employ \consoleinput macro on each line -->
