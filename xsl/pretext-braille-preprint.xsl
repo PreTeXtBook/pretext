@@ -829,12 +829,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of identification, and then generates a replacement page.   -->
 <xsl:template match="image">
     <!-- A "segment" with the ID of the image to identify it, -->
-    <!-- then the author's "description" to describe it       -->
+    <!-- then the author's "shortdescription" to describe it  -->
     <xsl:apply-templates select="." mode="transcriber-note">
         <xsl:with-param name="message">
             <xsl:apply-templates select="." mode="block-title"/>
             <xsl:text> </xsl:text>
-            <xsl:apply-templates select="description"/>
+            <xsl:apply-templates select="shortdescription"/>
         </xsl:with-param>
     </xsl:apply-templates>
     <!-- Form a page to be replaced by tactile version -->
@@ -851,10 +851,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A transcriber note replacing an image when included -->
 <!-- in some other (identifying) structure.              -->
 <xsl:template match="image" mode="braille-representation">
-    <!-- A "segment" with the author's "description" -->
+    <!-- A "segment" with the author's "shortdescription" -->
     <xsl:apply-templates select="." mode="transcriber-note">
         <xsl:with-param name="message">
-            <xsl:apply-templates select="description"/>
+            <xsl:apply-templates select="shortdescription"/>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -1911,7 +1911,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
-<xsl:template match="description">
+<xsl:template match="shortdescription">
     <xsl:apply-templates select="node()"/>
 </xsl:template>
 
@@ -2212,7 +2212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                   -->
 <!-- Template could be context-free for literal messages, but the      -->
 <!-- $message will sometimes come from the context of an element       -->
-<!-- (e.g. the "description" of an "image")                            -->
+<!-- (e.g. the "shortdescription" of an "image")                       -->
 <xsl:template match="*" mode="transcriber-note">
     <xsl:param name="message"/>
 

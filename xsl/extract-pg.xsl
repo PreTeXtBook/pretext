@@ -1526,19 +1526,19 @@
     <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
     <xsl:value-of select="substring-before($width, '%') div 100 * $design-width-pg"/>
-    <xsl:apply-templates select="." mode="description"/>
+    <xsl:apply-templates select="." mode="shortdescription"/>
     <xsl:text>)@]* </xsl:text>
 </xsl:template>
 
 <!-- Puts the description into an "alt" tag.                               -->
-<xsl:template match="image" mode="description">
+<xsl:template match="image" mode="shortdescription">
     <xsl:choose>
         <xsl:when test="@decorative = 'yes'">
             <xsl:text>, alt=&gt;""</xsl:text>
         </xsl:when>
-        <xsl:when test="not(string(description) = '')">
+        <xsl:when test="not(string(shortdescription) = '')">
             <xsl:variable name="description-text">
-                <xsl:apply-templates select="description"/>
+                <xsl:apply-templates select="shortdescription"/>
             </xsl:variable>
             <xsl:variable name="delimiter">
                 <xsl:call-template name="find-unused-character">
@@ -1553,13 +1553,13 @@
 </xsl:template>
 
 <!-- A description here should only have text nodes and var children.      -->
-<xsl:template match="image/description">
+<xsl:template match="image/shortdescription">
     <xsl:apply-templates select="text()|var"/>
 </xsl:template>
 
 <!-- An image description may depend on the value of a simple scalar var   -->
 <!-- Perhaps this should warn if @name is not in Perl scalar syntax        -->
-<xsl:template match="description/var">
+<xsl:template match="shortdescription/var">
     <xsl:value-of select="@name"/>
 </xsl:template>
 

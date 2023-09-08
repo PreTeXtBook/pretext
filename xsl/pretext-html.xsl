@@ -6487,7 +6487,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>.svg</xsl:text>
                 </xsl:with-param>
                 <xsl:with-param name="image-description">
-                    <xsl:apply-templates select="description" />
+                    <xsl:apply-templates select="shortdescription" />
                 </xsl:with-param>
                 <xsl:with-param name="decorative">
                     <xsl:apply-templates select="@decorative" />
@@ -6512,9 +6512,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="@decorative = 'yes'">
                         <xsl:attribute name="alt"/>
                     </xsl:when>
-                    <xsl:when test="not(string(description) = '')">
+                    <xsl:when test="not(string(shortdescription) = '')">
                         <xsl:attribute name="alt">
-                            <xsl:apply-templates select="description" />
+                            <xsl:apply-templates select="shortdescription" />
                         </xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
@@ -6558,7 +6558,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="svg-png-wrapper">
         <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
         <xsl:with-param name="image-description">
-            <xsl:apply-templates select="description" />
+            <xsl:apply-templates select="shortdescription" />
         </xsl:with-param>
         <xsl:with-param name="decorative">
             <xsl:apply-templates select="@decorative" />
@@ -6586,7 +6586,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="svg-png-wrapper">
                 <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
                 <xsl:with-param name="image-description">
-                    <xsl:apply-templates select="description" />
+                    <xsl:apply-templates select="shortdescription" />
                 </xsl:with-param>
                 <xsl:with-param name="decorative">
                     <xsl:apply-templates select="@decorative" />
