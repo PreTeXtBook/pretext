@@ -22,9 +22,9 @@ html {
 }
 
 :root {
-  --nav-background-border-color: #777;
   --component-border-color: #bababa;
-  --page-gutter-color: #ddd;
+  --page-gutter-color: #c5c4c4;
+  --page-border-color: #444;
   --page-color: white;
 }
 
@@ -42,6 +42,10 @@ body.pretext {
   max-width: var(--page-width);
   margin: 0 auto;
   background: var(--page-color);
+  
+  border-left: 1px solid var(--page-border-color);
+  border-right: 1px solid var(--page-border-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .pretext .ptx-page .ptx-main {
@@ -66,6 +70,10 @@ body.pretext {
   justify-content: center;
   margin: 0 auto;
   gap: 90px;
+  border-left: 1px solid var(--page-border-color);
+  border-right: 1px solid var(--page-border-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border-bottom: 0;
 }
 
 .pretext .ptx-content-footer {
@@ -82,7 +90,7 @@ body.pretext {
 /* components that should be wide */
 .ptx-content
   .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section),
-.ptx-content pre.program,
+/* .ptx-content pre.program, */
 .ptx-content .runestone.datafile,
 .ptx-content .contains-wide {
   width: var(--content-width-wide);
@@ -97,7 +105,7 @@ body.pretext {
 .ptx-content
   .runestone
   .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section),
-.ptx-content .runestone pre.program,
+/* .ptx-content .runestone pre.program, */
 .ptx-content .runestone .runestone.datafile {
   width: 100%;
   margin-left: auto;
@@ -166,10 +174,9 @@ body.pretext {
 .ptx-content .runestone .parsons .sortable-code-container {
   display: flex;
   flex-flow: wrap;
-  gap: 15px;
   justify-content: center;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  gap: 15px;
+  margin: 10px auto;
 }
 
 .ptx-content .ptx-runestone-container .parsons .sortable-code {
@@ -264,7 +271,7 @@ body.pretext {
       .parsons_section,
       .hparsons_section
     ),
-  .ptx-content
+  /* .ptx-content
     article:is(
       .theorem-like,
       .definition-like,
@@ -276,7 +283,7 @@ body.pretext {
       .computation-like
     )
     > .ptx-runestone-container
-    > pre.program,
+    > pre.program, */
   .ptx-content
     article:is(
       .theorem-like,
@@ -321,7 +328,11 @@ body.pretext {
 
   .ptx-runestone-container .cd_section,
   .ptx-content .ptx-runestone-container .parsons .sortable-code {
-    overflow-x: scroll;
+    overflow-x: auto;
+  }
+  
+  .ptx-content .ptx-runestone-container .parsons .sortable-code:first-of-type {
+    padding: 0 25px;
   }
 }
 

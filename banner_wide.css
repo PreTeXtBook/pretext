@@ -1,7 +1,13 @@
 @import url("banner_default.css");
 
+:root {
+  --banner-background-color: #ffffff;
+}
+
 .pretext .ptx-masthead {
-  max-width: unset;
+  max-width: var(--page-width);
+  background-color: var(--banner-background-color);
+  margin: 0 auto;
 }
 
 .pretext .ptx-masthead .ptx-banner {
@@ -11,4 +17,6 @@
   justify-content: center;
   max-width: var(--page-width);
   padding: 8px 0;
+  border-left: 1px solid var(--page-border-color);
+  border-right: 1px solid var(--page-border-color);
 } 

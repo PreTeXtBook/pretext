@@ -2,7 +2,7 @@
 
 
 :root {
-  --nav-background-color: #aaa;
+  --nav-background-color: #ededed;
 }
 
 .pretext .ptx-navbar {
@@ -10,9 +10,12 @@
   margin: 0 auto;
   display: flex;
   width: var(--page-width);
-  border: 1px solid var(--component-border-color);
   background: var(--nav-background-color);
   border-top: 0;
+  
+  border-left: 1px solid var(--page-border-color);
+  border-right: 1px solid var(--page-border-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .pretext .ptx-navbar .toc-toggle {

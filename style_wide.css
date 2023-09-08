@@ -29,7 +29,7 @@
   )
   > .ptx-runestone-container
   > .runestone:is(.ac_section, .codelens, .parsons_section, .hparsons_section),
-.ptx-content
+/* .ptx-content
   article:is(
     .theorem-like,
     .definition-like,
@@ -40,7 +40,7 @@
     .openproblems-like,
     .computation-like
   )
-  > pre.program,
+  > pre.program, */
 .ptx-content
   article:is(
     .theorem-like,
@@ -68,13 +68,7 @@
   margin-left: calc(var(--xl-margin) - 10px);
 }
 
-/* TEMP - undo pretext_add_on and pretext.css */
-.ptx-content pre.program,
-.ptx-content pre.code-block,
-.ptx-content .datafile pre,
-.ptx-content .datafiletextfield {
-  background: #f7f6f5;
-}
+
 
 .ptx-content .datafile pre {
   border: 1px solid #616160;
@@ -103,11 +97,24 @@
   margin-bottom: 5px;
 }
 
-.ac_actions > div:first-of-type {
-  display: flex !important;
-  flex-direction: column;
-  align-items: stretch;
-  text-align: center;
+.ptx-content .ptx-runestone-container .ac_output {
+  margin-bottom: 10px;
+}
+
+.ptx-content .ptx-runestone-container .codelens {
+  margin-bottom: 10px;
+}
+
+.ptx-content .ptx-runestone-container .ac_output pre {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 10px auto;
+}
+.ptx-runestone-container .ac-canvas {
+  margin-left: calc(50% - 202px);
+}
+.ptx-runestone-container .ac-canvas:empty {
+  display: none;
 }
 
 .runestone_caption {
@@ -126,7 +133,7 @@ table.visualizer tr {
 }
 
 #vizLayoutTdFirst {
-  min-width: 66%;
+
 }
 
 .ptx-content table tr td {
@@ -177,8 +184,13 @@ table.visualizer tr {
   margin: 0.75em auto !important;
 }
 
+.ac_code_div {
+  margin-top: 10px;
+}
+
 .pretext .ptx-runestone-container .ac_actions {
-  max-width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
   flex-wrap: nowrap;
   align-items: center;
   gap: 10px;
@@ -190,6 +202,22 @@ table.visualizer tr {
   flex: 0 1;
   margin: 0 !important;
 }
+
+
+.pretext .ptx-runestone-container .ac_actions > div:first-of-type {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.ptx-runestone-container .unittest-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 .ptx-content pre.program.line-numbers,
 .ptx-content pre.code-block.line-numbers {
