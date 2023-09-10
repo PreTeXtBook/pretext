@@ -46,9 +46,9 @@ nav.ptx-navbar {
     display: grid;
     grid-column-gap: 0em;
 
-    grid-template-columns:  .76fr 6em 6em 1fr;  /* Even gaps */
+    grid-template-columns:  auto 6em 6em 1fr;  /* Even gaps */
     grid-template-areas:
-        "MH-toc-area MH-extras-area1 MH-extras-area2 MH-preferences-area MH-page-navigation-area";
+        "MH-toc-area MH-extras-area1 MH-extras-area2 MH-page-navigation-area MH-preferences-area";
 
     background-color: #fff;
 /*
@@ -95,6 +95,7 @@ nav.ptx-navbar::after {
     border: 1px solid #888;
     cursor: pointer;
     box-sizing: border-box;
+    margin-right: 2em;
 }
 
 .toc-toggle:hover {
@@ -123,7 +124,6 @@ nav.ptx-navbar::after {
     justify-self: left;
 }
 .user-preferences-button {
-    grid-area: MH-preferences-area;
     justify-self: left;
 }
 
@@ -135,6 +135,12 @@ nav.ptx-navbar::after {
 /*
     align-self: start;
 */
+}
+
+.nav-runestone-controls {
+    grid-area: MH-preferences-area;
+    justify-self: end;
+    display: flex;
 }
 
 
@@ -257,21 +263,19 @@ nav.ptx-navbar::after {
     display: none;
 }
 
-.ptx-navbar .dropdown {
-    height: 35px;
+.pretext .ptx-navbar .dropdown {
+    height: 32px;
+}
 
 .ptx-navbar .up-button {
     text-align: center;
 }
 
 .ptx-navbar .name {
-    display: inline-block;
     position: relative;
     bottom: 0;
 }
-.ptx-navbar .treebuttons .name {
-    bottom: 0.2em;
-}
+
 .ptx-navbar .icon {
     display: inline-block;
     font-size: 1.5em;
@@ -283,9 +287,6 @@ nav.ptx-navbar::after {
 .ptx-navbar .up-button .icon {
     margin-left: 0;
     margin-right: 0.2em;
-}
-.ptx-navbar .up-button .name {
-    bottom: 0.3em;
 }
 .ptx-navbar .next-button .icon {
     margin-left: 0.2em;
