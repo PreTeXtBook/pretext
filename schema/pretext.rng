@@ -16,6 +16,8 @@
       <ref name="Solutions"/>
       <ref name="BookFrontMatter"/>
       <ref name="ArticleFrontMatter"/>
+      <ref name="BookBackMatter"/>
+      <ref name="ArticleBackMatter"/>
       <ref name="Preface"/>
       <ref name="Acknowledgement"/>
       <ref name="ArticleAppendix"/>
