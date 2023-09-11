@@ -53,5 +53,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: .
-          clean: false
+          clean: false  #retain files from other branches!!! 
+          single-commit: true  #wipe out old commits on gh-pages branch
           target-folder: css/${{ github.ref_name }}
