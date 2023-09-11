@@ -165,7 +165,7 @@ function handleWW(ww_id, action) {
 				}
 				var select = body_div.querySelector('select[id=' + answer + ']');
 				if (select && answers[answer]) {
-					const option = body_div.querySelector('option[value=' + answers[answer] + ']');
+					const option = body_div.querySelector('option[value="' + answers[answer].replace(/"/g, '\\"') + '"]');
 					option.setAttribute('selected', 'selected');
 				}
 			}
