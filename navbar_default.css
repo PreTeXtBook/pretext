@@ -24,6 +24,7 @@ nav.ptx-navbar {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 35px;
 
   color: #333333;
   background-color: #ededed;
@@ -72,6 +73,9 @@ nav.ptx-navbar {
 
 .ptx-navbar :is(.treebuttons, .nav-runestone-controls) {
   display: flex;
+}
+
+.ptx-navbar :is(.treebuttons) {
   flex-grow: 1;
   justify-content: right;
 }
@@ -146,6 +150,10 @@ nav.ptx-navbar {
   }
   .ptx-navbar .index-button {
     display: none;
+  }
+  
+  .ptx-navbar :is(.treebuttons) > *:first-child {
+    border-left: 0;
   }
 
   .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
