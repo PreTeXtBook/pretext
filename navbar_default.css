@@ -24,6 +24,8 @@ nav.ptx-navbar {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 10px;
+  gap: 10px;
   min-height: 35px;
 
   color: #333333;
@@ -93,7 +95,7 @@ nav.ptx-navbar {
 }
 
 .ptx-navbar .treebuttons .icon {
-  margin: 0 -3px;  /* chevrons have lots of horizontal padding */
+  margin: 0 -7px;  /* chevrons have lots of horizontal padding */
 }
 
 .ptx-navbar :is(.index-button, .calculator-toggle)  .icon {
