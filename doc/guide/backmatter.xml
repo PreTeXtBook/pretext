@@ -29,6 +29,7 @@
     <xi:include href="appendices/windows.xml"/>
     <xi:include href="appendices/windows-wsl.xml"/>
     <xi:include href="appendices/cli-transition.xml"/>
+    <xi:include href="appendices/cli-v1vsv2.xml"/>
     <appendix>
         <title>Example List of Notation</title>
         <notation-list />

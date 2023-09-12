@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="cli-v1vsv2">
+  <title>CLI versions 1 vs 2</title>
+  <author>Oscar Levin</author>
+
+
+    <p>
+      This appendix describes the differences between the PreTeXt-CLI version 1.x and 2.x.  
+      Generally, projects started in version 1 of the CLI will continue to work in version 2.  
+    </p>
+
+    <p>
+      The primary difference between the versions of the CLI is the format of the project manifest (<c>project.ptx</c>): in version 1, most properties were described as <init>XML</init> elements, where they are now given as attributes.  The functions of each attribute for the version 2 manifest is described in <xref ref="cli-project-manifest"/>.  Here we illustrate how these relate to the <em>legacy</em> elements.
+    </p>
+
+    <p>
+      In <xref ref="listing-v1-manifest"/> we show a project manifest containing almost all options available.  Then <xref ref="listing-v2-manifest"/> shows the same project manifest in version 2 format. 
+    </p>
+
+    <listing xml:id="listing-v1-manifest">
+      <caption>Example of version 1 project manifest</caption>
+    <program language="xml">
+      <input>
+      <![CDATA[
+
+      <?xml version="1.0" encoding="utf-8"?>
+      <project>
+        <targets>
+          <target name="web">
+            <format>html</format>
+            <source>source/main.ptx</source>
+            <publication>publication/publication.ptx</publication>
+            <output-dir>output/web</output-dir>
+          </target>
+          <target name="print" pdf-method="xelatex">
+            <format>pdf</format>
+            <source>source/main.ptx</source>
+            <publication>publication/publication.ptx</publication>
+            <output-dir>output/print</output-dir>
+            <output-filename>mybook.pdf</output-filename>
+          </target>
+          <target name="runestone">
+            <format>html</format>
+            <source>source/main.ptx</source>
+            <publication>publication/rs-publication.ptx</publication>
+            <output-dir>published/mydoc-id</output-dir>
+            <stringparam key="author.tools" value="yes"/>
+            <stringparam key="html.css.extra" value="external/custom-styles.css" />
+            <xsl>xsl/runestone.xsl</xsl>
+          </target>
+        </targets>
+        <executables>
+          <latex>latex</latex>
+          <pdflatex>pdflatex</pdflatex>
+          <xelatex>xelatex</xelatex>
+          <pdfsvg>pdf2svg</pdfsvg>
+          <asy>asy</asy>
+          <sage>sage</sage>
+          <pdfpng>convert</pdfpng>
+          <pdfeps>pdftops</pdfeps>
+          <node>node</node>
+          <liblouis>file2brl</liblouis>
+        </executables>
+      </project>
+
+      ]]>
+    </input>
+
+    </program>
+    </listing>
+
+    <listing xml:id="listing-v2-manifest">
+      <caption>Example of version 2 project manifest</caption>
+    <program language="xml">
+      <input>
+      <![CDATA[
+
+      <?xml version="1.0" encoding="utf-8"?>
+      <project ptx-version="2">
+        <targets>
+          <target 
+            name="web"
+            format="html"
+            source="source/main.ptx"
+            publication="publication/publication.ptx"
+            output-dir="output/web" />
+          <target 
+            name="print"
+            format="pdf"
+            pdf-method="xelatex"
+            source="source/main.ptx"
+            publication="publication/publication.ptx"
+            output-dir="output/print" 
+            output-filename="mybook.pdf" />
+          <target 
+            name="runestone"
+            format="html"
+            platform="runestone"
+            source="source/main.ptx"
+            publication="publication/rs-publication.ptx"
+            output-dir="published/mydoc-id"
+            xsl="xsl/runestone.xsl">
+            <stringparams author.tools="yes" html.css.extra="external/custom-styles.css" />
+          </target>
+        </targets>
+      </project>
+
+      ]]>
+    </input>
+    </program>
+    </listing>
+
+    <p>
+      One advantage of version 2 of the CLI is that many of the options are now optional, or can be applied at the project level to all targets.  The example shown above can be further simplified, as shown in <xref ref="listing-v2-manifest-simple"/>, since most values are the defaults anyway.
+    </p>
+
+    <listing xml:id="listing-v2-manifest-simple">
+      <caption>Simplified project manifest in version 2 format</caption>
+    <program language="xml">
+      <input>
+      <![CDATA[
+
+      <?xml version="1.0" encoding="utf-8"?>
+      <project ptx-version="2" publication="publication">
+        <targets>
+          <target 
+            name="web"
+            format="html" />
+          <target 
+            name="print"
+            format="pdf"
+            output-filename="mybook.pdf" />
+          <target 
+            name="runestone"
+            format="html"
+            platform="runestone"
+            publication="rs-publication.ptx"
+            output-dir="published/mydoc-id"
+            xsl="xsl/runestone.xsl">
+            <stringparams author.tools="yes" html.css.extra="external/custom-styles.css" />
+          </target>
+        </targets>
+      </project>
+
+      ]]>
+    </input>
+    </program>
+    </listing>
+
+    <p>
+      Attributes for the <tag>project</tag> element that describe paths are common roots for any paths specified in <tag>target</tag> elements.  
+    </p>
+
+    <p>
+      Notice that there is no longer a place to specify your <em>executables</em> in the manifest.  This is because your executables are generally specific to a particular system, not a project.  So instead, you specify executables in the file <c>executables.ptx</c> which is ignored by git.  As with the version 2 manifest, the name or path to the executables are given as values of attributes.  An example is shown in <xref ref="listing-v2-executables"/>.
+    </p>
+
+
+
+    <p>
+      The project manifest can be further simplified by setting attributes for the <tag>project</tag> element.  See <xref ref="cli-project-manifest"/> for details.
+    </p>
+
+    <p>
+      Hopefully the examples above make it clear how the two versions compare for basic options.  Below we list a few more differences between how you specify options in the version 1 and version 2 manifests.
+      <dl>
+        <li>
+          <title><attr>ptx-version</attr></title>
+          <p>
+            For the CLI to know you are using a version 2 manifest, you <em>must</em> include the <attr>ptx-version</attr> attribute in the <tag>project</tag> element, with value <q>2</q>.
+          </p>
+        </li>
+        <li>
+          <title>string parameters</title>
+          <p>
+            In version 1, you would specify string parameters as a sequence of <tag>stringparam</tag> elements, each with <attr>key</attr> and <attr>value</attr> attributes.  In version 2, you use a single <tag>stringparams</tag> element with attributes for each key set to the value for the string parameter's value.  See the example in <xref ref="listing-v2-manifest"/>
+          </p>
+        </li>
+        <li>
+          <title>zipped output</title>
+          <p>
+            In version 1, you could get a zipped version of your html output by setting the format of the target to <c>html-zipped</c>.  In version 2, this is replaced by setting the <attr>compression</attr> attribute to <q>zip</q> in the <tag>target</tag> element.
+          </p>
+        </li>
+        <li>
+          <title>Braille options</title>
+          <p>
+            In version 2, you specify what embossing method you use for Braille formatted targets using the <attr>braille-mode</attr> attribute, with value either <q>emboss</q> or <q>electronic</q>.
+          </p>
+        </li>
+        <li>
+          <title>WeBWorK Sets</title>
+          <p>
+            In version 1, you could generate webwork sets using the "webwork-sets" format.  In version 2, this is replaced by setting the <attr>format</attr> attribute to <q>webwork</q> in the <tag>target</tag> element.  Such a target can be compressed using the <attr>compression</attr> attribute.
+          </p>
+          
+        </li>
+        <li>
+          <title>Local asymptote</title>
+          <p>
+            In version 2, you can require that asymptote elements are generated using a local version of asymptote (instead of the server).  You can specify this by setting the <attr>asy-method</attr> attribute to <q>local</q>, in either the <tag>target</tag> element, or as an attribute of <tag>project</tag> to use this method for all targets.
+          </p>
+        </li>
+      </dl>
+    </p>
+
+</appendix>

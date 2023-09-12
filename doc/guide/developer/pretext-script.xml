@@ -159,7 +159,7 @@ The script should be run on the entire document, even if all the images are in o
             <title>PreTeXt Script Methods</title>
 
             <tabular>
-                <row heade="yes" bottom="major">
+                <row header="yes" bottom="major">
                     <cell>Situation</cell>
                     <cell>Values</cell>
                 </row>
