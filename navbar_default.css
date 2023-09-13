@@ -26,7 +26,7 @@ nav.ptx-navbar {
   align-items: center;
   padding: 0 10px;
   gap: 10px;
-  min-height: 35px;
+  min-height: 34px;
 
   color: #333333;
   background-color: #ededed;
@@ -77,10 +77,20 @@ nav.ptx-navbar {
   display: flex;
 }
 
-.ptx-navbar :is(.treebuttons) {
-  flex-grow: 1;
-  justify-content: right;
+.ptx-navbar .treebuttons {
+  flex: 1 1 210px;
+  justify-content: end;
 }
+
+.ptx-navbar .nav-runestone-controls {
+  flex: 1 1 70px;
+  justify-content: end;
+}
+
+.pretext .navbar .dropdown {
+  height: 34px;
+}
+
 
 .ptx-navbar :is(.treebuttons, .nav-runestone-controls) > *:first-child {
   border-left: 1px solid #bababa;
@@ -111,13 +121,13 @@ nav.ptx-navbar {
 
 .ptx-navbar .calculator-toggle {
   width: 60px;
-  height: 33px;
+  min-height: 32px;
   text-align: center;
   border-radius: 20px;
   margin-left: 5px;
   border: 2px solid #66f;
   line-height: 25px;
-  margin-top: 2px;
+  margin-top: 1px;
   background-color: #eef;
 }
 
@@ -176,6 +186,7 @@ nav.ptx-navbar {
     border-radius: 0;
     margin-left: 0;
     border: 0;
+    border-right: 1px solid #bababa;
     line-height: inherit;
     margin-top: 0;
     background-color: inherit;

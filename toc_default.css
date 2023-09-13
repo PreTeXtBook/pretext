@@ -29,44 +29,55 @@
 
 /* Places codenumbers */
 .ptx-toc .codenumber {
-    position: absolute;
-    margin-right: 0;
-    margin-left: 0em;
-/*
-    margin-top: 0.4px;
-*/
-    left: 0.3em;
+    padding-left: 0.3rem;
     display: inline-block;
 }
+
+.ptx-toc :is(.toc-frontmatter, .toc-backmatter) > .toc-title-box > a .title {
+    margin-left: 1.5rem;
+}
+
+.ptx-toc .toc-part > .toc-title-box > a .codenumber {
+    min-width: 1.5rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter > .toc-title-box > a .codenumber {
+    min-width: 1.9rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
+    min-width: 2.5rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item-list .toc-item .codenumber {
+    min-width: 3.3rem;
+    padding-right: 0.3rem;
+}
+
 .ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
     font-size: 80%;
     padding-top: 0.16em;
 }
+
 /* no codenumbers on subsections (anything under section) */
 .ptx-toc .toc-section .toc-item-list .toc-item a > .codenumber {
-    display: none;
+    visibility: hidden;
 }
 .ptx-toc .toc-section .toc-item-list .toc-item a:hover > .codenumber {
-    display: inline-block;
+    visibility: visible;
 }
 
-.ptx-toc ul.structural .title {
-    margin-left: 1.4em;
-    display: inline-block;
-}
-.ptx-toc ul.structural ul.structural .title {
-    margin-left: 1.5em;
-}
 .ptx-toc ul.structural ul.structural .title:empty::after {
     content: "empty heading!";
     font-weight: bold;
 }
 .ptx-toc ul.structural ul.structural ul.structural .title {
-    margin-left: 2.5em;
     font-size: 90%;
 }
 .ptx-toc ul.structural ul.structural ul.structural ul.structural .title {
-    margin-left: 3.2em;
     font-size: 90%;
     font-style: italic;
 }
@@ -98,7 +109,7 @@
 .ptx-toc ul.structural ul.structural li a {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
-    /* padding-left: 2.0em; */
+    display: flex;
 }
 
 /* Removes underlines from links in toc */
@@ -203,6 +214,7 @@ omitting, because it caused a "jump"
 
 .ptx-toc ul.structural li .toc-title-box a {
     flex: 1 1;
+    display: flex;
 }
 
 .ptx-toc.focused .toc-expander {

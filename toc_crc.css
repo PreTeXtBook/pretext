@@ -40,6 +40,7 @@
 }
 .ptx-toc ul ul li a {
     font-weight: 400;
+    grid-template-columns: 1.5em 1fr;
 }
 
 .ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
@@ -62,7 +63,7 @@
     font-weight: bold;
 }
 .ptx-toc ul ul ul a > .title {
-    margin-left: 0;
+    margin-left: 0.5em;
     font-size: 90%;
 }
 .ptx-toc ul ul ul ul a > .title {
@@ -134,7 +135,7 @@
     width: 240px;
 */
     grid-gap: 3px;
-    grid-template-columns: 1fr 10fr;
+    grid-template-columns: 1.25em 10fr;
     grid-template-areas:
         "toc-codenumber toc-content";
 }
