@@ -208,7 +208,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
                 <figure xml:id="figure-cubic-polynomial">
                     <caption>A cubic polynomial and its derivative</caption>
-                    <image source="cubic-function.png" width="60%"/>
+                    <image source="cubic-function.png" width="60%">
+                        <description>
+                            <p>
+                                This is a Cartesian plot with a blue curve that enters from the lower left.
+                                It crosses the <m>x</m>-axis at about <m>-2</m> and climbs to reac a peak at about <m>-0.8</m>
+                                where it flattens out. It continues to the right, now moving downward, and crosses the <m>y</m>-axis
+                                at <m>6</m>, and then crossing the <m>x</m>-axis again at <m>1</m>. It bends back upward, returning
+                                to quadrant I at <m>x=3</m>.
+                            </p>
+                            <p>
+                                There is also a red curve, a parabola, that enters from the top right. It moves downward, crossing the
+                                <m>x</m>-axis at <m>-0.8</m> and bottoming out at <m>x=0.7</m>. Then it climbs back up crossing the
+                                <m>x</m>-axis into quadrant I at <m>x=2.1</m>, and it rises out the upper right of the plot.
+                            </p>
+                        </description>
+                    </image>
                 </figure>
                 <p>Here we drop a small reference to an equation
                 earlier, notably <xref ref="zeta-2" />.</p>
