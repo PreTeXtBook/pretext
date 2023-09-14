@@ -2793,10 +2793,7 @@
                         element entity {TextLong}
                     }*,
                     element edition {text}?,
-                    element website {
-                        element name {TextShort},
-                        element address {text}
-                    }?,
+                    element website {Url}?,
                     element copyright {
                         element year {TextShort},
                         element holder {text},
