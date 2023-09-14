@@ -22,6 +22,14 @@
 
 
 /* Generic and large screen layout */
+.ptx-navbar .toc-toggle, .ptx-navbar .index-button, .ptx-navbar .searchbox
+{
+}
+
+.ptx-navbar .nav-other-controls
+{
+    margin-left: 1em;
+}
 
 .ptx-navbar .treebuttons {
     display: flex;
@@ -50,7 +58,7 @@ nav.ptx-navbar {
     display: grid;
     grid-column-gap: 0em;
 
-    grid-template-columns:  2fr auto 1fr 1fr 1fr auto; 
+    grid-template-columns: auto auto auto 1fr 1fr auto; 
     grid-template-areas:
     "MH-toc-area MH-extras-area1 ptx-searchbox MH-extras-area2 MH-page-navigation-area MH-preferences-area";
     background-color: #fff;
@@ -68,7 +76,7 @@ nav.ptx-navbar {
     z-index: 20;
 
     position: sticky;
-    top: 1px;
+    top: 0;
     align-items: end;
     min-height: unset; /* to thwart navbar.less */
     margin-bottom: 0; /* to thwart navbar.less */
@@ -145,6 +153,7 @@ nav.ptx-navbar::after {
     grid-area: MH-preferences-area;
     justify-self: end;
     display: flex;
+    padding-left: 4em;
 }
 
 /* .ptx-navbar button, */
@@ -189,9 +198,7 @@ nav.ptx-navbar::after {
 	right: 0;
 	padding: 0;
 	background: #ededed;
-    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 3fr;
-    grid-template-areas:
-        "MH-toc-area MH-extras-area1 ptx-searchbox MH-extras-area2 MH-preferences-area MH-page-navigation-area";
+    grid-template-columns: auto auto auto auto 1fr auto; 
 /*
 	box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
 */
@@ -213,6 +220,14 @@ nav.ptx-navbar::after {
 
     .ptx-navbar .toc-toggle {
         padding: 0 40px;
+    }
+
+    .ptx-navbar .nav-runestone-controls {
+        padding-left: 0;
+    }
+
+    .ptx-navbar .treebuttons {
+        justify-content: center;
     }
     
     .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
@@ -324,23 +339,20 @@ nav.ptx-navbar::after {
 }
 
 @media screen and (max-width: 800px) {
-    .ptx-navbar .index-button,
-    .ptx-navbar .user-preferences-button,
-    .ptx-navbar .calculator-toggle {
-	display: none;
-    }
-
     .ptx-navbar .toc-toggle .name,
     .ptx-navbar .previous-button .name,
     .ptx-navbar .up-button .name,
     .ptx-navbar .up-button .disabled .name,
     .ptx-navbar .next-button .name {
-	display: none;
+        display: none;
     }
 
-    .ptx-navbar .up-button .icon,
-    .ptx-navbar .up-button .disabled .icon{
+    .ptx-navbar .toc-toggle {
+        margin: 0;
     }
 
+    .ptx-navbar .calculator-toggle .icon {
+        padding-top: 5px;
+    }
 }
 

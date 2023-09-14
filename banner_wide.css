@@ -17,6 +17,4 @@
   justify-content: center;
   max-width: var(--page-width);
   padding: 8px 0;
-  border-left: 1px solid var(--page-border-color);
-  border-right: 1px solid var(--page-border-color);
 } 
