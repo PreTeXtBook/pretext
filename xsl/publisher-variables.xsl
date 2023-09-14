@@ -2202,6 +2202,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='upbutton']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!--                 -->
+<!-- HTML TOC        -->
+<!--                 -->
+
+<!-- Whether or not to tag TOC as focused -->
+<xsl:variable name="html-toc-focused_value">
+    <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='focused']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-html-toc-focused" select="$html-toc-focused_value='yes'"/>
+
+<!-- How many levels from root to pre-expand in focused view -->
+<xsl:variable name="html-toc-preexpanded-levels">
+    <xsl:variable name="preexpanded-value" >
+        <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='preexpanded-levels']" mode="set-pubfile-variable"/>
+    </xsl:variable>
+    <xsl:if test="not($b-html-toc-focused) and $preexpanded-value > 0">
+        <xsl:message>PTX:WARNING:   the preexpanded-levels setting (html/tableofcontents/@preexpanded-levels in the publisher file) has no effect if the table of contents is not set to focused mode (/html/tableofcontents/@focused is "yes")."</xsl:message>
+    </xsl:if>
+    <xsl:value-of select="$preexpanded-value"/>
+</xsl:variable>
+
 
 <!--                              -->
 <!-- HTML CSS Style Specification -->
@@ -3061,6 +3082,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="logic" default="linear" options="tree" legacy-stringparam="html.navigation.logic"/>
             <pi:pub-attribute name="upbutton" default="yes" options="no" legacy-stringparam="html.navigation.logic"/>
         </navigation>
+        <tableofcontents>
+            <pi:pub-attribute name="focused" default="no" options="yes"/>
+            <pi:pub-attribute name="preexpanded-levels" default="0" options="1 2 3 4 5 6"/>
+        </tableofcontents>
         <analytics>
             <pi:pub-attribute name="google-gst" freeform="yes"/>
         </analytics>

@@ -110,7 +110,9 @@
 
             <p>There are publisher file entries to control how navigation between pages behaves.  The <q>Up</q> button may be turned on and off.  An entry for the logic of these buttons can be set to the values of <c>linear</c> (the default) or <c>tree</c>.  The former causes the Previous and Next buttons to behave as if the divisions are arranged as in a printed book, i.e. linearly.  The latter option means that when a reader comes to the last subdivision of a division, the Next button will be not be active, and they will need to return (up the hierarchy/tree) to the division and move to the next division.  Turning off the Up button while electing the tree model is likely to lead to a frustrating navigation experience.</p>
 
-            <p>See <xref ref="html-navigation-options"/> for the exact syntax of these options.</p>
+            <p>The HTML target offers two views of the Table of Contents (ToC). The default is to fully expand the ToC to the depth indicated by the the <xref ref="common-toc-options">common Table of Contents level</xref> publisher setting. There is also a <c>focused</c> view that uses an expandable ToC and only initially fully expands the path to the current page.</p>
+
+            <p>See <xref ref="html-navigation-options"/> and <xref ref="html-toc-options"/> for the exact syntax of these options.</p>
         </subsection>
     </section>
 
