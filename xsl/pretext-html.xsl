@@ -10973,7 +10973,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                         </p>
                     </div>  <!-- title-container -->
-                    <xsl:call-template name="native-search-results"/>
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
@@ -11669,9 +11668,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Pick an ordering for the nav components based on layout needs -->
         <xsl:apply-templates select="." mode="primary-navigation-toc" />
         <xsl:apply-templates select="." mode="primary-navigation-index" />
+        <xsl:apply-templates select="." mode="primary-navigation-search" />
         <xsl:apply-templates select="." mode="primary-navigation-other-controls" />
         <xsl:apply-templates select="." mode="primary-navigation-treebuttons" />
-        <xsl:apply-templates select="." mode="primary-navigation-search" />
         <xsl:apply-templates select="." mode="primary-navigation-runestone" />
 
         <!-- Annotations button was once here, see GitHub issue -->
@@ -11698,7 +11697,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="primary-navigation-runestone">
     <!-- Runestone user menu -->
-    <xsl:if test="not($b-debug-react)">
+    <xsl:if test="not($b-debug-react) and ($b-host-runestone or $b-has-scratch-activecode)">
         <span class="nav-runestone-controls">
             <!-- A scratch ActiveCode via a pencil icon, always -->
             <xsl:call-template name="runestone-scratch-activecode"/>
@@ -12068,6 +12067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  this.ref('id')&#xa;</xsl:text>
         <xsl:text>  this.field('title')&#xa;</xsl:text>
         <xsl:text>  this.field('body')&#xa;</xsl:text>
+        <xsl:text>  this.metadataWhitelist = ['position']&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
         <xsl:text>    this.add(doc)&#xa;</xsl:text>
@@ -12987,14 +12987,14 @@ TODO:
     <xsl:if test="$has-native-search">
         <div class="searchbox">
             <div class="searchwidget">
-                <input id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search" onchange="doSearch()" />
-                <button id="searchbutton" class="searchbutton" type="button" onclick="doSearch()" title="Search book">
+                <button id="searchbutton" class="searchbutton button" type="button" title="Search book">
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'search'"/>
                     </xsl:call-template>
                     <span class="name">Search Book</span>
                 </button>
             </div>
+            <xsl:call-template name="native-search-results"/>
         </div>
     </xsl:if>
 </xsl:template>
@@ -13003,13 +13003,15 @@ TODO:
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
         <div id="searchresultsplaceholder" class="searchresultsplaceholder" style="display: none">
-            <button id="closesearchresults" class="closesearchresults" onclick="document.getElementById('searchresultsplaceholder').style.display = 'none'; return false;">x</button>
-            <h2>
+            <div class="search-results-controls">
+                <input aria-label="Search term" id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search term"/>
+                <button title="Close search" id="closesearchresults" class="closesearchresults"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <h2 class="search-results-heading">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'search-results-heading'"/>
                 </xsl:apply-templates>
                 <xsl:text>: </xsl:text>
-                <span id="searchterms" class="searchterms"></span>
             </h2>
             <!-- div#searchempty is not visible when there are results -->
             <div id="searchempty" class="searchempty">
