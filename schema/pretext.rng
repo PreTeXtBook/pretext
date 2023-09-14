@@ -725,12 +725,7 @@
       </optional>
       <optional>
         <element name="website">
-          <element name="name">
-            <ref name="TextShort"/>
-          </element>
-          <element name="address">
-            <text/>
-          </element>
+          <ref name="Url"/>
         </element>
       </optional>
       <optional>

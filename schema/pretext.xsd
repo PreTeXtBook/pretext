@@ -582,17 +582,10 @@
   <xs:element name="website">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="name"/>
-        <xs:element ref="address"/>
+        <xs:element ref="url"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="name">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextShort"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="address" type="xs:string"/>
   <xs:element name="holder" type="xs:string"/>
   <xs:element name="minilicense">
     <xs:complexType mixed="true">
