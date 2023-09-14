@@ -43,9 +43,11 @@ body.pretext {
   margin: 0 auto;
   background: var(--page-color);
   
-  border-left: 1px solid var(--page-border-color);
-  border-right: 1px solid var(--page-border-color);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.searchresultsplaceholder {
+  left: calc(50vw - 300px);
 }
 
 .pretext .ptx-page .ptx-main {
@@ -70,8 +72,6 @@ body.pretext {
   justify-content: center;
   margin: 0 auto;
   gap: 90px;
-  border-left: 1px solid var(--page-border-color);
-  border-right: 1px solid var(--page-border-color);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   border-bottom: 0;
 }
@@ -334,6 +334,13 @@ body.pretext {
   .ptx-content .ptx-runestone-container .parsons .sortable-code:first-of-type {
     padding: 0 25px;
   }
+  
+  .searchresultsplaceholder {
+    width: 80vw;
+    left: 10vw;
+    bottom: 10vh;
+  }
+
 }
 
 @media screen and (max-width: 663px) {

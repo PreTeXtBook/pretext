@@ -12,9 +12,6 @@
   width: var(--page-width);
   background: var(--nav-background-color);
   border-top: 0;
-  
-  border-left: 1px solid var(--page-border-color);
-  border-right: 1px solid var(--page-border-color);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -34,4 +31,9 @@
   margin-top: 0;
   background-color: #ededed;
   padding: 0 15px;
+}
+
+
+.ptx-navbar > :last-child > :last-child {
+  border-right: none;
 }
