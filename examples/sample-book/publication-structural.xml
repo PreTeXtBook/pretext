@@ -58,6 +58,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- viewer.  The elections here are meant to illustrate   -->
         <!-- this, somewhat, in the sample book.                   -->
         <exercises tabbed-tasks="inline project"/>
+        <!-- Test-drive focused ToC just in sample book            -->
+        <tableofcontents focused="yes"/>
         <!-- specify the style of the html by giving names to      -->
         <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
         <!-- put <css style="oscarlevin"/>                         -->
