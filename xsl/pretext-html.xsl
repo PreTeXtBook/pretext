@@ -11777,7 +11777,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="primary-navigation-runestone">
     <!-- Runestone user menu -->
-    <xsl:if test="not($b-debug-react)">
+    <xsl:if test="not($b-debug-react) and ($b-host-runestone or $b-has-scratch-activecode)">
         <span class="nav-runestone-controls">
             <!-- A scratch ActiveCode via a pencil icon, always -->
             <xsl:call-template name="runestone-scratch-activecode"/>
