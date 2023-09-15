@@ -7955,12 +7955,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
 
-                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element.</p>
+                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element. If the width of the original material is anything other than 800 pixels, you should add <attr>material-width</attr> with the actual material width (units are pixels).</p>
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
-                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5"/>
+                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5" reset-icon="yes"/>
                 </figure>
+
+                <p>There are some optional control elements that Geogebra provides, such as the presence of the toolbar and the reset button. These can be controlled by adding the following additional attributes to the <c>interactive</c>.
+                <ul>
+                    <li><p><c>toolbar="yes"</c>: add the Geogebra toolbar above the material</p></li>
+                    <li><p><c>algebra-input="yes"</c>: add an entry box below the material to add graphical objects using algebra formulas or Geogebra graphical commands</p></li>
+                    <li><p><c>reset-icon="yes"</c>: enable the reset icon</p></li>
+                    <li><p><c>shift-drag-zoom="yes"</c>: enable ability to drag and zoom the viewing context</p></li>
+                </ul>
+                </p>
 
                 <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
             </subsection>
