@@ -9894,7 +9894,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Geogebra -->
 <!-- Similar again, but with options fixed -->
 <xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
-    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
+    <xsl:param name="default-aspect" select="'1:1'" />
+    <xsl:variable name="ggbToolBar">
+        <xsl:choose>
+            <xsl:when test="@toolbar='yes'"><xsl:text>true</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:text>false</xsl:text></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="ggbAlgebraInput">
+        <xsl:choose>
+            <xsl:when test="@algebraInput='yes'"><xsl:text>true</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:text>false</xsl:text></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="ggbResetIcon">
+        <xsl:choose>
+            <xsl:when test="@resetIcon='yes'"><xsl:text>true</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:text>false</xsl:text></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="ggbShiftDragZoom">
+        <xsl:choose>
+            <xsl:when test="@shiftDragZoom='yes'"><xsl:text>true</xsl:text></xsl:when>
+            <xsl:otherwise><xsl:text>false</xsl:text></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="ggbMaterialWidth">
+        <xsl:choose>
+            <xsl:when test="@srcWidth"><xsl:value-of select="@srcWidth"/></xsl:when>
+            <xsl:otherwise>800</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="$default-aspect" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="ggbMaterialHeight">
+        <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
+    </xsl:variable>
+    <!-- iframe options not implemented: -->
+    <!-- smb = show menu bar                   -->
+    <!-- asb = allow style bar                 -->
+    <!-- rc = enable right click options       -->
+    <!-- ld = enable label drag                -->
+    <!-- ctl = click to launch                 -->
+    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
