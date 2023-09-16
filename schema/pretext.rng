@@ -25,9 +25,8 @@
       <ref name="IndexDivision"/>
       <ref name="References"/>
       <ref name="Glossary"/>
-      <ref name="Worksheet"/>
       <ref name="Figure"/>
-      <ref name="Webwork"/>
+      <ref name="WebWork"/>
     </choice>
   </start>
   <define name="Pretext">
