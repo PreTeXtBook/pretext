@@ -30,7 +30,6 @@
     <program language="xml">
       <input>
       <![CDATA[
-
       <?xml version="1.0" encoding="utf-8"?>
       <project>
         <targets>
@@ -70,10 +69,8 @@
           <liblouis>file2brl</liblouis>
         </executables>
       </project>
-
       ]]>
     </input>
-
     </program>
     </listing>
 
@@ -82,7 +79,6 @@
     <program language="xml">
       <input>
       <![CDATA[
-
       <?xml version="1.0" encoding="utf-8"?>
       <project ptx-version="2">
         <targets>
@@ -112,7 +108,6 @@
           </target>
         </targets>
       </project>
-
       ]]>
     </input>
     </program>
@@ -127,7 +122,6 @@
     <program language="xml">
       <input>
       <![CDATA[
-
       <?xml version="1.0" encoding="utf-8"?>
       <project ptx-version="2" publication="publication">
         <targets>
@@ -149,7 +143,6 @@
           </target>
         </targets>
       </project>
-
       ]]>
     </input>
     </program>
@@ -201,7 +194,7 @@
           <p>
             In version 1, you could generate webwork sets using the "webwork-sets" format.  In version 2, this is replaced by setting the <attr>format</attr> attribute to <q>webwork</q> in the <tag>target</tag> element.  Such a target can be compressed using the <attr>compression</attr> attribute.
           </p>
-          
+
         </li>
         <li>
           <title>Local asymptote</title>

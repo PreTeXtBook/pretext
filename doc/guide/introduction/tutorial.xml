@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of PreTeXt -->
-<!-- -->
-<!-- PreTeXt Author's Guide -->
-<!-- -->
-<!-- Copyright (C) 2013-2023 Robert A. Beezer -->
-<!-- See the file COPYING for copying conditions. -->
+<!-- This file is part of the documentation of PreTeXt              -->
+<!--                                                                -->
+<!--         The PreTeXt Guide                                      -->
+<!--                                                                -->
+<!-- Copyright (C) 2013-2019                                        -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan, Mitchel T. Keller -->
+<!-- See the file COPYING for copying conditions.                   -->
 
 <chapter xml:id="tutorial">
   <title>Getting Started Tutorial</title>

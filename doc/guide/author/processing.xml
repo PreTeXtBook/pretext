@@ -280,7 +280,6 @@
                 Assuming you ran this command in a terminal, the easiest way to continue working is to open a new terminal tab to run <c>pretext build</c> again; the local server will continue in the original terminal until you stop it with <kbd>CTRL</kbd>+<kbd>C</kbd>.
             </p>
 
-            
             <warning>
                 <p>
                     When using <c>pretext view</c>, your project is only viewable on your local machine (even if you are working in a Codespace or on CoCalc).  To make the output available to the public, you will need to copy the output to a web server, or use the <c>pretext deploy</c> command, described below.
@@ -316,7 +315,7 @@
             <insight>
 
                 <p>
-                    You can deploy multiple targets, starting with the 2.0 release of the CLI.  To do this, you will need to specify a <attr>deploy-dir</attr> attribute in your project manifest for each target you want to deploy.  Additionally, you should create a folder in the root of your project called <c>site</c> and create a landing page for your project.  The <c>site</c> folder and the output folders for each specified project will all be copied to <c>output/stage</c>.  We recommend using the flag <c>--stage-only</c> so you can preview you complete site before deploying it.  
+                    You can deploy multiple targets, starting with the 2.0 release of the CLI.  To do this, you will need to specify a <attr>deploy-dir</attr> attribute in your project manifest for each target you want to deploy.  Additionally, you should create a folder in the root of your project called <c>site</c> and create a landing page for your project.  The <c>site</c> folder and the output folders for each specified project will all be copied to <c>output/stage</c>.  We recommend using the flag <c>--stage-only</c> so you can preview you complete site before deploying it.
                 </p>
             </insight>
         </subsection>
@@ -346,11 +345,9 @@
                         </p>
                     </li>
                     <li>
-                        
                         <p>
                             To be even more precise, if the element you wish to generate has an <attr>xml:id</attr>, you can generate just that element using the <c>-x</c> flag.  For example, if your <tag>latex-image</tag> has id <q>img-circle</q>, generate it with <c>pretext generate -x img-circle</c>
                         </p>
-            
                     </li>
                     <li>
                         <p>
@@ -383,8 +380,7 @@
                 <caption>Example of a very simple project manifest.</caption>
             <program language="xml">
                 <input>
-                <![CDATA[ 
-
+                <![CDATA[
                 <?xml version="1.0" encoding="utf-8"?>
                 <project ptx-version="2">
                 <targets>
@@ -393,7 +389,6 @@
                     <target name="print" format="pdf" />
                 </targets>
                 </project>
-
                 ]]>
                 </input>
             </program>
@@ -410,11 +405,11 @@
 
             <p>
                 <idx><h>CLI</h><h>format</h></idx>
-                The second required attribute of <tag>target</tag> is <attr>format</attr>, which must be one of html, pdf, latex, custom, epub, kindle, or braille (although the last three of these are still experimental, as of 9/1/2023).  
+                The second required attribute of <tag>target</tag> is <attr>format</attr>, which must be one of html, pdf, latex, custom, epub, kindle, or braille (although the last three of these are still experimental, as of 9/1/2023).
             </p>
 
             <p>
-                With just these attributes, as with he manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout.  In particular, 
+                With just these attributes, as with he manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout.  In particular,
                 <ul>
                     <li><p>The source is <c>source/main.ptx</c>.</p></li>
                     <li><p>The publication if is <c>publication/publication.ptx</c>.</p></li>
@@ -461,7 +456,6 @@
                     <row>
                         <cell><attr>asy-method</attr></cell><cell><p>Optional, default: "server".  Valid values: "server" or "local". Used to specify whether asymptote images should be generated using the "server" asymptote version or a "local" asymptote install.</p></cell>
                     </row>
-                    
                 </tabular>
             </table>
 
@@ -510,13 +504,13 @@
                     </row>
                     <row>
                         <cell><attr>asy-method</attr></cell><cell><p>Optional, default: "server".  Valid values: "server" or "local". Overrides the <attr>asy-method</attr> attribute on <tag>project</tag>.</p></cell>
-                    </row>                    
+                    </row>
                 </tabular>
             </table>
-            
+
             <example xml:id="example-manifest">
                 <title>Example Project Manifest</title>
-                
+
                 <p>
                     To illustrate how the relative paths work, with attributes on both <tag>project</tag> and <tag>targets</tag> elements, consider the following manifest:
                 </p>
@@ -526,14 +520,14 @@
                 <?xml version="1.0" encoding="utf-8"?>
                 <project ptx-version="2" source="src" output-dir="out">
                     <targets>
-                        <target 
-                            name="web" 
-                            format="html" 
+                        <target
+                            name="web"
+                            format="html"
                             output-dir="web" />
-                        <target 
-                            name="print" 
-                            format="pdf" 
-                            source="main-print.ptx" 
+                        <target
+                            name="print"
+                            format="pdf"
+                            source="main-print.ptx"
                             publication="pub/publication.ptx"/>
                     </targets>
                 </project>
@@ -541,7 +535,7 @@
                 </input>
             </program>
                 <p>
-                    Here, the web target, with format html, will build from the root <pretext/> file "src/main.ptx", using the publication file "publication/publication.ptx", and will place the output in the folder "out/web".  
+                    Here, the web target, with format html, will build from the root <pretext/> file "src/main.ptx", using the publication file "publication/publication.ptx", and will place the output in the folder "out/web".
                 </p>
                 <p>
                     The print target, with format pdf, will build from the file "src/main-print.ptx", using the publication file "publication/pub/publication.ptx", and will place the output in the folder "out/print".
