@@ -273,7 +273,7 @@
           files will appear green. Likewise, a blue number will appear in the left sidebar.
         </p>
 
-        <figure xml-id="tutorial-figure-codespaces-sidebar">
+        <figure xml:id="tutorial-figure-codespaces-sidebar">
           <caption>Filenames changing color as they are edited in Codespaces</caption>
           <image width="50%" source="codespaces-sidebar.png">
             <description>Screenshot of VS Code sidebar in Codespaces</description>
@@ -286,7 +286,7 @@
           you can click on any of these to see what the changes are.
         </p>
 
-        <figure xml-id="tutorial-figure-codespaces-diff">
+        <figure xml:id="tutorial-figure-codespaces-diff">
           <caption>A <q>Git diff</q> showing changes in a file</caption>
           <image width="100%" source="codespaces-diff.png">
             <description>Screenshot of VS Code Git diff in Codespaces</description>
@@ -299,7 +299,7 @@
           use the drop-down menu to choose <q>Commit and Sync</q>. (If you forget to type a message describing the changes you've made, then a new tab will open: <q>COMMIT_EDITMSG</q> where you can type the message.  When you are done, close the tab.)
         </p>
 
-        <figure xml-id="tutorial-figure-codespaces-sync">
+        <figure xml:id="tutorial-figure-codespaces-sync">
           <caption>Commiting and syncing changes</caption>
           <image width="50%" source="codespaces-sync.png">
             <description>Screenshot of VS Code source control in Codespaces</description>
@@ -333,13 +333,12 @@
           </ul>
         </p>
 
-        <p>
-          You can generate assets in much the same way you run a build,
-          though you may need to first install some extra software.
-          You will see a <c>Generate</c> option in the <pretext /> command dialog, just below <c>Build</c>.
-          Select your target and wait for the process to complete, then <c>Build</c> once more to
-          incorporate your generated assets.
-        </p>
+      <p>
+        Starting in CLI version 1.7, these assets will be automatically generated whenever you build your output. If you change the source of these assets, they will be regenerated when you build.
+      </p>
+      <p>
+        Regardless of which version of the CLI you are using, you can generate assets as a separate step in much the same way you run a build. You will see a <c>Generate</c> option in the <pretext /> command dialog, just below <c>Build</c>. Select your target and wait for the process to complete, then <c>Build</c> once more to incorporate your generated assets.
+      </p>
 
       </subsection>
 
@@ -351,17 +350,14 @@
           your efforts with the world.  It's time to <term>deploy</term> your project!
         </p>
 
-        <p>
-          From the <q>PreTeXt Commands</q> dialog, select
-          <q>Deploy</q>.  This will automatically take the most recent build of your web target
-          and host it through <url href="https://pages.github.com/">GitHub Pages</url>.  Watch the output
-          pane for a link to your published site; unlike the preview link you've been using on <c>github.dev</c>
-          which is private to only you, this <c>github.io</c> link is ready to share with the world.
-          (It can take a few minutes for the site to get set up
-          or updated; there should be another link to view the progress of the GitHub <q>action</q> that
-          reports the progress.)
-        </p>
-      </subsection>
+      <p> 
+        From the <q>PreTeXt Commands</q> dialog, select <q>Deploy</q>. This will automatically take the most recent build of your web target and host it through <url href="https://pages.github.com/">GitHub Pages</url>. Watch the output pane for a link to your published site; unlike the preview link you've been using on <c>github.dev</c> which is private to only you, this <c>github.io</c> link is ready to share with the world. (It can take a few minutes for the site to get set up or updated; there should be another link to view the progress of the GitHub <q>action</q> that reports the progress.)
+      </p>
+
+      <p>
+        By default, doing a deploy will just publish your <c>web</c> target. It is also possible to deploy multiple targets along with a <q>landing</q> page directing a visitor of your site to the different versions of your project. See <xref ref="processing-CLI" /> for more information. 
+      </p>
+    </subsection>
 
       <subsection xml:id="tutorial-advanced">
         <title>Using this guide and advanced features</title>

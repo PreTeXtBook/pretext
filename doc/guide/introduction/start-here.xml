@@ -8,7 +8,7 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="start-here">
-    <title>Why <pretext />? </title>
+    <title>Why <pretext />?</title>
 
     <introduction>
         <p>Welcome to <q>the Guide</q> for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.  When you are ready to seek further help, or ask questions, please read the <xref ref="welcome" text="title"/> in <xref ref="welcome"/>.</p>
@@ -173,9 +173,8 @@
         </p>
 
         <p>
-            Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional processing, done in python.  The <pretext />-CLI does this using the <c>pretext generate</c> command.
-            There is also a python script that can accesses these functions directly for use in development.  See <xref ref="pretext-script"/> if you are curious.
-        </p>
+        Some features of <pretext />, such as the inclusion of images described in source, or including <webwork /> exercises, requires the use of an additional processing, done in python. Some of these also require additional software (such as <latex /> or Sage). The <pretext />-CLI does this automatically when building (and regenerates these assets if they have changed since the last build). There is also a python script that can accesses these functions directly for use in development. See <xref ref="pretext-script" /> if you are curious. 
+    </p>
 
     </section>
 
