@@ -34,8 +34,6 @@
     <sage>sage</sage>
     <pdfpng>convert</pdfpng>
     <pdfeps>pdftops</pdfeps>
-    <pdfcrop>pdf-crop-margins</pdfcrop>
-    <pageres>pageres</pageres>
     <node>node</node>
     <liblouis>file2brl</liblouis>
   </executables>
