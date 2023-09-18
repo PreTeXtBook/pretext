@@ -1131,6 +1131,18 @@ width: 100%
             </xsl:attribute>
         </xsl:if>
     </xsl:element>
+    <xsl:if test="description">
+        <details class="image-description">
+            <summary>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'description'"/>
+                </xsl:call-template>
+            </summary>
+            <div>
+                <xsl:apply-templates select="description"/>
+            </div>
+        </details>
+    </xsl:if>
 </xsl:template>
 
 <!-- ######### -->
