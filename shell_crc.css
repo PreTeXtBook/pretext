@@ -109,7 +109,6 @@ body.pretext {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     /*     overflow: hidden;*/  /* otherwise the rounded corners are not visible */
-    z-index: 100;
 }
 .pretext .ptx-masthead {
     position: relative;

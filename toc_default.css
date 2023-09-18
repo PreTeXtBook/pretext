@@ -29,55 +29,57 @@
 
 /* Places codenumbers */
 .ptx-toc .codenumber {
-    position: absolute;
-    margin-right: 0;
-    margin-left: 0em;
-/*
-    margin-top: 0.4px;
-*/
-    left: 0.3em;
+    padding-left: 0.3rem;
     display: inline-block;
 }
-/* no codenumbers on subsections */
-.ptx-toc ul.structural ul.structural a > .codenumber {
+
+.ptx-toc :is(.toc-frontmatter, .toc-backmatter) > .toc-title-box > a .title {
+    margin-left: 1.5rem;
+}
+
+.ptx-toc .toc-part > .toc-title-box > a .codenumber {
+    min-width: 1.5rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter > .toc-title-box > a .codenumber {
+    min-width: 1.9rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
+    min-width: 2.5rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item-list .toc-item .codenumber {
+    min-width: 3.3rem;
+    padding-right: 0.3rem;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
     font-size: 80%;
     padding-top: 0.16em;
-    display: none;
 }
-.ptx-toc ul.structural ul.structural a:focus > .codenumber,
-.ptx-toc ul.structural ul.structural a:hover > .codenumber {
-    display: inline-block;
+
+/* no codenumbers on subsections (anything under section) */
+.ptx-toc .toc-section .toc-item-list .toc-item a > .codenumber {
+    visibility: hidden;
 }
-.ptx-toc.parts > ul.structural > li > ul.structural > li > .toc-item > a > .codenumber {
-    font-size: 100%;
-    padding-top: 0;
-    display: inline-block;
+.ptx-toc .toc-section .toc-item-list .toc-item a:hover > .codenumber {
+    visibility: visible;
 }
-.ptx-toc ul.structural .title {
-    margin-left: 1.4em;
-    display: inline-block;
-}
-.ptx-toc ul.structural ul.structural .title {
-    margin-left: 1.5em;
-}
+
 .ptx-toc ul.structural ul.structural .title:empty::after {
     content: "empty heading!";
     font-weight: bold;
 }
 .ptx-toc ul.structural ul.structural ul.structural .title {
-    margin-left: 2.5em;
     font-size: 90%;
 }
 .ptx-toc ul.structural ul.structural ul.structural ul.structural .title {
-    margin-left: 3.2em;
     font-size: 90%;
     font-style: italic;
-}
-
-/* more specific than something in toc_default (obsolete comment?) */
-.ptx-toc ul.structural li ul.structural li ul.structural li:last-child {
-    margin-bottom: 0;
-    border-bottom: 1px solid #ddd;
 }
 
 .ptx-toc .part > a .codenumber {
@@ -91,34 +93,25 @@
     margin-left: 1em;
 }
 
+.ptx-toc .toc-item {
+    border-top: 1px solid var(--tocborder, #d1d1d1);
+}
+
 .ptx-toc ul.structural li a {
     position: relative;
     display: block;
     padding: 2.86957px;
     padding: 0.2em;
-//    padding-left: 0.5em;
-    border-top: 1px solid #d1d1d1;
-    border-bottom: 1px solid #d1d1d1;
+    /* padding-left: 0.5em; */
     font-family: "PT Serif", "Times New Roman", Times, serif;
     font-weight: bold;
 }
 .ptx-toc ul.structural ul.structural li a {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
-//    padding-left: 2.0em;
+    display: flex;
 }
 
-/* Sets spacing between section headings*/
-.ptx-toc > ul.structural > li:not(:first-child) {
-    margin-top: 0.3em;
-}
-/* But not at the start of a part */
-/* I cannot see that this actually does anything --DF */
-.ptx-toc > ul.structural > li.part + li,
-.ptx-toc > ul.structural > li.frontmatter + li,
-.ptx-toc > ul.structural > li.backmatter + li {
-    margin-top: 0;
-}
 /* Removes underlines from links in toc */
 .ptx-toc ul.structural li a, .ptx-toc ul.structural li a:link, .ptx-toc ul.structural li a:visited, .ptx-toc ul.structural li a:hover, .ptx-toc ul.structural li a:focus, .ptx-toc ul.structural li a:active {
     text-decoration: none;
@@ -132,9 +125,9 @@
 }
 */
 
-/* Ensures that there is no double border between subsections */
-.ptx-toc ul.structural li ul.structural a {
-    border-top: none;
+/* Extra border above top level items */
+.ptx-toc > .toc-item-list > .toc-item {
+    border-top: 2px solid var(--tocborder, #d1d1d1);
 }
 
 /* Allows both "top" and bottom border of a subsection to be highlighted on hover */
@@ -148,18 +141,11 @@ omitting, because it caused a "jump"
 */
 }
 
-/* Removes the excess space between the last subsection and the next section (caused by
-the margin on top of sections being used to space out adjacent sections) */
-.ptx-toc ul.structural li ul.structural li:last-child {
-    margin-bottom: -0.3em;
-}
-
 /* Removes double border between last subsection and next section */
-/* did not work correctly
 .ptx-toc > ul.structural li ul.structural li:last-child a {
     border-bottom: none;
 }
-*/
+
 
 .ptx-toc ul.structural li a:active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
@@ -188,3 +174,89 @@ the margin on top of sections being used to space out adjacent sections) */
     display: none;
 }
 
+/* if depth is shallow, identify best available toc item */
+.ptx-toc.depth1 ul.structural .toc-item.contains-active {
+    background-color: var(--chaptertocactive);
+    color: var(--chaptertoctextactive);
+}
+.ptx-toc.depth2 ul.structural ul.structural .toc-item.contains-active {
+    background-color: var(--parttocactive);
+    color: var(--parttoctextactive);
+}
+
+/* Hide all but active area of book */
+.ptx-toc.focused ul.structural:not(.contains-active) > li {
+    display: none;
+}
+.ptx-toc.focused ul.structural li.active > ul > li {
+    display: block;
+}
+
+/* Hooks for js based switching */
+.ptx-toc.focused ul.structural:not(.contains-active) > li.visible {
+    display: block;
+}
+.ptx-toc.focused ul.structural li.active > ul > li.hidden {
+    display: none ;
+}
+
+
+.ptx-toc.focused  > ul.structural > li:not(:first-child) {
+    margin-top: 0em;
+}
+.ptx-toc.focused ul.structural li ul.structural a:hover {
+    border: 0;
+}
+
+.toc-title-box {
+    display: flex;
+}
+
+.ptx-toc ul.structural li .toc-title-box a {
+    flex: 1 1;
+    display: flex;
+}
+
+.ptx-toc.focused .toc-expander {
+    border: 0;
+    padding: 2px 5px;
+    background: inherit;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.ptx-toc.focused .toc-expander .icon {
+    font-size: 30px;
+    line-height: 18px;
+    font-variation-settings: 'wght' 200;
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) {
+    background-color: var(--highlighttoc);
+    color: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) .icon {
+    fill: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
+    transform: rotate(-90deg);
+}
+
+/* Part colors fall back to same as chapter if not defined 
+   Defined here and not in setcolors so that colors_ file can override as include
+    order is toc/colors/setcolors */
+:root {
+    --parttoc: var(--chaptertoc);
+    --parttoctext: var(--chaptertoctext);
+    --parttocactive: var(--documenttitle);
+    --parttoctextactive: var(--chaptertoctextactive);
+}
+/* But if browser supports, make parts very slightly darker than chapters */
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+    :root {
+        --parttoc: color-mix(in srgb, var(--chaptertoc), black 15%);
+    }
+}

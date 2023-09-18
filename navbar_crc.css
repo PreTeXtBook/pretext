@@ -22,23 +22,35 @@
 
 
 /* Generic and large screen layout */
+.ptx-navbar .toc-toggle, .ptx-navbar .index-button, .ptx-navbar .searchbox
+{
+}
+
+.ptx-navbar .nav-other-controls
+{
+    margin-left: 1em;
+}
+
+.ptx-navbar .treebuttons {
+    display: flex;
+    justify-content: right;
+}
 
 .ptx-navbar .button {
-    padding: 0 24px 0 24px;
+    padding: 0 10px 0 10px;
 }
 
 .ptx-navbar .treebuttons .button {
-    padding: 0 20px 0 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.ptx-navbar .treebuttons .previous-button { padding-left: 12px; }
-.ptx-navbar .treebuttons .next-button { padding-right: 12px; }
+.ptx-navbar .treebuttons .previous-button { padding-left: 0px; }
+.ptx-navbar .treebuttons .next-button { padding-right: 0px; }
 
-.ptx-navbar .toc-toggle {
-    padding: 0 10px 0 10px;
+.ptx-navbar .nav-runestone-controls {
+    display: flex;
 }
 
 
@@ -46,10 +58,9 @@ nav.ptx-navbar {
     display: grid;
     grid-column-gap: 0em;
 
-    grid-template-columns:  .76fr 6em 6em 1fr;  /* Even gaps */
+    grid-template-columns: auto auto auto 1fr 1fr auto; 
     grid-template-areas:
-        "MH-toc-area MH-extras-area1 MH-extras-area2 MH-preferences-area MH-page-navigation-area";
-
+    "MH-toc-area MH-extras-area1 ptx-searchbox MH-extras-area2 MH-page-navigation-area MH-preferences-area";
     background-color: #fff;
 /*
     padding: 20px 0px 0px 0px;
@@ -65,7 +76,7 @@ nav.ptx-navbar {
     z-index: 20;
 
     position: sticky;
-    top: 1px;
+    top: 0;
     align-items: end;
     min-height: unset; /* to thwart navbar.less */
     margin-bottom: 0; /* to thwart navbar.less */
@@ -95,6 +106,7 @@ nav.ptx-navbar::after {
     border: 1px solid #888;
     cursor: pointer;
     box-sizing: border-box;
+    margin-right: 2em;
 }
 
 .toc-toggle:hover {
@@ -123,7 +135,6 @@ nav.ptx-navbar::after {
     justify-self: left;
 }
 .user-preferences-button {
-    grid-area: MH-preferences-area;
     justify-self: left;
 }
 
@@ -132,11 +143,18 @@ nav.ptx-navbar::after {
     grid-area: MH-page-navigation-area;
     justify-self: end;
     display: flex;
+    width: 100%;
 /*
     align-self: start;
 */
 }
 
+.nav-runestone-controls {
+    grid-area: MH-preferences-area;
+    justify-self: end;
+    display: flex;
+    padding-left: 4em;
+}
 
 /* .ptx-navbar button, */
 .ptx-navbar .button {
@@ -159,11 +177,20 @@ nav.ptx-navbar::after {
     box-sizing: border-box;
 }
 
+.ptx-navbar .searchbutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchresultsplaceholder {
+    left: calc(50vw - 300px);
+}
+
 
 /* Small screen layout  */
 @media only screen and (max-width: 800px) {
     .pretext  .ptx-navbar {
-	display: block;
 	position: fixed;
 	top: auto;
 	bottom: 0;
@@ -171,18 +198,16 @@ nav.ptx-navbar::after {
 	right: 0;
 	padding: 0;
 	background: #ededed;
+    grid-template-columns: auto auto auto auto 1fr auto; 
 /*
 	box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
 */
 	/*    height: 44.2px; */
 	
-	grid-template-columns:  1fr 1fr;
-	grid-column-gap: 0;
-        grid-template-areas: "MH-toc-area MH-page-navigation-area";
 	align-items: end;
     }
 
-    .pretext .ptx-navbar .button {
+    /* .pretext .ptx-navbar .button {
 	width: 24.95%;
 	height: 36px;
 	line-height: 40px;
@@ -191,13 +216,31 @@ nav.ptx-navbar::after {
     .ptx-navbar    .toc-toggle {
 	width: 25%;
 	margin: 0;
+    } */
+
+    .ptx-navbar .toc-toggle {
+        padding: 0 40px;
     }
 
-    /* Kill some white space between toc-toggle and treebuttons */
-    .ptx-navbar    .treebuttons {
-	margin: 0 0 0 -4px;
+    .ptx-navbar .nav-runestone-controls {
+        padding-left: 0;
     }
 
+    .ptx-navbar .treebuttons {
+        justify-content: center;
+    }
+    
+    .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+        display: none;
+    }
+
+    .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+        display: inline-block;
+    }
+
+    .searchresultsplaceholder {
+        left: 10vw;
+    }
 }
 
 .ptx-navbar .button:hover {
@@ -231,8 +274,6 @@ nav.ptx-navbar::after {
 }
 .ptx-navbar .toc-toggle .name {
     font-size: 1.0em;
-    position: relative;
-    bottom: 0.25em;
 }
 
 .ptx-navbar .index-button .name {
@@ -257,8 +298,9 @@ nav.ptx-navbar::after {
     display: none;
 }
 
-.ptx-navbar .dropdown {
-    height: 35px;
+.pretext .ptx-navbar .dropdown {
+    height: 32px;
+}
 
 .ptx-navbar .up-button {
     text-align: center;
@@ -266,12 +308,13 @@ nav.ptx-navbar::after {
 
 .ptx-navbar .name {
     display: inline-block;
+}
+.ptx-navbar .searchbutton .name {
+    display: none;
     position: relative;
     bottom: 0;
 }
-.ptx-navbar .treebuttons .name {
-    bottom: 0.2em;
-}
+
 .ptx-navbar .icon {
     display: inline-block;
     font-size: 1.5em;
@@ -283,9 +326,6 @@ nav.ptx-navbar::after {
 .ptx-navbar .up-button .icon {
     margin-left: 0;
     margin-right: 0.2em;
-}
-.ptx-navbar .up-button .name {
-    bottom: 0.3em;
 }
 .ptx-navbar .next-button .icon {
     margin-left: 0.2em;
@@ -299,23 +339,20 @@ nav.ptx-navbar::after {
 }
 
 @media screen and (max-width: 800px) {
-    .ptx-navbar .index-button,
-    .ptx-navbar .user-preferences-button,
-    .ptx-navbar .calculator-toggle {
-	display: none;
-    }
-
     .ptx-navbar .toc-toggle .name,
     .ptx-navbar .previous-button .name,
     .ptx-navbar .up-button .name,
     .ptx-navbar .up-button .disabled .name,
     .ptx-navbar .next-button .name {
-	display: none;
+        display: none;
     }
 
-    .ptx-navbar .up-button .icon,
-    .ptx-navbar .up-button .disabled .icon{
+    .ptx-navbar .toc-toggle {
+        margin: 0;
     }
 
+    .ptx-navbar .calculator-toggle .icon {
+        padding-top: 5px;
+    }
 }
 
