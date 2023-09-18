@@ -47,6 +47,11 @@
     padding-right: 0.3rem;
 }
 
+.ptx-toc .toc-backmatter .toc-item-list .toc-item .codenumber {
+    min-width: 1.9rem;
+    padding-right: 0.3rem;
+}
+
 .ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
     min-width: 2.5rem;
     padding-right: 0.3rem;
