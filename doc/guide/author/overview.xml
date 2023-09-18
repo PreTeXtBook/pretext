@@ -452,6 +452,29 @@
         <p>Note that the dynamic formats (including the Sage Cell) may run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
     </section>
 
+    <section xml:id="overview-interactive">
+        <title>Interactives</title>
+
+        <p>We strive to make it simple for authors to incorporate interactive demonstrations in the online output of their projects.  Of course, this prompts the question of what to do with this content in less-capable formats like <init>PDF</init> or braille.</p>
+
+        <p>The <tag>interactive</tag> element provides a consistent way to specify these demonstrations.  There are many possibilities, but perhaps they can be grouped mostly into three broad classes.<dl>
+            <li>
+                <title>Server Hosted</title>
+                <p>Interactive demonstrations hosted at external sites, such as those from GeoGebra or Desmos, can be included simply by providing the appropriate identifying information, much like the way you would specify a YouTube video (<xref ref="topic-youtube-video"/>).</p>
+            </li>
+            <li>
+                <title>Source Code</title>
+                <p>Some interactives can be described by source code that you include in your <pretext/> source.  Examples include JessieCode, CircuitJS, and Sage Interacts.  We also support GeoGebra this way.  This is similar to how we employ Sage Cells, but without as much specialization.</p>
+            </li>
+            <li>
+                <title>Roll Your Own</title>
+                <p>If you know <init>HTML</init>, <init>CSS</init>, and Javascript, you can provide your own routines and libraries to incorporate any sort of demonstration you can imagine and can code.</p>
+            </li>
+        </dl>See <xref ref="topic-interactive"/> for details.</p>
+
+        <p>For output formats where executing an <tag>interactive</tag> would be impossible, we manufacture a static version.  This includes a screenshot of the demonstration (automatically generated, or supplied by the author) and a Quick Response (QR) code that will point to a <term>standalone</term> <init>HTML</init> page that contains the interactive.  Again, see <xref ref="topic-interactive"/> for details.</p>
+    </section>
+
     <section xml:id="overview-sidebyside">
         <title>Side-by-Side Panels</title>
         <idx>side-by-side panel</idx>

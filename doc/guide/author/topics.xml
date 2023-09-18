@@ -3710,6 +3710,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
     </section>
 
+    <section xml:id="topic-interactive">
+        <title>Interactives</title>
+
+        <p>TODO: until then examine copious examples in the sample article.</p>
+    </section>
+
     <section xml:id="topic-sidebyside">
         <title>Side-by-Side Panels</title>
         <idx>side-by-side panel</idx>
@@ -4284,7 +4290,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             </figure>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-youtube-video">
             <title>YouTube Videos</title>
 
             <p>For a video hosted at YouTube, find the 11-character identification string in the address of a video you are viewing.  It will look something like <c>hAzdgU_kpGo</c>.  Then, instead of the <attr>source</attr> attribute, simply provide this identification string as the <attr>youtube</attr> attribute, such as<cd>
