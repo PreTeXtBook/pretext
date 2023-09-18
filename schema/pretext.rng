@@ -1937,17 +1937,31 @@
       </optional>
       <attribute name="source"/>
       <optional>
-        <attribute name="decorative">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="description">
-          <ref name="TextShort"/>
-        </element>
+        <choice>
+          <optional>
+            <attribute name="decorative">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <group>
+            <element name="shortdescription">
+              <text/>
+            </element>
+            <optional>
+              <element name="description">
+                <oneOrMore>
+                  <choice>
+                    <ref name="Paragraph"/>
+                    <ref name="Tabular"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
+          </group>
+        </choice>
       </optional>
     </element>
   </define>
@@ -1969,22 +1983,36 @@
         <attribute name="archive"/>
       </optional>
       <optional>
-        <attribute name="decorative">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="description">
-          <zeroOrMore>
-            <choice>
-              <ref name="TextShort"/>
-              <ref name="WWVariable"/>
-            </choice>
-          </zeroOrMore>
-        </element>
+        <choice>
+          <optional>
+            <attribute name="decorative">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <group>
+            <element name="shortdescription">
+              <oneOrMore>
+                <choice>
+                  <text/>
+                  <ref name="WWVariable"/>
+                </choice>
+              </oneOrMore>
+            </element>
+            <optional>
+              <element name="description">
+                <oneOrMore>
+                  <choice>
+                    <ref name="Paragraph"/>
+                    <ref name="Tabular"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
+          </group>
+        </choice>
       </optional>
       <choice>
         <element name="latex-image">
@@ -2019,22 +2047,36 @@
         <attribute name="width"/>
       </optional>
       <optional>
-        <attribute name="decorative">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="description">
-          <zeroOrMore>
-            <choice>
-              <ref name="TextShort"/>
-              <ref name="WWVariable"/>
-            </choice>
-          </zeroOrMore>
-        </element>
+        <choice>
+          <optional>
+            <attribute name="decorative">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <group>
+            <element name="shortdescription">
+              <oneOrMore>
+                <choice>
+                  <text/>
+                  <ref name="WWVariable"/>
+                </choice>
+              </oneOrMore>
+            </element>
+            <optional>
+              <element name="description">
+                <oneOrMore>
+                  <choice>
+                    <ref name="Paragraph"/>
+                    <ref name="Tabular"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
+          </group>
+        </choice>
       </optional>
       <optional>
         <element name="latex-image">

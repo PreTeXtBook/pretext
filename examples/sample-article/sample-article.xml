@@ -1643,7 +1643,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
                 <image width="50%" source="images/cubic-function.png">
-                    <description>A third degree polynomial with a local max and a local min, along with its second degree derivative plotted on the same axes</description>
+                    <shortdescription>
+                        a third degree polynomial with a local max and a local min;
+                        its derivative is plotted on the same axes
+                    </shortdescription>
                 </image>
             </figure>
 
@@ -2843,7 +2846,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
-                        <description>A pile of electronic components wired together</description>
+                        <shortdescription>
+                            a pile of electronic components wired together
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
@@ -3018,7 +3023,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-pgfplots-demo">
                     <caption>Sample pgfplots plot</caption>
                     <image xml:id="pgfplots-demo">
-                        <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
+                        <shortdescription>
+                            a Cartesian plane with a function graph, a parametric curve, and some points
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
@@ -3068,7 +3075,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-pgfplots-data-demo">
                     <caption>External data in a pgfplots plot</caption>
                     <image xml:id="pgfplots-data-demo">
-                        <description>A pgfplots example, with external data plotted.</description>
+                        <shortdescription>
+                            a Cartesian plot of electric potential over time;
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[
@@ -3082,6 +3091,68 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \addplot[blue] table {external/data/hodgkin-huxley-data.dat};
                         \end{axis}
                         \end{tikzpicture}]]>
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>
+                    A Cartesian plot might benefit from having a <tag>description</tag> with a
+                    <tag>tabular</tag> that lays bare the data used to to plot points.
+                </p>
+
+                <figure xml:id="figure-pgfplots-data-description">
+                    <caption>Full description with tabular</caption>
+                    <image label="pgfplots-data-description" width="70%">
+                        <shortdescription>
+                            a plot of some data points
+                        </shortdescription>
+                        <description>
+                            <p>
+                                A Cartesian graph plotting the following data.
+                            </p>
+                            <tabular row-headers="yes">
+                                <col right="minor"/>
+                                <col/><col/><col/>
+                                <col/><col/><col/>
+                                <col/><col/><col/>
+                                <row bottom="minor">
+                                    <cell><m>x</m></cell>
+                                    <cell><m>1</m></cell>
+                                    <cell><m>2</m></cell>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>4</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>6</m></cell>
+                                    <cell><m>7</m></cell>
+                                    <cell><m>8</m></cell>
+                                    <cell><m>9</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>y</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>8</m></cell>
+                                    <cell><m>9</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>8</m></cell>
+                                    <cell><m>2</m></cell>
+                                    <cell><m>3</m></cell>
+                                </row>
+                            </tabular>
+                        </description>
+                        <latex-image>
+                            \begin{tikzpicture}
+                                \begin{axis}[
+                                        xmin=0,
+                                        xmax=10,
+                                        ymin=-0,ymax=10,
+                                        xlabel={\(x\)},
+                                        ylabel={\(y\)},
+                                    ]
+                                    \addplot[only marks] coordinates {(1,5) (2,3) (3,8) (4,9) (5,5) (6,5) (7,8) (8,2) (9,3)};
+                                \end{axis}
+                            \end{tikzpicture}
                         </latex-image>
                     </image>
                 </figure>
@@ -3115,7 +3186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-asymptote-levers">
                     <caption>Asymptote Lever Demonstration</caption>
                     <image xml:id="asymptote-lever">
-                        <description>Moments on a lever</description>
+                        <shortdescription>moments on a lever</shortdescription>
                         <asymptote>
                         size(200,0);
 
@@ -3323,7 +3394,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
                     <image xml:id="sageplot-parabola" width="50%">
-                        <description>A standard parabola on the interval [-2,4]</description>
+                        <shortdescription>a standard parabola on the interval [-2,4]</shortdescription>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
@@ -3351,7 +3422,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-sage-exosagevec1">
                     <caption>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m></caption>
                     <image width="25%" xml:id="sageplot-exosagevec1">
-                        <description>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m>sont tracés tel que demandé, respectivement en rouge et en bleu.</description>
+                        <description>
+                            <p>
+                                Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m>sont tracés tel que demandé,
+                                respectivement en rouge et en bleu.
+                            </p>
+                        </description>
                         <sageplot>
                         plot(vector([-1,2]),color='red')+plot(vector([2,1]),color='blue')
                         </sageplot>
@@ -3596,7 +3672,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>An Asymptote image, with zero layout control, so 100% width.</p>
 
                     <image xml:id="asymptote-lever-solo">
-                        <description>Moments on a lever</description>
+                        <shortdescription>moments on a lever</shortdescription>
                         <asymptote>
                         // The next comment was seen in the wild, and the angle brackets
                         // are non-ASCII Unicode characters, which was disrupting communication
@@ -3633,7 +3709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>A Sage example, pushed to the right margin.</p>
 
                     <image xml:id="sageplot-parabola-solo" width="30%" margins="70% 0%">
-                        <description>A standard parabola on the interval [-2,4]</description>
+                        <shortdescription>a standard parabola on the interval [-2,4]</shortdescription>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
@@ -3962,43 +4038,127 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <subsection>
                 <title>Accessibility</title>
-                <p>An <tag>image</tag> should either have a non-empty description or set <attr>decorative</attr> to the value <c>yes</c>. Some of the following images comply, and some do not.  There's not really anything to see here visually, this is testing notifications made elsewhere.</p>
+                <p>
+                    An <tag>image</tag> should either have a non-empty <tag>description</tag>,
+                    a non-empty <tag>shortdescription</tag>, or set <attr>decorative</attr> to the
+                    value <c>yes</c>. Some of the following images comply, and some do not.  There's
+                    not really anything to see here visually, this is testing notifications made
+                    elsewhere.
+                </p>
 
                 <sbsgroup width="20%">
                     <sidebyside>
-                        <p>No description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, no shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png"/>
-                        <p>No description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, no shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes"/>
                     </sidebyside>
                     <sidebyside>
-                        <p>Empty description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
-                            <description/>
+                            <shortdescription/>
                         </image>
-                        <p>Empty description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
-                            <description/>
+                            <shortdescription/>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Too long description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
-                            <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                         </image>
-                        <p>Too long description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
-                            <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Good description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
-                            <description>A white square outlined in blue covered by a black X</description>
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                         </image>
-                        <p>Good description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
-                            <description>A white square outlined in blue covered by a black X</description>
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, no shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, no shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <shortdescription/>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <shortdescription/>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
                         </image>
                     </sidebyside>
                 </sbsgroup>
@@ -9596,7 +9756,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <figure xml:id="fig-sidebyside-subfigure">
                             <caption></caption>
                             <image source="images/cross-square.png">
-                                <description>Trefoil image</description>
+                                <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                             </image>
                         </figure>
                         <figure>
@@ -13356,7 +13516,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <statement>
                                 <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
                                 <image width="100%" source="images/projection1.png">
-                                    <description>two vectors...</description>
+                                    <shortdescription>two vectors in a Cartesian plane</shortdescription>
                                 </image>
                             </statement>
                         </exercise>

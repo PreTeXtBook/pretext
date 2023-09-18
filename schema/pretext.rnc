@@ -763,8 +763,13 @@
                     attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
-                    attribute decorative {"yes" | "no"}?,
-                    element description {TextShort}?
+                    (
+                        attribute decorative {"yes" | "no"}? |
+                        (
+                            element shortdescription {text},
+                            element description {(Paragraph | Tabular)+}?
+                        )
+                    )?
                 }
             ImageCode =
                 element image {
@@ -773,8 +778,13 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute archive {text}?,
-                    attribute decorative {"yes" | "no"}?,
-                    element description {(TextShort | WWVariable)*}?,
+                    (
+                        attribute decorative {"yes" | "no"}? |
+                        (
+                            element shortdescription {(text | WWVariable)+},
+                            element description {(Paragraph | Tabular)+}?
+                        )
+                    )?,
                     (
                         element latex-image {text} |
                         element asymptote {text} |
@@ -789,8 +799,13 @@
                 element image {
                     attribute pg-name {text}?,
                     attribute width {text}?,
-                    attribute decorative {"yes" | "no"}?,
-                    element description {(TextShort | WWVariable)*}?,
+                    (
+                        attribute decorative {"yes" | "no"}? |
+                        (
+                            element shortdescription {(text | WWVariable)+},
+                            element description {(Paragraph | Tabular)+}?
+                        )
+                    )?,
                     element latex-image {
                         text
                     }?

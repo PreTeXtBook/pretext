@@ -1755,10 +1755,14 @@
     <xs:sequence>
       <xs:element name="image">
         <xs:complexType>
-          <xs:sequence>
+          <xs:sequence minOccurs="0">
+            <xs:element name="shortdescription" type="xs:string"/>
             <xs:element minOccurs="0" name="description">
-              <xs:complexType mixed="true">
-                <xs:group ref="TextShort"/>
+              <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="Paragraph"/>
+                  <xs:element ref="tabular"/>
+                </xs:choice>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
@@ -1786,14 +1790,23 @@
       <xs:element name="image">
         <xs:complexType>
           <xs:sequence>
-            <xs:element minOccurs="0" name="description">
-              <xs:complexType mixed="true">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:group ref="TextShort"/>
-                  <xs:element ref="var"/>
-                </xs:choice>
-              </xs:complexType>
-            </xs:element>
+            <xs:sequence minOccurs="0">
+              <xs:element name="shortdescription">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="description">
+                <xs:complexType>
+                  <xs:choice maxOccurs="unbounded">
+                    <xs:group ref="Paragraph"/>
+                    <xs:element ref="tabular"/>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
             <xs:choice>
               <xs:element ref="latex-image"/>
               <xs:element ref="asymptote"/>
@@ -1837,14 +1850,23 @@
       <xs:element name="image">
         <xs:complexType>
           <xs:sequence>
-            <xs:element minOccurs="0" name="description">
-              <xs:complexType mixed="true">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:group ref="TextShort"/>
-                  <xs:element ref="var"/>
-                </xs:choice>
-              </xs:complexType>
-            </xs:element>
+            <xs:sequence minOccurs="0">
+              <xs:element name="shortdescription">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="description">
+                <xs:complexType>
+                  <xs:choice maxOccurs="unbounded">
+                    <xs:group ref="Paragraph"/>
+                    <xs:element ref="tabular"/>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
             <xs:element minOccurs="0" ref="latex-image"/>
           </xs:sequence>
           <xs:attribute name="pg-name"/>

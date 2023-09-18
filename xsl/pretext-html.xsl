@@ -6481,22 +6481,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- no extension, presume SVG provided as external image -->
         <xsl:when test="$extension=''">
-            <xsl:call-template name="svg-png-wrapper">
+            <xsl:apply-templates select="." mode="svg-png-wrapper">
                 <xsl:with-param name="image-filename">
                     <xsl:value-of select="$location"/>
                     <xsl:text>.svg</xsl:text>
                 </xsl:with-param>
-                <xsl:with-param name="image-description">
-                    <xsl:apply-templates select="shortdescription" />
-                </xsl:with-param>
-                <xsl:with-param name="decorative">
-                    <xsl:apply-templates select="@decorative" />
-                </xsl:with-param>
-            </xsl:call-template>
+            </xsl:apply-templates>
             <!-- possibly annotate with archive links -->
             <xsl:apply-templates select="." mode="archive">
                 <xsl:with-param name="base-pathname" select="$location"/>
             </xsl:apply-templates>
+            <!-- possibly give a long description -->
+            <xsl:apply-templates select="." mode="description"/>
         </xsl:when>
         <!-- with extension, just include it -->
         <xsl:otherwise>
@@ -6515,6 +6511,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="not(string(shortdescription) = '')">
                         <xsl:attribute name="alt">
                             <xsl:apply-templates select="shortdescription" />
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="description">
+                        <xsl:attribute name="alt">
+                            <xsl:text>described in detail following the image</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="aria-describedby">
+                            <xsl:apply-templates select="." mode="visible-id"/>
+                            <xsl:text>-description</xsl:text>
                         </xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
@@ -6537,6 +6542,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
+            <!-- possibly give a long description -->
+            <xsl:apply-templates select="." mode="description"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -6555,19 +6562,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
     </xsl:variable>
-    <xsl:call-template name="svg-png-wrapper">
+    <xsl:apply-templates select="." mode="svg-png-wrapper">
         <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
-        <xsl:with-param name="image-description">
-            <xsl:apply-templates select="shortdescription" />
-        </xsl:with-param>
-        <xsl:with-param name="decorative">
-            <xsl:apply-templates select="@decorative" />
-        </xsl:with-param>
-    </xsl:call-template>
+    </xsl:apply-templates>
     <!-- possibly annotate with archive links -->
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
     </xsl:apply-templates>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <xsl:template match="image[sageplot]" mode="image-inclusion">
@@ -6583,15 +6586,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="not(sageplot/@variant) or (sageplot/@variant = '2d')">
             <!-- construct the "img" element -->
-            <xsl:call-template name="svg-png-wrapper">
+            <xsl:apply-templates select="." mode="svg-png-wrapper">
                 <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
-                <xsl:with-param name="image-description">
-                    <xsl:apply-templates select="shortdescription" />
-                </xsl:with-param>
-                <xsl:with-param name="decorative">
-                    <xsl:apply-templates select="@decorative" />
-                </xsl:with-param>
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="sageplot/@variant = '3d'">
             <iframe>
@@ -6609,6 +6606,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
     </xsl:apply-templates>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- Asymptote graphics language -->
@@ -6710,18 +6709,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A named template creates the infrastructure for an SVG or PNG image -->
+<!-- The infrastructure for an SVG or PNG image      -->
 <!-- Parameters                                      -->
 <!--   image-filename: required, full relative path  -->
-<!--   image-description: optional                   -->
-<!--   decorative: optional, 'yes' => no alt text    -->
 <!-- NB: (2020-01-18) Prior, this was SVG specific,  -->
 <!-- and then PNG functionality was folded in (when  -->
 <!-- fallback for "sageplot" was no longer necessary -->
-<xsl:template name="svg-png-wrapper">
+<xsl:template match="image" mode="svg-png-wrapper">
     <xsl:param name="image-filename" />
-    <xsl:param name="image-description" select="''" />
-    <xsl:param name="decorative"/>
     <img>
         <!-- source file attribute for img element, the SVG image -->
         <xsl:attribute name="src">
@@ -6739,17 +6734,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <!-- alt attribute for accessibility -->
         <xsl:choose>
-            <xsl:when test="$decorative = 'yes'">
+            <xsl:when test="@decorative = 'yes'">
                 <xsl:attribute name="alt"/>
             </xsl:when>
-            <xsl:when test="not($image-description = '')">
+            <xsl:when test="shortdescription">
                 <xsl:attribute name="alt">
-                    <xsl:value-of select="$image-description" />
+                    <xsl:apply-templates select="shortdescription"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="description">
+                <xsl:attribute name="alt">
+                    <xsl:text>described in detail following the image</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="aria-describedby">
+                    <xsl:apply-templates select="." mode="visible-id"/>
+                    <xsl:text>-description</xsl:text>
                 </xsl:attribute>
             </xsl:when>
         </xsl:choose>
     </img>
 </xsl:template>
+
+<xsl:template match="image" mode="description">
+    <xsl:if test="description">
+        <xsl:variable name="image-id">
+            <xsl:apply-templates select="." mode="visible-id"/>
+            <xsl:text>-description</xsl:text>
+        </xsl:variable>
+        <details class="image-description">
+            <summary title="details">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'description'"/>
+                </xsl:call-template>
+            </summary>
+            <div id="{$image-id}">
+                <xsl:apply-templates select="description"/>
+            </div>
+        </details>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Image Archives -->
 <!-- Under an image provide a set of (download) links              -->
