@@ -6761,7 +6761,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="visible-id"/>
             <xsl:text>-description</xsl:text>
         </xsl:variable>
-        <details class="image-description">
+        <!-- @aria-live means screenreaders will make announcements -->
+        <details class="image-description" aria-live="polite">
             <summary title="details">
                 <xsl:call-template name="insert-symbol">
                     <xsl:with-param name="name" select="'description'"/>
