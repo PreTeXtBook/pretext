@@ -2822,7 +2822,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2899,11 +2899,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- Second: the content of the knowl, to be revealed/parsed later -->
-    <!-- Exception: born-hidden content is always in a "div", so an    -->
-    <!-- intra-paragraph knowl (e.g. a footnote) needs to be placed    -->
-    <!-- outside of HTML structures (e.g. a "p"), so we skip it here.  -->
-    <!-- But see "pop-footnote-text" modal template.                   -->
-    <xsl:apply-templates select="self::*[not(self::fn)]" mode="hidden-knowl-content">
+    <xsl:apply-templates select="." mode="hidden-knowl-content">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3044,6 +3040,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:apply-templates select="." mode="heading-birth" />
     </xsl:element>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Footnotes -->
+<!-- ######### -->
+
+<!-- Footnotes are always a problem.  No different here.  Once these      -->
+<!-- were "born-hidden" knowls.  But they are unique in that they really  -->
+<!-- must appear inline, yet have content that contains block-level items.-->
+<!-- So the content of each footnote could not live in a "div" inside     -->
+<!-- a "p" (typically), and was accumulated instead at the bottom of each -->
+<!-- HTML page (see previous commit for the removal of this action).      -->
+<!--                                                                      -->
+<!-- We will embark on replacing *all* "born-hidden" knowls, so isolate   -->
+<!-- this exception.  With minimal effort we can implement a footnote as  -->
+<!-- an "xref" knowl, even though this is technically incorrect.  The     -->
+<!-- content of the xref-knowl will have a heading (not needed) and       -->
+<!-- an "in-context" link (silly).  This allows for the footnote content  -->
+<!-- to "open" after the current block-level item (rather than            -->
+<!-- mid-sentence), which is a standard behavior of xref-knowls. And we   -->
+<!-- can use several templates already in place.                          -->
+<!--                                                                      -->
+<!-- TODO:                                                                -->
+<!--   * Manufacture content more as original content, perhaps into its   -->
+<!--     own directory.                                                   -->
+<!--   * Abandon knowl code and do something like a popup.                -->
+<!--   * Note: abandoned "pop-footnote-text" template could be returned   -->
+<!--     with a "git revert" and adjusted for production of content onto  -->
+<!--     a page (rather than in a file).                                  -->
+<!--                                                                      -->
+<xsl:template match="fn">
+    <a class="xref">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:attribute>
+        <!-- empty, but necessary for screen readers -->
+        <xsl:attribute name="href"/>
+        <!-- the path to an *xref* knowl (inappropriate) -->
+        <xsl:attribute name="data-knowl">
+            <xsl:apply-templates select="." mode="xref-knowl-filename"/>
+        </xsl:attribute>
+        <!-- add HTML title attribute to the link -->
+        <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
+        <!-- A superscript number, as the clickable content -->
+        <xsl:apply-templates select="." mode="heading-birth"/>
+    </a>
+    <!-- xref-knowl content is manufactured elsewhere in a brute-force   -->
+    <!-- fashion.  This would be a better place to ensure that every     -->
+    <!--  "fn" had its content produced in the right way no matter what. -->
 </xsl:template>
 
 
