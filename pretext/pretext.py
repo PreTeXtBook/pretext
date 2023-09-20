@@ -1953,8 +1953,8 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     pub_tree = ET.parse(pub_file)
     try:
         image = pub_tree.find('common').find('qr-code').get('image')
-        external = pub_tree.find('source').find('directories').get('external')
-        image_path = os.path.join(external, image)
+        _, external_dir = get_managed_directories(xml_source, pub_file)
+        image_path = os.path.join(external_dir, image)
         has_image = True
     except:
         has_image = False
