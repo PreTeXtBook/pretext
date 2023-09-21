@@ -116,9 +116,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- point to a totally different server (rather than other  -->
 <!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.81'" />
+<xsl:param name="html.css.version" select="'0.82'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.31'" />
+<xsl:param name="html.js.version" select="'0.32'" />
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
