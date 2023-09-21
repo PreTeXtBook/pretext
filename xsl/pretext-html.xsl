@@ -2843,41 +2843,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="born-hidden">
     <xsl:param name="b-original" select="true()" />
-    <xsl:variable name="placement">
-        <xsl:apply-templates select="." mode="hidden-knowl-placement" />
-    </xsl:variable>
-    <!-- First: the link that is visible on the page         -->
-    <xsl:choose>
-        <xsl:when test="$placement = 'block'">
-            <xsl:variable name="body-elt">
-                <xsl:apply-templates select="." mode="body-element" />
-            </xsl:variable>
-            <xsl:element name="{$body-elt}">
-                <xsl:attribute name="class">
-                    <xsl:apply-templates select="." mode="body-css-class" />
-                </xsl:attribute>
-                <!-- HTML id is best on element surrounding born-hidden knowl anchor -->
-                <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="html-id" />
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="hidden-knowl-link">
-                    <xsl:with-param name="placement" select="$placement"/>
-                </xsl:apply-templates>
-            </xsl:element>
-        </xsl:when>
-        <xsl:when test="$placement = 'inline'">
-            <xsl:apply-templates select="." mode="hidden-knowl-link">
-                <xsl:with-param name="placement" select="$placement"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- Second: the content of the knowl, to be revealed/parsed later -->
-    <xsl:apply-templates select="." mode="hidden-knowl-content">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
+
+    <details>
+        <!-- put an HTML id as a target of cross-references, etc, -->
+        <!-- but only when this is original content.  In other    -->
+        <!-- words, not when a consituent of an xref knowl        -->
+        <xsl:if test="$b-original">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="html-id" />
+            </xsl:attribute>
+        </xsl:if>
+        <!-- put relevant class names on "details" to help with styling -->
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="body-css-class"/>
+        </xsl:attribute>
+        <!-- the clickable that is visible on the page -->
+        <summary>
+           <xsl:apply-templates select="." mode="heading-birth" />
+       </summary>
+        <!-- the content of the knowl, to be revealed later -->
+        <xsl:apply-templates select="." mode="body">
+            <xsl:with-param name="block-type" select="'embed'" />
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </details>
 </xsl:template>
 
 <!-- An external file knowl, impersonating a hidden knowl -->
@@ -2905,89 +2894,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Hidden knowls are in two pieces.  This template -->
-<!-- ensures consistency of the common, linking id.  -->
-<xsl:template match="*" mode="hidden-knowl-id">
-    <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
-    <xsl:apply-templates select="." mode="html-id" />
-</xsl:template>
-
-<!-- The link portion of a hidden-knowl -->
-<xsl:template match="*" mode="hidden-knowl-link">
-    <xsl:param name="placement"/>
-
-    <xsl:element name="a">
-        <!-- empty, but presence needed for accessibility -->
-        <!-- An HTML "a" without an href attribute does   -->
-        <!-- not default to role "link" and does not read -->
-        <!-- as clickable by a screen reader.             -->
-        <xsl:attribute name="href"/>
-        <!-- empty, indicates content *not* in a file -->
-        <xsl:attribute name="data-knowl" />
-        <!-- id-ref class: content is in div referenced by id       -->
-        <!-- (element-name)-knowl: specific element used in content -->
-        <!-- original: born hidden knowl, not xref                  -->
-        <!-- Similar to "duplicate-hidden-knowl-link", id-ref extra -->
-        <xsl:attribute name="class">
-            <xsl:text>id-ref</xsl:text>
-            <!--  -->
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-knowl</xsl:text>
-            <!--  -->
-            <xsl:text> original</xsl:text>
-            <!-- classes indicate if opening the knowl reveals specials -->
-            <xsl:if test=".//image">
-                <xsl:text> has-image</xsl:text>
-            </xsl:if>
-            <xsl:if test=".//video">
-                <xsl:text> has-video</xsl:text>
-            </xsl:if>
-            <xsl:if test=".//interactive">
-                <xsl:text> has-interactive</xsl:text>
-            </xsl:if>
-            <xsl:if test=".//tabular">
-                <xsl:text> has-tabular</xsl:text>
-            </xsl:if>
-        </xsl:attribute>
-        <!-- and the id via a template for consistency -->
-        <xsl:attribute name="data-refid">
-            <xsl:apply-templates select="." mode="hidden-knowl-id" />
-        </xsl:attribute>
-        <!-- the object could be the target of an in-context link, and     -->
-        <!-- if inline, then just a bare anchor, so put id here, otherwise -->
-        <!-- in the 'block' case, it is on the surrounding element         -->
-        <xsl:if test="$placement = 'inline'">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="html-id" />
-            </xsl:attribute>
-        </xsl:if>
-        <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
-        <!-- heading in an HTML container -->
-        <xsl:apply-templates select="." mode="heading-birth" />
-    </xsl:element>
-</xsl:template>
-
-<!-- The content portion of a hidden knowl -->
-<!-- *Always* as div.hidden-content"       -->
-<xsl:template match="*" mode="hidden-knowl-content">
-    <xsl:param name="b-original" select="true()" />
-
-    <!-- .hidden-content is CSS for display: none           -->
-    <!-- Stop MathJax from processing contents on page load -->
-    <div class="hidden-content tex2jax_ignore">
-        <!-- different id, for use by the knowl mechanism -->
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="hidden-knowl-id" />
-        </xsl:attribute>
-        <!-- should the b-original flag always be true() here -->
-        <xsl:apply-templates select="." mode="body">
-            <xsl:with-param name="block-type" select="'embed'" />
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
-    </div>
 </xsl:template>
 
 <!-- The link for a duplicate hidden knowl -->
