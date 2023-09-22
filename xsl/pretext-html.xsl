@@ -2790,8 +2790,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (3) "heading-birth": produces HTML immediately interior to the "body-element", for visible blocks, in both the original and duplication processes.  Similarly, it is the link-text of a knowl for a block that is hidden (again in original or duplication modes).  Employed in "body" templates. -->
 
-<!-- (4) "hidden-knowl-placement": 'block' or 'inline' to indicate how to wrap hidden knowl links so they appear correctly on a page (block or inline, basically).  'block' means a wrapper with the class of the "body-element", while 'inline' means no wrapper is needed since the link is just fine in an inline situation.  Only relevant for an object which can be born hidden via a switch (e.g. a theorem), or is *always* born hidden (e.g. "fn" (footnote)).  So this template could be defined to produce no output and an error will be raised during processing if there is a mismatch (i.e. no ouput is a third possible value.  -->
-
 <!-- (5) "heading-xref-knowl": when a knowl is a target of a cross-reference, sometimes a better heading is necessary to help identify it.  For example, a cross-refernce to a list item can be improved by providing the number of the item in a heading. -->
 
 <!-- (6) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'embed', or 'xref'. -->
@@ -2806,22 +2804,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- born-hidden case -->
         <xsl:when test="$hidden = 'true'">
-            <xsl:choose>
-                <!-- primary occurrence, born hidden as embedded knowl     -->
-                <!-- is original flag pass-thru necessary?  always true()? -->
-                <xsl:when test="$b-original">
-                    <xsl:apply-templates select="." mode="born-hidden">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                </xsl:when>
-                <!-- duplicating, so just make a xref-knowl in same style, -->
-                <!-- but therefore clean of id's or other identification   -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="duplicate-born-hidden">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="born-hidden">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
         </xsl:when>
         <!-- born-visible case -->
         <xsl:otherwise>
@@ -2867,61 +2852,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </details>
-</xsl:template>
-
-<!-- An external file knowl, impersonating a hidden knowl -->
-<xsl:template match="*" mode="duplicate-born-hidden">
-    <xsl:param name="b-original" select="false()" />
-    <xsl:variable name="placement">
-        <xsl:apply-templates select="." mode="hidden-knowl-placement" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$placement = 'block'">
-            <xsl:variable name="body-elt">
-                <xsl:apply-templates select="." mode="body-element" />
-            </xsl:variable>
-            <xsl:element name="{$body-elt}">
-                <xsl:attribute name="class">
-                    <xsl:apply-templates select="." mode="body-css-class" />
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
-            </xsl:element>
-        </xsl:when>
-        <xsl:when test="$placement = 'inline'">
-            <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- The link for a duplicate hidden knowl -->
-<xsl:template match="*" mode="duplicate-hidden-knowl-link">
-    <xsl:element name="a">
-        <!-- empty, but presence needed for accessibility -->
-        <!-- An HTML "a" without an href attribute does   -->
-        <!-- not default to role "link" and does not read -->
-        <!-- as clickable by a screen reader.             -->
-        <xsl:attribute name="href"/>
-        <!-- (element-name)-knowl: specific element used in content -->
-        <!-- original: born hidden knowl, not xref                  -->
-        <!-- Similar to "hidden-knowl-link", no id-ref              -->
-        <xsl:attribute name="class">
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-knowl</xsl:text>
-            <!--  -->
-            <xsl:text> original</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="data-knowl">
-            <xsl:apply-templates select="." mode="hidden-knowl-filename" />
-        </xsl:attribute>
-        <!-- add HTML title attribute to the link -->
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <xsl:apply-templates select="." mode="heading-birth" />
-    </xsl:element>
 </xsl:template>
 
 <!-- ######### -->
@@ -3012,11 +2942,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> remark-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&REMARK-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&REMARK-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -3060,11 +2985,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&COMPUTATION-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> computation-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&COMPUTATION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3111,11 +3031,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> openproblem-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&OPENPROBLEM-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3184,11 +3099,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> definition-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&DEFINITION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&DEFINITION-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -3233,9 +3143,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
     <xsl:text> aside-like</xsl:text>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="&ASIDE-LIKE;" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-birth">
@@ -3284,9 +3191,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="poem" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="poem" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
 <xsl:template match="poem" mode="heading-birth">
@@ -3440,11 +3344,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> table-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&FIGURE-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- TODO - sort out title/caption -->
 <!-- Use title for xref-link text  -->
 
@@ -3535,9 +3434,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> assemblage-like</xsl:text>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="assemblage" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="assemblage" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title" />
@@ -3581,9 +3477,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="blockquote" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
 <xsl:template match="blockquote" mode="heading-birth" />
@@ -3622,9 +3515,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="paragraphs" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="paragraphs" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title-paragraphs" />
@@ -3662,9 +3552,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Not born hidden -->
-<xsl:template match="commentary" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
 <xsl:template match="commentary" mode="heading-birth">
@@ -3709,11 +3596,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&GOAL-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> goal-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&GOAL-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3773,11 +3655,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> example-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&EXAMPLE-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3842,9 +3719,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="subexercises" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="subexercises" mode="hidden-knowl-placement"/>
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -3939,9 +3813,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercisegroup" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="exercisegroup" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -4069,11 +3940,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> exercise-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="exercise" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -4247,11 +4113,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&PROJECT-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> project-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&PROJECT-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -4472,11 +4333,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> exercise-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="task" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="task" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-list-number" />
@@ -4676,11 +4532,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> solution-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="&SOLUTION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&SOLUTION-LIKE;" mode="heading-birth">
     <xsl:choose>
@@ -4731,11 +4582,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&DISCUSSION-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> discussion-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, inline-level -->
-<xsl:template match="&DISCUSSION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -4960,11 +4806,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> theorem-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -5017,12 +4858,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>proof</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Trailing as a hidden knowl, or plainly visible, -->
-<!-- a PROOF-LIKE is a block level item              -->
-<xsl:template match="&PROOF-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -5083,9 +4918,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="case" mode="hidden-knowl-placement" />
-
 <!-- When born use this specialized heading -->
 <xsl:template match="case" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-case" />
@@ -5127,11 +4959,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And its CSS class -->
 <xsl:template match="fn" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
-</xsl:template>
-
-<!-- When born hidden, inline-level -->
-<xsl:template match="fn" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -5189,9 +5016,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="contributor" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="contributor" mode="hidden-knowl-placement" />
 
 <!-- Heading is not needed -->
 <xsl:template match="contributor" mode="heading-birth" />
@@ -5254,9 +5078,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="gi" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="gi" mode="heading-birth" />
 
@@ -5317,9 +5138,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bib</xsl:text>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="biblio" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="biblio" mode="heading-birth" />
 
@@ -5371,11 +5189,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>solution-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="biblio/note|interactive/instructions" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="biblio/note" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-simple" />
@@ -5422,9 +5235,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fragment" mode="body-css-class">
     <xsl:text>fragment</xsl:text>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="fragment" mode="hidden-knowl-placement"/>
 
 <!-- When born use this heading -->
 <xsl:template match="fragment" mode="heading-birth">
@@ -5715,9 +5525,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="body-css-class">
     <xsl:text>li</xsl:text>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="li" mode="hidden-knowl-placement" />
 
 <!-- Not applicable -->
 <xsl:template match="li" mode="heading-birth" />
