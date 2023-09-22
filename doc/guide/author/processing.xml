@@ -49,6 +49,7 @@
 
     <section xml:id="processing-CLI">
         <title>The <pretext />-CLI</title>
+        <author>Oscar Levin</author>
         <idx><h>CLI</h></idx>
         <introduction>
         <p>
@@ -115,7 +116,7 @@
             </p>
 
             <p>
-                To verify that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (1.4.2, for example).
+                To verify that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (1.7.5, for example).
             </p>
 
             <p>
@@ -143,17 +144,17 @@
             </console>
 
             <p>
-                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 1.1.0:
+                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 1.7.5:
             </p>
 
             <console>
-                <input>pip install pretext=="1.1.0"</input>
+                <input>pip install pretext=="1.7.5"</input>
             </console>
-            <note>
+            <warning>
                 <p>
                     If you installed the <pretext />-CLI before version 1.0, you need to manually uninstall the package <c>pretextbook</c> (which is what the CLI was called during early development).  Run <c>pip uninstall pretextbook</c> and then <c>pip install pretext</c> te get caught up.
                 </p>
-            </note>
+            </warning>
             </paragraphs>
         </subsection>
 
@@ -171,7 +172,7 @@
             </console>
 
             <p>
-                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.
+                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.  You might also try <c>pretext new demo</c> to get a project that shows off more features available.
             </p>
 
             <p>
@@ -184,15 +185,15 @@
                         </p>
                     </li>
                     <li>
-                        <title>generate-assets</title>
+                        <title>generated-assets</title>
                         <p>
-                            A folder that will hold assets (such as images) generated from source, using the <c>pretext generate</c> command.  You should not manually edit any contents of this folder.
+                            A folder that will hold assets (such as images) generated from source, using the <c>pretext build</c> or <c>pretext generate</c> commands.  You should not manually edit any contents of this folder.
                         </p>
                     </li>
                     <li>
                         <title>publication</title>
                         <p>
-                            A folder to hold your publication files.  One publication file is included, but you can have as many as you want.  See <xref ref="publication-file-reference"/>.
+                            A folder to hold your <q>publication</q> files used to customize how your output looks.  One publication file is included, but you can have as many as you want.  See <xref ref="publication-file-reference"/>.
                         </p>
                     </li>
                     <li>
@@ -268,90 +269,24 @@
             </console>
 
             <p>
-                This will direct you to open a local server at a provided address (perhaps <url href="http://localhost:8000" visual="http://localhost:8000"/>).  Replace <q>web</q> in the above with other build targets as appropriate.
+                This will direct you to open a file running in a local server (that the CLI started for you) at a provided address (perhaps <url href="http://localhost:8128/output/web" visual="http://localhost:8128/output/web"/>).  Once you have run <c>pretext view</c> once, you can navigate to other output targets by navigating to a different url (maybe <url href="http://localhost:8128/output/print" visual="http://localhost:8128/output/print"/>) or just rerun the <c>pretext view</c> command with a different target name.
             </p>
 
             <p>
-                If you are on your own machine (i.e., not CoCalc), <c>pretext view</c> will attempt to open your default program for the type of file you are opening.  You can prevent this attempt using the <c>--no-launch</c> flag.
+                Running <c>pretext view</c> will attempt to open your default program for the type of file you are opening.  You can prevent this attempt using the <c>--no-launch</c> flag.
             </p>
 
             <p>
-                The <c>pretext view</c> command accepts a useful option for small projects that allow you to automatically rebuild your source every time you save it.  Try:
+                Assuming you ran this command in a terminal, the easiest way to continue working is to open a new terminal tab to run <c>pretext build</c> again; the local server will continue in the original terminal until you stop it with <kbd>CTRL</kbd>+<kbd>C</kbd>.
             </p>
 
-            <console>
-                <input>pretext view web --watch</input>
-            </console>
-
-            <p>
-               (You can use <c>-w</c> as a shorthand for <c>--watch</c>.) This currently only supports HTML-format targets.
-            </p>
-
-            <p>
-                When you are done, stop the server by hitting <c>CTRL+C</c>
-            </p>
-
-            <insight>
+            <warning>
                 <p>
-                    In addition to the <em>watch</em> option <c>-w</c>, you can use the flags <c>-b</c> to build before viewing, <c>-g</c> to generate assets before viewing, or combine these with <c>-bg</c>.
+                    When using <c>pretext view</c>, your project is only viewable on your local machine (even if you are working in a Codespace or on CoCalc).  To make the output available to the public, you will need to copy the output to a web server, or use the <c>pretext deploy</c> command, described below.
                 </p>
-            </insight>
-
-            <p>
-                Note that the project is only viewable on your local machine (even if you are working in CoCalc).  To make the output available to the public, you will need to copy the output to a web server, or use the <c>pretext deploy</c> command, described below.
-            </p>
+            </warning>
         </subsection>
-        <subsection>
-            <title>Generating assets: <c>pretext generate</c></title>
-            <idx><h><c>generate</c></h></idx>
-            <idx><h><c>pretext generate</c></h></idx>
-            <idx><h>CLI</h><h><c>generate</c></h></idx>
-            <p>
-                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.  To generate the assets, run the following command.
-            </p>
 
-            <console>
-                <input>pretext generate</input>
-            </console>
-
-            <insight>
-                <p>
-                    You can also generate assets and build at the same time, using <c>pretext build -g web</c> which will generate all assets for the target named <q>web</q>.
-                </p>
-            </insight>
-
-            <p>
-                This will generate all assets in the default formats for the first target in the project manifest.  If you need formats for another target, you can specify the target name with the <c>-t</c> flag, as in, for the target named <q>print</q>,
-            </p>
-
-            <console>
-                <input>pretext generate -t print</input>
-            </console>
-
-            <p>
-                Generating assets can be time consuming, so likely you will not want to repeat this step unless you have edited one of the elements of a particular asset type.  To further speed up the process, you can limit which sorts of assets you generate.  For example, if you edit a few <tag>latex-image</tag> elements, you can just generate these (for the first target in the manifest) with,
-            </p>
-
-            <console>
-                <input>pretext generate latex-image</input>
-            </console>
-
-            <p>
-                Valid choices for what types of assets you can generate in this specific way are: <c>webwork</c>, <c>latex-image</c>, <c>sageplot</c>, <c>asymptote</c>, <c>interactive</c>, <c>youtube</c>, <c>codelense</c>, and <c>datafile</c>.
-            </p>
-
-            <p>
-                To be even more precise, if the element you wish to generate has an <attr>xml:id</attr>, you can generate just that element using the <c>-x</c> flag.  For example, if your <tag>latex-image</tag> has id <q>img-circle</q>, generate it with,
-            </p>
-
-            <console>
-                <input>pretext generate -x img-circle</input>
-            </console>
-
-            <p>
-                Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag.
-            </p>
-        </subsection>
 
         <subsection>
             <title>Hosting your project: <c>pretext deploy</c></title>
@@ -372,11 +307,54 @@
             </console>
 
             <p>
-                This copies the contents of the html output folder into <c>docs</c>, commits the changes, and pushes them to GitHub.  All you need to do then is ensure that you enable the pages feature in your GitHub repository (<c>Settings</c>, then <c>Pages</c>, then set to deploy from a branch: gh-pages).
+                If you watch the terminal, you will either get directions for how to set up your repository, or will simply be told what the live website for your project is.
+            </p>
+            <p>
+                Behind the scenes, this command copies the contents of the output folders you want to deploy to a folder <c>output/stage</c>, and then moves the entire contents of that folder to the <c>gh-pages</c> branch of your github repository.  If you have not already created a <c>gh-pages</c> branch, the CLI will create one for you.  If you have not already set up your repository to track your source files, the CLI will walk you through the steps you need to get set up.
+            </p>
+            <insight>
+
+                <p>
+                    You can deploy multiple targets, starting with the 2.0 release of the CLI.  To do this, you will need to specify a <attr>deploy-dir</attr> attribute in your project manifest for each target you want to deploy.  Additionally, you should create a folder in the root of your project called <c>site</c> and create a landing page for your project.  The <c>site</c> folder and the output folders for each specified project will all be copied to <c>output/stage</c>.  We recommend using the flag <c>--stage-only</c> so you can preview you complete site before deploying it.
+                </p>
+            </insight>
+        </subsection>
+
+        <subsection>
+            <title>Generating assets: <c>pretext generate</c></title>
+            <idx><h><c>generate</c></h></idx>
+            <idx><h><c>pretext generate</c></h></idx>
+            <idx><h>CLI</h><h><c>generate</c></h></idx>
+            <p>
+                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.  \
             </p>
 
             <p>
-                If your project is not already tracked on GitHub, the CLI will walk you through the steps you need to get set up.
+                Prior to version 1.7 of the CLI, you would need to run <c>pretext generate -t [target]</c> (where <q>[target]</q> is the name of a target, like <q>web</q>) in order to generate assets.  Since then, you can still do this, but it is usually not necessary: whenever you build a target, the CLI will automatically generate any assets that are out of date.  If you want to force the generation of assets, you can use the <c>-g</c> flag when building (e.g., <c>pretext build web -g</c>).  If you really don't want to automatically regenerate assets, you can use the <c>--no-generate</c> flag when building (e.g., <c>pretext build web --no-generate</c>).
+            </p>
+
+            <p>
+                If you are using an older version of the CLI, or if you want to generate assets without building, the following instructions can help you limit what you generate.
+                <ul>
+                    <li>
+                        <p>
+                            You can limit which sorts of assets you generate.  For example, if you edit a few <tag>latex-image</tag> elements, you can just generate these (for the first target in the manifest) with <c>pretext generate latex-image</c>.
+                        </p>
+                        <p>
+                            Valid choices for what types of assets you can generate in this specific way are: <c>webwork</c>, <c>latex-image</c>, <c>sageplot</c>, <c>asymptote</c>, <c>interactive</c>, <c>youtube</c>, <c>codelense</c>, and <c>datafile</c>.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            To be even more precise, if the element you wish to generate has an <attr>xml:id</attr>, you can generate just that element using the <c>-x</c> flag.  For example, if your <tag>latex-image</tag> has id <q>img-circle</q>, generate it with <c>pretext generate -x img-circle</c>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag on <c>pretext generate</c>
+                        </p>
+                    </li>
+                </ul>
             </p>
         </subsection>
 
@@ -387,118 +365,235 @@
             <idx><h>CLI</h><h>project manifest</h></idx>
             <idx><h><c>project.ptx</c></h></idx>
             <p>
-                The project manifest, always named <q>project.ptx</q>, contains information about each <term>target</term> you will build, as well as the names of <term>executables</term> of external tools that might be needed for building targets and generating assets.
+                The project manifest, always named <q>project.ptx</q>, contains information about each <term>target</term> you will build.  Prior to version 2.0 of the CLI, it also contained the names of <term>executables</term> of external tools that might be needed for building targets and generating assets.  (In 2.0 and later, if you need to change the default names or paths to executables, you will use a separate <c>executables.ptx</c> file.)
             </p>
 
             <p>
-                The CLI looks for this file, so you should have only one.  If you have a project that was not created using <c>pretext new</c>, you can get a copy of the file by running <c>pretext init</c>.  You can also get the most recent template version of the manifest by running <c>pretext init --refresh</c>, which will create time-stamped versions of the files for you to copy from to your current manifest.
+                The CLI looks for this file, so you should have only one.  If you have a project that was not created using <c>pretext new</c>, you can get a copy of the file by running <c>pretext init</c>.  You can also get the most recent template version of the manifest by running <c>pretext init --refresh</c>, which will create time-stamped versions of the files (so your files with matching names don't get overwritten) for you to copy from.
             </p>
 
             <p>
-                While we use the .ptx extension, the manifest is not technically a pretext document, since it does not agree with the schema.  However, it must have a specific structure to be used with the CLI.  Below we show a sample manifest (you can also look at the result of <c>pretext new</c> or <c>pretext init</c>).
+                While we use the <c>.ptx</c> extension, the manifest is not technically a pretext document, since it does not agree with the schema.  However, it must have a specific structure to be used with the CLI.  An example of a simple manifest is given in <xref ref="cli-project-manifest-example"/>.  Note this is version 2 manifest; for a comparison of <q>legacy</q> manifests and the current format, see <xref ref="cli-v1vsv2"/>.
             </p>
 
-            <pre>
-            <![CDATA[
-            <?xml version="1.0" encoding="utf-8"?>
-            <project>
-              <targets>
-                <target name="web">
-                  <format>html</format>
-                  <source>source/main.ptx</source>
-                  <publication>publication/publication.ptx</publication>
-                  <output-dir>output/web</output-dir>
-                </target>
-                <target name="print" pdf-method="xelatex">
-                  <format>pdf</format>
-                  <source>source/main.ptx</source>
-                  <publication>publication/publication.ptx</publication>
-                  <output-dir>output/print</output-dir>
-                </target>
-                <target name="print-latex">
-                  <format>latex</format>
-                  <source>source/main.ptx</source>
-                  <publication>publication/publication.ptx</publication>
-                  <output-dir>output/print-latex</output-dir>
-                </target>
-                <target name="subset">
-                  <format>html</format>
-                  <source>source/main.ptx</source>
-                  <publication>publication/publication.ptx</publication>
-                  <output-dir>output/subset</output-dir>
-                  <stringparam key="debug.skip-knowls" value="yes"/>
-                  <xmlid-root>ch_first</xmlid-root>
-                </target>
-              </targets>
-              <executables>
-                <latex>latex</latex>
-                <pdflatex>pdflatex</pdflatex>
-                <xelatex>xelatex</xelatex>
-                <pdfsvg>pdf2svg</pdfsvg>
-                <asy>asy</asy>
-                <sage>sage</sage>
-                <pdfpng>convert</pdfpng>
-                <pdfeps>pdftops</pdfeps>
-                <node>node</node>
-                <liblouis>file2brl</liblouis>
-              </executables>
-            </project>
-            ]]>
-            </pre>
+            <listing xml:id="cli-project-manifest-example">
+                <caption>Example of a very simple project manifest.</caption>
+            <program language="xml">
+                <input>
+                <![CDATA[
+                <?xml version="1.0" encoding="utf-8"?>
+                <project ptx-version="2">
+                <targets>
+                    <target name="web" format="html" />
+                    <target name="rs" format="html" platform="runestone" />
+                    <target name="print" format="pdf" />
+                </targets>
+                </project>
+                ]]>
+                </input>
+            </program>
+            </listing>
 
             <p>
-                <idx><h>CLI</h><h>executables</h></idx>
-                Inside the root <tag>project</tag>, we have <tag>targets</tag> and <tag>executables</tag>.  The latter contains the commands you would call on the terminal to execute the specified command.  You can likely leave this as is, but if a command is not on your PATH, you could put the full path to the executable here.
+                The manifest contains a single <tag>project</tag> element with a <attr>ptx-version</attr> attribute.  This attribute is required and must be set to <q>2</q> for the CLI to recognize the file as a valid manifest.  Additional optional attributes of <tag>project</tag> can also be specified, which we will describe below.  The <tag>project</tag> element has a single child, <tag>targets</tag>, which contains a list of <tag>target</tag> elements.
             </p>
 
             <p>
                 <idx><h>CLI</h><h>targets</h></idx>
-                Each element of <tag>targets</tag> is a <tag>target</tag> that has a <attr>name</attr> attribute.  The name (e.g., web, print) is what you specify when you run build, view, or generate assets for a specific target (so <c>pretext build web</c>, <c>pretext view web</c> or <c>pretext generate -t web</c>).
+                Each <tag>target</tag> must have a <attr>name</attr> attribute.  The name (e.g., web, print) is what you specify when you run <c>build</c>, <c>view</c>, or <c>generate</c> for a specific target (so <c>pretext build web</c>, <c>pretext view web</c> or <c>pretext generate -t web</c>).
             </p>
 
             <p>
                 <idx><h>CLI</h><h>format</h></idx>
-                The children of a <tag>target</tag> start with <tag>format</tag>, which must be one of html, pdf, latex, custom, epub, kindle, or braille (although the last three of these are still experimental, as of 8/10/2022).  If the format is <q>pdf</q>, you can specify the latex engine used to process the .tex file by using the <attr>pdf-method</attr> attribute on <tag>target</tag>.
+                The second required attribute of <tag>target</tag> is <attr>format</attr>, which must be one of html, pdf, latex, custom, epub, kindle, or braille (although the last three of these are still experimental, as of 9/1/2023).
             </p>
 
             <p>
-                Next we have <tag>source</tag> which contains a (preferably) relative path to the main source file you will compile.  Different targets might have different main source files, in case you create a separate version of your project that includes only some chapters, for example.
+                With just these attributes, as with he manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout.  In particular,
+                <ul>
+                    <li><p>The source is <c>source/main.ptx</c>.</p></li>
+                    <li><p>The publication if is <c>publication/publication.ptx</c>.</p></li>
+                    <li><p>Output is stored in <c>output/</c> (with each target in a subfolder identical to the target's <c>name</c>).</p></li>
+                    <li><p>The staging directory to preview deploys is <c>output/stage</c>.</p></li>
+                </ul>
+                Each of these can be modified by adding the appropriate attribute of either the root <tag>project</tag> element or a particular <tag>target</tag> element.
             </p>
 
             <p>
-                <idx><h>publication file</h></idx>
-                <idx><h>CLI</h><h>publication file</h></idx>
-                The <tag>publication</tag> element specifies the path the the publication file for the target.  Different targets can have different publication files.
+                In <xref ref="table-cli-project-attributes"/> and <xref ref="table-cli-target-attributes"/> we give all the attributes you can have on the <tag>project</tag> and <tag>target</tag> elements, respectively.  Some attributes can be specified for both elements.  In such cases, the values will be paths, and the path given in the <tag>target</tag>'s attribute will be relative to the path given in the <tag>project</tag>'s attribute. This can be useful, for example, if all targets have publication files in the same folder, but the files for some targets are different.
             </p>
 
-            <p>
-                <idx><h>output-dir</h></idx>
-                <idx><h>CLI</h><h>output-dir</h></idx>
-                The <tag>output-dir</tag> element gives the path to the folder where the output of <c>pretext build</c> should go.  It is strongly recommended that this be a subfolder of <q>output</q>, which is ignored by git by default.  Again, different targets can, and probably should, have different output folders.
-            </p>
+            <p>All paths described below are given relative to the root of your project (i.e., the location of the <c>project.ptx</c> file).</p>
+
+            <table xml:id="table-cli-project-attributes">
+                <title>Attributes available for the <tag>project</tag> element.</title>
+                <tabular>
+                    <col/><col width="70%" valign="top"/>
+                    <row header="yes">
+                        <cell>Attribute</cell><cell>Description</cell>
+                    </row>
+                    <row>
+                        <cell><attr>ptx-version</attr></cell><cell><p>Required.  Must have value 2.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>source</attr></cell><cell><p>Optional, default: "source".  Path to folder holding main source file, relative to project root.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>publication</attr></cell><cell><p>Optional, default: "publication".  Path to folder holding publication file, relative to project root.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>output-dir</attr></cell><cell><p>Optional, default: "output".  Path to folder in which output files/folders for each target will be created.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>site</attr></cell><cell><p>Optional, default: "site".  Path to folder holding user-provided landing page for deploying multiple targets.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>stage</attr></cell><cell><p>Optional, default: "output/stage".  Path to folder where deployable targets will be collected before they are deployed.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>xsl</attr></cell><cell><p>Optional, default: "xsl".  Path to folder holding custom xsl files.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>asy-method</attr></cell><cell><p>Optional, default: "server".  Valid values: "server" or "local". Used to specify whether asymptote images should be generated using the "server" asymptote version or a "local" asymptote install.</p></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table xml:id="table-cli-target-attributes">
+                <title>Attributes available for the <tag>target</tag> elements.</title>
+                <tabular halign="left" valign="top">
+                    <col/><col width="70%"/>
+                    <row header="yes">
+                        <cell>Attribute</cell><cell>Description</cell>
+                    </row>
+                    <row>
+                        <cell><attr>name</attr></cell><cell><p>Required.  The name you use when executing a CLI command.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>format</attr></cell><cell><p>Required.  Valid values: "html", "pdf", "latex", "epub", "kindle", "braille", "webwork", and "custom".  The format the target will be built into.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>source</attr></cell><cell><p>Optional, default: "main.ptx".  Path to the root source file of the project (relative to the value of the <attr>source</attr> of <tag>project</tag>).</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>publication</attr></cell><cell><p>Optional, default: "publication.ptx".  Path to publication file (relative to the value of <attr>publication</attr> attribute of <tag>project</tag>).</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>output-dir</attr></cell><cell><p>Optional, default: the value of <attr>name</attr>.  Path to folder in which output files/folders will be created (relative to the value of <attr>output-dir</attr> attribute of <tag>project</tag>).</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>output-filename</attr></cell><cell><p>Optional, default: generated by pretext. Only valid for formats that produce a single output file.  Path to output file to be built (relative to the value of <attr>output-dir</attr> of the same <tag>target</tag> element).</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>deploy-dir</attr></cell><cell><p>Optional, default: None.  Path to subdirectory of deployed site where this target will live.  If deploying multiple targets, then this attribute must have a value for it to be deployed.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>xsl</attr></cell><cell><p>Optional, default: None.  Path to custom <init>XSL</init> file (relative to the value of <attr>xsl</attr> attribute of <tag>project</tag>). Required when <attr>format</attr> is "custom".</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>latex-engine</attr></cell><cell><p>Optional, default: "xelatex".  Valid values: "xelatex", "pdflatex", or "latex". Only used on targets that build with latex, to specify what latex command to call in that step.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>braille-mode</attr></cell><cell><p>Optional, default: "emboss".  Valid values: "emboss" or "electronic". Only used when <attr>format</attr> is "braille", to specify the mode for braille.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>platform</attr></cell><cell><p>Optional, default: None.  Valid values: "runestone". Only valid when <attr>format</attr> is "html". Used to specify that the target will be hosted on Runestone.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>compression</attr></cell><cell><p>Optional, default: None.  Valid values: "zip". Only valid when <attr>format</attr> is "html" (but <attr>platform</attr> is not "runestone") or "webwork". Results in output being compressed (as <c>.zip</c> file).</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>asy-method</attr></cell><cell><p>Optional, default: "server".  Valid values: "server" or "local". Overrides the <attr>asy-method</attr> attribute on <tag>project</tag>.</p></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <example xml:id="example-manifest">
+                <title>Example Project Manifest</title>
+
+                <p>
+                    To illustrate how the relative paths work, with attributes on both <tag>project</tag> and <tag>targets</tag> elements, consider the following manifest:
+                </p>
+            <program language="xml">
+                <input>
+                <![CDATA[
+                <?xml version="1.0" encoding="utf-8"?>
+                <project ptx-version="2" source="src" output-dir="out">
+                    <targets>
+                        <target
+                            name="web"
+                            format="html"
+                            output-dir="web" />
+                        <target
+                            name="print"
+                            format="pdf"
+                            source="main-print.ptx"
+                            publication="pub/publication.ptx"/>
+                    </targets>
+                </project>
+                ]]>
+                </input>
+            </program>
+                <p>
+                    Here, the web target, with format html, will build from the root <pretext/> file "src/main.ptx", using the publication file "publication/publication.ptx", and will place the output in the folder "out/web".
+                </p>
+                <p>
+                    The print target, with format pdf, will build from the file "src/main-print.ptx", using the publication file "publication/pub/publication.ptx", and will place the output in the folder "out/print".
+                </p>
+            </example>
 
             <p>
                 <idx><h>stringparam</h></idx>
                 <idx><h>CLI</h><h>stringparam</h></idx>
                 <idx><h>xmlid-root</h></idx>
                 <idx><h>CLI</h><h>xmlid-root</h></idx>
-                The above tags are required for each target.  There are also some optional tags that can further customize the behavior of a particular target.  The <tage>stringparam</tage> tag with attributes <attr>key</attr> and <attr>value</attr> can be used to specify string parameter options (<xref ref="publisher-string-parameters"/>.  The <tag>xmlid-root</tag> element is used to specify the xml:id of a division of a project for building only that subset of the project (useful for quickly testing just one chapter or section).
+                In addition to the attributes available for <tag>target</tag> elements, there is one optional child element, <tag>stringparams</tag>, which can be used to specify string parameter options (see <xref ref="publisher-string-parameters"/>).  These are specified using an attribute for the name of the string parameter, and the value of the attribute is the value of the string parameter.  Multiple string parameters are set using multiple attributes on the single <tag>stringparams</tag> element.
+            </p>
+        </subsection>
+
+        <subsection>
+            <title>Executables</title>
+            <idx><h>CLI</h><h>executables</h></idx>
+            <p>
+                <pretext/> uses several external tools to build and generate assets.  The CLI will automatically find these tools if they are installed in the default location for your operating system.  If you have installed them in a non-standard location, you can specify the path to the executable in a <c>executables.ptx</c> file, at the root of your project.  In <xref ref="listing-v2-executables"/> we give the defaults and formatting of such a file.
             </p>
 
-            <p>
-                <idx><h>custom xsl</h></idx>
-                <idx><h>CLI</h><h><c>custom xsl</c></h></idx>
-                The last optional element we will mention is the <tag>xsl</tag> element.  Here you would provide the path to a custom xsl file that itself calls the standard pretext-provided xsl.  To import the standard xsl file (say pretext-common.xsl) near the top of the custom xsl file, import it using<cd>
-                    <cline>&lt;xsl:import href="./core/pretext-common.xsl"/&gt;</cline>
-                </cd>To see an example of this used to build a revealjs slideshow, try <c>pretext new slideshow</c>.  Note that if you use the <q>custom</q> format, the <tag>xsl</tag> element is required, although it can be used on any format.  This is also how you would use the custom latex styles provided by pretext.
-            </p>
+            <listing xml:id="listing-v2-executables">
+                <caption>Example of version 2 executables file</caption>
+                <program language="xml">
+                  <input>
+                  <![CDATA[
+
+                  <?xml version="1.0" encoding="utf-8"?>
+                  <executables
+                        latex="latex"
+                        pdflatex="pdflatex"
+                        xelatex="xelatex"
+                        pdfsvg="pdf2svg"
+                        asy="asy"
+                        sage="sage"
+                        pdfpng="convert"
+                        pdfeps="pdftops"
+                        node="node"
+                        liblouis="file2brl" />
+
+                  ]]>
+                  </input>
+                </program>
+              </listing>
+
+              <warning>
+                <p>
+                    Prior to version 2 of the CLI, these executables were contained in the <c>project.ptx</c> file.  If you are using a version prior to 2.0, see <xref ref="cli-v1vsv2"/>.
+                </p>
+              </warning>
         </subsection>
 
         <subsection>
             <title>Getting help</title>
             <p>
                 <idx><h>CLI</h><h><c>-v debug</c></h></idx>
-                In addition to checking <c>pretext --help</c>, <c>pretext build --help</c>, <c>pretext generate --help</c>, etc, you have a few options when you run into trouble.  If you are getting errors that don't make sense, even after trying follow the suggestion of the error messages, look at the file <q>cli.log</q>, which includes even debug-level log messages.  You can also run the CLI using this higher level of verbosity using the <c>-v debug</c> option, which must go right after <c>pretext</c> command, before the subcommands (<c>build</c>, <c>generates</c>, etc.).  That is, enter the following for example,
+                In addition to checking <c>pretext --help</c>, <c>pretext build --help</c>, <c>pretext view --help</c>, etc, you have a few options when you run into trouble.  If you are getting errors that don't make sense, even after trying follow the suggestion of the error messages, look at the time-stamped log files inside the <c>logs</c> folder (or the <q>cli.log</q> file if you are using a CLI version prior to 2.0), which includes debug-level log messages.  You can also run the CLI using this higher level of verbosity using the <c>-v debug</c> option, which must go right after <c>pretext</c> command, before the subcommands (<c>build</c>, <c>deploy</c>, etc.).  That is, enter the following for example,
             </p>
 
             <console>
@@ -544,7 +639,7 @@
             <li><p>When you validate your source (see <xref ref="processing-dtd"/> and <xref ref="schema"/>) you will always point to the top-level source file (the one with the <tag>pretext</tag> tags).</p></li>
         </ul></p>
 
-        <p>The book generated by <c>pretext new book</c> has modular source, so is a nice starting point to see how this works.  Other examples are the sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but in no way should be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.
+        <p>The book generated by <c>pretext new demo</c> has modular source, so is a nice starting point to see how this works.  Other examples are the sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but in no way should be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.
         See <xref ref="topic-xinclude" /> for some of the finer points of this topic.</p>
     </section>
 
@@ -596,6 +691,8 @@
             <p>As these files are added to your project, you want to organize them in a specific (but flexible) way.  First, make a directory (folder) for your <em>external</em> files.  You can use any name you like, including <c>external</c>.  Within reason you can place it wherever you want.  Natural choices are as a peer of a <c>source</c> directory that holds your <pretext/> files, or as a subdirectory of your project's top-level directory that may hold all your <pretext/> files.  You can also organize this directory with subdirectories of your own choice, if that helps you stay organized.</p>
 
             <p>Similarly, you need a separate directory for your <em>generated</em> files.  As above, it can be named anything, including <c>generated</c>, and you can place it almost anywhere (close by).  But now, it must have a precise directory structure, described below in <xref ref="subdirectories-of-generated"/>, according to what sort of generation produced the files.</p>
+
+            <p>After you have read this section, see the discussion of generated and external files in <xref ref="version-caveats"/> for some good examples of why this flexibility is useful.</p>
         </subsection>
 
         <subsection>
@@ -674,7 +771,7 @@
 
             <p>As you can tell from the above, different output formats have different expectations for additional files and when producing an output, there may be different expectations for where exactly where to find files.  A good example is the <init>EPUB</init> format, which despite being basically an HTML format, is still very rigorous about names, formats, and locations for image files.  With the above procedures you provide just enough information for <pretext/> to handle the remainder of the complexity for you, without you becoming an expert with the EPUB standard.  So the <c>pretext/pretext</c> script can automatically produce PDF, HTML, EPUB, Kindle, and braille, each in a single step.</p>
 
-            <p>We have skirted one finer point of all this.  How does an author know if a file is external or generated and what are the supported subdirectories of the generated directory?  A <pretext/> <attr>source</attr> attribute will almost always point to a file that belongs in the external directory.  An exception is the <attr>preview</attr> attribute which is used to specify static images to use in outputs like PDF or print to represent more dynamic objects employed in more-capable electronic formats (videos, audio, interactives).  (Please alert us to other exceptions!)  The list below describes the subdirectories of the generated directory.  The files that belong in these directories are all generated by the <c>pretex/pretext</c> script using aspects of your authored source.</p>
+            <p>We have skirted one finer point of all this.  How does an author know if a file is external or generated and what are the supported subdirectories of the generated directory?  A <pretext/> <attr>source</attr> attribute will almost always point to a file that belongs in the external directory.  An exception is the <attr>preview</attr> attribute which is used to specify static images to use in outputs like PDF or print to represent more dynamic objects employed in more-capable electronic formats (videos, audio, interactives).  (Please alert us to other exceptions!)  The list below describes the subdirectories of the generated directory.  The files that belong in these directories are all generated by the <c>pretext/pretext</c> script using aspects of your authored source.</p>
 
             <list xml:id="subdirectories-of-generated">
                 <title>Subdirectories of the Generated Directory</title>

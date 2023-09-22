@@ -1035,17 +1035,18 @@ width: 100%
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="latex-image">
-                    <xsl:text>latex-image</xsl:text>
+                    <xsl:text>latex-image/</xsl:text>
+                    <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
                 </xsl:when>
                 <xsl:when test="sageplot">
-                    <xsl:text>sageplot</xsl:text>
+                    <xsl:text>sageplot/</xsl:text>
+                    <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
                 </xsl:when>
                 <xsl:when test="asymptote">
-                    <xsl:text>asymptote</xsl:text>
+                    <xsl:text>asymptote/</xsl:text>
+                    <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
                 </xsl:when>
             </xsl:choose>
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:choose>
                 <xsl:when test="$b-kindle">
                     <xsl:text>.png</xsl:text>
@@ -1130,6 +1131,18 @@ width: 100%
             </xsl:attribute>
         </xsl:if>
     </xsl:element>
+    <xsl:if test="description">
+        <details class="image-description">
+            <summary>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'description'"/>
+                </xsl:call-template>
+            </summary>
+            <div>
+                <xsl:apply-templates select="description"/>
+            </div>
+        </details>
+    </xsl:if>
 </xsl:template>
 
 <!-- ######### -->

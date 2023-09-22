@@ -1679,6 +1679,32 @@ Book (with parts), "section" at level 3
 <!-- Two abstract named templates in other files -->
 <!-- provide the necessary wrapping, per format  -->
 
+<!-- Utility: Class Names -->
+<!-- This is the class we place on "pre" elements to have them configure    -->
+<!-- as Sage cells.  This is given in the Javascript call in the head, and  -->
+<!-- on the actual instances of Sage cells.  So this provides consistency.  -->
+<!-- Passing an empty string for the language is historical, and could      -->
+<!-- perhaps be unwound to be the default language in the parameter.        -->
+<xsl:template name="sagecell-class-name">
+    <xsl:param name="language-attribute"/>
+    <xsl:param name="b-autoeval"/>
+
+    <xsl:text>sagecell</xsl:text>
+    <xsl:text>-</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$language-attribute=''">
+            <xsl:text>sage</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$language-attribute"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="$b-autoeval">
+        <xsl:text>-</xsl:text>
+        <xsl:text>autoeval</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Type; empty element                      -->
 <!-- Provide an empty cell to scribble in     -->
 <!-- Or break text cells in the Sage notebook -->
@@ -1692,6 +1718,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
+        <xsl:with-param name="b-autoeval" select="@auto-evaluate = 'yes'"/>
         <xsl:with-param name="in" select="''"/>
         <xsl:with-param name="out" select="''" />
     </xsl:apply-templates>
@@ -1746,6 +1773,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
+        <xsl:with-param name="b-autoeval" select="@auto-evaluate = 'yes'"/>
         <xsl:with-param name="in">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="input" />
@@ -1761,12 +1789,32 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Console Session -->
-<!-- An interactive command-line session with a prompt, input and output -->
-<!-- Generic template here, specifics of input and output elsewhere      -->
-<xsl:template match="console">
-    <!-- ignore prompt, and pick it up in trailing input -->
-    <xsl:apply-templates select="input|output" />
+<!-- Console Session, prompt on input line-->
+<!-- An interactive command-line session with pairs of input and output -->
+<!-- Determining the prompt is a bit complicated, but always the same   -->
+<!-- and always a pure textual result.  It becomes a part of the input  -->
+<!-- line, so this modal template has an "input" as its context.        -->
+<!--                                                                    -->
+<!-- Priority:                                                          -->
+<!--   1.  a specific @prompt on the "input" element                    -->
+<!--   2.  an overall session-wide @prompt on the "console" element     -->
+<!--   3.  a default, which can be superseded by a session-wide version -->
+<!-- NB: could add a "docinfo" element for use just before the default? -->
+<xsl:template match="console/input" mode="determine-console-prompt">
+    <xsl:choose>
+        <xsl:when test="@prompt">
+            <xsl:value-of select="@prompt"/>
+        </xsl:when>
+        <!-- parent is guaranteed to be a "console", which can -->
+        <!-- carry a default prompt for the entire session     -->
+        <xsl:when test="parent::console/@prompt">
+            <xsl:value-of select="parent::console/@prompt"/>
+        </xsl:when>
+        <!-- Default is a $-space, could just as well have been >-space -->
+        <xsl:otherwise>
+            <xsl:text>$&#x20;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################# -->
@@ -3277,6 +3325,17 @@ Book (with parts), "section" at level 3
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
+<!--  -->
+<!-- NB: it could be tempting to change this template to stuff     -->
+<!-- these "iframe" files into a dedicated directory.  Even though -->
+<!-- this template ensures some consistency, a pile of links still -->
+<!-- need to change, such as the "script" tag for locations of     -->
+<!-- extra JS as part of making one of these go.                   -->
+<xsl:template match="*" mode="iframe-filename">
+    <xsl:apply-templates select="." mode="visible-id-early" />
+    <xsl:text>-if.html</xsl:text>
+</xsl:template>
+
 <xsl:template match="audio|video|interactive" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id-early" />
     <xsl:text>.html</xsl:text>
@@ -3285,6 +3344,32 @@ Book (with parts), "section" at level 3
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
+
+<xsl:template match="audio|video|interactive" mode="standalone-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="standalone-filename" />
+    </xsl:if>
+    <!-- empty without a baseurl -->
+</xsl:template>
+
+<xsl:template match="audio|video|interactive" mode="embed-iframe-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="iframe-filename" />
+    </xsl:if>
+    <!-- empty without a baseurl -->
+</xsl:template>
+
+<!-- These interactives *are* iFrames, so we don't build a dedicated   -->
+<!-- page to make them into iFrames.  Over in -html we construct a URL -->
+<!-- for each one, embedded in a iFrame construction.  We need to work -->
+<!-- out the right thing to do for an "Embed" link in static formats.  -->
+<!-- For now, an empty result means no link in sttic formats.          -->
+<!-- NB: coordinate with "create-iframe-page" in -html                 -->
+<xsl:template match="audio|video"  mode="embed-iframe-url"/>
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]"  mode="embed-iframe-url"/>
+
 
 <!-- Static URL's -->
 <!-- Predictable and/or stable URLs for versions         -->
@@ -3738,9 +3823,9 @@ Book (with parts), "section" at level 3
 
 <xsl:key name="kbdkey-key" match="kbdkeyinfo" use="@name"/>
 
-<!-- ########### -->
-<!-- Identifiers -->
-<!-- ########### -->
+<!-- ###################### -->
+<!-- Identifiers and Labels -->
+<!-- ###################### -->
 
 <!-- Identifiers are in flux, as of 2023-03-30.  The "internal-id" is  -->
 <!-- an attribute built during the descent of the tree during the      -->
@@ -3789,6 +3874,32 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="local-name(.)" />
             <xsl:text>-</xsl:text>
             <xsl:number from="book|article|letter|memo" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An image described by source code, using languages Asymptote,     -->
+<!-- Sage, or LaTeX, should have its filename determined by properties -->
+<!-- of the associated language-specific element, specifically this is -->
+<!-- the province of the @label attribute.  So this is the preference  -->
+<!-- from approximately 2023-08-12.  Looking to the enclosing (parent) -->
+<!-- "image" is historical, preserving backward-compatibility.         -->
+<xsl:template match="asymptote|sageplot|latex-image" mode="image-source-basename">
+    <xsl:choose>
+        <!-- 2023-08-12: new behavior, prefer a @label (not @xml:id) -->
+        <!-- on the source code element to provide the filename      -->
+        <xsl:when test="@label">
+           <xsl:value-of select="@label"/>
+        </xsl:when>
+        <!-- Next stanza preserves backward-compatibility: previously an       -->
+        <!-- @xml:id value was used to form the filename of an image described -->
+        <!-- by source code (or a default was provided, like image-37).        -->
+        <xsl:when test="parent::image">
+            <xsl:apply-templates select="parent::image" mode="visible-id"/>
+        </xsl:when>
+        <!-- Well-formed PTX source means we never reach the "otherwise" -->
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:  parent of a "<xsl:value-of select="local-name()"/>" element in your PreTeXt source is not an "image".  If you think this is a programming error (not an error in your source), please report me.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10550,6 +10661,26 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//commentary[not(@component)]" />
         <xsl:with-param name="date-string" select="'2023-02-13'" />
         <xsl:with-param name="message" select="'the string parameter &quot;commentary&quot; will be removed on, or after, 2024-02-13 (but not yet).  Any &quot;commentary&quot; elements present should be adjusted to have their visibility controlled by version support, specifically by first being placed in a &quot;component&quot;, and then controlled by entries of a publisher file.  Then &quot;commentary&quot; elements can be hidden just with version support.  To be visible you will need to use version support AND continue to use the string parameter.  On, or after, 2024-02-13, this warning will become a fatal error.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2023-08-08  Simplify, and make more reliable, the URL for website entry of copyright page -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//colophon/website[address]" />
+        <xsl:with-param name="date-string" select="'2023-08-08'" />
+        <xsl:with-param name="message" select="'a &quot;website&quot; element with &quot;address&quot; and &quot;name&quot; children has changed.  Continue to use the &quot;website&quot; element as before, but replace the &quot;address&quot; and &quot;name&quot; children with a single &quot;url&quot; element, which is more flexible and reliable.  We will try to honor your intent, but you may prefer your own adjustments.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2023-08-10  Kill the half-baked "demonstration" element-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//demonstration" />
+        <xsl:with-param name="date-string" select="'2023-08-10'" />
+        <xsl:with-param name="message" select="'the &quot;demonstration&quot; element has been removed with no natural replacement.  The &quot;interactive&quot; element may be sufficiently flexible to do something similar and will produce a standalone page that might serve a similar purpose.'"/>
+    </xsl:call-template>
+    <!-- 2023-08-28  Deprecate console/prompt in favor of attributes-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//console/prompt" />
+        <xsl:with-param name="date-string" select="'2023-08-28'" />
+        <xsl:with-param name="message" select="'the &quot;prompt&quot; element of a &quot;console&quot; has been deprecated.  In its place, an &quot;input&quot; can have a @prompt attribute, or you can place a session-wide (not document-wide) @prompt attribute on the &quot;console&quot; element.  Until then, we will try to honor your intent.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

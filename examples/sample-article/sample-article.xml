@@ -182,7 +182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     The "xml:id" attribute will be used for the filename of the
     HTML output.
     -->
-    <article xml:id="derivatives">
+    <article xml:id="derivatives" label="derivatives">
         <title>Derivatives and Integrals</title>
         <subtitle>An Annotated Discourse</subtitle>
 
@@ -194,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         that a reader will actually see.
         -->
 
-        <frontmatter xml:id="frontmatter">
+        <frontmatter xml:id="frontmatter" label="frontmatter">
             <!--
             Items typically on the main title page of a book,
             but here as an article they are handled more compactly
@@ -239,7 +239,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         source readable.
         -->
 
-        <section>
+        <section label="section-introduction">
             <title>Introduction</title>
 
             <!--
@@ -269,7 +269,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         so keep it wrapped tight.  Lots can go on in a paragraph.
         -->
 
-        <section xml:id="section-fundamental-theorem">
+        <section xml:id="section-fundamental-theorem" label="section-fundamental-theorem">
             <title>The Fundamental Theorem</title>
 
             <p>There is a remarkable theorem:<fn xml:id="footnote-fermat">And fortunately we do not need to try to write it in the margin!</fn></p>
@@ -354,7 +354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         the first non-trivial character.
         -->
 
-        <section permid="Abc" xml:id="section-sage-cells">
+        <section permid="Abc" xml:id="section-sage-cells" label="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
             <!-- A version of the title with no markup at all,     -->
             <!-- math is now a Unicode symbol for an integral sign -->
@@ -575,7 +575,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <output>1/2*x - 1/4*sin(2*x)</output>
                 </sage>
 
-                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex/> output if they are the first piece of content, so we test that here also.  A defensive <c>\leavevmode</c> solves the problem.</p>
+                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc/>.</p>
             </paragraphs>
         </section>
 
@@ -603,7 +603,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         paragraphs and other blocks.)
         -->
 
-        <section xml:id="interesting-corollary">
+        <section xml:id="interesting-corollary" label="section-interesting-corollary">
             <title>An Interesting Corollary</title>
 
             <objectives permid="dEf" xml:id="objectives-structures">
@@ -1250,7 +1250,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </paragraphs>
                 </subsubsection>
 
-                <exercises xml:id="exercises-subsection-solo">
+                <exercises xml:id="exercises-subsection-solo" label="exercises-subsection-solo">
                     <exercise xml:id="exercise-test-number">
                         <statement>
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
@@ -1377,6 +1377,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Sage cells</h><h>linking</h></idx>
 
                 <p>Sage cells share their results on a per-webpage basis, or a per-knowl basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location by placing the code in an external file, which is pure text, freed from any need to format for XML processing.  So, in particular, there is no need to escape ampersands and angle brackets, nor is there employment of the <c>CDATA</c> mechanism.  But the real value is that there is just one version to edit, and any changes will be reflected in both copies.  We demonstrate this in the sample book, since it has the <c>xinclude</c> mechanism in place.  In the chapter on groups, find the section on Sage and then find the discussion of subgroups, and you will find an example of two identical Sage cells produced from one source file.</p>
+
+                <p>You can also specify certain cells to be auto-evaluated, by setting the <attr>auto-evaluate</attr> attribute to <c>yes</c>.  The resulting cell will not have a button for evaluation (so editing it would be pointless).  See the source of this sample article for the two examples below.</p>
+
+                <p>2023-08-17: support just now is for the use case of a small portion of code, not a huge library of helper routines.</p>
+
+                <p>Two cells with the default language <c>sage</c>.</p>
+
+                <sage auto-evaluate="yes">
+                    <input>k = 404</input>
+                </sage>
+
+                <sage>
+                    <input>2*k</input>
+                </sage>
+
+                <p>Two cells with language <c>python</c>.</p>
+
+                <sage language="python" auto-evaluate="yes">
+                    <input>
+                        k = 4112
+                        print("Assigned an initial value to the variable k")
+                    </input>
+                </sage>
+
+                <sage language="python">
+                    <input>
+                        k = 2*k
+                        print(k)
+                    </input>
+                </sage>
+
             </subsection>
 
             <subsection>
@@ -1563,7 +1594,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         in HTML, which are similar, but not identical.
         -->
 
-        <section permid="Bcd">
+        <section permid="Bcd" label="section-facts-figures">
             <title>Some Facts and Figures</title>
             <idx>footnotes</idx>
 
@@ -1612,7 +1643,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
                 <image width="50%" source="images/cubic-function.png">
-                    <description>A third degree polynomial with a local max and a local min, along with its second degree derivative plotted on the same axes</description>
+                    <shortdescription>
+                        a third degree polynomial with a local max and a local min;
+                        its derivative is plotted on the same axes
+                    </shortdescription>
                 </image>
             </figure>
 
@@ -1678,6 +1712,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         on the presence of ampersands, or not, respectively.
         -->
 
+        <!-- There is intentionally no @xml:id nor @label on this division, -->
+        <!-- to include testing of the out-of-the-box experience            -->
         <section>
             <title>Some Advanced Ideas</title>
 
@@ -1761,7 +1797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section>
+        <section label="section-mathematics">
             <title>Mathematics</title>
 
             <introduction>
@@ -2100,7 +2136,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="text-in-paragraphs">
+        <section xml:id="text-in-paragraphs" label="section-text-paragraphs">
             <title>Entering Text in Paragraphs, Titles, Captions</title>
             <shorttitle>Text in Paragraphs</shorttitle>
             <!-- a "plaintitle" has no markup, meant for browser tabs, etc -->
@@ -2759,7 +2795,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="graphics">
+        <section xml:id="graphics" label="section-graphics">
             <title>Graphics</title>
 
             <introduction>
@@ -2810,7 +2846,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
-                        <description>A pile of electronic components wired together</description>
+                        <shortdescription>
+                            a pile of electronic components wired together
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
@@ -2985,7 +3023,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-pgfplots-demo">
                     <caption>Sample pgfplots plot</caption>
                     <image xml:id="pgfplots-demo">
-                        <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
+                        <shortdescription>
+                            a Cartesian plane with a function graph, a parametric curve, and some points
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
@@ -3035,7 +3075,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-pgfplots-data-demo">
                     <caption>External data in a pgfplots plot</caption>
                     <image xml:id="pgfplots-data-demo">
-                        <description>A pgfplots example, with external data plotted.</description>
+                        <shortdescription>
+                            a Cartesian plot of electric potential over time;
+                        </shortdescription>
                         <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[
@@ -3049,6 +3091,68 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \addplot[blue] table {external/data/hodgkin-huxley-data.dat};
                         \end{axis}
                         \end{tikzpicture}]]>
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>
+                    A Cartesian plot might benefit from having a <tag>description</tag> with a
+                    <tag>tabular</tag> that lays bare the data used to to plot points.
+                </p>
+
+                <figure xml:id="figure-pgfplots-data-description">
+                    <caption>Full description with tabular</caption>
+                    <image label="pgfplots-data-description" width="70%">
+                        <shortdescription>
+                            a plot of some data points
+                        </shortdescription>
+                        <description>
+                            <p>
+                                A Cartesian graph plotting the following data.
+                            </p>
+                            <tabular row-headers="yes">
+                                <col right="minor"/>
+                                <col/><col/><col/>
+                                <col/><col/><col/>
+                                <col/><col/><col/>
+                                <row bottom="minor">
+                                    <cell><m>x</m></cell>
+                                    <cell><m>1</m></cell>
+                                    <cell><m>2</m></cell>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>4</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>6</m></cell>
+                                    <cell><m>7</m></cell>
+                                    <cell><m>8</m></cell>
+                                    <cell><m>9</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>y</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>8</m></cell>
+                                    <cell><m>9</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>5</m></cell>
+                                    <cell><m>8</m></cell>
+                                    <cell><m>2</m></cell>
+                                    <cell><m>3</m></cell>
+                                </row>
+                            </tabular>
+                        </description>
+                        <latex-image>
+                            \begin{tikzpicture}
+                                \begin{axis}[
+                                        xmin=0,
+                                        xmax=10,
+                                        ymin=-0,ymax=10,
+                                        xlabel={\(x\)},
+                                        ylabel={\(y\)},
+                                    ]
+                                    \addplot[only marks] coordinates {(1,5) (2,3) (3,8) (4,9) (5,5) (6,5) (7,8) (8,2) (9,3)};
+                                \end{axis}
+                            \end{tikzpicture}
                         </latex-image>
                     </image>
                 </figure>
@@ -3082,7 +3186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-asymptote-levers">
                     <caption>Asymptote Lever Demonstration</caption>
                     <image xml:id="asymptote-lever">
-                        <description>Moments on a lever</description>
+                        <shortdescription>moments on a lever</shortdescription>
                         <asymptote>
                         size(200,0);
 
@@ -3290,7 +3394,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
                     <image xml:id="sageplot-parabola" width="50%">
-                        <description>A standard parabola on the interval [-2,4]</description>
+                        <shortdescription>a standard parabola on the interval [-2,4]</shortdescription>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
@@ -3318,7 +3422,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-sage-exosagevec1">
                     <caption>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m></caption>
                     <image width="25%" xml:id="sageplot-exosagevec1">
-                        <description>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m>sont tracés tel que demandé, respectivement en rouge et en bleu.</description>
+                        <description>
+                            <p>
+                                Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m>sont tracés tel que demandé,
+                                respectivement en rouge et en bleu.
+                            </p>
+                        </description>
                         <sageplot>
                         plot(vector([-1,2]),color='red')+plot(vector([2,1]),color='blue')
                         </sageplot>
@@ -3563,7 +3672,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>An Asymptote image, with zero layout control, so 100% width.</p>
 
                     <image xml:id="asymptote-lever-solo">
-                        <description>Moments on a lever</description>
+                        <shortdescription>moments on a lever</shortdescription>
                         <asymptote>
                         // The next comment was seen in the wild, and the angle brackets
                         // are non-ASCII Unicode characters, which was disrupting communication
@@ -3600,7 +3709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>A Sage example, pushed to the right margin.</p>
 
                     <image xml:id="sageplot-parabola-solo" width="30%" margins="70% 0%">
-                        <description>A standard parabola on the interval [-2,4]</description>
+                        <shortdescription>a standard parabola on the interval [-2,4]</shortdescription>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
@@ -3929,64 +4038,134 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <subsection>
                 <title>Accessibility</title>
-                <p>An <tag>image</tag> should either have a non-empty description or set <attr>decorative</attr> to the value <c>yes</c>. Some of the following images comply, and some do not.  There's not really anything to see here visually, this is testing notifications made elsewhere.</p>
+                <p>
+                    An <tag>image</tag> should either have a non-empty <tag>description</tag>,
+                    a non-empty <tag>shortdescription</tag>, or set <attr>decorative</attr> to the
+                    value <c>yes</c>. Some of the following images comply, and some do not.  There's
+                    not really anything to see here visually, this is testing notifications made
+                    elsewhere.
+                </p>
 
                 <sbsgroup width="20%">
                     <sidebyside>
-                        <p>No description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, no shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png"/>
-                        <p>No description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, no shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes"/>
                     </sidebyside>
                     <sidebyside>
-                        <p>Empty description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
-                            <description/>
+                            <shortdescription/>
                         </image>
-                        <p>Empty description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
-                            <description/>
+                            <shortdescription/>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Too long description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
-                            <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                         </image>
-                        <p>Too long description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
-                            <description>This description is too long because when alt text is longer than 125 characters, some scren readers will cut off reading the alt text after the 125th character.</description>
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Good description, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png">
-                            <description>A white square outlined in blue covered by a black X</description>
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                         </image>
-                        <p>Good description, <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
                         <image source="images/cross-square.png" decorative="yes">
-                            <description>A white square outlined in blue covered by a black X</description>
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, no shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, no shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <shortdescription/>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <shortdescription/>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                    </sidebyside>
+                    <sidebyside>
+                        <p>Description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png">
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
+                        </image>
+                        <p>Description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
+                        <image source="images/cross-square.png" decorative="yes">
+                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
+                            <description>
+                                <p>
+                                    A white square outlined in blue covered by a black <q>X</q>.
+                                </p>
+                            </description>
                         </image>
                     </sidebyside>
                 </sbsgroup>
             </subsection>
         </section>
 
-        <section>
-            <title>Demonstrations</title>
-
-            <demonstration>
-                <title>A Simple Demonstration</title>
-
-                <p>Hey!</p>
-
-                <sage type="practice" />
-
-            </demonstration>
-
-        </section>
-
-        <section>
+        <section label="section-further-reading">
             <title>Further Reading</title>
 
             <subsection>
@@ -4292,7 +4471,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="lists">
+        <section xml:id="lists" label="section-lists">
             <title>List Calisthenics</title>
 
             <subsection>
@@ -5084,8 +5263,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </references>
         </section>
 
-        <section xml:id="table-calisthenics">
+        <section xml:id="table-calisthenics" label="section-table-calisthenics">
             <title>Table Calisthenics</title>
+
+            <sage>
+                <input>
+                c = 832
+                c
+                </input>
+            </sage>
+
+            <p>That was a Sage cell just now, which has nothing to do with tables.  But we needed someplace to test placement right after a division heading.  Carry on.</p>
 
             <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  Footnotes inside cells are tested here.</p>
 
@@ -7196,7 +7384,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>The <c>longtable</c> package allows for headers and footers indicating continued tables.  A possible enhancement is to support this feature in the case of a long table.</p>
         </section>
 
-        <section xml:id="section-interactive-authored">
+        <section xml:id="section-interactive-authored" label="section-interactive-authored">
             <title>Interactive Elements, Authored in Javascript</title>
             <!-- short for table of contents, etc -->
             <shorttitle>Interactive Elements, Authored</shorttitle>
@@ -7904,7 +8092,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-server">
+        <section xml:id="section-interactive-server" label="section-interactive-server">
             <title>Interactive Elements, Server</title>
             <idx><h>interactive elements</h><h>server</h></idx>
             <idx><h>embedded interactive elements</h><h>server</h></idx>
@@ -7927,12 +8115,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
 
-                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element.</p>
+                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element. If the width of the original material is anything other than 800 pixels, you should add <attr>material-width</attr> with the actual material width (units are pixels).</p>
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
-                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5"/>
+                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5" reset-icon="yes"/>
                 </figure>
+
+                <p>There are some optional control elements that Geogebra provides, such as the presence of the toolbar and the reset button. These can be controlled by adding the following additional attributes to the <c>interactive</c>.
+                <ul>
+                    <li><p><c>toolbar="yes"</c>: add the Geogebra toolbar above the material</p></li>
+                    <li><p><c>algebra-input="yes"</c>: add an entry box below the material to add graphical objects using algebra formulas or Geogebra graphical commands</p></li>
+                    <li><p><c>reset-icon="yes"</c>: enable the reset icon</p></li>
+                    <li><p><c>shift-drag-zoom="yes"</c>: enable ability to drag and zoom the viewing context</p></li>
+                </ul>
+                </p>
 
                 <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
             </subsection>
@@ -8002,7 +8199,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-exercises">
+        <section xml:id="section-interactive-exercises" label="section-interactive-exercises">
             <title>Interactive Exercises</title>
 
             <introduction>
@@ -8281,7 +8478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-code">
+        <section xml:id="section-interactive-code" label="section-interactive-code">
             <title>Interactive Coding</title>
 
             <introduction>
@@ -8348,7 +8545,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-audio">
+        <section xml:id="section-audio" label="section-audio">
             <title>Audio</title>
 
             <p>2019-05-24: this is preliminary, and mostly based on the code for <tag>video</tag> so read the next section and mimic the style from there.  But use an <tag>audio</tag> element and have the <attr>source</attr> attribute point to an OGG, MP3, or WAV file.  Plus, an <attr>aspect</attr> attribute will be ignored.</p>
@@ -8374,7 +8571,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </sidebyside>
         </section>
 
-        <section xml:id="section-video">
+        <section xml:id="section-video" label="section-video">
             <title>Video</title>
 
             <introduction>
@@ -8390,7 +8587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
+                    <video label="ups-promo-frame-one" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg" />
                 </figure>
 
                 <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/PreTeXtBook/pretext/issues/853" visual="github.com/PreTeXtBook/pretext/issues/853">Issue #853</url>.)
@@ -8400,14 +8597,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-preview.jpg" />
+                    <video label="ups-promo-preview" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-preview.jpg" />
                 </figure>
 
                 <p>If you find the posters provided automatically for a video to be distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
-                    <video source="video/ups-visitor-guide-360" width="80%" preview="generic" />
+                    <video label="ups-promo-generic" source="video/ups-visitor-guide-360" width="80%" preview="generic" />
                 </figure>
 
                 <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are several examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations, and has asymmetric margins.</p>
@@ -8416,32 +8613,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>Big Buck Bunny from  <url href="http://camendesign.com/code/video_for_everybody/test.htm" visual="camendesign.com/code/video_for_everybody/test.htm"><q>Video for Everybody</q> Test Page</url></caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-frame-one" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-margins" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-ogg" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, MP4 format</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-mp4" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, WebM format</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-webm" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <figure>
                     <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
+                    <video label="big-buck-bunny-best-format" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -8531,7 +8728,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                     <figure>
                         <caption>YouTube playlist ID specified in a <q>named</q> playlist</caption>
-                        <video youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" />
+                        <video label="zeppelin-playlist-named" youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" />
                         <!-- https://www.youtube.com/embed?listType=playlist&list=PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_ -->
                     </figure>
                 </sidebyside>
@@ -8624,6 +8821,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Now with an author-supplied poster.</p>
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki" visual="vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
+                    <!-- NB: we intentionally do not put an xml:id or label attribute on  -->
+                    <!-- this video to test its default filename, which was once "video-35" -->
                     <video vimeo="27246366" width="80%" preview="preview/move.png"/>
                 </figure>
             </subsection>
@@ -8634,14 +8833,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
                     <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
-                    <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                    <video label="big-buck-bunny-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                         <track kind="subtitles" listing="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     </video>
                 </figure>
 
                 <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
+                <video label="big-buck-bunny-two-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
                     <track kind="subtitles" listing="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
                     <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
                 </video>
@@ -8660,7 +8859,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         A "preview" XSL transform to HTML could be especially useful.
         -->
 
-        <section xml:id="section-cross-referencing">
+        <section xml:id="section-cross-referencing" label="section-cross-referencing">
             <title>Cross-Referencing</title>
 
             <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
@@ -8794,7 +8993,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Foo <dataurl source="data/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
         </section>
 
-        <section xml:id="section-internationalization">
+        <section xml:id="section-internationalization" label="section-internationalization">
             <title>Internationalization</title>
             <idx>internationalization</idx>
 
@@ -9017,7 +9216,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>The <c>console</c> tag is also implemented with <c>fancyvrb</c>, with adjustments for the input lines.  It will not look like it, but these are 8 such inputs, with similar results to above, but now bolded.</p>
 
-                <console margins="0%">
+                <console margins="0%" prompt="">
                     <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
                     <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
                     <input>&#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF;</input>
@@ -9064,7 +9263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of the more advanced sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  The more advanced sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
 
-        <section>
+        <section label="section-pre-formatted">
             <title>Pre-Formatted Text</title>
 
             <p>In Sage, if you wanted to build a matrix<idx>matrix</idx>, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
@@ -9132,7 +9331,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>We use a Unicode right arrow (Unicode Character 'RIGHTWARDS ARROW', U+2192) to sometimes indicate the truncation of long lines in a text file.  It is available in our usual monospace font for <latex/>/PDF, but we include a use here in order to make certain that is always the case.  Here: <c>&#x2192;</c>.</p>
         </section>
 
-        <section xml:id="section-programs">
+        <section xml:id="section-programs" label="section-programs">
             <title>Program Listings (with <c>code</c> in the title)</title>
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
@@ -9227,6 +9426,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </program>
             </listing>
 
+            <p>A <tag>program</tag> may include line numbers.</p>
+
+            <listing xml:id="program-line-numbers">
+                <caption>A static Java program with line numbers</caption>
+                <program interactive='no' language="java" line-numbers="yes">
+                    <input>
+                    import javax.swing.JFrame;  //Importing class JFrame
+                    import javax.swing.JLabel;  //Importing class JLabel
+                    public class HelloWorld {
+                        public static void main(String[] args) {
+                            JFrame frame = new JFrame();           //Creating frame
+                            frame.setTitle("Hi!");                 //Setting title frame
+                            frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                            frame.pack();                          //Setting size to smallest
+                            frame.setLocationRelativeTo(null);     //Centering frame
+                            frame.setVisible(true);                //Showing frame
+                        }
+                    }
+                    </input>
+                </program>
+            </listing>
+
+            <p>A <tag>program</tag> may also include highlighted lines.</p>
+
+            <listing xml:id="program-highlight-lines">
+                <caption>A static Java program with line numbers</caption>
+                <program interactive='no' language="java" line-numbers="yes" highlight-lines="1,3-5">
+                    <input>
+                    import javax.swing.JFrame;  //Importing class JFrame
+                    import javax.swing.JLabel;  //Importing class JLabel
+                    public class HelloWorld {
+                        public static void main(String[] args) {
+                            JFrame frame = new JFrame();           //Creating frame
+                            frame.setTitle("Hi!");                 //Setting title frame
+                            frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                            frame.pack();                          //Setting size to smallest
+                            frame.setLocationRelativeTo(null);     //Centering frame
+                            frame.setVisible(true);                //Showing frame
+                        }
+                    }
+                    </input>
+                </program>
+            </listing>
+
             <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof may be included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
 
             <algorithm xml:id="algorithm-sieve-eratosthenes">
@@ -9271,30 +9514,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <listing xml:id="console-raspberry-pi">
                 <caption>Console Session: <c>int</c> and <c>float</c></caption>
-                <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <console prompt="pi@raspberrypi ~/progs/chap02 $ ">
                     <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input>./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input />
                 </console>
             </listing>
 
             <p>Here is the plain version, some layout control.  We simply place a small margin on the left (at 4% width).</p>
 
-            <console margins="4%">
-                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+            <console prompt="pi@raspberrypi ~/progs/chap02 $ " margins="4%">
                 <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                 <input>./intAndFloat</input>
                 <output>
                 The integer is 19088743 and the float is 19088.742188
                 </output>
-                <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                 <input />
             </console>
 
@@ -9302,18 +9539,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <listing xml:id="console-raspberry-pi-multi">
                 <caption>Console Session: <c>int</c> and <c>float</c> (multi-line input)</caption>
-                <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                <console prompt="pi@raspberrypi ~/progs/chap02 $ ">
                     <input>
                     gcc -Wall
                         -o intAndFloat intAndFloat.c
                     </input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input>./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input />
                 </console>
             </listing>
@@ -9325,36 +9559,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing>
                 <caption>Console Session: problematic <latex /> characters</caption>
                 <console>
-                    <prompt>A backslash \ here  </prompt>
-                    <input>A backslash \ here</input>
+                    <input prompt="A backslash \ here  ">A backslash \ here</input>
                     <output>A backslash \ here</output>
 
-                    <prompt>A begin group { here  </prompt>
-                    <input>A begin group { here</input>
+                    <input prompt="A begin group { here  ">A begin group { here</input>
                     <output>A begin group { here</output>
 
-                    <prompt>An end group { here  </prompt>
-                    <input>An end group } here</input>
+                    <input prompt="An end group { here  ">An end group } here</input>
                     <output>An end group } here</output>
 
-                    <prompt>An open escape sequence (* here  </prompt>
-                    <input>An open escape sequence (* here</input>
+                    <input prompt="An open escape sequence (* here  ">An open escape sequence (* here</input>
                     <output>An open escape sequence (* here</output>
 
-                    <prompt>An end escape sequence *) here  </prompt>
-                    <input>An end escape sequence *) here</input>
+                    <input prompt="An end escape sequence *) here  ">An end escape sequence *) here</input>
                     <output>An end escape sequence *) here</output>
 
-                    <prompt>Some quotation marks ` ' " here  </prompt>
-                    <input>Some quotation marks ` ' " here</input>
+                    <input prompt="Some quotation marks ` ' &quot; here  ">Some quotation marks ` ' " here</input>
                     <output>Some quotation marks ` ' " here</output>
 
-                    <prompt>The rest &amp; % $ # _ ~ ^ of LaTeX  </prompt>
-                    <input>The rest &amp; % $ # _ ~ ^ of LaTeX</input>
+                    <input prompt="The rest &amp; % $ # _ ~ ^ of LaTeX  ">The rest &amp; % $ # _ ~ ^ of LaTeX</input>
                     <output>The rest &amp; % $ # _ ~ ^ of LaTeX</output>
 
-                    <prompt>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß  </prompt>
-                    <input>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</input>
+                    <input prompt="Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß  ">Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</input>
                     <output>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</output>
                 </console>
             </listing>
@@ -9475,7 +9701,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </listing>
         </section>
 
-        <section>
+        <section label="section-units-measure">
             <title>Units of Measure</title>
 
             <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by <pretext/> in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
@@ -9494,7 +9720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="section-side-by-side">
+        <section xml:id="section-side-by-side" label="section-side-by-side">
             <title>Side-By-Side Panels</title>
 
             <introduction>
@@ -9530,7 +9756,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <figure xml:id="fig-sidebyside-subfigure">
                             <caption></caption>
                             <image source="images/cross-square.png">
-                                <description>Trefoil image</description>
+                                <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                             </image>
                         </figure>
                         <figure>
@@ -10902,7 +11128,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section>
+        <section label="section-side-by-side-gallery">
             <title>Side-by-Side Gallery</title>
 
             <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" text="type-global" /> for that). The layout is identical for each <c>sidebyside</c>, 5% margins, panel widths of 40% and 45%, leaving 5% for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
@@ -10955,15 +11181,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </input>
                     </program>
                     <console>
-                        <prompt>pi@rpi ~$ </prompt>
-                        <input>gcc -o intAndFloat intAndFloat.c</input>
-                        <prompt>pi@rpi ~$ </prompt>
-                        <input>./intAndFloat</input>
+                        <input prompt="pi@rpi ~$ ">gcc -o intAndFloat intAndFloat.c</input>
+                        <input prompt="pi@rpi ~$ ">./intAndFloat</input>
                         <output>
                         19088743 (integer) and 19088.742188 (float)
                         </output>
-                        <prompt>pi@rpi ~$ </prompt>
-                        <input />
+                        <input prompt="pi@rpi ~$ "/>
                     </console>
                 </sidebyside>
             </figure>
@@ -11110,7 +11333,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
-                <video source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
+                <video label="ups-promo-side-by-side" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
                 <!-- Airborne Toxic Event -->
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
@@ -11118,7 +11341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global" />).  For other examples see <xref ref="section-video" text="type-global"/> and <xref ref="atomic-video" text="type-global"/>.</p>
         </section>
 
-        <section xml:id="open-problems">
+        <section xml:id="open-problems" label="section-open-problems">
             <title>Open Problems</title>
 
             <p>Like for mathematical research.  Experimental as of 2023-07-06.</p>
@@ -11131,7 +11354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="poetry">
+        <section xml:id="poetry" label="section-poetry">
             <title>Poetry</title>
 
             <p>There is support for poems via the <c>poem</c><idx>poem</idx> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  There are many very flexible options for horizontal alignment and indentation.  Further extensive examples, constructed by Jahrme Risner, are available in the example Humanities document.</p>
@@ -11196,7 +11419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="atomic-items">
+        <section xml:id="atomic-items" label="section-atomic-items">
             <title>Atomic Objects</title>
 
             <introduction>
@@ -11293,6 +11516,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </li>
                     </ol>
                 </p>
+
+                <p>A <c>rotation="n"</c> attribute applied to a bare image will rotate the image by n<degree/>. The vertical space adjusts to accomodate the rotated image in the latex version but not in the html version.</p>
+                <figure>
+                    <caption>Rotated Images</caption>
+
+                    <sidebyside width="33%" valign="bottom">
+                        <figure>
+                            <caption><c>rotate="180"</c></caption>
+                            <image source="images/Yellow_Duck.png" rotate="180"/>
+                        </figure>
+                        <figure>
+                            <caption><c>rotate="15"</c></caption>
+                            <image source="images/Yellow_Duck.png" rotate="15"/></figure>
+                    </sidebyside>
+                </figure>
+
+                <p>For pdf output destined for print, <ie/> when the publication file entry <c>latex/@print="yes"</c>, a <c>@landscape="yes"</c> attribute applied to a <tag>figure</tag>, <tag>table</tag>, <tag>list</tag> or <tag>listing</tag> will cause the object to be rotated 90<degree/> and presented on its own page.  Placement of the float is determined by <latex/> and multipage objects are not supported.</p>
+
+                <figure xml:id="propulsion_system2" landscape="yes">
+                    <caption>This landscape figure will be rotated so the long edge is vertical, and will appear on its own page in <em>print PDF</em> output.</caption>
+                    <image source="images/propulsion_system"/>
+                </figure>
+                <figure xml:id="rotated-fig-with-sbs" landscape="yes">
+                    <caption>Wide figure containing a sidebyside containing a rotated image.  This will be rotated and appear on its own page in <term>print PDF</term> output.</caption>
+                    <sidebyside widths="25% 70%" margins="0%" valign="bottom" landscape="true">
+                        <figure>
+                            <caption>Quack</caption>
+                            <image rotate="10" source="images/Yellow_Duck.png"/>
+                        </figure>
+                        <figure>
+                            <caption>Propulsion System</caption>
+                            <image source="images/propulsion_system"/>
+                        </figure>
+                    </sidebyside>
+                </figure>
 
                 <exercise>
                     <task>
@@ -11486,15 +11744,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>And a <tag>console</tag> element, also with no layout control.</p>
 
                 <console>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>gcc -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>./intAndFloat</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -o intAndFloat intAndFloat.c</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input />
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                 </console>
 
                 <p>Now similar examples, but with layout control: margins and width.</p>
@@ -11531,15 +11786,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A longer <tag>console</tag>, with margins so significant the appearance is ill-advised.</p>
 
                 <console margins="50% 15%">
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>./intAndFloat</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                     <output>
                     The integer is 19088743 and the float is 19088.742188
                     </output>
-                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input />
+                    <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                 </console>
 
                 <p>Two <tag>listing</tag>, with <tag>caption</tag>, and no layout control.</p>
@@ -11563,15 +11815,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>A console session on a Raspberry Pi</caption>
                         <console>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>./intAndFloat</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input />
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                 </listing>
 
@@ -11596,15 +11845,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>A console session on a Raspberry Pi</caption>
                         <console margins="10% 10%">
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>./intAndFloat</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input />
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                 </listing>
 
@@ -11624,15 +11870,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </input>
                     </program>
                     <console>
-                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                        <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                        <input>./intAndFloat</input>
+                        <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                        <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                         <output>
                         The integer is 19088743 and the float is 19088.742188
                         </output>
-                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                        <input />
+                        <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                     </console>
                     <program language="r">
                         <input>
@@ -11665,15 +11908,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </input>
                         </program>
                         <console>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input>./intAndFloat</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                            <input />
+                            <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                         <program language="r">
                             <input>
@@ -11712,14 +11952,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <listing>
                         <caption>Raspberry Pi</caption>
                         <console>
-                            <prompt>$ </prompt>
                             <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                            <prompt>$ </prompt>
                             <input>./intAndFloat</input>
                             <output>
                             The integer is 19088743 and the float is 19088.742188
                             </output>
-                            <prompt>$ </prompt>
                             <input />
                         </console>
                     </listing>
@@ -11749,14 +11986,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <listing>
                             <caption>Raspberry Pi</caption>
                             <console>
-                                <prompt>$ </prompt>
                                 <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
-                                <prompt>$ </prompt>
                                 <input>./intAndFloat</input>
                                 <output>
                                 The integer is 19088743 and the float is 19088.742188
                                 </output>
-                                <prompt>$ </prompt>
                                 <input />
                             </console>
                         </listing>
@@ -12435,7 +12669,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="advanced-numbering">
+        <section xml:id="advanced-numbering" label="section-advanced-numbering">
             <title>Advanced Numbering</title>
 
             <introduction>
@@ -12674,7 +12908,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </solutions>
         </section>
 
-        <section>
+        <section label="section-customizations">
             <title>Customizations</title>
 
             <subsection xml:id="rename-facility">
@@ -12743,7 +12977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
-        <section xml:id="section-myopenmath">
+        <section xml:id="section-myopenmath" label="section-myopenmath">
             <title>MyOpenMath Interactive Problems</title>
 
             <p>This is a <em>test</em> with two inline exercises containing MyOpenMath (MOM) problems.  None of this is in the schema, and all of it is subject to change.</p>
@@ -12766,7 +13000,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </section>
 
 
-        <section xml:id="ancillaries">
+        <section xml:id="ancillaries" label="section-ancillaries">
             <title>Ancillaries</title>
 
             <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set the string parameter <c>commentary</c> to the value <c>yes</c>. Other distinctions are:<ul>
@@ -12794,7 +13028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Mauris fringilla nulla arcu, sagittis ultrices quam malesuada eleifend. Proin tristique elit eu bibendum tincidunt. Donec commodo lorem in magna egestas, vitae malesuada velit ornare. Pellentesque finibus neque in venenatis tristique. In id blandit est, in euismod urna. Donec commodo sagittis ligula, in venenatis nulla porttitor in. Donec nec tortor sit amet felis posuere ultricies. Suspendisse euismod quis ex eu placerat.</p>
         </section>
 
-        <section xml:id="worksheets">
+        <section xml:id="worksheets" label="section-worksheets">
             <title>Worksheets</title>
 
             <introduction>
@@ -12805,7 +13039,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>If you make PDF output you will notice an increased amount of control over layout.  Also, if the publication file elects <latex/> draft mode, then there will be visual indicators of prescribed whitespace.</p>
             </introduction>
 
-            <worksheet>
+            <worksheet label="worksheet-geometric-prelude">
               <title>A Geometric Prelude</title>
               <!-- <author>Dave Rosoff</author> -->
               <objectives xml:id="objectives">
@@ -12935,7 +13169,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </conclusion>
             </worksheet>
 
-            <worksheet top="3cm" bottom="100pt">
+            <worksheet label="worksheet-networks" top="3cm" bottom="100pt">
                 <title>Networks Worksheet</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
@@ -13161,7 +13395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </page>
             </worksheet>
 
-            <worksheet margin="1cm">
+            <worksheet label="worksheet-testing" margin="1cm">
                 <introduction>
                     <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
@@ -13248,7 +13482,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </page>
             </worksheet>
 
-            <worksheet courseid="MAT-150" series="Activity" seriescode="13">
+            <worksheet label="worksheet-dot-products" courseid="MAT-150" series="Activity" seriescode="13">
               <title>Dot products and projection</title>
                 <page>
                     <sidebyside width="45%" margins="0%">
@@ -13282,7 +13516,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <statement>
                                 <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
                                 <image width="100%" source="images/projection1.png">
-                                    <description>two vectors...</description>
+                                    <shortdescription>two vectors in a Cartesian plane</shortdescription>
                                 </image>
                             </statement>
                         </exercise>
@@ -13342,7 +13576,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </worksheet>
         </section>
 
-        <section xml:id="exercises-single">
+        <section xml:id="exercises-single" label="section-exercises-single">
             <title>Exercises, One Subsection</title>
 
             <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global" />.</p>
@@ -13450,7 +13684,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <exercise>
                         <title>Challenging Two</title>
                         <statement>
-                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh.</p>
+                            <p>Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
                         </statement>
                     </exercise>
 
@@ -13497,7 +13732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </references>
         </section>
 
-        <exercises>
+        <exercises label="exercises-structured">
             <title>Exercise Section, Structured</title>
 
             <introduction>
@@ -13576,7 +13811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subexercises>
         </exercises>
 
-        <section xml:id="exercises-multiple">
+        <section xml:id="exercises-multiple" label="section-exercises-multiple">
             <title>Exercises, Multiple Subsections</title>
 
             <introduction>
@@ -13666,7 +13901,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <exercise>
                         <title>Challenging Two</title>
                         <statement>
-                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh.</p>
+                            <p>Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
                         </statement>
                     </exercise>
 
@@ -13717,7 +13953,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </references>
         </section>
 
-        <exercises xml:id="exercises">
+        <exercises xml:id="exercises" label="exercises-top-level">
             <title>Exercises, Top-Level</title>
 
             <introduction>
@@ -13766,7 +14002,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <title>Challenging Two</title>
                     <statement>
-                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh.</p>
+                        <p>Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
                     </statement>
                 </exercise>
 
@@ -13852,10 +14089,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercises>
 
 
-        <backmatter xml:id="backmatter">
+        <backmatter xml:id="backmatter" label="backmatter">
             <title>Reference</title>
 
-            <appendix>
+            <appendix  label="appendix-notation">
                 <title>Notation</title>
                 <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
 
@@ -13868,7 +14105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
             </appendix>
 
-            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
+            <solutions xml:id="solutions-backmatter" label="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
                 <title>Solutions to Selected Exercises</title>
                 <idx><h>solutions</h><h>as an appendix</h></idx>
 
@@ -13883,7 +14120,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </conclusion>
             </solutions>
 
-            <solutions inline="hint solution answer" divisional="hint solution" scope="exercises-section-multiple">
+            <solutions label="solutions-single-exercises" inline="hint solution answer" divisional="hint solution" scope="exercises-section-multiple">
                 <title>Solutions to a Single Exercises Division</title>
                 <idx><h>solutions</h><h>for one group of exercises</h></idx>
 
@@ -13894,7 +14131,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- content will happen here automatically -->
             </solutions>
 
-            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer">
+            <solutions label="solutions-answers" inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer">
                 <title>All Solutions that are Answers</title>
                 <idx><h>solutions</h><h>all answers</h></idx>
 
@@ -13905,7 +14142,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- content will happen here automatically -->
             </solutions>
 
-            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
+            <solutions label="solutions-odd-answers" inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer" admit="odd">
                 <title>All Solutions that are Answers to Odd Exercises</title>
                 <idx><h>solutions</h><h>all even answers</h></idx>
 
@@ -13916,7 +14153,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- content will happen here automatically -->
             </solutions>
 
-            <appendix xml:id="appendix-results">
+            <appendix xml:id="appendix-results" label="appendix-results">
                 <title>List of Results</title>
 
                 <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" text="type-global" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
@@ -13924,7 +14161,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
             </appendix>
 
-            <appendix xml:id="appendix-exercise-lists">
+            <appendix xml:id="appendix-exercise-lists" label="appendix-exercise-lists">
                 <title>Lists of Exercises</title>
 
                 <p>Since <tag>exercise</tag> come in several flavors, we use <term>pseudo-elements</term> to specify the distinct types.  There are not many reading questions<mdash/>but here is a list of all of them, by section, using a <c>readingquestion</c> pseudo-element.</p>
@@ -13937,7 +14174,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </appendix>
 
-            <appendix>
+            <appendix label="appendix-structured">
                 <title>A Structured Appendix</title>
                 <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
                 <subsection>
@@ -13954,7 +14191,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </subsection>
             </appendix>
 
-            <appendix>
+            <appendix label="appendix-index">
                 <title>Index</title>
 
                 <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <tag>idx</tag>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
@@ -13976,7 +14213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </paragraphs>
             </appendix>
 
-            <glossary xml:id="glossary-backmatter">
+            <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
                 <idx>glossary</idx>
                 <headnote>
                     <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized" text="type-global"/>.</p>
@@ -13993,7 +14230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </gi>
             </glossary>
 
-            <appendix xml:id="references">
+            <appendix xml:id="references" label="appendix-multiple-references">
                 <title>Multiple References</title>
 
                 <subsection>
@@ -14020,7 +14257,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Bibliography/References can appear anywhere,  -->
             <!-- but these are in the backmatter, hence global -->
 
-            <references xml:id="references-backmatter">
+            <references xml:id="references-backmatter" label="references-backmatter">
                 <title>References</title>
 
                 <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
@@ -14031,12 +14268,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </references>
 
-            <index>
+            <index label="the-index">
                 <title>Index</title>
                 <index-list />
             </index>
 
-            <colophon>
+            <colophon label="colophon-back">
                 <p>This article was authored in, and produced with, <pretext />.  It is typeset with the Latin Modern font.</p>
             </colophon>
         </backmatter>

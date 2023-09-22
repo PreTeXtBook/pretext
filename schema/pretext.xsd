@@ -582,17 +582,10 @@
   <xs:element name="website">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="name"/>
-        <xs:element ref="address"/>
+        <xs:element ref="url"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="name">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextShort"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="address" type="xs:string"/>
   <xs:element name="holder" type="xs:string"/>
   <xs:element name="minilicense">
     <xs:complexType mixed="true">
@@ -921,7 +914,6 @@
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
       <xs:element ref="fragment"/>
-      <xs:element ref="demonstration"/>
     </xs:choice>
   </xs:group>
   <xs:element name="prelude">
@@ -1146,27 +1138,38 @@
   <xs:element name="console">
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
-        <xs:element minOccurs="0" ref="prompt"/>
-        <xs:element minOccurs="0" ref="input"/>
+        <xs:element name="input">
+          <xs:complexType mixed="true">
+            <xs:attribute name="prompt"/>
+          </xs:complexType>
+        </xs:element>
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="prompt"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="prompt" type="xs:string"/>
-  <xs:element name="input" type="xs:string"/>
   <xs:element name="output" type="xs:string"/>
   <xs:element name="program">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="input"/>
+        <xs:element name="input" type="xs:string"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
       <xs:attribute name="language"/>
+      <xs:attribute name="line-numberss">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="highlight-lines"/>
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1548,6 +1551,16 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
+  <xs:attributeGroup name="Landscape">
+    <xs:attribute name="landscape" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
   <xs:group name="Figure">
     <xs:choice>
       <xs:element ref="figure"/>
@@ -1567,6 +1580,14 @@
             <xs:group ref="SideBySideGroup"/>
             <xs:element ref="score"/>
           </xs:choice>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1578,6 +1599,14 @@
           <xs:sequence>
             <xs:element ref="tabular"/>
           </xs:sequence>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1590,6 +1619,14 @@
             <xs:element ref="program"/>
             <xs:element ref="console"/>
           </xs:choice>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1603,6 +1640,14 @@
             <xs:group ref="List"/>
             <xs:group minOccurs="0" ref="ConclusionText"/>
           </xs:sequence>
+          <xs:attribute name="landscape">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1710,10 +1755,14 @@
     <xs:sequence>
       <xs:element name="image">
         <xs:complexType>
-          <xs:sequence>
+          <xs:sequence minOccurs="0">
+            <xs:element name="shortdescription" type="xs:string"/>
             <xs:element minOccurs="0" name="description">
-              <xs:complexType mixed="true">
-                <xs:group ref="TextShort"/>
+              <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="Paragraph"/>
+                  <xs:element ref="tabular"/>
+                </xs:choice>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
@@ -1721,6 +1770,7 @@
           <xs:attribute name="permid"/>
           <xs:attribute name="width"/>
           <xs:attribute name="margins"/>
+          <xs:attribute name="rotate"/>
           <xs:attribute name="archive"/>
           <xs:attribute name="source" use="required"/>
           <xs:attribute name="decorative">
@@ -1740,14 +1790,23 @@
       <xs:element name="image">
         <xs:complexType>
           <xs:sequence>
-            <xs:element minOccurs="0" name="description">
-              <xs:complexType mixed="true">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:group ref="TextShort"/>
-                  <xs:element ref="var"/>
-                </xs:choice>
-              </xs:complexType>
-            </xs:element>
+            <xs:sequence minOccurs="0">
+              <xs:element name="shortdescription">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="description">
+                <xs:complexType>
+                  <xs:choice maxOccurs="unbounded">
+                    <xs:group ref="Paragraph"/>
+                    <xs:element ref="tabular"/>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
             <xs:choice>
               <xs:element ref="latex-image"/>
               <xs:element ref="asymptote"/>
@@ -1791,14 +1850,23 @@
       <xs:element name="image">
         <xs:complexType>
           <xs:sequence>
-            <xs:element minOccurs="0" name="description">
-              <xs:complexType mixed="true">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:group ref="TextShort"/>
-                  <xs:element ref="var"/>
-                </xs:choice>
-              </xs:complexType>
-            </xs:element>
+            <xs:sequence minOccurs="0">
+              <xs:element name="shortdescription">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="description">
+                <xs:complexType>
+                  <xs:choice maxOccurs="unbounded">
+                    <xs:group ref="Paragraph"/>
+                    <xs:element ref="tabular"/>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
             <xs:element minOccurs="0" ref="latex-image"/>
           </xs:sequence>
           <xs:attribute name="pg-name"/>
@@ -1978,12 +2046,20 @@
   <xs:element name="sage">
     <xs:complexType>
       <xs:sequence minOccurs="0">
-        <xs:element ref="input"/>
+        <xs:element name="input" type="xs:string"/>
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
       <xs:attribute name="doctest"/>
       <xs:attribute name="tolerance"/>
+      <xs:attribute name="auto-evaluate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="no"/>
+            <xs:enumeration value="yes"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="language"/>
       <xs:attribute name="type"/>
     </xs:complexType>
@@ -3365,6 +3441,7 @@
         <xs:element ref="permille"/>
         <xs:element ref="pilcrow"/>
         <xs:element ref="section-mark"/>
+        <xs:element ref="copyleft"/>
         <xs:element ref="copyright"/>
         <xs:element ref="registered"/>
         <xs:element ref="trademark"/>
@@ -3442,6 +3519,9 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="section-mark">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="copyleft">
     <xs:complexType/>
   </xs:element>
   <xs:element name="copyright">
@@ -3628,15 +3708,6 @@
   </xs:element>
   <xs:element name="notation-list">
     <xs:complexType/>
-  </xs:element>
-  <xs:element name="demonstration">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="Title"/>
-        <xs:group ref="Paragraph"/>
-        <xs:element ref="sage"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
   <xs:element name="docinfo">
     <xs:complexType>

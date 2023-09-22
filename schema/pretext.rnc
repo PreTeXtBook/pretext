@@ -1,7 +1,7 @@
 
                     grammar {
                 
-            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary
+            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             
             Pretext =
                 element pretext {
@@ -238,10 +238,7 @@
                         element entity {TextLong}
                     }*,
                     element edition {text}?,
-                    element website {
-                        element name {TextShort},
-                        element address {text}
-                    }?,
+                    element website {Url}?,
                     element copyright {
                         element year {TextShort},
                         element holder {text},
@@ -389,8 +386,7 @@
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                Demonstration
+                Poem | Assemblage | ListGenerator | Fragment
             
             Prelude =
                 element prelude {BlockText+}
@@ -485,11 +481,14 @@
             Console =
                 element console {
                     PermanentID?,
+                    attribute prompt {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     (
-                        element prompt {text}?,
-                        element input {text}?,
+                        element input {
+                            attribute prompt {text}?,
+                            text
+                        },
                         element output {text}?
                     )+
                 }
@@ -499,6 +498,8 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
+                    attribute line-numberss {"yes"|"no"}?,
+                    attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
                     element input {text}
                 }
@@ -655,9 +656,12 @@
             
             Caption =
                 element caption {TextLong}
+            Landscape =
+                attribute landscape {"yes" | "no"}
             Figure =
                 element figure {
                     MetaDataCaption,
+                    Landscape?,
                     (
                         Image |
                         Video |
@@ -668,10 +672,12 @@
                 } |
                 element table {
                     MetaDataAltTitle,
+                    Landscape?,
                     Tabular
                 } |
                 element listing {
                     MetaDataCaption,
+                    Landscape?,
                     (
                         Program |
                         Console
@@ -679,6 +685,7 @@
                 } |
                 element list {
                     MetaDataAltTitle,
+                    Landscape?,
                     IntroductionText?,
                     List,
                     ConclusionText?
@@ -753,10 +760,16 @@
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
-                    attribute decorative {"yes" | "no"}?,
-                    element description {TextShort}?
+                    (
+                        attribute decorative {"yes" | "no"}? |
+                        (
+                            element shortdescription {text},
+                            element description {(Paragraph | Tabular)+}?
+                        )
+                    )?
                 }
             ImageCode =
                 element image {
@@ -765,8 +778,13 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute archive {text}?,
-                    attribute decorative {"yes" | "no"}?,
-                    element description {(TextShort | WWVariable)*}?,
+                    (
+                        attribute decorative {"yes" | "no"}? |
+                        (
+                            element shortdescription {(text | WWVariable)+},
+                            element description {(Paragraph | Tabular)+}?
+                        )
+                    )?,
                     (
                         element latex-image {text} |
                         element asymptote {text} |
@@ -781,8 +799,13 @@
                 element image {
                     attribute pg-name {text}?,
                     attribute width {text}?,
-                    attribute decorative {"yes" | "no"}?,
-                    element description {(TextShort | WWVariable)*}?,
+                    (
+                        attribute decorative {"yes" | "no"}? |
+                        (
+                            element shortdescription {(text | WWVariable)+},
+                            element description {(Paragraph | Tabular)+}?
+                        )
+                    )?,
                     element latex-image {
                         text
                     }?
@@ -850,6 +873,7 @@
                 PermanentID?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
+                attribute auto-evaluate {'no'|'yes'}?,
                 attribute language {text}?,
                 attribute type {text}?,
                 (element input {text}, element output {text}?)?
@@ -1497,6 +1521,7 @@
                 element permille {empty} |
                 element pilcrow {empty} |
                 element section-mark {empty} |
+                element copyleft {empty} |
                 element copyright {empty} |
                 element registered {empty} |
                 element trademark {empty} |
@@ -1556,12 +1581,6 @@
             NotationList =
                 element notation-list {empty}
             
-                    Demonstration = element demonstration {
-                    Title,
-                    Paragraph,
-                    Sage
-                    }
-                
             DocInfo =
                 element docinfo {
                     XMLBase?,

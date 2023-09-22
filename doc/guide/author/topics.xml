@@ -2278,17 +2278,32 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>To use these images, you simply provide the complete filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  Your <pretext/> source would look like:</p>
 
             <pre>
-            <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
+            <![CDATA[<image source="images/crocodiles.png" width="50%"/>]]>
             </pre>
 
             <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).</p>
 
-            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example:</p>
+            <p>
+                You should also provide a <tag>description</tag> and/or <tag>shortdescription</tag>
+                as a child of the <tag>image</tag>, or else explicitly declare the image to be
+                decorative with an attribute <attr>decorative</attr> set to <c>yes</c>.
+                A <tag>shortdescription</tag> should be text-only (but perhaps with <tag>var</tag>
+                children) and be less than 100<ndash/>140 characters long. A <tag>description</tag>
+                should be structured with <tag>p</tag> and <tag>tabular</tag> elements. For example:
+            </p>
 
             <pre>
             <![CDATA[
             <image source="images/crocodiles.jpeg" width="50%">
-                <description>Five crocodiles partially submerged.</description>
+                <shortdescription>Five crocodiles partially submerged.</shortdescription>
+                <description>
+                    <p>
+                        Five crocodiles are in a pond. Three of them have their eyes above
+                        the water line, looking in the direction of the camera. The other
+                        two are in the background and only their tails are visible above
+                        the water line.
+                    </p>
+                </description>
             </image>
             ]]>
             </pre>
@@ -3169,11 +3184,13 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
 
-            <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).</p>
+            <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional.  The content of these two elements is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  A <attr>prompt</attr> attribute on the <tag>input</tag> can be supplied to provide a system prompt distinct from the actual commands.  The default prompt is a dollar sign followed by a space.  If it is more convenient <attr>prompt</attr> may be supplied on the <tag>console</tag>, to be used in each enclosed <tag>input</tag>.  If you do not want any prompts at all, just use an empty value for <attr>prompt</attr>.</p>
 
             <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>caption</tag> displayed below, and a number assigned.  So, in particular, if your program or console is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
 
             <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  We will eventually provide a table of attribute values here.  They are always lowercase, and a good first guess is likely to succeed.</p>
+
+            <p>In some output formats, notably <init>HTML</init>, the syntax highlighter can add lines or highlight individual lines of code. Highlighting lines is not supported for <latex/> output.  To display line numbers, set the <attr>line-numbers</attr> attribute to <c>yes</c>. To highlight particular lines, set <attr>highlight-lines</attr> to a comma-separated list consisting of individual lines and/or ranges indicated with dashes.  Some examples are: <c>5</c>, <c>2,5</c>,  <c>2,5-8,10-15,15</c>.</p>
 
             <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
         </subsection>
@@ -3194,6 +3211,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
 
             <p>Note also that a data file may be provided independently for consumption by an ActiveCode program.  See <xref ref="topic-datafile"/>.</p>
+
+            <p>ActiveCode elements that are language <c>sql</c> can make use of an SQLite database file. This is different than a <c>datafile</c> (which is expected to be text or an image). To include a database file, use the <attr>database</attr> on the <tag>program</tag> element and specify the file to load as a string relative to the <attr>@external</attr> top-level directory</p>
 
             <p>If you want to include code from one or more preceding <tag>program</tag> elements, use the <attr>include</attr> attribute whose value is a list (comma-separated or space-separated) of <attr>xml:id</attr>s for the code you want included.</p>
         </subsection>
@@ -3689,6 +3708,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <!-- Details at: https://groups.google.com/g/sage-cell/c/ETeONQMYbQM/m/Tzl-rFmkAQAJ -->
             <p>Unfortunately, the ability to read files <em>anywhere</em> on the internet was abused, so this capability had to be restricted to a finite list of servers.  These include <url href="https://www.dropbox.com" visual="www.dropbox.com">DropBox</url> and <url href="https://github.com" visual="github.com">GitHub</url> where you might find it convenient to place files supporting your code.  Note that for GitHub, you likely want to use a <init>URL</init> which is a <q>raw</q> file such as for the <pretext/> repository <url href="https://github.com/PreTeXtBook/pretext/raw/master/README.md" visual="github.com/PreTeXtBook/pretext/raw/master/README.md">README</url> file, written with Markdown.</p>
         </subsection>
+    </section>
+
+    <section xml:id="topic-interactive">
+        <title>Interactives</title>
+
+        <p>TODO: until then examine copious examples in the sample article.</p>
     </section>
 
     <section xml:id="topic-sidebyside">
@@ -4265,7 +4290,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             </figure>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-youtube-video">
             <title>YouTube Videos</title>
 
             <p>For a video hosted at YouTube, find the 11-character identification string in the address of a video you are viewing.  It will look something like <c>hAzdgU_kpGo</c>.  Then, instead of the <attr>source</attr> attribute, simply provide this identification string as the <attr>youtube</attr> attribute, such as<cd>

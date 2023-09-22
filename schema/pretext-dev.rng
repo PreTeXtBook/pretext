@@ -264,7 +264,6 @@
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
       <ref name="Fragment"/>
-      <ref name="Demonstration"/>
       <ref name="WorksheetSideBySide"/>
     </choice>
   </define>

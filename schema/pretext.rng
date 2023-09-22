@@ -16,6 +16,8 @@
       <ref name="Solutions"/>
       <ref name="BookFrontMatter"/>
       <ref name="ArticleFrontMatter"/>
+      <ref name="BookBackMatter"/>
+      <ref name="ArticleBackMatter"/>
       <ref name="Preface"/>
       <ref name="Acknowledgement"/>
       <ref name="ArticleAppendix"/>
@@ -23,6 +25,8 @@
       <ref name="IndexDivision"/>
       <ref name="References"/>
       <ref name="Glossary"/>
+      <ref name="Figure"/>
+      <ref name="WebWork"/>
     </choice>
   </start>
   <define name="Pretext">
@@ -725,12 +729,7 @@
       </optional>
       <optional>
         <element name="website">
-          <element name="name">
-            <ref name="TextShort"/>
-          </element>
-          <element name="address">
-            <text/>
-          </element>
+          <ref name="Url"/>
         </element>
       </optional>
       <optional>
@@ -1070,7 +1069,6 @@
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
       <ref name="Fragment"/>
-      <ref name="Demonstration"/>
     </choice>
   </define>
   <define name="Prelude">
@@ -1276,22 +1274,21 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <attribute name="prompt"/>
+      </optional>
+      <optional>
         <attribute name="width"/>
       </optional>
       <optional>
         <attribute name="margins"/>
       </optional>
       <oneOrMore>
-        <optional>
-          <element name="prompt">
-            <text/>
-          </element>
-        </optional>
-        <optional>
-          <element name="input">
-            <text/>
-          </element>
-        </optional>
+        <element name="input">
+          <optional>
+            <attribute name="prompt"/>
+          </optional>
+          <text/>
+        </element>
         <optional>
           <element name="output">
             <text/>
@@ -1313,6 +1310,17 @@
       </optional>
       <optional>
         <attribute name="language"/>
+      </optional>
+      <optional>
+        <attribute name="line-numberss">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="highlight-lines"/>
       </optional>
       <optional>
         <attribute name="interactive">
@@ -1755,10 +1763,21 @@
       <ref name="TextLong"/>
     </element>
   </define>
+  <define name="Landscape">
+    <attribute name="landscape">
+      <choice>
+        <value>yes</value>
+        <value>no</value>
+      </choice>
+    </attribute>
+  </define>
   <define name="Figure">
     <choice>
       <element name="figure">
         <ref name="MetaDataCaption"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <choice>
           <ref name="Image"/>
           <ref name="Video"/>
@@ -1769,10 +1788,16 @@
       </element>
       <element name="table">
         <ref name="MetaDataAltTitle"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <ref name="Tabular"/>
       </element>
       <element name="listing">
         <ref name="MetaDataCaption"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <choice>
           <ref name="Program"/>
           <ref name="Console"/>
@@ -1780,6 +1805,9 @@
       </element>
       <element name="list">
         <ref name="MetaDataAltTitle"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
         <optional>
           <ref name="IntroductionText"/>
         </optional>
@@ -1902,21 +1930,38 @@
         <attribute name="margins"/>
       </optional>
       <optional>
+        <attribute name="rotate"/>
+      </optional>
+      <optional>
         <attribute name="archive"/>
       </optional>
       <attribute name="source"/>
       <optional>
-        <attribute name="decorative">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="description">
-          <ref name="TextShort"/>
-        </element>
+        <choice>
+          <optional>
+            <attribute name="decorative">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <group>
+            <element name="shortdescription">
+              <text/>
+            </element>
+            <optional>
+              <element name="description">
+                <oneOrMore>
+                  <choice>
+                    <ref name="Paragraph"/>
+                    <ref name="Tabular"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
+          </group>
+        </choice>
       </optional>
     </element>
   </define>
@@ -1938,22 +1983,36 @@
         <attribute name="archive"/>
       </optional>
       <optional>
-        <attribute name="decorative">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="description">
-          <zeroOrMore>
-            <choice>
-              <ref name="TextShort"/>
-              <ref name="WWVariable"/>
-            </choice>
-          </zeroOrMore>
-        </element>
+        <choice>
+          <optional>
+            <attribute name="decorative">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <group>
+            <element name="shortdescription">
+              <oneOrMore>
+                <choice>
+                  <text/>
+                  <ref name="WWVariable"/>
+                </choice>
+              </oneOrMore>
+            </element>
+            <optional>
+              <element name="description">
+                <oneOrMore>
+                  <choice>
+                    <ref name="Paragraph"/>
+                    <ref name="Tabular"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
+          </group>
+        </choice>
       </optional>
       <choice>
         <element name="latex-image">
@@ -1988,22 +2047,36 @@
         <attribute name="width"/>
       </optional>
       <optional>
-        <attribute name="decorative">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="description">
-          <zeroOrMore>
-            <choice>
-              <ref name="TextShort"/>
-              <ref name="WWVariable"/>
-            </choice>
-          </zeroOrMore>
-        </element>
+        <choice>
+          <optional>
+            <attribute name="decorative">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <group>
+            <element name="shortdescription">
+              <oneOrMore>
+                <choice>
+                  <text/>
+                  <ref name="WWVariable"/>
+                </choice>
+              </oneOrMore>
+            </element>
+            <optional>
+              <element name="description">
+                <oneOrMore>
+                  <choice>
+                    <ref name="Paragraph"/>
+                    <ref name="Tabular"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
+          </group>
+        </choice>
       </optional>
       <optional>
         <element name="latex-image">
@@ -2182,6 +2255,14 @@
       </optional>
       <optional>
         <attribute name="tolerance"/>
+      </optional>
+      <optional>
+        <attribute name="auto-evaluate">
+          <choice>
+            <value>no</value>
+            <value>yes</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="language"/>
@@ -3809,6 +3890,9 @@
       <element name="section-mark">
         <empty/>
       </element>
+      <element name="copyleft">
+        <empty/>
+      </element>
       <element name="copyright">
         <empty/>
       </element>
@@ -3995,13 +4079,6 @@
   <define name="NotationList">
     <element name="notation-list">
       <empty/>
-    </element>
-  </define>
-  <define name="Demonstration">
-    <element name="demonstration">
-      <ref name="Title"/>
-      <ref name="Paragraph"/>
-      <ref name="Sage"/>
     </element>
   </define>
   <define name="DocInfo">

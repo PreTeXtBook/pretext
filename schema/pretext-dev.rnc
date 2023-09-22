@@ -115,7 +115,7 @@
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | WorksheetExercise | Project |
                 Poem | Assemblage | ListGenerator | Fragment |
-                Demonstration |WorksheetSideBySide
+                WorksheetSideBySide
             # Allow exercise in sidebyside
             WorksheetSideBySide =
                 element sidebyside {

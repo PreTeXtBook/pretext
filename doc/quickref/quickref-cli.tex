@@ -9,7 +9,7 @@
 %
 %
 \documentclass{article}
-\usepackage{graphicx}  
+\usepackage{graphicx}
 \usepackage[landscape]{geometry}
 \usepackage[xetex]{color}
 \usepackage{url}
@@ -41,7 +41,7 @@
 \begin{center}
 \textbf{PreTeXt Quick Reference:\\ Command Line Interface (CLI)}\\
 % Steve Clontz, T.\ W.\ Judson, and Oscar Levin \\
-CLI version 1.0.0, 2022-08-05  \\
+CLI version 2.0.0, 2023-09-12  \\
 Full documentation: \url{pretextbook.org}\\
 % Switch to CC?
 GNU Free Document License, extend for your own use
@@ -91,19 +91,18 @@ GNU Free Document License, extend for your own use
 
 
 \hr\textbf{Generate source images and WeBWorK}\\
-If your book has any WeBWorK, latex-image, asymptote, sageplot, interactive, etc. you need to generate these from source.
+If your book has any WeBWorK, latex-image, asymptote, sageplot, interactive, etc. assets will be generated on each build. You can generate separately with:\\
 
 {\ex \verb| pretext generate|}: Generate all assets for first target in {\verb|project.ptx|}.\\
 {\ex \verb| pretext generate webwork|}: Generate webwork for first target in {\verb|publication.ptx|}\\
-{\ex \verb| pretext generate sageplot -t print|}: Generate sageplot for target "print".\\
-{\ex \verb| pretext generate latex-image -x img-graph1|}: Generate latex-image with xml:id "img-graph1" (for first target).\\
+{\ex \verb| pretext generate sageplot -t print|}: Generate sageplot for target ``print''.\\
+{\ex \verb| pretext generate latex-image -x img-graph1|}: Generate latex-image with xml:id ``img-graph1'' (for first target).\\
 %*********************************************
 
  \hr\textbf{View a PreTeXt document (local)}
 
 {\ex \verb| pretext view|}: Creates a local server to preview the first target in {\verb|project.ptx|}\\
-{\ex \verb| pretext view print|}: Views the "print" target\\
-{\ex \verb| pretext view -w|}: Builds, starts server, and rebuilds every time the source is saved\\
+{\ex \verb| pretext view print|}: Views the ``print'' target\\
 % {\ex \verb| CTRL+C|} to close the server\\
 %*********************************************
 
@@ -117,37 +116,29 @@ If your book has any WeBWorK, latex-image, asymptote, sageplot, interactive, etc
 
 %*********************************************
 
-\hr\textbf{Useful Shortcuts}
+% \hr\textbf{Useful Shortcuts}
 
-{\ex \verb| pretext build -g|}: build and generate in one step\\
-{\ex \verb| pretext build web -g latex-image|}: build web target and generate latex-images\\
-{\ex \verb| pretext view -b|}: build before you preview\\
-{\ex \verb| pretext view -g|}: generate assets before you view\\
-{\ex \verb| pretext view -bg|}: generate assets, build, and view\\
+% {\ex \verb| pretext build -g|}: build and generate in one step\\
+% {\ex \verb| pretext build web -g latex-image|}: build web target and generate latex-images\\
+% {\ex \verb| pretext view -b|}: build before you preview\\
+% {\ex \verb| pretext view -g|}: generate assets before you view\\
+% {\ex \verb| pretext view -bg|}: generate assets, build, and view\\
 
 \columnbreak
 
 %*********************************************
 \hr\textbf{Project Manifest}
-The file {\verb|project.ptx|} describes your build targets.  Each target has a \emph{name} (e.g. "print-latex") that you build or view with, e.g. {\verb|pretext build print-latex|} or generate assets for with, e.g. {\verb|pretext generate webwork -t print-latex|}.  
+The file {\verb|project.ptx|} describes your build targets.  Each target has a \emph{name} (e.g. ``print-latex'') that you build or view with, e.g. {\verb|pretext build print-latex|}.
 
 Structure of a target:
 \begin{verbatim}
-  <target name="web">
-    <format>html</format>
-    <source>...</source>
-    <publication>...</publication>
-    <output-dir>...</output-dir>
-  </target>
+  <target name="web" format="html"\>
 \end{verbatim}
-{\ex \verb|<format>|} can be html, latex, pdf, custom, epub, or kindle\\
-{\ex \verb|<source>|} is the path to the root ptx document.  Usually \texttt{source/main.ptx}\\
-{\ex \verb|<publication>|} is the path to the publication file.  Usually \texttt{publication/publication.ptx}\\
-{\ex \verb|<output-dir>|} is the path the the folder that will hold output.  Usually something like \texttt{output/web}\\
-Other optional elements:\\
-{\ex \verb|<stringparam key="..." value="..."/>|}: allows for setting the value of string parameters\\
-{\ex \verb|<xmlid-root>ch-first</xmlid-root>|}: used to restrict build to a subset of the source, starting with the element with xml:id "ch-first"\\ 
-{\ex \verb|<xsl>xsl/custom.xsl</xsl>|}: used to build with a custom xsl file.  Import standard xsl from that file using, e.g.\\ {\verb|<xsl:import href=".core/pretext-common.xsl"/>|}
+{\ex \verb|format|} can be html, latex, pdf, custom, epub, kindle, or braille\\
+Additional attributes:\\
+{\ex \verb|source|} is the path to the root ptx document.  Default: \texttt{source/main.ptx}\\
+{\ex \verb|publication|} is the path to the publication file.  Default \texttt{publication/publication.ptx}\\
+{\ex \verb|output-dir|} is the path the the folder that will hold output.  Default is \texttt{output/[target name]}\\
 
 
 

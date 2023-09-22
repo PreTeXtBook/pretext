@@ -102,9 +102,11 @@
         <title>Images</title>
         <idx>image</idx>
 
-        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag, using the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path from the top-level of the appropriate directory. Read <xref ref="processing-directory-management"/> for details on how to set these directories correctly.  If you are starting a new project, using the <pretext />-CLI (with the command <c>pretext new book</c>, for example), then most of the setup portion is done for you and the top-level folder for images that are created external to the project is called <c>assests</c>, and it is a sibling of the <c>source</c> directory. It is your responsibility to locate that file properly relative to this directory, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="ch2-images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>c2-images</c> below wherever you set the <attr>external</attr> top-level directory, and you would place the <c>butterflies.jpg</c> inside of it.</p>
+        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag, using the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path from the top-level of the appropriate directory. Read <xref ref="processing-directory-management"/> for details on how to set these directories correctly.  If you are starting a new project, using the <pretext />-CLI (with the command <c>pretext new book</c>, for example), then most of the setup portion is done for you and the top-level directory for images that are created external to the project is called <c>assests</c>, and it is a sibling of the <c>source</c> directory. It is your responsibility to locate that file properly relative to this directory, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you set the <attr>external</attr> top-level directory, and you would place the <c>butterflies.jpg</c> file inside of the <c>images</c> directory.</p>
 
         <p>The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
+
+        <p>The optional <attr>rotate</attr> attribute controls the angular rotation of the image about its center, for example <c>image/@rotate="30"</c> will rotate the image 30<degree/> counterclockwise.</p>
 
         <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
 
@@ -112,7 +114,24 @@
 
         <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex/> macros, <pretext/> provides support for authoring with graphics languages such as Asymptote, TikZ, PGF, PSTricks, and xy-pic in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable <init>SVG</init> images, in addition to other formats like <init>PDF</init> or <init>PNG</init>.  Making all this happen is one of the more technical aspects of <pretext/>, so read the details in <xref ref="topic-images"/> along with frequent references there to the <c>pretext</c> script described in <xref ref="pretext-script"/>.</p>
 
-        <p>For accessibility, every <tag>image</tag> should either have a <tag>description</tag> child, or it should explicitly declare itself to be a decorative image setting <attr>decorative</attr> to the value <c>yes</c>. A description should minimally describe the important information in the image that is not already present in the surrounding text. Some screen readers may cut off reading a full descritption after the first 125 characters. For a complex technical diagram or an image from which the reader is expected to extract important information on their own, it can be challenging to write a description with the 125-character limit. It may be advisable to seek advice from an expert.</p>
+        <p>
+            For accessibility, every <tag>image</tag> should either have a description or it should
+            explicitly declare itself to be a decorative image setting <attr>decorative</attr> to
+            the value <c>yes</c>. Descriptions are of two types. A <tag>shortdescription</tag>
+            should minimally describe the important information in the image that is not already
+            present in the surrounding text. It should have no element children except possibly
+            <tag>var</tag> children. This content will be used as the <attr>alt</attr> attribute
+            for the HTML <tag>img</tag>. Some screen readers may cut off reading this content after
+            the first 100<ndash/>140 characters, therefore you should keep this element short.
+            A <tag>description</tag> element should be structured with <tag>p</tag> and
+            <tag>tabular</tag> children and has no technical limit on length. It may describe the
+            image more completely. The content of the <tag>description</tag> should describe the
+            image, but should not be necessary for a sighted reader to take in the important
+            features of the image. (If there are features of the image that need to be explained to
+            all readers, this should happen in the main body of the text.) An <tag>image</tag> may
+            have one or both types of description, but it is incorrect to have neither unless
+            <attr>decorative</attr> is set to value <c>yes</c>.
+        </p>
     </section>
 
     <section xml:id="overview-lists">
@@ -431,6 +450,29 @@
         <p>The Sage Cell Server can also be configured to interpret different languages, because Sage by default contains everything needed to evaluate code in these languages.  This is done by providing a <attr>language</attr> attribute, where possible values are <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>. The default is <c>sage</c>.</p>
 
         <p>Note that the dynamic formats (including the Sage Cell) may run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
+    </section>
+
+    <section xml:id="overview-interactive">
+        <title>Interactives</title>
+
+        <p>We strive to make it simple for authors to incorporate interactive demonstrations in the online output of their projects.  Of course, this prompts the question of what to do with this content in less-capable formats like <init>PDF</init> or braille.</p>
+
+        <p>The <tag>interactive</tag> element provides a consistent way to specify these demonstrations.  There are many possibilities, but perhaps they can be grouped mostly into three broad classes.<dl>
+            <li>
+                <title>Server Hosted</title>
+                <p>Interactive demonstrations hosted at external sites, such as those from GeoGebra or Desmos, can be included simply by providing the appropriate identifying information, much like the way you would specify a YouTube video (<xref ref="topic-youtube-video"/>).</p>
+            </li>
+            <li>
+                <title>Source Code</title>
+                <p>Some interactives can be described by source code that you include in your <pretext/> source.  Examples include JessieCode, CircuitJS, and Sage Interacts.  We also support GeoGebra this way.  This is similar to how we employ Sage Cells, but without as much specialization.</p>
+            </li>
+            <li>
+                <title>Roll Your Own</title>
+                <p>If you know <init>HTML</init>, <init>CSS</init>, and Javascript, you can provide your own routines and libraries to incorporate any sort of demonstration you can imagine and can code.</p>
+            </li>
+        </dl>See <xref ref="topic-interactive"/> for details.</p>
+
+        <p>For output formats where executing an <tag>interactive</tag> would be impossible, we manufacture a static version.  This includes a screenshot of the demonstration (automatically generated, or supplied by the author) and a Quick Response (QR) code that will point to a <term>standalone</term> <init>HTML</init> page that contains the interactive.  Again, see <xref ref="topic-interactive"/> for details.</p>
     </section>
 
     <section xml:id="overview-sidebyside">

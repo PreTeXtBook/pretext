@@ -197,6 +197,22 @@
             </cd>attribute can have the value <c>one</c> for a one-sided version, or the value <c>two</c> to produce a two-sided version.  The default depends on if the output is electronic (one-sided) or print (two-sided).  See <xref ref="print-sides"/> for more detail.</p>
         </subsection>
 
+        <subsection xml:id="latex-open-odd-options">
+            <title><latex/> Page Matching</title>
+            <idx><h>page matching</h><h>LaTeX, PDF</h></idx>
+            <idx><h>open odd option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>page matching</h></idx>
+            <idx><h>LaTeX</h><h>open odd option</h></idx>
+            <idx><h>PDF</h><h>page matching</h></idx>
+            <idx><h>PDF</h><h>open odd option</h></idx>
+
+            <p>A two-sided <init>PDF</init> will contain extra blank pages to ensure that certain divisions (usually parts and chapters) always open on an odd-numbered page. Since a one-sided <init>PDF</init> will omit these extra blank pages, the page numbers may get out of sync between the two versions. The<cd>
+                <cline>/publication/latex/@open-odd</cline>
+            </cd>attribute can be used to force the page numbers back into sync by either also inserting the extra blank pages in a one-side <init>PDF</init> version (by setting the attribute to value <c>add-blanks</c>) or by simply skipping the page number for pages that would have been blank in the pagination (by setting the attribute to value <c>skip-pages</c>). If the attribute value is <c>no</c> for a one-sided <init>PDF</init> output (the default), then no adjustment is made and divisions open on the next consecutive page whether odd- or even-numbered.</p>
+
+            <p>Note that this attribute is ignored for two-sided <init>PDF</init> output, where extra blank pages are always inserted. Also note that page-matching between one- and two-sided <init>PDF</init> versions may require a consistent specification of the  <c>/publication/latex/@pageref</c> option (<xref ref="latex-xref-page-number-options"/>).  See <xref ref="latex-page-fidelity"/> for a more thorough discussion of page number fidelity.</p>
+        </subsection>
+
         <subsection xml:id="latex-font-size-options">
             <title><latex/> Font Sizes</title>
             <idx><h>font size options</h><h>LaTeX, PDF</h></idx>
@@ -645,6 +661,19 @@
             </cd>element can have the following attributes:<ul>
                 <li><attr>logic</attr> with values <c>linear</c> (default) and <c>tree</c>.</li>
                 <li><attr>upbutton</attr> with values <c>yes</c> (default) and <c>no</c>.</li>
+            </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
+        </subsection>
+
+        <subsection xml:id="html-toc-options">
+            <title>HTML Table of Contents Options</title>
+            <idx><h>HTML</h><h>table of contents</h></idx>
+            <idx><h>table of contents</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/tableofcontents</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>focused</attr> with values <c>no</c> (default) and <c>yes</c>. Enabling a focused TOC makes the TOC expandable/collapsible and initialliy hides TOC items not on the path to the active webpage.</li>
+                <li><attr>preexpanded-levels</attr> with values <c>1-6</c> (0 is the default). This value controls how many levels from the root of the TOC are initially expanded outside of the path to the current page. Either 0 or 1 will result in the root level of the TOC being expanded (it is on the path to the active page and thus always is expanded). 2 will result in the first two levels of the TOC being visible (e.g. parts and chapters or chapters and sections). 3 would result in three initially visible levels (e.g. parts/chapters/sections), etc...</li>
             </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
         </subsection>
     </section>

@@ -1036,6 +1036,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </dataurl>
 </xsl:template>
 
+<xsl:template match="colophon/website[address]" mode="repair">
+    <website>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <url>
+            <xsl:attribute name="href">
+                <xsl:value-of select="address"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="name/node()" mode="repair"/>
+        </url>
+    </website>
+</xsl:template>
+
+<!-- 2023-08-28: deprecate the "console" "prompt" element -->
+
+<!-- Removing this entire line typically orphans a text node    -->
+<!-- just prior with a newline and indentation, but this should -->
+<!-- not harm subsequent processing since we do not assume      -->
+<!-- source is carefully authored as one element per line.      -->
+<xsl:template match="console/prompt" mode="repair"/>
+
+<!-- If there was a "prompt" element just preceding an "input"      -->
+<!-- element, then we reach up and grab it and make it an attribute -->
+<!-- of the "input" - but not if somebody happened to already start -->
+<!-- using a @prompt attribute.                                     -->
+<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
+<xsl:template match="console/input" mode="repair">
+    <xsl:copy>
+        <xsl:if test="not(@prompt) and preceding-sibling::*[1][self::prompt]">
+            <xsl:attribute name="prompt">
+                <xsl:value-of select="preceding-sibling::*[1][self::prompt]"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- 2023-09-07: move "description" to "shortdescription" -->
+
+<xsl:template match="image/description[not(*[not(self::var)])]" mode="repair">
+    <xsl:element name="shortdescription" namespace="">
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:element>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
@@ -2145,6 +2189,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
+            <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <xsl:choose>
                     <!-- @preview present, so author provides a static image  -->
@@ -2217,16 +2262,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>.png</xsl:text>
                         </xsl:attribute>
                     </image>
-                    <p>
-                        <url>
-                            <xsl:attribute name="href">
-                                <xsl:apply-templates select="." mode="static-url"/>
-                            </xsl:attribute>
+                    <!-- URL templates create empty strings as signals URLs do not (yet) exist -->
+                    <!-- We kill the automatic footnotes, a debatable decision                 -->
+                    <!--  -->
+                    <xsl:variable name="standalone-url">
+                        <xsl:apply-templates select="." mode="standalone-url"/>
+                    </xsl:variable>
+                    <xsl:if test="not($standalone-url = '')">
+                        <p>
+                            <url href="{$standalone-url}" visual="">
+                                <xsl:text>Standalone</xsl:text>
+                            </url>
+                        </p>
+                    </xsl:if>
+                    <!--  -->
+                    <xsl:variable name="embed-iframe-url">
+                        <xsl:apply-templates select="." mode="embed-iframe-url"/>
+                    </xsl:variable>
+                    <xsl:if test="not($embed-iframe-url = '')">
+                        <p>
                             <!-- Kill the automatic footnote    -->
-                            <!-- <xsl:attribute name="visual"/> -->
-                            <xsl:text>Interactive</xsl:text>
-                        </url>
-                    </p>
+                            <url href="{$embed-iframe-url}" visual="">
+                                <xsl:text>Embed</xsl:text>
+                            </url>
+                        </p>
+                    </xsl:if>
+                    <!--  -->
                 </stack>
             </sidebyside>
         </xsl:when>

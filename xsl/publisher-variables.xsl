@@ -2178,6 +2178,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+<!-- For determining use in places such as static interactives -->
+<xsl:variable name="b-has-baseurl" select="not($baseurl = '')"/>
 
 <!--                 -->
 <!-- HTML Navigation -->
@@ -2198,6 +2200,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An up button is very desirable if you use the tree-like logic                 -->
 <xsl:variable name="nav-upbutton">
     <xsl:apply-templates select="$publisher-attribute-options/html/navigation/pi:pub-attribute[@name='upbutton']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+<!--                 -->
+<!-- HTML TOC        -->
+<!--                 -->
+
+<!-- Whether or not to tag TOC as focused -->
+<xsl:variable name="html-toc-focused_value">
+    <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='focused']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-html-toc-focused" select="$html-toc-focused_value='yes'"/>
+
+<!-- How many levels from root to pre-expand in focused view -->
+<xsl:variable name="html-toc-preexpanded-levels">
+    <xsl:variable name="preexpanded-value" >
+        <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='preexpanded-levels']" mode="set-pubfile-variable"/>
+    </xsl:variable>
+    <xsl:if test="not($b-html-toc-focused) and $preexpanded-value > 0">
+        <xsl:message>PTX:WARNING:   the preexpanded-levels setting (html/tableofcontents/@preexpanded-levels in the publisher file) has no effect if the table of contents is not set to focused mode (/html/tableofcontents/@focused is "yes")."</xsl:message>
+    </xsl:if>
+    <xsl:value-of select="$preexpanded-value"/>
 </xsl:variable>
 
 
@@ -2616,6 +2639,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameter, so we want the default (false) to be more likely than not. -->
 <xsl:variable name="b-latex-print" select="not($latex-print = 'no')"/>
 
+<!-- Always open on odd page in one-sided version, to        -->
+<!-- to faciltate matching page-for-page with two-sided      -->
+<!-- version.                                                -->
+<!-- "add-blanks" means make a blank page on the even page   -->
+<!--              preceding open odd page, when necessary    -->
+<!-- "skip-pages" means skip over an even page number in the -->
+<!--              pagination to open on an odd page number,  -->
+<!--              when necessary                             -->
+<!-- "no"         continuous pagination, parts/chapters/etc  -->
+<!--              can open on either even or odd pages       -->
+<xsl:variable name="latex-open-odd">
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='open-odd']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- LaTeX/Page -->
 
 <!-- Right Alignment -->
@@ -2790,7 +2827,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/latex/asymptote/@links = 'yes'">
             <xsl:choose>
                 <!-- fail when no base URL is given -->
-                <xsl:when test="$baseurl = ''">
+                <xsl:when test="not($b-has-baseurl)">
                     <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
                     <xsl:text>no</xsl:text>
                 </xsl:when>
@@ -2825,7 +2862,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/html/asymptote/@links = 'yes'">
             <xsl:choose>
                 <!-- fail when no base URL is given -->
-                <xsl:when test="$baseurl = ''">
+                <xsl:when test="not($b-has-baseurl)">
                     <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
                     <xsl:text>no</xsl:text>
                 </xsl:when>
@@ -3045,6 +3082,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="logic" default="linear" options="tree" legacy-stringparam="html.navigation.logic"/>
             <pi:pub-attribute name="upbutton" default="yes" options="no" legacy-stringparam="html.navigation.logic"/>
         </navigation>
+        <tableofcontents>
+            <pi:pub-attribute name="focused" default="no" options="yes"/>
+            <pi:pub-attribute name="preexpanded-levels" default="0" options="1 2 3 4 5 6"/>
+        </tableofcontents>
         <analytics>
             <pi:pub-attribute name="google-gst" freeform="yes"/>
         </analytics>
@@ -3066,6 +3107,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="snapshot" default="no" options="yes"/>
         <pi:pub-attribute name="pageref" options="yes no" legacy-stringparam="latex.pageref"/>
         <pi:pub-attribute name="draft" default="no" options="yes" legacy-stringparam="latex.draft"/>
+        <pi:pub-attribute name="open-odd" default="no" options="add-blanks skip-pages"/>
         <page>
             <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
         </page>

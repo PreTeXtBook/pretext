@@ -259,6 +259,9 @@ def asymptote_conversion(
     #   curl --data-binary @source.asy 'asymptote.ualberta.ca:10007?f=svg' > output.svg
     import glob
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     try:
         import requests  # post()
     except ImportError:
@@ -428,6 +431,9 @@ def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
 ):
     # stringparams is a dictionary, best for lxml parsing
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     # external module, often forgotten
     try:
@@ -637,6 +643,9 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     """Convert certain  files in source to text representations in XML files"""
     # stringparams is a dictionary, best for lxml parsing
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     import base64
 
     msg = 'converting data files from {} to text representations in XML files for placement in {}'
@@ -748,6 +757,9 @@ def latex_tactile_image_conversion(
     #     7.  Process with XSL to insert braille and other modifications
 
     # NB: latex (in (5)) and dvisvgm (in (6)) are hard-coded
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     log.info(
         "converting latex-image from {} to {} graphics for placement in {}".format(
@@ -902,6 +914,9 @@ def latex_tactile_image_conversion(
 
 def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     try:
         import requests  # post()
     except ImportError:
@@ -1053,16 +1068,52 @@ def webwork_to_xml(
 
     # Build dictionaries and localization string into a scratch directory/file
     tmp_dir = get_temporary_directory()
-    ww_filename = os.path.join(tmp_dir, "webwork-dicts.txt")
+    ww_filename = os.path.join(tmp_dir, "webwork-dicts.xml")
     log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
     xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
-    # "run" an assignment for the list of triples of strings
-    with open(ww_filename, "r") as ww_file:
-        problem_dictionaries = ww_file.read()
-    # "run" the dictionaries and localization string
-    # protect backslashes in LaTeX code
-    # globals() necessary for success
-    exec(problem_dictionaries.replace("\\", "\\\\"), globals())
+    # build necessary variables by reading xml with lxml
+    ww_xml = ET.parse(ww_filename).getroot()
+    localization = ww_xml.find("localization").text
+    if ww_xml.find("server-params-pub").find("ww-domain") is not None:
+        server_params_pub = {
+            "ww_domain": ww_xml.find("server-params-pub").find("ww-domain").text,
+            "courseID": ww_xml.find("server-params-pub").find("course-id").text,
+            "userID": ww_xml.find("server-params-pub").find("user-id").text,
+            "password": ww_xml.find("server-params-pub").find("password").text,
+            "course_password": ww_xml.find("server-params-pub").find("course-password").text,
+        }
+    else:
+        server_params_pub = {}
+    origin = {}
+    copiedfrom = {}
+    seed = {}
+    source = {}
+    pghuman = {}
+    pgdense = {
+        "hint_no_solution_no": {},
+        "hint_no_solution_yes": {},
+        "hint_yes_solution_no": {},
+        "hint_yes_solution_yes": {},
+    }
+    for ele in ww_xml.iter("problem"):
+        origin[ele.get("id")] = ele.get("origin")
+        seed[ele.get("id")] = ele.get("seed")
+        if ele.get("source") is not None:
+            source[ele.get("id")] = ele.get("source")
+        else:
+            if ele.get("copied-from") is not None:
+                copiedfrom[ele.get("id")] = ele.get("copied-from")
+            pghuman[ele.get("id")] = ele.find("pghuman").text
+            for dense in ele.iter("pgdense"):
+                if dense.get("hint")=="yes" and dense.get("solution")=="yes":
+                    pgdense[ele.get("id")] = dense.text
+                    pgdense["hint_yes_solution_yes"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="yes" and dense.get("solution")=="no":
+                    pgdense["hint_yes_solution_no"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="no" and dense.get("solution")=="yes":
+                    pgdense["hint_no_solution_yes"][ele.get("id")] = dense.text
+                elif dense.get("hint")=="no" and dense.get("solution")=="no":
+                    pgdense["hint_no_solution_no"][ele.get("id")] = dense.text
 
     # ideally, pub_file is in use, in which case server_params_pub is nonempty.
     # if no pub_file in use, rely on server_params.
@@ -1330,7 +1381,7 @@ def webwork_to_xml(
 
         bad_xml = False
         try:
-            response_root = ET.fromstring(response.text)
+            response_root = ET.fromstring(bytes(response.text, encoding='utf-8'))
         except:
             response_root = ET.Element("webwork")
             bad_xml = True
@@ -1551,7 +1602,7 @@ def webwork_to_xml(
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
         # Start appending XML children
-        response_root = ET.fromstring(response_text)
+        response_root = ET.fromstring(bytes(response_text, encoding='utf-8'))
         # Use "webwork-reps" as parent tag for the various representations of a problem
         webwork_reps = ET.SubElement(webwork_representations, "webwork-reps")
         webwork_reps.set("version", ww_reps_version)
@@ -1769,6 +1820,10 @@ def webwork_to_xml(
 
 
 def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     if pub_file:
         stringparams["publisher"] = pub_file
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -1799,6 +1854,9 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
 
 def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     if pub_file:
         stringparams["publisher"] = pub_file
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -1814,6 +1872,9 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
 
 def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     try:
         import requests  # YouTube server
@@ -1884,6 +1945,9 @@ def play_button(dest_dir):
 
 
 def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     # https://pypi.org/project/qrcode/
     try:
@@ -2199,6 +2263,9 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     try:
         import requests  # MyOpenMath server
     except ImportError:
@@ -2251,6 +2318,9 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
 def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     # general message for this entire procedure
     log.info(
@@ -2679,6 +2749,10 @@ def _split_brf(filename):
 
 def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     """Produce complete document in an EPUB container"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
     #   'mml': mathematics as MathML
@@ -3200,6 +3274,10 @@ def html(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
     """Convert XML source to HTML files, in destination directory or as zip file"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     import distutils.dir_util  # copy_tree()
 
     # Consult publisher file for locations of images
@@ -3296,6 +3374,9 @@ def html(
 def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
     """Convert XML source to pre-processed PreTeXt in destination directory"""
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     # support publisher file, not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -3326,6 +3407,9 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
     # support publisher file, not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -3349,6 +3433,9 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
 
 def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     """Convert XML source to a PDF (incomplete)"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
 
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
