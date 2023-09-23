@@ -2722,7 +2722,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The upshot is that the main pages have visible content and hidden, embedded content (knowls) with full identification as original canonical versions.  Cross-references open external file knowls, whose hidden components are again accessed via knowls that use external files of duplicated content.  None of the knowl files contain any identification, so these identifiers remain unique in their appearances as part of the main pages. -->
 
-<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'embed', 'xref', 'hidden'.  The four situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as an embedded knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content.  Also, the block-type parameter is tunneled down to the Sage cells so they can be constructed properly when inside of knowls. -->
+<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'hidden', 'xref', 'hidden'.  The four situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as an embedded knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content.  Also, the block-type parameter is tunneled down to the Sage cells so they can be constructed properly when inside of knowls. -->
 
 <!-- The relevant templates controlling production of a block, and their use, are: -->
 
@@ -2734,7 +2734,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (5) "heading-xref-knowl": when a knowl is a target of a cross-reference, sometimes a better heading is necessary to help identify it.  For example, a cross-refernce to a list item can be improved by providing the number of the item in a heading. -->
 
-<!-- (6) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'embed', or 'xref'. -->
+<!-- (6) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'hidden', or 'xref'. -->
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
@@ -2790,7 +2790,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
        </summary>
         <!-- the content of the knowl, to be revealed later -->
         <xsl:apply-templates select="." mode="body">
-            <xsl:with-param name="block-type" select="'embed'" />
+            <xsl:with-param name="block-type" select="'hidden'" />
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </details>
@@ -5248,7 +5248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <!-- Label original, but not if embedded            -->
             <!-- Then id goes onto the knowl text, so locatable -->
-            <xsl:if test="$b-original and not($block-type = 'embed')">
+            <xsl:if test="$b-original and not($block-type = 'hidden')">
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
@@ -9211,7 +9211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The block-type parameter is only received from, and sent to, the -->
 <!-- templates in the HTML conversion.  The purpose is to inform that -->
 <!-- conversion that the Sage cell is inside a born-hidden knowl      -->
-<!-- ($block-type = 'embed') and adjust the class name accordingly.   -->
+<!-- ($block-type = 'hidden') and adjust the class name accordingly.  -->
 
 <!-- Never an @id , so just repeat -->
 <xsl:template match="sage" mode="duplicate">
