@@ -543,6 +543,21 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 /* born hidden articls are now in "details", so adding markup
 to immitate what is below.  */
 
+.ptx-content summary,
+.ptx-content summary > .heading {
+    position: relative;
+}
+
+.ptx-content summary > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+    display: inline;
+}
+
+
+/*       -----      */
+
 
 .ptx-content article > .heading,
 .ptx-content article > a .heading {
