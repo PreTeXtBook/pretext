@@ -348,8 +348,24 @@ so that we can set our own later */
 
 
 
+/* 9/23/23 a knowled article is now in a "details", so we add style
+   to mimic the old style below  */
 
+.ptx-content section > details > summary::marker {
+  content: "";
+}
 
+.ptx-content section > details, .ptx-content .paragraphs > details {
+    margin-top: 1.25em;
+}
+.ptx-content section details + details,
+.ptx-content section .introduction + details,
+.ptx-content section .para + details,
+.ptx-content section .posterior + details {
+    margin-top: 1.75em;
+}
+
+ooooooo
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
@@ -523,6 +539,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .ptx-content .abstract > .title + .para {
     display: inline;
 }
+
+/* born hidden articls are now in "details", so adding markup
+to immitate what is below.  */
+
+
 .ptx-content article > .heading,
 .ptx-content article > a .heading {
     font-size: 1.125em;
