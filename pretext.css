@@ -351,12 +351,17 @@ so that we can set our own later */
 /* 9/23/23 a knowled article is now in a "details", so we add style
    to mimic the old style below  */
 
-.ptx-content section > details > summary::marker {
+.ptx-content section > details > summary::marker,
+.ptx-content article + details > summary::marker {
   content: "";
 }
 
-.ptx-content section > details, .ptx-content .paragraphs > details {
+.ptx-content section > details, .ptx-content .paragraphs > details,
+.ptx-content article + details {
     margin-top: 1.25em;
+}
+.ptx-content summary + article {
+    margin-top: 1em;
 }
 .ptx-content section details + details,
 .ptx-content section .introduction + details,
@@ -365,7 +370,9 @@ so that we can set our own later */
     margin-top: 1.75em;
 }
 
-ooooooo
+.ptx-content details > article {
+ /* background color?  padding? */
+}
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
