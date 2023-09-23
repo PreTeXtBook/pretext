@@ -1942,7 +1942,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
-<!-- build xref-knowl, and optionally a hidden-knowl duplicate       -->
+<!-- Build many, many xref-knowls, recursively                        -->
 <!-- NB: "me" has all the necessary templates, but is never a target -->
 <!-- mrow is only ever an "xref" knowl, and has enclosing content    -->
 <!-- These are "top-level" starting places for this process,         -->
@@ -1954,18 +1954,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:if test="$knowlizable = 'true'">
         <!-- a generally available cross-reference knowl file, of duplicated content -->
-        <xsl:apply-templates select="." mode="manufacture-knowl">
-            <xsl:with-param name="knowl-type" select="'xref'" />
-        </xsl:apply-templates>
-        <!-- optionally, a file version of duplicated hidden-knowl content -->
-        <xsl:variable name="hidden">
-            <xsl:apply-templates select="." mode="is-hidden" />
-        </xsl:variable>
-        <xsl:if test="$hidden = 'true'">
-            <xsl:apply-templates select="." mode="manufacture-knowl">
-                <xsl:with-param name="knowl-type" select="'hidden'" />
-            </xsl:apply-templates>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="manufacture-knowl"/>
     </xsl:if>
     <!-- recurse into contents, as we may just        -->
     <!-- "skip over" some containers, such as an "ol" -->
@@ -2061,40 +2050,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Context is an object that is the target of a cross-reference    -->
 <!-- ("xref") and is known/checked to be implemented as a knowl.     -->
-<!-- We cruise children for the necessity of hidden content which we -->
-<!-- impersonate with a file knowl that looks like a hidden knowl.   -->
 <xsl:template match="*" mode="xref-knowl">
-    <xsl:apply-templates select="." mode="manufacture-knowl">
-        <xsl:with-param name="knowl-type" select="'xref'"/>
-    </xsl:apply-templates>
-    <!-- Cruise children, note this is a context switch         -->
-    <!-- Looking for born-hidden knowls in "xref" knowl content -->
-    <xsl:for-each select=".//*">
-        <xsl:variable name="hidden">
-            <xsl:apply-templates select="." mode="is-hidden"/>
-        </xsl:variable>
-        <xsl:if test="$hidden = 'true'">
-            <xsl:apply-templates select="." mode="manufacture-knowl">
-                <xsl:with-param name="knowl-type" select="'hidden'"/>
-            </xsl:apply-templates>
-        </xsl:if>
-    </xsl:for-each>
+    <xsl:apply-templates select="." mode="manufacture-knowl"/>
 </xsl:template>
 
-<!-- Build one, or two, files for knowl content -->
+<!-- Build file for xref-knowl content -->
 <xsl:template match="*" mode="manufacture-knowl">
-    <xsl:param name="knowl-type" />
     <xsl:variable name="knowl-file">
-        <xsl:choose>
-            <xsl:when test="$knowl-type = 'xref'">
-                <xsl:apply-templates select="." mode="xref-knowl-filename" />
-            </xsl:when>
-            <xsl:when test="$knowl-type = 'hidden'">
-                <xsl:apply-templates select="." mode="hidden-knowl-filename" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
-    <!-- write file infrastructure first -->
+    <!-- N.B. can't form @href with xsl:attribute -->
     <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <xsl:call-template name="language-attributes"/>
@@ -2124,48 +2089,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- whose content is more than just the xref,  -->
                 <!-- it is the entire containing md or mdn      -->
                 <xsl:choose>
-                    <xsl:when test="$knowl-type = 'xref'">
-                        <xsl:choose>
-                            <xsl:when test="self::mrow">
-                                <xsl:apply-templates select="parent::*" mode="body">
-                                    <xsl:with-param name="block-type" select="'xref'" />
-                                    <xsl:with-param name="b-original" select="false()" />
-                                    <xsl:with-param name="b-top-level" select="true()" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:apply-templates select="." mode="body">
-                                    <xsl:with-param name="block-type" select="'xref'" />
-                                    <xsl:with-param name="b-original" select="false()" />
-                                    <xsl:with-param name="b-top-level" select="true()" />
-                                </xsl:apply-templates>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:when>
-                    <xsl:when test="$knowl-type = 'hidden'">
-                        <xsl:apply-templates select="." mode="body">
-                            <xsl:with-param name="block-type" select="'hidden'" />
+                    <xsl:when test="self::mrow">
+                        <xsl:apply-templates select="parent::*" mode="body">
+                            <xsl:with-param name="block-type" select="'xref'" />
                             <xsl:with-param name="b-original" select="false()" />
                             <xsl:with-param name="b-top-level" select="true()" />
                         </xsl:apply-templates>
                     </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="." mode="body">
+                            <xsl:with-param name="block-type" select="'xref'" />
+                            <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="b-top-level" select="true()" />
+                        </xsl:apply-templates>
+                    </xsl:otherwise>
                 </xsl:choose>
-                <!-- in-context link just for xref-knowl content -->
-                <xsl:if test="$knowl-type = 'xref'">
-                    <xsl:variable name="href">
-                        <xsl:apply-templates select="." mode="url" />
-                    </xsl:variable>
-                    <span class="incontext">
-                        <a href="{$href}" class="internal">
-                            <xsl:apply-templates select="." mode="type-name">
-                                <xsl:with-param name="string-id" select="'incontext'"/>
-                            </xsl:apply-templates>
-                        </a>
-                    </span>
-                </xsl:if>
+                <!-- in-context link for xref-knowl content -->
+                <span class="incontext">
+                    <a class="internal">
+                        <xsl:attribute name="href">
+                            <xsl:apply-templates select="." mode="url"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'incontext'"/>
+                        </xsl:apply-templates>
+                    </a>
+                </span>
             </body>
         </html>
-    </exsl:document>  <!-- end file -->
+    </exsl:document>
 </xsl:template>
 
 <!-- The directory of knowls that are targets of cross-references    -->
@@ -2174,12 +2126,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>./knowl/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
-</xsl:template>
-
-<xsl:template match="*" mode="hidden-knowl-filename">
-    <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>-hidden.html</xsl:text>
 </xsl:template>
 
 <!-- ######## -->
@@ -2910,9 +2856,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Named template since it "begins" at document root.     -->
 <xsl:template name="footnote-content">
     <xsl:for-each select="$document-root//fn">
-        <xsl:apply-templates select="." mode="manufacture-knowl">
-            <xsl:with-param name="knowl-type" select="'xref'" />
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="manufacture-knowl"/>
     </xsl:for-each>
 </xsl:template>
 
