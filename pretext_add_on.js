@@ -299,8 +299,7 @@ console.log("this is e", e);
         console.log("                       adding permalinks");
         /* add permalinks to all sections and articles */
         /* the main section p is just for legacy pre div.para html */
-        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section .para, main section p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section .discussion-like,  main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like,
-      section > details');
+        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section .para, main section p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section .discussion-like,  main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like, section > details');
         //   items_needing_permalinks = document.querySelectorAll('body section article');
         this_url = window.location.href.split('#')[0];
         permalink_word = "&#x1F517;";
