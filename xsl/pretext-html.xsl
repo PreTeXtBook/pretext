@@ -1198,7 +1198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="xref-as-knowl"/>
                 </xsl:variable>
                 <xsl:if test="$is-knowl = 'true'">
-                    <xsl:apply-templates select="." mode="xref-knowl"/>
+                    <xsl:apply-templates select="." mode="manufacture-knowl"/>
                 </xsl:if>
             </xsl:if>
         </xsl:when>
@@ -1340,7 +1340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="xref-as-knowl"/>
         </xsl:variable>
         <xsl:if test="$is-knowl = 'true'">
-            <xsl:apply-templates select="." mode="xref-knowl"/>
+            <xsl:apply-templates select="." mode="manufacture-knowl"/>
         </xsl:if>
     </xsl:if>
 </xsl:template>
@@ -1894,7 +1894,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:apply-templates>
             <xsl:if test="$block = 'true'">
-                <xsl:apply-templates select="$enclosure" mode="xref-knowl"/>
+                <xsl:apply-templates select="$enclosure" mode="manufacture-knowl"/>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
@@ -2017,7 +2017,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$target" mode="xref-as-knowl"/>
             </xsl:variable>
             <xsl:if test="$is-knowl = 'true'">
-                <xsl:apply-templates select="$target" mode="xref-knowl"/>
+                <xsl:apply-templates select="$target" mode="manufacture-knowl"/>
             </xsl:if>
         </xsl:for-each>
     </xsl:for-each>
@@ -2048,13 +2048,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Context is an object that is the target of a cross-reference    -->
-<!-- ("xref") and is known/checked to be implemented as a knowl.     -->
-<xsl:template match="*" mode="xref-knowl">
-    <xsl:apply-templates select="." mode="manufacture-knowl"/>
-</xsl:template>
-
-<!-- Build file for xref-knowl content -->
+<!-- Build file for xref-knowl content                            -->
+<!-- Context is an object that is the target of a cross-reference -->
+<!-- ("xref") and is known/checked to be implemented as a knowl.  -->
 <xsl:template match="*" mode="manufacture-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
