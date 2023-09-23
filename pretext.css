@@ -351,6 +351,10 @@ so that we can set our own later */
 /* 9/23/23 a knowled article is now in a "details", so we add style
    to mimic the old style below  */
 
+.ptx-content section > details > summary {
+    cursor: pointer;
+}
+
 .ptx-content section > details > summary::marker,
 .ptx-content article + details > summary::marker {
   content: "";
@@ -371,7 +375,27 @@ so that we can set our own later */
 }
 
 .ptx-content details > article {
- /* background color?  padding? */
+  padding-top: 0.25em;
+}
+.ptx-content details > article:not(.theorem-like):not(.definition-like) {
+  padding: 0.25em;
+  padding-left: 0.5em;
+}
+.ptx-content details > article {
+  background-color: #f5f5ff;
+}
+.ptx-content details > article details > article,
+.ptx-content details > article details > .answer {
+  margin: 0.5em;
+  padding: 0.25em;
+  padding-left: 0.5em;
+  background-color: #fffff5;
+}
+.ptx-content details > article details > article details > article {
+  background-color: #fff5ff;
+}
+.ptx-content details > article details > article details > article details > article {
+  background-color: #fafffa;
 }
 
 /* this > may be too restrictive.  The purpose is to not put a
