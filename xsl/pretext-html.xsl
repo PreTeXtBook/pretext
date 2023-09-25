@@ -2072,7 +2072,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="origin" select="''"/>
 
     <xsl:variable name="knowl-file">
-        <xsl:apply-templates select="." mode="knowl-filename" />
+        <xsl:apply-templates select="." mode="knowl-filename">
+            <xsl:with-param name="origin" select="$origin"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <!-- N.B. can't form @href with xsl:attribute -->
     <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
@@ -2138,6 +2140,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The directory of knowls that are targets of cross-references    -->
 <!-- The file extension is *.html so recognized as OK by Moodle, etc -->
 <xsl:template match="*" mode="knowl-filename">
+    <xsl:param name="origin" select="''"/>
+
     <xsl:text>./knowl/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
@@ -2851,7 +2855,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="href"/>
         <!-- the path to an *xref* knowl (inappropriate) -->
         <xsl:attribute name="data-knowl">
-            <xsl:apply-templates select="." mode="knowl-filename"/>
+            <xsl:apply-templates select="." mode="knowl-filename">
+                <xsl:with-param name="origin" select="'fn'"/>
+            </xsl:apply-templates>
         </xsl:attribute>
         <!-- add HTML title attribute to the link -->
         <xsl:attribute name="title">
@@ -5669,7 +5675,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="position() != 1">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:apply-templates select="id(@ref)" mode="knowl-filename"/>
+                <xsl:apply-templates select="id(@ref)" mode="knowl-filename">
+                    <xsl:with-param name="origin" select="'xref'"/>
+                </xsl:apply-templates>
             </xsl:for-each>
         </xsl:attribute>
     </xsl:if>
@@ -8013,7 +8021,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>xref</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="data-knowl">
-                            <xsl:apply-templates select="$target" mode="knowl-filename" />
+                            <xsl:apply-templates select="$target" mode="knowl-filename">
+                                <xsl:with-param name="origin" select="$origin"/>
+                            </xsl:apply-templates>
                         </xsl:attribute>
                     </xsl:when>
                     <!-- build traditional hyperlink -->
@@ -8056,7 +8066,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$knowl='true'">
             <xsl:text>\knowl{</xsl:text>
-            <xsl:apply-templates select="$target" mode="knowl-filename"/>
+            <xsl:apply-templates select="$target" mode="knowl-filename">
+                <xsl:with-param name="origin" select="'xref'"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\href{</xsl:text>
