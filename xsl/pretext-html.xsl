@@ -9239,27 +9239,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Biological Names -->
 <!-- ################ -->
 
-<xsl:template match="taxon[not(genus) and not(species)]">
+<!-- typically in an italic font -->
+
+<xsl:template match="taxon">
     <span class="taxon">
-        <xsl:apply-templates />
+        <xsl:choose>
+            <!-- both substructures -->
+            <xsl:when test="genus and species">
+                <xsl:apply-templates select="genus"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="species"/>
+            </xsl:when>
+            <!-- just one -->
+            <xsl:when test="genus">
+                <xsl:apply-templates select="genus"/>
+            </xsl:when>
+            <!-- just the other one -->
+            <xsl:when test="species">
+                <xsl:apply-templates select="species"/>
+            </xsl:when>
+            <!-- not structured, use content -->
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
     </span>
 </xsl:template>
 
-<xsl:template match="taxon[genus or species]">
-    <span class="taxon">
-        <xsl:if test="genus">
-            <span class="genus">
-                <xsl:apply-templates select="genus"/>
-            </span>
-        </xsl:if>
-        <xsl:if test="genus and species">
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:if test="species">
-            <span class="species">
-                <xsl:apply-templates select="species"/>
-            </span>
-        </xsl:if>
+<xsl:template match="genus">
+    <span class="genus">
+        <xsl:apply-templates select="text()"/>
+    </span>
+</xsl:template>
+
+<xsl:template match="species">
+    <span class="species">
+        <xsl:apply-templates select="text()"/>
     </span>
 </xsl:template>
 
