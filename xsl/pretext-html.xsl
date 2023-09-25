@@ -136,9 +136,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is the motivation for this parameterization.  See the definition  -->
 <!-- of this variable in  pretext-assembly.xsl  for more detail.       -->
 <!--                                                                   -->
-<!-- Conversions that build on HTML, but produce formats incapable     -->
-<!-- (braille) or unwilling (EPUB, Jupyter) to employ Javascript, or   -->
-<!-- similar, need to override this variable back to "static".         -->
+<!-- Conversions that build on HTML, but produce formats unwilling     -->
+<!-- (EPUB, Jupyter) to employ Javascript, or similar, need to         -->
+<!-- override this variable back to "static".                          -->
 <xsl:variable name="exercise-style" select="'dynamic'"/>
 
 <!-- Search for the "math.punctuation.include" -->
@@ -180,16 +180,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- boolean variable $b-html-presentation              -->
 <xsl:param name="html.presentation" select="'no'" />
 <xsl:variable name="b-html-presentation" select="$html.presentation = 'yes'" />
-
-<!-- We make a much different variant of HTML output as input to    -->
-<!-- liblouis for conversion of literary text to braille.  When it  -->
-<!-- is easier to insert a small change in the interior of a        -->
-<!-- template, we use this variable to condition the change, rather -->
-<!-- than providing a new template in the braille conversion.       -->
-<!--                                                                -->
-<!-- We set the internal boolean variable to false() here, and turn -->
-<!-- it on in the dedicated stylesheet for conversion to braille.   -->
-<xsl:variable name="b-braille" select="false()"/>
 
 <!-- ############### -->
 <!-- Source Analysis -->
@@ -553,10 +543,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We use a modal template, so it can be called  -->
 <!-- two more times for a worksheet to make        -->
 <!-- printable standalone versions.                -->
-<!-- NB: Override in the Braille conversion for    -->
-<!-- just "frontmatter" and "backmatter" simply    -->
-<!-- to keep from stepping the heading level, so   -->
-<!-- the liblouis styling on h1-h6 is consistent   -->
 <xsl:template match="&STRUCTURAL;">
     <xsl:param name="heading-level"/>
 
@@ -765,7 +751,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hit with templates.  This is the heading.   -->
 <!-- Only "chapter" ever gets shown generically  -->
 <!-- Subdivisions have titles, or default titles -->
-<!-- NB: this template is overridden for Braille -->
 <xsl:template match="*" mode="section-heading">
     <xsl:param name="heading-level"/>
 
@@ -808,7 +793,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- provide a frontmatter/titlepage to provide   -->
 <!-- more specific information.  In either event, -->
 <!-- a typical section heading is out of place.   -->
-<!-- NB: this is copied verbatim for Braille      -->
 <xsl:template match="book|article" mode="section-heading" />
 
 <!-- An abstract needs structure, and an ID for a -->
@@ -838,13 +822,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a "codenumber," and a "title."  We format these       -->
 <!-- consistently here with a modal template.  We can hide -->
 <!-- components with classes on the enclosing "heading"    -->
-<!-- NB: this is overridden in the conversion to Braille,  -->
-<!-- to center chapter numbers above titles (and appendix, -->
-<!-- preface, etc), so coordinate with those templates.    -->
-<!-- NB: we often squelch type names via CSS, but for the  -->
-<!-- braille conversion it is not so easy, so we instead   -->
-<!-- provide a modified version of this template there.    -->
-<!-- Consider keeping these in-sync.                       -->
 <xsl:template match="*" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -866,10 +843,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *display* a number at birth is therefore more complicated    -->
 <!-- than *having* a number or not.                               -->
 <!-- NB: We sneak in links for standalone versions of worksheets. -->
-<!-- NB: we often squelch type names via CSS, but for the braille -->
-<!-- conversion it is not so easy, so we instead provide a        -->
-<!-- modified version of this template there. Consider keeping    -->
-<!-- these in-sync.                                               -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
@@ -952,8 +925,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this could done with a "section-heading" template?-->
 <!-- Other divisions (eg, colophon, preface) will follow   -->
 <!-- This is all within a .frontmatter class for CSS       -->
-<!-- NB: this is redefined with the same @match in the     -->
-<!-- Braille conversion, so keep these in-sync             -->
 <xsl:template match="titlepage">
     <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
     <h2 class="heading">
@@ -2763,9 +2734,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These two named templates create a space or a      -->
 <!-- period with enough HTML markup to allow for hiding -->
 <!-- them if some other part of a heading is hidden.    -->
-<!-- NB: These are radically simplified in tbe braille  -->
-<!-- conversion, for use in headings (includes exercise -->
-<!-- numbers) so think about where they are used.       -->
 
 <xsl:template name="space-styled">
     <span class="space">
@@ -3699,9 +3667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Overall enclosing element     -->
 <!-- Natural HTML element, usually -->
 <xsl:template match="blockquote" mode="body-element">
-    <!-- Allow for creating exceptional first list item in braille -->
-    <!-- conversion. Here, result is almost always "blockquote".   -->
-    <xsl:apply-templates select="." mode="initial-list-item-element"/>
+    <xsl:text>blockquote</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
@@ -3754,7 +3720,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="paragraphs" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
-<!-- NB: this is modified in the conversion to Braille -->
 <xsl:template match="paragraphs" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title-paragraphs" />
 </xsl:template>
@@ -5596,16 +5561,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </pre>
 </xsl:template>
 
-<!-- Stub: for the conversion to braille, which imports this -->
-<!-- stylesheet, we sometimes add a @data-braille attribute  -->
-<!-- to guide the application of  liblouis  styles.  For     -->
-<!-- blocks, we have a "block-data-braille-attribute" hook   -->
-<!-- in the "body" template.  Here (and now) it is           -->
-<!-- implemented as a no-op stub.  The stylesheet for the    -->
-<!-- conversion to braille will override this template with  -->
-<!-- the desired functionality.                              -->
-<xsl:template match="*" mode="block-data-braille-attribute"/>
-
 <!-- All of the implementations above use the same   -->
 <!-- template for their body, it relies on various   -->
 <!-- templates but most of the work comes via the    -->
@@ -5638,20 +5593,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="class">
                 <xsl:apply-templates select="." mode="body-css-class" />
             </xsl:attribute>
-            <!-- possible indicator for use in for braille conversion, -->
-            <!-- activated by a non-trivial implementation of this     -->
-            <!-- hook in the braille stylesheet                        -->
-            <xsl:apply-templates select="." mode="block-data-braille-attribute"/>
             <!-- Label original, but not if embedded            -->
             <!-- Then id goes onto the knowl text, so locatable -->
             <xsl:if test="$b-original and not($block-type = 'embed')">
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
-            </xsl:if>
-            <!-- obvious marker of a block's beginning, often produces nothing -->
-            <xsl:if test="$b-braille">
-                <xsl:apply-templates select="." mode="braille-top-box-line"/>
             </xsl:if>
             <!-- If visible, heading interior to article -->
             <xsl:if test="$block-type = 'visible'">
@@ -5677,10 +5624,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
                 <xsl:with-param name="block-type" select="$block-type" />
             </xsl:apply-templates>
-            <!-- obvious marker of a block's ending, often produces nothing -->
-            <xsl:if test="$b-braille">
-                <xsl:apply-templates select="." mode="braille-bottom-box-line"/>
-            </xsl:if>
         </xsl:element>
     </xsl:if>
     <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
@@ -5732,20 +5675,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Paragraphs, without lists within   -->
-<!-- Coordinate with simplified version -->
-<!-- in the conversion to Braille       -->
 <xsl:template match="p" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
-    <!-- Allow for creating exceptional first list item in braille -->
-    <!-- conversion. Here, $body-element is almost always "p".     -->
-    <xsl:variable name="body-element">
-        <xsl:apply-templates select="." mode="initial-list-item-element"/>
-    </xsl:variable>
-    <xsl:element name="{$body-element}">
+    <div>
         <xsl:attribute name="class">
             <xsl:text>para</xsl:text>
             <!-- acknowledge prelude/interlude/postlude parents -->
@@ -5760,7 +5696,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
+    </div>
 </xsl:template>
 
 <!-- Paragraphs, with displays within                    -->
@@ -5769,12 +5705,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and so should not be within an HTML paragraph.      -->
 <!-- We bust them out, and put the id for the paragraph  -->
 <!-- on the first one, even if empty.                    -->
-<!-- All but the first is p/@data-braille="continuation" -->
-<!-- so later HTML "p" can be styled for Braille as if   -->
-<!-- they are part of a logical PreTeXt paragraph        -->
-<!-- Note: a simpler version of this appears in the      -->
-<!-- braille conversion, with a few improvements         -->
-<!-- (such as using "node()").                           -->
 <xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -5803,17 +5733,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
     <!-- This comparison might improve with a normalize-space()      -->
     <xsl:if test="not($initial-content='')">
-        <!-- Allow for creating exceptional first list item in braille -->
-        <!-- conversion. Here, $body-element is almost always "p".     -->
-        <xsl:variable name="body-element">
-            <xsl:apply-templates select="." mode="initial-list-item-element"/>
-        </xsl:variable>
-        <xsl:element name="{$body-element}">
+        <div>
             <xsl:attribute name="class">
                 <xsl:text>para</xsl:text>
             </xsl:attribute>
             <xsl:copy-of select="$initial-content" />
-        </xsl:element>
+        </div>
     </xsl:if>
     <!-- for each display, output the display, plus trailing content -->
     <xsl:for-each select="$displays">
@@ -5842,11 +5767,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
                     <div class="para">
-                        <xsl:if test="$b-braille">
-                            <xsl:attribute name="data-braille">
-                                <xsl:text>continuation</xsl:text>
-                            </xsl:attribute>
-                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </div>
                 </xsl:if>
@@ -5862,11 +5782,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
                     <div class="para">
-                        <xsl:if test="$b-braille">
-                            <xsl:attribute name="data-braille">
-                                <xsl:text>continuation</xsl:text>
-                            </xsl:attribute>
-                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </div>
                 </xsl:if>
@@ -6018,22 +5933,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- The conversion to braille sometimes needs an exceptional       -->
-<!-- element for the first block of a list item, so we can get      -->
-<!-- list labels onto the same line as the following content.       -->
-<!-- Here in the HTML conversion, the template is a fancy way       -->
-<!-- of not accomplishing much.  Two of the three simple "text"     -->
-<!-- blocks of a list item jut coincidentally have PreTeXt names    -->
-<!-- that match HTML names.  A PreTeXt "p" becomes a "div.para"     -->
-<!-- when this device is in use.  We document this near lists,      -->
-<!-- even if use is distributed around.  -->
-<xsl:template match="blockquote|pre" mode="initial-list-item-element">
-    <xsl:value-of select="local-name(.)"/>
-</xsl:template>
-<xsl:template match="p" mode="initial-list-item-element">
-    <xsl:text>div</xsl:text>
 </xsl:template>
 
 <!-- ########### -->
@@ -8280,13 +8179,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> lines</xsl:text>
                 </xsl:if>
             </xsl:attribute>
-            <xsl:if test="not($next-cell)">
-                <xsl:if test="$b-braille">
-                    <xsl:attribute name="data-braille">
-                        <xsl:text>last-cell</xsl:text>
-                    </xsl:attribute>
-                </xsl:if>
-            </xsl:if>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
                     <xsl:value-of select="$column-span" />
@@ -8798,7 +8690,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Emphasis -->
-<!-- NB: See override in Braille conversion -->
 <xsl:template match="em">
     <em class="emphasis">
         <xsl:apply-templates />
@@ -9112,17 +9003,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See templates in xsl/pretext-common.xsl file)     -->
 <!-- Then wrap in a pre element that MathJax ignores     -->
 <xsl:template match="pre">
-    <!-- Allow for creating exceptional first list item in braille -->
-    <!-- conversion. Here, $body-element is almost always "pre".   -->
-    <xsl:variable name="body-element">
-        <xsl:apply-templates select="." mode="initial-list-item-element"/>
-    </xsl:variable>
-    <xsl:element name="{$body-element}">
+    <pre>
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="interior"/>
-    </xsl:element>
+    </pre>
 </xsl:template>
 
 <!-- ################## -->
@@ -9353,8 +9239,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Biological Names -->
 <!-- ################ -->
 
-<!-- See a potentially cleaner template in the braille conversion -->
-
 <xsl:template match="taxon[not(genus) and not(species)]">
     <span class="taxon">
         <xsl:apply-templates />
@@ -9395,8 +9279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We provide the quotation marks explicitly, along       -->
 <!-- with a span for any additional styling.  The quotation -->
-<!-- marks are necessary for accessibility, e.g., they are  -->
-<!-- critical in the Braille conversion.                    -->
+<!-- marks are necessary for accessibility.                 -->
 <xsl:template match="articletitle">
     <span class="articletitle">
         <xsl:call-template name="lq-character"/>
@@ -10736,9 +10619,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
-<!-- NB: a grossly simplified version of this      -->
-<!-- template is used as an override for the       -->
-<!-- conversion to braille.  Keep them in sync.    -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
     <!-- TODO: simplify these variables, much like for LaTeX -->
@@ -13415,11 +13295,6 @@ TODO:
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
     <div id="latex-macros" class="hidden-content process-math" style="display:none">
-        <xsl:if test="$b-braille">
-            <xsl:attribute name="data-braille">
-                <xsl:text>latex-macros</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
         <xsl:call-template name="inline-math-wrapper">
             <xsl:with-param name="math">
                 <xsl:value-of select="$latex-packages-mathjax"/>
