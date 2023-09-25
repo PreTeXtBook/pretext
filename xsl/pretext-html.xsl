@@ -9477,7 +9477,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- presently output is dropped as computable           -->
 <!-- NB: button text is also set as part of knowls code  -->
 <xsl:template match="sage" mode="sage-active-markup">
-    <xsl:param name="block-type"/>
     <xsl:param name="language-attribute" />
     <xsl:param name="b-autoeval" select="false()"/>
     <xsl:param name="in" />
@@ -9489,10 +9488,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
             <!-- See https://github.com/sagemath/sagecell/issues/542 -->
             <xsl:text>ptx-sagecell </xsl:text>
-            <!-- class names for configuration -->
-            <xsl:if test="$block-type = 'embed'">
-                <xsl:text>hidden-</xsl:text>
-            </xsl:if>
             <xsl:call-template name="sagecell-class-name">
                 <xsl:with-param name="language-attribute" select="$language-attribute"/>
                 <xsl:with-param name="b-autoeval" select="$b-autoeval"/>
@@ -9514,19 +9509,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An abstract named template accepts input text   -->
 <!-- and provides the display class, so untouchable  -->
 <xsl:template name="sage-display-markup">
-    <xsl:param name="block-type"/>
     <xsl:param name="in" />
 
     <pre>
         <xsl:attribute name="class">
             <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
             <!-- See https://github.com/sagemath/sagecell/issues/542 -->
-            <xsl:text>ptx-sagecell </xsl:text>
-            <!-- class names for configuration -->
-            <xsl:if test="$block-type = 'embed'">
-                <xsl:text>hidden-</xsl:text>
-            </xsl:if>
-            <xsl:text>sage-display</xsl:text>
+            <xsl:text>ptx-sagecell sage-display</xsl:text>
         </xsl:attribute>
         <script type="text/x-sage">
             <xsl:value-of select="$in" />

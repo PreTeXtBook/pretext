@@ -1696,10 +1696,7 @@ Book (with parts), "section" at level 3
 <!-- Or break text cells in the Sage notebook -->
 <!-- This cell does respect @language         -->
 <xsl:template match="sage[not(input) and not(output) and not(@type)]">
-    <xsl:param name="block-type"/>
-
     <xsl:apply-templates select="." mode="sage-active-markup">
-        <xsl:with-param name="block-type" select="$block-type"/>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
@@ -1717,10 +1714,7 @@ Book (with parts), "section" at level 3
 <!-- We override this in LaTeX, since it is useless          -->
 <!-- (and we can't tell in the abstract wrapping template)   -->
 <xsl:template match="sage[@type='practice']">
-    <xsl:param name="block-type"/>
-
     <xsl:apply-templates select="." mode="sage-active-markup">
-        <xsl:with-param name="block-type" select="$block-type"/>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'practice'" />
         </xsl:with-param>
@@ -1734,8 +1728,6 @@ Book (with parts), "section" at level 3
 <!-- We do not pass along any output, since this is silly        -->
 <!-- These cells are meant to be be incorrect or incomplete      -->
 <xsl:template match="sage[@type='display']">
-    <xsl:param name="block-type"/>
-
     <xsl:call-template name="sage-display-markup">
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'display'" />
@@ -1751,10 +1743,7 @@ Book (with parts), "section" at level 3
 <!-- Type: "full" (the default)         -->
 <!-- Absent meeting any other condition -->
 <xsl:template match="sage|sage[@type='full']">
-    <xsl:param name="block-type"/>
-
     <xsl:apply-templates select="." mode="sage-active-markup">
-        <xsl:with-param name="block-type" select="$block-type"/>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
