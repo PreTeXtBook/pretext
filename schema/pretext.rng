@@ -3671,16 +3671,16 @@
         </attribute>
       </optional>
       <choice>
-        <ref name="TextSimple"/>
+        <text/>
         <group>
           <optional>
             <element name="genus">
-              <ref name="TextSimple"/>
+              <text/>
             </element>
           </optional>
           <optional>
             <element name="species">
-              <ref name="TextSimple"/>
+              <text/>
             </element>
           </optional>
         </group>

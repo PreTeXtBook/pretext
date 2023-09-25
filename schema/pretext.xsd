@@ -3263,26 +3263,15 @@
   <xs:element name="attr" type="xs:string"/>
   <xs:element name="taxon">
     <xs:complexType mixed="true">
-      <xs:choice>
-        <xs:group ref="TextSimple"/>
-        <xs:sequence>
-          <xs:element minOccurs="0" ref="genus"/>
-          <xs:element minOccurs="0" ref="species"/>
-        </xs:sequence>
-      </xs:choice>
+      <xs:sequence minOccurs="0">
+        <xs:element minOccurs="0" ref="genus"/>
+        <xs:element minOccurs="0" ref="species"/>
+      </xs:sequence>
       <xs:attribute name="ncbi" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="genus">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextSimple"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="species">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextSimple"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="genus" type="xs:string"/>
+  <xs:element name="species" type="xs:string"/>
   <xs:group name="Generator">
     <xs:choice>
       <xs:choice>
