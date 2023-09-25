@@ -8004,6 +8004,7 @@ Book (with parts), "section" at level 3
             <!-- NB: could a xref with title text have math in it and mess-up here? -->
             <xsl:apply-templates select="." mode="xref-link">
                 <xsl:with-param name="target" select="$target" />
+                <xsl:with-param name="origin" select="'xref'" />
                 <xsl:with-param name="content" select="$text" />
             </xsl:apply-templates>
         </xsl:otherwise>
@@ -8111,6 +8112,7 @@ Book (with parts), "section" at level 3
             <!-- NB: could a xref with title text have math in it and mess-up here? -->
             <xsl:apply-templates select="." mode="xref-link">
                 <xsl:with-param name="target" select="$target-one" />
+                <xsl:with-param name="origin" select="'xref'" />
                 <xsl:with-param name="content" select="$text" />
             </xsl:apply-templates>
         </xsl:otherwise>
@@ -8212,6 +8214,7 @@ Book (with parts), "section" at level 3
     <!-- NB: could a xref with title text have math in it and mess-up here? -->
     <xsl:apply-templates select="." mode="xref-link">
         <xsl:with-param name="target" select="$target" />
+        <xsl:with-param name="origin" select="'xref'" />
         <xsl:with-param name="content" select="$text" />
     </xsl:apply-templates>
     <!-- check if we have exhausted the list, -->
@@ -8784,6 +8787,7 @@ Book (with parts), "section" at level 3
                     </xsl:variable>
                     <xsl:apply-templates select="." mode="xref-link">
                         <xsl:with-param name="target" select="$target" />
+                        <xsl:with-param name="origin" select="'xref'" />
                         <xsl:with-param name="content">
                             <xsl:apply-templates select="." mode="xref-text" >
                                 <xsl:with-param name="target" select="$target" />
@@ -9008,6 +9012,7 @@ Book (with parts), "section" at level 3
 <!--  implementation is based on location            -->
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="target" />
+    <xsl:param name="origin"/>
     <xsl:param name="content" />
 
     <xsl:message>PTX:BUG:     a new conversion needs an implementation of the modal "xref-link" template.  Search your output for "[LINK:"</xsl:message>

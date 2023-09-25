@@ -1162,6 +1162,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Experimental: maybe belongs in -common -->
 <!-- Not -md, know where the link lives     -->
+<!-- NB: presumes this only gets used for   -->
+<!-- knowls that end up in a "notation"     -->
+<!-- list (can't adjust @match since it     -->
+<!-- claws up the tree)                     -->
 <xsl:template match="*" mode="enclosure-xref">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
@@ -1176,6 +1180,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$structural='true' or $block='true'">
             <xsl:apply-templates select="." mode="xref-link">
                 <xsl:with-param name="target" select="." />
+                <xsl:with-param name="origin" select="'notation'"/>
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="." mode="type-name" />
                     <xsl:variable name="enclosure-number">
@@ -1320,6 +1325,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div>
         <xsl:apply-templates select="." mode="xref-link">
             <xsl:with-param name="target" select="." />
+            <xsl:with-param name="origin" select="'list-of'"/>
             <xsl:with-param name="content">
                 <xsl:apply-templates select="." mode="type-name" />
                 <xsl:text> </xsl:text>
@@ -1889,6 +1895,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="($structural = 'true') or ($block = 'true')">
             <xsl:apply-templates select="." mode="xref-link">
                 <xsl:with-param name="target" select="$enclosure"/>
+                <xsl:with-param name="origin" select="'index'"/>
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="$enclosure" mode="type-name"/>
                 </xsl:with-param>
@@ -1963,9 +1970,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl-old" />
 </xsl:template>
 
-<!-- A "fragref" for literate programming has specialized behavior   -->
-<!-- when reconstructing program code.  But as a knowl in HTML it is -->
-<!-- isomorphic to "xref", so we lump them into this template.       -->
+<!-- A "fragref" for literate programming has specialized behavior -->
+<!-- when reconstructing program code.  But as a knowl in HTML it  -->
+<!-- is isomorphic to "xref", so we lump them into this template.  -->
+<!-- Also, because we collect unique id's it will no longer be     -->
+<!-- possible to use the "origin" parameter to distinguish the     -->
+<!-- reference provoking the knowl (an "xref" and a "fragref"      -->
+<!-- could point to the same target).  There is little downside in -->
+<!-- this, and some upside in not putting identical content into   -->
+<!-- multiple locations.                                           -->
 <xsl:template match="*" mode="make-efficient-knowls">
     <xsl:variable name="xref-ids">
         <xsl:for-each select="$document-root//xref|$document-root//fragref">
@@ -7962,6 +7975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are broken into two and other uses are rearranged -->
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="target" select="/.." />
+    <xsl:param name="origin" select="''" />
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
     <xsl:variable name="knowl">
         <xsl:apply-templates select="$target" mode="xref-as-knowl" />
@@ -7978,6 +7992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="parent::mrow or parent::me or parent::men">
             <xsl:apply-templates select="." mode="xref-link-display-math">
                 <xsl:with-param name="target" select="$target"/>
+                <xsl:with-param name="origin" select="'xref'"/>
                 <xsl:with-param name="content" select="$content"/>
             </xsl:apply-templates>
         </xsl:when>
@@ -8030,6 +8045,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See discussion in "xref-link" about "copy-of" necessity.   -->
 <xsl:template match="*" mode="xref-link-display-math">
     <xsl:param name="target"/>
+    <xsl:param name="origin"/>
     <xsl:param name="content"/>
 
     <!-- this could be passed as a parameter, but -->
@@ -9202,6 +9218,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="langle-character"/>
         <xsl:apply-templates select="." mode="xref-link">
             <xsl:with-param name="target" select="$target" />
+            <!-- "fragref" is isomorpic to "xref" as a link -->
+            <xsl:with-param name="origin" select="'xref'" />
             <xsl:with-param name="content">
                 <xsl:apply-templates select="$target" mode="title-full"/>
             </xsl:with-param>
