@@ -1194,7 +1194,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="xref-as-knowl"/>
                 </xsl:variable>
                 <xsl:if test="$is-knowl = 'true'">
-                    <xsl:apply-templates select="." mode="manufacture-knowl"/>
+                    <xsl:apply-templates select="." mode="manufacture-knowl">
+                        <xsl:with-param name="origin" select="'notation'"/>
+                    </xsl:apply-templates>
                 </xsl:if>
             </xsl:if>
         </xsl:when>
@@ -1336,7 +1338,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="xref-as-knowl"/>
         </xsl:variable>
         <xsl:if test="$is-knowl = 'true'">
-            <xsl:apply-templates select="." mode="manufacture-knowl"/>
+            <xsl:apply-templates select="." mode="manufacture-knowl">
+                <xsl:with-param name="origin" select="'list-of'"/>
+            </xsl:apply-templates>
         </xsl:if>
     </xsl:if>
 </xsl:template>
@@ -1890,7 +1894,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:apply-templates>
             <xsl:if test="$block = 'true'">
-                <xsl:apply-templates select="$enclosure" mode="manufacture-knowl"/>
+                <xsl:apply-templates select="$enclosure" mode="manufacture-knowl">
+                    <xsl:with-param name="origin" select="'index'"/>
+                </xsl:apply-templates>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
@@ -2013,7 +2019,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$target" mode="xref-as-knowl"/>
             </xsl:variable>
             <xsl:if test="$is-knowl = 'true'">
-                <xsl:apply-templates select="$target" mode="manufacture-knowl"/>
+                <xsl:apply-templates select="$target" mode="manufacture-knowl">
+                    <xsl:with-param name="origin" select="'xref'" />
+                </xsl:apply-templates>
             </xsl:if>
         </xsl:for-each>
     </xsl:for-each>
@@ -2048,6 +2056,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Context is an object that is the target of a cross-reference -->
 <!-- ("xref") and is known/checked to be implemented as a knowl.  -->
 <xsl:template match="*" mode="manufacture-knowl">
+    <xsl:param name="origin" select="''"/>
+
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="knowl-filename" />
     </xsl:variable>
@@ -2847,7 +2857,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Named template since it "begins" at document root.     -->
 <xsl:template name="footnote-content">
     <xsl:for-each select="$document-root//fn">
-        <xsl:apply-templates select="." mode="manufacture-knowl"/>
+        <xsl:apply-templates select="." mode="manufacture-knowl">
+            <xsl:with-param name="origin" select="'fn'"/>
+        </xsl:apply-templates>
     </xsl:for-each>
 </xsl:template>
 
