@@ -2143,6 +2143,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="origin" select="''"/>
 
     <xsl:text>./knowl/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$origin = 'xref'">
+            <xsl:text>xref/</xsl:text>
+        </xsl:when>
+        <xsl:when test="$origin = 'index'">
+            <xsl:text>index/</xsl:text>
+        </xsl:when>
+        <xsl:when test="$origin = 'list-of'">
+            <xsl:text>list-of/</xsl:text>
+        </xsl:when>
+        <xsl:when test="$origin = 'notation'">
+            <xsl:text>notation/</xsl:text>
+        </xsl:when>
+        <xsl:when test="$origin = 'fn'">
+            <xsl:text>fn/</xsl:text>
+        </xsl:when>
+        <!-- put a "location-report" template here to debug a bad knowl file -->
+        <!-- (the file, or a reference to it) that lacks a subdirectory      -->
+        <xsl:otherwise/>
+    </xsl:choose>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
