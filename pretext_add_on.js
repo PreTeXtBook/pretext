@@ -325,7 +325,8 @@ console.log("this is e", e);
                        this_anchor  = "" //this_item.parentElement.parentElement.id;
                    }
                } else if (this_item.parentElement.nodeName == "LI") {
-                   this_anchor  = this_item.parentElement.id;
+               //    this_anchor  = this_item.parentElement.id;
+                   this_anchor  = "";
                }
             }
             if(this_anchor) {
