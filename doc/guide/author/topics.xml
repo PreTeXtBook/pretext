@@ -2330,6 +2330,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             </image>
             ]]>
             </pre>
+
+            <p>
+                See <xref ref="subsec-img-desc-advice"/> for advice on writing effective image descriptions.
+            </p>
+
         </subsection>
 
         <subsection xml:id="topic-images-vector">
@@ -3190,7 +3195,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <title>Copies of Images</title>
 
             <p>Sometimes you want to use the same image more than once.  Putting it in a <tag>figure</tag> and then making a cross-reference (<tag>xref</tag>) can work well in <init>HTML</init> output since it will be available as a knowl.  However in a static format (<init>PDF</init>, print) the reader will need to chase the cross-reference.</p>
-            
+
             <p>For a raster image, you can just point to the file again with the <attr>source</attr> attribute.  You are free to wrap it in a <c>figure</c> and thus change the caption.  It will get a new number as a new figure, and you will need to assign a new unique <attr>xml:id</attr> attribute.  Maybe appending <c>-copy-2</c>, or similar, to the <attr>xml:id</attr> will be helpful.</p>
 
             <p>If you have a figure generated from source code (such as in TikZ) you really do not want to edit and maintain two copies that may not stay in sync.  Instead, you can place the code into a file and <c>xinclude</c> it twice.  Study <xref ref="topic-xinclude"/> carefully, and note that this is an excellent place to take advantage of setting the <attr>parse</attr> attribute to <c>text</c> (no need to escape problematic <init>XML</init> characters).  Notice that when you generate images, you will have two image files with identical contents, but different names.  This is no place for false optimization.  Bits are cheap and your time is valuable.  It is far more important to only maintain a single copy of the source, than to be caught up with the <q>waste</q> of having two copies of the same file (and which are managed for you).  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
@@ -4515,6 +4520,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <title>Accessibility</title>
         <idx>accessibilty</idx>
         <idx>web accessibilty</idx>
+        <subsection xml:id="subsec-accessibility-automatic">
+            <title><pretext /> provided accessibility features</title>
+
 
         <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.  These come in part from the recommendations at the <url href="https://www.w3.org/WAI/standards-guidelines/wcag/" visual="www.w3.org/WAI/standards-guidelines/wcag/">Web Content Accessibility Guidelines</url> of the Web Accessibility Initiative.<dl width="narrow">
             <li>
@@ -4579,15 +4587,20 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>If a document has a watermark (<xref ref="watermarks"/>), then a screen reader will announce its presence at the beginning of each page of <init>HTML</init> content.</p>
             </li>
         </dl></p>
+    </subsection>
+    <subsection xml:id="subsec-accessibility-author-provided">
+        <title>Author Provided Accessibility Features</title>
 
-        <p>Here are features which are provided, but require your participation as the author.<dl width="narrow">
+        <p>Here are features which are <pretext /> helps fascilitate, but require your participation as the author.<dl width="narrow">
             <li>
                 <title>Image Description</title>
-                <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can use a <tag>description</tag> element.  The content here will migrate to places like the <init>HTML</init> <attr>alt</attr> attribute to be picked up by screen readers.</p>
+                <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can provide both a <tag>shortdescription</tag>, which will migrate to the <init>HTML</init> <attr>alt</attr> attribute, as well as a  a <tag>description</tag> element (structured with <tag>p</tag> and <tag>tabular</tag> children) that will be provided as a longer description.  The content will picked up by screen readers.</p>
 
-                <p>Make the content very expressive and detailed, but not overly verbose.  Also, do not use any markup whatsoever, just simple characters, and avoid quotation marks.  You can learn more at sites such as the one provided by the Web Accessibility Initiative (<init>WAI</init>) at <url href="https://www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives" visual="www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives">Text alternatives for non-text content</url>.</p>
+                <p>For the <tag>shortdescription</tag>, make the content clear and concise.  Do not use any markup whatsoever, just simple characters, and avoid quotation marks, and limit the text to at most 125 characters. You can learn more at sites such as the one provided by the Web Accessibility Initiative (<init>WAI</init>) at <url href="https://www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives" visual="www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives">Text alternatives for non-text content</url>.</p>
 
-                <p>We cannot do this one for you, this is for the author only.  But we can give you the tools do it as easily and as correctly as possible.</p>
+                <p>We cannot do this one for you, this is for the author only, as image descriptions must take into account author intent and their context.  But we can give you the tools do it as easily and as correctly as possible.</p>
+
+                <p>See <xref ref="subsec-img-desc-advice"/> for further advice on authoring image descriptions.</p>
             </li>
 
             <li>
@@ -4624,6 +4637,359 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             </li>
 
         </dl></p>
+    </subsection>
+
+    <subsection xml:id="subsec-img-desc-advice">
+        <title>Advice for Writing Image Descriptions</title>
+        <author>Oscar Levin</author>
+        <p>
+          Acknowledgement: the following content is based on a presentation delivered by Michael Cantino in December 2022.  Michael has served as the BVIS specialist for Oregon's K-12 public schools, an accessibility specialist at Portland Community College, and is a Library of Congress certified Braille Transcriber. Many thanks to Michael for sharing his expertise with the <pretext/> community.
+        </p>
+
+        <p>
+          Accessibility standards dictate that all (non-decorative) images included in websites are accompanied by a text description which a screen reader can read aloud to a non-sighted user.  This <term>alternative text</term> (or <term>alt text</term>) is also displayed in place of the image if the image fails to load.  Essentially alt text is a brief description of what the image is meant to convey. Of course, determining how to concisely convey information of an image can be a challenge for any image, and this is especially true for images you would find in a mathematics or science textbook.  The following suggestions and examples are intended to help an author create quality descriptions of their images.
+        </p>
+
+        <p>
+          First, a few technical considerations.  The usual way a non-sighted user will access a pretext book is through a <pretext />-generated <init>HTML</init> webpage.  Screen readers will read the text contained in the <attr>alt</attr> attribute of the <tag>img</tag> element on the page. (<pretext /> uses the text the author provides in the <tag>shortdescription</tag> element to create this content.)  Technical limitations of the <attr>alt</attr> attribute and most screen reader software mean that descriptions presented in this way must conform to particular specifications.
+        </p>
+
+        <p>
+          The content of an alt-text description must be plain text and should not exceed a total of 125 characters (although the exact character limit is a matter of some debate). Some screen readers will read more than this, but others will simply stop reading at this point. Further, it is more complicated to get screen readers to navigate alt text compared to how they would navigate the rest of text on the page.  Since the alt text is plain text, it cannot include text styles, links, MathML, or other markup.
+        </p>
+
+        <insight>
+          VS Code, and presumably most modern text editors, will display the character count of selected text in the status bar.
+        </insight>
+
+        <p>
+          A separate way to provide information about an image to non-sighted users is to use some sort of <term>long description</term>.  There is not wide agreement among platforms on how to implement long descriptions, but generally they are available near the image (not assigned to the image directly). In <pretext />, long descriptions are authored inside a <tag>description</tag> element, structured with <tag>p</tag> (or <tag>tabular</tag>) children.  These descriptions <em>can</em> include basic markup, including mathematics inside <tag>m</tag> tags.
+        </p>
+
+        <p>
+          In the following sections, we will consider how to write image descriptions that achieve the goal of providing the same information as the image does.  Depending on the particular case, this could be done with a short or long description.  When a long description is needed, the image should still have a short description that give a brief overview of the image and alert the reader to the presence of a long description. The long description will likely repeat the information from the short description (although this is a bit of a style decision).
+        </p>
+
+        <p>
+          From this point on, we will not distinguish between the types of descriptions and simply consider what content would be appropriate to include in a description.
+        </p>
+
+      <paragraphs>
+        <title>Images in Context</title>
+
+        <p>
+          To convey the information of an image requires an understanding of what information the image is <em>intended</em> to convey.  Two identical images can naturally have completely different descriptions depending on what the purpose of the image is.  For example, consider the following image and think about how you might describe it.
+        </p>
+
+        <figure xml:id="fig-img-desc-discontinuity">
+          <caption>Graph from <url href="https://activecalculus.org/single/sec-1-7-lim-cont-diff.html#gHq"><pubtitle>Active Calculus</pubtitle></url></caption>
+          <image source="discontinuity.png" width="30%">
+            <shortdescription>graph of function f, a downward opening parabola, with open circle at parabola's vertex, at the point (1,3)</shortdescription>
+            <description>
+              <p>
+                The graph of a downward opening parabola labeled <m>f</m>, with vertex at the point <m>(1,3)</m>.  At the vertex, the graph shows an open circle, indicating that the function is not defined at this point.
+              </p>
+            </description>
+          </image>
+        </figure>
+
+        <p>
+          The long description I gave to this image was: <q>The graph of a downward opening parabola labeled <m>f</m>, with vertex at the point <m>(1,3)</m>.  At the vertex, the graph shows an open circle, indicating that the function is not defined at this point.</q>  This was informed by what I assumed the author was trying to accomplish with the image: to illustrate various ways that a function might not be continuous.  I also know that the textbook has described parabolas as <q>opening downward,</q> rather than having negative leading coefficient or some other standard.
+        </p>
+
+        <p>
+          But what if this same image was in an exercise asking the reader to determine the equation of the parabola?  The description above didn't mention anything about axes since that wasn't relevant to the point the author was trying to make.  If the reader wanted to find the equation, then we might write a description like the following:
+        </p>
+
+        <blockquote>
+          <p>
+            The graph of a function plotted on coordinate axes.  Both horizontal and vertical axes range from -1 to 4. The graph appears to start at the point <m>(-1,1)</m>, crosses the vertical axis between labeled values 2 and 3, reaches a maximum value of 3 at <m>x = 1</m>, and then decreases again, crossing the horizontal axis between <m>x = 3</m> and <m>x = 4</m>.
+          </p>
+        </blockquote>
+
+        <p>
+          Even this might change depending on the context.  Should readers be able to identify whether the graph is a polynomial or a line?  Or is the goal to be able to identify what the vertical intercept is from the graph?
+        </p>
+
+        <p>
+          Along with the pedagogical context, it is also worth considering the other information that is available to the reader: some of the information in the image may be described in the surrounding text or in the caption of the image.  It is not necessary to repeat this information in the description.
+        </p>
+
+        <p>
+          Once you have an understanding of what the image is meant to convey, you can start to write the description itself.  The following are some general guidelines to keep in mind.
+          <ul>
+            <li>
+              <p>
+                Give an overview. Before describing various elements in an image, give a brief overview.  This will allow the reader to determine whether they need to continue reading the description, or jump ahead.  It also orients the reader to the image and helps them understand the context of the description.
+              </p>
+            </li>
+            <li>
+              <p>
+                Create <em>structure</em>. A reader will need to piece together all the different components of an image, so anything the author can do to facilitate this is helpful.  For example, work from left to right, or clockwise from the top, and say that this is what you are doing. Use the relevant structure of an image to group descriptions of related components: <q>A set of coordinate axes, in which the horizontal axis ranges from -10 to 10 and the vertical axis ranges from -5 to 5.</q>
+              </p>
+            </li>
+            <li>
+              <p>
+                Be clear and concise. After writing your description, read it back and look for ways to improve brevity, clarity, and structure.  This needs to be done while still considering the reading level and vocabulary of the target audience.  A nice resource of this is the <url href="https://alt-text-as-poetry.net/">Alt Text as Poetry</url> website.
+              </p>
+            </li>
+            <li>
+              <p>
+                Leverage the reader's specialized knowledge.  Again with an understanding of your target audience, you may be able to assume they know what the graph of a particular function looks like.  For example, an advanced college math textbook could have as a description, <q>graph of a quadratic function with a vertex at (2, 3) and a <m>y</m>-intercept at (0, 1).</q>
+              </p>
+            </li>
+            <li>
+              <p>
+                Avoid visual shorthand. Sighted authors are used to using comparisons between how things look. Some basic shapes should be okay for most readers: a ball, a cup, U-shaped, etc.
+              </p>
+            </li>
+          </ul>
+        </p>
+
+        <p>
+          As an example of the structure of a description, consider the recommendations for describing a <q>chart or graph</q> (data visualization) provided by the <url href="https://www.urban.org/sites/default/files/2022-12/Do%20No%20Harm%20Guide%20Centering%20Accessibility%20in%20Data%20Visualization.pdf">Do No Harm Guide: Centering Accessibility in Data Visualization</url>.  Chapters 3 and 4 of that guide are particularly helpful.
+        </p>
+      </paragraphs>
+        <paragraphs>
+          <title>Examples</title>
+
+
+        <p>
+          We conclude with a few more examples of images and their descriptions.
+        </p>
+
+
+        <example>
+          <title>Venn diagram</title>
+          <figure xml:id="fig-img-desc-venn">
+            <caption>A Venn diagram from <url href="https://discrete.openmathbooks.org/dmoi3/sec_intro-sets.html#ovT"><pubtitle>Discrete Mathematics: an Open Introduction</pubtitle></url>
+            </caption>
+            <image source="two-set-a-minus-b" width="30%">
+              <shortdescription>Venn diagram with two overlapping circles labeled A and B; region in A not overlapping B is shaded.</shortdescription>
+              <description>
+                <p>
+                  A Venn diagram with two overlapping circles labeled A and B, respectively.  Each circle contains a region which does not overlap with the other circle, and a region which does overlap.  The region contained in circle A that does not overlap with region B is shaded.
+                </p>
+              </description>
+            </image>
+          </figure>
+          <p>
+            <dl>
+              <li>
+                <title>Short description</title>
+                <p>
+                  Venn diagram with two overlapping circles labeled A and B; region in A not overlapping B is shaded.
+                </p>
+              </li>
+              <li>
+                <title>Long description</title>
+                <p>
+                  A Venn diagram with two overlapping circles labeled A and B, respectively.  Each circle contains a region which does not overlap with the other circle, and a region which does overlap.  The region contained in circle A that does not overlap with region B is shaded.
+                </p>
+              </li>
+              <li>
+                <title>Context</title>
+                <p>
+                  The image is illustrating how Venn diagrams can be shaded to illustrate set operations.  This was the forth Venn diagram in the text, as such the second sentence of the long description is likely unnecessary; readers should understand what a 2 set Venn diagram looks like.
+                </p>
+              </li>
+            </dl>
+          </p>
+        </example>
+
+
+        <example>
+          <title>Kernel and pre-image</title>
+          <figure xml:id="fig-img-desc-kpi">
+            <caption>Kernel and pre-image diagram from <url href="http://linear.ups.edu/html/section-ILT.html"><pubtitle>A First Course in Linear Algebra</pubtitle></url></caption>
+            <image source="KPI" width="60%">
+              <shortdescrition>Two ovals representing vector spaces containing points representing vectors, with arrows associating points.</shortdescrition>
+              <description>
+                <p>
+                  Two ovals representing vector spaces <m>U</m> and <m>V</m> with arrows connecting points in oval <m>U</m> to oval <m>V</m>, representing the transformation <m>T</m>.  Oval <m>U</m> is split into 4 roughly equal sections, each with 3 points; arrows point from each individual point to a shared, corresponding point in oval <m>V</m>. Each section's points connect to a different point in oval <m>V</m>, which contains 6 points in total.  In each section of oval <m>U</m>, a label appears above the first point and an expression appears to label the section.
+                  <ul>
+                    <li>
+                      <p>
+                        Section 1: first point is labeled <m>\mathbf{u}_1</m>, section labeled with <m>\mathbf{u}_1 + \mathcal{K}(T)</m>, arrows point to point <m>\mathbf{v}_1</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+
+                    <li>
+                      <p>
+                        Section 2: first point is labeled <m>\mathbf{u}_2</m>, section labeled with <m>T^{-1}(\mathbf{v}_2) = \mathbf{u}_2 + \mathcal{K}(T)</m>, arrows point to point <m>\mathbf{v}_2</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Section 3: first point is labeled <m>\mathbf{0}_U</m>, section labeled with <m>T^{-1}(\mathbf{0}_V) = \mathcal{K}(T)</m>, arrows point to point labeled <m>\mathbf{0}_V</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Section 4: first point is labeled <m>\mathbf{u}_3</m>, section labeled with <m>T^{-1}(\mathbf{v}_3)</m>, arrows point to point labeled <m>\mathbf{v}_3</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+                  </ul>
+                  The two remaining points in <m>V</m> are labeled <m>x</m> and <m>y</m>.
+                </p>
+              </description>
+            </image>
+        </figure>
+            <p>
+              <dl>
+                <li>
+                  <title>Short description</title>
+                  <p>
+                    Two ovals representing vector spaces containing points representing vectors, with arrows associating points.
+                  </p>
+                </li>
+                <li>
+                  <title>Long description</title>
+                  <p>
+                    Two ovals representing vector spaces <m>U</m> and <m>V</m> with arrows connecting points in oval <m>U</m> to oval <m>V</m>, representing the transformation <m>T</m>.  Oval <m>U</m> is split into 4 roughly equal sections, each with 3 points; arrows point from each individual point to a shared, corresponding point in oval <m>V</m>. Each section's points connect to a different point in oval <m>V</m>, which contains 6 points in total.  In each section of oval <m>U</m>, a label appears above the first point and an expression appears to label the section.
+                  <ul>
+                    <li>
+                      <p>
+                        Section 1: first point is labeled <m>\mathbf{u}_1</m>, section labeled with <m>\mathbf{u}_1 + \mathcal{K}(T)</m>, arrows point to point <m>\mathbf{v}_1</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+
+                    <li>
+                      <p>
+                        Section 2: first point is labeled <m>\mathbf{u}_2</m>, section labeled with <m>T^{-1}(\mathbf{v}_2) = \mathbf{u}_2 + \mathcal{K}(T)</m>, arrows point to point <m>\mathbf{v}_2</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Section 3: first point is labeled <m>\mathbf{0}_U</m>, section labeled with <m>T^{-1}(\mathbf{0}_V) = \mathcal{K}(T)</m>, arrows point to point labeled <m>\mathbf{0}_V</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Section 4: first point is labeled <m>\mathbf{u}_3</m>, section labeled with <m>T^{-1}(\mathbf{v}_3)</m>, arrows point to point labeled <m>\mathbf{v}_3</m> in oval <m>V</m>.
+                      </p>
+                    </li>
+                  </ul>
+                  The two remaining points in <m>V</m> are labeled <m>x</m> and <m>y</m>.
+                  </p>
+                </li>
+                <li>
+                  <title>Context</title>
+                  <p>
+                    The image is contained in a section on injective linear transformations in a proof-based linear algebra textbook.  The goal of the image is to illustrate the equivalence between images of the linear transformation, their pre-images, and the kernel of the transformation.
+                  </p>
+                </li>
+              </dl>
+            </p>
+
+        </example>
+
+        <example>
+          <title>Combinatorial Graph (unlabeled)</title>
+          <figure xml:id="fig-img-desc-graph">
+            <caption>Unlabeled graph from <url href="https://discrete.openmathbooks.org/dmoi3/sec_paths.html#KBJ"><pubtitle>Discrete Mathematics: an Open Introduction</pubtitle></url></caption>
+            <image source="graph-10-friends" width="30%">
+              <shortdescription>9 vertices arranged in a circle; edges connect some pairs of vertices.  See long description</shortdescription>
+              <description>
+                <p>
+                  Graph with 9 vertices arranged in a circle. Edges connect pairs of vertices.  Starting at the top and moving clockwise, the vertices have been numbered in this description 1 through 9 so edges can be detailed in the table below.
+                </p>
+                <tabular>
+                  <row header="yes">
+                    <cell>Vertex</cell><cell>Connected to vertices</cell>
+                  </row>
+                  <row>
+                    <cell>1</cell><cell>2, 4, 6, 7</cell>
+                  </row>
+                  <row>
+                    <cell>2</cell><cell>1, 4, 7</cell>
+                  </row>
+                  <row>
+                    <cell>3</cell><cell>6, 8</cell>
+                  </row>
+                  <row>
+                    <cell>4</cell><cell>1, 2, 6, 7, 8, 9</cell>
+                  </row>
+                  <row>
+                    <cell>5</cell><cell>6, 8, 9</cell>
+                  </row>
+                  <row>
+                    <cell>6</cell><cell>1, 3, 4, 5</cell>
+                  </row>
+                  <row>
+                    <cell>7</cell><cell>1, 2, 4, 8</cell>
+                  </row>
+                  <row>
+                    <cell>8</cell><cell>3, 4, 5, 7</cell>
+                  </row>
+                  <row>
+                    <cell>9</cell><cell>4, 5</cell>
+                  </row>
+                </tabular>
+              </description>
+            </image>
+        </figure>
+            <p>
+              <dl>
+                <li>
+                  <title>Short description</title>
+                  <p>
+                    9 vertices arranged in a circle; edges connect some pairs of vertices.  See long description
+                  </p>
+                </li>
+                <li>
+                  <title>Long description</title>
+                  <p>
+                    Graph with 9 vertices arranged in a circle. Edges connect pairs of vertices.  Starting at the top and moving clockwise, the vertices have been numbered in this description 1 through 9 so edges can be detailed in the table below.
+                  </p>
+                  <tabular>
+                    <row header="yes">
+                      <cell>Vertex</cell><cell>Connected to vertices</cell>
+                    </row>
+                    <row>
+                      <cell>1</cell><cell>2, 4, 6, 7</cell>
+                    </row>
+                    <row>
+                      <cell>2</cell><cell>1, 4, 7</cell>
+                    </row>
+                    <row>
+                      <cell>3</cell><cell>6, 8</cell>
+                    </row>
+                    <row>
+                      <cell>4</cell><cell>1, 2, 6, 7, 8, 9</cell>
+                    </row>
+                    <row>
+                      <cell>5</cell><cell>6, 8, 9</cell>
+                    </row>
+                    <row>
+                      <cell>6</cell><cell>1, 3, 4, 5</cell>
+                    </row>
+                    <row>
+                      <cell>7</cell><cell>1, 2, 4, 8</cell>
+                    </row>
+                    <row>
+                      <cell>8</cell><cell>3, 4, 5, 7</cell>
+                    </row>
+                    <row>
+                      <cell>9</cell><cell>4, 5</cell>
+                    </row>
+                  </tabular>
+                </li>
+                <li>
+                  <title>Context</title>
+                  <p>
+                    This is from an exercise in a section on paths in graphs.  The question reads, <q>Below is a graph representing friendships between a group of students (each vertex is a student and each edge is a friendship). Is it possible for the students to sit around a round table in such a way that every student sits between two friends? What does this question have to do with paths?</q>
+                  </p>
+                </li>
+              </dl>
+            </p>
+
+        </example>
+
+      </paragraphs>
+    </subsection>
+    <conclusion>
+        <title>Conclusion</title>
 
         <p>Watching a blind reader navigate a web page can be a very enlightening experience.  Or you might even undertake learning one yourself.  Here are some suggestions for getting started (current on 2018-05-31).<ul>
             <li><init>NVDA</init>, <url href="https://www.nvaccess.org/" visual="www.nvaccess.org"/>, Windows, open source via GPL</li>
@@ -4645,6 +5011,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>The International Digital Publishing Forum has information on <url href="http://idpf.org/a11y" visual="idpf.org/a11y">EPUB Accessibility</url>.</p>
             </li>
         </dl></p>
+    </conclusion>
     </section>
     <section xml:id="topic-slides">
         <title>Slides</title>
