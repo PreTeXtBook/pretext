@@ -1279,6 +1279,10 @@ a.mjx-svg-href  {
     stroke: inherit;
 }
 
+.displaymath + .para {
+    margin-top: 0
+}
+
 /* for long math formulas and tables to scroll on small screens */
 @media screen and (max-width: 943px) {
   .ptx-content .displaymath {
