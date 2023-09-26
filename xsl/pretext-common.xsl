@@ -4608,10 +4608,9 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Serial Numbers: fragments -->
-<!-- The @ref variant is not numbered, see below.  -->
-<!-- We number the remainder sequentially.         -->
+<!-- Simply numbered sequentially, globally. -->
 <xsl:template match="fragment" mode="serial-number">
-    <xsl:value-of select="count(preceding::fragment) + 1"/>
+    <xsl:number level="any"/>
 </xsl:template>
 
 
@@ -4673,11 +4672,6 @@ Book (with parts), "section" at level 3
 
 <!-- A subexercises is meant to be minimal, and does not have a number -->
 <xsl:template match="subexercises" mode="serial-number"/>
-
-<!-- This should not be called, a "fragment" as a      -->
-<!-- pointer is not really much in the way of content, -->
-<!-- and we are more interested in its target          -->
-<xsl:template match="fragment[@ref]" mode="serial-number"/>
 
 <!-- We only allow one "instructions" for an "interactive" -->
 <xsl:template match="interactive/instructions" mode="serial-number"/>
