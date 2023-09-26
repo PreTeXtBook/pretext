@@ -2001,9 +2001,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl-old" />
 </xsl:template>
 
+<!-- A "fragref" for literate programming has specialized behavior   -->
+<!-- when reconstructing program code.  But as a knowl in HTML it is -->
+<!-- isomorphic to "xref", so we lump them into this template.       -->
 <xsl:template match="*" mode="make-efficient-knowls">
     <xsl:variable name="xref-ids">
-        <xsl:for-each select="$document-root//xref">
+        <xsl:for-each select="$document-root//xref|$document-root//fragref">
             <xsl:choose>
                 <!-- ignore, no-op -->
                 <xsl:when test="@provisional"/>
