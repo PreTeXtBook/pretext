@@ -11,7 +11,13 @@
 <chapter xml:id="code-style">
     <title>Code Style</title>
 
-    <section xml:id="whitespace-code">
+    <section xml:id="code-style-indentation">
+        <title>Indentation</title>
+
+        <p>Indentation of XSL, and indentation of Python, is four spaces per level of indentation.  Please do not be stubborn and suggest that you should be allowed to behave differently.  With many contributors it is more important that every developer does it the same, than for one developer to suggest that their personal preference is better.  Oh, and never tabs (see <xref ref="git-tabs"/>).</p>
+    </section>
+
+    <section xml:id="code-style-whitespace">
         <title>Whitespace</title>
 
         <p>When a change has a lot of whitespace changes, or trivial re-formatting, please isolate those on a separate commit.  Then suggest to the committer that the full 40-character hash of the commit (once finalized) be added to the <c>.git-blame-ignore-revs</c> file to keep <c>git blame</c> functional.  To learn more, see <url href="https://akrabat.com/ignoring-revisions-with-git-blame/">Rob Allen's post</url>, and <xref ref="git-blame"/>.</p>

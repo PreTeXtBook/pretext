@@ -36,6 +36,26 @@
         </ul></p>
     </section>
 
+    <section xml:id="git-whitespace">
+        <title>Whitespace</title>
+        <idx><h>whitespace</h><h>in code</h></idx>
+
+        <p><term>Whitespace</term> refers to those pesky characters that you really cannot see visually, but which are definitely (different) bytes in your source code.  Spaces, non-breaking spaces, tabs, newlines (carriage return?  Enter?).  Here is the problem.  Somebody else left a blank space at the end of a line mid-sentence, perhaps because they manually added a newline there to make a line shorter and more readable (especially if it is code).  Now you open that file with your editor, which is set to strip trailing whitespace from lines.  Maybe you make an edit, realize it was not what you needed and remove the edit.  The rest of your work is off in some other file.  But now the original file has a single one-character deletion, and that will be carried forever in the git history as a change you made to the work of the previous manual-line-breaker.</p>
+
+        <p>Solution: the original space introduced at the end of the line in mid-sentence should never have been part of a commit, and should never have been merged in the first place.  The fault is really not yours, and having your editor strip trailing whitespace is probably a good thing.  But if you find these sorts of mistakes, they should be on a commit of their own, clearly labeled as fixing whitespace (see <xref ref="code-style-whitespace"/>).  But do not be the person who introduces the spurious whitespace in the first place!  We will likely ask you to clean it up before your pull request is merged.</p>
+
+        <p>Whether or not a newline is the last character of a file seems to be a common <q>correction</q> that editors make routinely.  Let us say that a newline should be there, so feel free to add such newlines (on its own commit).</p>
+
+        <p>When I do <c>git diff</c> at the command-line, extraneous whitespace (trailing characters, blank lines that are really not at all blank) are shown as bright red rectangles.  Can't miss 'em.  Find a similar tool that works for you.  Or <c>grep</c> with a pattern like <c> $</c> (that's a space and a dollar-sign.)  And learn to configure your editor to do the right thing routinely (and no more).</p>
+    </section>
+
+    <section xml:id="git-tabs">
+        <title>Tabs</title>
+        <idx><h>whitespace</h><h>tabs</h></idx>
+
+        <p>A <term>tab</term> is the worst sort of whitespace!  (See <xref ref="git-whitespace"/>.)  There should never ever be any tabs present in any contribution to <pretext/>.  The problem: the <q>width</q> of a tab is different for each person who opens a file.  Two spaces, four spaces, eight spaces, you name it.  So if indentation is accomplished with a mix of tabs and spaces, there is a good chance it might look right to you, but looks wrong to many other developers.  I hit the tab key on my keyboard all the time.  But my editor is set to supply <em>four spaces</em> as a result.  See if your editor will behave similarly.</p>
+    </section>
+
     <section>
         <title>Pull Requests</title>
 
@@ -191,6 +211,6 @@
             <cline>git config blame.ignoreRevsFile .git-blame-ignore-revs</cline>
         </cd></p>
 
-        <p>To learn more, see <url href="https://akrabat.com/ignoring-revisions-with-git-blame/">Rob Allen's post</url>, and <xref ref="whitespace-code"/>.</p>
+        <p>To learn more, see <url href="https://akrabat.com/ignoring-revisions-with-git-blame/">Rob Allen's post</url>, and <xref ref="code-style-whitespace"/>.</p>
     </section>
 </chapter>
