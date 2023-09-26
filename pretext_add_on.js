@@ -307,7 +307,7 @@ console.log("this is e", e);
             this_item = items_needing_permalinks[i];
             var this_anchor = this_item.id;
             if (Boolean(this_item.closest(".parsons"))) { continue }  /* parsons block */
-            if (Boolean(this_item.closest("details"))) { continue }  /* parsons block */
+            if (Boolean(this_item.closest("details"))) { continue }  /* hidden in details */
             if (this_item.parentElement.classList.contains("lines")) { continue }  /* parsons block */
             if (getComputedStyle(this_item).display == "inline") { continue }  /* inline paragraph at start of article, for example*/
             try {
