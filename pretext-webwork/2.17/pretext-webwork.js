@@ -1013,7 +1013,7 @@ function createFeedbackButton(id, title, content) {
 	if (!content) feedbackButton.dataset.emptyContent = '1';
 	const contentSpan = document.createElement('span');
 	//contentSpan.style.fontSize = '15pt';
-	contentSpan.textContent = '🡇'
+	contentSpan.textContent = '↓';
 	feedbackButton.appendChild(contentSpan);
 	feedbackButton.type = 'button';
 	feedbackButton.classList.add('ww-feedback');
