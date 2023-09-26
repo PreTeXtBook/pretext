@@ -670,7 +670,7 @@ to immitate what is below.  */
     font-weight: normal;
     font-style: italic;
 }
-.ptx-content article.theorem-like li > .title {
+.ptx-content article.theorem-like li  .title {
     font-weight: 600;
     font-style: normal;
     font-size: 96%;
