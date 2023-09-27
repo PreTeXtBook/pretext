@@ -32,7 +32,7 @@
     <!-- information which a reader mostly will never see. -->
 
     <docinfo>
-
+        <document-id edition="2">PTXWW</document-id>
         <!-- In the HTML version there is room for a   -->
         <!-- picture or logo in the upper left corner. -->
         <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
@@ -67,31 +67,30 @@
         -->
         <feedback>
             <url>not-implemented.html</url>
-             <!-- <text>My Button Text</text>  -->
+            <!-- <text>My Button Text</text>  -->
         </feedback>
 
         <latex-image-preamble>
             \usepackage{pgfplots}
             \pgfplotsset{
                 every axis/.append style={
-                    axis lines=middle,
-                    xlabel={\(x\)},
-                    ylabel={\(y\)},
+                    axis lines=middle, xlabel={\(x\)}, ylabel={\(y\)},
                     grid = both,
                 }
             }
         </latex-image-preamble>
     </docinfo>
 
-    <article xml:id="sample-ww-chapter">
-        <title>Integrating <webwork /> into Textbooks</title>
+    <book xml:id="sample-ww-chapter">
+        <title>Integrating <webwork />
+ into Textbooks</title>
         <subtitle>Sample Exercises</subtitle>
 
         <frontmatter xml:id="frontmatter">
 
             <!-- Items typically at the top of the first page of an article -->
             <titlepage>
-               <!-- There can be several authors here -->
+                <!-- There can be several authors here -->
                 <author>
                     <personname>Robert Beezer</personname>
                     <department>Department of Mathematics and Computer Science</department>
@@ -113,110 +112,177 @@
                 </author>
 
                 <!-- Can set date manually or use the "today" element -->
-                <date><today /></date>
+                <date>
+                    <today />
+                </date>
 
             </titlepage>
 
             <abstract>
-                <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  While technically an example of <pretext />'s <c>article</c> format, it is intended to closely resemble a chapter of a <pretext /> <c>book</c> that is divided into sections.</p>
-                <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
-                <p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext /> enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork /> end, and generally maintaining <webwork /> software.</p>
-                <p>This article assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
-            </abstract>
+                <p>This is a sample article to demonstrate integrating <webwork />
+ homework problems into content authored with <pretext />
+.  While technically an example of <pretext />
+'s <c>article</c> format, it is intended to closely resemble a chapter of a <pretext />
+    <c>book</c> that is divided into sections.</p>
+<p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.
+</p>
+<p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext />
+ enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork />
+ end, and generally maintaining <webwork />
+ software.</p>
+<p>This article assumes a mild familiarity with both <url href="https://pretextbook.org/">
+<pretext />
+</url> and <url href="http://webwork.maa.org/wiki/Main_Page">
+<webwork />
+</url>. For more information about either project, follow the links.</p>
+</abstract>
 
-        </frontmatter>
+</frontmatter>
+<chapter xml:id="the-webwork-chapter">
+<title>A Chapter full of WeBWorK pRoBleMs</title>
+<section>
+<title>Arithmetic</title>
 
-        <section>
-            <title>Arithmetic</title>
+<p>Some questions with quantitative answers.</p>
 
-            <p>Some questions with quantitative answers.</p>
+<exercise xml:id="integer-addition" label="lab-integer-addition">
+<title>Adding Single-Digit Integers</title>
 
-            <exercise xml:id="integer-addition">
-                <title>Adding Single-Digit Integers</title>
+<introduction>
+<p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
+</introduction>
 
-                <introduction>
-                    <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
-                </introduction>
-
-                <webwork xml:id="webwork-add-numbers">
-                    <description>
+<webwork xml:id="webwork-add-numbers">
+<description>
                         Add two positive single-digit integers.
-                    </description>
+</description>
 
-                    <pg-code>
+<pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
                         $c = Compute($a + $b);
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
-                    </statement>
+<statement>
+<p>Compute the sum of <m>
+<var name="$a" />
+</m> and <m>
+<var name="$b" />
+</m>:
+</p>
+<p>
+<m>
+<var name="$a" />
+ +<var name="$b" />
+ =</m>
+<var name="$c" width="5" category="integer" />
+</p>
+</statement>
 
-                    <solution>
-                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
-                    </solution>
-                </webwork>
+<solution>
+<p>
+<m>
+<var name="$a" />
+ +<var name="$b" />
+ =<var name="$c" />
+</m>.
+</p>
+</solution>
+</webwork>
 
-                <conclusion>
-                    <p>That was a simple problem.  Let's move on.</p>
-                </conclusion>
-            </exercise>
+<conclusion>
+<p>That was a simple problem.  Let's move on.</p>
+</conclusion>
+</exercise>
 
-            <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
+<p>If you are familiar with <webwork />
+, then it may be a surprise to you to be interacting with a <webwork />
+ problem this way, without having logged in to <webwork />
+.</p>
 
-            <exercise xml:id="integer-addition-with-seed">
-                <title>Declaring a Problem Seed</title>
+<exercise xml:id="integer-addition-with-seed" label="lab-integer-addition-with-seed">
+<title>Declaring a Problem Seed</title>
 
-                <introduction>
-                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem (<q>copied</q> in the <pretext/> source), but with a <c>seed</c> specified.</p>
-                </introduction>
+<introduction>
+<p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem (<q>copied</q> in the <pretext/>
+ source), but with a <c>seed</c> specified.</p>
+</introduction>
 
-                <webwork copy="webwork-add-numbers" seed="510"/>
+<webwork copy="webwork-add-numbers" seed="510"/>
 
-            </exercise>
+</exercise>
 
-            <exercise xml:id="integer-addition-with-control-seed">
-                <title>Controlling Randomness</title>
+<exercise xml:id="integer-addition-with-control-seed" label="lab-integer-addition-with-control-seed">
+<title>Controlling Randomness</title>
 
-                <introduction>
-                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
-                </introduction>
+<introduction>
+<p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />
+'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
+</introduction>
 
-                <webwork seed="1">
-                    <pg-code>
+<webwork seed="1" label="controlled_randomness">
+<pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
                         if ($envir{problemSeed}==1){$a=1;$b=2};
                         $c = Compute($a + $b);
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
-                    </statement>
+<statement>
+<p>Compute the sum of <m>
+<var name="$a" />
+</m> and <m>
+<var name="$b" />
+</m>:
+</p>
+<p>
+<m>
+<var name="$a" />
+ +<var name="$b" />
+ =</m>
+<var name="$c" width="5" category="integer" />
+</p>
+</statement>
 
-                    <solution>
-                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
-                    </solution>
-                </webwork>
-            </exercise>
+<solution>
+<p>
+<m>
+<var name="$a" />
+ +<var name="$b" />
+ =<var name="$c" />
+</m>.
+</p>
+</solution>
+</webwork>
+</exercise>
 
 
-            <exercise>
-                <title>Special Answer Checking</title>
+<exercise>
+<title>Special Answer Checking</title>
 
-                <introduction>
-                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.<ul>
-                        <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q><c>y</c></q>.</p></li>
-                        <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q><c>x^2*x^3</c></q>, which, right or wrong, is unsimplified.</p></li>
-                        <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
-                    </ul></p>
-                </introduction>
+<introduction>
+<p>One of the strengths of <webwork />
+ is its ability to give intelligent feedback for incorrect answers.<ul>
+<li>
+<p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>
+<c>y</c>
+</q>.
+</p>
+</li>
+<li>
+<p>There is general feedback for when the student's answer is not in the right form. Try entering <q>
+<c>x^2*x^3</c>
+</q>, which, right or wrong, is unsimplified.</p>
+</li>
+<li>
+<p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p>
+</li>
+</ul>
+</p>
+</introduction>
 
-                <webwork>
-                    <pg-code>
+<webwork>
+<pg-code>
                         $a = random(1, 9, 1);
                         $b = random(1, 9, 1);
                         $c = $a + $b;
@@ -232,34 +298,51 @@
                         $evaluator = $answer->cmp()->withPostFilter(AnswerHints(
                             [Compute("x^($product)")] =>
                             "When multiplying terms with the same base, you do not multiply the exponents."));
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
+<statement>
+<p>Use the properties of exponents to simplify <m>
+<var name="$expression" />
+</m>.
+</p>
 
-                        <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
+<instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.
+</instruction>
 
-                        <p><m><var name="$expression" />=</m> <var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
+<p>
+<m>
+<var name="$expression" />
+=</m>
+<var name="$answer" evaluator="$evaluator" width="8" category="formula" />
+</p>
 
-                    </statement>
+</statement>
 
-                    <solution>
-                        <p>We <em>add</em> the exponents as follows, while including a gratuitous reference to the quadratic formula:<md>
-                            <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}&amp;<xref ref="theorem-quadratic-formula" text="type-global"/></mrow>
-                            <mrow>&amp;=x^{<var name="$c" />}</mrow>
-                        </md></p>
-                    </solution>
-                </webwork>
-            </exercise>
+<solution>
+<p>We <em>add</em> the exponents as follows, while including a gratuitous reference to the quadratic formula:<md>
+<mrow>
+<var name="$expression" />
+&amp;=x^{<var name="$a" />
++<var name="$b" />
+}&amp;<xref ref="theorem-quadratic-formula" text="type-global"/>
+</mrow>
+<mrow>&amp;=x^{<var name="$c" />
+}</mrow>
+</md>
+</p>
+</solution>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Using Hints</title>
-                <introduction>
-                    <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an PTX hint is controlled.</p>
-                </introduction>
+<exercise>
+<title>Using Hints</title>
+<introduction>
+<p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork />
+ course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an PTX hint is controlled.</p>
+</introduction>
 
-                <webwork>
-                    <pg-code>
+<webwork>
+<pg-code>
                         do {
                             $a = list_random(2,3,5,6);
                             $b = random(1, 5, 1);
@@ -271,87 +354,118 @@
                         Context("LimitedRadical");
 
                         $answer = Formula("$b sqrt($a)");
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>Simplify the expression <m><var name="$expression"/></m>.</p>
-                        <p><m><var name="$expression"/>=</m> <var name="$answer" width="10"/></p>
-                    </statement>
+<statement>
+<p>Simplify the expression <m>
+<var name="$expression"/>
+</m>.
+</p>
+<p>
+<m>
+<var name="$expression"/>
+=</m>
+<var name="$answer" width="10"/>
+</p>
+</statement>
 
-                    <hint>
-                        <p>Factor the number inside the radical.</p>
-                    </hint>
+<hint>
+<p>Factor the number inside the radical.</p>
+</hint>
 
-                    <solution>
-                        <p><me><var name="$expression"/>=\sqrt{<var name="$b"/>^2\cdot <var name="$a"/>}=<var name="$b"/>\sqrt{<var name="$a"/>}</me></p>
-                    </solution>
-                </webwork>
-            </exercise>
+<solution>
+<p>
+<me>
+<var name="$expression"/>
+=\sqrt{<var name="$b"/>
+^2\cdot <var name="$a"/>
+}=<var name="$b"/>
+\sqrt{<var name="$a"/>
+}</me>
+</p>
+</solution>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>No Randomization</title>
-                <introduction>
-                    <p>This problem has no randomization at all, not even if it were exported to be part of a problem set on a <webwork /> server. As such, it really doesn't need any lines of Perl code in its setup, so you have the option of skipping that part of the authoring process.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+2=</m> <var name="3" width="5" /></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>For more about problems that do not require any randomization, see the <url href="https://pretextbook.org/documentation.html">PTX Author Guide</url>.</p>
-                </conclusion>
-            </exercise>
+<exercise label="lab-no-random">
+<title>No Randomization</title>
+<introduction>
+<p>This problem has no randomization at all, not even if it were exported to be part of a problem set on a <webwork />
+ server. As such, it really doesn't need any lines of Perl code in its setup, so you have the option of skipping that part of the authoring process.</p>
+</introduction>
+<webwork label="ww-no-random">
+<statement>
+<p>
+<m>1+2=</m>
+<var name="3" width="5" />
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>For more about problems that do not require any randomization, see the <url href="https://pretextbook.org/documentation.html">PTX Author Guide</url>.
+</p>
+</conclusion>
+</exercise>
 
-            <project>
-                <title>Inside a <tag>project</tag></title>
-                <introduction>
-                    <p>
-                        If you like, you can have a <webwork/> inside a PROJECT-LIKE block.
+<project>
+<title>Inside a <tag>project</tag>
+</title>
+<introduction>
+<p>
+                        If you like, you can have a <webwork/>
+ inside a PROJECT-LIKE block.
                         Just like with an <tag>exercise</tag>, it can be preceded with an optional <tag>introduction</tag>
                         and followed by an optional <tag>conclusion</tag>.
-                    </p>
-                </introduction>
-                <webwork copy="webwork-add-numbers" seed="511"/>
-            </project>
+</p>
+</introduction>
+<webwork copy="webwork-add-numbers" seed="511" label="lab-copy-webwork-add-numbers"/>
+</project>
 
-        </section>
+</section>
 
-        <section xml:id="section-the-quadratic-formula">
-            <title>The Quadratic Formula</title>
+<section xml:id="section-the-quadratic-formula">
+<title>The Quadratic Formula</title>
 
-            <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems can still behave well.</p>
+<p>In the previous section, we saw relatively simple <webwork />
+ questions. This section demonstrates how even very complicated <webwork />
+ problems can still behave well.</p>
 
-            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork /> problem references the theorem by its number. This seemingly minor detail demonstrates the degree to which <webwork /> and <pretext /> have been integrated.</p>
+<p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork />
+ problem references the theorem by its number. This seemingly minor detail demonstrates the degree to which <webwork />
+ and <pretext />
+ have been integrated.</p>
 
-            <theorem xml:id="theorem-quadratic-formula">
-                <title>Quadratic Formula</title>
+<theorem xml:id="theorem-quadratic-formula">
+<title>Quadratic Formula</title>
 
-                <statement>
-                    <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me></p>
-                </statement>
-                <proof>
-                    <p><md>
-                        <mrow>ax^2 + bx + c &amp;= 0</mrow>
-                        <mrow>ax^2 + bx &amp;= -c</mrow>
-                        <mrow>4ax^2 + 4bx &amp;= -4c</mrow>
-                        <mrow>4ax^2 + 4bx + b^2 &amp;= b^2 - 4ac</mrow>
-                        <mrow>(2ax + b)^2 &amp;= b^2 - 4ac</mrow>
-                        <mrow>2ax + b &amp;=\pm\sqrt{b^2 - 4ac}</mrow>
-                        <mrow>2ax &amp;=-b\pm\sqrt{b^2 - 4ac}</mrow>
-                        <mrow>x &amp;=\frac{-b\pm\sqrt{b^2 - 4ac}}{2a}</mrow>
-                    </md></p>
-                </proof>
-            </theorem>
+<statement>
+<p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me>
+</p>
+</statement>
+<proof>
+<p>
+<md>
+<mrow>ax^2 + bx + c &amp;= 0</mrow>
+<mrow>ax^2 + bx &amp;= -c</mrow>
+<mrow>4ax^2 + 4bx &amp;= -4c</mrow>
+<mrow>4ax^2 + 4bx + b^2 &amp;= b^2 - 4ac</mrow>
+<mrow>(2ax + b)^2 &amp;= b^2 - 4ac</mrow>
+<mrow>2ax + b &amp;=\pm\sqrt{b^2 - 4ac}</mrow>
+<mrow>2ax &amp;=-b\pm\sqrt{b^2 - 4ac}</mrow>
+<mrow>x &amp;=\frac{-b\pm\sqrt{b^2 - 4ac}}{2a}</mrow>
+</md>
+</p>
+</proof>
+</theorem>
 
-            <exercise xml:id="quadratic-equation">
-                <title>Solving Quadratic Equations</title>
-                <webwork xml:id="webwork-solve-quadratic">
-                    <description>
-                        <line>Find a quadratic equation's solutions.</line>
-                        <line>One positive integer solution and one negative fraction solution.</line>
-                    </description>
-                    <pg-code>
+<exercise xml:id="quadratic-equation" label="lab-quadratic-equation">
+<title>Solving Quadratic Equations</title>
+<webwork xml:id="webwork-solve-quadratic">
+<description>
+<line>Find a quadratic equation's solutions.</line>
+<line>One positive integer solution and one negative fraction solution.</line>
+</description>
+<pg-code>
                         Context("Fraction");
                         $a = Compute(random(2,6,1));
                         do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
@@ -375,80 +489,99 @@
                         );
                         Context("FiniteSolutionSets");
                         $solutionset = Formula("{$x1,$x2}");
-                    </pg-code>
-                    <introduction>
-                        <p>
-                            Consider the quadratic equation <m><var name="$quadratic" /> = 0</m>.
-                        </p>
-                    </introduction>
-                    <task>
-                        <title>Identify Coefficients</title>
-                        <statement>
-                            <p>
+</pg-code>
+<introduction>
+<p>
+                            Consider the quadratic equation <m>
+<var name="$quadratic" />
+ = 0</m>.
+</p>
+</introduction>
+<task>
+<title>Identify Coefficients</title>
+<statement>
+<p>
                                 Identify the coefficients for the quadratic equation
-                                using the standard form from <xref ref="theorem-quadratic-formula" />.
-                            </p>
-                            <p>
-                                <m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>,
-                                <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>,
-                                <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/>
-                            </p>
-                        </statement>
-                        <solution>
-                            <p>
+                                using the standard form from <xref ref="theorem-quadratic-formula" />
+.
+</p>
+<p>
+<m>a=</m>
+<var name="$a" width="4" evaluator="$evaluatorfora"/>
+,
+<m>b=</m>
+<var name="$b" width="4" evaluator="$evaluatorforb"/>
+,
+<m>c=</m>
+<var name="$c" width="4" evaluator="$evaluatorforc"/>
+</p>
+</statement>
+<solution>
+<p>
                                 Take the coefficient of <m>x^2</m> for the value of <m>a</m>,
                                 the coefficient of <m>x</m> for <m>b</m>,
                                 and the constant for <m>c</m>.
-                                <em>In this case</em>, they are <m>a = <var name="$a" /></m>,
-                                <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.
-                            </p>
-                        </solution>
-                    </task>
-                    <task>
-                        <title>Use the Quadratic Formula</title>
-                        <statement>
-                            <p>
+<em>In this case</em>, they are <m>a = <var name="$a" />
+</m>,
+<m>b = <var name="$b" />
+</m>,<m>c = <var name="$c" />
+</m>.
+</p>
+</solution>
+</task>
+<task>
+<title>Use the Quadratic Formula</title>
+<statement>
+<p>
                                 Using the quadratic formula, solve the equation.
-                            </p>
-                            <p>
-                                <var name="$solutionset" width="40"/>
-                            </p>
-                        </statement>
-                        <solution>
-                            <p>
-                                Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula"/>.
-                            </p>
-                            <p>
-                                You already identified <m>a = <var name="$a"/></m>,
-                                <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>,
+</p>
+<p>
+<var name="$solutionset" width="40"/>
+</p>
+</statement>
+<solution>
+<p>
+                                Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula"/>
+.
+</p>
+<p>
+                                You already identified <m>a = <var name="$a"/>
+</m>,
+<m>b = <var name="$b"/>
+</m>, and <m>c = <var name="$c"/>
+</m>,
                                 so the results are:
-                                <me>x = <var name="$sol1"/> = <var name="$x1"/></me>
+<me>x = <var name="$sol1"/>
+ =<var name="$x1"/>
+</me>
                                 or
-                                <me>x = <var name="$sol2"/> = <var name="$x2"/></me>
-                            </p>
-                        </solution>
-                    </task>
-                    <conclusion>
-                        <p>
+<me>x = <var name="$sol2"/>
+ =<var name="$x2"/>
+</me>
+</p>
+</solution>
+</task>
+<conclusion>
+<p>
                             This conclusion is just here for testing.
-                        </p>
-                    </conclusion>
-                </webwork>
-            </exercise>
+</p>
+</conclusion>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Nested tasks</title>
-                <introduction>
-                    <p>
+<exercise>
+<title>Nested tasks</title>
+<introduction>
+<p>
                         This exercise tests that nested tasks work.
-                    </p>
-                </introduction>
-                <webwork>
-                    <description>
-                        <line>Find a quadratic equation's solutions.</line>
-                        <line>One positive integer solution and one negative fraction solution.</line>
-                    </description>
-                    <pg-code>
+</p>
+</introduction>
+<webwork>
+<description>
+<line>Find a quadratic equation's solutions.</line>
+<line>One positive integer solution and one negative fraction solution.</line>
+</description>
+<pg-code>
                         Context("Fraction");
                         $a = Compute(random(2,6,1));
                         do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
@@ -472,490 +605,556 @@
                         );
                         Context("FiniteSolutionSets");
                         $solutionset = Formula("{$x1,$x2}");
-                    </pg-code>
-                    <introduction>
-                        <p>
-                            Consider the quadratic equation <m><var name="$quadratic" /> = 0</m>.
-                        </p>
-                    </introduction>
-                    <task>
-                        <title>Identify Coefficients</title>
-                        <introduction>
-                            <p>
-                                Identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula"/>.
-                            </p>
-                        </introduction>
-                        <task>
-                            <statement>
-                                <p>
-                                    <m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>,
-                                </p>
-                            </statement>
-                            <solution>
-                                <p>
+</pg-code>
+<introduction>
+<p>
+                            Consider the quadratic equation <m>
+<var name="$quadratic" />
+ = 0</m>.
+</p>
+</introduction>
+<task>
+<title>Identify Coefficients</title>
+<introduction>
+<p>
+                                Identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula"/>
+.
+</p>
+</introduction>
+<task>
+<statement>
+<p>
+<m>a=</m>
+<var name="$a" width="4" evaluator="$evaluatorfora"/>
+,
+</p>
+</statement>
+<solution>
+<p>
                                     Take the coefficient of <m>x^2</m> for the value of <m>a</m>.
-                                    <em>In this case</em>, <m>a = <var name="$a" /></m>.
-                                </p>
-                            </solution>
-                        </task>
-                        <task>
-                            <statement>
-                                <p>
-                                    <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>,
-                                </p>
-                            </statement>
-                            <solution>
-                                <p>
+<em>In this case</em>,<m>a = <var name="$a" />
+</m>.
+</p>
+</solution>
+</task>
+<task>
+<statement>
+<p>
+<m>b=</m>
+<var name="$b" width="4" evaluator="$evaluatorforb"/>
+,
+</p>
+</statement>
+<solution>
+<p>
                                     Take the coefficient of <m>x</m> for the value of <m>b</m>.
-                                    <em>In this case</em>, <m>b = <var name="$b" /></m>.
-                                </p>
-                            </solution>
-                        </task>
-                        <task>
-                            <statement>
-                                <p>
-                                    <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/>
-                                </p>
-                            </statement>
-                            <solution>
-                                <p>
+<em>In this case</em>,<m>b = <var name="$b" />
+</m>.
+</p>
+</solution>
+</task>
+<task>
+<statement>
+<p>
+<m>c=</m>
+<var name="$c" width="4" evaluator="$evaluatorforc"/>
+</p>
+</statement>
+<solution>
+<p>
                                     Take the constant term for the value of <m>c</m>.
-                                    <em>In this case</em>, <m>c = <var name="$c" /></m>.
-                                </p>
-                            </solution>
-                        </task>
-                    </task>
-                    <task>
-                        <title>Use the Quadratic Formula</title>
-                        <statement>
-                            <p>
+<em>In this case</em>,<m>c = <var name="$c" />
+</m>.
+</p>
+</solution>
+</task>
+</task>
+<task>
+<title>Use the Quadratic Formula</title>
+<statement>
+<p>
                                 Using the quadratic formula, solve the equation.
-                            </p>
-                            <p>
-                                <var name="$solutionset" width="40"/>
-                            </p>
-                        </statement>
-                        <solution>
-                            <p>
-                                Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula"/>.
-                            </p>
-                            <p>
-                                You already identified <m>a = <var name="$a"/></m>,
-                                <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>,
+</p>
+<p>
+<var name="$solutionset" width="40"/>
+</p>
+</statement>
+<solution>
+<p>
+                                Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula"/>
+.
+</p>
+<p>
+                                You already identified <m>a = <var name="$a"/>
+</m>,
+<m>b = <var name="$b"/>
+</m>, and <m>c = <var name="$c"/>
+</m>,
                                 so the results are:
-                                <me>x = <var name="$sol1"/> = <var name="$x1"/></me>
+<me>x = <var name="$sol1"/>
+ =<var name="$x1"/>
+</me>
                                 or
-                                <me>x = <var name="$sol2"/> = <var name="$x2"/></me>
-                            </p>
-                        </solution>
-                    </task>
-                    <conclusion>
-                        <p>
+<me>x = <var name="$sol2"/>
+ =<var name="$x2"/>
+</me>
+</p>
+</solution>
+</task>
+<conclusion>
+<p>
                             This conclusion is just here for testing.
-                        </p>
-                    </conclusion>
-                </webwork>
-            </exercise>
+</p>
+</conclusion>
+</webwork>
+</exercise>
 
-            <exercise xml:id="copy-with-tasks">
-                <title>Copy a Problem with Tasks</title>
+<exercise xml:id="copy-with-tasks" label="lab-copy-with-tasks">
+<title>Copy a Problem with Tasks</title>
 
-                <introduction>
-                    <p>We are testing copying the quadratic equation problem above (<xref ref="quadratic-equation"/>), since it is structured with <tag>task</tag>, and we also provide a new seed.</p>
-                </introduction>
+<introduction>
+<p>We are testing copying the quadratic equation problem above (<xref ref="quadratic-equation"/>
+), since it is structured with <tag>task</tag>, and we also provide a new seed.</p>
+</introduction>
 
-                <webwork copy="webwork-solve-quadratic" seed="832"/>
+<webwork copy="webwork-solve-quadratic" seed="832"/>
 
-            </exercise>
-        </section>
+</exercise>
+</section>
 
-        <section>
-            <title>Open Problem Library</title>
+<section>
+<title>Open Problem Library</title>
 
 
-                <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
+<p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork />
+ problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
-                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>pretext</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+<p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork />
+ caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>pretext</c> script to connect to the server to produce <pretext />
+ code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
-                <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork /> course which is hosting the <webwork /> computation may be used this way.</p>
+<p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork />
+ course which is hosting the <webwork />
+ computation may be used this way.</p>
 
-            <exercise xml:id="cylinder-volume">
-                <title>Cylinder Volume</title>
+<exercise xml:id="cylinder-volume" label="lab-cylinder-volume">
+<title>Cylinder Volume</title>
 
-                <introduction>
-                    <p>This problem is one that Portland Community College has donated to the Open Problem Library.</p>
-                </introduction>
+<introduction>
+<p>This problem is one that Portland Community College has donated to the Open Problem Library.</p>
+</introduction>
 
-                <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
-            </exercise>
+<webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
+</exercise>
 
-            <p>This uninteresting image, authored in <latex/> syntax, is here only to make sure its automatically-assigned identifier is correct, given that the <init>OPL</init> problem just above is going to generate another image for its static representation.</p>
 
-            <image>
-                <latex-image>
-                    \begin{tikzpicture}
-                        \draw[fill=white] (0,0) ellipse (3 and 0.45);
+<p>This uninteresting image, authored in <latex/>
+ syntax, is here only to make sure its automatically-assigned identifier is correct, given that the <init>OPL</init> problem just above is going to generate another image for its static representation.</p>
+<!--
+<image>
+<latex-image>
+                    \begin{tikzpicture} \draw[fill=white] (0,0) ellipse (3 and 0.45);
                     \end{tikzpicture}
-                </latex-image>
-            </image>
+</latex-image>
+</image>
+-->
+<warning>
+<title>Incompatible Problems</title>
 
-            <warning>
-                <title>Incompatible Problems</title>
+<p>Not all problems that come from the OPL are compatible with <pretext />
+. The reasons vary. Perhaps the problem uses older <webwork />
+ macros that cannot be augmented to provide <pretext />
+ output. Perhaps the problem nests a table within a table, which <pretext />
+ will not support. Perhaps there are graphics in the problem that are not sized appropriately for <pretext />
+ output and there's nothing you can do about it. And there are many more reasons.</p>
 
-                <p>Not all problems that come from the OPL are compatible with <pretext />. The reasons vary. Perhaps the problem uses older <webwork /> macros that cannot be augmented to provide <pretext /> output. Perhaps the problem nests a table within a table, which <pretext /> will not support. Perhaps there are graphics in the problem that are not sized appropriately for <pretext /> output and there's nothing you can do about it. And there are many more reasons.</p>
+<p>Unfortunately the variety of reasons for which a problem may be incompatible means that at present, there is no way to validate a problem automatically. Using an incompatible problem might not raise any errors at any stage of the <pretext />
+ processing, but large chunks of the problem may be missing, especially in print output. So we recommend that you review all output modes when using an OPL problem. Chances are that if it is behaving in print, it will behave elsewhere. But that is an unproven theory at this point.</p>
+</warning>
+</section>
 
-                <p>Unfortunately the variety of reasons for which a problem may be incompatible means that at present, there is no way to validate a problem automatically. Using an incompatible problem might not raise any errors at any stage of the <pretext /> processing, but large chunks of the problem may be missing, especially in print output. So we recommend that you review all output modes when using an OPL problem. Chances are that if it is behaving in print, it will behave elsewhere. But that is an unproven theory at this point.</p>
-            </warning>
-        </section>
+<section>
+<title>Antidifferentiation</title>
 
-        <section>
-            <title>Antidifferentiation</title>
+<subsection>
+<title>A Few More Features</title>
 
-            <subsection>
-                <title>A Few More Features</title>
+<p>This subsection demonstrates a few more features.</p>
 
-                <p>This subsection demonstrates a few more features.</p>
+<definition xml:id="definition-antiderivative">
+<title>Antiderivative of a Function</title>
 
-                <definition xml:id="definition-antiderivative">
-                    <title>Antiderivative of a Function</title>
+<statement>
+<p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.
+</p>
+</statement>
+</definition>
 
-                    <statement>
-                        <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
-                    </statement>
-                </definition>
+<p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
 
-                <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
+<theorem xml:id="theorem-FTC">
+<title>The Fundamental Theorem of Calculus</title>
+<idx>Fundamental Theorem of Calculus</idx>
+<statement>
+<p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me>
+</p>
+</statement>
+<proof>
+<p>Left to the reader.</p>
+</proof>
+</theorem>
 
-                <theorem xml:id="theorem-FTC">
-                    <title>The Fundamental Theorem of Calculus</title>
-                    <idx>Fundamental Theorem of Calculus</idx>
-                    <statement>
-                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
-                    </statement>
-                    <proof>
-                        <p>Left to the reader.</p>
-                    </proof>
-                </theorem>
+<p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
 
-                <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+<corollary xml:id="corollary-FTC-derivative">
+<statement>
+<p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>
+</p>
+</statement>
+<proof xml:id="proof-FTC-corollary">
+<p>We simply take the indicated derivative, applying <xref ref="theorem-FTC" />
+ at <xref ref="equation-use-FTC" />
+.<mdn>
+<mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+<mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+<mrow>&amp;=f(x)-0 = f(x)</mrow>
+</mdn>
+</p>
+</proof>
+</corollary>
+</subsection>
 
-                <corollary xml:id="corollary-FTC-derivative">
-                    <statement>
-                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
-                    </statement>
-                    <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
-                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                        </mdn></p>
-                    </proof>
-                </corollary>
-            </subsection>
+<exercises>
+<title>
+<webwork />
+ Exercises</title>
 
-            <exercises>
-                <title><webwork /> Exercises</title>
+<introduction>
+<p>The first problem in this list is coming from the <webwork />
+ Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so in the HTML output there is no opportunity to provide an answer.</p>
+</introduction>
 
-                <introduction>
-                    <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so in the HTML output there is no opportunity to provide an answer.</p>
-                </introduction>
+<exercise xml:id="ww-antiderivatives" label="lab-ww-antiderivatives">
+<title>Antiderivatives</title>
 
-                <exercise xml:id="ww-antiderivatives">
-                    <title>Antiderivatives</title>
+<introduction>
+<p>Consult <xref ref="definition-antiderivative" />
+ and the <xref ref="theorem-FTC" text="title" />
+ to assist you with the following problem.</p>
+</introduction>
 
-                    <introduction>
-                        <p>Consult <xref ref="definition-antiderivative" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
-                    </introduction>
+<webwork source="Library/ma122DB/set12/s5_4_26.pg" />
 
-                    <webwork source="Library/ma122DB/set12/s5_4_26.pg" />
+<conclusion>
+<p>Unless the OPL has changed this problem out from under us, note the <q>SOLUTION</q> appearing in the solution. That is hard-coded into the OPL version of the problem. This is an example of something undesirable that may happen when using OPL problems that were not originally written with <pretext />
+ in mind.</p>
+</conclusion>
+</exercise>
 
-                    <conclusion>
-                        <p>Unless the OPL has changed this problem out from under us, note the <q>SOLUTION</q> appearing in the solution. That is hard-coded into the OPL version of the problem. This is an example of something undesirable that may happen when using OPL problems that were not originally written with <pretext /> in mind.</p>
-                    </conclusion>
-                </exercise>
+<exercise xml:id="ww-discuss-always-antiderivative" label="lab-ww-discuss-always-antiderivative">
+<title>Every Continuous Function has an Antiderivative</title>
 
-                <exercise xml:id="ww-discuss-always-antiderivative">
-                    <title>Every Continuous Function has an Antiderivative</title>
+<introduction>
+<p>
+<webwork />
+ problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <webwork />
+ as part of a homework set, users could submit an answer.</p>
+</introduction>
 
-                    <introduction>
-                        <p><webwork /> problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <webwork /> as part of a homework set, users could submit an answer.</p>
-                    </introduction>
+<webwork>
+<statement>
+<p>Explain how we can use <xref ref="corollary-FTC-derivative" />
+ to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>:<m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork />
+ problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
+<p>
+<var form="essay" />
+</p>
+</statement>
+</webwork>
+</exercise>
 
-                    <webwork>
-                        <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
-                            <p><var form="essay" /></p>
-                        </statement>
-                    </webwork>
-                </exercise>
+<exercise xml:id="ww-discuss-inverse-processes" label="lab-ww-discuss-inverse-processes">
+<title>Inverse Processes</title>
 
-                <exercise xml:id="ww-discuss-inverse-processes">
-                    <title>Inverse Processes</title>
+<webwork>
+<statement>
+<p>
+<q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
+<p>
+<var form="essay" width="40"/>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-                    <webwork>
-                        <statement>
-                            <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
-                            <p><var form="essay" width="40"/></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-
-                <exercisegroup cols="2">
-                    <introduction>
-                        <p>
+<exercisegroup cols="2">
+<introduction>
+<p>
                             For the given function <m>f</m>, find <m>\indefiniteintegral{f(x)}{x}</m>.
-                        </p>
-                        <p>
+</p>
+<p>
                             Note that these common instructions are phrased in such a way
                             that they would read well if they were applied to only one exercise at a time.
                             That will happen if these exercises are exported as <c>.pg</c> files,
-                            for example to be used in online homework from a <webwork/> server.
-                        </p>
-                    </introduction>
+                            for example to be used in online homework from a <webwork/>
+ server.
+</p>
+</introduction>
 
-                    <exercise>
-                        <webwork>
-                            <pg-code>
+<exercise>
+<webwork>
+<pg-code>
                                 $answer = FormulaUpToConstant("-cos(x)");
-                            </pg-code>
-                            <statement>
-                                <p>
-                                    <m>f(x)=\sin(x)</m>
-                                </p>
-                                <p>
-                                    <var name="$answer" width="20"/>
-                                </p>
-                            </statement>
-                        </webwork>
-                    </exercise>
+</pg-code>
+<statement>
+<p>
+<m>f(x)=\sin(x)</m>
+</p>
+<p>
+<var name="$answer" width="20"/>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-                    <exercise>
-                        <webwork>
-                            <pg-code>
+<exercise>
+<webwork>
+<pg-code>
                                 $answer = FormulaUpToConstant("e^x");
-                            </pg-code>
-                            <statement>
-                                <p>
-                                    <m>f(x)=e^x</m>
-                                </p>
-                                <p>
-                                    <var name="$answer" width="20"/>
-                                </p>
-                            </statement>
-                        </webwork>
-                    </exercise>
-                </exercisegroup>
+</pg-code>
+<statement>
+<p>
+<m>f(x)=e^x</m>
+</p>
+<p>
+<var name="$answer" width="20"/>
+</p>
+</statement>
+</webwork>
+</exercise>
+</exercisegroup>
 
-                <exercise xml:id="ww-use-the-definition-of-the-derivative">
-                    <title>Show Your Work</title>
-                    <introduction>
-                        <p>
-                            Sometimes you would like a student to give a <q>simple</q> answer that <webwork/> can automatically assess,
+<exercise xml:id="ww-use-the-definition-of-the-derivative" label="lab-ww-use-the-definition-of-the-derivative">
+<title>Show Your Work</title>
+<introduction>
+<p>
+                            Sometimes you would like a student to give a <q>simple</q> answer that <webwork/>
+ can automatically assess,
                             but you would also like the student to show their work or reasoning.
                             Perhaps there is a particular method that you want to see the student use to find the answer.
                             So you have a regular answer blank and also an essay blank.
-                            For practical reasons, you may wish to use the same problem on your <webwork/> server, but omit the essay part.
+                            For practical reasons, you may wish to use the same problem on your <webwork/>
+ server, but omit the essay part.
                             For example, if you want to use that problem but leave out the manual grading.
-                            For this, <webwork/> has the <c>explanation_box</c> tool, demonstrated here.
-                        </p>
-                    </introduction>
+                            For this, <webwork/>
+ has the <c>explanation_box</c> tool, demonstrated here.
+</p>
+</introduction>
 
-                    <webwork>
-                        <pg-code>
+<webwork>
+<pg-code>
                             $answer = Formula('2x');
                             $showwork = '[@ explanation_box(message => "Show your work.") @]*';
-                        </pg-code>
-                        <statement>
-                            <p>
+</pg-code>
+<statement>
+<p>
                                 Use the definition of the derivative to find <m>\frac{d}{dx}x^2</m>.
-                            </p>
-                            <p>
-                                <var name="$answer" width="10"/>
-                            </p>
-                            <p>
-                                <var name="$showwork" data="pgml"/>
-                            </p>
-                        </statement>
-                    </webwork>
-                </exercise>
+</p>
+<p>
+<var name="$answer" width="10"/>
+</p>
+<p>
+<var name="$showwork" data="pgml"/>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            </exercises>
-        </section>
+</exercises>
+</section>
 
-        <section>
-            <title>Math Content</title>
+<section>
+<title>Math Content</title>
 
-            <p>
+<p>
                 This section helps with testing aspects of math content.
-            </p>
+</p>
 
-            <exercise>
-                <title>Math Elements and Alignment</title>
-                <introduction>
-                    <p>
-                        In this exercise we demonstrate the allowed math elements: <tag>m</tag>, <tag>me</tag>, and <tag>md</tag>.
-                        The last of these may have attribute <attr>alignment</attr> with options <c>gather</c>, <c>align</c>, or <c>alignat</c>.
+<exercise>
+<title>Math Elements and Alignment</title>
+<introduction>
+<p>
+                        In this exercise we demonstrate the allowed math elements: <tag>m</tag>,<tag>me</tag>, and <tag>md</tag>.
+                        The last of these may have attribute <attr>alignment</attr> with options <c>gather</c>,<c>align</c>, or <c>alignat</c>.
                         The first two are used by default, depending on if you have <c>&amp;</c> or <c>\amp</c> in your math.
-                    </p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p>
+</p>
+</introduction>
+<webwork>
+<statement>
+<p>
                             If <m>a=5</m> and <m>b=12</m>, then <me>a^2+b^2=13^2</me>.
-                        </p>
-                        <p>
+</p>
+<p>
                             Here, we solve an equation.
-                            <md>
-                                <mrow>2x+1 \amp= 3</mrow>
-                                <mrow>2x   \amp= 2</mrow>
-                                <mrow>x    \amp= 1</mrow>
-                            </md>
+<md>
+<mrow>2x+1 \amp= 3</mrow>
+<mrow>2x \amp= 2</mrow>
+<mrow>x \amp= 1</mrow>
+</md>
                             Here we have a three-way inequality to solve.
-                            <md>
-                                <mrow>1 \lt 2x+1 \lt 3</mrow>
-                                <mrow>0 \lt 2x   \lt 2</mrow>
-                                <mrow>0 \lt x    \lt 1</mrow>
-                            </md>
+<md>
+<mrow>1 \lt 2x+1 \lt 3</mrow>
+<mrow>0 \lt 2x   \lt 2</mrow>
+<mrow>0 \lt x    \lt 1</mrow>
+</md>
                             And here, we see a system of equations.
-                            <md alignment="alignat">
-                                <mrow>2x + 2y \amp {}+{} \amp z \amp {}={} \amp 10</mrow>
-                                <mrow>y \amp {}-{} \amp  4z \amp {}={} \amp 9</mrow>
-                                <mrow>\amp\amp   3z \amp {}={} \amp -6</mrow>
-                            </md>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
+<md alignment="alignat">
+<mrow>2x + 2y \amp {}+{} \amp z \amp {}={} \amp 10</mrow>
+<mrow>y \amp {}-{} \amp  4z \amp {}={} \amp 9</mrow>
+<mrow>\amp\amp   3z \amp {}={} \amp -6</mrow>
+</md>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Intertext</title>
-                <introduction>
-                    <p>
+<exercise>
+<title>Intertext</title>
+<introduction>
+<p>
                         With an <tag>md</tag> you might have <tag>intertext</tag> among the rows.
-                    </p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p>
+</p>
+</introduction>
+<webwork>
+<statement>
+<p>
                             Here, we solve an equation.
-                            <md>
-                                <mrow>2x+1 \amp= 3</mrow>
-                                <intertext> Now subtract <m>1</m> from each side.</intertext>
-                                <mrow>2x   \amp= 2</mrow>
-                                <intertext> Now divide by <m>2</m> on each side.</intertext>
-                                <mrow>x    \amp= 1</mrow>
-                            </md>
-                        </p>
-                        <p>
+<md>
+<mrow>2x+1 \amp= 3</mrow>
+<intertext> Now subtract <m>1</m> from each side.</intertext>
+<mrow>2x \amp= 2</mrow>
+<intertext> Now divide by <m>2</m> on each side.</intertext>
+<mrow>x \amp= 1</mrow>
+</md>
+</p>
+<p>
                             We should also test when the <tag>md</tag> is within a list.
-                            <ol>
-                                <li>
-                                    <p>
+<ol>
+<li>
+<p>
                                         Start a list.
-                                    </p>
-                                </li>
-                                <li>
-                                    <p>
-                                        <md>
-                                            <mrow>2x+1 \amp= 3</mrow>
-                                            <intertext> Now subtract <m>1</m> from each side.</intertext>
-                                            <mrow>2x   \amp= 2</mrow>
-                                            <intertext> Now divide by <m>2</m> on each side.</intertext>
-                                            <mrow>x    \amp= 1</mrow>
-                                        </md>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p>
+</p>
+</li>
+<li>
+<p>
+<md>
+<mrow>2x+1 \amp= 3</mrow>
+<intertext> Now subtract <m>1</m> from each side.</intertext>
+<mrow>2x \amp= 2</mrow>
+<intertext> Now divide by <m>2</m> on each side.</intertext>
+<mrow>x \amp= 1</mrow>
+</md>
+</p>
+</li>
+<li>
+<p>
                                         Still in the list?
-                                    </p>
-                                </li>
-                            </ol>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
-        </section>
+</p>
+</li>
+</ol>
+</p>
+</statement>
+</webwork>
+</exercise>
+</section>
 
-        <section>
-            <title>PGML Formatting and Verbatim Calisthenics</title>
+<section>
+<title>PGML Formatting and Verbatim Calisthenics</title>
 
-            <p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
+<p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
 
-            <exercise xml:id="ww-PGML-format">
-                <title>PGML Formatting</title>
+<exercise xml:id="ww-PGML-format" label="lab-ww-PGML-format">
+<title>PGML Formatting</title>
 
-                <webwork>
-                    <statement>
-                        <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
-                        <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
-                        <p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
-                        <p>Emphasis: <em>very important</em></p>
-                        <p>Alert: <alert>do not</alert> do it</p>
-                        <p>Braces: {text that looks like a set}</p>
-                        <!-- uncomment next to test, will not activate generally in sample document -->
-                        <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
-                        <pre>
+<webwork>
+<statement>
+<p>Smart double quotes: <q>Life is about making an impact, not making an income.</q>
+</p>
+<p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq>
+</p>
+<p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
+<p>Emphasis: <em>very important</em>
+</p>
+<p>Alert: <alert>do not</alert> do it</p>
+<p>Braces: {text that looks like a set}</p>
+<!-- uncomment next to test, will not activate generally in sample document -->
+<!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
+<pre>
                             Some pre-formatted text
                                         with an indented line
                         and an out-dented line
                         This should not be altered *a problem*
                         And this [$NDASH]* should not be an en-dash
-                        </pre>
+</pre>
 
-                        <p>
+<p>
                             Here is some inline <c>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</c>,
                             and here is some <cd>single-line display code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cd>
                             and here is some
-                            <cd>
-                                <cline>multi-line display</cline>
-                                <cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cline>
-                            </cd>
-                        </p>
+<cd>
+<cline>multi-line display</cline>
+<cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cline>
+</cd>
+</p>
 
-                        <p>Some raw characters, XML/HTML:    &amp; &lt; &gt; " '</p>
-                        <p>Some raw characters, <latex/>:    # $ % ^ &amp; _ { } ~ \</p>
-                        <p>Some raw characters, PGML:        \ * # { } [ ]</p>
+<p>Some raw characters, XML/HTML:    &amp; &lt; &gt; " '</p>
+<p>Some raw characters, <latex/>
+:    # $ % ^ &amp; _ { } ~ \</p>
+<p>Some raw characters, PGML:        \ * # { } [ ]</p>
 
-                        <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
+<p>Some characters that need special handling for PGML conversion to HTML or <latex />
+:</p>
 
-                        <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
-                        <p>An ndash<ndash />right here.</p>
-                        <p>An mdash<mdash />right here.</p>
+<p>A non<nbsp />
+breaking space (invisble where a hyphen should be)</p>
+<p>An ndash<ndash />
+right here.</p>
+<p>An mdash<mdash />
+right here.</p>
 
-                        <p>Some constructions in <q>normal</q> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
+<p>Some constructions in <q>normal</q> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
 
-                        <p>&gt;&gt; This should not be a centered line &lt;&lt;</p>
+<p>&gt;&gt; This should not be a centered line &lt;&lt;</p>
 
-                        <p>&gt;&gt; Nor a right-justified line, either</p>
+<p>&gt;&gt; Nor a right-justified line, either</p>
 
-                        <p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
+<p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
 
-                        <p>Brackets, unpaired; ] with content between [</p>
+<p>Brackets, unpaired; ] with content between [</p>
 
-                        <p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
+<p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
 
-                        <p>### This should not be a level 3 heading</p>
+<p>### This should not be a level 3 heading</p>
 
-                        <p>===   Not a horizontal rule from three equal signs</p>
-                        <p>==    Not a horizontal rule from two equal signs</p>
-                        <p>===== Not a horizontal rule from five equal signs</p>
-                        <p>---   Not a horizontal rule from three hyphens</p>
-                        <p>--    Not a horizontal rule from two hyphens</p>
-                        <p>----- Not a horizontal rule from five hyphens</p>
+<p>===   Not a horizontal rule from three equal signs</p>
+<p>==    Not a horizontal rule from two equal signs</p>
+<p>===== Not a horizontal rule from five equal signs</p>
+<p>---   Not a horizontal rule from three hyphens</p>
+<p>--    Not a horizontal rule from two hyphens</p>
+<p>----- Not a horizontal rule from five hyphens</p>
 
-                        <p>+ Not an unordered list item</p>
-                        <p>- Not an unordered list item</p>
+<p>+ Not an unordered list item</p>
+<p>- Not an unordered list item</p>
 
-                    </statement>
-                </webwork>
-            </exercise>
+</statement>
+</webwork>
+</exercise>
 
-            <p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
+<p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
 
-            <exercise>
-                <webwork>
-                    <pg-code>
+<exercise>
+<webwork>
+<pg-code>
                         $xmlchars = q(&lt;>&amp;'";);
                         $latex0 = '#%&amp;&lt;>\^_`|~';
                         $latex1 = '${}';
@@ -971,126 +1170,158 @@
                         $latex1MO = String($latex1);
                         $alphanumericMO = String($alphanumeric);
                         $othercharsMO = String($otherchars);
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p><ol>
-                            <li>
-                                <p>Special characters used by XML, character escaping: <var name="$xmlchars" /></p>
-                                <p>Now as a MathObject: <var name="$xmlcharsMO" /></p>
-                                <p><var name="$xmlchars" width="6" /></p>
-                            </li>
-                            <li>
-                                <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> disagree: <var name="$latex0" /></p>
-                                <p>Now as a MathObject: <var name="$latex0MO" /></p>
-                                <p><var name="$latex0" width="11" /></p>
-                            </li>
-                            <li>
-                                <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> can agree: <var name="$latex1" /></p>
-                                <p>Now as a MathObject: <var name="$latex1MO" /></p>
-                                <p><var name="$latex1" width="3" /></p>
-                            </li>
-                            <li>
-                                <p>Alphanumeric characters: <var name="$alphanumeric" /></p>
-                                <p>Now as a MathObject: <var name="$alphanumericMO" /></p>
-                                <p><var name="$alphanumeric" width="62" /></p>
-                            </li>
-                            <li>
-                                <p>Other characters: <var name="$otherchars" /></p>
-                                <p>Now as a MathObject: <var name="$othercharsMO" /></p>
-                                <p><var name="$otherchars" width="15" /></p>
-                            </li>
-                        </ol></p>
-                        <p>In answers, because of <latex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
-                    </statement>
-                </webwork>
-            </exercise>
+<statement>
+<p>
+<ol>
+<li>
+<p>Special characters used by XML, character escaping: <var name="$xmlchars" />
+</p>
+<p>Now as a MathObject: <var name="$xmlcharsMO" />
+</p>
+<p>
+<var name="$xmlchars" width="6" />
+</p>
+</li>
+<li>
+<p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> disagree: <var name="$latex0" />
+</p>
+<p>Now as a MathObject: <var name="$latex0MO" />
+</p>
+<p>
+<var name="$latex0" width="11" />
+</p>
+</li>
+<li>
+<p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> can agree: <var name="$latex1" />
+</p>
+<p>Now as a MathObject: <var name="$latex1MO" />
+</p>
+<p>
+<var name="$latex1" width="3" />
+</p>
+</li>
+<li>
+<p>Alphanumeric characters: <var name="$alphanumeric" />
+</p>
+<p>Now as a MathObject: <var name="$alphanumericMO" />
+</p>
+<p>
+<var name="$alphanumeric" width="62" />
+</p>
+</li>
+<li>
+<p>Other characters: <var name="$otherchars" />
+</p>
+<p>Now as a MathObject: <var name="$othercharsMO" />
+</p>
+<p>
+<var name="$otherchars" width="15" />
+</p>
+</li>
+</ol>
+</p>
+<p>In answers, because of <latex/>
+ and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
+</statement>
+</webwork>
+</exercise>
 
-            <p>
+<p>
                 Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
                 If this is put into the exercise statement, it will be inserted <em>after</em> PGML processing is done,
                 and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
-                use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
-            </p>
+                use <c>data="pgml"</c>. (This is not in the <pretext/>
+ schema as of 3/26/2020, and is subject to change.)
+</p>
 
-            <exercise>
-                <webwork>
-                    <pg-code>
+<exercise>
+<webwork>
+<pg-code>
                         $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
-                    </pg-code>
-                    <statement>
-                        <p>
-                            <var name="$statement"/> makes:
-                        </p>
-                        <p>
-                            <var name="$statement" data="pgml"/>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
-        </section>
+</pg-code>
+<statement>
+<p>
+<var name="$statement"/>
+ makes:
+</p>
+<p>
+<var name="$statement" data="pgml"/>
+</p>
+</statement>
+</webwork>
+</exercise>
+</section>
 
-        <section>
-            <title>Multiple Choice</title>
+<section>
+<title>Multiple Choice</title>
 
-            <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
+<p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
 
-            <exercise>
-                <title>Drop-down/Popup</title>
+<exercise>
+<title>Drop-down/Popup</title>
 
-                <introduction>
-                    <p>Note also that the solution to this problem uses an external link.</p>
-                </introduction>
+<introduction>
+<p>Note also that the solution to this problem uses an external link.</p>
+</introduction>
 
-                <webwork>
+<webwork>
 
-                    <pg-code>
+<pg-code>
                         $rational = PopUp(
                             ["?","is","is not",],
                             "is not",
                         );
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>The number <m>\sqrt{2}</m> <var name="$rational" form="popup"/> rational.</p>
+<statement>
+<p>The number <m>\sqrt{2}</m>
+<var name="$rational" form="popup"/>
+ rational.</p>
 
-                    </statement>
+</statement>
 
-                    <solution>
-                        <p>If <m>\sqrt{2}</m> were rational, then <m>\sqrt{2}=\frac{p}{q}</m>, with <m>p</m> and <m>q</m> coprime. But then <m>2q^2=p^2</m>. By <url href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic#Canonical_representation_of_a_positive_integer">the Fundamental Theorem of Arithmetic</url>, the power of <m>2</m> dividing the left side is odd, while the power of <m>2</m> dividing the right side is even. This is a contradiction, so <m>\sqrt{2}</m> <var name="$rational"/> rational.</p>
-                    </solution>
+<solution>
+<p>If <m>\sqrt{2}</m> were rational, then <m>\sqrt{2}=\frac{p}{q}</m>, with <m>p</m> and <m>q</m> coprime. But then <m>2q^2=p^2</m>. By <url href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic#Canonical_representation_of_a_positive_integer">the Fundamental Theorem of Arithmetic</url>, the power of <m>2</m> dividing the left side is odd, while the power of <m>2</m> dividing the right side is even. This is a contradiction, so <m>\sqrt{2}</m>
+<var name="$rational"/>
+ rational.</p>
+</solution>
 
-                </webwork>
-            </exercise>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Choose one</title>
+<exercise>
+<title>Choose one</title>
 
-                <webwork>
+<webwork>
 
-                    <pg-code>
+<pg-code>
                         $theorem = RadioButtons(
                           ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
                           1, # index of correct answer; could also just be the correct answer
                         );
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
-                        <p><var name="$theorem" form="buttons"/></p>
-                    </statement>
+<statement>
+<p>Which of the following suggest that differentiation and integration are inverse processes?</p>
+<p>
+<var name="$theorem" form="buttons"/>
+</p>
+</statement>
 
-                    <solution>
-                        <p>The correct answer is <var name="$theorem"/>.</p>
-                    </solution>
+<solution>
+<p>The correct answer is <var name="$theorem"/>
+.</p>
+</solution>
 
-                </webwork>
-            </exercise>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Choose a Subset of Options</title>
-                <webwork>
-                    <pg-code>
+<exercise>
+<title>Choose a Subset of Options</title>
+<webwork>
+<pg-code>
                         $checks = CheckboxList(
                             [
                                 [
@@ -1104,28 +1335,29 @@
                             ],
                             [0, 1, 2]
                         );
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.
                             There may be more than one correct answer.
-                        </p>
-                        <p>
-                            <var name="$checks" form="checkboxes"/>
-                        </p>
-                    </statement>
-                    <solution>
-                        <p>
-                            The correct answer is <var name="$checks"/>.
-                        </p>
-                    </solution>
-                </webwork>
-            </exercise>
+</p>
+<p>
+<var name="$checks" form="checkboxes"/>
+</p>
+</statement>
+<solution>
+<p>
+                            The correct answer is <var name="$checks"/>
+.
+</p>
+</solution>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Choose a Subset of Options with Automated Labeling</title>
-                <webwork>
-                    <pg-code>
+<exercise>
+<title>Choose a Subset of Options with Automated Labeling</title>
+<webwork>
+<pg-code>
                         $checks = CheckboxList(
                             [
                                 [
@@ -1140,28 +1372,29 @@
                             [0, 1, 2],
                             labels => "ABC",   # "abc", "123", "roman", "Roman"
                         );
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.
                             There may be more than one correct answer.
-                        </p>
-                        <p>
-                            <var name="$checks" form="checkboxes"/>
-                        </p>
-                    </statement>
-                    <solution>
-                        <p>
-                            The correct answer is <var name="$checks"/>.
-                        </p>
-                    </solution>
-                </webwork>
-            </exercise>
+</p>
+<p>
+<var name="$checks" form="checkboxes"/>
+</p>
+</statement>
+<solution>
+<p>
+                            The correct answer is <var name="$checks"/>
+.
+</p>
+</solution>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Choose a Subset of Options with Explicit Labeling</title>
-                <webwork>
-                    <pg-code>
+<exercise>
+<title>Choose a Subset of Options with Explicit Labeling</title>
+<webwork>
+<pg-code>
                         $checks = CheckboxList(
                             [
                                 [
@@ -1176,119 +1409,186 @@
                             [0, 1, 2],
                             displayLabels => 1
                         );
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.
                             There may be more than one correct answer.
-                        </p>
-                        <p>
-                            <var name="$checks" form="checkboxes"/>
-                        </p>
-                    </statement>
-                    <solution>
-                        <p>
-                            The correct answer is <var name="$checks"/>.
-                        </p>
-                    </solution>
-                </webwork>
-            </exercise>
-        </section>
+</p>
+<p>
+<var name="$checks" form="checkboxes"/>
+</p>
+</statement>
+<solution>
+<p>
+                            The correct answer is <var name="$checks"/>
+.
+</p>
+</solution>
+</webwork>
+</exercise>
+</section>
 
-        <section>
-            <title>Tables</title>
+<section>
+<title>Tables</title>
 
-            <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
+<p>Although a <webwork />
+ problem written in <pretext />
+ source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>,<c>medium</c>, or <c>major</c>, when these borders are used in a <webwork />
+ problem that is rendered as a hard copy problem from within <webwork />
+, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
 
-            <exercise>
-                <title>Complete this Table</title>
+<exercise>
+<title>Complete this Table</title>
 
-                <webwork>
-                    <pg-code>
+<webwork>
+<pg-code>
                         @a = (random(2,9,1),random(2,9,1));
                         @b = (random(2,9,1),random(2,9,1));
                         for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>Complete this multiplication table.</p>
+<statement>
+<p>Complete this multiplication table.</p>
 
-                        <tabular bottom="minor" right="minor" halign="center">
-                            <col halign="right" right="major"/>
-                            <col />
-                            <col />
-                            <row bottom="major">
-                                <cell><m>\times</m></cell>
-                                <cell><m><var name="$a[0]"/></m></cell>
-                                <cell><m><var name="$a[1]"/></m></cell>
-                            </row>
-                            <row>
-                                <cell><m><var name="$b[0]"/></m></cell>
-                                <cell><var name="$p[0]" form="none" category="integer"/></cell>
-                                <cell><var name="$p[2]" form="none" category="integer"/></cell>
-                            </row>
-                            <row>
-                                <cell><m><var name="$b[1]"/></m></cell>
-                                <cell><var name="$p[1]" form="none" category="integer"/></cell>
-                                <cell><var name="$p[3]" form="none" category="integer"/></cell>
-                            </row>
-                        </tabular>
-                    </statement>
+<tabular bottom="minor" right="minor" halign="center">
+<col halign="right" right="major"/>
+<col />
+<col />
+<row bottom="major">
+<cell>
+<m>\times</m>
+</cell>
+<cell>
+<m>
+<var name="$a[0]"/>
+</m>
+</cell>
+<cell>
+<m>
+<var name="$a[1]"/>
+</m>
+</cell>
+</row>
+<row>
+<cell>
+<m>
+<var name="$b[0]"/>
+</m>
+</cell>
+<cell>
+<var name="$p[0]" form="none" category="integer"/>
+</cell>
+<cell>
+<var name="$p[2]" form="none" category="integer"/>
+</cell>
+</row>
+<row>
+<cell>
+<m>
+<var name="$b[1]"/>
+</m>
+</cell>
+<cell>
+<var name="$p[1]" form="none" category="integer"/>
+</cell>
+<cell>
+<var name="$p[3]" form="none" category="integer"/>
+</cell>
+</row>
+</tabular>
+</statement>
 
-                    <solution>
-                        <tabular bottom="minor" right="minor" halign="center">
-                            <col halign="right" right="major"/>
-                            <col />
-                            <col />
-                            <row bottom="major">
-                                <cell><m>\times</m></cell>
-                                <cell><m><var name="$a[0]"/></m></cell>
-                                <cell><m><var name="$a[1]"/></m></cell>
-                            </row>
-                            <row>
-                                <cell><m><var name="$b[0]"/></m></cell>
-                                <cell><m><var name="$p[0]"/></m></cell>
-                                <cell><m><var name="$p[2]"/></m></cell>
-                            </row>
-                            <row>
-                                <cell><m><var name="$b[1]"/></m></cell>
-                                <cell><m><var name="$p[1]"/></m></cell>
-                                <cell><m><var name="$p[3]"/></m></cell>
-                            </row>
-                        </tabular>
+<solution>
+<tabular bottom="minor" right="minor" halign="center">
+<col halign="right" right="major"/>
+<col />
+<col />
+<row bottom="major">
+<cell>
+<m>\times</m>
+</cell>
+<cell>
+<m>
+<var name="$a[0]"/>
+</m>
+</cell>
+<cell>
+<m>
+<var name="$a[1]"/>
+</m>
+</cell>
+</row>
+<row>
+<cell>
+<m>
+<var name="$b[0]"/>
+</m>
+</cell>
+<cell>
+<m>
+<var name="$p[0]"/>
+</m>
+</cell>
+<cell>
+<m>
+<var name="$p[2]"/>
+</m>
+</cell>
+</row>
+<row>
+<cell>
+<m>
+<var name="$b[1]"/>
+</m>
+</cell>
+<cell>
+<m>
+<var name="$p[1]"/>
+</m>
+</cell>
+<cell>
+<m>
+<var name="$p[3]"/>
+</m>
+</cell>
+</row>
+</tabular>
 
-                    </solution>
-                </webwork>
+</solution>
+</webwork>
 
-            </exercise>
+</exercise>
 
-        </section>
+</section>
 
-        <section>
-            <title>Graphics in Exercises</title>
-            <p>
+<section>
+<title>Graphics in Exercises</title>
+<p>
                 It is natural for exercises to have graphics.
                 For example, an exercise might produce a graph of some kind,
                 and ask the reader to extract some information from that graph.
-            </p>
-            <p>
-                If your <webwork/> server is version 2.16 or later,
-                <webwork/> problems can process <tag>latex-image</tag> code. Here is an example.
-            </p>
-            <exercise>
-                <title>A static <tag>latex-image</tag> graph</title>
-                <webwork>
-                    <pg-code>
+</p>
+<p>
+                If your <webwork/>
+ server is version 2.16 or later,
+<webwork/>
+ problems can process <tag>latex-image</tag> code. Here is an example.
+</p>
+<exercise>
+<title>A static <tag>latex-image</tag> graph</title>
+<webwork>
+<pg-code>
                         Context("IntegerFunctions");
                         Context()->variables->are(n=>'Real');
                         $answer = OneOf(Formula("C(n+1,2)"),Formula("(n+1)n/2"));
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             This image is a visual proof that <m>\sum_{k=1}^{n}k</m> equals what?
-                        </p>
-                        <image width="50%">
-                           <description>
+</p>
+<image width="50%">
+<description>
                                 21 blue balls are arranged in a triangular formation,
                                 with one at the top, then a row of two, a row of three,
                                 and so on until a row of six;
@@ -1298,8 +1598,8 @@
                                 until they intersect two orange balls;
                                 the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
                                 to one pair from the 7 orange balls
-                            </description>
-                            <latex-image>
+</description>
+<latex-image>
                                 \begin{tikzpicture}
                                     \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
                                     \draw[very thick] (2-0.5*7,-0.866025*7) -&#x2d; (2-0.5*4,-0.866025*4) -&#x2d; (5-0.5*7,-0.866025*7);
@@ -1313,146 +1613,144 @@
                                     \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
                                     \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
                                 \end{tikzpicture}
-                            </latex-image>
-                        </image>
-                        <instruction>
+</latex-image>
+</image>
+<instruction>
                             You may enter the answer using <c>C(n,k)</c> notation.
-                        </instruction>
-                        <p>
-                            <var name="$answer" width="20"/>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
+</instruction>
+<p>
+<var name="$answer" width="20"/>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>A randomized <tag>latex-image</tag> graph</title>
-                <introduction>
-                    <p>
+<exercise>
+<title>A randomized <tag>latex-image</tag> graph</title>
+<introduction>
+<p>
                         These images may depend on the random seed.
                         In this problem, the height and width of the rectangle are randomized.
-                    </p>
-                </introduction>
-                <webwork>
-                    <pg-code>
+</p>
+</introduction>
+<webwork>
+<pg-code>
                         $a = random(4,6,1);
                         $b = $a + random(2,4,1);
                         $area = NumberWithUnits($a*$b, 'cm^2');
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             Find the area of the rectangle.
-                        </p>
-                        <image width="50%">
-                            <description>
-                                a rectangle whose width is labeled <var name="$b"/> cm
-                                and height is labeled <var name="$a"/> cm
-                            </description>
-                            <latex-image>
-                                \begin{tikzpicture}
-                                    \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
+</p>
+<image width="50%">
+<description>
+                                a rectangle whose width is labeled <var name="$b"/>
+ cm
+                                and height is labeled <var name="$a"/>
+ cm
+</description>
+<latex-image>
+                                \begin{tikzpicture} \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
                                 \end{tikzpicture}
-                            </latex-image>
-                        </image>
-                        <p>
-                            <var name="$area" width="20"/>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
+</latex-image>
+</image>
+<p>
+<var name="$area" width="20"/>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>A <tag>latex-image</tag> graph affected by <tag>latex-image-preamble</tag></title>
-                <introduction>
-                    <p>
+<exercise>
+<title>A <tag>latex-image</tag> graph affected by <tag>latex-image-preamble</tag>
+</title>
+<introduction>
+<p>
                         This sample chapter's <tag>docinfo</tag> has a <tag>latex-image-preamble</tag>.
                         This exercise has graph styling that is affected by that.
-                    </p>
-                </introduction>
-                <webwork>
-                    <pg-code>
+</p>
+</introduction>
+<webwork>
+<pg-code>
                         @roots = (-3..3)[NchooseK(7,3)];
                         @roots = num_sort(@roots);
                         $answer = List(@roots);
                         $xmin = min(-1,@roots)-1;
                         $xmax = max(1,@roots)+1;
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             What are the roots of this polynomial?
-                        </p>
-                        <image width="50%">
-                            <description>
-                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
-                                <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
-                            </description>
-                            <latex-image>
+</p>
+<image width="50%">
+<description>
+                                the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>
+,
+<var name="$roots[1]"/>
+, and <var name="$roots[2]"/>
+.
+</description>
+<latex-image>
                                 \begin{tikzpicture}
-                                    \begin{axis}
-                                        \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
+                                    \begin{axis} \addplot[domain=$xmin:$xmax,smooth] {(x-$roots[0])*(x-$roots[1])*(x-$roots[2])};
                                     \end{axis}
                                 \end{tikzpicture}
-                            </latex-image>
-                        </image>
-                        <p>
-                            <var name="$answer" width="20"/>
-                        </p>
-                    </statement>
-                </webwork>
-            </exercise>
+</latex-image>
+</image>
+<p>
+<var name="$answer" width="20"/>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Special characters</title>
-                <introduction>
-                    <p>
+<exercise>
+<title>Special characters</title>
+<introduction>
+<p>
                         This exercise is to test that special characters behave.
-                    </p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p>
+</p>
+</introduction>
+<webwork>
+<statement>
+<p>
                             The code below has a printed dollar sign, a printed percent sign,
                             a printed at sign, and a percent sign used as a comment marker.
-                        </p>
-                        <image width="50%">
-                            <description>
+</p>
+<image width="50%">
+<description>
                                 this image has pictures of text with special characters like $, %, and @
-                            </description>
-                            <latex-image>
+</description>
+<latex-image>
                                 \begin{tikzpicture}
                                     \node at (0,0) {I need about \$3.50.};
                                     \node at (0,1) {You gotta give 110\%.};  %This is a comment.
                                     \node at (0,2) {Send email user@domain.com.};
                                 \end{tikzpicture}
-                            </latex-image>
-                        </image>
-                    </statement>
-                </webwork>
-            </exercise>
+</latex-image>
+</image>
+</statement>
+</webwork>
+</exercise>
 
-            <!-- TODO: Support for packages, such as pgfplots -->
+<!-- TODO: Support for packages, such as pgfplots -->
 
-            <p>
+<p>
                 An older mechanism for creating images is supported
                 and demonstrated here.
-            </p>
+</p>
 
-            <exercise>
-                <title>Solve using a graph</title>
-                <webwork>
-                    <pg-code>
+<exercise>
+<title>Solve using a graph</title>
+<webwork>
+<pg-code>
                         $a = random(1,3,1);
-                        $gr = init_graph(-1,-1,4,4,
-                        axes=>[0,0],
-                        grid=>[5,5],
-                        size=>[300,180]
+                        $gr = init_graph(-1,-1,4,4, axes=>[0,0], grid=>[5,5], size=>[300,180]
                         );
                         add_functions($gr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                         $second_x = Real($a*2**(1/3));
-                        $solgr = init_graph(-1,-1,4,4,
-                        axes=>[0,0],
-                        grid=>[5,5],
-                        size=>[300,180]
+                        $solgr = init_graph(-1,-1,4,4, axes=>[0,0], grid=>[5,5], size=>[300,180]
                         );
                         add_functions($solgr, "x^3/$a^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                         $solgr->moveTo(0,1);
@@ -1460,295 +1758,356 @@
                         $solgr->arrowTo($a,0,'black',3);
                         Context("FiniteSolutionSets");
                         $answer = Formula("{$a}");
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             The graph below is a graph of <m>y=f(x)</m>.
                             Use the graph to solve the equation <m>f(x)=1</m>.
-                        </p>
-                        <image pg-name="$gr" width="50%">
-                            <description>
-                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.
-                            </description>
-                        </image>
-                        <p>
-                            <var name="$answer" width="5" category="number"/>
-                        </p>
-                    </statement>
-                    <solution>
-                        <p>
-                            The graph reveals that the solution set to <m>f(x)=1</m> is <m><var name="$answer"/></m>.
-                        </p>
-                        <image pg-name="$solgr" width="50%">
-                            <description>
-                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=<var name="$a"/> on the x-axis.
-                            </description>
-                        </image>
-                    </solution>
-                </webwork>
-            </exercise>
+</p>
+<image pg-name="$gr" width="50%">
+<description>
+                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>
+,1) and (<var name="$second_x"/>
+,2) before leaving the graph moving more and more upward and to the right.
+</description>
+</image>
+<p>
+<var name="$answer" width="5" category="number"/>
+</p>
+</statement>
+<solution>
+<p>
+                            The graph reveals that the solution set to <m>f(x)=1</m> is <m>
+<var name="$answer"/>
+</m>.
+</p>
+<image pg-name="$solgr" width="50%">
+<description>
+                                a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>
+,1) and (<var name="$second_x"/>
+,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=<var name="$a"/>
+ on the x-axis.
+</description>
+</image>
+</solution>
+</webwork>
+</exercise>
 
-            <exercises>
-                <exercisegroup cols="2">
-                    <introduction>
-                        <p>
+<exercises>
+<exercisegroup cols="2">
+<introduction>
+<p>
                             This exercisegroup has a <tag>latex-image</tag> image in its introduction.
                             In standalone versions of the exercise, this image should be repeated.
-                        </p>
-                        <image width="50%">
-                          <latex-image>
+</p>
+<image width="50%">
+<latex-image>
                             \begin{tikzpicture}
                                 \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(L\)} --++ (0,3) node[right,pos=0.5] {\(W\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(D\)} --++ (0,3) --++ (4,0);
                             \end{tikzpicture}
-                          </latex-image>
-                        </image>
-                    </introduction>
-                    <exercise>
-                        <webwork>
-                            <statement>
-                                <p>
+</latex-image>
+</image>
+</introduction>
+<exercise>
+<webwork>
+<statement>
+<p>
                                     Find <m>D</m> when <m>L=4</m> and <m>W=3</m>.
-                                </p>
-                                <p>
-                                    <var name="'5'" width="10"/>
-                                </p>
-                            </statement>
-                            <solution>
-                                <image>
-                                  <latex-image>
+</p>
+<p>
+<var name="'5'" width="10"/>
+</p>
+</statement>
+<solution>
+<image>
+<latex-image>
                                     \begin{tikzpicture}
                                         \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(4\)} --++ (0,3) node[right,pos=0.5] {\(3\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(5\)} --++ (0,3) --++ (4,0);
                                     \end{tikzpicture}
-                                  </latex-image>
-                                </image>
-                            </solution>
-                        </webwork>
-                    </exercise>
-                    <exercise>
-                        <webwork>
-                            <statement>
-                                <p>
+</latex-image>
+</image>
+</solution>
+</webwork>
+</exercise>
+<exercise>
+<webwork>
+<statement>
+<p>
                                     Find <m>D</m> when <m>L=12</m> and <m>W=5</m>.
-                                </p>
-                                <p>
-                                    <var name="'13'" width="10"/>
-                                </p>
-                            </statement>
-                            <solution>
-                                <image>
-                                  <latex-image>
+</p>
+<p>
+<var name="'13'" width="10"/>
+</p>
+</statement>
+<solution>
+<image>
+<latex-image>
                                     \begin{tikzpicture}
                                         \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(12\)} --++ (0,3) node[right,pos=0.5] {\(5\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(13\)} --++ (0,3) --++ (4,0);
                                     \end{tikzpicture}
-                                  </latex-image>
-                                </image>
-                            </solution>
-                        </webwork>
-                    </exercise>
-                </exercisegroup>
-            </exercises>
+</latex-image>
+</image>
+</solution>
+</webwork>
+</exercise>
+</exercisegroup>
+</exercises>
 
-        </section>
+</section>
 
-        <section>
-            <title>Subject Area Templates</title>
+<section>
+<title>Subject Area Templates</title>
 
-            <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
+<p>This section samples the subject area template problems found on the <webwork />
+ wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>
+.</p>
 
-            <exercise xml:id="number-or-function">
-                <title>Answer is a number or a function</title>
+<exercise xml:id="number-or-function" label="lab-number-or-function">
+<title>Answer is a number or a function</title>
 
-                <webwork>
+<webwork>
 
-                    <pg-code>
+<pg-code>
                         $a = non_zero_random(-9,9,1);
                         do { $b = random(2,9,1); } until ( $b != $a );
                         $answer1 = Compute("$a");
                         $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p><ol>
-                            <li>
-                                <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
-                                <p><ul marker="square">
-                                    <li>
-                                        <p><var name="$answer1" width="15" category="integer"/></p>
-                                    </li>
-                                </ul></p>
-                            </li>
-                            <li>
-                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <p><ul marker="square">
-                                    <li>
-                                        <p><var name="$answer2" width="15" category="formula"/></p>
-                                    </li>
-                                </ul></p>
-                            </li>
-                        </ol></p>
+<statement>
+<p>
+<ol>
+<li>
+<p>Suppose the correct answer is <m>
+<var name="$answer1"/>
+</m>.
+</p>
+<p>
+<ul marker="square">
+<li>
+<p>
+<var name="$answer1" width="15" category="integer"/>
+</p>
+</li>
+</ul>
+</p>
+</li>
+<li>
+<p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/>
+</m>.
+</p>
+<p>
+<ul marker="square">
+<li>
+<p>
+<var name="$answer2" width="15" category="formula"/>
+</p>
+</li>
+</ul>
+</p>
+</li>
+</ol>
+</p>
 
-                    </statement>
+</statement>
 
-                    <solution>
-                        <p>Solution explanation goes here.</p>
-                    </solution>
-                </webwork>
-            </exercise>
+<solution>
+<p>Solution explanation goes here.</p>
+</solution>
+</webwork>
+</exercise>
 
-            <exercise xml:id="function-with-domain-issues">
-                <title>Answer is a function with domain issues</title>
+<exercise xml:id="function-with-domain-issues" label="lab-function-with-domain-issues">
+<title>Answer is a function with domain issues</title>
 
-                <webwork>
+<webwork>
 
-                    <pg-code>
+<pg-code>
                         $a = random(2,5,1);
                         $answer1 = Compute("sqrt(x-$a)");
                         $answer1->{limits} = [$a+1,$a+4];
                         $answer2 = Compute("ln(abs( x / (x-$a) ))");
                         $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
                         $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p><ol>
-                            <li>
-                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
-                                <p><ul marker="square">
-                                    <li>
-                                        <p><var name="$answer1" width="15" category="formula"/></p>
-                                    </li>
-                                </ul></p>
-                            </li>
-                            <li>
-                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <p><ul marker="square">
-                                    <li>
-                                        <p><var name="$answer2" width="15" evaluator="$answer2evaluator" category="formula"/></p>
-                                    </li>
-                                </ul></p>
-                            </li>
-                        </ol></p>
+<statement>
+<p>
+<ol>
+<li>
+<p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/>
+</m>.
+</p>
+<p>
+<ul marker="square">
+<li>
+<p>
+<var name="$answer1" width="15" category="formula"/>
+</p>
+</li>
+</ul>
+</p>
+</li>
+<li>
+<p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/>
+</m>.
+</p>
+<p>
+<ul marker="square">
+<li>
+<p>
+<var name="$answer2" width="15" evaluator="$answer2evaluator" category="formula"/>
+</p>
+</li>
+</ul>
+</p>
+</li>
+</ol>
+</p>
 
-                    </statement>
+</statement>
 
-                    <solution>
-                        <p>Solution explanation goes here.</p>
-                    </solution>
-                </webwork>
-            </exercise>
+<solution>
+<p>Solution explanation goes here.</p>
+</solution>
+</webwork>
+</exercise>
 
-            <exercise xml:id="multiple-choice-popup-or-radio-buttons">
-                <title>Multiple Choice by Popup, Radio Buttons, or Checkboxes</title>
+<exercise xml:id="multiple-choice-popup-or-radio-buttons" label="lab-multiple-choice-popup-or-radio-buttons">
+<title>Multiple Choice by Popup, Radio Buttons, or Checkboxes</title>
 
-                <webwork>
-                    <pg-code>
+<webwork>
+<pg-code>
                         $color1 = PopUp(["?","Red","Blue","Green"], 2);
                         $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
                         $color3 = CheckboxList(["Red","Blue","Green","None of these"], [1]);
-                    </pg-code>
-                    <statement>
-                        <p>My favorite color is <var name="$color1" form="popup"/>.</p>
+</pg-code>
+<statement>
+<p>My favorite color is <var name="$color1" form="popup"/>
+.</p>
 
-                        <p>My favorite color is</p>
-                        <p><var name="$color2" form="buttons"/></p>
+<p>My favorite color is</p>
+<p>
+<var name="$color2" form="buttons"/>
+</p>
 
-                        <p>My favorite color is</p>
-                        <p><var name="$color3" form="checkboxes"/></p>
-                    </statement>
+<p>My favorite color is</p>
+<p>
+<var name="$color3" form="checkboxes"/>
+</p>
+</statement>
 
-                    <solution>
-                        <p>The correct answer is <var name="$color1"/>.</p>
-                        <p>The correct answer is <var name="$color2"/>.</p>
-                        <p>The correct answer is <var name="$color3"/>.</p>
-                    </solution>
+<solution>
+<p>The correct answer is <var name="$color1"/>
+.</p>
+<p>The correct answer is <var name="$color2"/>
+.</p>
+<p>The correct answer is <var name="$color3"/>
+.</p>
+</solution>
 
-                </webwork>
-            </exercise>
+</webwork>
+</exercise>
 
-            <exercise>
-                <webwork>
-                    <pg-code>
+<exercise>
+<webwork>
+<pg-code>
                           $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
-                    </pg-code>
-                    <statement>
-                        <p>
+</pg-code>
+<statement>
+<p>
                             There is math in each option for this question. Which expression is not a polynomial?
-                        </p>
-                        <p>
-                            <var name="$expressions" form="buttons"/>
-                        </p>
-                    </statement>
-                    <solution>
-                        <p>The answer is <var name="$expressions"/>.</p>
-                    </solution>
-                </webwork>
+</p>
+<p>
+<var name="$expressions" form="buttons"/>
+</p>
+</statement>
+<solution>
+<p>The answer is <var name="$expressions"/>
+.</p>
+</solution>
+</webwork>
 
-            </exercise>
+</exercise>
 
-            <exercise xml:id="tables">
-                <title>Tables</title>
+<exercise xml:id="tables" label="lab-tables">
+<title>Tables</title>
 
-                <webwork>
+<webwork>
 
-                    <pg-code>
+<pg-code>
                         $x = Real(5);
-                    </pg-code>
+</pg-code>
 
-                    <statement>
-                        <p>A table with minimal XML source.</p>
+<statement>
+<p>A table with minimal XML source.</p>
 
-                        <tabular>
-                            <row>
-                                <cell>A</cell>
-                                <cell>B</cell>
-                                <cell>C</cell>
-                            </row>
-                            <row>
-                                <cell>D</cell>
-                                <cell>E</cell>
-                                <cell>F</cell>
-                            </row>
-                            <row>
-                                <cell>G</cell>
-                                <cell>H</cell>
-                                <cell>I</cell>
-                            </row>
-                        </tabular>
-                        <p>Finish this table.</p>
+<tabular>
+<row>
+<cell>A</cell>
+<cell>B</cell>
+<cell>C</cell>
+</row>
+<row>
+<cell>D</cell>
+<cell>E</cell>
+<cell>F</cell>
+</row>
+<row>
+<cell>G</cell>
+<cell>H</cell>
+<cell>I</cell>
+</row>
+</tabular>
+<p>Finish this table.</p>
 
-                        <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                            <col halign="right" top="minor"/>
-                            <col right="medium"/>
-                            <col halign="left"/>
-                            <row bottom="none" left="none">
-                            <cell right="minor">1</cell>
-                                <cell>two</cell>
-                                <cell><m>\lfloor\pi\rfloor</m></cell>
-                            </row>
-                            <row valign="bottom">
-                                <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                <cell><var name="$x" form="none" category="integer"/></cell>
-                                <cell>six</cell>
-                            </row>
-                            <row halign="right">
-                                <cell><m>2^3-1</m></cell>
-                                <cell colspan="2" halign="center">VIII</cell>
-                            </row>
-                        </tabular>
-                    </statement>
+<tabular top="major" left="major" bottom="major" right="minor" halign="center">
+<col halign="right" top="minor"/>
+<col right="medium"/>
+<col halign="left"/>
+<row bottom="none" left="none">
+<cell right="minor">1</cell>
+<cell>two</cell>
+<cell>
+<m>\lfloor\pi\rfloor</m>
+</cell>
+</row>
+<row valign="bottom">
+<cell bottom="minor">
+<line>
+<m>\text{I}+\text{I}</m>
+</line>
+<line>
+<m>{}+\text{I}+\text{I}</m>
+</line>
+</cell>
+<cell>
+<var name="$x" form="none" category="integer"/>
+</cell>
+<cell>six</cell>
+</row>
+<row halign="right">
+<cell>
+<m>2^3-1</m>
+</cell>
+<cell colspan="2" halign="center">VIII</cell>
+</row>
+</tabular>
+</statement>
 
-                    <solution>
-                        <p>The missing number is <var name="$x"/>.</p>
-                    </solution>
+<solution>
+<p>The missing number is <var name="$x"/>
+.</p>
+</solution>
 
-                </webwork>
+</webwork>
 
-            </exercise>
+</exercise>
 
-            <exercise>
-                <title>Answer Arrays</title>
-                <webwork>
-                  <pg-code>
+<exercise>
+<title>Answer Arrays</title>
+<webwork>
+<pg-code>
                     Context("Point");
                     $p = Point(0,0);
                     Context("Vector");
@@ -1756,35 +2115,47 @@
                     $c = ColumnVector(3,4);
                     Context("Matrix");
                     $m = Matrix([[1,2],[3,4]]);
-                  </pg-code>
-                  <statement>
-                    <p>
+</pg-code>
+<statement>
+<p>
                       These answer blanks are all expecting some sort of answer in an array format.
-                    </p>
-                    <p>
-                      <m><var name="$p"/> = {}</m><var name="$p" form="array"/>
-                    </p>
-                    <p>
-                      <m><var name="$v"/> = {}</m><var name="$v" form="array"/>
-                    </p>
-                    <p>
-                      <m><var name="$c"/> = {}</m><var name="$c" form="array"/>
-                    </p>
-                    <p>
-                      <m><var name="$m"/> = {}</m><var name="$m" form="array"/>
-                    </p>
-                  </statement>
-                </webwork>
-            </exercise>
-        </section>
+</p>
+<p>
+<m>
+<var name="$p"/>
+ = {}</m>
+<var name="$p" form="array"/>
+</p>
+<p>
+<m>
+<var name="$v"/>
+ = {}</m>
+<var name="$v" form="array"/>
+</p>
+<p>
+<m>
+<var name="$c"/>
+ = {}</m>
+<var name="$c" form="array"/>
+</p>
+<p>
+<m>
+<var name="$m"/>
+ = {}</m>
+<var name="$m" form="array"/>
+</p>
+</statement>
+</webwork>
+</exercise>
+</section>
 
-        <section>
-            <title>Stress Tests</title>
+<section>
+<title>Stress Tests</title>
 
-            <exercise>
-                <title>PTX problem source with server-generated images</title>
-                <webwork>
-                    <pg-code>
+<exercise>
+<title>PTX problem source with server-generated images</title>
+<webwork>
+<pg-code>
                         for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
                         add_functions($gr[0], "1 for x in &lt;-1,4> using color:blue and weight:2");
                         add_functions($gr[1], "x for x in &lt;-1,4> using color:blue and weight:2");
@@ -1794,749 +2165,911 @@
                         add_functions($gr[5], "sin(x) for x in &lt;-1,4> using color:blue and weight:2");
                         add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
                         add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
-                    </pg-code>
-                    <task>
-                        <statement>
-                            <image pg-name="$gr[0]" width="25%"/>
-                            <image pg-name="$gr[1]" width="25%"/>
-                        </statement>
-                        <solution>
-                            <image pg-name="$gr[2]" width="25%"/>
-                        </solution>
-                    </task>
-                    <task>
-                        <statement>
-                            <image pg-name="$gr[3]" width="25%"/>
-                            <image pg-name="$gr[4]" width="25%"/>
-                            <image pg-name="$gr[5]" width="25%"/>
-                        </statement>
-                        <hint>
-                            <image pg-name="$gr[6]" width="25%"/>
-                        </hint>
-                        <solution>
-                            <image pg-name="$gr[7]" width="25%"/>
-                        </solution>
-                    </task>
-                </webwork>
-            </exercise>
+</pg-code>
+<task>
+<statement>
+<image pg-name="$gr[0]" width="25%"/>
+<image pg-name="$gr[1]" width="25%"/>
+</statement>
+<solution>
+<image pg-name="$gr[2]" width="25%"/>
+</solution>
+</task>
+<task>
+<statement>
+<image pg-name="$gr[3]" width="25%"/>
+<image pg-name="$gr[4]" width="25%"/>
+<image pg-name="$gr[5]" width="25%"/>
+</statement>
+<hint>
+<image pg-name="$gr[6]" width="25%"/>
+</hint>
+<solution>
+<image pg-name="$gr[7]" width="25%"/>
+</solution>
+</task>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Checking Proper Indentation In Lists</title>
-                <introduction>
-                    <p>One long exercise, where ordered sublists test the specification of their labels.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><ol>
-                            <li>Simple item</li>
-                            <li>Simple item</li>
-                            <li>Simple item</li>
-                        </ol></p>
+<exercise>
+<title>Checking Proper Indentation In Lists</title>
+<introduction>
+<p>One long exercise, where ordered sublists test the specification of their labels.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<ol>
+<li>Simple item</li>
+<li>Simple item</li>
+<li>Simple item</li>
+</ol>
+</p>
 
-                        <p><ol>
-                            <li>Simple item</li>
-                            <li>Simple item</li>
-                            <li>Simple item</li>
-                        </ol></p>
+<p>
+<ol>
+<li>Simple item</li>
+<li>Simple item</li>
+<li>Simple item</li>
+</ol>
+</p>
 
-                        <p>Text before.<ol>
-                            <li>Simple item</li>
-                            <li>Simple item</li>
-                            <li>Simple item</li>
-                        </ol>And after.</p>
+<p>Text before.<ol>
+<li>Simple item</li>
+<li>Simple item</li>
+<li>Simple item</li>
+</ol>And after.</p>
 
-                        <p><ol>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                        </ol></p>
+<p>
+<ol>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol>
+</p>
 
-                        <p>Text before.<ol>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                        </ol>And after.</p>
+<p>Text before.<ol>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol>And after.</p>
 
-                        <p><ol>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p><ol marker="A">
-                                    <li>
-                                        <p>Sublist Item</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                    </li>
-                                </ol></p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                        </ol></p>
+<p>
+<ol>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>
+<ol marker="A">
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+</ol>
+</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol>
+</p>
 
-                        <p>Text before.<ol>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Text before.<ol marker="i">
-                                    <li>
-                                        <p>Sublist Item</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                    </li>
-                                </ol>And after.</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                        </ol>And after.</p>
+<p>Text before.<ol>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Text before.<ol marker="i">
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+</ol>And after.</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol>And after.</p>
 
-                        <p><ol>
-                            <li>
-                                <p>Structured item</p>
-                                <p>Second paragraph</p>
-                            </li>
-                            <li>
-                                <p><ol marker="I">
-                                    <li>
-                                        <p>Sublist Item</p>
-                                        <p>Second paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                        <p>Second paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                        <p>Second paragraph</p>
-                                    </li>
-                                </ol></p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                                <p>Second paragraph</p>
-                            </li>
-                        </ol></p>
+<p>
+<ol>
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>
+<ol marker="I">
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+</ol>
+</p>
+</li>
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+</ol>
+</p>
 
-                        <p>Text before.<ol>
-                            <li>
-                                <p>Structured item</p>
-                                <p>Second paragraph</p>
-                            </li>
-                            <li>
-                                <p>Text before.<ol marker="1">
-                                    <li>
-                                        <p>Sublist Item</p>
-                                        <p>Second paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                        <p>Second paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item</p>
-                                        <p>Second paragraph</p>
-                                    </li>
-                                </ol>And after.</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                                <p>Second paragraph</p>
-                            </li>
-                        </ol>And after.</p>
+<p>Text before.<ol>
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Text before.<ol marker="1">
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+</ol>And after.</p>
+</li>
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+</ol>And after.</p>
 
-                        <p><ol>
-                            <li>
-                                <p><me>1+1=2</me>Structured item</p>
-                                <p>Second<me>1+1=2</me> paragraph</p>
-                            </li>
-                            <li>
-                                <p><ol marker="a">
-                                    <li>
-                                        <p>Sublist<me>1+1=2</me> Item</p>
-                                        <p>Second paragraph<me>1+1=2</me></p>
-                                    </li>
-                                    <li>
-                                        <p><me>1+1=2</me>Sublist Item</p>
-                                        <p>Second<me>1+1=2</me> paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item<me>1+1=2</me></p>
-                                        <p><me>1+1=2</me>Second paragraph</p>
-                                    </li>
-                                </ol></p>
-                            </li>
-                            <li>
-                                <p>Structured<me>1+1=2</me> item</p>
-                                <p>Second paragraph<me>1+1=2</me></p>
-                            </li>
-                        </ol></p>
+<p>
+<ol>
+<li>
+<p>
+<me>1+1=2</me>Structured item</p>
+<p>Second<me>1+1=2</me> paragraph</p>
+</li>
+<li>
+<p>
+<ol marker="a">
+<li>
+<p>Sublist<me>1+1=2</me> Item</p>
+<p>Second paragraph<me>1+1=2</me>
+</p>
+</li>
+<li>
+<p>
+<me>1+1=2</me>Sublist Item</p>
+<p>Second<me>1+1=2</me> paragraph</p>
+</li>
+<li>
+<p>Sublist Item<me>1+1=2</me>
+</p>
+<p>
+<me>1+1=2</me>Second paragraph</p>
+</li>
+</ol>
+</p>
+</li>
+<li>
+<p>Structured<me>1+1=2</me> item</p>
+<p>Second paragraph<me>1+1=2</me>
+</p>
+</li>
+</ol>
+</p>
 
-                        <p>Text before.<ol>
-                            <li>
-                                <p>Structured<me>1+1=2</me> item</p>
-                                <p>Second paragraph<me>1+1=2</me></p>
-                            </li>
-                            <li>
-                                <p><me>1+1=2</me>Text before.<ol marker="A">
-                                    <li>
-                                        <p>Sublist<me>1+1=2</me> Item</p>
-                                        <p>Second paragraph<me>1+1=2</me></p>
-                                    </li>
-                                    <li>
-                                        <p><me>1+1=2</me>Sublist Item</p>
-                                        <p>Second<me>1+1=2</me> paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item<me>1+1=2</me></p>
-                                        <p><me>1+1=2</me>Second paragraph</p>
-                                    </li>
-                                </ol>And<me>1+1=2</me> after.</p>
-                            </li>
-                            <li>
-                                <p>Structured item<me>1+1=2</me></p>
-                                <p><me>1+1=2</me>Second paragraph</p>
-                            </li>
-                        </ol>And after.</p>
+<p>Text before.<ol>
+<li>
+<p>Structured<me>1+1=2</me> item</p>
+<p>Second paragraph<me>1+1=2</me>
+</p>
+</li>
+<li>
+<p>
+<me>1+1=2</me>Text before.<ol marker="A">
+<li>
+<p>Sublist<me>1+1=2</me> Item</p>
+<p>Second paragraph<me>1+1=2</me>
+</p>
+</li>
+<li>
+<p>
+<me>1+1=2</me>Sublist Item</p>
+<p>Second<me>1+1=2</me> paragraph</p>
+</li>
+<li>
+<p>Sublist Item<me>1+1=2</me>
+</p>
+<p>
+<me>1+1=2</me>Second paragraph</p>
+</li>
+</ol>And<me>1+1=2</me> after.</p>
+</li>
+<li>
+<p>Structured item<me>1+1=2</me>
+</p>
+<p>
+<me>1+1=2</me>Second paragraph</p>
+</li>
+</ol>And after.</p>
 
-                        <p>Text before.<ol>
-                            <li>
-                                <p>Structured<md>
-                                    <mrow>1+1\amp=2</mrow>
-                                    <mrow>2\amp=2</mrow>
-                                </md> item</p>
-                                <p>Second paragraph<md>
-                                    <mrow>1+1\amp=2</mrow>
-                                    <mrow>2\amp=2</mrow>
-                                </md></p>
-                            </li>
-                            <li>
-                                <p><md>
-                                    <mrow>1+1\amp=2</mrow>
-                                    <mrow>2\amp=2</mrow>
-                                </md>Text before.<ol marker="i">
-                                    <li>
-                                        <p>Sublist<md>
-                                            <mrow>1+1\amp=2</mrow>
-                                            <mrow>2\amp=2</mrow>
-                                        </md> Item</p>
-                                        <p>Second paragraph<md>
-                                            <mrow>1+1\amp=2</mrow>
-                                            <mrow>2\amp=2</mrow>
-                                        </md></p>
-                                    </li>
-                                    <li>
-                                        <p><md>
-                                            <mrow>1+1\amp=2</mrow>
-                                            <mrow>2\amp=2</mrow>
-                                        </md>Sublist Item</p>
-                                        <p>Second<md>
-                                            <mrow>1+1\amp=2</mrow>
-                                            <mrow>2\amp=2</mrow>
-                                        </md> paragraph</p>
-                                    </li>
-                                    <li>
-                                        <p>Sublist Item<md>
-                                            <mrow>1+1\amp=2</mrow>
-                                            <mrow>2\amp=2</mrow>
-                                        </md></p>
-                                        <p><md>
-                                            <mrow>1+1\amp=2</mrow>
-                                            <mrow>2\amp=2</mrow>
-                                        </md>Second paragraph</p>
-                                    </li>
-                                </ol>And<md>
-                                <mrow>1+1\amp=2</mrow>
-                                <mrow>2\amp=2</mrow>
-                            </md> after.</p>
-                            </li>
-                            <li>
-                                <p>Structured item<md>
-                                    <mrow>1+1\amp=2</mrow>
-                                    <mrow>2\amp=2</mrow>
-                                </md></p>
-                                <p><md>
-                                    <mrow>1+1\amp=2</mrow>
-                                    <mrow>2\amp=2</mrow>
-                                </md>Second paragraph</p>
-                            </li>
-                        </ol>And after.</p>
-                    </statement>
-                </webwork>
-            </exercise>
+<p>Text before.<ol>
+<li>
+<p>Structured<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md> item</p>
+<p>Second paragraph<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>
+</p>
+</li>
+<li>
+<p>
+<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>Text before.<ol marker="i">
+<li>
+<p>Sublist<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md> Item</p>
+<p>Second paragraph<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>
+</p>
+</li>
+<li>
+<p>
+<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>Sublist Item</p>
+<p>Second<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md> paragraph</p>
+</li>
+<li>
+<p>Sublist Item<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>
+</p>
+<p>
+<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>Second paragraph</p>
+</li>
+</ol>And<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md> after.</p>
+</li>
+<li>
+<p>Structured item<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>
+</p>
+<p>
+<md>
+<mrow>1+1\amp=2</mrow>
+<mrow>2\amp=2</mrow>
+</md>Second paragraph</p>
+</li>
+</ol>And after.</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Checking Proper Indentation In Lists with Images and Tables</title>
-                <webwork>
-                    <pg-code>
-                        $g=init_graph(-1,-1,1,1,axes=>[0,0]);
-                    </pg-code>
-                    <statement>
-                        <p><ol>
-                            <li>
-                                <p>Structured item</p>
-                                <image pg-name="$g" width="17%"/>
-                            </li>
-                            <li>
-                                <image pg-name="$g" width="17%"/>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                                <image pg-name="$g" width="17%"/>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                        </ol></p>
+<exercise>
+<title>Checking Proper Indentation In Lists with Images and Tables</title>
+<webwork>
+<pg-code> $g=init_graph(-1,-1,1,1,axes=>[0,0]);
+</pg-code>
+<statement>
+<p>
+<ol>
+<li>
+<p>Structured item</p>
+<image pg-name="$g" width="17%"/>
+</li>
+<li>
+<image pg-name="$g" width="17%"/>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+<image pg-name="$g" width="17%"/>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol>
+</p>
 
-                        <p><ol>
-                            <li>
-                                <p>Structured item</p>
-                                <tabular>
-                                    <row>
-                                        <cell>a</cell>
-                                        <cell>b</cell>
-                                    </row>
-                                    <row>
-                                        <cell>c</cell>
-                                        <cell>d</cell>
-                                    </row>
-                                </tabular>
-                            </li>
-                            <li>
-                                <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                                    <col halign="right" top="minor"/>
-                                    <col right="medium"/>
-                                    <col halign="left"/>
-                                    <row bottom="none" left="none">
-                                    <cell right="minor">1</cell>
-                                        <cell>two</cell>
-                                        <cell><m>\lfloor\pi\rfloor</m></cell>
-                                    </row>
-                                    <row valign="bottom">
-                                        <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                        <cell><m>5</m></cell>
-                                        <cell>six</cell>
-                                    </row>
-                                    <row halign="right">
-                                        <cell><m>2^3-1</m></cell>
-                                        <cell colspan="2" halign="center">VIII</cell>
-                                    </row>
-                                </tabular>
-                                <p>Structured item</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                                <tabular>
-                                    <row>
-                                        <cell>a</cell>
-                                        <cell>b</cell>
-                                    </row>
-                                    <row>
-                                        <cell>c</cell>
-                                        <cell>d</cell>
-                                    </row>
-                                </tabular>
-                                <p>Second paragraph</p>
-                            </li>
-                            <li>
-                                <p>Structured item</p>
-                            </li>
-                        </ol></p>
-                    </statement>
-                </webwork>
-            </exercise>
+<p>
+<ol>
+<li>
+<p>Structured item</p>
+<tabular>
+<row>
+<cell>a</cell>
+<cell>b</cell>
+</row>
+<row>
+<cell>c</cell>
+<cell>d</cell>
+</row>
+</tabular>
+</li>
+<li>
+<tabular top="major" left="major" bottom="major" right="minor" halign="center">
+<col halign="right" top="minor"/>
+<col right="medium"/>
+<col halign="left"/>
+<row bottom="none" left="none">
+<cell right="minor">1</cell>
+<cell>two</cell>
+<cell>
+<m>\lfloor\pi\rfloor</m>
+</cell>
+</row>
+<row valign="bottom">
+<cell bottom="minor">
+<line>
+<m>\text{I}+\text{I}</m>
+</line>
+<line>
+<m>{}+\text{I}+\text{I}</m>
+</line>
+</cell>
+<cell>
+<m>5</m>
+</cell>
+<cell>six</cell>
+</row>
+<row halign="right">
+<cell>
+<m>2^3-1</m>
+</cell>
+<cell colspan="2" halign="center">VIII</cell>
+</row>
+</tabular>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+<tabular>
+<row>
+<cell>a</cell>
+<cell>b</cell>
+</row>
+<row>
+<cell>c</cell>
+<cell>d</cell>
+</row>
+</tabular>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <title>Deep-nested lists</title>
-                <webwork>
-                    <statement>
-                        <p>Ordered list.</p>
-                        <p><ol>
-                            <li><p>Level 1, first.</p></li>
-                            <li><p>Level 1, second.<ol>
-                                <li><p>Level 2, first.</p></li>
-                                <li><p>Level 2, second.<ol>
-                                    <li><p>Level 3, first.</p></li>
-                                    <li><p>Level 3, second.<ol>
-                                        <li><p>Level 4, first.</p></li>
-                                        <li><p>Level 4, second.</p></li>
-                                        <li><p>Level 4, third.</p></li>
-                                    </ol></p></li>
-                                    <li><p>Level 3, third.</p></li>
-                                </ol></p></li>
-                                <li><p>Level 2, third.</p></li>
-                            </ol></p></li>
-                            <li><p>Level 1, third.</p></li>
-                        </ol></p>
-                        <p>Unordered list.</p>
-                        <p><ul>
-                            <li><p>Level 1, first.</p></li>
-                            <li><p>Level 1, second.<ul>
-                                <li><p>Level 2, first.</p></li>
-                                <li><p>Level 2, second.<ul>
-                                    <li><p>Level 3, first.</p></li>
-                                    <li><p>Level 3, second.<ul>
-                                        <li><p>Level 4, first.</p></li>
-                                        <li><p>Level 4, second.</p></li>
-                                        <li><p>Level 4, third.</p></li>
-                                    </ul></p></li>
-                                    <li><p>Level 3, third.</p></li>
-                                </ul></p></li>
-                                <li><p>Level 2, third.</p></li>
-                            </ul></p></li>
-                            <li><p>Level 1, third.</p></li>
-                        </ul></p>
-                    </statement>
-                </webwork>
-            </exercise>
+<exercise>
+<title>Deep-nested lists</title>
+<webwork>
+<statement>
+<p>Ordered list.</p>
+<p>
+<ol>
+<li>
+<p>Level 1, first.</p>
+</li>
+<li>
+<p>Level 1, second.<ol>
+<li>
+<p>Level 2, first.</p>
+</li>
+<li>
+<p>Level 2, second.<ol>
+<li>
+<p>Level 3, first.</p>
+</li>
+<li>
+<p>Level 3, second.<ol>
+<li>
+<p>Level 4, first.</p>
+</li>
+<li>
+<p>Level 4, second.</p>
+</li>
+<li>
+<p>Level 4, third.</p>
+</li>
+</ol>
+</p>
+</li>
+<li>
+<p>Level 3, third.</p>
+</li>
+</ol>
+</p>
+</li>
+<li>
+<p>Level 2, third.</p>
+</li>
+</ol>
+</p>
+</li>
+<li>
+<p>Level 1, third.</p>
+</li>
+</ol>
+</p>
+<p>Unordered list.</p>
+<p>
+<ul>
+<li>
+<p>Level 1, first.</p>
+</li>
+<li>
+<p>Level 1, second.<ul>
+<li>
+<p>Level 2, first.</p>
+</li>
+<li>
+<p>Level 2, second.<ul>
+<li>
+<p>Level 3, first.</p>
+</li>
+<li>
+<p>Level 3, second.<ul>
+<li>
+<p>Level 4, first.</p>
+</li>
+<li>
+<p>Level 4, second.</p>
+</li>
+<li>
+<p>Level 4, third.</p>
+</li>
+</ul>
+</p>
+</li>
+<li>
+<p>Level 3, third.</p>
+</li>
+</ul>
+</p>
+</li>
+<li>
+<p>Level 2, third.</p>
+</li>
+</ul>
+</p>
+</li>
+<li>
+<p>Level 1, third.</p>
+</li>
+</ul>
+</p>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <introduction>
-                    <p>
+<exercise>
+<introduction>
+<p>
                         This exercise has no content in its statement.
                         It should throw a PTX warning during the representations build.
-                    </p>
-                </introduction>
-                <webwork>
-                    <statement>
-                    </statement>
-                </webwork>
-            </exercise>
+</p>
+</introduction>
+<webwork>
+<statement>
+</statement>
+</webwork>
+</exercise>
 
-            <exercise>
-                <introduction>
-                    <p>
+<exercise>
+<introduction>
+<p>
                         This exercise has a single quote in it.
                         A single quote is the first option for a delimiter for perl's q
                         function which is used by extract-pg.xsl in table cells.
                         So if working, it should move on to the next delimiter option.
-                    </p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <tabular>
-                            <row>
-                                <cell>What's up, Doc?</cell>
-                            </row>
-                        </tabular>
-                    </statement>
-                </webwork>
-            </exercise>
-        </section>
+</p>
+</introduction>
+<webwork>
+<statement>
+<tabular>
+<row>
+<cell>What's up, Doc?</cell>
+</row>
+</tabular>
+</statement>
+</webwork>
+</exercise>
+</section>
 
-        <section>
-            <title>Layout Configuration Testing</title>
+<section>
+<title>Layout Configuration Testing</title>
 
-            <introduction>
-                <p>This section is to provide a single page demonstrating all of the combinations that may factor into a problem's layout.</p>
-            </introduction>
+<introduction>
+<p>This section is to provide a single page demonstrating all of the combinations that may factor into a problem's layout.</p>
+</introduction>
 
-            <subsection>
-                <title>Inline Exercises</title>
-                <p>Some <q>inline</q> exercises, as distinguished from the <q>divisional</q> exercises below.</p>
-                <exercise>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercise>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-            </subsection>
+<subsection>
+<title>Inline Exercises</title>
+<p>Some <q>inline</q> exercises, as distinguished from the <q>divisional</q> exercises below.</p>
+<exercise>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+</subsection>
 
-            <exercises>
-                <title>Divisional Exercises</title>
-                <exercise>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-                <exercise>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercise>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercise>
-                    <title>Has a Title</title>
-                    <introduction>
-                        <p>Has an introduction.</p>
-                    </introduction>
-                    <webwork>
-                        <statement>
-                            <p><m>1+1=2</m></p>
-                        </statement>
-                    </webwork>
-                    <conclusion>
-                        <p>Has a conclusion.</p>
-                    </conclusion>
-                </exercise>
-                <exercisegroup>
-                    <introduction>
-                        <p>These are inside an exercisegroup.</p>
-                    </introduction>
-                    <exercise>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                    </exercise>
-                    <exercise>
-                        <title>Has a Title</title>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                    </exercise>
-                    <exercise>
-                        <introduction>
-                            <p>Has an introduction.</p>
-                        </introduction>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                    </exercise>
-                    <exercise>
-                        <title>Has a Title</title>
-                        <introduction>
-                            <p>Has an introduction.</p>
-                        </introduction>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                    </exercise>
-                    <exercise>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                        <conclusion>
-                            <p>Has a conclusion.</p>
-                        </conclusion>
-                    </exercise>
-                    <exercise>
-                        <title>Has a Title</title>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                        <conclusion>
-                            <p>Has a conclusion.</p>
-                        </conclusion>
-                    </exercise>
-                    <exercise>
-                        <introduction>
-                            <p>Has an introduction.</p>
-                        </introduction>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                        <conclusion>
-                            <p>Has a conclusion.</p>
-                        </conclusion>
-                    </exercise>
-                    <exercise>
-                        <title>Has a Title</title>
-                        <introduction>
-                            <p>Has an introduction.</p>
-                        </introduction>
-                        <webwork>
-                            <statement>
-                                <p><m>1+1=2</m></p>
-                            </statement>
-                        </webwork>
-                        <conclusion>
-                            <p>Has a conclusion.</p>
-                        </conclusion>
-                    </exercise>
-                </exercisegroup>
-            </exercises>
-        </section>
+<exercises>
+<title>Divisional Exercises</title>
+<exercise>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercisegroup>
+<introduction>
+<p>These are inside an exercisegroup.</p>
+</introduction>
+<exercise>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+</exercise>
+<exercise>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+<exercise>
+<title>Has a Title</title>
+<introduction>
+<p>Has an introduction.</p>
+</introduction>
+<webwork>
+<statement>
+<p>
+<m>1+1=2</m>
+</p>
+</statement>
+</webwork>
+<conclusion>
+<p>Has a conclusion.</p>
+</conclusion>
+</exercise>
+</exercisegroup>
+</exercises>
+</section>
 
-        <section xml:id="section-deprecations">
-            <title>Deprecations</title>
+<section xml:id="section-deprecations">
+<title>Deprecations</title>
 
-            <p>
+<p>
                 This section is for testing if deprecated features are still supported.
                 No such tests are being performed now.
-            </p>
-        </section>
-
-        <backmatter>
-            <!-- 2018-09-19: answers are not yet available, so we -->
-            <!-- still test that asking for them is not a problem -->
-            <solutions inline="hint answer solution" divisional="hint answer solution">
-                <title>Hints, Answers, and Solutions</title>
-            </solutions>
-        </backmatter>
-    </article>
+</p>
+</section>
+</chapter>
+<backmatter>
+<!-- 2018-09-19: answers are not yet available, so we -->
+<!-- still test that asking for them is not a problem -->
+<solutions inline="hint answer solution" divisional="hint answer solution">
+<title>Hints, Answers, and Solutions</title>
+</solutions>
+</backmatter>
+</book>
 </pretext>
