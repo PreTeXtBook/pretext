@@ -2235,23 +2235,24 @@ nested tasks. see
 https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#aBc
 */
 
-.ptx-content .exercise-like > .exercise-like {
+/* 9/27/23  added "article" because of details.exercise-like */
+.ptx-content article.exercise-like > .exercise-like {
     margin-left: 40px;
 }
-.ptx-content .exercise-like > .exercise-like.task {
+.ptx-content article.exercise-like > .exercise-like.task {
     margin-left: 20px;
 }
-.ptx-content .exercise-like > .exercise-like > .para {
+.ptx-content article.exercise-like > .exercise-like > .para {
     margin-top: 1.25em;
 /*    margin-bottom: 0.25em; */
 }
-.ptx-content .example-like > .heading + .introduction {
+.ptx-content article.example-like > .heading + .introduction {
     display: inline;
 }
-.ptx-content .example-like > .heading + .introduction > .para:first-child {
+.ptx-content article.example-like > .heading + .introduction > .para:first-child {
     display: inline;
 }
-.ptx-content .example-like > .exercise-like > .para {
+.ptx-content article.example-like > .exercise-like > .para {
     margin-top: 1.25em;
 }
 

@@ -348,8 +348,55 @@ so that we can set our own later */
 
 
 
+/* 9/23/23 a knowled article is now in a "details", so we add style
+   to mimic the old style below  */
 
+.ptx-content section > details > summary {
+    cursor: pointer;
+}
 
+.ptx-content section > details > summary::marker,
+.ptx-content article + details > summary::marker {
+  content: "";
+}
+
+.ptx-content section > details, .ptx-content .paragraphs > details,
+.ptx-content article + details {
+    margin-top: 1.25em;
+}
+.ptx-content summary + article {
+    margin-top: 1em;
+}
+.ptx-content section details + details,
+.ptx-content section .introduction + details,
+.ptx-content section .para + details,
+.ptx-content section .posterior + details {
+    margin-top: 1.75em;
+}
+
+.ptx-content details > article {
+  padding-top: 0.25em;
+}
+.ptx-content details > article:not(.theorem-like):not(.definition-like) {
+  padding: 0.25em;
+  padding-left: 0.5em;
+}
+.ptx-content details > article {
+  background-color: #f5f5ff;
+}
+.ptx-content details > article details > article,
+.ptx-content details > article details > .answer {
+  margin: 0.5em;
+  padding: 0.25em;
+  padding-left: 0.5em;
+  background-color: #fffff5;
+}
+.ptx-content details > article details > article details > article {
+  background-color: #fff5ff;
+}
+.ptx-content details > article details > article details > article details > article {
+  background-color: #fafffa;
+}
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
@@ -523,6 +570,26 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .ptx-content .abstract > .title + .para {
     display: inline;
 }
+
+/* born hidden articls are now in "details", so adding markup
+to immitate what is below.  */
+
+.ptx-content summary,
+.ptx-content summary > .heading {
+    position: relative;
+}
+
+.ptx-content summary > .heading {
+    font-size: 1.125em;
+    line-height: 1.125em;
+    margin-top: 0;
+    display: inline;
+}
+
+
+/*       -----      */
+
+
 .ptx-content article > .heading,
 .ptx-content article > a .heading {
     font-size: 1.125em;

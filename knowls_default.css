@@ -48,7 +48,8 @@ table [data-knowl] {
     z-index: 0;
 }
 /* is the next only for a proof or other content that is only a knowl? */
-article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [data-knowl].active::after {
+article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [data-knowl].active::after,
+    section > details > summary > .heading, article + details > summary > .heading {
     content: "";
     position: absolute;
     top: 0;
