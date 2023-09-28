@@ -859,6 +859,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- In database with the same structure as an exercise/question. -->
 <xsl:template match="datafile" mode="runestone-manifest">
     <question>
+    <xsl:attribute name="optional">
+        <xsl:text>yes</xsl:text>
+    </xsl:attribute>
         <!-- label is from the "program", or enclosing "listing" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <htmlsrc>
