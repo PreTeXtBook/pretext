@@ -319,19 +319,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$subtree-node" mode="chunking" />
         </xsl:otherwise>
     </xsl:choose>
-    <!-- knowl-production, partially in flux while improving -->
-    <xsl:choose>
-        <!-- subsetting? don't bother (for now) -->
-        <xsl:when test="$b-subsetting"/>
-        <!-- alternate, new production for testing -->
-        <xsl:when test="$b-knowls-new">
-            <xsl:apply-templates select="." mode="make-efficient-knowls"/>
-        </xsl:when>
-        <!-- status quo -->
-        <xsl:otherwise>
-            <xsl:apply-templates select="$document-root" mode="xref-knowl-old"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- knowl-production -->
+    <!-- subsetting? don't bother (for now) -->
+    <xsl:if test="not($b-subsetting)">
+        <xsl:apply-templates select="." mode="make-efficient-knowls"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- However, some PTX document types do not have    -->
@@ -1192,17 +1184,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <!-- When we make knowl content selectively, we may    -->
-            <!-- need to produce the content for the notation link -->
-            <xsl:if test="$b-knowls-new">
-                <xsl:variable name="is-knowl">
-                    <xsl:apply-templates select="." mode="xref-as-knowl"/>
-                </xsl:variable>
-                <xsl:if test="$is-knowl = 'true'">
-                    <xsl:apply-templates select="." mode="manufacture-knowl">
-                        <xsl:with-param name="origin" select="'notation'"/>
-                    </xsl:apply-templates>
-                </xsl:if>
+            <!-- As we make knowl content selectively, we need -->
+            <!-- nto produce the content for the notation link -->
+            <xsl:variable name="is-knowl">
+                <xsl:apply-templates select="." mode="xref-as-knowl"/>
+            </xsl:variable>
+            <xsl:if test="$is-knowl = 'true'">
+                <xsl:apply-templates select="." mode="manufacture-knowl">
+                    <xsl:with-param name="origin" select="'notation'"/>
+                </xsl:apply-templates>
             </xsl:if>
         </xsl:when>
         <!-- nothing interesting here, so step up a level -->
@@ -1337,17 +1327,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-xref"/>
     </div>
-    <!-- When we make knowl content selectively, we may   -->
-    <!-- need to produce the content for a "list-of" link -->
-    <xsl:if test="$b-knowls-new">
-        <xsl:variable name="is-knowl">
-            <xsl:apply-templates select="." mode="xref-as-knowl"/>
-        </xsl:variable>
-        <xsl:if test="$is-knowl = 'true'">
-            <xsl:apply-templates select="." mode="manufacture-knowl">
-                <xsl:with-param name="origin" select="'list-of'"/>
-            </xsl:apply-templates>
-        </xsl:if>
+    <!-- As we make knowl content selectively, we need -->
+    <!-- nto produce the content for a "list-of" link  -->
+    <xsl:variable name="is-knowl">
+        <xsl:apply-templates select="." mode="xref-as-knowl"/>
+    </xsl:variable>
+    <xsl:if test="$is-knowl = 'true'">
+        <xsl:apply-templates select="." mode="manufacture-knowl">
+            <xsl:with-param name="origin" select="'list-of'"/>
+        </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 
@@ -1922,12 +1910,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Many elements are candidates for cross-references     -->
 <!-- and many of those are nicely implemented as knowls.   -->
-<!-- We traverse the entire document tree with a modal     -->
-<!-- "xref-knowl-old" template.  When it encounters an element -->
-<!-- that needs a cross-reference target as a knowl file,  -->
-<!-- that file is built and the tree traversal continues.  -->
-<!--                                                       -->
-<!-- See initiation in the entry template.                 -->
 
 <!-- Cross-references as knowls                               -->
 <!-- Override to turn off cross-references as knowls          -->
@@ -1951,25 +1933,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
-<!-- Build many, many xref-knowls, recursively                        -->
-<!-- NB: "me" has all the necessary templates, but is never a target -->
-<!-- mrow is only ever an "xref" knowl, and has enclosing content    -->
-<!-- These are "top-level" starting places for this process,         -->
-<!-- assuming divisions are never knowled                            -->
-<!-- NB: when this leaves, search for two uses in code comments -->
-<xsl:template match="*" mode="xref-knowl-old">
-    <xsl:variable name="knowlizable">
-        <xsl:apply-templates select="." mode="xref-as-knowl" />
-    </xsl:variable>
-    <xsl:if test="$knowlizable = 'true'">
-        <!-- a generally available cross-reference knowl file, of duplicated content -->
-        <xsl:apply-templates select="." mode="manufacture-knowl"/>
-    </xsl:if>
-    <!-- recurse into contents, as we may just        -->
-    <!-- "skip over" some containers, such as an "ol" -->
-    <xsl:apply-templates select="*" mode="xref-knowl-old" />
-</xsl:template>
-
+<!-- This template makes the knowl content for cross-references    -->
+<!-- (and not index entries, notation list entries, etc.)  It      -->
+<!-- accumulates and de-duplicagtes all the @ref/@xml:id strings   -->
+<!-- and then makes the files of content for the target *once*.    -->
+<!-- Initiation is one-time, late in the entry template.           -->
+<!--                                                               -->
 <!-- A "fragref" for literate programming has specialized behavior -->
 <!-- when reconstructing program code.  But as a knowl in HTML it  -->
 <!-- is isomorphic to "xref", so we lump them into this template.  -->
@@ -2760,7 +2729,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Original, born hidden.  The element knows if it should be hidden on the page in an embedded knowl via the modal "is-hidden" template.  So a link is written on the page, and the main content is written onto the page as a hidden, embedded knowl.  The "b-original" flag (set to true) is passed through to templates for the children. -->
 
-<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl-old" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall heading, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  -->
+<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "make-efficient-knowl" templates  When an element is first considered as a cross-reference target the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall heading, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  -->
 
 <!-- Child elements born visible will be written into knowl files without identification.  -->
 

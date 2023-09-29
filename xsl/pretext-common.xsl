@@ -456,12 +456,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- LaTeX display style in list items -->
 <xsl:param name="debug.displaystyle" select="'yes'"/>
 
-<!-- HTML only, trying to fix knowls in waves -->
-<!-- Temporary, undocumented, and experimental -->
-<!-- all = old-style, necessary = new-style -->
-<xsl:param name="debug.knowl-production" select="'all'"/>
-<xsl:variable name="b-knowls-new" select="not($debug.knowl-production = 'all')"/>
-
 <!-- 2021-07-30: HTML only, experimental -->
 <!-- Switch to kill all knowls, intended to facilitate -->
 <!-- quick preview builds for use while authoring. -->
