@@ -322,7 +322,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- knowl-production -->
     <!-- subsetting? don't bother (for now) -->
     <xsl:if test="not($b-subsetting)">
-        <xsl:apply-templates select="." mode="make-efficient-knowls"/>
+        <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
 </xsl:template>
 
@@ -1866,8 +1866,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Recursion always halts, since "pretext" is structural       -->
 <!-- TODO: save knowl or section link                            -->
 <!-- We create content of "xref-knowl" if it is a block.         -->
-<!-- TODO: identify index targets consistently in "make-efficient-knowls" -->
-<!-- template, presumably parents of "idx" that are knowlable.            -->
+<!-- TODO: identify index targets consistently in "make-xref-knowls" -->
+<!-- template, presumably parents of "idx" that are knowlable.       -->
 <xsl:template match="index-list" mode="index-enclosure">
     <xsl:param name="enclosure"/>
 
@@ -1948,7 +1948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- could point to the same target).  There is little downside in -->
 <!-- this, and some upside in not putting identical content into   -->
 <!-- multiple locations.                                           -->
-<xsl:template match="*" mode="make-efficient-knowls">
+<xsl:template match="*" mode="make-xref-knowls">
     <xsl:variable name="xref-ids">
         <xsl:for-each select="$document-root//xref|$document-root//fragref">
             <xsl:choose>
