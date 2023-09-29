@@ -1312,7 +1312,7 @@
         <attribute name="language"/>
       </optional>
       <optional>
-        <attribute name="line-numberss">
+        <attribute name="line-numbers">
           <choice>
             <value>yes</value>
             <value>no</value>
