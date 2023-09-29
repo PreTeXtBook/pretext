@@ -1971,12 +1971,24 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
+    # Establish whether there is an image from pub file
+    pub_tree = ET.parse(pub_file)
+    try:
+        image = pub_tree.find('common').find('qr-code').get('image')
+        _, external_dir = get_managed_directories(xml_source, pub_file)
+        image_path = os.path.join(external_dir, image)
+        has_image = True
+    except:
+        has_image = False
+
     # https://pypi.org/project/qrcode/
     try:
         import qrcode  # YouTube server
     except ImportError:
         global __module_warning
         raise ImportError(__module_warning.format("qrcode"))
+
+    import qrcode.image.styledpil
 
     log.info(
         "manufacturing QR codes from {} for placement in {}".format(
@@ -2013,13 +2025,22 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # Using more elaborate (class) calls to simply get a zero border,
         # rather than cropping (ala https://stackoverflow.com/questions/9870876)
         # Simple version: qr_image = qrcode.make(url), has border
+        if has_image:
+            # error correction up to 25%
+            error_correction = qrcode.constants.ERROR_CORRECT_Q
+        else:
+            # error correction up to 7%
+            error_correction = qrcode.constants.ERROR_CORRECT_L
         qr = qrcode.QRCode(version=None,
-                           error_correction=qrcode.constants.ERROR_CORRECT_L,
+                           error_correction=error_correction,
                            box_size=10,
                            border=0
                            )
         qr.add_data(url)
-        qr_image = qr.make_image(fill_color="black", back_color="white")
+        if has_image:
+            qr_image = qr.make_image(image_factory=qrcode.image.styledpil.StyledPilImage, embeded_image_path=image_path)
+        else:
+            qr_image = qr.make_image(fill_color="black", back_color="white")
         # Now save as a PNG
         qr_image.save(path)
     log.info("QR code creation complete")
