@@ -6111,8 +6111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>described in detail following the image</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="aria-describedby">
-                            <xsl:apply-templates select="." mode="visible-id"/>
-                            <xsl:text>-description</xsl:text>
+                            <xsl:apply-templates select="." mode="describedby-id"/>
                         </xsl:attribute>
                     </xsl:when>
                 </xsl:choose>
@@ -6340,8 +6339,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>described in detail following the image</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="aria-describedby">
-                    <xsl:apply-templates select="." mode="visible-id"/>
-                    <xsl:text>-description</xsl:text>
+                    <xsl:apply-templates select="." mode="describedby-id"/>
                 </xsl:attribute>
             </xsl:when>
         </xsl:choose>
@@ -6350,10 +6348,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="image" mode="description">
     <xsl:if test="description">
-        <xsl:variable name="image-id">
-            <xsl:apply-templates select="." mode="visible-id"/>
-            <xsl:text>-description</xsl:text>
-        </xsl:variable>
         <!-- @aria-live means screenreaders will make announcements -->
         <details class="image-description" aria-live="polite">
             <summary title="details">
@@ -6361,11 +6355,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="name" select="'description'"/>
                 </xsl:call-template>
             </summary>
-            <div id="{$image-id}">
+            <div>
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="describedby-id"/>
+                </xsl:attribute>
                 <xsl:apply-templates select="description"/>
             </div>
         </details>
     </xsl:if>
+</xsl:template>
+
+<!-- Utility template so "aria-describedby" values are consistent -->
+<xsl:template match="image" mode="describedby-id">
+    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:text>-description</xsl:text>
 </xsl:template>
 
 
