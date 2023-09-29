@@ -428,7 +428,7 @@ def sage_conversion(
     os.chdir(owd)
 
 def latex_image_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
+    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, pyMuPDF=False
 ):
     # stringparams is a dictionary, best for lxml parsing
 
@@ -441,6 +441,12 @@ def latex_image_conversion(
     except ImportError:
         global __module_warning
         raise ImportError(__module_warning.format("pdfCropMargins"))
+
+    if pyMuPDF:
+        try:
+            import fitz # for svg and png conversion
+        except ImportError:
+            raise ImportError(__module_warning.format("pyMuPDF"))
 
     log.info(
         "converting latex-image pictures from {} to {} graphics for placement in {}".format(
@@ -558,6 +564,15 @@ def latex_image_conversion(
                 if outformat == "pdf" or outformat == "all":
                     shutil.copy2(latex_image_pdf, dest_dir)
                 if outformat == "svg" or outformat == "all":
+                    if pyMuPDF:
+                        # create svg using pymupdf:
+                        with fitz.Document(latex_image_pdf) as doc:
+                            svg = doc.load_page(0).get_svg_image()
+                        with open(latex_image_svg, "w") as f:
+                            f.write(svg)
+                        shutil.copy2(latex_image_svg, dest_dir)
+                        # clasic way to produce svg, using pdf2svg:
+                        latex_image_svg = "classic-" + latex_image_svg
                     pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
                     # TODO why this debug line? get_executable_cmd() outputs the same debug info
                     log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
@@ -574,7 +589,14 @@ def latex_image_conversion(
                         )
                     shutil.copy2(latex_image_svg, dest_dir)
                 if outformat == "png" or outformat == "all":
-                    # create high-quality png, presumes "convert" executable
+                    if pyMuPDF:
+                        # create high-quality png using pymupdf:
+                        with fitz.Document(latex_image_pdf) as doc:
+                            png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
+                        png.save(latex_image_png)
+                        shutil.copy2(latex_image_png, dest_dir)
+                        # classic method: create high-quality png, presumes "convert" executable
+                        latex_image_png = "classic-" + latex_image_png
                     pdfpng_executable_cmd = get_executable_cmd("pdfpng")
                     # TODO why this debug line? get_executable_cmd() outputs the same debug info
                     log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
