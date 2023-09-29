@@ -3010,7 +3010,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercises>
 
-    <exercises xml:id="fill-in--exercises">
+    <exercises xml:id="fill-in-exercises">
         <title>Fill-In Exercises</title>
 
         <exercise label="fillin-integer">

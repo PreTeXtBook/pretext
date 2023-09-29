@@ -1439,10 +1439,10 @@
                 element taxon {
                     attribute ncbi {xsd:integer}?,
                     (
-                        TextSimple |
+                        text |
                         (
-                            element genus {TextSimple}?,
-                            element species {TextSimple}?
+                            element genus {text}?,
+                            element species {text}?
                         )
                     )
                 }

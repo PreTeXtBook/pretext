@@ -116,9 +116,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- point to a totally different server (rather than other  -->
 <!-- facilities for testing incremental additions/overrides. -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.81'" />
+<xsl:param name="html.css.version" select="'0.82'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.31'" />
+<xsl:param name="html.js.version" select="'0.32'" />
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -136,9 +136,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is the motivation for this parameterization.  See the definition  -->
 <!-- of this variable in  pretext-assembly.xsl  for more detail.       -->
 <!--                                                                   -->
-<!-- Conversions that build on HTML, but produce formats incapable     -->
-<!-- (braille) or unwilling (EPUB, Jupyter) to employ Javascript, or   -->
-<!-- similar, need to override this variable back to "static".         -->
+<!-- Conversions that build on HTML, but produce formats unwilling     -->
+<!-- (EPUB, Jupyter) to employ Javascript, or similar, need to         -->
+<!-- override this variable back to "static".                          -->
 <xsl:variable name="exercise-style" select="'dynamic'"/>
 
 <!-- Search for the "math.punctuation.include" -->
@@ -180,16 +180,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- boolean variable $b-html-presentation              -->
 <xsl:param name="html.presentation" select="'no'" />
 <xsl:variable name="b-html-presentation" select="$html.presentation = 'yes'" />
-
-<!-- We make a much different variant of HTML output as input to    -->
-<!-- liblouis for conversion of literary text to braille.  When it  -->
-<!-- is easier to insert a small change in the interior of a        -->
-<!-- template, we use this variable to condition the change, rather -->
-<!-- than providing a new template in the braille conversion.       -->
-<!--                                                                -->
-<!-- We set the internal boolean variable to false() here, and turn -->
-<!-- it on in the dedicated stylesheet for conversion to braille.   -->
-<xsl:variable name="b-braille" select="false()"/>
 
 <!-- ############### -->
 <!-- Source Analysis -->
@@ -554,10 +544,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We use a modal template, so it can be called  -->
 <!-- two more times for a worksheet to make        -->
 <!-- printable standalone versions.                -->
-<!-- NB: Override in the Braille conversion for    -->
-<!-- just "frontmatter" and "backmatter" simply    -->
-<!-- to keep from stepping the heading level, so   -->
-<!-- the liblouis styling on h1-h6 is consistent   -->
 <xsl:template match="&STRUCTURAL;">
     <xsl:param name="heading-level"/>
 
@@ -766,7 +752,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hit with templates.  This is the heading.   -->
 <!-- Only "chapter" ever gets shown generically  -->
 <!-- Subdivisions have titles, or default titles -->
-<!-- NB: this template is overridden for Braille -->
 <xsl:template match="*" mode="section-heading">
     <xsl:param name="heading-level"/>
 
@@ -809,7 +794,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- provide a frontmatter/titlepage to provide   -->
 <!-- more specific information.  In either event, -->
 <!-- a typical section heading is out of place.   -->
-<!-- NB: this is copied verbatim for Braille      -->
 <xsl:template match="book|article" mode="section-heading" />
 
 <!-- An abstract needs structure, and an ID for a -->
@@ -839,13 +823,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a "codenumber," and a "title."  We format these       -->
 <!-- consistently here with a modal template.  We can hide -->
 <!-- components with classes on the enclosing "heading"    -->
-<!-- NB: this is overridden in the conversion to Braille,  -->
-<!-- to center chapter numbers above titles (and appendix, -->
-<!-- preface, etc), so coordinate with those templates.    -->
-<!-- NB: we often squelch type names via CSS, but for the  -->
-<!-- braille conversion it is not so easy, so we instead   -->
-<!-- provide a modified version of this template there.    -->
-<!-- Consider keeping these in-sync.                       -->
 <xsl:template match="*" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -867,10 +844,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *display* a number at birth is therefore more complicated    -->
 <!-- than *having* a number or not.                               -->
 <!-- NB: We sneak in links for standalone versions of worksheets. -->
-<!-- NB: we often squelch type names via CSS, but for the braille -->
-<!-- conversion it is not so easy, so we instead provide a        -->
-<!-- modified version of this template there. Consider keeping    -->
-<!-- these in-sync.                                               -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
@@ -953,8 +926,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this could done with a "section-heading" template?-->
 <!-- Other divisions (eg, colophon, preface) will follow   -->
 <!-- This is all within a .frontmatter class for CSS       -->
-<!-- NB: this is redefined with the same @match in the     -->
-<!-- Braille conversion, so keep these in-sync             -->
 <xsl:template match="titlepage">
     <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
     <h2 class="heading">
@@ -1228,7 +1199,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="xref-as-knowl"/>
                 </xsl:variable>
                 <xsl:if test="$is-knowl = 'true'">
-                    <xsl:apply-templates select="." mode="xref-knowl"/>
+                    <xsl:apply-templates select="." mode="manufacture-knowl"/>
                 </xsl:if>
             </xsl:if>
         </xsl:when>
@@ -1370,7 +1341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="xref-as-knowl"/>
         </xsl:variable>
         <xsl:if test="$is-knowl = 'true'">
-            <xsl:apply-templates select="." mode="xref-knowl"/>
+            <xsl:apply-templates select="." mode="manufacture-knowl"/>
         </xsl:if>
     </xsl:if>
 </xsl:template>
@@ -1924,7 +1895,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:apply-templates>
             <xsl:if test="$block = 'true'">
-                <xsl:apply-templates select="$enclosure" mode="xref-knowl"/>
+                <xsl:apply-templates select="$enclosure" mode="manufacture-knowl"/>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
@@ -1972,7 +1943,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
-<!-- build xref-knowl, and optionally a hidden-knowl duplicate       -->
+<!-- Build many, many xref-knowls, recursively                        -->
 <!-- NB: "me" has all the necessary templates, but is never a target -->
 <!-- mrow is only ever an "xref" knowl, and has enclosing content    -->
 <!-- These are "top-level" starting places for this process,         -->
@@ -1984,27 +1955,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:if test="$knowlizable = 'true'">
         <!-- a generally available cross-reference knowl file, of duplicated content -->
-        <xsl:apply-templates select="." mode="manufacture-knowl">
-            <xsl:with-param name="knowl-type" select="'xref'" />
-        </xsl:apply-templates>
-        <!-- optionally, a file version of duplicated hidden-knowl content -->
-        <xsl:variable name="hidden">
-            <xsl:apply-templates select="." mode="is-hidden" />
-        </xsl:variable>
-        <xsl:if test="$hidden = 'true'">
-            <xsl:apply-templates select="." mode="manufacture-knowl">
-                <xsl:with-param name="knowl-type" select="'hidden'" />
-            </xsl:apply-templates>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="manufacture-knowl"/>
     </xsl:if>
     <!-- recurse into contents, as we may just        -->
     <!-- "skip over" some containers, such as an "ol" -->
     <xsl:apply-templates select="*" mode="xref-knowl-old" />
 </xsl:template>
 
+<!-- A "fragref" for literate programming has specialized behavior   -->
+<!-- when reconstructing program code.  But as a knowl in HTML it is -->
+<!-- isomorphic to "xref", so we lump them into this template.       -->
 <xsl:template match="*" mode="make-efficient-knowls">
     <xsl:variable name="xref-ids">
-        <xsl:for-each select="$document-root//xref">
+        <xsl:for-each select="$document-root//xref|$document-root//fragref">
             <xsl:choose>
                 <!-- ignore, no-op -->
                 <xsl:when test="@provisional"/>
@@ -2055,10 +2018,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$target" mode="xref-as-knowl"/>
             </xsl:variable>
             <xsl:if test="$is-knowl = 'true'">
-                <xsl:apply-templates select="$target" mode="xref-knowl"/>
+                <xsl:apply-templates select="$target" mode="manufacture-knowl"/>
             </xsl:if>
         </xsl:for-each>
     </xsl:for-each>
+    <!-- Faking original footnote content with "xref" knowls temporarily. -->
+    <!-- So we need an ad-hoc template to make the actual files in the    -->
+    <!-- more efficient case here.  (A template so we are more likely     -->
+    <!-- to remove it once we gt footnotes going differently.             -->
+    <xsl:call-template name="footnote-content"/>
 </xsl:template>
 
 <!-- Decompose a string of references into elements for id  -->
@@ -2081,42 +2049,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Context is an object that is the target of a cross-reference    -->
-<!-- ("xref") and is known/checked to be implemented as a knowl.     -->
-<!-- We cruise children for the necessity of hidden content which we -->
-<!-- impersonate with a file knowl that looks like a hidden knowl.   -->
-<xsl:template match="*" mode="xref-knowl">
-    <xsl:apply-templates select="." mode="manufacture-knowl">
-        <xsl:with-param name="knowl-type" select="'xref'"/>
-    </xsl:apply-templates>
-    <!-- Cruise children, note this is a context switch         -->
-    <!-- Looking for born-hidden knowls in "xref" knowl content -->
-    <xsl:for-each select=".//*">
-        <xsl:variable name="hidden">
-            <xsl:apply-templates select="." mode="is-hidden"/>
-        </xsl:variable>
-        <xsl:if test="$hidden = 'true'">
-            <xsl:apply-templates select="." mode="manufacture-knowl">
-                <xsl:with-param name="knowl-type" select="'hidden'"/>
-            </xsl:apply-templates>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
-<!-- Build one, or two, files for knowl content -->
+<!-- Build file for xref-knowl content                            -->
+<!-- Context is an object that is the target of a cross-reference -->
+<!-- ("xref") and is known/checked to be implemented as a knowl.  -->
 <xsl:template match="*" mode="manufacture-knowl">
-    <xsl:param name="knowl-type" />
     <xsl:variable name="knowl-file">
-        <xsl:choose>
-            <xsl:when test="$knowl-type = 'xref'">
-                <xsl:apply-templates select="." mode="xref-knowl-filename" />
-            </xsl:when>
-            <xsl:when test="$knowl-type = 'hidden'">
-                <xsl:apply-templates select="." mode="hidden-knowl-filename" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="knowl-filename" />
     </xsl:variable>
-    <!-- write file infrastructure first -->
+    <!-- N.B. can't form @href with xsl:attribute -->
     <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <xsl:call-template name="language-attributes"/>
@@ -2146,62 +2086,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- whose content is more than just the xref,  -->
                 <!-- it is the entire containing md or mdn      -->
                 <xsl:choose>
-                    <xsl:when test="$knowl-type = 'xref'">
-                        <xsl:choose>
-                            <xsl:when test="self::mrow">
-                                <xsl:apply-templates select="parent::*" mode="body">
-                                    <xsl:with-param name="block-type" select="'xref'" />
-                                    <xsl:with-param name="b-original" select="false()" />
-                                    <xsl:with-param name="b-top-level" select="true()" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:apply-templates select="." mode="body">
-                                    <xsl:with-param name="block-type" select="'xref'" />
-                                    <xsl:with-param name="b-original" select="false()" />
-                                    <xsl:with-param name="b-top-level" select="true()" />
-                                </xsl:apply-templates>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:when>
-                    <xsl:when test="$knowl-type = 'hidden'">
-                        <xsl:apply-templates select="." mode="body">
-                            <xsl:with-param name="block-type" select="'hidden'" />
+                    <xsl:when test="self::mrow">
+                        <xsl:apply-templates select="parent::*" mode="body">
+                            <xsl:with-param name="block-type" select="'xref'" />
                             <xsl:with-param name="b-original" select="false()" />
                             <xsl:with-param name="b-top-level" select="true()" />
                         </xsl:apply-templates>
                     </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="." mode="body">
+                            <xsl:with-param name="block-type" select="'xref'" />
+                            <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="b-top-level" select="true()" />
+                        </xsl:apply-templates>
+                    </xsl:otherwise>
                 </xsl:choose>
-                <!-- in-context link just for xref-knowl content -->
-                <xsl:if test="$knowl-type = 'xref'">
-                    <xsl:variable name="href">
-                        <xsl:apply-templates select="." mode="url" />
-                    </xsl:variable>
-                    <span class="incontext">
-                        <a href="{$href}" class="internal">
-                            <xsl:apply-templates select="." mode="type-name">
-                                <xsl:with-param name="string-id" select="'incontext'"/>
-                            </xsl:apply-templates>
-                        </a>
-                    </span>
-                </xsl:if>
+                <!-- in-context link for xref-knowl content -->
+                <span class="incontext">
+                    <a class="internal">
+                        <xsl:attribute name="href">
+                            <xsl:apply-templates select="." mode="url"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'incontext'"/>
+                        </xsl:apply-templates>
+                    </a>
+                </span>
             </body>
         </html>
-    </exsl:document>  <!-- end file -->
+    </exsl:document>
 </xsl:template>
 
 <!-- The directory of knowls that are targets of cross-references    -->
 <!-- The file extension is *.html so recognized as OK by Moodle, etc -->
-<xsl:template match="*" mode="xref-knowl-filename">
+<xsl:template match="*" mode="knowl-filename">
     <xsl:text>./knowl/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
-</xsl:template>
-
-<xsl:template match="*" mode="hidden-knowl-filename">
-    <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>-hidden.html</xsl:text>
 </xsl:template>
 
 <!-- ######## -->
@@ -2756,9 +2677,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These two named templates create a space or a      -->
 <!-- period with enough HTML markup to allow for hiding -->
 <!-- them if some other part of a heading is hidden.    -->
-<!-- NB: These are radically simplified in tbe braille  -->
-<!-- conversion, for use in headings (includes exercise -->
-<!-- numbers) so think about where they are used.       -->
 
 <xsl:template name="space-styled">
     <span class="space">
@@ -2777,35 +2695,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Block Production, Knowls -->
 <!-- ######################## -->
 
+<!-- 2023-09-23: content "born hidden" may be due to an election by a publisher ("theorem") or automatic as part of this conversion ("hint").  We once thought of these as "embedded" knowls since their content lived on the page, and in contrast to cross-reference knowls ("xref") whose content lives in an (external) file.  With recent changes we have migrated even further away from "embed" to "hidden" in nomenclature for these.  The comments below may not always reflect this. -->
+
 <!-- Generically, a "block" is a child of a "division."  See the schema for more precision.  Blocks also have significant components.  An "example" is a block, and its "solution" is a significant component.  A "p" might be a block, but it could also be a significant component of an "example." -->
 
 <!-- Some blocks and components can be realized in a hidden fashion, as knowls whose content is embedded within the page.  This may be automatic (footnotes, "fn", are a good example), elective ("theorem" is a good example), or banned (a "blockquote" is never hidden). -->
 
 <!-- All blocks, and many of their significant components, are available as targets of cross-references, implemented as knowls, but now the content resides in external files.  These files contain duplicates of blocks and their components (rather than originals), so need to be free of the unique identifiers that are used in the original versions. -->
 
-<!-- This suggests four modes for the initial production of a block or component, though some blocks may only be produced in two of the four modes: visible and original, hidden and original, a cross-reference knowl, an external knowl duplicating a hidden knowl. -->
+<!-- This suggests three modes for the initial production of a block or component, though some blocks may only be produced in two of the three modes: visible and original, hidden and original, a cross-reference knowl. -->
 <!-- (a) Visible and original (on a main page) -->
 <!-- (b) Hidden and original (embedded knowl on a page) -->
 <!-- (c) Visible and duplicate (in, or as, a cross-reference knowl) -->
-<!-- (d) Hidden and duplicate (an external knowl, duplicating the hidden original knowl) -->
 
 <!-- The generic (not modal) template matches any element that is a block or a significant component of some other element that is a block or a component. -->
 
 <!-- Every such element is only output in one of two forms, and as few times as possible.  One form is the "original" and includes full identifying information, such as an HTML id attribute or a LaTeX label for rows of display mathematics.  The other form is a "duplicate", as an external file, for use by the knowl code to open and display.  As a duplicate of the orginal, it should be free of all identifying information and should recycle other duplicates as much as possible. -->
 
-<!-- An element arrives here in one of four situations, two as originals and two as duplicates.  We describe those situations and what should happen. -->
+<!-- An element arrives here in one of three situations, two as originals and one as a duplicate.  We describe those situations and what should happen. -->
 
 <!-- Original, born visible.  The obvious situation, we render the element as part of the page, adding identifying information.  The template sets the "b-original" flag to true by default, for this reason.  Children of the element are incorporated (through the modal body templates) as originals (visible and/or hidden) by passing along the "b-original" flag. -->
 
 <!-- Original, born hidden.  The element knows if it should be hidden on the page in an embedded knowl via the modal "is-hidden" template.  So a link is written on the page, and the main content is written onto the page as a hidden, embedded knowl.  The "b-original" flag (set to true) is passed through to templates for the children. -->
 
-<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl-old" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall heading, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  For a block that is born hidden, we build an additional external knowl that duplicates it, so without identification, without an overall heading, and without an in-context link.  -->
+<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl-old" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall heading, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  -->
 
-<!-- Child elements born visible will be written into knowl files without identification.  Child elements born hidden will write a knowl link into the page, pointing to the duplicated (hidden) version.  -->
+<!-- Child elements born visible will be written into knowl files without identification.  -->
 
-<!-- The upshot is that the main pages have visible content and hidden, embedded content (knowls) with full identification as original canonical versions.  Cross-references open external file knowls, whose hidden components are again accessed via knowls that use external files of duplicated content.  None of the knowl files contain any identification, so these identifiers remain unique in their appearances as part of the main pages. -->
+<!-- The upshot is that the main pages have visible content and hidden, embedded content (knowls) with full identification as original canonical versions.  Cross-references open external file knowls.  None of the knowl files contain any identification, so these identifiers remain unique in their appearances as part of the main pages. -->
 
-<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'embed', 'xref', 'hidden'.  The four situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as an embedded knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content.  Also, the block-type parameter is tunneled down to the Sage cells so they can be constructed properly when inside of knowls. -->
+<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'hidden', 'xref'.  The three situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as a born-hidden knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content.  Also, the block-type parameter is tunneled down to the Sage cells so they can be constructed properly when inside of knowls. -->
 
 <!-- The relevant templates controlling production of a block, and their use, are: -->
 
@@ -2815,13 +2734,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (3) "heading-birth": produces HTML immediately interior to the "body-element", for visible blocks, in both the original and duplication processes.  Similarly, it is the link-text of a knowl for a block that is hidden (again in original or duplication modes).  Employed in "body" templates. -->
 
-<!-- (4) "hidden-knowl-placement": 'block' or 'inline' to indicate how to wrap hidden knowl links so they appear correctly on a page (block or inline, basically).  'block' means a wrapper with the class of the "body-element", while 'inline' means no wrapper is needed since the link is just fine in an inline situation.  Only relevant for an object which can be born hidden via a switch (e.g. a theorem), or is *always* born hidden (e.g. "fn" (footnote)).  So this template could be defined to produce no output and an error will be raised during processing if there is a mismatch (i.e. no ouput is a third possible value.  -->
+<!-- (4) "heading-xref-knowl": when a knowl is a target of a cross-reference, sometimes a better heading is necessary to help identify it.  For example, a cross-refernce to a list item can be improved by providing the number of the item in a heading. -->
 
-<!-- (5) "heading-xref-knowl": when a knowl is a target of a cross-reference, sometimes a better heading is necessary to help identify it.  For example, a cross-refernce to a list item can be improved by providing the number of the item in a heading. -->
+<!-- (5) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'hidden', or 'xref'. -->
 
-<!-- (6) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'embed', or 'xref'. -->
-
-<!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
+<!-- (6) TODO: "wrapped-content" called by "body" to separate code. -->
 
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
@@ -2831,22 +2748,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- born-hidden case -->
         <xsl:when test="$hidden = 'true'">
-            <xsl:choose>
-                <!-- primary occurrence, born hidden as embedded knowl     -->
-                <!-- is original flag pass-thru necessary?  always true()? -->
-                <xsl:when test="$b-original">
-                    <xsl:apply-templates select="." mode="born-hidden">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                </xsl:when>
-                <!-- duplicating, so just make a xref-knowl in same style, -->
-                <!-- but therefore clean of id's or other identification   -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="duplicate-born-hidden">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="born-hidden">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
         </xsl:when>
         <!-- born-visible case -->
         <xsl:otherwise>
@@ -2868,179 +2772,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="born-hidden">
     <xsl:param name="b-original" select="true()" />
-    <xsl:variable name="placement">
-        <xsl:apply-templates select="." mode="hidden-knowl-placement" />
-    </xsl:variable>
-    <!-- First: the link that is visible on the page         -->
-    <xsl:choose>
-        <xsl:when test="$placement = 'block'">
-            <xsl:variable name="body-elt">
-                <xsl:apply-templates select="." mode="body-element" />
-            </xsl:variable>
-            <xsl:element name="{$body-elt}">
-                <xsl:attribute name="class">
-                    <xsl:apply-templates select="." mode="body-css-class" />
-                </xsl:attribute>
-                <!-- HTML id is best on element surrounding born-hidden knowl anchor -->
-                <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="html-id" />
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="hidden-knowl-link">
-                    <xsl:with-param name="placement" select="$placement"/>
-                </xsl:apply-templates>
-            </xsl:element>
-        </xsl:when>
-        <xsl:when test="$placement = 'inline'">
-            <xsl:apply-templates select="." mode="hidden-knowl-link">
-                <xsl:with-param name="placement" select="$placement"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- Second: the content of the knowl, to be revealed/parsed later -->
-    <xsl:apply-templates select="." mode="hidden-knowl-content">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
 
-<!-- An external file knowl, impersonating a hidden knowl -->
-<xsl:template match="*" mode="duplicate-born-hidden">
-    <xsl:param name="b-original" select="false()" />
-    <xsl:variable name="placement">
-        <xsl:apply-templates select="." mode="hidden-knowl-placement" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$placement = 'block'">
-            <xsl:variable name="body-elt">
-                <xsl:apply-templates select="." mode="body-element" />
-            </xsl:variable>
-            <xsl:element name="{$body-elt}">
-                <xsl:attribute name="class">
-                    <xsl:apply-templates select="." mode="body-css-class" />
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
-            </xsl:element>
-        </xsl:when>
-        <xsl:when test="$placement = 'inline'">
-            <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Hidden knowls are in two pieces.  This template -->
-<!-- ensures consistency of the common, linking id.  -->
-<xsl:template match="*" mode="hidden-knowl-id">
-    <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
-    <xsl:apply-templates select="." mode="html-id" />
-</xsl:template>
-
-<!-- The link portion of a hidden-knowl -->
-<xsl:template match="*" mode="hidden-knowl-link">
-    <xsl:param name="placement"/>
-
-    <xsl:element name="a">
-        <!-- empty, but presence needed for accessibility -->
-        <!-- An HTML "a" without an href attribute does   -->
-        <!-- not default to role "link" and does not read -->
-        <!-- as clickable by a screen reader.             -->
-        <xsl:attribute name="href"/>
-        <!-- empty, indicates content *not* in a file -->
-        <xsl:attribute name="data-knowl" />
-        <!-- id-ref class: content is in div referenced by id       -->
-        <!-- (element-name)-knowl: specific element used in content -->
-        <!-- original: born hidden knowl, not xref                  -->
-        <!-- Similar to "duplicate-hidden-knowl-link", id-ref extra -->
-        <xsl:attribute name="class">
-            <xsl:text>id-ref</xsl:text>
-            <!--  -->
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-knowl</xsl:text>
-            <!--  -->
-            <xsl:text> original</xsl:text>
-            <!-- classes indicate if opening the knowl reveals specials -->
-            <xsl:if test=".//image">
-                <xsl:text> has-image</xsl:text>
-            </xsl:if>
-            <xsl:if test=".//video">
-                <xsl:text> has-video</xsl:text>
-            </xsl:if>
-            <xsl:if test=".//interactive">
-                <xsl:text> has-interactive</xsl:text>
-            </xsl:if>
-            <xsl:if test=".//tabular">
-                <xsl:text> has-tabular</xsl:text>
-            </xsl:if>
-        </xsl:attribute>
-        <!-- and the id via a template for consistency -->
-        <xsl:attribute name="data-refid">
-            <xsl:apply-templates select="." mode="hidden-knowl-id" />
-        </xsl:attribute>
-        <!-- the object could be the target of an in-context link, and     -->
-        <!-- if inline, then just a bare anchor, so put id here, otherwise -->
-        <!-- in the 'block' case, it is on the surrounding element         -->
-        <xsl:if test="$placement = 'inline'">
+    <details>
+        <!-- put an HTML id as a target of cross-references, etc, -->
+        <!-- but only when this is original content.  In other    -->
+        <!-- words, not when a consituent of an xref knowl        -->
+        <xsl:if test="$b-original">
             <xsl:attribute name="id">
                 <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
-        <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
-        <!-- heading in an HTML container -->
-        <xsl:apply-templates select="." mode="heading-birth" />
-    </xsl:element>
-</xsl:template>
-
-<!-- The content portion of a hidden knowl -->
-<!-- *Always* as div.hidden-content"       -->
-<xsl:template match="*" mode="hidden-knowl-content">
-    <xsl:param name="b-original" select="true()" />
-
-    <!-- .hidden-content is CSS for display: none           -->
-    <!-- Stop MathJax from processing contents on page load -->
-    <div class="hidden-content tex2jax_ignore">
-        <!-- different id, for use by the knowl mechanism -->
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="hidden-knowl-id" />
+        <!-- put relevant class names on "details" to help with styling -->
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="body-css-class"/>
         </xsl:attribute>
-        <!-- should the b-original flag always be true() here -->
+        <!-- the clickable that is visible on the page -->
+        <summary>
+           <xsl:apply-templates select="." mode="heading-birth" />
+       </summary>
+        <!-- the content of the knowl, to be revealed later -->
         <xsl:apply-templates select="." mode="body">
-            <xsl:with-param name="block-type" select="'embed'" />
+            <xsl:with-param name="block-type" select="'hidden'" />
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </div>
-</xsl:template>
-
-<!-- The link for a duplicate hidden knowl -->
-<xsl:template match="*" mode="duplicate-hidden-knowl-link">
-    <xsl:element name="a">
-        <!-- empty, but presence needed for accessibility -->
-        <!-- An HTML "a" without an href attribute does   -->
-        <!-- not default to role "link" and does not read -->
-        <!-- as clickable by a screen reader.             -->
-        <xsl:attribute name="href"/>
-        <!-- (element-name)-knowl: specific element used in content -->
-        <!-- original: born hidden knowl, not xref                  -->
-        <!-- Similar to "hidden-knowl-link", no id-ref              -->
-        <xsl:attribute name="class">
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-knowl</xsl:text>
-            <!--  -->
-            <xsl:text> original</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="data-knowl">
-            <xsl:apply-templates select="." mode="hidden-knowl-filename" />
-        </xsl:attribute>
-        <!-- add HTML title attribute to the link -->
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <xsl:apply-templates select="." mode="heading-birth" />
-    </xsl:element>
+    </details>
 </xsl:template>
 
 <!-- ######### -->
@@ -3080,7 +2835,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="href"/>
         <!-- the path to an *xref* knowl (inappropriate) -->
         <xsl:attribute name="data-knowl">
-            <xsl:apply-templates select="." mode="xref-knowl-filename"/>
+            <xsl:apply-templates select="." mode="knowl-filename"/>
         </xsl:attribute>
         <!-- add HTML title attribute to the link -->
         <xsl:attribute name="title">
@@ -3094,6 +2849,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  "fn" had its content produced in the right way no matter what. -->
 </xsl:template>
 
+<!-- Temporarily make every footnote as an external "xref"  -->
+<!-- knowl file for the case of efficient knowl generation. -->
+<!-- Named template since it "begins" at document root.     -->
+<xsl:template name="footnote-content">
+    <xsl:for-each select="$document-root//fn">
+        <xsl:apply-templates select="." mode="manufacture-knowl"/>
+    </xsl:for-each>
+</xsl:template>
 
 <!-- ##################### -->
 <!-- Block Implementations -->
@@ -3119,11 +2882,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&REMARK-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> remark-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&REMARK-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3171,11 +2929,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> computation-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&COMPUTATION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -3220,11 +2973,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> openproblem-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&OPENPROBLEM-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3293,11 +3041,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> definition-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&DEFINITION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&DEFINITION-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -3342,9 +3085,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
     <xsl:text> aside-like</xsl:text>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="&ASIDE-LIKE;" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-birth">
@@ -3393,9 +3133,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="poem" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="poem" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
 <xsl:template match="poem" mode="heading-birth">
@@ -3549,11 +3286,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> table-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&FIGURE-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- TODO - sort out title/caption -->
 <!-- Use title for xref-link text  -->
 
@@ -3644,9 +3376,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> assemblage-like</xsl:text>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="assemblage" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="assemblage" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title" />
@@ -3682,18 +3411,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Overall enclosing element     -->
 <!-- Natural HTML element, usually -->
 <xsl:template match="blockquote" mode="body-element">
-    <!-- Allow for creating exceptional first list item in braille -->
-    <!-- conversion. Here, result is almost always "blockquote".   -->
-    <xsl:apply-templates select="." mode="initial-list-item-element"/>
+    <xsl:text>blockquote</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
 <xsl:template match="blockquote" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="blockquote" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -3733,11 +3457,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="paragraphs" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
-<!-- NB: this is modified in the conversion to Braille -->
 <xsl:template match="paragraphs" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title-paragraphs" />
 </xsl:template>
@@ -3774,9 +3494,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Not born hidden -->
-<xsl:template match="commentary" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
 <xsl:template match="commentary" mode="heading-birth">
@@ -3821,11 +3538,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&GOAL-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> goal-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&GOAL-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3885,11 +3597,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> example-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&EXAMPLE-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -3954,9 +3661,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="subexercises" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="subexercises" mode="hidden-knowl-placement"/>
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -4051,9 +3755,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercisegroup" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="exercisegroup" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -4181,11 +3882,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> exercise-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="exercise" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -4359,11 +4055,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&PROJECT-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> project-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, block-level -->
-<xsl:template match="&PROJECT-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -4584,11 +4275,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> exercise-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="task" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="task" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-list-number" />
@@ -4788,11 +4474,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> solution-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="&SOLUTION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&SOLUTION-LIKE;" mode="heading-birth">
     <xsl:choose>
@@ -4843,11 +4524,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&DISCUSSION-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> discussion-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, inline-level -->
-<xsl:template match="&DISCUSSION-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -5072,11 +4748,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> theorem-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- When born use this heading -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -5129,12 +4800,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>proof</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Trailing as a hidden knowl, or plainly visible, -->
-<!-- a PROOF-LIKE is a block level item              -->
-<xsl:template match="&PROOF-LIKE;" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -5195,9 +4860,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="case" mode="hidden-knowl-placement" />
-
 <!-- When born use this specialized heading -->
 <xsl:template match="case" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-case" />
@@ -5239,11 +4901,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And its CSS class -->
 <xsl:template match="fn" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
-</xsl:template>
-
-<!-- When born hidden, inline-level -->
-<xsl:template match="fn" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -5301,9 +4958,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="contributor" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="contributor" mode="hidden-knowl-placement" />
 
 <!-- Heading is not needed -->
 <xsl:template match="contributor" mode="heading-birth" />
@@ -5366,9 +5020,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name()"/>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="gi" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="gi" mode="heading-birth" />
 
@@ -5429,9 +5080,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bib</xsl:text>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="biblio" mode="hidden-knowl-placement" />
-
 <!-- When born use this heading -->
 <xsl:template match="biblio" mode="heading-birth" />
 
@@ -5452,19 +5100,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="serial-number" />
         <xsl:text>]</xsl:text>
     </div>
-    <xsl:text>&#xa0;&#xa0;</xsl:text>
     <div class="bibentry">
         <xsl:apply-templates select="text()|*[not(self::note)]">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </div>
-    <xsl:if test="note">
-        <div class="knowl-container">
+        <xsl:if test="note">
             <xsl:apply-templates select="note">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
-        </div>
-    </xsl:if>
+        </xsl:if>
+    </div>
 </xsl:template>
 
 <!-- Bibliographic Note -->
@@ -5484,11 +5129,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is a temporary hack, which should go away -->
 <xsl:template match="biblio/note|interactive/instructions" mode="body-css-class">
     <xsl:text>solution-like</xsl:text>
-</xsl:template>
-
-<!-- When born hidden, inline-level -->
-<xsl:template match="biblio/note|interactive/instructions" mode="hidden-knowl-placement">
-    <xsl:text>inline</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
@@ -5538,9 +5178,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>fragment</xsl:text>
 </xsl:template>
 
-<!-- Never born hidden -->
-<xsl:template match="fragment" mode="hidden-knowl-placement"/>
-
 <!-- When born use this heading -->
 <xsl:template match="fragment" mode="heading-birth">
     <xsl:variable name="hN">
@@ -5579,16 +5216,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </pre>
 </xsl:template>
 
-<!-- Stub: for the conversion to braille, which imports this -->
-<!-- stylesheet, we sometimes add a @data-braille attribute  -->
-<!-- to guide the application of  liblouis  styles.  For     -->
-<!-- blocks, we have a "block-data-braille-attribute" hook   -->
-<!-- in the "body" template.  Here (and now) it is           -->
-<!-- implemented as a no-op stub.  The stylesheet for the    -->
-<!-- conversion to braille will override this template with  -->
-<!-- the desired functionality.                              -->
-<xsl:template match="*" mode="block-data-braille-attribute"/>
-
 <!-- All of the implementations above use the same   -->
 <!-- template for their body, it relies on various   -->
 <!-- templates but most of the work comes via the    -->
@@ -5621,20 +5248,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="class">
                 <xsl:apply-templates select="." mode="body-css-class" />
             </xsl:attribute>
-            <!-- possible indicator for use in for braille conversion, -->
-            <!-- activated by a non-trivial implementation of this     -->
-            <!-- hook in the braille stylesheet                        -->
-            <xsl:apply-templates select="." mode="block-data-braille-attribute"/>
             <!-- Label original, but not if embedded            -->
             <!-- Then id goes onto the knowl text, so locatable -->
-            <xsl:if test="$b-original and not($block-type = 'embed')">
+            <xsl:if test="$b-original and not($block-type = 'hidden')">
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
-            </xsl:if>
-            <!-- obvious marker of a block's beginning, often produces nothing -->
-            <xsl:if test="$b-braille">
-                <xsl:apply-templates select="." mode="braille-top-box-line"/>
             </xsl:if>
             <!-- If visible, heading interior to article -->
             <xsl:if test="$block-type = 'visible'">
@@ -5660,10 +5279,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
                 <xsl:with-param name="block-type" select="$block-type" />
             </xsl:apply-templates>
-            <!-- obvious marker of a block's ending, often produces nothing -->
-            <xsl:if test="$b-braille">
-                <xsl:apply-templates select="." mode="braille-bottom-box-line"/>
-            </xsl:if>
         </xsl:element>
     </xsl:if>
     <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
@@ -5715,20 +5330,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Paragraphs, without lists within   -->
-<!-- Coordinate with simplified version -->
-<!-- in the conversion to Braille       -->
 <xsl:template match="p" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
-    <!-- Allow for creating exceptional first list item in braille -->
-    <!-- conversion. Here, $body-element is almost always "p".     -->
-    <xsl:variable name="body-element">
-        <xsl:apply-templates select="." mode="initial-list-item-element"/>
-    </xsl:variable>
-    <xsl:element name="{$body-element}">
+    <div>
         <xsl:attribute name="class">
             <xsl:text>para</xsl:text>
             <!-- acknowledge prelude/interlude/postlude parents -->
@@ -5743,7 +5351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
+    </div>
 </xsl:template>
 
 <!-- Paragraphs, with displays within                    -->
@@ -5752,12 +5360,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and so should not be within an HTML paragraph.      -->
 <!-- We bust them out, and put the id for the paragraph  -->
 <!-- on the first one, even if empty.                    -->
-<!-- All but the first is p/@data-braille="continuation" -->
-<!-- so later HTML "p" can be styled for Braille as if   -->
-<!-- they are part of a logical PreTeXt paragraph        -->
-<!-- Note: a simpler version of this appears in the      -->
-<!-- braille conversion, with a few improvements         -->
-<!-- (such as using "node()").                           -->
 <xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -5786,17 +5388,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
     <!-- This comparison might improve with a normalize-space()      -->
     <xsl:if test="not($initial-content='')">
-        <!-- Allow for creating exceptional first list item in braille -->
-        <!-- conversion. Here, $body-element is almost always "p".     -->
-        <xsl:variable name="body-element">
-            <xsl:apply-templates select="." mode="initial-list-item-element"/>
-        </xsl:variable>
-        <xsl:element name="{$body-element}">
+        <div>
             <xsl:attribute name="class">
                 <xsl:text>para</xsl:text>
             </xsl:attribute>
             <xsl:copy-of select="$initial-content" />
-        </xsl:element>
+        </div>
     </xsl:if>
     <!-- for each display, output the display, plus trailing content -->
     <xsl:for-each select="$displays">
@@ -5825,11 +5422,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
                     <div class="para">
-                        <xsl:if test="$b-braille">
-                            <xsl:attribute name="data-braille">
-                                <xsl:text>continuation</xsl:text>
-                            </xsl:attribute>
-                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </div>
                 </xsl:if>
@@ -5845,11 +5437,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
                     <div class="para">
-                        <xsl:if test="$b-braille">
-                            <xsl:attribute name="data-braille">
-                                <xsl:text>continuation</xsl:text>
-                            </xsl:attribute>
-                        </xsl:if>
                         <xsl:copy-of select="$common-content" />
                     </div>
                 </xsl:if>
@@ -5880,9 +5467,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="body-css-class">
     <xsl:text>li</xsl:text>
 </xsl:template>
-
-<!-- Never born hidden -->
-<xsl:template match="li" mode="hidden-knowl-placement" />
 
 <!-- Not applicable -->
 <xsl:template match="li" mode="heading-birth" />
@@ -6003,22 +5587,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- The conversion to braille sometimes needs an exceptional       -->
-<!-- element for the first block of a list item, so we can get      -->
-<!-- list labels onto the same line as the following content.       -->
-<!-- Here in the HTML conversion, the template is a fancy way       -->
-<!-- of not accomplishing much.  Two of the three simple "text"     -->
-<!-- blocks of a list item jut coincidentally have PreTeXt names    -->
-<!-- that match HTML names.  A PreTeXt "p" becomes a "div.para"     -->
-<!-- when this device is in use.  We document this near lists,      -->
-<!-- even if use is distributed around.  -->
-<xsl:template match="blockquote|pre" mode="initial-list-item-element">
-    <xsl:value-of select="local-name(.)"/>
-</xsl:template>
-<xsl:template match="p" mode="initial-list-item-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
-
 <!-- ########### -->
 <!-- Mathematics -->
 <!-- ########### -->
@@ -6090,7 +5658,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="position() != 1">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:apply-templates select="id(@ref)" mode="xref-knowl-filename"/>
+                <xsl:apply-templates select="id(@ref)" mode="knowl-filename"/>
             </xsl:for-each>
         </xsl:attribute>
     </xsl:if>
@@ -8263,13 +7831,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> lines</xsl:text>
                 </xsl:if>
             </xsl:attribute>
-            <xsl:if test="not($next-cell)">
-                <xsl:if test="$b-braille">
-                    <xsl:attribute name="data-braille">
-                        <xsl:text>last-cell</xsl:text>
-                    </xsl:attribute>
-                </xsl:if>
-            </xsl:if>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
                     <xsl:value-of select="$column-span" />
@@ -8441,7 +8002,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>xref</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="data-knowl">
-                            <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
+                            <xsl:apply-templates select="$target" mode="knowl-filename" />
                         </xsl:attribute>
                     </xsl:when>
                     <!-- build traditional hyperlink -->
@@ -8483,7 +8044,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$knowl='true'">
             <xsl:text>\knowl{</xsl:text>
-            <xsl:apply-templates select="$target" mode="xref-knowl-filename"/>
+            <xsl:apply-templates select="$target" mode="knowl-filename"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\href{</xsl:text>
@@ -8781,7 +8342,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Emphasis -->
-<!-- NB: See override in Braille conversion -->
 <xsl:template match="em">
     <em class="emphasis">
         <xsl:apply-templates />
@@ -9095,17 +8655,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See templates in xsl/pretext-common.xsl file)     -->
 <!-- Then wrap in a pre element that MathJax ignores     -->
 <xsl:template match="pre">
-    <!-- Allow for creating exceptional first list item in braille -->
-    <!-- conversion. Here, $body-element is almost always "pre".   -->
-    <xsl:variable name="body-element">
-        <xsl:apply-templates select="." mode="initial-list-item-element"/>
-    </xsl:variable>
-    <xsl:element name="{$body-element}">
+    <pre>
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="interior"/>
-    </xsl:element>
+    </pre>
 </xsl:template>
 
 <!-- ################## -->
@@ -9336,29 +8891,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Biological Names -->
 <!-- ################ -->
 
-<!-- See a potentially cleaner template in the braille conversion -->
+<!-- typically in an italic font -->
 
-<xsl:template match="taxon[not(genus) and not(species)]">
+<xsl:template match="taxon">
     <span class="taxon">
-        <xsl:apply-templates />
+        <xsl:choose>
+            <!-- both substructures -->
+            <xsl:when test="genus and species">
+                <xsl:apply-templates select="genus"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="species"/>
+            </xsl:when>
+            <!-- just one -->
+            <xsl:when test="genus">
+                <xsl:apply-templates select="genus"/>
+            </xsl:when>
+            <!-- just the other one -->
+            <xsl:when test="species">
+                <xsl:apply-templates select="species"/>
+            </xsl:when>
+            <!-- not structured, use content -->
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
     </span>
 </xsl:template>
 
-<xsl:template match="taxon[genus or species]">
-    <span class="taxon">
-        <xsl:if test="genus">
-            <span class="genus">
-                <xsl:apply-templates select="genus"/>
-            </span>
-        </xsl:if>
-        <xsl:if test="genus and species">
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:if test="species">
-            <span class="species">
-                <xsl:apply-templates select="species"/>
-            </span>
-        </xsl:if>
+<xsl:template match="genus">
+    <span class="genus">
+        <xsl:apply-templates select="text()"/>
+    </span>
+</xsl:template>
+
+<xsl:template match="species">
+    <span class="species">
+        <xsl:apply-templates select="text()"/>
     </span>
 </xsl:template>
 
@@ -9378,8 +8946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We provide the quotation marks explicitly, along       -->
 <!-- with a span for any additional styling.  The quotation -->
-<!-- marks are necessary for accessibility, e.g., they are  -->
-<!-- critical in the Braille conversion.                    -->
+<!-- marks are necessary for accessibility.                 -->
 <xsl:template match="articletitle">
     <span class="articletitle">
         <xsl:call-template name="lq-character"/>
@@ -9646,7 +9213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The block-type parameter is only received from, and sent to, the -->
 <!-- templates in the HTML conversion.  The purpose is to inform that -->
 <!-- conversion that the Sage cell is inside a born-hidden knowl      -->
-<!-- ($block-type = 'embed') and adjust the class name accordingly.   -->
+<!-- ($block-type = 'hidden') and adjust the class name accordingly.  -->
 
 <!-- Never an @id , so just repeat -->
 <xsl:template match="sage" mode="duplicate">
@@ -9659,7 +9226,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- presently output is dropped as computable           -->
 <!-- NB: button text is also set as part of knowls code  -->
 <xsl:template match="sage" mode="sage-active-markup">
-    <xsl:param name="block-type"/>
     <xsl:param name="language-attribute" />
     <xsl:param name="b-autoeval" select="false()"/>
     <xsl:param name="in" />
@@ -9671,10 +9237,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
             <!-- See https://github.com/sagemath/sagecell/issues/542 -->
             <xsl:text>ptx-sagecell </xsl:text>
-            <!-- class names for configuration -->
-            <xsl:if test="$block-type = 'embed'">
-                <xsl:text>hidden-</xsl:text>
-            </xsl:if>
             <xsl:call-template name="sagecell-class-name">
                 <xsl:with-param name="language-attribute" select="$language-attribute"/>
                 <xsl:with-param name="b-autoeval" select="$b-autoeval"/>
@@ -9696,19 +9258,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An abstract named template accepts input text   -->
 <!-- and provides the display class, so untouchable  -->
 <xsl:template name="sage-display-markup">
-    <xsl:param name="block-type"/>
     <xsl:param name="in" />
 
     <pre>
         <xsl:attribute name="class">
             <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
             <!-- See https://github.com/sagemath/sagecell/issues/542 -->
-            <xsl:text>ptx-sagecell </xsl:text>
-            <!-- class names for configuration -->
-            <xsl:if test="$block-type = 'embed'">
-                <xsl:text>hidden-</xsl:text>
-            </xsl:if>
-            <xsl:text>sage-display</xsl:text>
+            <xsl:text>ptx-sagecell sage-display</xsl:text>
         </xsl:attribute>
         <script type="text/x-sage">
             <xsl:value-of select="$in" />
@@ -10719,9 +10275,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
-<!-- NB: a grossly simplified version of this      -->
-<!-- template is used as an override for the       -->
-<!-- conversion to braille.  Keep them in sync.    -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
     <!-- TODO: simplify these variables, much like for LaTeX -->
@@ -13398,11 +12951,6 @@ TODO:
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
     <div id="latex-macros" class="hidden-content process-math" style="display:none">
-        <xsl:if test="$b-braille">
-            <xsl:attribute name="data-braille">
-                <xsl:text>latex-macros</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
         <xsl:call-template name="inline-math-wrapper">
             <xsl:with-param name="math">
                 <xsl:value-of select="$latex-packages-mathjax"/>
