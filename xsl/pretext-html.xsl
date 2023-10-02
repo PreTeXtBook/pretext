@@ -8147,7 +8147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "tabular" as part of an "in context" testing regimen        -->
 <!-- spearheaded by Volker Sorge.  As a PreTeXt construction,    -->
 <!-- it could be ill-advised.  But we won't split that hair now. -->
-<!-- Do not use any place another HTML is is being added.        -->
+<!-- Do not use any place another HTML id is being added.        -->
 <!-- And use the "match" so we can catalog *where* it is used.   -->
 <xsl:template match="tabular" mode="html-permid-only">
     <xsl:if test="@permid">
