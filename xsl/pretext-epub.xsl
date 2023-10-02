@@ -311,10 +311,8 @@
             <!-- location info for debugging efforts -->
             <xsl:apply-templates select="." mode="debug-location" />
             <!-- Heading, div for this structural subdivision -->
-            <xsl:variable name="hid">
-                <xsl:apply-templates select="." mode="html-id" />
-            </xsl:variable>
-            <section class="{local-name(.)}" id="{$hid}">
+            <section class="{local-name(.)}">
+                <xsl:apply-templates select="." mode="html-id-attribute"/>
                 <xsl:apply-templates select="." mode="section-heading" />
                 <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
                 <!-- deleted "nav" and summary links here -->
@@ -562,9 +560,7 @@
     </xsl:comment>
     <!-- one  item  element per chapter -->
     <xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="html-id" />
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
         <!-- properties are iff, so validator complains if extra -->
         <!-- condition on math presence for svg/mathml property  -->
         <!-- TODO: use a parameter switch for output style       -->
@@ -1078,9 +1074,7 @@ width: 100%
     <!-- item  element for manifest -->
     <xsl:element name="item" namespace="http://www.idpf.org/2007/opf">
         <!-- internal id of the image -->
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="html-id" />
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
         <!-- filename relative to EPUB directory -->
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
@@ -1367,9 +1361,7 @@ width: 100%
         <!-- As a target of a cross-reference URL/hyperlink, the base     -->
         <!-- HTML modal "url" template uses the HTML id                   -->
         <xsl:if test="$context = 'men' or $context = 'md' or $context = 'mdn'">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="html-id"/>
-            </xsl:attribute>
+            <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
