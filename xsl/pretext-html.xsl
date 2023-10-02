@@ -9239,6 +9239,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original"/>
 
     <xsl:element name="pre">
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:attribute name="class">
             <!-- ".ptx-sagecell" for CSS (and not simply .sagecell). -->
             <!-- See https://github.com/sagemath/sagecell/issues/542 -->
@@ -9249,8 +9251,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:attribute>
 
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:element name="script">
             <xsl:attribute name="type">
                 <xsl:text>text/x-sage</xsl:text>
