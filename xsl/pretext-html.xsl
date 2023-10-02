@@ -487,6 +487,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Heading, div for this structural subdivision -->
             <section class="{local-name(.)}">
                 <xsl:apply-templates select="." mode="html-id-attribute"/>
+                <xsl:apply-templates select="." mode="permid-attribute"/>
                 <xsl:apply-templates select="." mode="section-heading">
                     <xsl:with-param name="heading-level" select="2"/>
                 </xsl:apply-templates>
@@ -575,6 +576,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Heading, div for this structural subdivision -->
     <section class="{local-name(.)}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -796,6 +798,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="abstract">
     <div class="abstract">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <!-- title or heading?  We go with a default title, which will -->
         <!-- be localized.  Then ban an author-provided title in the   -->
         <!-- schema.  This allows for reasonable behavior in a ToC     -->
@@ -1078,6 +1081,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <xsl:if test="title">
             <xsl:variable name="hN">
@@ -2770,6 +2774,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- words, not when a consituent of an xref knowl        -->
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <!-- put relevant class names on "details" to help with styling -->
         <xsl:attribute name="class">
@@ -2818,6 +2823,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fn">
     <a class="xref">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <!-- empty, but necessary for screen readers -->
         <xsl:attribute name="href"/>
         <!-- the path to an *xref* knowl (inappropriate) -->
@@ -5035,6 +5041,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:apply-templates select="." mode="html-id-attribute"/>
+                    <xsl:apply-templates select="." mode="permid-attribute"/>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
             </dt>
@@ -5237,6 +5244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Then id goes onto the knowl text, so locatable -->
             <xsl:if test="$b-original and not($block-type = 'hidden')">
                 <xsl:apply-templates select="." mode="html-id-attribute"/>
+                <xsl:apply-templates select="." mode="permid-attribute"/>
             </xsl:if>
             <!-- If visible, heading interior to article -->
             <xsl:if test="$block-type = 'visible'">
@@ -5328,6 +5336,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- label original -->
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
@@ -5362,6 +5371,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div class="para logical">
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <!-- INDENT FOLLOWING ON A WHITESPACE COMMIT -->
     <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
@@ -5484,6 +5494,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:apply-templates select="." mode="html-id-attribute"/>
+                    <xsl:apply-templates select="." mode="permid-attribute"/>
                 </xsl:if>
                 <!-- "title" only possible for structured version of a list item -->
                 <xsl:if test="title">
@@ -5550,6 +5561,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:apply-templates select="." mode="html-id-attribute"/>
+                    <xsl:apply-templates select="." mode="permid-attribute"/>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
             </xsl:element>
@@ -5616,6 +5628,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="knowl-urls"/>
         <xsl:if test="$b-original and not(self::me)">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <xsl:copy-of select="$content" />
     </div>
@@ -5803,6 +5816,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <xsl:if test="title">
             <xsl:variable name="hN">
@@ -5830,6 +5844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section class="headnote">
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
         </xsl:if>
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
@@ -6916,6 +6931,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:element name="audio">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:attribute name="class">
             <xsl:text>audio</xsl:text>
         </xsl:attribute>
@@ -7021,6 +7037,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we need to build the element, since @autoplay is optional -->
     <xsl:element name="video">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:attribute name="class">
             <xsl:text>video</xsl:text>
         </xsl:attribute>
@@ -7252,6 +7269,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Turn autoplay on, else two clicks needed -->
                 <iframe class="video" allowfullscreen="" src="{$source-url-autoplay-on}">
                     <xsl:apply-templates select="." mode="html-id-attribute"/>
+                    <xsl:apply-templates select="." mode="permid-attribute"/>
                     <xsl:apply-templates select="." mode="video-iframe-attributes">
                         <xsl:with-param name="autoplay" select="'true'"/>
                     </xsl:apply-templates>
@@ -7261,6 +7279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <iframe class="video" allowfullscreen="" src="{$source-url}">
                 <xsl:apply-templates select="." mode="html-id-attribute"/>
+                <xsl:apply-templates select="." mode="permid-attribute"/>
                 <xsl:apply-templates select="." mode="video-iframe-attributes">
                     <xsl:with-param name="autoplay" select="$autoplay"/>
                 </xsl:apply-templates>
@@ -8101,6 +8120,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="html-id"/>
     </xsl:attribute>
+</xsl:template>
+
+<!-- A source @permid is presered in an output @data-permid -->
+<xsl:template match="*" mode="permid-attribute">
+    <xsl:if test="@permid">
+        <xsl:attribute name="data-permid">
+            <xsl:value-of select="@permid"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- We manufacture Javascript variables sometimes using            -->
@@ -9222,6 +9250,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
 
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:element name="script">
             <xsl:attribute name="type">
                 <xsl:text>text/x-sage</xsl:text>
@@ -9461,6 +9490,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -9535,6 +9565,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ctl = click to launch                 -->
     <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -9569,6 +9600,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '?', @calcplot3d)" />
     <iframe src="{$full-url}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -9602,6 +9634,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes"/>
     </iframe>
 </xsl:template>
@@ -9624,6 +9657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="{$location}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes"/>
     </iframe>
 </xsl:template>
@@ -9632,6 +9666,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
@@ -13091,6 +13126,7 @@ TODO:
 <xsl:template match="worksheet/page">
     <section class="onepage">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates/>
     </section>
 </xsl:template>
