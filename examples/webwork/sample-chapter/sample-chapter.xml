@@ -20,10 +20,6 @@
 <!-- along with PreTeXt. If not, see <http://www.gnu.org/licenses/>.       -->
 <!-- ********************************************************************* -->
 
-<!-- This is a PreTeXt "article" designed to look           -->
-<!-- like a chapter of a book.  So it has several sections, -->
-<!-- each with mathematical content and WeBWorK problems.   -->
-
 <pretext>
     <!-- Other languages can be used to internationalize parts of a document -->
     <!-- <pretext xml:lang="pt-BR"> -->
@@ -83,13 +79,12 @@
         </latex-image-preamble>
     </docinfo>
 
-    <article xml:id="sample-ww-chapter">
+    <book xml:id="sample-ww-chapter">
         <title>Integrating <webwork /> into Textbooks</title>
         <subtitle>Sample Exercises</subtitle>
 
         <frontmatter xml:id="frontmatter">
 
-            <!-- Items typically at the top of the first page of an article -->
             <titlepage>
                <!-- There can be several authors here -->
                 <author>
@@ -117,14 +112,17 @@
 
             </titlepage>
 
-            <abstract>
-                <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  While technically an example of <pretext />'s <c>article</c> format, it is intended to closely resemble a chapter of a <pretext /> <c>book</c> that is divided into sections.</p>
+            <preface>
+                <p>This is a sample book to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  It is structured as a book whose chapters are again structured with sections (no introductions or conclusions) so that it fits Ruestone's chaper/subchapter model and can be used for testing on Runestone Academy.</p>
                 <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
                 <p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext /> enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork /> end, and generally maintaining <webwork /> software.</p>
-                <p>This article assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
-            </abstract>
+                <p>This book assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
+            </preface>
 
         </frontmatter>
+
+        <chapter>
+            <title>Instructive Examples</title>
 
         <section>
             <title>Arithmetic</title>
@@ -1550,6 +1548,11 @@
 
         </section>
 
+        </chapter>
+
+        <chapter>
+            <title>Technical Examples</title>
+
         <section>
             <title>Subject Area Templates</title>
 
@@ -2531,6 +2534,8 @@
             </p>
         </section>
 
+        </chapter>
+
         <backmatter>
             <!-- 2018-09-19: answers are not yet available, so we -->
             <!-- still test that asking for them is not a problem -->
@@ -2538,5 +2543,5 @@
                 <title>Hints, Answers, and Solutions</title>
             </solutions>
         </backmatter>
-    </article>
+    </book>
 </pretext>
