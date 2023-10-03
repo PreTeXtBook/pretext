@@ -876,159 +876,6 @@
             </section>
 
             <section>
-                <title>PGML Formatting and Verbatim Calisthenics</title>
-
-                <p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
-
-                <exercise xml:id="ww-PGML-format">
-                    <title>PGML Formatting</title>
-
-                    <webwork>
-                        <statement>
-                            <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
-                            <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
-                            <p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
-                            <p>Emphasis: <em>very important</em></p>
-                            <p>Alert: <alert>do not</alert> do it</p>
-                            <p>Braces: {text that looks like a set}</p>
-                            <!-- uncomment next to test, will not activate generally in sample document -->
-                            <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
-                            <pre>
-                                Some pre-formatted text
-                                            with an indented line
-                            and an out-dented line
-                            This should not be altered *a problem*
-                            And this [$NDASH]* should not be an en-dash
-                            </pre>
-
-                            <p>
-                                Here is some inline <c>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</c>,
-                                and here is some <cd>single-line display code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cd>
-                                and here is some
-                                <cd>
-                                    <cline>multi-line display</cline>
-                                    <cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cline>
-                                </cd>
-                            </p>
-
-                            <p>Some raw characters, XML/HTML:    &amp; &lt; &gt; " '</p>
-                            <p>Some raw characters, <latex/>:    # $ % ^ &amp; _ { } ~ \</p>
-                            <p>Some raw characters, PGML:        \ * # { } [ ]</p>
-
-                            <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
-
-                            <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
-                            <p>An ndash<ndash />right here.</p>
-                            <p>An mdash<mdash />right here.</p>
-
-                            <p>Some constructions in <q>normal</q> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
-
-                            <p>&gt;&gt; This should not be a centered line &lt;&lt;</p>
-
-                            <p>&gt;&gt; Nor a right-justified line, either</p>
-
-                            <p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
-
-                            <p>Brackets, unpaired; ] with content between [</p>
-
-                            <p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
-
-                            <p>### This should not be a level 3 heading</p>
-
-                            <p>===   Not a horizontal rule from three equal signs</p>
-                            <p>==    Not a horizontal rule from two equal signs</p>
-                            <p>===== Not a horizontal rule from five equal signs</p>
-                            <p>---   Not a horizontal rule from three hyphens</p>
-                            <p>--    Not a horizontal rule from two hyphens</p>
-                            <p>----- Not a horizontal rule from five hyphens</p>
-
-                            <p>+ Not an unordered list item</p>
-                            <p>- Not an unordered list item</p>
-
-                        </statement>
-                    </webwork>
-                </exercise>
-
-                <p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
-
-                <exercise>
-                    <webwork>
-                        <pg-code>
-                            $xmlchars = q(&lt;>&amp;'";);
-                            $latex0 = '#%&amp;&lt;>\^_`|~';
-                            $latex1 = '${}';
-                            $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                            $otherchars = '!()*+,-./:=?@[]';
-                            Context()->strings->add($xmlchars=>{});
-                            Context()->strings->add($latex0=>{});
-                            Context()->strings->add($latex1=>{});
-                            Context()->strings->add($alphanumeric=>{});
-                            Context()->strings->add($otherchars=>{});
-                            $xmlcharsMO = String($xmlchars);
-                            $latex0MO = String($latex0);
-                            $latex1MO = String($latex1);
-                            $alphanumericMO = String($alphanumeric);
-                            $othercharsMO = String($otherchars);
-                        </pg-code>
-
-                        <statement>
-                            <p><ol>
-                                <li>
-                                    <p>Special characters used by XML, character escaping: <var name="$xmlchars" /></p>
-                                    <p>Now as a MathObject: <var name="$xmlcharsMO" /></p>
-                                    <p><var name="$xmlchars" width="6" /></p>
-                                </li>
-                                <li>
-                                    <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> disagree: <var name="$latex0" /></p>
-                                    <p>Now as a MathObject: <var name="$latex0MO" /></p>
-                                    <p><var name="$latex0" width="11" /></p>
-                                </li>
-                                <li>
-                                    <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> can agree: <var name="$latex1" /></p>
-                                    <p>Now as a MathObject: <var name="$latex1MO" /></p>
-                                    <p><var name="$latex1" width="3" /></p>
-                                </li>
-                                <li>
-                                    <p>Alphanumeric characters: <var name="$alphanumeric" /></p>
-                                    <p>Now as a MathObject: <var name="$alphanumericMO" /></p>
-                                    <p><var name="$alphanumeric" width="62" /></p>
-                                </li>
-                                <li>
-                                    <p>Other characters: <var name="$otherchars" /></p>
-                                    <p>Now as a MathObject: <var name="$othercharsMO" /></p>
-                                    <p><var name="$otherchars" width="15" /></p>
-                                </li>
-                            </ol></p>
-                            <p>In answers, because of <latex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
-                        </statement>
-                    </webwork>
-                </exercise>
-
-                <p>
-                    Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
-                    If this is put into the exercise statement, it will be inserted <em>after</em> PGML processing is done,
-                    and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
-                    use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
-                </p>
-
-                <exercise>
-                    <webwork>
-                        <pg-code>
-                            $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
-                        </pg-code>
-                        <statement>
-                            <p>
-                                <var name="$statement"/> makes:
-                            </p>
-                            <p>
-                                <var name="$statement" data="pgml"/>
-                            </p>
-                        </statement>
-                    </webwork>
-                </exercise>
-            </section>
-
-            <section>
                 <title>Multiple Choice</title>
 
                 <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
@@ -1552,6 +1399,159 @@
 
         <chapter>
             <title>Technical Examples</title>
+
+            <section>
+                <title>PGML Formatting and Verbatim Calisthenics</title>
+
+                <p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
+
+                <exercise xml:id="ww-PGML-format">
+                    <title>PGML Formatting</title>
+
+                    <webwork>
+                        <statement>
+                            <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
+                            <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
+                            <p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
+                            <p>Emphasis: <em>very important</em></p>
+                            <p>Alert: <alert>do not</alert> do it</p>
+                            <p>Braces: {text that looks like a set}</p>
+                            <!-- uncomment next to test, will not activate generally in sample document -->
+                            <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
+                            <pre>
+                                Some pre-formatted text
+                                            with an indented line
+                            and an out-dented line
+                            This should not be altered *a problem*
+                            And this [$NDASH]* should not be an en-dash
+                            </pre>
+
+                            <p>
+                                Here is some inline <c>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</c>,
+                                and here is some <cd>single-line display code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cd>
+                                and here is some
+                                <cd>
+                                    <cline>multi-line display</cline>
+                                    <cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cline>
+                                </cd>
+                            </p>
+
+                            <p>Some raw characters, XML/HTML:    &amp; &lt; &gt; " '</p>
+                            <p>Some raw characters, <latex/>:    # $ % ^ &amp; _ { } ~ \</p>
+                            <p>Some raw characters, PGML:        \ * # { } [ ]</p>
+
+                            <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
+
+                            <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
+                            <p>An ndash<ndash />right here.</p>
+                            <p>An mdash<mdash />right here.</p>
+
+                            <p>Some constructions in <q>normal</q> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
+
+                            <p>&gt;&gt; This should not be a centered line &lt;&lt;</p>
+
+                            <p>&gt;&gt; Nor a right-justified line, either</p>
+
+                            <p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
+
+                            <p>Brackets, unpaired; ] with content between [</p>
+
+                            <p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
+
+                            <p>### This should not be a level 3 heading</p>
+
+                            <p>===   Not a horizontal rule from three equal signs</p>
+                            <p>==    Not a horizontal rule from two equal signs</p>
+                            <p>===== Not a horizontal rule from five equal signs</p>
+                            <p>---   Not a horizontal rule from three hyphens</p>
+                            <p>--    Not a horizontal rule from two hyphens</p>
+                            <p>----- Not a horizontal rule from five hyphens</p>
+
+                            <p>+ Not an unordered list item</p>
+                            <p>- Not an unordered list item</p>
+
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
+
+                <exercise>
+                    <webwork>
+                        <pg-code>
+                            $xmlchars = q(&lt;>&amp;'";);
+                            $latex0 = '#%&amp;&lt;>\^_`|~';
+                            $latex1 = '${}';
+                            $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                            $otherchars = '!()*+,-./:=?@[]';
+                            Context()->strings->add($xmlchars=>{});
+                            Context()->strings->add($latex0=>{});
+                            Context()->strings->add($latex1=>{});
+                            Context()->strings->add($alphanumeric=>{});
+                            Context()->strings->add($otherchars=>{});
+                            $xmlcharsMO = String($xmlchars);
+                            $latex0MO = String($latex0);
+                            $latex1MO = String($latex1);
+                            $alphanumericMO = String($alphanumeric);
+                            $othercharsMO = String($otherchars);
+                        </pg-code>
+
+                        <statement>
+                            <p><ol>
+                                <li>
+                                    <p>Special characters used by XML, character escaping: <var name="$xmlchars" /></p>
+                                    <p>Now as a MathObject: <var name="$xmlcharsMO" /></p>
+                                    <p><var name="$xmlchars" width="6" /></p>
+                                </li>
+                                <li>
+                                    <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> disagree: <var name="$latex0" /></p>
+                                    <p>Now as a MathObject: <var name="$latex0MO" /></p>
+                                    <p><var name="$latex0" width="11" /></p>
+                                </li>
+                                <li>
+                                    <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> can agree: <var name="$latex1" /></p>
+                                    <p>Now as a MathObject: <var name="$latex1MO" /></p>
+                                    <p><var name="$latex1" width="3" /></p>
+                                </li>
+                                <li>
+                                    <p>Alphanumeric characters: <var name="$alphanumeric" /></p>
+                                    <p>Now as a MathObject: <var name="$alphanumericMO" /></p>
+                                    <p><var name="$alphanumeric" width="62" /></p>
+                                </li>
+                                <li>
+                                    <p>Other characters: <var name="$otherchars" /></p>
+                                    <p>Now as a MathObject: <var name="$othercharsMO" /></p>
+                                    <p><var name="$otherchars" width="15" /></p>
+                                </li>
+                            </ol></p>
+                            <p>In answers, because of <latex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <p>
+                    Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
+                    If this is put into the exercise statement, it will be inserted <em>after</em> PGML processing is done,
+                    and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
+                    use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
+                </p>
+
+                <exercise>
+                    <webwork>
+                        <pg-code>
+                            $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
+                        </pg-code>
+                        <statement>
+                            <p>
+                                <var name="$statement"/> makes:
+                            </p>
+                            <p>
+                                <var name="$statement" data="pgml"/>
+                            </p>
+                        </statement>
+                    </webwork>
+                </exercise>
+            </section>
 
             <section>
                 <title>Subject Area Templates</title>
