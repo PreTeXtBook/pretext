@@ -65,7 +65,7 @@
         -->
         <feedback>
             <url>not-implemented.html</url>
-             <!-- <text>My Button Text</text>  -->
+            <!-- <text>My Button Text</text>  -->
         </feedback>
 
         <latex-image-preamble>
@@ -88,7 +88,7 @@
         <frontmatter xml:id="frontmatter">
 
             <titlepage>
-               <!-- There can be several authors here -->
+                <!-- There can be several authors here -->
                 <author>
                     <personname>Robert Beezer</personname>
                     <department>Department of Mathematics and Computer Science</department>
@@ -2539,8 +2539,6 @@
         </chapter>
 
         <backmatter>
-            <!-- 2018-09-19: answers are not yet available, so we -->
-            <!-- still test that asking for them is not a problem -->
             <solutions inline="hint answer solution" divisional="hint answer solution">
                 <title>Hints, Answers, and Solutions</title>
             </solutions>
