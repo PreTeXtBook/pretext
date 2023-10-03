@@ -71,9 +71,9 @@ function handleWW(ww_id, action) {
 		ww_container.dataset.hasAnswer = ww_container.getElementsByClassName('answer').length > 0;
 		// Get (possibly localized) label text for hints and solutions.
 		ww_container.dataset.hintLabelText = ww_container.dataset.hasHint == 'true'
-			? ww_container.querySelectorAll('.hint-knowl span.type')[0].textContent : 'Hint';
+			? ww_container.querySelectorAll('.hint-knowl span.type, details.hint span.type')[0].textContent : 'Hint';
 		ww_container.dataset.solutionLabelText = ww_container.dataset.hasSolution == 'true'
-			? ww_container.querySelectorAll('.solution-knowl span.type')[0].textContent : 'Solution';
+			? ww_container.querySelectorAll('.solution-knowl span.type, details.solution span.type')[0].textContent : 'Solution';
 
 		ww_container.tabIndex = -1;
 	}
