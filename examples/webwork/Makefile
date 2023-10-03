@@ -73,6 +73,7 @@ MINI = $(WWEXAMPLE)/minimal/mini.xml
 
 # Publisher files
 SMPCPUB = $(WWEXAMPLE)/sample-chapter/publication.xml
+SMPRSPUB = $(WWEXAMPLE)/sample-chapter/publication-academy.xml
 MINIPUB = $(WWEXAMPLE)/minimal/publication.xml
 
 # These paths are subdirectories of
@@ -81,6 +82,7 @@ TEXOUT     = $(SCRATCH)/latex
 PDFOUT     = $(SCRATCH)/pdf
 IMGOUT     = $(SCRATCH)/images
 HTMLOUT    = $(SCRATCH)/html
+RSOUT      = $(SCRATCH)/runestone
 EPUBOUT    = $(SCRATCH)/epub
 PGOUT      = $(SCRATCH)/pg
 
@@ -167,6 +169,13 @@ sample-chapter-html:
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
 	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
+
+sample-chapter-runestone:
+	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
+	$(PTX)/pretext/pretext -c latex-image -f svg -p $(SMPRSPUB) $(SMPC)
+	-rm -r $(RSOUT)
+	install -d $(RSOUT)
+	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPRSPUB) -x debug.datedfiles no -d $(RSOUT) $(SMPC); \
 
 mini-html:
 	-rm -r $(HTMLOUT)
