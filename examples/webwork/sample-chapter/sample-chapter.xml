@@ -131,7 +131,7 @@
 
                 <p>Some questions with quantitative answers.</p>
 
-                <exercise xml:id="integer-addition">
+                <exercise label="integer-addition">
                     <title>Adding Single-Digit Integers</title>
 
                     <introduction>
@@ -166,7 +166,7 @@
 
                 <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
 
-                <exercise xml:id="integer-addition-with-seed">
+                <exercise label="integer-addition-with-seed">
                     <title>Declaring a Problem Seed</title>
 
                     <introduction>
@@ -177,7 +177,7 @@
 
                 </exercise>
 
-                <exercise xml:id="integer-addition-with-control-seed">
+                <exercise label="integer-addition-with-control-seed">
                     <title>Controlling Randomness</title>
 
                     <introduction>
@@ -204,7 +204,7 @@
                 </exercise>
 
 
-                <exercise>
+                <exercise label="special-answer-checking">
                     <title>Special Answer Checking</title>
 
                     <introduction>
@@ -252,7 +252,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="using-hints">
                     <title>Using Hints</title>
                     <introduction>
                         <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an PTX hint is controlled.</p>
@@ -288,7 +288,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="no-random">
                     <title>No Randomization</title>
                     <introduction>
                         <p>This problem has no randomization at all, not even if it were exported to be part of a problem set on a <webwork /> server. As such, it really doesn't need any lines of Perl code in its setup, so you have the option of skipping that part of the authoring process.</p>
@@ -303,7 +303,7 @@
                     </conclusion>
                 </exercise>
 
-                <project>
+                <project label="copy-webwork-add-numbers">
                     <title>Inside a <tag>project</tag></title>
                     <introduction>
                         <p>
@@ -344,7 +344,7 @@
                     </proof>
                 </theorem>
 
-                <exercise xml:id="quadratic-equation">
+                <exercise xml:id="quadratic-equation" label="quadratic-equation">
                     <title>Solving Quadratic Equations</title>
                     <webwork xml:id="webwork-solve-quadratic">
                         <description>
@@ -436,7 +436,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="nested-tasks">
                     <title>Nested tasks</title>
                     <introduction>
                         <p>
@@ -557,7 +557,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise xml:id="copy-with-tasks">
+                <exercise label="copy-with-tasks">
                     <title>Copy a Problem with Tasks</title>
 
                     <introduction>
@@ -579,7 +579,7 @@
 
                     <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork /> course which is hosting the <webwork /> computation may be used this way.</p>
 
-                <exercise xml:id="cylinder-volume">
+                <exercise label="cylinder-volume">
                     <title>Cylinder Volume</title>
 
                     <introduction>
@@ -660,7 +660,7 @@
                         <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so in the HTML output there is no opportunity to provide an answer.</p>
                     </introduction>
 
-                    <exercise xml:id="ww-antiderivatives">
+                    <exercise label="ww-antiderivatives">
                         <title>Antiderivatives</title>
 
                         <introduction>
@@ -674,7 +674,7 @@
                         </conclusion>
                     </exercise>
 
-                    <exercise xml:id="ww-discuss-always-antiderivative">
+                    <exercise label="ww-discuss-always-antiderivative">
                         <title>Every Continuous Function has an Antiderivative</title>
 
                         <introduction>
@@ -689,7 +689,7 @@
                         </webwork>
                     </exercise>
 
-                    <exercise xml:id="ww-discuss-inverse-processes">
+                    <exercise label="ww-discuss-inverse-processes">
                         <title>Inverse Processes</title>
 
                         <webwork>
@@ -746,7 +746,7 @@
                         </exercise>
                     </exercisegroup>
 
-                    <exercise xml:id="ww-use-the-definition-of-the-derivative">
+                    <exercise label="ww-use-the-definition-of-the-derivative">
                         <title>Show Your Work</title>
                         <introduction>
                             <p>
@@ -789,7 +789,7 @@
                     This section helps with testing aspects of math content.
                 </p>
 
-                <exercise>
+                <exercise label="math-and-alignment">
                     <title>Math Elements and Alignment</title>
                     <introduction>
                         <p>
@@ -827,7 +827,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="intertext">
                     <title>Intertext</title>
                     <introduction>
                         <p>
@@ -882,7 +882,7 @@
 
                 <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
 
-                <exercise>
+                <exercise label="multiple-choice">
                     <title>Drop-down/Popup</title>
 
                     <introduction>
@@ -910,7 +910,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="choose-one">
                     <title>Choose one</title>
 
                     <webwork>
@@ -934,7 +934,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="options-subset">
                     <title>Choose a Subset of Options</title>
                     <webwork>
                         <pg-code>
@@ -969,7 +969,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="options-subset-auto-label">
                     <title>Choose a Subset of Options with Automated Labeling</title>
                     <webwork>
                         <pg-code>
@@ -1005,7 +1005,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="options-subset-explicit-labeling">
                     <title>Choose a Subset of Options with Explicit Labeling</title>
                     <webwork>
                         <pg-code>
@@ -1047,7 +1047,7 @@
 
                 <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
 
-                <exercise>
+                <exercise label="table-completion">
                     <title>Complete this Table</title>
 
                     <webwork>
@@ -1122,7 +1122,7 @@
                     If your <webwork/> server is version 2.16 or later,
                     <webwork/> problems can process <tag>latex-image</tag> code. Here is an example.
                 </p>
-                <exercise>
+                <exercise label="static-latex-image">
                     <title>A static <tag>latex-image</tag> graph</title>
                     <webwork>
                         <pg-code>
@@ -1172,7 +1172,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="randomized-latex-image">
                     <title>A randomized <tag>latex-image</tag> graph</title>
                     <introduction>
                         <p>
@@ -1208,7 +1208,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="latex-image-with-preamble">
                     <title>A <tag>latex-image</tag> graph affected by <tag>latex-image-preamble</tag></title>
                     <introduction>
                         <p>
@@ -1248,7 +1248,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="special-characters">
                     <title>Special characters</title>
                     <introduction>
                         <p>
@@ -1284,7 +1284,7 @@
                     and demonstrated here.
                 </p>
 
-                <exercise>
+                <exercise label="solving-with-graph">
                     <title>Solve using a graph</title>
                     <webwork>
                         <pg-code>
@@ -1407,7 +1407,7 @@
 
                 <p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
 
-                <exercise xml:id="ww-PGML-format">
+                <exercise label="ww-PGML-format">
                     <title>PGML Formatting</title>
 
                     <webwork>
@@ -1560,7 +1560,7 @@
 
                 <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
-                <exercise xml:id="number-or-function">
+                <exercise label="number-or-function">
                     <title>Answer is a number or a function</title>
 
                     <webwork>
@@ -1600,7 +1600,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise xml:id="function-with-domain-issues">
+                <exercise label="function-with-domain-issues">
                     <title>Answer is a function with domain issues</title>
 
                     <webwork>
@@ -1642,7 +1642,7 @@
                     </webwork>
                 </exercise>
 
-                <exercise xml:id="multiple-choice-popup-or-radio-buttons">
+                <exercise label="multiple-choice-popup-or-radio-buttons">
                     <title>Multiple Choice by Popup, Radio Buttons, or Checkboxes</title>
 
                     <webwork>
@@ -1690,7 +1690,7 @@
 
                 </exercise>
 
-                <exercise xml:id="tables">
+                <exercise label="tables">
                     <title>Tables</title>
 
                     <webwork>
