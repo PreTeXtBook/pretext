@@ -29,6 +29,8 @@
 
     <docinfo>
 
+        <!-- To aid uniqueness of database identifiers in Runestone -->
+        <document-id edition="2">PTXWW</document-id>
         <!-- In the HTML version there is room for a   -->
         <!-- picture or logo in the upper left corner. -->
         <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
