@@ -2106,8 +2106,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
-<!-- The directory of knowls that are targets of cross-references    -->
-<!-- The file extension is *.html so recognized as OK by Moodle, etc -->
+<!-- The directories of knowls that are targets of references.  Most,   -->
+<!-- but not all, filenames are based on the "visible-id" template,     -->
+<!-- but this is organized so alternate naming conventions can be used. -->
+<!-- The file extension is *.html so recognized as OK by Moodle, etc    -->
 <xsl:template match="*" mode="knowl-filename">
     <xsl:param name="origin" select="''"/>
 
@@ -2115,24 +2117,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$origin = 'xref'">
             <xsl:text>xref/</xsl:text>
+            <!-- Target of an "xref" must always have an author-supplied -->
+            <!-- @xml:id value and this is backward-compatible with the  -->
+            <!-- situation before @label became prominent.               -->
+            <xsl:value-of select="@xml:id"/>
         </xsl:when>
         <xsl:when test="$origin = 'index'">
             <xsl:text>index/</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:when>
         <xsl:when test="$origin = 'list-of'">
             <xsl:text>list-of/</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:when>
         <xsl:when test="$origin = 'notation'">
             <xsl:text>notation/</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:when>
+        <!-- Footnotes are original content and are temporarily being   -->
+        <!-- implemented as cross-reference knowls.  This stanza should -->
+        <!-- be removed once they are implemented properly.             -->
         <xsl:when test="$origin = 'fn'">
             <xsl:text>fn/</xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:when>
         <!-- put a "location-report" template here to debug a bad knowl file -->
         <!-- (the file, or a reference to it) that lacks a subdirectory      -->
         <xsl:otherwise/>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
