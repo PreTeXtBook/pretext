@@ -2527,6 +2527,57 @@
                 </exercises>
             </section>
 
+            <section xml:id="section-runestone-testing">
+                <title>Runestone Assignment Testing</title>
+                <p>
+                    This section is specifically for testing when exercises are migrated to a
+                    Runestone Assignment page.
+                </p>
+                <exercises>
+                    <exercisegroup>
+                        <introduction>
+                            <p>
+                                This introduction should appear ahead of the exercise when it shows
+                                up in the Assignment page.
+                            </p>
+                            <tabular>
+                                <row>
+                                    <cell><m>(0,0)</m></cell>
+                                    <cell><m>(0,1)</m></cell>
+                                </row>
+                                <row>
+                                    <cell><m>(1,0)</m></cell>
+                                    <cell><m>(1,1)</m></cell>
+                                </row>
+                            </tabular>
+                            <image>
+                                <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+                                    \end{tikzpicture}
+                                </latex-image>
+                                <shortdescription>a blue square</shortdescription>
+                            </image>
+                            <p>
+                                It has a table and an image too to check it all comes through.
+                            </p>
+                        </introduction>
+                        <exercise label="an-exercisegroup-exercise">
+                            <webwork>
+                                <statement>
+                                    <p>
+                                        What is <m>1+1</m>?
+                                    </p>
+                                    <p>
+                                        <var name="'2'" width="5"/>>
+                                    </p>
+                                </statement>
+                            </webwork>
+                        </exercise>
+                    </exercisegroup>
+                </exercises>
+            </section>
+
             <section xml:id="section-deprecations">
                 <title>Deprecations</title>
 
