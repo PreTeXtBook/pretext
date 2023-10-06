@@ -800,6 +800,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- not knowled. Solutions are available in the originals, via  -->
         <!-- an "in context" link off the Assignment page                -->
         <htmlsrc>
+            <xsl:apply-templates select="." mode="introduction"/>
             <xsl:choose>
                 <!-- with "webwork" guts, the HTML is exceptional -->
                 <xsl:when test="@exercise-interactive = 'webwork-reps'">
@@ -820,6 +821,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </htmlsrc>
     </question>
+</xsl:template>
+
+<xsl:template match="*" mode="introduction"/>
+
+<xsl:template match="exercisegroup/exercise" mode="introduction">
+    <xsl:apply-templates select="parent::exercisegroup/introduction"/>
 </xsl:template>
 
 <!-- TODO: by renaming/refactoring the templates inside of   -->
