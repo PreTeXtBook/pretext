@@ -800,6 +800,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- not knowled. Solutions are available in the originals, via  -->
         <!-- an "in context" link off the Assignment page                -->
         <htmlsrc>
+            <!-- next template produces nothing, unless the  -->
+            <!-- "exercise" is in an "exercisegroup" ("eg")  -->
+            <xsl:apply-templates select="." mode="eg-introduction"/>
             <xsl:choose>
                 <!-- with "webwork" guts, the HTML is exceptional -->
                 <xsl:when test="@exercise-interactive = 'webwork-reps'">
@@ -820,6 +823,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </htmlsrc>
     </question>
+</xsl:template>
+
+<!-- For an "exercise" divorced from it's "exercisegroup" "introduction", -->
+<!-- we pick it up to be part of what is shown to the student on the      -->
+<!-- Runestone Assignment page.                                           -->
+
+<xsl:template match="*" mode="eg-introduction"/>
+
+<xsl:template match="exercisegroup/exercise" mode="eg-introduction">
+    <xsl:apply-templates select="parent::exercisegroup/introduction"/>
 </xsl:template>
 
 <!-- TODO: by renaming/refactoring the templates inside of   -->
