@@ -3315,8 +3315,6 @@ def html(
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    import distutils.dir_util  # copy_tree()
-
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
 
@@ -3362,13 +3360,7 @@ def html(
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
 
     if file_format  == "html":
-        # with multiple files, we need to copy a tree, and
-        # shutil.copytree() will balk at overwriting directories
-        # before Python 3.8.  The  distutils  module is old
-        # (being replaced by setup).  So once on Python 3.8 these
-        # copies can be replaced with shutil.copytree() using
-        # the  dirs_exist_ok  keyword
-        distutils.dir_util.copy_tree(tmp_dir, dest_dir)
+        shutil.copytree(tmp_dir, dest_dir, dirs_exist_ok=True)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
         owd = os.getcwd()
