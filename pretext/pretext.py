@@ -3424,7 +3424,7 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 #####################
 
 
-def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, manage_directories=False):
+def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, use_manage_directories=False):
     """Convert XML source to LaTeX in destination directory"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -3445,7 +3445,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, manage_dir
     log.info("converting {} to LaTeX as {}".format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
-    if manage_directories:
+    if use_manage_directories:
         # Manage directories so LaTeX can be built in-place
         external_abs, generated_abs = get_managed_directories(xml, pub_file)
         manage_directories(dest_dir, external_abs=external_abs, generated_abs=generated_abs)
