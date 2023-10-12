@@ -21,11 +21,8 @@
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
 # 2023-10-13: this module expects Python 3.8 or newer
-# 2021-05-21: this module expects Python 3.6 or newer
-#     copying HTML into cwd twice, might be better with
 #     shutil.copytree(dirs_exist_ok), requires Python 3.8
-#     see comments near copytree() and copy_tree()
-#
+# 2021-05-21: this module expects Python 3.6 or newer
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
 #     otherwise Python 3.0 might be sufficient
@@ -3316,8 +3313,6 @@ def html(
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    import distutils.dir_util  # copy_tree()
-
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
 
@@ -3363,13 +3358,7 @@ def html(
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
 
     if file_format  == "html":
-        # with multiple files, we need to copy a tree, and
-        # shutil.copytree() will balk at overwriting directories
-        # before Python 3.8.  The  distutils  module is old
-        # (being replaced by setup).  So once on Python 3.8 these
-        # copies can be replaced with shutil.copytree() using
-        # the  dirs_exist_ok  keyword
-        distutils.dir_util.copy_tree(tmp_dir, dest_dir)
+        shutil.copytree(tmp_dir, dest_dir, dirs_exist_ok=True)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
         owd = os.getcwd()
@@ -3477,8 +3466,6 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory
     latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir)
-
-    # "dirs_exist_ok" keyword is Python 3.8; necessary?
 
     # Create localized filenames for pdflatex conversion step
     # sourcename  needs to match behavior of latex() with above arguments
