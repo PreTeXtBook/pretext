@@ -472,9 +472,7 @@ def latex_image_conversion(
     # not supported outside of the managed directory scheme (2021-07-28)
     # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    if external_dir:
-        external_dest = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_dir, external_dest)
+    manage_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # no output (argument 3), stylesheet writes out per-image file
@@ -871,9 +869,7 @@ def latex_tactile_image_conversion(
     # not supported outside of the managed directory scheme (2021-07-28)
     # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    if external_dir:
-        external_dest = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_dir, external_dest)
+    manage_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # Output is multiple *.tex files
@@ -2131,9 +2127,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Copy in external resources (e.g., js code)
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
+    manage_directories(tmp_dir, external_abs=external_dir)
 
     # Spawn a new process running a local html.server
     import subprocess
@@ -3361,16 +3355,7 @@ def html(
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    # Managed, generated images
-    # copytree() does not overwrite since
-    # tmp_dir is created anew on each use
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
-
-    if generated_abs:
-        generated_dir = os.path.join(tmp_dir, "generated")
-        shutil.copytree(generated_abs, generated_dir)
+    manage_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -3468,6 +3453,10 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     log.info("converting {} to LaTeX as {}".format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
+    # Manage directories so LaTeX can be built in-place
+    external_abs, generated_abs = get_managed_directories(xml, pub_file)
+    manage_directories(dest_dir, external_abs=external_abs, generated_abs=generated_abs)
+
 
 ###################
 # Conversion to PDF
@@ -3504,16 +3493,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # A "None" value will indicate there was no information
     # (an empty string is impossible due to a slash always being present?)
 
-    # Managed, generated images
-    # copytree() does not overwrite since
-    # tmp_dir is created anew on each use
-    if generated_abs:
-        generated_dir = os.path.join(tmp_dir, "generated")
-        shutil.copytree(generated_abs, generated_dir)
-    # externally manufactured images
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
+    manage_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -4074,6 +4054,17 @@ def get_managed_directories(xml_source, pub_file):
     # pair of discovered absolute paths
     return (generated, external)
 
+
+def manage_directories(output_dir, external_abs=None, generated_abs=None):
+    # Copies external and generated directories from absolute paths set in external_abs
+    # and generated_abs (unless set to None) into the specified output_dir.
+    if external_abs is not None:
+        external_dir = os.path.join(output_dir, "external")
+        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+
+    if generated_abs is not None:
+        generated_dir = os.path.join(output_dir, "generated")
+        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
 
 def targz(output, source_dir):
     """Creates a zipped tar file, output; the root of the archive has a single folder, source_dir"""
