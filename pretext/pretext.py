@@ -87,6 +87,9 @@ import zipfile
 # regular expression tools
 import re
 
+# contextmanager tools
+import contextlib
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -215,13 +218,11 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # Also, print() here actual writes on the file, as
     # another facility of the fileinput module, but we need
     # to kill the "extra" newline that print() creates
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    html_file = mjoutput
-    with fileinput.FileInput(html_file, inplace=True) as file:
-        for line in file:
-            print(xhtml_elt.sub(repl, line), end="")
-    os.chdir(owd)
+    with working_directory(tmp_dir):
+        html_file = mjoutput
+        with fileinput.FileInput(html_file, inplace=True) as file:
+            for line in file:
+                print(xhtml_elt.sub(repl, line), end="")
 
     # clean up and package MJ representations, font data, etc
     derivedname = get_output_filename(
@@ -292,81 +293,79 @@ def asymptote_conversion(
     )
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # Resulting *.asy files are in tmp_dir, switch there to work
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    devnull = open(os.devnull, "w")
-    # simply copy for source file output
-    # no need to check executable or server, PreTeXt XSL does it all
-    if outformat == "source" or outformat == "all":
-        for asydiagram in os.listdir(tmp_dir):
-            log.info("copying source file {}".format(asydiagram))
-            shutil.copy2(asydiagram, dest_dir)
-    # consolidated process for five possible output formats
-    # parameterized for places where  method  differs
-    if outformat == "all":
-        outformats = ["html", "svg", "png", "pdf", "eps"]
-    elif outformat in ["html", "svg", "png", "pdf", "eps"]:
-        outformats = [outformat]
-    else:
-        outformats = []
-    for outform in outformats:
-        # setup, depending on the method
-        if method == "local":
-            asy_executable_cmd = get_executable_cmd("asy")
-            # perhaps replace following stock advisory with a real version
-            # check using the (undocumented) distutils.version module, see:
-            # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
-            proc = subprocess.Popen(
-                [asy_executable_cmd[0], "--version"], stderr=subprocess.PIPE
-            )
-            # bytes -> ASCII, strip final newline
-            asyversion = proc.stderr.read().decode("ascii")[:-1]
-            # build command line to suit
-            # 2021-12-10, Michael Doob: "-noprc" is default for the server,
-            # and newer CLI versions.  Retain for explicit use locally when
-            # perhaps an older version is being employed
-            asy_cli = asy_executable_cmd + ["-f", outform]
-            if outform in ["pdf", "eps"]:
-                asy_cli += ["-noprc", "-iconify", "-tex", "xelatex", "-batchMask"]
-            elif outform in ["svg", "png"]:
-                asy_cli += ["-render=4", "-tex", "xelatex", "-iconify"]
-        if method == "server":
-            alberta = "http://asymptote.ualberta.ca:10007?f={}".format(outform)
-        # loop over .asy files, doing conversions
-        for asydiagram in glob.glob(os.path.join(tmp_dir, "*.asy")):
-            filebase, _ = os.path.splitext(asydiagram)
-            asyout = "{}.{}".format(filebase, outform)
-            log.info("converting {} to {}".format(asydiagram, asyout))
-            # do the work, depending on method
+    with working_directory(tmp_dir):
+        devnull = open(os.devnull, "w")
+        # simply copy for source file output
+        # no need to check executable or server, PreTeXt XSL does it all
+        if outformat == "source" or outformat == "all":
+            for asydiagram in os.listdir(tmp_dir):
+                log.info("copying source file {}".format(asydiagram))
+                shutil.copy2(asydiagram, dest_dir)
+        # consolidated process for five possible output formats
+        # parameterized for places where  method  differs
+        if outformat == "all":
+            outformats = ["html", "svg", "png", "pdf", "eps"]
+        elif outformat in ["html", "svg", "png", "pdf", "eps"]:
+            outformats = [outformat]
+        else:
+            outformats = []
+        for outform in outformats:
+            # setup, depending on the method
             if method == "local":
-                asy_cmd = asy_cli + [asydiagram]
-                log.debug("asymptote conversion {}".format(asy_cmd))
-                subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                asy_executable_cmd = get_executable_cmd("asy")
+                # perhaps replace following stock advisory with a real version
+                # check using the (undocumented) distutils.version module, see:
+                # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
+                proc = subprocess.Popen(
+                    [asy_executable_cmd[0], "--version"], stderr=subprocess.PIPE
+                )
+                # bytes -> ASCII, strip final newline
+                asyversion = proc.stderr.read().decode("ascii")[:-1]
+                # build command line to suit
+                # 2021-12-10, Michael Doob: "-noprc" is default for the server,
+                # and newer CLI versions.  Retain for explicit use locally when
+                # perhaps an older version is being employed
+                asy_cli = asy_executable_cmd + ["-f", outform]
+                if outform in ["pdf", "eps"]:
+                    asy_cli += ["-noprc", "-iconify", "-tex", "xelatex", "-batchMask"]
+                elif outform in ["svg", "png"]:
+                    asy_cli += ["-render=4", "-tex", "xelatex", "-iconify"]
             if method == "server":
-                log.debug("asymptote server query {}".format(alberta))
-                with open(asydiagram) as f:
-                    # protect against Unicode (in comments?)
-                    data = f.read().encode("utf-8")
-                    response = requests.post(url=alberta, data=data)
-                    open(asyout, "wb").write(response.content)
-            # copy resulting image file, or warn/advise about failure
-            if os.path.exists(asyout):
-                shutil.copy2(asyout, dest_dir)
-            else:
-                msg = [
-                    "the Asymptote output {} was not built".format(asyout),
-                    "             Perhaps your code has errors (try testing in the Asymptote web app).",
-                ]
+                alberta = "http://asymptote.ualberta.ca:10007?f={}".format(outform)
+            # loop over .asy files, doing conversions
+            for asydiagram in glob.glob(os.path.join(tmp_dir, "*.asy")):
+                filebase, _ = os.path.splitext(asydiagram)
+                asyout = "{}.{}".format(filebase, outform)
+                log.info("converting {} to {}".format(asydiagram, asyout))
+                # do the work, depending on method
                 if method == "local":
-                    msg += [
-                        "             Or your local copy of Asymtote may precede version 2.66 that we expect.",
-                        "             In this case, not every image can be built in every possible format.",
-                        "",
-                        "             Your Asymptote reports its version within the following:",
-                        "             {}".format(asyversion),
+                    asy_cmd = asy_cli + [asydiagram]
+                    log.debug("asymptote conversion {}".format(asy_cmd))
+                    subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                if method == "server":
+                    log.debug("asymptote server query {}".format(alberta))
+                    with open(asydiagram) as f:
+                        # protect against Unicode (in comments?)
+                        data = f.read().encode("utf-8")
+                        response = requests.post(url=alberta, data=data)
+                        open(asyout, "wb").write(response.content)
+                # copy resulting image file, or warn/advise about failure
+                if os.path.exists(asyout):
+                    shutil.copy2(asyout, dest_dir)
+                else:
+                    msg = [
+                        "the Asymptote output {} was not built".format(asyout),
+                        "             Perhaps your code has errors (try testing in the Asymptote web app).",
                     ]
-                log.warning("\n".join(msg))
-    os.chdir(owd)
+                    if method == "local":
+                        msg += [
+                            "             Or your local copy of Asymtote may precede version 2.66 that we expect.",
+                            "             In this case, not every image can be built in every possible format.",
+                            "",
+                            "             Your Asymptote reports its version within the following:",
+                            "             {}".format(asyversion),
+                        ]
+                    log.warning("\n".join(msg))
 
 def sage_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat
@@ -412,18 +411,16 @@ def sage_conversion(
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    devnull = open(os.devnull, "w")
-    for sageplot in os.listdir(tmp_dir):
-        filebase, _ = os.path.splitext(sageplot)
-        sageout = "{0}.{1}".format(filebase, outformat)
-        sage_cmd = sage_executable_cmd + [sageplot]
-        log.info("converting {} to {}".format(sageplot, sageout))
-        log.debug("sage conversion {}".format(sage_cmd))
-        subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-        shutil.copy2(sageout, dest_dir)
-    os.chdir(owd)
+    with working_directory(tmp_dir):
+        devnull = open(os.devnull, "w")
+        for sageplot in os.listdir(tmp_dir):
+            filebase, _ = os.path.splitext(sageplot)
+            sageout = "{0}.{1}".format(filebase, outformat)
+            sage_cmd = sage_executable_cmd + [sageplot]
+            log.info("converting {} to {}".format(sageplot, sageout))
+            log.debug("sage conversion {}".format(sage_cmd))
+            subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, pyMuPDF=False
@@ -476,167 +473,164 @@ def latex_image_conversion(
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # now work in temporary directory
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    # and maintain a list of failures for later
-    failed_images = []
-    # files *only*, from top-level
-    files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
-    for latex_image in files:
-        if outformat == "source":
-            shutil.copy2(latex_image, dest_dir)
-            log.info("copying {} to {}".format(latex_image, dest_dir))
-        else:
-            filebase, _ = os.path.splitext(latex_image)
-            latex_image_pdf = "{}.pdf".format(filebase)
-            latex_image_svg = "{}.svg".format(filebase)
-            latex_image_png = "{}.png".format(filebase)
-            latex_image_eps = "{}.eps".format(filebase)
-            # process with a  latex  engine
-            latex_key = get_deprecated_tex_fallback(method)
-            tex_executable_cmd = get_executable_cmd(latex_key)
-            # TODO why this debug line? get_executable_cmd() outputs the same debug info
-            log.debug("tex executable: {}".format(tex_executable_cmd[0]))
-            latex_cmd = tex_executable_cmd + ["-halt-on-error", latex_image]
-            log.info("converting {} to {}".format(latex_image, latex_image_pdf))
-            # Run LaTeX on the image file, usual console transcript is stdout.
-            # "result" is a "CompletedProcess" object.  Specifying an encoding
-            # causes captured output to be a string, which is convenient.
-            result = subprocess.run(latex_cmd, stdout=subprocess.PIPE, encoding="utf-8")
-            if result.returncode != 0:
-                # failed
-                failed_images.append(latex_image)
-                # and we help as much as we can
-                msg = "\n".join(
-                    [
-                        "LaTeX compilation of {} failed.",
-                        'Re-run, requesting "source" as the format, to analyze the image.',
-                        "Likely creating the entire document as PDF will fail similarly.",
-                        "The transcript of the LaTeX run follows.",
-                    ]
-                ).format(latex_image)
-                log.error(msg)
-                print(
-                    "##################################################################"
-                )
-                print(result.stdout)
-                print(
-                    "##################################################################"
-                )
+    with working_directory(tmp_dir):
+        # and maintain a list of failures for later
+        failed_images = []
+        # files *only*, from top-level
+        files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
+        for latex_image in files:
+            if outformat == "source":
+                shutil.copy2(latex_image, dest_dir)
+                log.info("copying {} to {}".format(latex_image, dest_dir))
             else:
-                # Threshold implies only byte value 255 is white, which
-                # assumes these images are *produced* on white backgrounds
-                pcm_cmd = [
-                    latex_image_pdf,
-                    "-o",
-                    "cropped-" + latex_image_pdf,
-                    "-t",
-                    "254",
-                    "-p",
-                    "0",
-                    "-a",
-                    "-1",
-                ]
-                log.info(
-                    "cropping {} to {}".format(
-                        latex_image_pdf, "cropped-" + latex_image_pdf
+                filebase, _ = os.path.splitext(latex_image)
+                latex_image_pdf = "{}.pdf".format(filebase)
+                latex_image_svg = "{}.svg".format(filebase)
+                latex_image_png = "{}.png".format(filebase)
+                latex_image_eps = "{}.eps".format(filebase)
+                # process with a  latex  engine
+                latex_key = get_deprecated_tex_fallback(method)
+                tex_executable_cmd = get_executable_cmd(latex_key)
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                log.debug("tex executable: {}".format(tex_executable_cmd[0]))
+                latex_cmd = tex_executable_cmd + ["-halt-on-error", latex_image]
+                log.info("converting {} to {}".format(latex_image, latex_image_pdf))
+                # Run LaTeX on the image file, usual console transcript is stdout.
+                # "result" is a "CompletedProcess" object.  Specifying an encoding
+                # causes captured output to be a string, which is convenient.
+                result = subprocess.run(latex_cmd, stdout=subprocess.PIPE, encoding="utf-8")
+                if result.returncode != 0:
+                    # failed
+                    failed_images.append(latex_image)
+                    # and we help as much as we can
+                    msg = "\n".join(
+                        [
+                            "LaTeX compilation of {} failed.",
+                            'Re-run, requesting "source" as the format, to analyze the image.',
+                            "Likely creating the entire document as PDF will fail similarly.",
+                            "The transcript of the LaTeX run follows.",
+                        ]
+                    ).format(latex_image)
+                    log.error(msg)
+                    print(
+                        "##################################################################"
                     )
-                )
-                pdfCropMargins.crop(pcm_cmd)
-                if not os.path.exists("cropped-" + latex_image_pdf):
-                    log.error(
-                        "There was a problem cropping {} and {} was not created".format(
+                    print(result.stdout)
+                    print(
+                        "##################################################################"
+                    )
+                else:
+                    # Threshold implies only byte value 255 is white, which
+                    # assumes these images are *produced* on white backgrounds
+                    pcm_cmd = [
+                        latex_image_pdf,
+                        "-o",
+                        "cropped-" + latex_image_pdf,
+                        "-t",
+                        "254",
+                        "-p",
+                        "0",
+                        "-a",
+                        "-1",
+                    ]
+                    log.info(
+                        "cropping {} to {}".format(
                             latex_image_pdf, "cropped-" + latex_image_pdf
                         )
                     )
-                shutil.move("cropped-" + latex_image_pdf, latex_image_pdf)
-                log.info(
-                    "renaming {} to {}".format(
-                        "cropped-" + latex_image_pdf, latex_image_pdf
+                    pdfCropMargins.crop(pcm_cmd)
+                    if not os.path.exists("cropped-" + latex_image_pdf):
+                        log.error(
+                            "There was a problem cropping {} and {} was not created".format(
+                                latex_image_pdf, "cropped-" + latex_image_pdf
+                            )
+                        )
+                    shutil.move("cropped-" + latex_image_pdf, latex_image_pdf)
+                    log.info(
+                        "renaming {} to {}".format(
+                            "cropped-" + latex_image_pdf, latex_image_pdf
+                        )
                     )
-                )
-                if outformat == "all":
-                    shutil.copy2(latex_image, dest_dir)
-                if outformat == "pdf" or outformat == "all":
-                    shutil.copy2(latex_image_pdf, dest_dir)
-                if outformat == "svg" or outformat == "all":
-                    if pyMuPDF:
-                        # create svg using pymupdf:
-                        with fitz.Document(latex_image_pdf) as doc:
-                            svg = doc.load_page(0).get_svg_image()
-                        with open(latex_image_svg, "w") as f:
-                            f.write(svg)
+                    if outformat == "all":
+                        shutil.copy2(latex_image, dest_dir)
+                    if outformat == "pdf" or outformat == "all":
+                        shutil.copy2(latex_image_pdf, dest_dir)
+                    if outformat == "svg" or outformat == "all":
+                        if pyMuPDF:
+                            # create svg using pymupdf:
+                            with fitz.Document(latex_image_pdf) as doc:
+                                svg = doc.load_page(0).get_svg_image()
+                            with open(latex_image_svg, "w") as f:
+                                f.write(svg)
+                            shutil.copy2(latex_image_svg, dest_dir)
+                            # clasic way to produce svg, using pdf2svg:
+                            latex_image_svg = "classic-" + latex_image_svg
+                        pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
+                        # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                        log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
+                        svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
+                        log.info(
+                            "converting {} to {}".format(latex_image_pdf, latex_image_svg)
+                        )
+                        subprocess.call(svg_cmd)
+                        if not os.path.exists(latex_image_svg):
+                            log.error(
+                                "There was a problem converting {} to svg and {} was not created".format(
+                                    latex_image_pdf, latex_image_svg
+                                )
+                            )
                         shutil.copy2(latex_image_svg, dest_dir)
-                        # clasic way to produce svg, using pdf2svg:
-                        latex_image_svg = "classic-" + latex_image_svg
-                    pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
-                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
-                    svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
-                    log.info(
-                        "converting {} to {}".format(latex_image_pdf, latex_image_svg)
-                    )
-                    subprocess.call(svg_cmd)
-                    if not os.path.exists(latex_image_svg):
-                        log.error(
-                            "There was a problem converting {} to svg and {} was not created".format(
-                                latex_image_pdf, latex_image_svg
-                            )
+                    if outformat == "png" or outformat == "all":
+                        if pyMuPDF:
+                            # create high-quality png using pymupdf:
+                            with fitz.Document(latex_image_pdf) as doc:
+                                png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
+                            png.save(latex_image_png)
+                            shutil.copy2(latex_image_png, dest_dir)
+                            # classic method: create high-quality png, presumes "convert" executable
+                            latex_image_png = "classic-" + latex_image_png
+                        pdfpng_executable_cmd = get_executable_cmd("pdfpng")
+                        # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                        log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
+                        png_cmd = pdfpng_executable_cmd + [
+                            "-density",
+                            "300",
+                            latex_image_pdf,
+                            "-quality",
+                            "100",
+                            latex_image_png,
+                        ]
+                        log.info(
+                            "converting {} to {}".format(latex_image_pdf, latex_image_png)
                         )
-                    shutil.copy2(latex_image_svg, dest_dir)
-                if outformat == "png" or outformat == "all":
-                    if pyMuPDF:
-                        # create high-quality png using pymupdf:
-                        with fitz.Document(latex_image_pdf) as doc:
-                            png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
-                        png.save(latex_image_png)
+                        subprocess.call(png_cmd)
+                        if not os.path.exists(latex_image_png):
+                            log.error(
+                                "There was a problem converting {} to png and {} was not created".format(
+                                    latex_image_pdf, latex_image_png
+                                )
+                            )
                         shutil.copy2(latex_image_png, dest_dir)
-                        # classic method: create high-quality png, presumes "convert" executable
-                        latex_image_png = "classic-" + latex_image_png
-                    pdfpng_executable_cmd = get_executable_cmd("pdfpng")
-                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
-                    png_cmd = pdfpng_executable_cmd + [
-                        "-density",
-                        "300",
-                        latex_image_pdf,
-                        "-quality",
-                        "100",
-                        latex_image_png,
-                    ]
-                    log.info(
-                        "converting {} to {}".format(latex_image_pdf, latex_image_png)
-                    )
-                    subprocess.call(png_cmd)
-                    if not os.path.exists(latex_image_png):
-                        log.error(
-                            "There was a problem converting {} to png and {} was not created".format(
-                                latex_image_pdf, latex_image_png
-                            )
+                    if outformat == "eps" or outformat == "all":
+                        pdfeps_executable_cmd = get_executable_cmd("pdfeps")
+                        # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                        log.debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
+                        eps_cmd = pdfeps_executable_cmd + [
+                            "-eps",
+                            latex_image_pdf,
+                            latex_image_eps,
+                        ]
+                        log.info(
+                            "converting {} to {}".format(latex_image_pdf, latex_image_eps)
                         )
-                    shutil.copy2(latex_image_png, dest_dir)
-                if outformat == "eps" or outformat == "all":
-                    pdfeps_executable_cmd = get_executable_cmd("pdfeps")
-                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    log.debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
-                    eps_cmd = pdfeps_executable_cmd + [
-                        "-eps",
-                        latex_image_pdf,
-                        latex_image_eps,
-                    ]
-                    log.info(
-                        "converting {} to {}".format(latex_image_pdf, latex_image_eps)
-                    )
-                    subprocess.call(eps_cmd)
-                    if not os.path.exists(latex_image_eps):
-                        log.error(
-                            "There was a problem converting {} to eps and {} was not created".format(
-                                latex_image_pdf, latex_image_eps
+                        subprocess.call(eps_cmd)
+                        if not os.path.exists(latex_image_eps):
+                            log.error(
+                                "There was a problem converting {} to eps and {} was not created".format(
+                                    latex_image_pdf, latex_image_eps
+                                )
                             )
-                        )
-                    shutil.copy2(latex_image_eps, dest_dir)
-    # change directories back so the temp directory can be removed later.
-    os.chdir(owd)
+                        shutil.copy2(latex_image_eps, dest_dir)
     # raise an error if there were *any* failed images
     if failed_images:
         msg = "\n".join(
@@ -874,52 +868,49 @@ def latex_tactile_image_conversion(
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, extraction_params)
 
     # now work in temporary directory for latex runs
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    # files *only*, from top-level
-    files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
-    for latex_image in files:
-        filebase, extension = os.path.splitext(latex_image)
-        # avoid some XML files left around
-        if extension == ".tex":
-            latex_image_dvi = "{}.dvi".format(filebase)
-            latex_image_svg = "{}.svg".format(filebase)
+    with working_directory(tmp_dir):
+        # files *only*, from top-level
+        files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
+        for latex_image in files:
+            filebase, extension = os.path.splitext(latex_image)
+            # avoid some XML files left around
+            if extension == ".tex":
+                latex_image_dvi = "{}.dvi".format(filebase)
+                latex_image_svg = "{}.svg".format(filebase)
 
-            # 5. Process to DVI with old-school LaTeX
-            log.info("converting {} to {}".format(latex_image, latex_image_dvi))
-            latex_cmd = ["latex", "-interaction=batchmode", latex_image]
-            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if not os.path.exists(latex_image_dvi):
-                log.error(
-                    "There was a problem compiling {}, so {} was not created".format(
-                        latex_image, latex_image_dvi
+                # 5. Process to DVI with old-school LaTeX
+                log.info("converting {} to {}".format(latex_image, latex_image_dvi))
+                latex_cmd = ["latex", "-interaction=batchmode", latex_image]
+                subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                if not os.path.exists(latex_image_dvi):
+                    log.error(
+                        "There was a problem compiling {}, so {} was not created".format(
+                            latex_image, latex_image_dvi
+                        )
                     )
-                )
 
-            # 6. Process to SVG with  dvisvgm  utility
-            log.info("converting {} to {}".format(latex_image_dvi, latex_image_svg))
-            divsvgm_cmd = ["dvisvgm", latex_image_dvi, "--bbox=papersize"]
-            subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if not os.path.exists(latex_image_svg):
-                log.error(
-                    "There was a problem processing {}, so {} was not created".format(
-                        latex_image, latex_image_svg
+                # 6. Process to SVG with  dvisvgm  utility
+                log.info("converting {} to {}".format(latex_image_dvi, latex_image_svg))
+                divsvgm_cmd = ["dvisvgm", latex_image_dvi, "--bbox=papersize"]
+                subprocess.call(divsvgm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                if not os.path.exists(latex_image_svg):
+                    log.error(
+                        "There was a problem processing {}, so {} was not created".format(
+                            latex_image, latex_image_svg
+                        )
                     )
-                )
 
-            # 7.  Place the label content as SVG "text" elements using SVG
-            # rectangles as the guide to placement, via an XSL stylesheet
-            log.info("applying latex-image-extraction stylesheet with tactile option")
-            manipulation_params = stringparams
-            manipulation_params["labelfile"] = braille_label_file
-            svg_source = os.path.join(tmp_dir, latex_image_svg)
-            svg_result = os.path.join(dest_dir, latex_image_svg)
-            manipulation_xslt = os.path.join(ptx_xsl_dir, "support", "tactile-svg.xsl")
-            xsltproc(
-                manipulation_xslt, svg_source, svg_result, None, manipulation_params
-            )
-    # change directory back so the temp directory can be deleted.
-    os.chdir(owd)
+                # 7.  Place the label content as SVG "text" elements using SVG
+                # rectangles as the guide to placement, via an XSL stylesheet
+                log.info("applying latex-image-extraction stylesheet with tactile option")
+                manipulation_params = stringparams
+                manipulation_params["labelfile"] = braille_label_file
+                svg_source = os.path.join(tmp_dir, latex_image_svg)
+                svg_result = os.path.join(dest_dir, latex_image_svg)
+                manipulation_xslt = os.path.join(ptx_xsl_dir, "support", "tactile-svg.xsl")
+                xsltproc(
+                    manipulation_xslt, svg_source, svg_result, None, manipulation_params
+                )
 
 #####################
 # Traces for CodeLens
@@ -2161,25 +2152,20 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
     # TODO: just write to "dest_dir"?
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-
-    # event loop and copy, terminating server process even if interrupted
-    try:
-        log.debug("Using http.server subprocess {}".format(server.pid))
-        baseurl = "http://localhost:{}".format(port)
-        asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
-    finally:
-        # close the server and report (debug) results
-        log.info("Closing http.server subprocess")
-        server.kill()
-        log.debug("Log data from http.server:")
-        server_output = server.stderr.read()
-        for line in server_output.split("\n"):
-            log.debug(line)
-
-    # restore working directory
-    os.chdir(owd)
+    with working_directory(tmp_dir):
+        # event loop and copy, terminating server process even if interrupted
+        try:
+            log.debug("Using http.server subprocess {}".format(server.pid))
+            baseurl = "http://localhost:{}".format(port)
+            asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
+        finally:
+            # close the server and report (debug) results
+            log.info("Closing http.server subprocess")
+            server.kill()
+            log.debug("Log data from http.server:")
+            server_output = server.stderr.read()
+            for line in server_output.split("\n"):
+                log.debug(line)
 
 
 ############
@@ -2446,9 +2432,9 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
         # chunked into chapters
         # directory switch could be moved to split routine,
         # or it could be done in temporary directory and copied out
-        os.chdir(dest_dir)
-        _split_brf(temp_brf)
-        log.info("BRF file chunked and deposited in {}".format(dest_dir))
+        with working_directory(dest_dir):
+            _split_brf(temp_brf)
+            log.info("BRF file chunked and deposited in {}".format(dest_dir))
 
 ############################
 # Splitting braille chapters
@@ -2885,15 +2871,13 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # Also, print() here actual writes on the file, as
     # another facility of the fileinput module, but we need
     # to kill the "extra" newline that print() creates
-    owd = os.getcwd()
-    os.chdir(xhtml_dir)
-    html_elt = re.compile(orig)
-    for root, dirs, files in os.walk(xhtml_dir):
-        for fn in files:
-            with fileinput.FileInput(fn, inplace=True) as file:
-                for line in file:
-                    print(html_elt.sub(repl, line), end="")
-    os.chdir(owd)
+    with working_directory(xhtml_dir):
+        html_elt = re.compile(orig)
+        for root, dirs, files in os.walk(xhtml_dir):
+            for fn in files:
+                with fileinput.FileInput(fn, inplace=True) as file:
+                    for line in file:
+                        print(html_elt.sub(repl, line), end="")
 
     # EPUB stylesheet writes an XHTML file with
     # bits of info necessary for packaging
@@ -3002,10 +2986,9 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 "100",
                 cover_source,
             ]
-            os.chdir(tmp_dir)
-            subprocess.run(latex_cmd)
-            subprocess.run(png_cmd)
-            os.chdir(owd)
+            with working_directory(tmp_dir):
+                subprocess.run(latex_cmd)
+                subprocess.run(png_cmd)
         except:
             log.warning("failed to construct cover image using LaTeX and ImageMagick")
             log.info("attempting to construct cover image using pageres")
@@ -3019,9 +3002,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                     "EPUB/xhtml/cover-page.xhtml",
                     "1280x2048",
                 ]
-                os.chdir(tmp_dir)
-                subprocess.run(pageres_cmd)
-                os.chdir(owd)
+                with working_directory(tmp_dir):
+                    subprocess.run(pageres_cmd)
             except:
                 log.warning("failed to construct cover image using pageres")
                 log.info(
@@ -3181,23 +3163,21 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     title_file = ET.tostring(title_file_element, method="text").decode("ascii")
     epub_file = "{}-{}.epub".format(title_file, math_format)
     log.info("packaging an EPUB temporarily as {}".format(epub_file))
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    with zipfile.ZipFile(epub_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
-        epub.write("mimetype", compress_type=zipfile.ZIP_STORED)
-        for root, dirs, files in os.walk("EPUB"):
-            for name in files:
-                epub.write(os.path.join(root, name))
-        for root, dirs, files in os.walk("META-INF"):
-            for name in files:
-                epub.write(os.path.join(root, name))
-        for root, dirs, files in os.walk("css"):
-            for name in files:
-                epub.write(os.path.join(root, name))
-    derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
-    log.info("EPUB file deposited as {}".format(derivedname))
-    shutil.copy2(epub_file, derivedname)
-    os.chdir(owd)
+    with working_directory(tmp_dir):
+        with zipfile.ZipFile(epub_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
+            epub.write("mimetype", compress_type=zipfile.ZIP_STORED)
+            for root, dirs, files in os.walk("EPUB"):
+                for name in files:
+                    epub.write(os.path.join(root, name))
+            for root, dirs, files in os.walk("META-INF"):
+                for name in files:
+                    epub.write(os.path.join(root, name))
+            for root, dirs, files in os.walk("css"):
+                for name in files:
+                    epub.write(os.path.join(root, name))
+        derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
+        log.info("EPUB file deposited as {}".format(derivedname))
+        shutil.copy2(epub_file, derivedname)
 
 
 ####################
@@ -3361,22 +3341,20 @@ def html(
         shutil.copytree(tmp_dir, dest_dir, dirs_exist_ok=True)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
-        owd = os.getcwd()
-        os.chdir(tmp_dir)
-        zip_file = "html-output.zip"
-        log.info(
-            "packaging a zip file temporarily as {}".format(
-                os.path.join(tmp_dir, zip_file)
+        with working_directory(tmp_dir):
+            zip_file = "html-output.zip"
+            log.info(
+                "packaging a zip file temporarily as {}".format(
+                    os.path.join(tmp_dir, zip_file)
+                )
             )
-        )
-        with zipfile.ZipFile(zip_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
-            for root, dirs, files in os.walk("."):
-                for name in files:
-                    epub.write(os.path.join(root, name))
-        derivedname = get_output_filename(xml, out_file, dest_dir, ".zip")
-        shutil.copy2(zip_file, derivedname)
-        log.info("zip file of HTML output deposited as {}".format(derivedname))
-        os.chdir(owd)
+            with zipfile.ZipFile(zip_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
+                for root, dirs, files in os.walk("."):
+                    for name in files:
+                        epub.write(os.path.join(root, name))
+            derivedname = get_output_filename(xml, out_file, dest_dir, ".zip")
+            shutil.copy2(zip_file, derivedname)
+            log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
 
@@ -3484,27 +3462,25 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
-    owd = os.getcwd()
-    os.chdir(tmp_dir)
-    # process with a  latex  engine
-    latex_key = get_deprecated_tex_fallback(method)
-    latex_exec_cmd = get_executable_cmd(latex_key)
-    # In flux during development, now nonstop
-    # -halt-on-error will give an exit code to examine
-    # perhaps behavior depends on -v, -vv
-    # Two passes to resolve cross-references,
-    # we may need a third for tcolorbox adjustments
-    latex_cmd = latex_exec_cmd + ["-halt-on-error", sourcename]
-    subprocess.run(latex_cmd)
-    subprocess.run(latex_cmd)
+    with working_directory(tmp_dir):
+        # process with a  latex  engine
+        latex_key = get_deprecated_tex_fallback(method)
+        latex_exec_cmd = get_executable_cmd(latex_key)
+        # In flux during development, now nonstop
+        # -halt-on-error will give an exit code to examine
+        # perhaps behavior depends on -v, -vv
+        # Two passes to resolve cross-references,
+        # we may need a third for tcolorbox adjustments
+        latex_cmd = latex_exec_cmd + ["-halt-on-error", sourcename]
+        subprocess.run(latex_cmd)
+        subprocess.run(latex_cmd)
 
-    # out_file: not(None) only if provided in CLI
-    # dest_dir: always defined, if only current directory of CLI invocation
-    if out_file:
-        shutil.copy2(pdfname, out_file)
-    else:
-        shutil.copy2(pdfname, dest_dir)
-    os.chdir(owd)
+        # out_file: not(None) only if provided in CLI
+        # dest_dir: always defined, if only current directory of CLI invocation
+        if out_file:
+            shutil.copy2(pdfname, out_file)
+        else:
+            shutil.copy2(pdfname, dest_dir)
 
 #################
 # XSLT Processing
@@ -3713,13 +3689,12 @@ def validate(xml_source, out_file, dest_dir):
     # zipfile.ZIP_DEFLATED is the "usual  ZIP compression method"
     zip_filename = os.path.join(tmp_dir, "test.zip")
     log.info("packaging source temporarily as {}".format(zip_filename))
-    owd = os.getcwd()
-    os.chdir(d)
-    with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-        # set() will avoid duplicate files included twice (or more)
-        for f in set(all_files):
-            zip_file.write(f)
-    os.chdir(owd)
+    with working_directory(d):
+        with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+            # set() will avoid duplicate files included twice (or more)
+            for f in set(all_files):
+                zip_file.write(f)
+
 
     # fresh schema from the PreTeXt distribution
     schema_filename = os.path.join(get_ptx_path(), "schema", "pretext.rng")
@@ -4060,6 +4035,24 @@ def targz(output, source_dir):
     with tarfile.open(output, "w:gz") as tar:
         tar.add(source_dir, arcname=os.path.basename(source_dir))
 
+@contextlib.contextmanager
+def working_directory(path):
+    """
+    Temporarily change the current working directory.
+
+    Usage:
+    with working_directory(path):
+        do_things()   # working in the given path
+    do_other_things() # back to original path
+    """
+    current_directory = os.getcwd()
+    os.chdir(path)
+    log.debug(f"Now working in directory {path}")
+    try:
+        yield
+    finally:
+        os.chdir(current_directory)
+        log.debug(f"Successfully changed directory back to {current_directory}")
 
 ###########################
 #
