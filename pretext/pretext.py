@@ -3421,6 +3421,9 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 # Conversion to LaTeX
 #####################
 
+# This is not a build target, there is no such thing as a "latex build."
+# Instead, this is a conveience for developers who want to compare
+# different versions of this file during development and testing.
 
 def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""

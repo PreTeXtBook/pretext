@@ -356,7 +356,7 @@ def get_cli_arguments():
         ("tactile", "Images with braille labels, etc. (latex-image graphics only)"),
         ("speech", "Speech (math elements)"),
         ("source", "Standalone source files"),
-        ("latex", "LaTeX source file (intermediate format, for developers)"),
+        ("latex", "LaTeX source file (only, an intermediate format for developers)"),
         ("html", "HyperText Markup Language (online/web pages)"),
         ("html-zip", "HyperText Markup Language (single zip file)"),
         ("epub-svg", "EPUB container, math as SVG"),
