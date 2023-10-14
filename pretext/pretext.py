@@ -21,11 +21,8 @@
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
 # 2023-10-13: this module expects Python 3.8 or newer
-# 2021-05-21: this module expects Python 3.6 or newer
-#     copying HTML into cwd twice, might be better with
 #     shutil.copytree(dirs_exist_ok), requires Python 3.8
-#     see comments near copytree() and copy_tree()
-#
+# 2021-05-21: this module expects Python 3.6 or newer
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
 #     otherwise Python 3.0 might be sufficient
@@ -473,9 +470,7 @@ def latex_image_conversion(
     # not supported outside of the managed directory scheme (2021-07-28)
     # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    if external_dir:
-        external_dest = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_dir, external_dest)
+    manage_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # no output (argument 3), stylesheet writes out per-image file
@@ -872,9 +867,7 @@ def latex_tactile_image_conversion(
     # not supported outside of the managed directory scheme (2021-07-28)
     # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    if external_dir:
-        external_dest = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_dir, external_dest)
+    manage_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # Output is multiple *.tex files
@@ -2131,10 +2124,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Copy in external resources (e.g., js code)
-    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
+    _, external_abs = get_managed_directories(xml_source, pub_file)
+    manage_directories(tmp_dir, external_abs=external_abs)
 
     # Spawn a new process running a local html.server
     import subprocess
@@ -3322,8 +3313,6 @@ def html(
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    import distutils.dir_util  # copy_tree()
-
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
 
@@ -3362,29 +3351,14 @@ def html(
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    # Managed, generated images
-    # copytree() does not overwrite since
-    # tmp_dir is created anew on each use
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
-
-    if generated_abs:
-        generated_dir = os.path.join(tmp_dir, "generated")
-        shutil.copytree(generated_abs, generated_dir)
+    manage_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
 
     if file_format  == "html":
-        # with multiple files, we need to copy a tree, and
-        # shutil.copytree() will balk at overwriting directories
-        # before Python 3.8.  The  distutils  module is old
-        # (being replaced by setup).  So once on Python 3.8 these
-        # copies can be replaced with shutil.copytree() using
-        # the  dirs_exist_ok  keyword
-        distutils.dir_util.copy_tree(tmp_dir, dest_dir)
+        shutil.copytree(tmp_dir, dest_dir, dirs_exist_ok=True)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
         owd = os.getcwd()
@@ -3493,8 +3467,6 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # (2) pass tmp_dir (scratch) as destination directory
     latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir)
 
-    # "dirs_exist_ok" keyword is Python 3.8; necessary?
-
     # Create localized filenames for pdflatex conversion step
     # sourcename  needs to match behavior of latex() with above arguments
     basename = os.path.splitext(os.path.split(xml)[1])[0]
@@ -3505,16 +3477,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # A "None" value will indicate there was no information
     # (an empty string is impossible due to a slash always being present?)
 
-    # Managed, generated images
-    # copytree() does not overwrite since
-    # tmp_dir is created anew on each use
-    if generated_abs:
-        generated_dir = os.path.join(tmp_dir, "generated")
-        shutil.copytree(generated_abs, generated_dir)
-    # externally manufactured images
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
+    manage_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -4075,6 +4038,17 @@ def get_managed_directories(xml_source, pub_file):
     # pair of discovered absolute paths
     return (generated, external)
 
+
+def manage_directories(output_dir, external_abs=None, generated_abs=None):
+    # Copies external and generated directories from absolute paths set in external_abs
+    # and generated_abs (unless set to None) into the specified output_dir.
+    if external_abs is not None:
+        external_dir = os.path.join(output_dir, "external")
+        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+
+    if generated_abs is not None:
+        generated_dir = os.path.join(output_dir, "generated")
+        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
 
 def targz(output, source_dir):
     """Creates a zipped tar file, output; the root of the archive has a single folder, source_dir"""
