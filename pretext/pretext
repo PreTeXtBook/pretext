@@ -18,6 +18,7 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
+# 2023-10-13: this script expects Python 3.8 or newer
 # 2021-05-21: this script expects Python 3.6 or newer
 #     argparse is backported to 3.1 (?)
 # 2020-05-20: this script expects Python 3.4 or newer
@@ -286,7 +287,7 @@ def get_cli_arguments():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="PreTeXt utility script (requires Python 3.6)",
+        description="PreTeXt utility script (requires Python 3.8)",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -527,7 +528,7 @@ def main():
 
     # Report Python version in debugging output
     log.debug(
-        "Python version: {} (expecting 3.6 or newer)".format(ptx.python_version())
+        "Python version: {} (expecting 3.8 or newer)".format(ptx.python_version())
     )
 
     # Check discovering directory locations as

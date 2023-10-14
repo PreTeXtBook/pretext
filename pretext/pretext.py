@@ -20,6 +20,7 @@
 # Python Version History
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
+# 2023-10-13: this module expects Python 3.8 or newer
 # 2021-05-21: this module expects Python 3.6 or newer
 #     copying HTML into cwd twice, might be better with
 #     shutil.copytree(dirs_exist_ok), requires Python 3.8
@@ -3787,7 +3788,7 @@ def check_python_version():
     # but only handling 2to3 switch when introduced
     msg = "".join(
         [
-            "PreTeXt script/module expects Python 3.6, not Python 2 or older\n",
+            "PreTeXt script/module expects Python 3.8, not Python 2 or older\n",
             "You have Python {}\n",
             "** Try prefixing your command-line with 'python3 ' **",
         ]
