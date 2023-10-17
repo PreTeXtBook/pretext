@@ -1824,10 +1824,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.late" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Begin: Author-provided packages&#xa;</xsl:text>
-    <xsl:text>%% (From  docinfo/latex-preamble/package  elements)&#xa;</xsl:text>
-    <xsl:value-of select="$latex-packages" />
-    <xsl:text>%% End: Author-provided packages&#xa;</xsl:text>
+    <!-- "extra" packages specified by the author -->
+    <xsl:variable name="latex-packages">
+        <xsl:for-each select="$docinfo/math-package">
+            <!-- must be specified, but can be empty/null -->
+            <xsl:if test="not(normalize-space(@latex-name)) = ''">
+                <xsl:text>\usepackage{</xsl:text>
+                <xsl:value-of select="@latex-name"/>
+                <xsl:apply-templates />
+                <xsl:text>}</xsl:text>
+                <!-- one per line for readability -->
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:if test="not($latex-packages = '')">
+        <xsl:text>%% Begin: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
+        <xsl:text>%% (From  docinfo/math-package  elements)&#xa;</xsl:text>
+        <xsl:value-of select="$latex-packages"/>
+        <xsl:text>%% End: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
+    </xsl:if>
+    <!-- "extra" macros specified by the author -->
     <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
     <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
     <xsl:text>%% Plus three from PTX for XML characters&#xa;</xsl:text>

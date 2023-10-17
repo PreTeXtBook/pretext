@@ -12981,9 +12981,17 @@ TODO:
 <!-- First a variable to massage the author-supplied -->
 <!-- package list to the form MathJax expects        -->
 <xsl:variable name="latex-packages-mathjax">
-    <xsl:value-of select="str:replace($latex-packages, '\usepackage{', '\require{')" />
+    <xsl:for-each select="$docinfo/math-package">
+        <!-- must be specified, but can be empty/null -->
+        <xsl:if test="not(normalize-space(@mathjax-name)) = ''">
+            <xsl:text>\require{</xsl:text>
+            <xsl:value-of select="@mathjax-name"/>
+            <xsl:apply-templates />
+            <xsl:text>}</xsl:text>
+            <!-- all on one line, not very readable, but historical -->
+        </xsl:if>
+    </xsl:for-each>
 </xsl:variable>
-
 
 <!-- MathJax expects math wrapping, and we place in   -->
 <!-- a hidden div so not visible and take up no space -->
