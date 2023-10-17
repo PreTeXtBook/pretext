@@ -2991,107 +2991,107 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 subprocess.run(png_cmd)
         except:
             log.warning("failed to construct cover image using LaTeX and ImageMagick")
-                log.info(
-                    'attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
+            log.info(
+                'attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
+            )
+            try:
+                title_size = 100
+                title_font = PIL.ImageFont.truetype("Arial Bold.ttf", title_size)
+                subtitle_size = int(title_size * 0.6)
+                subtitle_font = PIL.ImageFont.truetype(
+                    "Arial Bold.ttf", subtitle_size
                 )
-                try:
-                    title_size = 100
-                    title_font = PIL.ImageFont.truetype("Arial Bold.ttf", title_size)
-                    subtitle_size = int(title_size * 0.6)
-                    subtitle_font = PIL.ImageFont.truetype(
-                        "Arial Bold.ttf", subtitle_size
+                author_size = subtitle_size
+                author_font = PIL.ImageFont.truetype("Arial.ttf", author_size)
+                title_words = title.split()
+                subtitle_words = subtitle.split()
+                author_names = [x.strip() for x in author.split(",")]
+                png_width = 1280
+                png_height = int(png_width * 1.6)
+                # build an array of lines for the title (and subtitle), each line fitting within 80% of png_width
+                title_lines = [""]
+                for word in title_words:
+                    last_line = title_lines[-1]
+                    (line_width, line_height) = title_font.getsize(
+                        last_line + " " + word
                     )
-                    author_size = subtitle_size
-                    author_font = PIL.ImageFont.truetype("Arial.ttf", author_size)
-                    title_words = title.split()
-                    subtitle_words = subtitle.split()
-                    author_names = [x.strip() for x in author.split(",")]
-                    png_width = 1280
-                    png_height = int(png_width * 1.6)
-                    # build an array of lines for the title (and subtitle), each line fitting within 80% of png_width
-                    title_lines = [""]
-                    for word in title_words:
-                        last_line = title_lines[-1]
-                        (line_width, line_height) = title_font.getsize(
-                            last_line + " " + word
-                        )
-                        if line_width <= 0.8 * png_width:
-                            title_lines[-1] += " " + word
-                        else:
-                            title_lines.append(word)
-                    multiline_title = "\n".join(title_lines).strip()
-                    subtitle_lines = [""]
-                    for word in subtitle_words:
-                        last_line = subtitle_lines[-1]
-                        (line_width, line_height) = subtitle_font.getsize(
-                            last_line + " " + word
-                        )
-                        if line_width <= 0.8 * png_width:
-                            subtitle_lines[-1] += " " + word
-                        else:
-                            subtitle_lines.append(word)
-                    multiline_subtitle = "\n".join(subtitle_lines).strip()
-                    # each author on own line
-                    multiline_author = "\n".join(author_names).strip()
-                    # create new image
+                    if line_width <= 0.8 * png_width:
+                        title_lines[-1] += " " + word
+                    else:
+                        title_lines.append(word)
+                multiline_title = "\n".join(title_lines).strip()
+                subtitle_lines = [""]
+                for word in subtitle_words:
+                    last_line = subtitle_lines[-1]
+                    (line_width, line_height) = subtitle_font.getsize(
+                        last_line + " " + word
+                    )
+                    if line_width <= 0.8 * png_width:
+                        subtitle_lines[-1] += " " + word
+                    else:
+                        subtitle_lines.append(word)
+                multiline_subtitle = "\n".join(subtitle_lines).strip()
+                # each author on own line
+                multiline_author = "\n".join(author_names).strip()
+                # create new image
+                cover_png = PIL.Image.new(
+                    mode="RGB", size=(png_width, png_height), color="white"
+                )
+                draw = PIL.ImageDraw.Draw(cover_png)
+                title_depth = int(png_height // 4)
+                subtitle_depth = (
+                    title_depth + len(title_lines) * title_size + 0.2 * title_size
+                )
+                author_depth = (
+                    subtitle_depth
+                    + len(subtitle_lines) * subtitle_size
+                    + 0.8 * title_size
+                )
+                draw.multiline_text(
+                    (int(png_width // 2), title_depth),
+                    multiline_title,
+                    font=title_font,
+                    fill="black",
+                    anchor="ma",
+                    align="center",
+                )
+                draw.multiline_text(
+                    (int(png_width // 2), subtitle_depth),
+                    multiline_subtitle,
+                    font=subtitle_font,
+                    fill="gray",
+                    anchor="ma",
+                    align="center",
+                )
+                draw.multiline_text(
+                    (int(png_width // 2), author_depth),
+                    multiline_author,
+                    font=author_font,
+                    fill="black",
+                    anchor="ma",
+                    align="center",
+                )
+                cover_png.save(cover_source)
+            except:
+                log.warning(
+                    'failed to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
+                )
+                log.info("attempting to construct crude bitmap font cover image")
+                try:
+                    title_words = title_ASCII.split()
+                    title_font = PIL.ImageFont.load_default()
                     cover_png = PIL.Image.new(
-                        mode="RGB", size=(png_width, png_height), color="white"
+                        mode="RGB", size=(120, 192), color="white"
                     )
                     draw = PIL.ImageDraw.Draw(cover_png)
-                    title_depth = int(png_height // 4)
-                    subtitle_depth = (
-                        title_depth + len(title_lines) * title_size + 0.2 * title_size
-                    )
-                    author_depth = (
-                        subtitle_depth
-                        + len(subtitle_lines) * subtitle_size
-                        + 0.8 * title_size
-                    )
-                    draw.multiline_text(
-                        (int(png_width // 2), title_depth),
-                        multiline_title,
-                        font=title_font,
-                        fill="black",
-                        anchor="ma",
-                        align="center",
-                    )
-                    draw.multiline_text(
-                        (int(png_width // 2), subtitle_depth),
-                        multiline_subtitle,
-                        font=subtitle_font,
-                        fill="gray",
-                        anchor="ma",
-                        align="center",
-                    )
-                    draw.multiline_text(
-                        (int(png_width // 2), author_depth),
-                        multiline_author,
-                        font=author_font,
-                        fill="black",
-                        anchor="ma",
-                        align="center",
-                    )
+                    y = 20
+                    for word in title_words:
+                        draw.text((20, y), word, font=title_font, fill="black")
+                        y += 10
                     cover_png.save(cover_source)
                 except:
-                    log.warning(
-                        'failed to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
-                    )
-                    log.info("attempting to construct crude bitmap font cover image")
-                    try:
-                        title_words = title_ASCII.split()
-                        title_font = PIL.ImageFont.load_default()
-                        cover_png = PIL.Image.new(
-                            mode="RGB", size=(120, 192), color="white"
-                        )
-                        draw = PIL.ImageDraw.Draw(cover_png)
-                        y = 20
-                        for word in title_words:
-                            draw.text((20, y), word, font=title_font, fill="black")
-                            y += 10
-                        cover_png.save(cover_source)
-                    except:
-                        # We failed to build a cover.png so we remove all references to cover.png
-                        log.warning("failed to construct a cover image")
+                    # We failed to build a cover.png so we remove all references to cover.png
+                    log.warning("failed to construct a cover image")
         try:
             shutil.copy2(cover_source, cover_dest)
         except:
