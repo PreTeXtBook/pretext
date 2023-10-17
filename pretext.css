@@ -426,6 +426,9 @@ so that we can set our own later */
 .ptx-content section .para + .tabular-box {
     margin-top: 0.75em;
 }
+.ptx-content section .tabular-box + .tabular-box {
+    margin-top: 1.0em;
+}
 .ptx-content section .proof {
     margin-top: 0.75em;
 }

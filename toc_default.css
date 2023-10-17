@@ -32,10 +32,22 @@
     padding-left: 0.3rem;
     display: inline-block;
 }
+.ptx-toc .codenumber + .title {
+    padding-left: 0.3rem;
+}
+.ptx-toc .internal > .title:first-child {
+    padding-left: 1.0rem;
+}
+.ptx-toc .structural .structural .codenumber {
+    padding-top: 0.2em;
+    font-size: 80%;
+}
 
+/*
 .ptx-toc :is(.toc-frontmatter, .toc-backmatter) > .toc-title-box > a .title {
     margin-left: 1.5rem;
 }
+*/
 
 .ptx-toc .toc-part > .toc-title-box > a .codenumber {
     min-width: 1.5rem;
