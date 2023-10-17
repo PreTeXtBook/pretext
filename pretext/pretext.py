@@ -2991,21 +2991,6 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 subprocess.run(png_cmd)
         except:
             log.warning("failed to construct cover image using LaTeX and ImageMagick")
-            log.info("attempting to construct cover image using pageres")
-            try:
-                pageres_executable_cmd = get_executable_cmd("pageres")
-                pageres_cmd = pageres_executable_cmd + [
-                    "-v",
-                    "--filename=cover",
-                    "--css=section.frontmatter{width:480px;height:768px;}h1{padding-top:192px;padding-left:32px;padding-right:32px;}.author{padding-left:32px;padding-right:32px;}",
-                    "--selector=.frontmatter",
-                    "EPUB/xhtml/cover-page.xhtml",
-                    "1280x2048",
-                ]
-                with working_directory(tmp_dir):
-                    subprocess.run(pageres_cmd)
-            except:
-                log.warning("failed to construct cover image using pageres")
                 log.info(
                     'attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
                 )
