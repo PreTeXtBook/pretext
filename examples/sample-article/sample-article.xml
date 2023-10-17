@@ -52,9 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         an example of the use of the "\cancelto{}{}" macro from
         the "cancel" package.
         -->
-        <latex-preamble>
-            <package>cancel</package>
-        </latex-preamble>
+        <math-package latex-name="cancel" mathjax-name="cancel"/>
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
