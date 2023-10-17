@@ -1080,6 +1080,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- 2023-10-17: docinfo/latex-preamble is history -->
+
+<xsl:template match="docinfo/latex-preamble" mode="repair">
+    <!-- any attributes (no such thing?) are simply  -->
+    <!-- orphaned and we just process child elements -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+</xsl:template>
+
+<!-- 2023-10-17: and "extra" LaTeX packages are re-worked -->
+
+<xsl:template match="docinfo/latex-preamble/package" mode="repair">
+    <xsl:element name="math-package">
+        <xsl:attribute name="latex-name">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
+        <xsl:attribute name="mathjax-name">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->

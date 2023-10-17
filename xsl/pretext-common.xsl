@@ -10651,6 +10651,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;prompt&quot; element of a &quot;console&quot; has been deprecated.  In its place, an &quot;input&quot; can have a @prompt attribute, or you can place a session-wide (not document-wide) @prompt attribute on the &quot;console&quot; element.  Until then, we will try to honor your intent.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2023-10-17  Deprecate docinfo/latex-preamble/package in favor of docinfo/math-package -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/latex-preamble/package" />
+        <xsl:with-param name="date-string" select="'2023-10-17'" />
+        <xsl:with-param name="message" select="'the &quot;docinfo/latex-preamble/package&quot; element has been replaced by a &quot;docinfo/math-package&quot; element with &quot;@latex-name&quot; and &quot;@mathjax-name&quot; attributes.  Both attributes are required, but may be different, identical, or empty.  Note too that &quot;latex-preamble&quot; is no longer used for anything.  Until adjusted, we will honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2023-10-17  docinfo/latex-preamble element is history -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/latex-preamble" />
+        <xsl:with-param name="date-string" select="'2023-10-17'" />
+        <xsl:with-param name="message" select="'the &quot;docinfo/latex-preamble&quot; element no longer has a purpose.  Remove the element and adjust any contained &quot;package&quot; elements.  Then this warning will cease.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
