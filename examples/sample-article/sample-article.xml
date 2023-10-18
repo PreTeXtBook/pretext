@@ -53,6 +53,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         the "cancel" package.
         -->
         <math-package latex-name="cancel" mathjax-name="cancel"/>
+        <!-- Superior bevelled/slanted fractions in LaTeX output (only) -->
+        <math-package latex-name="xfrac" mathjax-name=""/>
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
@@ -1819,7 +1821,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
 
-                <p><pretext/> provides modest built-in support for <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the pre-defined <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.  (The presentation in HTML output could be improved.  Please make suggestions if your skills with <latex/> macros and knowledge of MathJax's supported commands warrant.)</p>
+                <p><pretext/> once provided modest built-in support for <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the pre-defined <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.  The presentation in HTML is subpar, but could improve as MathJax provides support.  It is now an author's responsibility to add support for superior typesetting for <init>PDF</init> output by loading the <c>xfrac</c> <latex/> package with the following in <tag>docinfo</tag>:<cd>
+                    <cline>&lt;math-package latex-name="xfrac" mathjax-name=""/&gt;</cline>
+                </cd>which is what we have done here as a test.  See the Guide for more details.</p>
 
                 <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
                     <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
