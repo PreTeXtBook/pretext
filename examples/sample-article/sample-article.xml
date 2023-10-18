@@ -7381,6 +7381,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
+            <p> Here is a consecutive pair of <q>bare</q> <tag>tabular</tag> to test vertical space between them. </p>
+
+            <tabular top="medium" bottom="medium" halign="center">
+                <col right="minor" /><col /><col /><col /><col />
+                <row bottom="minor">
+                    <cell><m>t</m></cell>
+                    <cell><m>2/3</m></cell>
+                    <cell><m>2/303</m></cell>
+                    <cell><m>2/30003</m></cell>
+                    <cell><m>2/3000003</m></cell>
+                </row>
+                <row>
+                    <cell><m>g(t)</m></cell>
+                    <cell><m>-1</m></cell>
+                    <cell><m>-1</m></cell>
+                    <cell><m>-1</m></cell>
+                    <cell><m>-1</m></cell>
+                </row>
+            </tabular>
+
+            <tabular top="medium" bottom="medium" halign="center">
+            <col right="minor" /><col /><col /><col /><col />
+                <row bottom="minor">
+                    <cell><m>t</m></cell>
+                    <cell><m>2/5</m></cell>
+                    <cell><m>2/505</m></cell>
+                    <cell><m>2/50005</m></cell>
+                    <cell><m>2/5000005</m></cell>
+                </row>
+                <row>
+                    <cell><m>g(t)</m></cell>
+                    <cell><m>1</m></cell>
+                    <cell><m>1</m></cell>
+                    <cell><m>1</m></cell>
+                    <cell><m>1</m></cell>
+                </row>
+            </tabular>
+
             <p>The <c>longtable</c> package allows for headers and footers indicating continued tables.  A possible enhancement is to support this feature in the case of a long table.</p>
         </section>
 
