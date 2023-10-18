@@ -791,10 +791,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
-    <xsl:if test="$b-has-sfrac">
-        <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
-        <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:if test="$b-has-latex-front-cover or $b-has-latex-back-cover">
         <xsl:text>%% pdfpages package for front and back covers as PDFs&#xa;</xsl:text>
@@ -1854,7 +1850,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Plus three from PTX for XML characters&#xa;</xsl:text>
     <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
-
+    <!-- 2023-10-18: source has \sfrac{}{} macro, but now author needs     -->
+    <!-- to specify the LaTeX "xfrac" package in a docinfo/math-package    -->
+    <!-- element to continue support.  This is the fallback subpar macro,  -->
+    <!-- just like we use in HTML, when author has not loaded the package. -->
+    <!-- Perhaps relevant: http://tex.stackexchange.com/questions/3372/    -->
+    <xsl:if test="$b-has-sfrac and not(contains($latex-packages, '\usepackage{xfrac}'))">
+        <xsl:text>%% Historical (subpar) support for \sfrac macro&#xa;</xsl:text>
+        <xsl:text>%% to achieve pleasing slanted (beveled) fractions.&#xa;</xsl:text>
+        <xsl:text>%% Add "xfrac" package with a  docinfo/math-package  element&#xa;</xsl:text>
+        <xsl:text>%% to achieve superior typesetting in LaTeX/PDF output&#xa;</xsl:text>
+        <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$document-root//contributors">
         <xsl:text>%% Semantic macros for contributor list&#xa;</xsl:text>
         <xsl:text>\newcommand{\contributor}[1]{\parbox{\linewidth}{#1}\par\bigskip}&#xa;</xsl:text>
