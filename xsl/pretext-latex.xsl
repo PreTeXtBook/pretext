@@ -84,6 +84,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
+<!-- 2023-10-18: this is a bit buggy, as it ignores the "men" element.  -->
+<!-- And it examines the "md" element which will never be true. It has  -->
+<!-- been fine for years, and it hopefully will go away some day, so no -->
+<!-- fix right now.                                                     -->
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 <!-- These are *significant*, *intentional* source elements requiring a monospace font   -->
 <!-- (and not incindentals like an email address which could just be the default tt font -->
