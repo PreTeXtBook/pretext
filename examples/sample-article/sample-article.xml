@@ -2011,11 +2011,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title><latex /> Packages and MathJax Extensions</title>
 
-                <p>If you would like to use macros from a <latex /> package <em>and</em> there is a MathJax extension <em>of the same name</em> which implements the same macros, then you may use these with your mathematics as we demonstrate here.</p>
+                <p>If you would like to enhance your mathematics by using a macro from a <latex/> package <em>and</em> there is a MathJax extension <em>which implements the same macro</em>, then you may use this with your mathematics as we demonstrate here.</p>
 
-                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
+                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <tag>math-package</tag> element within the <tag>docinfo</tag> section.  That is the only setup required to make the macro usable in <latex/> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
 
-                <p>The packages appear before the author-supplied macros, so you can use macros from the packages as building blocks for document-specific macros.  We cannot guarantee there will be no conflicts between additional packages and those in use normally, or added in the future.  So use at your own risk.</p>
+                <p>See the <pubtitle><pretext/> Guide</pubtitle> subsection about <q>MathJax Extensions</q> for more detail.</p>
             </subsection>
 
             <subsection>
