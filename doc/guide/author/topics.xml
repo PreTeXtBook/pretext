@@ -1673,7 +1673,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Extras</title>
 
-            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
+            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default.</p>
+
+            <p>We are moving away from built-in automatic support for the <c>\sfrac{}{}</c> macro.  As of 2023-10-18 you may use this macro, but results will just look like regular inline fractions.  However, you can get superior typesetting in <init>PDF</init> output by loading the <c>xfrac</c> <latex/> package with the following in <tag>docinfo</tag>:<cd>
+                <cline>&lt;math-package latex-name="xfrac" mathjax-name=""/&gt;</cline>
+            </cd>See the <xref ref="mathematics-latex-packages"/> for more details.</p>
         </subsection>
 
         <subsection xml:id="mathematics-notes">
