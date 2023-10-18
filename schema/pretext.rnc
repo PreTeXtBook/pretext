@@ -1595,13 +1595,12 @@
                 }
             
             Configuration |=
-                element latex-preamble {
-                    element package {text}*
-                }
+                    element math-package {
+                        attribute latex-name {text},
+                        attribute mathjax-name {text}
+                    }*
             Configuration |=
-                element latex-image-preamble {
-                    text
-                }
+                element latex-image-preamble {text}
             Configuration |=
                 element asymptote-preamble {text}
             

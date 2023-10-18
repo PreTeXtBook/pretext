@@ -4103,13 +4103,12 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="latex-preamble">
-      <zeroOrMore>
-        <element name="package">
-          <text/>
-        </element>
-      </zeroOrMore>
-    </element>
+    <zeroOrMore>
+      <element name="math-package">
+        <attribute name="latex-name"/>
+        <attribute name="mathjax-name"/>
+      </element>
+    </zeroOrMore>
   </define>
   <define name="Configuration" combine="choice">
     <element name="latex-image-preamble">

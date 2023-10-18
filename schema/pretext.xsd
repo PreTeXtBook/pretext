@@ -3708,7 +3708,7 @@
   <xs:group name="Configuration">
     <xs:choice>
       <xs:element ref="brandlogo"/>
-      <xs:element ref="latex-preamble"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="math-package"/>
       <xs:element ref="latex-image-preamble"/>
       <xs:element ref="asymptote-preamble"/>
       <xs:element ref="macros"/>
@@ -3727,14 +3727,12 @@
       <xs:attribute name="source" use="required"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="latex-preamble">
+  <xs:element name="math-package">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="package"/>
-      </xs:sequence>
+      <xs:attribute name="latex-name" use="required"/>
+      <xs:attribute name="mathjax-name" use="required"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="package" type="xs:string"/>
   <xs:element name="latex-image-preamble" type="xs:string"/>
   <xs:element name="asymptote-preamble" type="xs:string"/>
   <xs:element name="macros" type="xs:string"/>

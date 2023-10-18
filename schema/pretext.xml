@@ -2991,19 +2991,18 @@
             </code>
         </fragment>
 
-        <p>We add some items to the preamble for <latex/>, <tag>latex-image</tag>, and <tag>asymptote</tag>.  For a <c>package</c> to be in a <tag>latex-preamble</tag>, it needs to have an identical implementation, and be of the same name, as a version that exists for MathJax.  Images specified by <latex/> or Asymptote syntax sometimes need extra information in their preambles.</p>
+        <p>We add some items which will become parts of preambles to support math in <latex/> syntax, <tag>latex-image</tag>, and <tag>asymptote</tag>.  <latex/> packages, and their cousins, MathJax extensions, can be specified to support mathematics elements (<tag>m</tag> and friends).  Images specified by <latex/> or Asymptote syntax sometimes need extra information in their preambles.</p>
 
         <fragment xml:id="preambles">
             <title>Preambles</title>
             <code>
             Configuration |=
-                element latex-preamble {
-                    element package {text}*
-                }
+                    element math-package {
+                        attribute latex-name {text},
+                        attribute mathjax-name {text}
+                    }*
             Configuration |=
-                element latex-image-preamble {
-                    text
-                }
+                element latex-image-preamble {text}
             Configuration |=
                 element asymptote-preamble {text}
             </code>
