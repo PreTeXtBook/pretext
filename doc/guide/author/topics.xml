@@ -1642,11 +1642,26 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="mathematics-latex-packages">
-            <title>Additional Packages</title>
+            <title><latex/> Packages, MathJax Extensions</title>
+            <idx>LaTeX packages</idx>
+            <idx>MathJax extensions</idx>
+            <idx><h>extensions</h><h>MathJax</h></idx>
+            <idx><h>packages</h><h>LaTeX</h></idx>
 
-            <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
+            <p><latex/>, which we use as the syntax for mathematics, allows extensive customization through <term>packages</term>, which are enabled through a <c>\usepackage{}</c> macro.  Packages also provide extensive customization or control over the document structure.  Thus, <pretext/> provides support for additional packages <em>to enhance mathematical content</em>, but does not have any facility beyond this (e.g. to influence or support document structure).</p>
 
-            <p>Then the supported macros of the package will be available with your mathematics elements, and you can use them within other macro definitions.  We do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext />.  Nor do we support debugging such conflicts.</p>
+            <p>We use <latex/> to create <init>PDF</init> and print output.  For most other electronic formats, we use MathJax to embed mathematics onto a web page or to make images of mathematics used in EPUB, and so on.  MathJax has <term>extensions</term>, which mimic certain <latex/> packages.  For a list of supported extensions see MathJax's <url href="https://docs.mathjax.org/en/latest/input/tex/extensions/index.html">TeX/LaTeX Extension List</url>.  Note that some of these extensions are technical (not supporting mathematical syntax) and some we load already as part of setting up MathJax, so carefully evaluate how a given package is selected to support certain macros.</p>
+
+            <p>Suppose there is a <latex/> math-mode macro you would like to use.  We will illustrate with the <c>\cancelto</c> macro that is part of the fairly standard <url href="https://ctan.org/pkg/cancel"><c>cancel</c></url> package.  It will draw an arrow through a mathematical formula, with a replacement value.  Conveniently, MathJax has a <c>cancel</c> extension, and this extension <em>also</em> defines the <c>\cancelto</c> macro.  You need to check this, as a <latex/> package and a MathJax extension are not guaranteed to define the same collection of macros.  Nor are the two guaranteed to have the same name (though this is best practice).</p>
+
+            <p>To make the <c>\cancelto</c> macro available and active in your mathematical elements (<tag>m</tag>, <tag>me</tag>, etc.) add the following to your <tag>docinfo</tag> element:
+            <cd>
+                <cline>&lt;math-package latex-name="cancel" mathjax-name="cancel"/&gt;</cline>
+            </cd>Now you may freely use the <c>\cancelto</c> macro in your mathematics, confident that it will render correctly in all output formats.</p>
+
+            <p>Note that both attributes <attr>latex-name</attr> and <attr>mathjax-name</attr> must be present.  They may be identical (as above, and typical) or they may be different (rare).  There are situations where one might be empty.  Of course, you can use these macros in other definitions of mathematics macros you might make (<xref ref="mathematics-macros"/>).  However, we do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext/>.  Nor do we support debugging such conflicts.</p>
+
+            <p>If there are <latex/> macros you desire, but without a MathJax implementation, then there is not much we can do, short of suggesting you write your own extension (not recommended, see <url href="https://docs.mathjax.org/en/latest/web/webpack.html#custom-extension">A Custom Extension</url>).  There are some workarounds which we may document shortly.</p>
         </subsection>
 
         <subsection>
