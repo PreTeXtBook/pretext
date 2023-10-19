@@ -55,6 +55,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <math-package latex-name="cancel" mathjax-name="cancel"/>
         <!-- Superior bevelled/slanted fractions in LaTeX output (only) -->
         <math-package latex-name="xfrac" mathjax-name=""/>
+        <math-package latex-name="extpfeil" mathjax-name="extpfeil"/>
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
@@ -1801,7 +1802,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Mathematics</title>
 
             <introduction>
-                <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  The <pretext/> Guide has a link to the complete list of macros supported by MathJax.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
+                <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  The <pretext/> Guide has a link to the complete list of macros supported by MathJax.  We load the <c>AMSsymbols</c> library.</p>
             </introduction>
 
 
@@ -1817,7 +1818,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
                 </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
-                <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
+                <p>Historically, we provided internal support for the <latex/> package <c>extpfeil</c>.  As of 2023-10-19 this has become an author election (see the <tag>docinfo</tag> section in the source of this document).  We preeserve a small test that this extensible arrows library is being included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
                 <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
 
