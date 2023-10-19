@@ -1788,6 +1788,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
+    <!-- 2023-10-19: this test is buggy, there is no consideration -->
+    <!-- of "men", while "md" and "mrow" are duplicative           -->
     <xsl:if test="$document-root//m|$document-root//md|$document-root//mrow">
         <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
         <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
