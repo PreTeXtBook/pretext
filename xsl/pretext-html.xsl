@@ -12226,7 +12226,11 @@ TODO:
                         <map key="packages">
                             <array key="[+]">
                                 <string>base</string>
-                                <string>extpfeil</string>
+                                <!-- 2023-10-19: this provides backward-compatible behavior -->
+                                <!-- and could be removed at the first sign of trouble      -->
+                                <xsl:if test="not(contains($latex-packages-mathjax, '\require{extpfeil}'))">
+                                    <string>extpfeil</string>
+                                </xsl:if>
                                 <string>ams</string>
                                 <string>amscd</string>
                                 <string>color</string>
