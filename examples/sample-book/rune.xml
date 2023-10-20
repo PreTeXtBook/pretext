@@ -3661,5 +3661,100 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </figure>
     </section>
 
+    <section xml:id="section-runestone-assignment-testing">
+        <title>Runestone Assignment Testing</title>
+        <p>
+            This is a section that is specifically for testing when exercises are migrated to a
+            Runestone Assignment page.
+        </p>
+        <exercises>
+            <exercise label="exercisegroup-exercise-zero">
+                <statement>
+                    <p>
+                        This is an <tag>exercises</tag> division (at the level of a <tag>subsection</tag>) which is not being numbered.  We've hijacked this first exercise to say so, and to precede the <tag>exercisegroup</tag> following, which is the real test right now.
+                        What is <m>0+0</m>?
+                    </p>
+                </statement>
+            </exercise>
+
+            <exercisegroup>
+                <title>An Exercise Group</title>
+                <introduction>
+                    <p>
+                        This introduction should appear ahead of each exercise when it shows
+                        up in the Runestone Assignment page.
+                    </p>
+                    <tabular>
+                        <row>
+                            <cell><m>(0,0)</m></cell>
+                            <cell><m>(0,1)</m></cell>
+                        </row>
+                        <row>
+                            <cell><m>(1,0)</m></cell>
+                            <cell><m>(1,1)</m></cell>
+                        </row>
+                    </tabular>
+                    <image>
+                        <latex-image label="runestone-blue-square">
+                            \begin{tikzpicture}
+                                \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+                            \end{tikzpicture}
+                        </latex-image>
+                        <shortdescription>a blue square</shortdescription>
+                    </image>
+                    <p>
+                        It has a table, and an image too, to check it all comes through.
+                    </p>
+                </introduction>
+                <exercise label="exercisegroup-exercise-one">
+                    <statement>
+                        <p>
+                            What is <m>1+1</m>?
+                        </p>
+                    </statement>
+                    <choices>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Two</p>
+                            </statement>
+                        </choice>
+                        <choice>
+                            <statement>
+                                <p>Three</p>
+                            </statement>
+                        </choice>
+                     </choices>
+                </exercise>
+                <exercise label="exercisegroup-exercise-two">
+                    <statement>
+                        <p>
+                            What is <m>2+2</m>?
+                        </p>
+                    </statement>
+                    <choices>
+                        <choice>
+                            <statement>
+                                <p>Two</p>
+                            </statement>
+                        </choice>
+                        <choice correct="yes">
+                            <statement>
+                                <p>Four</p>
+                            </statement>
+                        </choice>
+                     </choices>
+                </exercise>
+            </exercisegroup>
+            <exercise label="exercisegroup-exercise-three">
+                <statement>
+                    <p>
+                        What is <m>3+3</m>?
+                    </p>
+                </statement>
+            </exercise>
+        </exercises>
+        <p>And a final paragraph in the section, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
+    </section>
+
 </chapter>
 
