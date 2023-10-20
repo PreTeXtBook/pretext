@@ -10451,6 +10451,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'reset'"/>
             </xsl:apply-templates>
         </xsl:attribute>
+        <xsl:attribute name="data-localize-hint">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'hint'"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:attribute name="data-localize-solution">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'solution'"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
         <xsl:choose>
             <xsl:when test="server-data/@problemSource">
                 <xsl:attribute name="data-problemSource">
