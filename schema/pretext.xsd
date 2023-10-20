@@ -1161,7 +1161,7 @@
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
       <xs:attribute name="language"/>
-      <xs:attribute name="line-numberss">
+      <xs:attribute name="line-numbers">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="yes"/>
