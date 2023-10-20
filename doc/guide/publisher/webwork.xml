@@ -200,11 +200,11 @@
         </cd>
         And if it isn't, you can install it with <c>pip</c>, specifically with:
         <cd>
-          sudo pip install requests
+          pip install requests
         </cd>
         (If you don't have <c>pip</c> installed, you could use:
         <cd>
-          sudo easy_install pip
+          easy_install pip
         </cd>
         to install it.)
       </p>
