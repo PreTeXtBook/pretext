@@ -24,12 +24,9 @@
 .ptx-toc {
     --codenumber-pad-left: 0.3rem;
     --codenumber-pad-right: 0.5rem;
-
-    /* first level indentation set to line up with second
-       level indentation to minimize ragged edge*/
+    
     --toc-indent-first: calc(1.0rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
     --toc-indent-second: calc(1.7rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
-    /* third level needs more space for numbering */
     --toc-indent-third: calc(2.2rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
 }
 
