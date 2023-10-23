@@ -1260,17 +1260,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- both thoughtfully authored, nothing to do -->
             <xsl:when test="@xml:id and @label"/>
         </xsl:choose>
-        <!-- The following is experimental as of 2022-11-18, but will likely              -->
-        <!-- become a good model for an auto-generated @label in the absence              -->
-        <!-- of any other authored string.                                                -->
+        <!-- The following is converging to final as of 2023-10-23, and will be useful    -->
+        <!-- for an auto-generated @label in the absence of any other authored string.    -->
         <!--                                                                              -->
         <!-- * Strategy is much like @original-id but maybe needs as much care            -->
-        <!-- * Effectively an @xml:id can be promoted to a @label by the first two "when" -->
-        <!-- * Element counts are used in base 26 via a lower-case alphabet               -->
+        <!-- * Effectively an @xml:id is promoted to a @label by the first two "when"     -->
+        <!-- * Element counts are used to reflect document tree structure                 -->
         <!-- * Separators are dashes, not initial letters of element names                -->
-        <!-- * Colons as separators might create confusion with namespaces                -->
+        <!-- * Colons as separators would create confusion with namespaces                -->
         <!-- * Prefixed with a full element name aids debugging                           -->
-        <!-- * Salt (digits) added to authored values may decrease risk of collision      -->
+        <!-- * Salt (digits) added to authored values could decrease risk of collision    -->
         <xsl:variable name="new-internal-id">
             <xsl:choose>
                 <xsl:when test="@label">
@@ -1286,19 +1285,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$parent-id"/>
                     <!-- With a colon, the value is not an "NCname" - a "non-colonized" name.    -->
                     <!-- So fails as source material.  Unclear why we can use it in these trees. -->
-                    <!-- Anyway, perhaps good to avoid.                                          -->
-                    <!-- non-alphabetic seprator needed for uniqueness                           -->
+                    <!-- Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2). -->
                     <xsl:text>-</xsl:text>
-                    <!-- A base 26 experiment (which is how 27, 28,... seem to be represented).  -->
-                    <!-- Zero is rendered as "0", thus the "+ 1" is necessary.                   -->
-                    <xsl:number value="count(preceding-sibling::*) + 1" format="a"/>
+                    <!-- Start counting from 1, easier to debug -->
+                    <xsl:number value="count(preceding-sibling::*) + 1"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <!-- aids debugging/portabiity somewhat -->
-        <xsl:variable name="element-name" select="local-name()"/>
         <xsl:attribute name="internal-id">
-            <xsl:value-of select="concat($element-name, '-', $new-internal-id)"/>
+            <xsl:value-of select="$new-internal-id"/>
         </xsl:attribute>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="identification">
