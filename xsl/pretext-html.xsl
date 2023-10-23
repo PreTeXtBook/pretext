@@ -1933,7 +1933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:value-of select="not($b-skip-knowls)" />
 </xsl:template>
 
@@ -2726,7 +2726,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Generically, a "block" is a child of a "division."  See the schema for more precision.  Blocks also have significant components.  An "example" is a block, and its "solution" is a significant component.  A "p" might be a block, but it could also be a significant component of an "example." -->
 
-<!-- Some blocks and components can be realized in a hidden fashion, as knowls whose content is embedded within the page.  This may be automatic (footnotes, "fn", are a good example), elective ("theorem" is a good example), or banned (a "blockquote" is never hidden). -->
+<!-- Some blocks and components can be realized in a hidden fashion, as knowls whose content is embedded within the page.  This may be automatic, elective ("theorem" is a good example), or banned (a "blockquote" is never hidden). -->
 
 <!-- All blocks, and many of their significant components, are available as targets of cross-references, implemented as knowls, but now the content resides in external files.  These files contain duplicates of blocks and their components (rather than originals), so need to be free of the unique identifiers that are used in the original versions. -->
 
@@ -2828,49 +2828,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Footnotes -->
 <!-- ######### -->
 
-<!-- Footnotes are always a problem.  No different here.  Once these      -->
-<!-- were "born-hidden" knowls.  But they are unique in that they really  -->
-<!-- must appear inline, yet have content that contains block-level items.-->
-<!-- So the content of each footnote could not live in a "div" inside     -->
-<!-- a "p" (typically), and was accumulated instead at the bottom of each -->
-<!-- HTML page (see previous commit for the removal of this action).      -->
-<!--                                                                      -->
-<!-- We will embark on replacing *all* "born-hidden" knowls, so isolate   -->
-<!-- this exception.  With minimal effort we can implement a footnote as  -->
-<!-- an "xref" knowl, even though this is technically incorrect.  The     -->
-<!-- content of the xref-knowl will have a heading (not needed) and       -->
-<!-- an "in-context" link (silly).  This allows for the footnote content  -->
-<!-- to "open" after the current block-level item (rather than            -->
-<!-- mid-sentence), which is a standard behavior of xref-knowls. And we   -->
-<!-- can use several templates already in place.                          -->
-<!--                                                                      -->
-<!-- TODO:                                                                -->
-<!--   * Manufacture content more as original content, perhaps into its   -->
-<!--     own directory.                                                   -->
-<!--   * Abandon knowl code and do something like a popup.                -->
-<!--   * Note: abandoned "pop-footnote-text" template could be returned   -->
-<!--     with a "git revert" and adjusted for production of content onto  -->
-<!--     a page (rather than in a file).                                  -->
-<!--                                                                      -->
+<!-- Currently implemented as a details html element with no guardrails   -->
+<!-- on nested content. Other footnotes, block content, etc... will all   -->
+<!-- be rendered, but perhaps not well. Caveat emptor.                    -->
 <xsl:template match="fn">
-    <a class="xref">
+    <details class="ptx-footnote" aria-live="polite">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="permid-attribute"/>
-        <!-- empty, but necessary for screen readers -->
-        <xsl:attribute name="href"/>
-        <!-- the path to an *xref* knowl (inappropriate) -->
-        <xsl:attribute name="data-knowl">
-            <xsl:apply-templates select="." mode="knowl-filename">
-                <xsl:with-param name="origin" select="'fn'"/>
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <!-- add HTML title attribute to the link -->
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
         <!-- A superscript number, as the clickable content -->
-        <xsl:apply-templates select="." mode="heading-birth"/>
-    </a>
+        <summary class="ptx-footnote__number">
+            <xsl:attribute name="title">
+                <xsl:apply-templates select="." mode="tooltip-text" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="heading-birth"/>
+        </summary>
+        <span class="ptx-footnote__contents">
+            <xsl:apply-templates select="./text()|node()"/>
+        </span>
+    </details>
     <!-- xref-knowl content is manufactured elsewhere in a brute-force   -->
     <!-- fashion.  This would be a better place to ensure that every     -->
     <!--  "fn" had its content produced in the right way no matter what. -->
@@ -4909,29 +4884,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-
-<!-- Next few implementations fit into general -->
-<!-- framework, but have some one-off flavor   -->
-
-
-<!-- Footnotes -->
-<!-- A bit unusual, as inline with minimal appearance -->
-
-<!-- Always born-hidden, by design -->
-<xsl:template match="fn" mode="is-hidden">
-    <xsl:text>true</xsl:text>
-</xsl:template>
-
-<!-- Overall enclosing element -->
-<xsl:template match="fn" mode="body-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
-
-<!-- And its CSS class -->
-<xsl:template match="fn" mode="body-css-class">
-    <xsl:value-of select="local-name()"/>
-</xsl:template>
-
 <!-- When born use this heading -->
 <!-- This could move to headings, but is one-off -->
 <xsl:template match="fn" mode="heading-birth">
@@ -4946,7 +4898,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fn" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
-
+<!-- AWS WTH -->
 <!-- Primary content of generic "body" template   -->
 <!-- Pass along b-original flag                   -->
 <!-- Simply process contents, could restrict here -->
@@ -4957,6 +4909,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
+<!-- AWS WTH -->
 <!-- Special footnotes come from the "url" element with -->
 <!-- an internal/obsfucated attribute holding a URL     -->
 <!-- which we wrap as "code", just as when made visible -->
@@ -5253,7 +5206,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 
