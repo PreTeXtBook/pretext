@@ -2726,7 +2726,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Generically, a "block" is a child of a "division."  See the schema for more precision.  Blocks also have significant components.  An "example" is a block, and its "solution" is a significant component.  A "p" might be a block, but it could also be a significant component of an "example." -->
 
-<!-- Some blocks and components can be realized in a hidden fashion, as knowls whose content is embedded within the page.  This may be automatic (footnotes, "fn", are a good example), elective ("theorem" is a good example), or banned (a "blockquote" is never hidden). -->
+<!-- Some blocks and components can be realized in a hidden fashion, as knowls whose content is embedded within the page.  This may be automatic ("hint" is always born hidden), elective ("theorem" is a good example), or banned (a "blockquote" is never hidden). -->
 
 <!-- All blocks, and many of their significant components, are available as targets of cross-references, implemented as knowls, but now the content resides in external files.  These files contain duplicates of blocks and their components (rather than originals), so need to be free of the unique identifiers that are used in the original versions. -->
 
@@ -2829,49 +2829,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Footnotes -->
 <!-- ######### -->
 
-<!-- Footnotes are always a problem.  No different here.  Once these      -->
-<!-- were "born-hidden" knowls.  But they are unique in that they really  -->
-<!-- must appear inline, yet have content that contains block-level items.-->
-<!-- So the content of each footnote could not live in a "div" inside     -->
-<!-- a "p" (typically), and was accumulated instead at the bottom of each -->
-<!-- HTML page (see previous commit for the removal of this action).      -->
-<!--                                                                      -->
-<!-- We will embark on replacing *all* "born-hidden" knowls, so isolate   -->
-<!-- this exception.  With minimal effort we can implement a footnote as  -->
-<!-- an "xref" knowl, even though this is technically incorrect.  The     -->
-<!-- content of the xref-knowl will have a heading (not needed) and       -->
-<!-- an "in-context" link (silly).  This allows for the footnote content  -->
-<!-- to "open" after the current block-level item (rather than            -->
-<!-- mid-sentence), which is a standard behavior of xref-knowls. And we   -->
-<!-- can use several templates already in place.                          -->
-<!--                                                                      -->
-<!-- TODO:                                                                -->
-<!--   * Manufacture content more as original content, perhaps into its   -->
-<!--     own directory.                                                   -->
-<!--   * Abandon knowl code and do something like a popup.                -->
-<!--   * Note: abandoned "pop-footnote-text" template could be returned   -->
-<!--     with a "git revert" and adjusted for production of content onto  -->
-<!--     a page (rather than in a file).                                  -->
-<!--                                                                      -->
+<!-- Currently implemented as a details html element with no guardrails   -->
+<!-- on nested content. Other footnotes, block content, etc... will all   -->
+<!-- be rendered, but perhaps not well. Caveat emptor.                    -->
 <xsl:template match="fn">
-    <a class="xref">
+    <details class="ptx-footnote" aria-live="polite">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="permid-attribute"/>
-        <!-- empty, but necessary for screen readers -->
-        <xsl:attribute name="href"/>
-        <!-- the path to an *xref* knowl (inappropriate) -->
-        <xsl:attribute name="data-knowl">
-            <xsl:apply-templates select="." mode="knowl-filename">
-                <xsl:with-param name="origin" select="'fn'"/>
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <!-- add HTML title attribute to the link -->
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
         <!-- A superscript number, as the clickable content -->
-        <xsl:apply-templates select="." mode="heading-birth"/>
-    </a>
+        <summary class="ptx-footnote__number">
+            <xsl:attribute name="title">
+                <xsl:apply-templates select="." mode="tooltip-text" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="heading-birth"/>
+        </summary>
+        <xsl:apply-templates select="." mode="body"/>
+    </details>
     <!-- xref-knowl content is manufactured elsewhere in a brute-force   -->
     <!-- fashion.  This would be a better place to ensure that every     -->
     <!--  "fn" had its content produced in the right way no matter what. -->
@@ -4930,7 +4903,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="fn" mode="body-css-class">
-    <xsl:value-of select="local-name()"/>
+    <xsl:text>ptx-footnote__contents</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
