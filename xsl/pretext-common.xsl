@@ -3785,16 +3785,16 @@ Book (with parts), "section" at level 3
 <!-- Identifiers and Labels -->
 <!-- ###################### -->
 
-<!-- Identifiers are in flux, as of 2023-03-30.  The "internal-id" is  -->
+<!-- Identifiers are in flux, as of 2023-03-30.  The "unique-id" is    -->
 <!-- an attribute built during the descent of the tree during the      -->
 <!-- pre-processor/assembly phase.  As such, it is fast and ugly.      -->
 <!-- Do not let a reader catch sight of it in output ever, beacuase it -->
 <!-- is ugly, and because it is not really permanant.  That is what    -->
 <!-- "visible-id" is for.  But constructing "visible-id" is very slow  -->
 <!-- (we hope to speed htat up as well).  So we are transitioning to   -->
-<!-- the "internal-id" wherever possible, but with careful testing.    -->
-<xsl:template match="*" mode="internal-id">
-    <xsl:value-of select="@internal-id"/>
+<!-- the "unique-id" wherever possible, but with careful testing.      -->
+<xsl:template match="*" mode="unique-id">
+    <xsl:value-of select="@unique-id"/>
 </xsl:template>
 
 <!-- These strings are used for items an author must manage              -->

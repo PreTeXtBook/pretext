@@ -1339,7 +1339,7 @@ width: 100%
 <xsl:template match="m|me|men|md|mdn">
     <!-- NB: math-representation file writes with "visible-id" -->
     <xsl:variable name="id">
-        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>
     <xsl:variable name="math" select="$math-repr/pi:math[@id = $id]"/>
     <xsl:variable name="speech" select="$speech-repr/pi:math[@id = $id]"/>

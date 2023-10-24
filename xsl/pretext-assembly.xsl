@@ -1216,7 +1216,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- should not introduce or remove elements.                     -->
 
 <!-- 2023-03-30: This is old commentary about the use of the -->
-<!-- "internal-id" identifier in the LaTeX conversion, which -->
+<!-- "unique-id" identifier in the LaTeX conversion, which   -->
 <!-- has now become more universal.  Once identifiers settle -->
 <!-- down, we can clean up the parts of this worth keeping.  -->
 <!--  -->
@@ -1270,7 +1270,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- * Colons as separators would create confusion with namespaces                -->
         <!-- * Prefixed with a full element name aids debugging                           -->
         <!-- * Salt (digits) added to authored values could decrease risk of collision    -->
-        <xsl:variable name="new-internal-id">
+        <xsl:variable name="new-unique-id">
             <xsl:choose>
                 <xsl:when test="@label">
                     <xsl:value-of select="@label"/>
@@ -1292,12 +1292,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:attribute name="internal-id">
-            <xsl:value-of select="$new-internal-id"/>
+        <xsl:attribute name="unique-id">
+            <xsl:value-of select="$new-unique-id"/>
         </xsl:attribute>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="identification">
-            <xsl:with-param name="parent-id" select="$new-internal-id"/>
+            <xsl:with-param name="parent-id" select="$new-unique-id"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>

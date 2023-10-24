@@ -1064,7 +1064,7 @@ def webwork_to_xml(
     ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
     # execute XSL extraction to get back six dictionaries
-    # where the keys are the internal-ids for the problems
+    # where the keys are the unique-id for the problems
     # origin, copy, seed, source, pghuman, pgdense
     # also get the localization as a string
     # The XSL gets the problems in document order, and the

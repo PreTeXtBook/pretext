@@ -104,7 +104,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*" mode="meld-math"/>
         <!-- get braille from representations file -->
         <xsl:variable name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
+            <xsl:apply-templates select="." mode="unique-id"/>
         </xsl:variable>
         <math-original>
             <xsl:apply-templates select="node()|@*" mode="meld-math"/>
@@ -442,7 +442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <!-- division headings go to the Table of Contents -->
         <xsl:attribute name="heading-id">
-            <xsl:apply-templates select="." mode="internal-id"/>
+            <xsl:apply-templates select="." mode="unique-id"/>
         </xsl:attribute>
         <!-- TODO: record heading levels for indentation/runover in ToC -->
         <!--  -->

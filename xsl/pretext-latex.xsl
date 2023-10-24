@@ -267,11 +267,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\addtocontents{toc}{</xsl:text>
             <xsl:if test="$b-pageref">
                 <xsl:text>\protect\label{</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="unique-id" />
                 <xsl:text>}</xsl:text>
             </xsl:if>
             <xsl:text>\protect\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}{}</xsl:text>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
@@ -279,11 +279,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
             <xsl:if test="$b-pageref">
                 <xsl:text>\label{</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="unique-id" />
                 <xsl:text>}</xsl:text>
             </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}{}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -3924,11 +3924,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\addtocontents{toc}{</xsl:text>
             <xsl:if test="$b-pageref">
                 <xsl:text>\protect\label{</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="unique-id" />
                 <xsl:text>}</xsl:text>
             </xsl:if>
             <xsl:text>\protect\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}{}</xsl:text>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
@@ -3936,11 +3936,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
             <xsl:if test="$b-pageref">
                 <xsl:text>\label{</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="unique-id" />
                 <xsl:text>}</xsl:text>
             </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}{}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -4596,7 +4596,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4612,7 +4612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4707,7 +4707,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="description" />
     <xsl:text>&amp;</xsl:text>
     <xsl:text>\pageref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
@@ -5125,7 +5125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:text>An epigraph here\\with two lines\\-Rob</xsl:text> -->
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <!-- Various LaTeX classes and packages define various names, see   -->
@@ -5337,7 +5337,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -5372,14 +5372,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- expect certain arguments.  This template provides them. -->
 <!--                                                         -->
 <!-- 1.  title, with punctuation as needed                   -->
-<!-- 2.  the "internal-id", which suffices for               -->
+<!-- 2.  the "unique-id", which suffices for                 -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!--                                                         -->
 <!-- Or, for THEOREM-LIKE and AXIOM-LIKE,                    -->
 <!--                                                         -->
 <!-- 1.  title, right now we add punctuation as needed       -->
 <!-- 2.  a list of creator(s)                                -->
-<!-- 3.  the "internal-id", which suffices for               -->
+<!-- 3.  the "unique-id", which suffices for                 -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
@@ -5394,9 +5394,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="creator-full" />
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <!-- internal-id destined for tcolorbox  phantomlabel=  option -->
+    <!-- unique-id destined for tcolorbox  phantomlabel=  option -->
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -5446,7 +5446,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <!-- TODO: move this into an environment argument -->
     <!-- to enable styling options (possibly blank)   -->
@@ -5509,7 +5509,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <!-- label -->
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -5528,7 +5528,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="subexercises">
     <xsl:variable name="id">
-        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>
     <xsl:text>\paragraph{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
@@ -5890,7 +5890,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sanitize-workspace"/>
             <xsl:text>}</xsl:text>
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id"/>
+            <xsl:apply-templates select="." mode="unique-id"/>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -6057,7 +6057,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
         <!-- label of the exercise, to link back to it -->
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
         <xsl:text>}</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
         <!-- Now the guts of the exercise, inside of its  -->
@@ -6354,7 +6354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:when test="count(.|$solutions-mainmatter) = count($solutions-mainmatter)">
                                 <xsl:text>\space</xsl:text>
                                 <xsl:text>\hyperlink{</xsl:text>
-                                <xsl:apply-templates select="." mode="internal-id-duplicate">
+                                <xsl:apply-templates select="." mode="unique-id-duplicate">
                                     <xsl:with-param name="suffix" select="'main'"/>
                                 </xsl:apply-templates>
                                 <xsl:text>}{[</xsl:text>
@@ -6364,7 +6364,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:when test="count(.|$solutions-backmatter) = count($solutions-backmatter)">
                                 <xsl:text>\space</xsl:text>
                                 <xsl:text>\hyperlink{</xsl:text>
-                                <xsl:apply-templates select="." mode="internal-id-duplicate">
+                                <xsl:apply-templates select="." mode="unique-id-duplicate">
                                     <xsl:with-param name="suffix" select="'back'"/>
                                 </xsl:apply-templates>
                                 <xsl:text>}{[</xsl:text>
@@ -6562,14 +6562,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- suffix to the label.                                -->
         <xsl:when test="$purpose = 'mainmatter'">
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id-duplicate">
+            <xsl:apply-templates select="." mode="unique-id-duplicate">
                 <xsl:with-param name="suffix" select="'main'"/>
             </xsl:apply-templates>
             <xsl:text>}{}</xsl:text>
         </xsl:when>
         <xsl:when test="$purpose = 'backmatter'">
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id-duplicate">
+            <xsl:apply-templates select="." mode="unique-id-duplicate">
                 <xsl:with-param name="suffix" select="'back'"/>
             </xsl:apply-templates>
             <xsl:text>}{}</xsl:text>
@@ -6695,7 +6695,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
@@ -7339,7 +7339,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{</xsl:text>
@@ -8626,7 +8626,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="caption-full"/>
     <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}{</xsl:text>
     <xsl:if test="$b-latex-hardcode-numbers">
         <xsl:apply-templates select="." mode="number"/>
@@ -8671,7 +8671,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}{</xsl:text>
     <xsl:if test="$b-latex-hardcode-numbers">
         <xsl:apply-templates select="." mode="number"/>
@@ -10049,7 +10049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \naturally, then ref{} will generate that number.  In order to make an -->
 <!-- \electronic PDF, we use the  hyperref  package, and specifically, the  -->
 <!-- \hyperref[]{} command.  The string that associates these comes from    -->
-<!-- \our "internal-id" template, often the @xml:id.  Example:              -->
+<!-- \our "unique-id" template, often the @xml:id.  Example:              -->
 <!--                                                                        -->
 <!--   \begin{theorem}\label{foo}                                           -->
 <!--                                                                        -->
@@ -10064,7 +10064,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- whose number is that of its containing division.  Some items are not   -->
 <!-- numbered at all, like a "preface".  Here we use \hypertarget{}{} as    -->
 <!-- the marker, and \hyperlink{}{} with custom text (title, hard-coded     -->
-<!-- number, etc) as the visual, clickable link.  The "internal-id" is used -->
+<!-- number, etc) as the visual, clickable link.  The "unique-id" is used -->
 <!-- as before to link the two commands.  The second argument of            -->
 <!-- \hypertarget can be text, but we uniformly leave it empty (a \null     -->
 <!-- target text was unnecessary and visible, 2015-12-12).  Example:        -->
@@ -10082,7 +10082,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unique Identifiers -->
 <!-- ################## -->
 
-<!-- We use the universal "internal-id" template to create strings -->
+<!-- We use the universal "unique-id" template to create strings -->
 <!-- identifying items in LaTeX output, as names and as pointers.  -->
 
 <!-- ################################ -->
@@ -10125,7 +10125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$xref-as-ref = 'true'">
             <xsl:text>\label{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
         <!-- Objects cross-referenced outside of LaTeX's usual     -->
@@ -10134,11 +10134,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:if test="$b-pageref">
                 <xsl:text>\label{</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="unique-id" />
                 <xsl:text>}{}</xsl:text>
             </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}{}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -10159,9 +10159,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- version of an exercise to point to solutions elsewhere.           -->
 <!-- The suffix is general-purpose, but is intended now to be          -->
 <!-- "main" or "back", depending on where the solution is located.     -->
-<xsl:template match="&SOLUTION-LIKE;" mode="internal-id-duplicate">
+<xsl:template match="&SOLUTION-LIKE;" mode="unique-id-duplicate">
     <xsl:param name="suffix" select="'bad-suffix'"/>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>-</xsl:text>
     <xsl:value-of select="$suffix"/>
 </xsl:template>
@@ -10209,7 +10209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- task always gets a number, but we have to avoid recursion -->
     <!-- that would result by just getting a \ref from xref-number -->
     <xsl:text>{\xreffont\ref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}}</xsl:text>
 </xsl:template>
 
@@ -10218,7 +10218,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with symbols not numbers                           -->
 <xsl:template match="mrow[@tag]" mode="xref-number">
     <xsl:text>{\xreffont\ref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}}</xsl:text>
 </xsl:template>
 
@@ -10326,13 +10326,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- if so, append prefix with separator -->
             <xsl:if test="$needs-part-prefix = 'true'">
                 <xsl:text>\ref{</xsl:text>
-                <xsl:apply-templates select="ancestor::part" mode="internal-id" />
+                <xsl:apply-templates select="ancestor::part" mode="unique-id" />
                 <xsl:text>}</xsl:text>
                 <xsl:text>.</xsl:text>
             </xsl:if>
             <!-- and always, a representation for the text of the xref -->
             <xsl:text>\ref{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:text>}</xsl:text>
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -10373,19 +10373,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:variable name="active-ref">
                 <xsl:text>\ref{</xsl:text>
-                <xsl:apply-templates select="$target" mode="internal-id" />
+                <xsl:apply-templates select="$target" mode="unique-id" />
                 <xsl:text>}</xsl:text>
             </xsl:variable>
             <xsl:variable name="inactive-ref">
                 <xsl:text>\ref*{</xsl:text>
-                <xsl:apply-templates select="$target" mode="internal-id" />
+                <xsl:apply-templates select="$target" mode="unique-id" />
                 <xsl:text>}</xsl:text>
             </xsl:variable>
             <xsl:value-of select="str:replace($content, $active-ref, $inactive-ref)" />
         </xsl:when>
         <xsl:when test="$xref-as-ref='true'">
             <xsl:text>\hyperref[</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:apply-templates select="$target" mode="unique-id" />
             <xsl:text>]</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$content" />
@@ -10393,7 +10393,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\hyperlink{</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:apply-templates select="$target" mode="unique-id" />
             <xsl:text>}</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$content" />
@@ -10419,7 +10419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- OK, requested and helps, let's add it -->
         <xsl:otherwise>
             <xsl:text>, p.\,\pageref{</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id"/>
+            <xsl:apply-templates select="$target" mode="unique-id"/>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -10792,7 +10792,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -10868,7 +10868,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\scriptsize </xsl:text>
     <xsl:apply-templates select="$target" mode="number"/>
     <xsl:text>\space[\pageref{</xsl:text>
-    <xsl:apply-templates select="$target" mode="internal-id"/>
+    <xsl:apply-templates select="$target" mode="unique-id"/>
     <xsl:text>}]</xsl:text>
     <xsl:text>}</xsl:text>
     <xsl:call-template name="rangle-character"/>
@@ -10899,7 +10899,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <!-- "key" for cross-referencing -->
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
