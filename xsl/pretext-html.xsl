@@ -2811,6 +2811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- put relevant class names on "details" to help with styling -->
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="body-css-class"/>
+            <xsl:text> born-hidden-knowl</xsl:text>
         </xsl:attribute>
         <!-- the clickable that is visible on the page -->
         <summary>
