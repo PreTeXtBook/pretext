@@ -380,6 +380,7 @@ so that we can set our own later */
 .ptx-content details > article:not(.theorem-like):not(.definition-like) {
   padding: 0.25em;
   padding-left: 0.5em;
+  padding-bottom: 0;
 }
 .ptx-content details > article {
   background-color: #f5f5ff;
