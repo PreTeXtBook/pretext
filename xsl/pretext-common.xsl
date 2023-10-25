@@ -3802,16 +3802,7 @@ Book (with parts), "section" at level 3
 <!-- Since items like filenames and URLs are sometimes shared across     -->
 <!-- conversions (or extractions) this template is in -common            -->
 <xsl:template match="*" mode="visible-id">
-    <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:value-of select="@label"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number from="book|article|letter|memo" level="any" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="@unique-id"/>
 </xsl:template>
 
 <!-- The "visible-id" version above assumes any (legacy) @xml:id have -->
