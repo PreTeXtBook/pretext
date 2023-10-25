@@ -2011,11 +2011,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:for-each>
     </xsl:for-each>
-    <!-- Faking original footnote content with "xref" knowls temporarily. -->
-    <!-- So we need an ad-hoc template to make the actual files in the    -->
-    <!-- more efficient case here.  (A template so we are more likely     -->
-    <!-- to remove it once we gt footnotes going differently.             -->
-    <xsl:call-template name="footnote-content"/>
 </xsl:template>
 
 <!-- Decompose a string of references into elements for id  -->
@@ -2136,13 +2131,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$origin = 'notation'">
             <xsl:text>notation/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
-        </xsl:when>
-        <!-- Footnotes are original content and are temporarily being   -->
-        <!-- implemented as cross-reference knowls.  This stanza should -->
-        <!-- be removed once they are implemented properly.             -->
-        <xsl:when test="$origin = 'fn'">
-            <xsl:text>fn/</xsl:text>
             <xsl:apply-templates select="." mode="visible-id" />
         </xsl:when>
         <!-- put a "location-report" template here to debug a bad knowl file -->
@@ -2848,17 +2836,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- xref-knowl content is manufactured elsewhere in a brute-force   -->
     <!-- fashion.  This would be a better place to ensure that every     -->
     <!--  "fn" had its content produced in the right way no matter what. -->
-</xsl:template>
-
-<!-- Temporarily make every footnote as an external "xref"  -->
-<!-- knowl file for the case of efficient knowl generation. -->
-<!-- Named template since it "begins" at document root.     -->
-<xsl:template name="footnote-content">
-    <xsl:for-each select="$document-root//fn">
-        <xsl:apply-templates select="." mode="manufacture-knowl">
-            <xsl:with-param name="origin" select="'fn'"/>
-        </xsl:apply-templates>
-    </xsl:for-each>
 </xsl:template>
 
 <!-- ##################### -->
