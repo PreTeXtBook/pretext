@@ -843,14 +843,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of identification, and then generates a replacement page.   -->
 <xsl:template match="image">
     <!-- A "segment" with the ID of the image to identify it, -->
-    <!-- then the author's "shortdescription" to describe it  -->
     <xsl:apply-templates select="." mode="transcriber-note">
         <xsl:with-param name="message">
             <xsl:apply-templates select="." mode="block-title"/>
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="shortdescription"/>
         </xsl:with-param>
     </xsl:apply-templates>
+    <!-- Then the author's descriptions -->
+    <xsl:apply-templates select="." mode="braille-representation"/>
     <!-- Form a page to be replaced by tactile version -->
     <block ownpage="yes">
         <xsl:apply-templates select="." mode="transcriber-note">
@@ -866,11 +865,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in some other (identifying) structure.              -->
 <xsl:template match="image" mode="braille-representation">
     <!-- A "segment" with the author's "shortdescription" -->
-    <xsl:apply-templates select="." mode="transcriber-note">
-        <xsl:with-param name="message">
-            <xsl:apply-templates select="shortdescription"/>
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:if test="shortdescription">
+        <xsl:apply-templates select="." mode="transcriber-note">
+            <xsl:with-param name="message">
+                <xsl:apply-templates select="shortdescription"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
 </xsl:template>
 
 <!-- Not really a title, but a repeated identification of an image  -->
@@ -1925,8 +1926,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- Just text nodes, but might have a WeBWorK -->
+<!-- "var", so process all children            -->
 <xsl:template match="shortdescription">
-    <xsl:apply-templates select="node()"/>
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- fillin blanks, outside math -->
