@@ -877,6 +877,8 @@ class BRF:
             typeforms = [BRF.trans1_bit] * len(aline)
         else:
             print('BUG: did not recognize typeface "{}"'.format(typeface) )
+            # May be the Python error:
+            #    UnboundLocalError: local variable 'typeforms' referenced before assignment
             # When this error message reports "segment" as the typeface,
             # it means there are nested segments.  Search this module for
             # "SUSPECT TYPEFACE" to find a useful debugging statement to use.
