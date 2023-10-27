@@ -351,51 +351,51 @@ so that we can set our own later */
 /* 9/23/23 a knowled article is now in a "details", so we add style
    to mimic the old style below  */
 
-.ptx-content section  details > summary {
+.ptx-content section  .born-hidden-knowl > summary {
     cursor: pointer;
 }
 
-.ptx-content section > details > summary::marker,
-.ptx-content article + details > summary::marker {
+.ptx-content section > .born-hidden-knowl  > summary::marker,
+.ptx-content article + .born-hidden-knowl  > summary::marker {
   content: "";
 }
 
-.ptx-content section > details, .ptx-content .paragraphs > details,
-.ptx-content article + details {
+.ptx-content section > .born-hidden-knowl , .ptx-content .paragraphs > .born-hidden-knowl ,
+.ptx-content article + .born-hidden-knowl  {
     margin-top: 1.25em;
 }
-.ptx-content summary + article {
+.ptx-content .born-hidden-knowl summary + article {
     margin-top: 1em;
 }
-.ptx-content section details + details,
-.ptx-content section .introduction + details,
-.ptx-content section .para + details,
-.ptx-content section .posterior + details {
+.ptx-content section .born-hidden-knowl  + .born-hidden-knowl ,
+.ptx-content section .introduction + .born-hidden-knowl ,
+.ptx-content section .para + .born-hidden-knowl ,
+.ptx-content section .posterior + .born-hidden-knowl  {
     margin-top: 1.75em;
 }
 
-.ptx-content details > article {
+.ptx-content .born-hidden-knowl  > article {
   padding-top: 0.25em;
 }
-.ptx-content details > article:not(.theorem-like):not(.definition-like) {
+.ptx-content .born-hidden-knowl  > article:not(.theorem-like):not(.definition-like) {
   padding: 0.25em;
   padding-left: 0.5em;
   padding-bottom: 0;
 }
-.ptx-content details > article {
+.ptx-content .born-hidden-knowl  > article {
   background-color: #f5f5ff;
 }
-.ptx-content details > article details > article,
-.ptx-content details > article details > .answer {
+.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > article,
+.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > .answer {
   margin: 0.5em;
   padding: 0.25em;
   padding-left: 0.5em;
   background-color: #fffff5;
 }
-.ptx-content details > article details > article details > article {
+.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > article .born-hidden-knowl  > article {
   background-color: #fff5ff;
 }
-.ptx-content details > article details > article details > article details > article {
+.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > article .born-hidden-knowl  > article .born-hidden-knowl  > article {
   background-color: #fafffa;
 }
 
@@ -578,12 +578,12 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 /* born hidden articls are now in "details", so adding markup
 to immitate what is below.  */
 
-.ptx-content summary,
-.ptx-content summary > .heading {
+.ptx-content .born-hidden-knowl summary,
+.ptx-content .born-hidden-knowl summary > .heading {
     position: relative;
 }
 
-.ptx-content summary > .heading {
+.ptx-content .born-hidden-knowl summary > .heading {
     font-size: 1.125em;
     line-height: 1.125em;
     margin-top: 0;
