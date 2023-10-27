@@ -1,4 +1,4 @@
-
+/* -------------------toc-------------------- */
 .ptx-toc {
   /* IMPORTANT height must be calculated by javascript. */
     width: 240px;
@@ -15,166 +15,168 @@
     background: #fff;
 }
 
-.ptx-toc > ul:first-child > li:last-child {
+.ptx-toc > .toc-item-list:first-child > .toc-item:last-child {
     border-bottom: 8px solid #999;
 }
 
-/* Aligns toc to the top and side of the allotted space, respectively */
-.ptx-toc ul {
+/* -------------------toc-items-------------------- */
+
+.ptx-toc {
+    --codenumber-pad-left: 0.3rem;
+    --codenumber-pad-right: 0.5rem;
+    
+    --toc-indent-first: calc(1.0rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
+    --toc-indent-second: calc(1.7rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
+    --toc-indent-third: calc(2.2rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
+}
+
+/* will be less indentation */
+.ptx-toc:is(.depth1, .parts.depth2) {
+    --codenumber-pad-right: 0.5rem;
+}
+
+.ptx-toc .toc-item-list {
     margin: 0px;
     padding: 0px;
     list-style-type: none;
-}
-
-
-/* Places codenumbers */
-.ptx-toc .codenumber {
-    padding-left: 0.3rem;
-    display: inline-block;
-}
-.ptx-toc .codenumber + .title {
-    padding-left: 0.3rem;
-}
-.ptx-toc .internal > .title:first-child {
-    padding-left: 1.0rem;
-}
-.ptx-toc .structural .structural .codenumber {
-    padding-top: 0.2em;
-    font-size: 80%;
-}
-
-/*
-.ptx-toc :is(.toc-frontmatter, .toc-backmatter) > .toc-title-box > a .title {
-    margin-left: 1.5rem;
-}
-*/
-
-.ptx-toc .toc-part > .toc-title-box > a .codenumber {
-    min-width: 1.5rem;
-    padding-right: 0.3rem;
-}
-
-.ptx-toc .toc-chapter > .toc-title-box > a .codenumber {
-    min-width: 1.9rem;
-    padding-right: 0.3rem;
-}
-
-.ptx-toc .toc-backmatter .toc-item-list .toc-item .codenumber {
-    min-width: 1.9rem;
-    padding-right: 0.3rem;
-}
-
-.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
-    min-width: 2.5rem;
-    padding-right: 0.3rem;
-}
-
-.ptx-toc .toc-chapter .toc-item-list .toc-item-list .toc-item .codenumber {
-    min-width: 3.3rem;
-    padding-right: 0.3rem;
-}
-
-.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
-    font-size: 80%;
-    padding-top: 0.16em;
-}
-
-/* no codenumbers on subsections (anything under section) */
-.ptx-toc .toc-section .toc-item-list .toc-item a > .codenumber {
-    visibility: hidden;
-}
-.ptx-toc .toc-section .toc-item-list .toc-item a:hover > .codenumber {
-    visibility: visible;
-}
-
-.ptx-toc ul.structural ul.structural .title:empty::after {
-    content: "empty heading!";
-    font-weight: bold;
-}
-.ptx-toc ul.structural ul.structural ul.structural .title {
-    font-size: 90%;
-}
-.ptx-toc ul.structural ul.structural ul.structural ul.structural .title {
-    font-size: 90%;
-    font-style: italic;
-}
-
-.ptx-toc .part > a .codenumber {
-    position: relative;
-    display: block;
-    float: left;
-    margin-right: 0.7em;
-}
-.ptx-toc .part > a .title {
-    display: block;
-    margin-left: 1em;
 }
 
 .ptx-toc .toc-item {
     border-top: 1px solid var(--tocborder, #d1d1d1);
 }
 
-.ptx-toc ul.structural li a {
-    position: relative;
-    display: block;
-    padding: 2.86957px;
-    padding: 0.2em;
-    /* padding-left: 0.5em; */
-    font-family: "PT Serif", "Times New Roman", Times, serif;
-    font-weight: bold;
-}
-.ptx-toc ul.structural ul.structural li a {
-    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: normal;
+/* -------------------title-box------------------- */
+
+.ptx-toc .toc-title-box {
     display: flex;
 }
 
-/* Removes underlines from links in toc */
-.ptx-toc ul.structural li a, .ptx-toc ul.structural li a:link, .ptx-toc ul.structural li a:visited, .ptx-toc ul.structural li a:hover, .ptx-toc ul.structural li a:focus, .ptx-toc ul.structural li a:active {
-    text-decoration: none;
+.ptx-toc .toc-title-box > .internal {
+    position: relative;
+    display: flex;
+    flex-grow: 1;
+    padding: 0.2em;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
 }
 
-/*
-.ptx-toc > ul > li a, .ptx-toc > ul > li a:link, .ptx-toc > ul > li a:visited {
-    font-weight: bold;
-    font-family: "PT Serif", "Times New Roman", Times, serif;
-    padding-left: 0.2em;
+/* at second level, switch fonts */
+.ptx-toc .toc-item-list .toc-item-list .toc-title-box > .internal {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
 }
-*/
 
 /* Extra border above top level items */
 .ptx-toc > .toc-item-list > .toc-item {
     border-top: 2px solid var(--tocborder, #d1d1d1);
 }
 
-/* Allows both "top" and bottom border of a subsection to be highlighted on hover */
-.ptx-toc ul.structural li ul.structural a:hover {
-/*
-omitting, because it caused a "jump"
-    border-top: 1px solid #3c110a;
-*/
-/*
-    margin-top: -1px;
-*/
-}
-
-/* Removes double border between last subsection and next section */
-.ptx-toc > ul.structural li ul.structural li:last-child a {
-    border-bottom: none;
-}
-
-
-.ptx-toc ul.structural li a:active {
+.ptx-toc .toc-item.active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
 }
 
+
+/* -------------------codenumbers-------------------- */
+.ptx-toc .codenumber {
+    min-width: var(--toc-indent-first);
+    padding-left: var(--codenumber-pad-left);
+    padding-right: var(--codenumber-pad-right);
+    display: inline-block;
+    text-align: left;
+    flex-grow: 0;
+}
+
+/* second level of numbering */
+/*  anything 1+ levels deeper than a chapter in a book */
+.book .ptx-toc .toc-chapter .toc-item-list .codenumber,
+/*  anything 1+ levels deeper than a section in an article */
+.article .ptx-toc .toc-section .toc-item-list .codenumber,
+/*  anything 1+ levels deeper than backmatter */
+.ptx-toc .toc-backmatter .toc-item-list .codenumber
+{
+    font-size: 80%;
+    padding-top: 0.16em;
+    min-width: var(--toc-indent-second);
+}
+
+/* third level of numbering */
+/*  anything 2+ levels deeper than a chapter in a book */
+.book .ptx-toc .toc-chapter .toc-item-list .toc-item-list .codenumber,
+/*  anything 2+ levels deeper than a section in an article */
+.article .ptx-toc .toc-section .toc-item-list .toc-item-list .codenumber,
+/*  anything 2+ levels deeper than backmatter */
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .codenumber
+{
+    min-width: var(--toc-indent-third);
+    visibility: hidden;
+}
+
+/* reveal on interaction */
+.ptx-toc .toc-item-list .toc-item-list .toc-item-list a:is(:hover, :focus) > .codenumber {
+    visibility: visible;
+}
+
+/* -------------------titles-------------------- */
+.ptx-toc .toc-title-box .title {
+    flex-grow: 1;
+}
+
+/* Any toc item without a codenumber needs indentation
+   Can't select absence of a preceeding, so indent all titles
+   and then clear indent if there is a codenumber */
+.ptx-toc .toc-item .toc-title-box .title {
+    margin-left: var(--toc-indent-first);
+}
+
+/* second level as defined by codenumber selectors */
+.book .ptx-toc .toc-chapter .toc-item-list .title,
+.article .ptx-toc .toc-section .toc-item-list .title,
+.ptx-toc .toc-backmatter .toc-item-list .title 
+{
+    margin-left: var(--toc-indent-second);
+}
+
+/* third level as defined by codenumber selectors */
+.book .ptx-toc .toc-chapter .toc-item-list .toc-item-list .title,
+.article .ptx-toc .toc-section .toc-item-list .toc-item-list .title,
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .title
+{
+    margin-left: var(--toc-indent-third);
+}
+
+/* unless there is a codenumber */
+.ptx-toc .toc-item > .toc-title-box .codenumber + .title {
+    margin-left: 0 !important;
+}
+
+.ptx-toc ul.structural ul.structural .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+
+
+.ptx-toc .toc-chapter .toc-item-list .title,
+.ptx-toc .toc-section .toc-item-list .title,
+/* 2 levels deep in back matter */
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .title 
+{
+    font-size: 90%;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item-list .title,
+.ptx-toc .toc-section .toc-item-list .toc-item-list .title,
+/* 3 levels deep in back matter */
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .toc-item-list .title 
+{
+    font-style: italic;
+}
+
+/* ??? */
 .ptx-toc ul.structural li a.has-chevron {
   padding-right: 2em;
 }
-.ptx-toc .toc-item {
-  position: relative;
-}
 
+/* -------------------depth controls-------------------- */
 .ptx-toc.depth0 ul.structural {
     display: none;
 }
@@ -201,6 +203,8 @@ omitting, because it caused a "jump"
     color: var(--parttoctextactive);
 }
 
+
+/* -------------------focused toc-------------------- */
 /* Hide all but active area of book */
 .ptx-toc.focused ul.structural:not(.contains-active) > li {
     display: none;
@@ -223,15 +227,6 @@ omitting, because it caused a "jump"
 }
 .ptx-toc.focused ul.structural li ul.structural a:hover {
     border: 0;
-}
-
-.toc-title-box {
-    display: flex;
-}
-
-.ptx-toc ul.structural li .toc-title-box a {
-    flex: 1 1;
-    display: flex;
 }
 
 .ptx-toc.focused .toc-expander {
