@@ -1103,6 +1103,45 @@ xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
     'opsz' 24
 }
 
+.ptx-footnote {
+    display: inline;
+}
+
+.ptx-footnote[open] {
+    display: contents;
+}
+
+.ptx-footnote[open] .ptx-footnote__number {
+    visibility: hidden;
+}
+.ptx-footnote[open] .ptx-footnote__number::before {
+    font-size: 0.6rem;
+    content: "[x]";
+    visibility: visible;
+    vertical-align: super;
+}
+
+.ptx-footnote__number {
+    display: inline;
+}
+
+.ptx-footnote__number::marker {
+    content: "";
+}
+
+.ptx-footnote__contents {
+    display: block;
+    font-style: italic;
+    background: var(--knowlbackground);
+    border-radius: 6px;
+    padding: 0px 8px;
+    margin: 4px auto;
+    width: fit-content;
+    max-width: calc(100% - 60px);
+    border: 2px solid var(--knowlborder);
+}
+  
+
 /*******************************************************************************
  *
  * Authors: David Farmer, Rob Beezer
