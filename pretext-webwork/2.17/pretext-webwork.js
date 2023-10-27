@@ -157,9 +157,21 @@ function handleWW(ww_id, action) {
 				if (input && input.type.toUpperCase() == 'RADIO') {
 					const buttons = body_div.querySelectorAll('input[name=' + answer + ']');
 					for (const button of buttons) {
-						// button.value is like "B0" and answers[answer] is like "Choice 1"
-						if (button.value == 'B' + String(Number(answers[answer].replace(/^Choice /, '')) - 1)) {
+						if (button.value == answers[answer]) {
 							button.setAttribute('checked', 'checked');
+						}
+					}
+				}
+				if (input && input.type.toUpperCase() == 'CHECKBOX') {
+					const checkboxes = body_div.querySelectorAll('input[name=' + answer + ']');
+					for (const checkbox of checkboxes) {
+						// This is not a bulletproof approach if the problem used input values that are weird
+						// For example, with commas in them
+						// However, we are stuck with WW providing answers[answer] as a string like `[value0, value1]`
+						// and note that it is not `["value0", "value1"]`, so we cannot cleanly parse it into an array
+						let checkbox_regex = new RegExp('(\\[|, )' + checkbox.value + '(, |\\])');
+						if (answers[answer].match(checkbox_regex)) {
+							checkbox.setAttribute('checked', 'checked');
 						}
 					}
 				}
@@ -306,7 +318,7 @@ function handleWW(ww_id, action) {
 					const score = data.rh_result.answers[name].score;
 					let headline = '';
 					let correctClass = '';
-					if (score == 1) {
+					if (score >= 1) {
 						headline = localize_correct + '!';
 						correctClass = 'correct';
 					} else if (score > 0 && score < 1) {
@@ -315,7 +327,7 @@ function handleWW(ww_id, action) {
 					} else if (data.rh_result.answers[name].student_ans == '') {
 						headline = localize_blank + '.';
 						correctClass = 'blank';
-					} else if (score == 0) {
+					} else if (score <= 0) {
 						headline = localize_incorrect + '.';
 						correctClass = 'incorrect';
 					}
@@ -588,10 +600,11 @@ function handleWW(ww_id, action) {
 			background-size: auto 100%;
 			background-position: right;
 			background-repeat: no-repeat;
+			padding-right: 29px;
 		}
 		input[type="text"].blank {
 			background-color: #CDF;
-			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%230049DB' text-anchor='end'>🡄</text></svg>");
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='20px'><text x='19' y='16' fill='%230049DB' text-anchor='end'>⚠</text></svg>");
 		}
 		input[type="text"].correct, select.correct, input[type="text"].correct + span.mq-editable-field {
 			background-color: #8F8;
@@ -1012,15 +1025,10 @@ function createFeedbackButton(id, title, content) {
 	feedbackButton.dataset.bsContent = `<div id="${id}-content">${content || ''}</div>`;
 	if (!content) feedbackButton.dataset.emptyContent = '1';
 	const contentSpan = document.createElement('span');
-	//contentSpan.style.fontSize = '15pt';
-	contentSpan.textContent = '↓';
+	contentSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="none" stroke-width="2" viewBox="0 0 24 24" color="#000000"><path stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 11.5v5M12 7.51l.01-.011M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"></path></svg>`;
 	feedbackButton.appendChild(contentSpan);
 	feedbackButton.type = 'button';
 	feedbackButton.classList.add('ww-feedback');
-	/*feedbackButton.style.fontSize = 'revert';
-	feedbackButton.style.border = 'none';
-	feedbackButton.style.verticalAlign = 'baseline';
-	feedbackButton.style.backgroundColor = 'transparent';*/
 
 	feedbackButton.id = `${id}-feedback-button`;
 	feedbackButton.dataset.bsToggle = 'popover';
