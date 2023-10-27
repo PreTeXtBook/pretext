@@ -1138,7 +1138,7 @@ xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
     width: fit-content;
     max-width: calc(100% - 60px);
     border: 2px solid var(--knowlborder);
-    }
+}
   
 
 /*******************************************************************************
