@@ -35,7 +35,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- originally created.  Perhaps the include can move to a more obvious   -->
 <!-- location near the top of that file.  There is no entry template and   -->
 <!-- every template is a named template which relies on parameters, not    -->
-<!-- context or a match/select mechanism.                                  -->
+<!-- context or a match/select mechanism.  (With some exceptions.)         -->
 <!--                                                                       -->
 <!-- Used in:                                                              -->
 <!--     xsl/pretext-common.xsl (2022-03-27)                               -->
@@ -52,8 +52,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="str"
+    extension-element-prefixes="pi str"
 >
 
 <!-- ########################## -->
@@ -870,7 +871,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some items that are in play relative to Runestone Services -->
 <!-- that are independendt of dynamic/static and which can      -->
-<!-- promote consistence if defined only once.                  -->
+<!-- promote consistence if defined only once.  End game is the -->
+<!-- text of a datafile, so appropriate here.  However, they    -->
+<!-- are a bit different than above in spirit, as they involve  -->
+<!-- global variables, file manipulations, and are not named    -->
+<!-- templates generally.  They are necessary to create static  -->
+<!-- versions of Runestone datafile elements during the         -->
+<!-- assembly phase, and the enhanced-source stylesheet avoids  -->
+<!-- using -common, hence movement here on 2023-10-30.          -->
 
 <!-- Datafiles have default rows and columns -->
 <xsl:variable name="datafile-default-rows" select="20"/>
