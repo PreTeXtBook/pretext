@@ -3767,6 +3767,70 @@ def get_source_path(source_file):
     return os.path.normpath(source_dir)
 
 
+def _git_symbolic_to_hash(symbolic):
+    '''Convert a branch name to its commit hash at the tip'''
+
+    repo = get_ptx_path();
+    # e.g. .git/refs/heads/master
+    commit_filename = os.path.join(repo, '.git', 'refs', 'heads', symbolic)
+    try:
+        with open(commit_filename, 'r') as f:
+            # always a commit hash in hex
+            # strip a trailing newline (OK assumption?)
+            return f.readline()[:-1]
+    except Exception as e:
+        log.critical(traceback.format_exc())
+        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
+        return None
+
+
+# presumes PreTeXt repo publishes "master" as mainline branchh
+def get_git_master_commit():
+    """Return the full commit hash of master branch"""
+    # Note: no guarantee this is the branch in use
+    return _git_symbolic_to_hash('master')
+
+
+def get_git_head():
+    '''Returns a pair for active branch: (symbolic name, hash)'''
+    # Note: in "detached state" the symbolic name is None
+
+    import string
+
+    repo = get_ptx_path();
+    # .git/refs/heads/master
+    branch_filename = os.path.join(repo, '.git', 'HEAD')
+    try:
+        with open(branch_filename, 'r') as f:
+            # strip a trailing newline (OK assumption?)
+            head = f.readline()[:-1]
+    except Exception as e:
+        log.critical(traceback.format_exc())
+        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
+        return (None, None)
+
+    # head is normally a full symbolic reference
+    # but on a "checkout" is "detached" and is a hash
+    # https://stackoverflow.com/questions/11592261/check-if-a-string-is-hexadecimal
+    # https://stackoverflow.com/a/11592279
+    if all(c in string.hexdigits for c in head):
+        return (None, head)
+    else:
+        # strip leading 16 characters: "ref: refs/heads/"
+        branch = head[16:]
+        commit = _git_symbolic_to_hash(branch)
+        return (branch, commit)
+
+
+def build_info_message():
+    '''Return a string with useful information about build environment'''
+    # Presumes the git repository is present, may need an override
+    branch, commit = get_git_head()
+    master = get_git_master_commit()
+    msg = 'built with {} using commit {} at tip of branch "{}" ("master": {})'
+    return msg.format("pretext/pretext script", commit, branch, master)
+
+
 def get_runestone_services_version():
     """Examine Runestone Services file for version number"""
 
