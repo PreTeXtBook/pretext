@@ -249,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
+<xsl:variable name="all-webwork" select="$version//webwork"/>
 
 <xsl:variable name="webwork-rtf">
     <xsl:apply-templates select="$version" mode="webwork"/>
