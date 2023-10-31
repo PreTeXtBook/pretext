@@ -1272,7 +1272,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- elements, which will cause changes in how the        -->
 <!-- "visible-id" template behaves.                       -->
 <xsl:template match="*" mode="identification">
-    <xsl:param name="parent-id"  select="'root-'"/>
+    <xsl:param name="parent-id"  select="'root'"/>
     <xsl:copy>
         <!-- duplicate all attributes, especially  -->
         <!-- preserve any authored @xml:id, @label -->
