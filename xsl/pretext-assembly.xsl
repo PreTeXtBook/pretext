@@ -1124,6 +1124,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- for constructing "View Source" knowls in HTML output as a form of  -->
 <!-- always-accurate documentation.                                     -->
 <!--                                                                    -->
+<!-- See also the "assembly-id" template below as a second motivation.  -->
+<!--                                                                    -->
 <!-- Key properties of the id:                                          -->
 <!--     - built with descent through tree, so fast                     -->
 <!--     - unique (numbers give depth and breadth within subtree)       -->
@@ -1186,6 +1188,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="parent-id" select="concat($new-id, $lead-separator)"/>
         </xsl:apply-templates>
     </xsl:copy>
+</xsl:template>
+
+<!-- Some maniulations of source require stable identification *before*     -->
+<!-- we assign @unique-id values for general use in the very late           -->
+<!-- "identification" phase.  This is a role for the "original-id" which    -->
+<!-- is formed based soley on the author's source (which may get versioned, -->
+<!-- customized, repaired, etc.).  It should suffice for "big" objects      -->
+<!-- which are unlikely to change much (other than going away in a version) -->
+<!-- and may only be "repaired" in a one-to-one cosmetic rename.  We use    -->
+<!-- this sparingly, thus we are careful about the match, along with        -->
+<!-- documenting rationale for each object.                                 -->
+<!--                                                                        -->
+<!-- Another way to think about this is as an "early" id, versus the        -->
+<!-- more general "late" id.                                                -->
+<!--                                                                        -->
+<!-- datafile                                                               -->
+<!--     For static versions of this Runestone component, when the file is  -->
+<!--     a text file provided in the external directory, we need to         -->
+<!--     interrogate the file manufactured in the generated directory in    -->
+<!--     order to make a sample of its content.  This happens before we     -->
+<!--     construct unique-id.                                               -->
+
+<xsl:template match="datafile" mode="assembly-id">
+    <xsl:value-of select="@original-id"/>
+</xsl:template>
+
+<xsl:template match="*" mode="assembly-id">
+    <xsl:message>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect</xsl:message>
+    <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
 </xsl:template>
 
 
