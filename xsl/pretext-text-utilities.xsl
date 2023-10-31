@@ -895,7 +895,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$generated-directory-source"/>
     <xsl:text>datafile/</xsl:text>
     <!-- context is "datafile", the basis for identifier -->
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <!-- ned an early identifier in assembly phase       -->
+    <xsl:apply-templates select="." mode="assembly-id"/>
     <xsl:text>.xml</xsl:text>
 </xsl:template>
 

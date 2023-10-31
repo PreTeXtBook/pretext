@@ -57,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Second: text files given by external file       -->
 <xsl:template match="datafile/image|datafile/pre[@source]" mode="extraction">
     <!-- 1. identifier -->
-    <xsl:apply-templates select=".." mode="visible-id" />
+    <xsl:apply-templates select=".." mode="assembly-id" />
     <xsl:text> </xsl:text>
     <!-- 2. Type from element used (image, pre) -->
     <xsl:value-of select="local-name()"/>
