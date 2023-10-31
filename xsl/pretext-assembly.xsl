@@ -154,15 +154,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pass: elements, attributes, text, whitespace, comments,     -->
 <!-- everything. Various other templates will override these     -->
 <!-- templates to create a new enhanced source tree.             -->
-<xsl:template match="node()|@*" mode="version">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="version"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="original-labels">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="original-labels"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="node()|@*" mode="version">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="version"/>
     </xsl:copy>
 </xsl:template>
 
@@ -236,22 +236,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- new tree as a (text) result tree fragment and then we     -->
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
-<xsl:variable name="version-rtf">
-    <xsl:apply-templates select="/" mode="version"/>
-</xsl:variable>
-<xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <xsl:variable name="original-labeled-rtf">
-    <xsl:apply-templates select="$version" mode="original-labels"/>
+    <xsl:apply-templates select="/" mode="original-labels"/>
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
+
+<xsl:variable name="version-rtf">
+    <xsl:apply-templates select="$original-labeled" mode="version"/>
+</xsl:variable>
+<xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
 <xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
 
 <xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$original-labeled" mode="webwork"/>
+    <xsl:apply-templates select="$version" mode="webwork"/>
 </xsl:variable>
 <xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
@@ -1118,14 +1119,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="pagebreak" mode="repair"/>
 
 
-<!-- This pass adds 100% internal identification for elements after a   -->
-<!-- version has been constructed, but before anything else is added or -->
-<!-- manipulated.  The tree it builds is used for constructing          -->
-<!-- "View Source" knowls in HTML output as a form of always-accurate   -->
-<!-- documentation.  This id might be useful in other scenarios so we   -->
-<!-- build it with some care.  Entirely possible that the final pass of -->
-<!-- this stylesheet will have produced times which in HTML there is no -->
-<!-- real original.  So maybe not perfect.  But good enough?            -->
+<!-- This pass adds 100% internal identification for elements before    -->
+<!-- anything has been added or subtracted. The tree it builds is used  -->
+<!-- for constructing "View Source" knowls in HTML output as a form of  -->
+<!-- always-accurate documentation.                                     -->
 <!--                                                                    -->
 <!-- Key properties of the id:                                          -->
 <!--     - built with descent through tree, so fast                     -->
