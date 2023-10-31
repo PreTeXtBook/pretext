@@ -1139,7 +1139,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- capture the id we will use *and* build upon -->
         <xsl:variable name="new-id">
             <xsl:choose>
-                <!-- authored @xml:id, so reset to this subtree -->
+                <!-- authored @label, so reset to this subtree -->
+                <xsl:when test="@label">
+                    <xsl:value-of select="@label"/>
+                </xsl:when>
+                <!-- or mimic later upgrade of xml:id -> label -->
                 <xsl:when test="@xml:id">
                     <xsl:value-of select="@xml:id"/>
                 </xsl:when>
@@ -1170,7 +1174,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- in recursion just below.                                   -->
         <xsl:variable name="lead-separator">
             <xsl:choose>
-                <xsl:when test="@xml:id">
+                <xsl:when test="@xml:id or @label">
                     <xsl:text>-</xsl:text>
                 </xsl:when>
                 <xsl:otherwise/>
