@@ -1,0 +1,274 @@
+/* -------------------toc-------------------- */
+.ptx-toc {
+  /* IMPORTANT height must be calculated by javascript. */
+    width: 240px;
+    margin: 0;
+    font-size: 14.72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.ptx-toc::after {
+    content: url("data:image/svg+xml; utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='338 3000 8772 6866'%3E%3Cg style='stroke-width:.025in; stroke:black; fill:none'%3E%3Cpolyline points='472,3590 472,9732 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:butt;' d='M 4724,9448 A 4660 4660 0 0 1 8598 9259 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:174;stroke-linecap:butt;' d='M 4488,9685 A 4228 4228 0 0 0 472 9732 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:butt;' d='M 4724,3590 A 4241 4241 0 0 1 8598 3496 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:round;' d='M 850,3496 A 4241 4241 0 0 1 4724 3590 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:round;' d='M 850,9259 A 4507 4507 0 0 1 4724 9448 '%3E%3C/path%3E%3Cpolyline points='5385,4299 4062,8125 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='8598,3496 8598,9259 ' style='stroke:%23000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='850,3496 850,9259 ' style='stroke:%23000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='4960,9685 4488,9685 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='3070,4582 1889,6141 3070,7700 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='6418,4582 7600,6141 6418,7700 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='8976,3590 8976,9732 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpath style='stroke:%23000000;stroke-width:174;stroke-linecap:butt;' d='M 4960,9685 A 4228 4228 0 0 1 8976 9732 '%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    display: block;
+    height: 13em;
+    padding: 2em 1em;
+    background: #fff;
+}
+
+.ptx-toc > .toc-item-list:first-child > .toc-item:last-child {
+    border-bottom: 8px solid #999;
+}
+
+/* -------------------toc-items-------------------- */
+
+.ptx-toc {
+    --codenumber-pad-left: 0.3rem;
+    --codenumber-pad-right: 0.5rem;
+    
+    --toc-indent-first: calc(1.0rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
+    --toc-indent-second: calc(1.7rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
+    --toc-indent-third: calc(2.2rem + var(--codenumber-pad-left) + var(--codenumber-pad-right));
+}
+
+/* will be less indentation */
+.ptx-toc:is(.depth1, .parts.depth2) {
+    --codenumber-pad-right: 0.5rem;
+}
+
+.ptx-toc .toc-item-list {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+
+.ptx-toc .toc-item {
+    border-top: 1px solid var(--tocborder, #d1d1d1);
+}
+
+/* -------------------title-box------------------- */
+
+.ptx-toc .toc-title-box {
+    display: flex;
+}
+
+.ptx-toc .toc-title-box > .internal {
+    position: relative;
+    display: flex;
+    flex-grow: 1;
+    padding: 0.2em;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+
+/* at second level, switch fonts */
+.ptx-toc .toc-item-list .toc-item-list .toc-title-box > .internal {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+/* Extra border above top level items */
+.ptx-toc > .toc-item-list > .toc-item {
+    border-top: 2px solid var(--tocborder, #d1d1d1);
+}
+
+.ptx-toc .toc-item.active {
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+
+
+/* -------------------codenumbers-------------------- */
+.ptx-toc .codenumber {
+    min-width: var(--toc-indent-first);
+    padding-left: var(--codenumber-pad-left);
+    padding-right: var(--codenumber-pad-right);
+    display: inline-block;
+    text-align: left;
+    flex-grow: 0;
+}
+
+/* second level of numbering */
+/*  anything 1+ levels deeper than a chapter in a book */
+.book .ptx-toc .toc-chapter .toc-item-list .codenumber,
+/*  anything 1+ levels deeper than a section in an article */
+.article .ptx-toc .toc-section .toc-item-list .codenumber,
+/*  anything 1+ levels deeper than backmatter */
+.ptx-toc .toc-backmatter .toc-item-list .codenumber
+{
+    font-size: 80%;
+    padding-top: 0.16em;
+    min-width: var(--toc-indent-second);
+}
+
+/* third level of numbering */
+/*  anything 2+ levels deeper than a chapter in a book */
+.book .ptx-toc .toc-chapter .toc-item-list .toc-item-list .codenumber,
+/*  anything 2+ levels deeper than a section in an article */
+.article .ptx-toc .toc-section .toc-item-list .toc-item-list .codenumber,
+/*  anything 2+ levels deeper than backmatter */
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .codenumber
+{
+    min-width: var(--toc-indent-third);
+    visibility: hidden;
+}
+
+/* reveal on interaction */
+.ptx-toc .toc-item-list .toc-item-list .toc-item-list a:is(:hover, :focus) > .codenumber {
+    visibility: visible;
+}
+
+/* -------------------titles-------------------- */
+.ptx-toc .toc-title-box .title {
+    flex-grow: 1;
+}
+
+/* Any toc item without a codenumber needs indentation
+   Can't select absence of a preceeding, so indent all titles
+   and then clear indent if there is a codenumber */
+.ptx-toc .toc-item .toc-title-box .title {
+    margin-left: var(--toc-indent-first);
+}
+
+/* second level as defined by codenumber selectors */
+.book .ptx-toc .toc-chapter .toc-item-list .title,
+.article .ptx-toc .toc-section .toc-item-list .title,
+.ptx-toc .toc-backmatter .toc-item-list .title 
+{
+    margin-left: var(--toc-indent-second);
+}
+
+/* third level as defined by codenumber selectors */
+.book .ptx-toc .toc-chapter .toc-item-list .toc-item-list .title,
+.article .ptx-toc .toc-section .toc-item-list .toc-item-list .title,
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .title
+{
+    margin-left: var(--toc-indent-third);
+}
+
+/* unless there is a codenumber */
+.ptx-toc .toc-item > .toc-title-box .codenumber + .title {
+    margin-left: 0 !important;
+}
+
+.ptx-toc ul.structural ul.structural .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+
+
+.ptx-toc .toc-chapter .toc-item-list .title,
+.ptx-toc .toc-section .toc-item-list .title,
+/* 2 levels deep in back matter */
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .title 
+{
+    font-size: 90%;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item-list .title,
+.ptx-toc .toc-section .toc-item-list .toc-item-list .title,
+/* 3 levels deep in back matter */
+.ptx-toc .toc-backmatter .toc-item-list .toc-item-list .toc-item-list .title 
+{
+    font-style: italic;
+}
+
+/* ??? */
+.ptx-toc ul.structural li a.has-chevron {
+  padding-right: 2em;
+}
+
+/* -------------------depth controls-------------------- */
+.ptx-toc.depth0 ul.structural {
+    display: none;
+}
+.ptx-toc.depth1 ul.structural ul.structural {
+    display: none;
+}
+.ptx-toc.depth2 ul.structural ul.structural ul.structural {
+    display: none;
+}
+.ptx-toc.depth3 ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+.ptx-toc.depth4 ul.structural ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+
+/* if depth is shallow, identify best available toc item */
+.ptx-toc.depth1 ul.structural .toc-item.contains-active {
+    background-color: var(--chaptertocactive);
+    color: var(--chaptertoctextactive);
+}
+.ptx-toc.depth2 ul.structural ul.structural .toc-item.contains-active {
+    background-color: var(--parttocactive);
+    color: var(--parttoctextactive);
+}
+
+
+/* -------------------focused toc-------------------- */
+/* Hide all but active area of book */
+.ptx-toc.focused ul.structural:not(.contains-active) > li {
+    display: none;
+}
+.ptx-toc.focused ul.structural li.active > ul > li {
+    display: block;
+}
+
+/* Hooks for js based switching */
+.ptx-toc.focused ul.structural:not(.contains-active) > li.visible {
+    display: block;
+}
+.ptx-toc.focused ul.structural li.active > ul > li.hidden {
+    display: none ;
+}
+
+
+.ptx-toc.focused  > ul.structural > li:not(:first-child) {
+    margin-top: 0em;
+}
+.ptx-toc.focused ul.structural li ul.structural a:hover {
+    border: 0;
+}
+
+.ptx-toc.focused .toc-expander {
+    border: 0;
+    padding: 2px 5px;
+    background: inherit;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.ptx-toc.focused .toc-expander .icon {
+    font-size: 30px;
+    line-height: 18px;
+    font-variation-settings: 'wght' 200;
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) {
+    background-color: var(--highlighttoc);
+    color: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) .icon {
+    fill: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
+    transform: rotate(-90deg);
+}
+
+/* Part colors fall back to same as chapter if not defined 
+   Defined here and not in setcolors so that colors_ file can override as include
+    order is toc/colors/setcolors */
+:root {
+    --parttoc: var(--chaptertoc);
+    --parttoctext: var(--chaptertoctext);
+    --parttocactive: var(--documenttitle);
+    --parttoctextactive: var(--chaptertoctextactive);
+}
+/* But if browser supports, make parts very slightly darker than chapters */
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+    :root {
+        --parttoc: color-mix(in srgb, var(--chaptertoc), black 15%);
+    }
+}

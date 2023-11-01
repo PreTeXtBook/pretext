@@ -1,0 +1,82 @@
+
+/*
+ There are five main choices that define a color scheme in the
+ HTML output of PreTeXt:
+ 1) A dark color for the title on each page
+ 2) A dark color for highlighted words in the body
+ 3) A dark color for other highlighted words in the body
+
+ In the CSS those are called 'documenttitle', 'bodytitle',
+ and 'bodysubtitle'.
+
+ The other two choices appear in the ToC.
+
+ Either:
+ 4) A dark color for each chapter background
+ 5) A dark color for the current section background
+ (Often the ToC section background equals documenttitle.
+
+ Or:
+ 4') A light color for each chapter background
+ 5') A light color for the current section background
+
+ In the CSS those are called 'chaptertoc' and 'sectiontoc',
+ respectively.
+
+ With 4) and 5) you need white letters to go on the dark
+ background, and with 4') and 5') you need dark letters
+ on the light background.  Set the color of those letters
+ with 'chaptertoctext'.
+
+ In addition to the above choices, you need to 
+ choose a contrasting shade of each color, to be used
+ for highlighting, borders, etc.
+
+ In the future you will be able to choose colors for assemblages
+ and for knowl output
+*/
+
+:root {
+  --documenttitle: #932919;
+  --bodytitle: #A62E1C;  /* often a darker version of documenttitle  */
+  --bodysubtitle: #2B5F82;  /* can be the same as bodytitle  */
+  --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
+  --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  /* Part colors are not used in non-focused TOC */
+  --parttoc: #932c1c;   
+  --parttoctext: white;
+  --parttocactive: var(--documenttitle);
+  --parttoctextactive: white;
+
+  --chaptertoc: #3572a0;
+  --chaptertoctext: white;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: white;   /* can also write it as #ffffff  */
+  --sectiontoctext: #662211;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #185f65;
+
+  --highlighttoc: #671d12;   /* often a dark version of documenttitle */
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #F0EAF6;
+  --assemblageborder: #5B2F82;
+  --assemblageborder: #B793D7;
+  --assemblageborder: #CAAEE0;
+  --assemblagedarkborder: #472664;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+}
+

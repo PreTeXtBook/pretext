@@ -1,0 +1,219 @@
+/*
+  main knowls style
+*/
+
+[data-knowl] {
+    display: inline;
+    position: relative;
+    cursor: pointer;
+    color: #9c2310;
+    padding: 0px 2px 0px 2px;
+    margin: 0;
+    text-decoration: none;
+    margin-bottom: 1px;
+/*
+    margin-bottom: 0;
+*/
+    font-weight: 500;
+    white-space: nowrap;
+    border-bottom: none;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    transition-property: background-color;
+    transition-duration: 0ms;
+}
+table [data-knowl] {
+    white-space: pre-line;
+}
+
+[data-knowl]:hover, [data-knowl]:active, [data-knowl].active {
+    color: #8a1200;
+    background: #ffedeb;
+/*
+    margin-bottom: 0;
+*/
+    border-bottom: none;
+}
+
+[data-knowl]::after, [data-knowl]:hover::after, [data-knowl].active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 1px;
+    right: 2.4px;
+    left: 2.4px;
+    border-bottom: 1px dotted #9c2310;
+    transition-property: left, right;
+    transition-duration: 0ms;
+    z-index: 0;
+}
+/* is the next only for a proof or other content that is only a knowl? */
+article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [data-knowl].active::after,
+    section > details > summary > .heading, article + details > summary > .heading {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 1px;
+    right: 8.4px;
+    right: 0.6em;
+    left: 2.4px;
+    border-bottom: 1px dotted #9c2310;
+    transition-property: left, right;
+    transition-duration: 0ms;
+    z-index: 0;
+}
+
+[data-knowl].fn-knowl {
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 2px;
+}
+[data-knowl].fn-knowl::after {
+    bottom: 7px;
+}
+
+.knowl-error {
+   color: red;
+   border-bottom: 0;
+}
+.knowl-output {
+    background: #f5f5ff;
+    border: 10px solid #ddf;
+    border-radius: 10px;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.knowl-output.original {
+    background: #f8f8f8;
+    border: none;
+/*    border-left: 1px solid #666;
+*/
+    border-radius: 0;
+    padding: 0;
+    margin-top: 10px;
+}
+.knowl-output.original .knowl-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+/*
+.knowl-output.original:after {
+  content: '';
+  display: block;
+  padding-top: 0.35em;
+}
+*/
+.example-like .knowl-output.original {
+    background: inherit;
+}
+
+
+
+.knowl-output .knowl-output {
+    border-width: 6px;
+    background: #fffff5;
+    border-radius: 4px;
+    margin-bottom: -3px;
+    margin-left: -7px;
+    margin-right: -7px;
+}
+.knowl-output .knowl-output .knowl-output {
+    background: #fff5ff;
+}
+.knowl-output .knowl-output .knowl-output .knowl-output {
+    background: #fafffa;
+}
+.knowl-footer {
+  position: relative;
+  bottom: -9px;
+  font-size: x-small;
+  background: #ddf;
+  color: grey;
+  padding: 0 0 0 12px;
+  margin:  -10px 0 0 0;
+}
+.knowl-footer a {
+  color: #006;
+}
+.knowl-footer a:hover {
+  background: none;
+  color: #88f;
+}
+/* .knowl-footer:after {
+    content: "\2002";
+} */
+
+.knowl-output .knowl-output .knowl-footer {
+  bottom: -5px;
+  margin:  -5px 0 0 0;
+}
+
+.knowl-output + .knowl-output {
+    margin-top: 0;
+}
+.knowl-output + .knowl-output.original {
+    margin-top: 0.5em;
+}
+.knowl-content {
+    padding: 10px;
+    padding-bottom: 7px;
+}
+.knowl-content > *:first-child {
+    margin-top: 0;
+}
+
+/* sort of a hack for proof knows in theorem knowls */
+.ptx-content div.knowl .posterior a[data-knowl]:first-child {
+    padding: 0;
+}
+
+/* not sure where this was being used, but it made short knowls
+ * look bad, like the hint here:
+ * SAFurtherReading.html
+*/
+.ptx-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
+    margin-bottom: 0.5em;
+}
+
+/* No Greg's L in knowls, to save space */
+
+.ptx-content .knowl-content > article.theorem-like,
+.ptx-content .knowl-content > article.definition-like,
+.ptx-content .knowl-content > article.example-like,
+.ptx-content .knowl-content > article.project-like,
+.ptx-content .knowl-content > article.objectives,
+.ptx-content .knowl-content > article.outcomes,
+.ptx-content .knowl-content > article.remark-like {
+    padding-left: 0;
+    border-left: none;
+}
+.ptx-content .knowl-content > article.theorem-like::after,
+.ptx-content .knowl-content > article.definition-like::after,
+.ptx-content .knowl-content > article.example-like::after,
+.ptx-content .knowl-content > article.project-like::after,
+.ptx-content .knowl-content > article.objectives::after,
+.ptx-content .knowl-content > article.outcomes::after,
+.ptx-content .knowl-content > article.remark-like::after {
+    content: '';
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+    width: 0;
+}
+
+/* sup knowls are used for footnotes */
+/* the next 2 are obsolete, because (in PTX HTML) the structure is now a(sup), not sup(a) */
+sup [data-knowl] {
+    padding: 0px 0px 0px 3px;
+}
+
+sup .active[data-knowl] {
+    padding: 0px 0px 0px 3px;
+}
+
+sup [data-knowl]:hover {
+    padding: 0px 0px 0px 3px;
+}
+

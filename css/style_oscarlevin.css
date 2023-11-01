@@ -1,0 +1,471 @@
+/* Since the detault style is loaded before the oscarlevin style, */
+/* some of the default style has to be undone */
+
+.ptx-content article.theorem-like::after, .ptx-content article.definition-like::after, .ptx-content article.example-like::after, .ptx-content article.project-like::after, .ptx-content article.remark-like::after, .ptx-content article.openproblem-like::after, .ptx-content article.openproblems-like::after, .ptx-content article.computation-like::after {
+   content: unset;
+}
+
+.ptx-content article.theorem-like, .ptx-content article.definition-like, .ptx-content article.example-like, .ptx-content article.project-like, .ptx-content article.remark-like, .ptx-content article.openproblem-like, .ptx-content article.openproblems-like, .ptx-content article.computation-like {
+  padding: unset;
+  border: unset;
+}
+
+
+:root {
+/* Set colors for environments */
+
+  --assembbody: var(--bluelight, hsl(210, 90%, 80%));
+  --assembborder: var(--blue, hsl(210, 40%, 60%));
+  --assembhead: var(--blue, hsl(210, 40%, 75%));
+  --definitionbody: var(--greenlight, hsl(180, 40%, 80%));
+  --definitionborder: var(--green, hsl(180, 40%, 50%));
+  --definitionhead: var(--green, hsl(180, 40%, 50%));
+  --theorembody: var(--violetlight, hsl(270, 40%, 94%));
+  --theoremborder: var(--violet, hsl(270, 40%, 75%));
+  --theoremhead: var(--violetdark, hsl(270, 40%, 25%));
+  --examplebody: var(--bluedull, hsl(240, 40%, 90%));
+  --exampleborder: var(--bluedark, hsl(240, 40%, 25%));
+  --examplehead: var(--exampleborder);
+  --examplelikebody: var(--examplebody);
+  --examplelikeborder: var(--bluedull, hsl(240, 40%, 75%));
+  --examplelikehead: var(--examplelikeborder);
+  --projectbody: var(--greenlight, hsl(180, 40%, 94%));
+  --projectborder: var(--green, hsl(180, 40%, 75%));
+  --projecthead: var(--green, hsl(180, 40%, 75%));
+  --investigateborder: var(--bluerich, hsl(180, 40%, 25%));
+  --goalborder: var(--violetrich, hsl(270, 90%, 25%));
+  --remarklikebody: var(--yellowlight, hsl(59, 55%, 85%));
+  --remarklikeborder: var(--yellow, hsl(59, 55%, 50%));
+  --remarklikehead: var(--yellow, hsl(59, 55%, 50%));
+  --computationborder: var(--orangedull, hsl(180, 40%, 75%));
+
+  /* temporary workaround for setcolors.css use of assemblage */
+  --asemblagebackground: var(--assembbody) !important;
+  --assemblageborder: var(--assembborder) !important;
+}
+
+/* We can style all the *-like environments:
+    definition-like,
+    theorem-like,
+    example-like,
+    project-like,
+    remark-like,
+    computation-like,
+    goal-like, and
+    assemblage-like.
+  We also could do something for proofs, and commentary.
+
+  (should we style aside-like?  Or just copy from style_default?)
+
+  We define the style of environments in three steps: first the shape, then the color, and finally the shape and color of the heading/title.  The only reason to group these as such is that we can then have a common shape for differet *-like elements, but still allow for different colors to distinguish them.
+
+  Start with the important custom environments (theorem might be different from the other theorem-like, etc.), then clean up any standard *-like.
+
+*/
+
+/* definitions, theorems, assemblages, with theorem-like.theorem distinguished */
+.ptx-content article.assemblage-like,
+.ptx-content article.definition-like,
+.ptx-content article.theorem-like.theorem {
+    margin-top: 1.75em;
+    padding: 1em;
+    border-radius: 2px;
+    margin-bottom: 1em;
+}
+
+.ptx-content article.theorem-like {
+  margin-top: 1.25em;
+  padding: 1em;
+  border-radius: 2px;
+  margin-bottom: 1em;
+}
+
+.ptx-content article.assemblage-like{
+    background-color: var(--assembbody);
+    border: 2px solid var(--assembborder);
+}
+
+.ptx-content article.definition-like {
+  background-color: var(--definitionbody);
+  border: 2px solid var(--definitionborder);
+}
+
+.ptx-content article.theorem-like.theorem,
+.ptx-content article.theorem-like {
+  background-color: var(--theorembody);
+  border: 2px solid var(--theoremborder);
+}
+
+.ptx-content article.assemblage-like .heading,
+.ptx-content article.definition-like .heading,
+.ptx-content article.theorem-like.theorem .heading {
+  margin-top: -1.75em;
+  margin-left: -0.25em;
+  display: table;
+  padding: 0.25em 0.4em;
+}
+
+.ptx-content .assemblage-like .heading {
+  background-color: var(--assembhead);
+  color: #000;
+}
+
+.ptx-content .definition-like .heading {
+  background-color: var(--definitionborder);
+  color: #000;
+}
+
+.ptx-content .theorem-like.theorem .heading {
+  background-color: var(--theoremborder);
+  color: #000;
+}
+
+.ptx-content .example-like > .heading + .introduction,
+.ptx-content .computation-like > .heading + .introduction,
+.ptx-content .assemblage-like .heading + .para,
+.ptx-content .computation-like > .heading + .para,
+.ptx-content .example-like .heading + .para,
+.ptx-content .theorem-like.theorem .heading + .para,
+.ptx-content .definition-like .heading + .para {
+  display: block;
+  margin-top: 0.25em;
+}
+
+/* Examples and example-like; computation-like styled same as example-like with different colors */
+.ptx-content article.example-like,
+.ptx-content article.computation-like {
+  padding-left: 0.8em;
+  padding-bottom: 0.5em;
+}
+
+.ptx-content article.example-like.example {
+  border-left: 0.1em solid var(--examplehead);
+  border-bottom: 0.1em solid var(--examplehead);
+}
+
+.ptx-content article.example-like {
+  border-left: 0.1em solid var(--examplelikeborder);
+  border-bottom: 0.1em solid var(--examplelikeborder);
+}
+
+.ptx-content article.computation-like {
+  border-left: 0.1em solid var(--computationborder);
+  border-bottom: 0.1em solid var(--computationborder);
+}
+
+.ptx-content .example-like > .heading,
+.ptx-content .computation-like > .heading {
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  margin-left: -0.8em;
+}
+
+
+.ptx-content .example-like.example > .heading {
+  border: 0.1em solid var(--examplehead);   /* maybe no border-left? */
+  background: var(--examplehead);
+  color: white;
+}
+
+.ptx-content .example-like > .heading {
+  background: var(--examplelikeborder);
+  color: black;
+}
+
+.ptx-content .computation-like > .heading {
+  background: var(--computationborder);
+  color: black;
+}
+
+/* Project-like */
+.ptx-content article.project-like {
+  background-color: white;
+  border: solid 3px var(--projectborder);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 1em;
+}
+
+.ptx-content article.project-like.investigation {
+  border-color: var(--investigateborder);
+}
+
+.ptx-content article.project-like > .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table !important;
+  padding: 5px 1em;
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 120% !important;
+}
+
+
+/* Goal-like */
+
+.ptx-content .goal-like {
+  background-color: white;
+  border-radius: 0em;
+  padding: 0.7em;
+  margin-bottom: 1em;
+}
+.ptx-content .goal-like.objectives {
+  border-top: solid 3px var(--goalborder);
+  border-bottom: solid 3px var(--goalborder);
+  border-left: none;
+  border-right: none;
+}
+.ptx-content .goal-like.outcomes {
+  border-top: solid 3px var(--goalborder);
+  border-bottom: solid 3px var(--goalborder);
+  border-left: none;
+  border-right: none;
+}
+
+.ptx-content .goal-like .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table;
+  padding: 5px 1em;
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 120%;
+}
+
+/* remark-like */
+
+.ptx-content article.remark-like {
+  margin-top: 1.25em;
+  padding: 1em;
+  padding-top: 0.7em;
+  margin-bottom: 1em;
+  border-radius: 0px;
+  border-left: 5px solid var(--remarklikeborder);
+  background-color: var(--remarklikebody);
+}
+
+
+/* proofs */
+
+.ptx-content section > .proof {
+  margin-bottom: 1em;
+}
+
+
+/* Common fixes? */
+.ptx-content article.assemblage-like .heading::after,
+.ptx-content article.theorem-like.theorem .heading::after,
+.ptx-content article.theorem-like .heading::after,
+.ptx-content article.example-like > .heading::after,
+.ptx-content article.project-like > .heading::after {
+  content: "";
+}
+
+/* Fixes for mathjax: */
+/* These gradients need to be adjusted to match background colors */
+.ptx-content .assemblage-like .MJXc-display,
+.ptx-content .definition-like .MJXc-display,
+.ptx-content .theorem-like.theorem .MJXc-display {
+    background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
+.ptx-content .theorem-like.corollary .MJXc-display {
+    background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
+
+/*
+END OF STYLE_OSCARLEVIN
+(below is only stuff copied from style_default)
+*/
+
+
+
+/* Assides, copied directly from style_default.css */
+/* next selector first part of the following is due to the mistake of
+   putting paragraph spacing in the margin-bottom
+   Redo when we fix that error */
+.ptx-content .aside-like {
+ /*   margin-top: -1.25em;
+*/
+    position: absolute;
+    margin-left: 45%;
+    overflow-x: hidden;
+    max-width: 495px;
+    max-height: 7em;
+    overflow-y: hidden;
+    border: none;
+    padding: 4px 10px 0 10px;
+    color: #888;
+}
+.ptx-content .example-like .aside-like {
+    margin-top: 0;
+    position: absolute;
+}
+.ptx-content .aside-like {
+    font-size: 90%;
+}
+.ptx-content .aside-like {
+  margin-bottom: 5px;
+  background-color: #f5faff;
+  box-shadow: 0 0 1.0em 0.2em #fff inset;
+}
+.ptx-content .aside-like:first-child {
+    margin-top: -2.25em;
+}
+.ptx-content .aside-like:after {
+  content  : "";
+  position : absolute;
+  z-index  : 1;
+  top   : 0em;
+  bottom   : 0;
+  left     : 0;
+  pointer-events   : none;
+  background-image : linear-gradient(to bottom,
+                    rgba(255,255,255, 0.4),
+                    rgba(255,255,255, 1) 90%);
+  width    : 550px;
+  height   : 8em;
+}
+/* example of where the following is needed? */
+/*
+.ptx-content .aside-like * {
+    background-color: #f5faff !important;
+}
+*/
+.ptx-content .aside-like.front, .ptx-content .example-like .aside-like.front {
+  position: relative;
+  z-index: 0;
+  padding: 8px 15px 10px 15px;
+  padding: 2px 10px;
+  margin: 5px 0px 5px 10px;
+  border: 2px solid #dcebfa;
+  max-height: none;
+  max-width: 550px;
+  color: inherit;
+  font-size: 100%;
+  box-shadow: none;
+}
+.ptx-content .aside-like.front:after, .ptx-content .example-like .aside-like.front:after {
+    background-image: none;
+}
+.ptx-content .example-like .aside-like.front {
+    margin-top: 1.25em;
+}
+
+.ptx-content .aside-like.front + .para{
+    margin-top: 1.25em !important;
+    padding-top: 0;
+}
+
+
+
+.ptx-content .aside-like .aside-like {
+  background-color: #fafff5;
+  border: 1px dotted #aaa;
+}
+
+.ptx-content article.aside-like > .para:first-child {
+    margin-top: 0;
+}
+
+.ptx-content .aside-like > .heading {
+    font-size: 95%;
+}
+
+.ptx-content .aside-like + *{
+    margin-top: 3em !important;
+    margin-right: 3em;
+}
+
+/* on sufficiently large screens, there is enough of a margin to see part of the aside */
+
+@media screen and (min-width: 943px) {
+  .ptx-content .aside-like + * {
+      margin-right: 0;
+  }
+}
+
+/* on a wide screen, asides should appear in the right margin */
+@media screen and (min-width: 1100px) {
+  .ptx-content .aside-like, .ptx-content .aside-like.front, .ptx-content .example-like .aside-like, .ptx-content .example-like .aside-like.front {
+      position: absolute;
+      margin-top: -2em;
+      margin-left: 660px;
+      max-width: 200px;  /* for some reason the width was too small, so I had to put width (next line) */
+      width: 200px;
+      color: inherit;
+  }
+  .ptx-content .aside-like.front, .ptx-content .example-like .aside-like.front {
+      max-height: none;
+      max-width: 223px;
+      border: 2px solid #dcebfa;
+}
+  .ptx-content .example-like .aside-like, .ptx-content .example-like .aside-like.front {
+      margin-left: 654px;  /* because .example-like has 6px of padding */
+  }
+
+  .ptx-content .aside-like + * {
+      margin-top: 1.25em !important;
+  /*    background: none;  */
+      margin-right: 0;
+  }
+
+  .ptx-content .aside-like.front:after, .ptx-content .example-like .aside-like.front:after {
+    background-image: none;
+  }
+
+  .ptx-content .aside-like:nth-of-type(3n+1) {
+    margin-left: 660px;
+}
+  .ptx-content .aside-like:nth-of-type(3n) {
+    margin-left: 680px;
+}
+  .ptx-content .aside-like:nth-of-type(3n+2) {
+    margin-left: 640px;
+}
+}
+
+.ptx-content .aside-like:hover:after, .ptx-content .aside-like:focus:after {
+    top: 3em;
+    height: auto;
+    background-image : none;
+}
+
+.ptx-content .aside-like:hover, .ptx-content .aside-like:focus {
+    color: inherit;
+    padding: 2px 8px 0 8px;
+    border: 2px solid #dcebfa;
+    height: auto;
+    max-height: none;
+}
+.ptx-content .aside-like.front:hover, .ptx-content .aside-like.front:focus {
+    padding: 4px 10px;
+}
+
+/* find a better way to handle asides in content that has a wide left margin */
+/* see http://pretext.jahrme.com/aside-in-knowl/section-1.html */
+.ptx-content section dl dd .aside-like {
+    margin-top: 0 !important;
+    margin-left: 100px !important;
+}
+.ptx-content section dl dd .aside-like.front {
+    margin-left: -300px !important;
+}
+
+@media screen and (max-width: 1099px) {
+  .ptx-content .aside-like {
+    position: relative;
+    float: right;
+    z-index: 0;
+    overflow-x: hidden;
+    margin-left: 1em;
+    margin-top: 1em;
+    max-width: 195px;
+    max-height: 4em;
+    margin-right: -8em;
+}
+  .ptx-content li > .aside-like:last-child {
+    position: absolute;
+}
+}
+
+

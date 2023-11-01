@@ -1,0 +1,118 @@
+
+/*
+ There are five main choices that define a color scheme in the
+ HTML output of PreTeXt:
+ 1) A dark color for the title on each page
+ 2) A dark color for highlighted words in the body
+ 3) A dark color for other highlighted words in the body
+
+ In the CSS those are called 'documenttitle', 'bodytitle',
+ and 'bodysubtitle'.
+
+ The other two choices appear in the ToC.
+
+ Either:
+ 3) A dark color for each chapter background
+ 4) A dark color for the current section background
+ (Often the ToC section background equals documenttitle.
+
+ Or:
+ 3') A light color for each chapter background
+ 4') A light color for the current section background
+
+ In the CSS those are called 'chaptertoc' and 'sectiontoc',
+ respectively.
+
+ With 3) and 4) you need white letters to go on the dark
+ background, and with 3') and 4') you need dark letters
+ on the light background.  Set the color of those letters
+ with 'chaptertoctext'.
+
+ In addition to the above four choices, you need to 
+ choose a contrasting shade of each color, to be used
+ for highlighting, borders, etc.
+
+ In the future you will be able to choose colors for assemblages
+ and for knowl output
+*/
+
+:root {
+  --documenttitle: #2a5ea4;
+  --bodytitle: #2b5f82; 
+  --bodysubtitle: #a62e1c;
+  --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
+  --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: #28803f;
+  --chaptertoctext: white;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: white;   /* can also write it as #ffffff  */
+  --sectiontoctext: #20477b;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: #20477b;   /* often a dark version of documenttitle */
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+
+  /* Colors for block envirornments: */
+  /* 
+  We specify 6 color families (hues), each with 5 hue/lightness options, to be used by style files if they wish. 
+
+  The hues should roughly corrspond to red, orange, yellow, green, blue, violet, but should be consistent with the colors specified for titles and toc defined above. 
+  
+  Each color has *light, *dark variants (adjusting the lightness of hsl) and *rich, *dull variants (adjusting the saturation). *light and *dull should work for a main background. The standard and *riche should work for borders. For a bold title background, the *dark could be used.
+
+  The *dark should always contrast correctly with white text (we could later specify a *dark-text to be the correct contrast with *dark). All other variants should contrast correctly with black text.
+  */
+  --red: hsl(345, 60%, 60%);  
+  --redlight: hsl(345, 60%, 80%);  
+  --reddark: hsl(345, 60%, 15%);  
+  --redrich: hsl(345, 100%, 60%);  
+  --reddull: hsl(345, 20%, 60%);  
+
+  --orange: hsl(30, 70%, 60%);  
+  --orangelight: hsl(30, 60%, 80%);  
+  --orangedark: hsl(30, 60%, 15%);  
+  --orangerich: hsl(30, 100%, 60%);  
+  --orangedull: hsl(30, 30%, 60%);  
+
+  --yellow: hsl(58, 60%, 60%);  
+  --yellowlight: hsl(58, 60%, 80%);  
+  --yellowdark: hsl(58, 60%, 15%);  
+  --yellowrich: hsl(58, 100%, 60%);  
+  --yellowdull: hsl(58, 30%, 60%);  
+  
+  --green: hsl(136, 52%, 33%);
+  --greenlight: hsl(136, 52%, 80%);  
+  --greendark: hsl(136, 52%, 15%);  
+  --greenrich: hsl(136, 100%, 60%);  
+  --greendull: hsl(136, 20%, 60%);
+    
+  --blue: hsl(214, 59%, 60%);
+  --bluelight: hsl(214, 59%, 80%);  
+  --bluedark: hsl(214, 59%, 15%);  
+  --bluerich: hsl(214, 100%, 50%);  
+  --bluedull: hsl(214, 20%, 50%);
+
+  --violet: hsl(259, 60%, 60%);  
+  --violetlight: hsl(259, 60%, 80%);  
+  --violetdark: hsl(259, 60%, 15%);  
+  --violetrich: hsl(259, 100%, 60%);  
+  --violetdull: hsl(259, 20%, 60%);  
+}
+

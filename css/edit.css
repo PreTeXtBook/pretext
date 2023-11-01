@@ -1,0 +1,493 @@
+/* CAT  */
+
+.edit_menu_holder {
+    position: relative;
+    left: 15em;
+    bottom: 1.5em;
+    z-index: 1000;
+}
+.edit_menu_holder li {
+    font-style: normal;
+}
+p > .edit_menu_holder,
+.creator > .edit_menu_holder {
+    display: inline;
+}
+p > .edit_menu_holder {
+    bottom: 4.2em;
+}
+#local_menu_holder {
+    position: relative;
+    left: 20em;
+    bottom: 1.5em;
+    z-index: 1000;
+}
+.edit_menu,
+#enter_choice {
+    background: #fee;
+    position: absolute;
+    left: 0;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 95%;
+    font-weight: normal;
+}
+.edit_menu.past {
+    background: #ffe;
+    color: #999;
+}
+.past > li {
+    background: #fff9f9;
+    color: #aaa;
+}
+#enter_choice {
+    padding: 0.25em 0.5em 0 0.5em;
+    background: yellow;
+    bottom: -1.2em;
+    border-radius: 0.5em 0.5em 0 0;
+    font-style: italic;
+}
+.may_enter #enter_choice {
+    background: #ccccee;
+}
+.may_enter {
+    margin-top: 1.25em;
+    background: #eeeeff !important;
+}
+.may_enter > [data-editable] {
+    background: #feeedf !important;
+}
+.may_enter > [data-editable="99"] {
+    background: #ffffdd !important;
+}
+
+p > .edit_menu_holder > #enter_choice {
+    bottom: -2.7em;
+}
+blockquote > .edit_menu_holder > #enter_choice {
+    bottom: -1.2em;
+}
+blockquote.may_leave + .edit_menu_holder > #enter_choice {
+    bottom: -2.3em;
+}
+article.project-like > .edit_menu_holder > #enter_choice {
+    bottom: -0.5em;
+}
+article.theorem-like > .edit_menu_holder > #enter_choice,
+article.definition-like > .edit_menu_holder > #enter_choice {
+    bottom: -0.2em;
+}
+/*
+article.project-like > ol > .edit_menu_holder > #enter_choice {
+    bottom: -1.3em;
+}
+*/
+.ptx-content section article.project-like.may-enter > .heading,
+.ptx-content section article.project-like.may-leave > .heading {
+    background-color: inherit;
+}
+
+ol > .edit_menu_holder > #enter_choice {
+    bottom: -1.3em;
+}
+ol.may_leave + .edit_menu_holder > #enter_choice {
+    bottom: -3.3em;
+}
+li > .para > .edit_menu_holder > #enter_choice {
+    bottom: -4.1em;
+}
+#enter_choice[data-location="inline"] {
+    bottom: -0.2em;
+    left: -0.5em;
+}
+
+.edit_menu_holder + .para {
+    margin-top: 0;
+}
+li > .edit_menu_holder {
+    display: block;
+}
+.may_leave + .edit_menu_holder #enter_choice {
+    position: absolute;
+    padding: 0em 0.5em 0.25em 0.25em;
+    background: #FFD6D9;
+    bottom: -1.9em;
+    border-radius: 0 0 0.5em 0.5em;
+    list-style-type: none;
+    font-style: italic;
+}
+section.may_leave + .edit_menu_holder #enter_choice {
+    bottom: -3.3em;
+}
+article.may_leave + .edit_menu_holder #enter_choice {
+    bottom: -2.3em;
+}
+.may_leave + .edit_menu_holder #enter_choice li {
+    padding: 0;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
+.edit_menu li.chosen,
+.edit_menu #choose_current {
+    background: #ddf;
+    color: #000;
+}
+.edit_menu.past > .choose {
+    background: #eef;
+    color: #000;
+}
+.edit_menu {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
+}
+.edit_menu li {
+    margin-top: 0;
+    padding-right: 1.4em;
+    padding-left: 0.4em;
+    padding-bottom: 0.1em;
+}
+.edit_menu li:last-of-type {
+    padding-bottom: 0.3em;
+}
+.edit_menu_holder ol.past {
+    box-shadow: -0.25em 0.25em 0 #ccc;
+}
+.edit_menu_holder ol:not(.past) {
+    border: 0.1em solid #999;
+    box-shadow: 0.15em 0.15em 0.05em #ccc;
+}
+.edit_menu li#choose_current {
+    background: #ddf;
+}
+.edit_menu li.choosen {
+    background: #ddf;
+}
+.edit_menu li ol {
+    position: absolute;
+    left: 8em;
+/*
+    bottom: -0.5em;
+*/
+    top: -3.5em;
+    margin-top: 0;
+    padding-left: 0;
+    list-style-type: none;
+    background: #fdd;
+}
+.edit_menu li ol li {
+    position: relative;
+}
+.edit_menu li ol ol {
+    position: absolute;
+    top: -1.5em;
+    z-index: 500;
+}
+.edit_menu li.choose {
+    background: #eef;
+}
+.edit_menu .wrap_to_submenu {
+    float: right;
+}
+.past > li > .wrap_to_submenu {
+    display: none;
+}
+.edit_menu .to_submenu {
+    position: absolute;
+    padding-left: 0.5em;
+}
+.text_source {
+    font-size: 95%;
+}
+.may_select > .para:first-of-type {
+    margin-top: 0;
+}
+.sbspanel.may_select {
+    margin-top: 0;
+}
+sbspanel:empty { /* can only happen when partially created */
+    height: 10em;
+    background-color: rgb(221, 221, 255);
+}
+.ptx-content .sbspanel:empty + .sbspanel:empty {
+    background-color: #dfd;
+}
+.ptx-content .sbspanel:empty + .sbspanel:empty + .sbspanel:empty {
+    background-color: #eee;
+}
+
+#actively_editing {
+    margin-top: 1em;
+}
+#actively_editing_id {
+    float: right;
+    width: 8em;
+    margin-bottom: 0;
+}
+#actively_editing[data-component="title"] {
+    display: inline-block;
+    min-width: 10em;
+    margin-top: 0;
+    margin-left: 0.75em;
+    background: #fff;
+    border: 1px dotted black;
+}
+.title > .edit_menu_holder {
+    display: inline;
+}
+.space + .title {
+    margin-left: 0.5em;
+}
+
+.edit_menu .in_edit_tree {
+    border: none;
+}
+.edit_menu .in_edit_tree:before,
+.edit_menu .in_edit_tree:before {
+    display: none;
+}
+
+.in_edit_tree > .workspace {
+    min-height: 3em;
+    background: #efe;
+    border: 1px dotted #aaa;
+}
+.in_edit_tree > .workspace::before {
+    content: "optional workspace (in printed worksheet)";
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 0.25em;
+}
+/* why not collapse the next groups of 4? */
+.in_edit_tree > .placeholder.proof,
+.in_edit_tree > .placeholder.hint,
+.in_edit_tree > .placeholder.answer,
+.in_edit_tree > .placeholder.solution {
+    min-height: 1em;
+    background: #fee;
+}
+.in_edit_tree > .placeholder.proof::before,
+.in_edit_tree > .placeholder.hint::before,
+.in_edit_tree > .placeholder.answer::before,
+.in_edit_tree > .placeholder.solution::before {
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 0.25em;
+}
+.in_edit_tree > .placeholder.proof::before {
+    content: "optional proof";
+}
+.in_edit_tree > .placeholder.hint::before {
+    content: "optional hint";
+}
+.in_edit_tree > .placeholder.answer::before {
+    content: "optional answer";
+}
+.in_edit_tree > .placeholder.solution::before {
+    content: "optional solution";
+}
+
+.group_description {
+    font-size: 75%;
+    font-color: #caa;
+    font-style: italic;
+}
+[data-objecttype="theorem-like"] .para {
+    font-style: italic;
+}
+[data-objecttype="theorem-like"] .para ol {
+    font-style: normal;
+}
+
+.paragraph_input {
+    width: 98%;
+    min-height: 3em;
+    border: 3px dashed #999;
+}
+.paragraph_input:focus {
+    border: 1px solid #000;
+    padding: 2px;
+}
+.displaymath_input {
+    width: 98%;
+    min-height: 3em;
+    border: 3px dotted #399;
+}
+.displaymath_input:focus {
+    border: 1px dashed #900;
+    padding: 2px;
+}
+.edit_inline_math {
+    font-family: "Inconsolata";
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: #ddf;
+}
+#actively_editing em {
+    background-color: #fdf;
+}
+#actively_editing q {
+    background-color: #eef;
+}
+#actively_editing span {
+    background-color: #dfd;
+}
+#actively_editing code {
+    background-color: #ddd;
+}
+#actively_editing dfn {
+    background-color: #fee;
+}
+.ptx-content section.may_enter > .heading {
+    margin-top: 0;
+}
+.ptx-content #deleting {
+    transition: all 0.5s;
+    background: #666;
+    height: 5em;
+    margin-right: 20em;
+    margin-left: 15em;
+    font-size: 5%;
+    box-shadow: -2px -1px 1px #770000;
+}
+
+.ptx-content .phantomobject.move {
+    margin-left: 5em;
+    margin-right: 2em;
+    padding: 1.5em;
+    box-shadow: 1em 0.7em rgba(180, 180, 180,0.96);
+    margin-top: -1.5em;
+    margin-bottom: -1.5em;
+    z-index: 100;
+    background: rgba(239, 223,256,0.9);
+    font-size: 110%;
+    font-style: italic;
+    position: relative;
+}
+.ptx-content .phantomobject.move + .para {
+    margin-top: 0;
+}
+.ptx-content .phantomobject.move .done {
+    margin-left: 1em;
+    margin-top: 0em;
+}
+.ptx-content .phantomobject.move .movearrow  {
+    position: relative;
+    z-index: 101;
+    background: rgba(243, 225,256,1);
+}
+.ptx-content .phantomobject.move .movearrow .arrow {
+    font-size: 200%;
+    margin-right: 0.6em;
+    margin-top: -0.5em;
+}
+.ptx-content .phantomobject.move .movearrow .para {
+    margin-top: 0.4em;
+}
+.ptx-content .phantomobject.move .movearrow .para.up {
+    margin-top: 0;
+    margin-bottom: -1em;
+}
+.ptx-content .phantomobject.move .movearrow .para.down {
+    margin-top: 0.0em;
+}
+.ptx-content .phantomobject.move .movearrow > * {
+    display: inline-block;
+}
+
+.ptx-content .ref.tmp {
+    background: #dfd;
+}
+.ptx-content .may_enter q {
+    background: #ddf;
+}
+.ptx-content .may_enter abbr {
+    background: #adf;
+}
+
+/* new editing css */
+.ptx-content .para.may_select {
+    display: block !important;
+}
+.ptx-content .may_select {
+    background: #fef;
+    border: 2px solid #999;
+}
+
+.ptx-content .onepage.in_edit_tree,
+.ptx-content .in_edit_tree .onepage {
+    border: 6px double #600 !important;
+    padding: 0.5em;
+}
+
+
+.ptx-content .para.in_edit_tree,
+.ptx-content section.in_edit_tree,
+.ptx-content article.in_edit_tree {
+    border: 3px solid #666 !important;
+    padding: 0.5em;
+}
+.ptx-content .in_edit_tree .para,
+.ptx-content .in_edit_tree .displaymath,
+.ptx-content .in_edit_tree section,
+.ptx-content .in_edit_tree article {
+    border: 3px solid blue !important;
+    padding: 0.5em;
+}
+.ptx-content .in_edit_tree .para {
+    border: 3px solid #4a9 !important;
+    background: #ffd;
+    padding: 0.5em;
+}
+.ptx-content .in_edit_tree figcaption,
+.ptx-content .in_edit_tree blockquote {
+    border: 3px dotted #9a0 !important;
+    background: #efd;
+    padding: 0.5em;
+}
+.ptx-content .in_edit_tree img {
+    border: 3px dotted #09a !important;
+    background: #fbd;
+    padding: 0.5em;
+}
+.ptx-content .in_edit_tree .displaymath,
+.ptx-content .in_edit_tree figure {
+    border: 3px solid #92a !important;
+    background: #efe;
+    padding: 0.5em;
+}
+/* over-rive overflow-x on small screens */
+.ptx-content.canedit .displaymath,
+.ptx-content.canedit .figure,
+.ptx-content.canedit figure.figure-like figcaption {
+     overflow: initial;
+}
+.ptx-content .in_edit_tree * section,
+.ptx-content .in_edit_tree * article {
+    border: 3px solid green !important;
+    padding: 0.5em;
+}
+.ptx-content .in_edit_tree * * .para,
+.ptx-content .in_edit_tree * * .displaymath,
+.ptx-content .in_edit_tree * * section,
+.ptx-content .in_edit_tree * * article {
+    border: 3px dashed grey !important;
+    padding: 0.5em;
+}
+
+.ptx-content .in_edit_tree .para.mp,
+.ptx-content .in_edit_tree .para.fp {
+    margin-top: 0;
+}
+
+.ptx-content .in_edit_tree .heading + .para {
+    display: block;
+}
+.ptx-content .in_edit_tree::before,
+.ptx-content .in_edit_tree::after,
+.ptx-content .in_edit_tree *::before,
+.ptx-content .in_edit_tree *::after {
+    all: reset;
+}

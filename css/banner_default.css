@@ -1,0 +1,141 @@
+/*******************************************************************************
+ * PreTeXt Masthead Stylesheet
+ *******************************************************************************/
+
+.ptx-masthead .ptx-banner {
+    border-bottom: 1px solid #d4d4d4;
+    border-top: 1px solid transparent;
+    overflow: hidden;
+    padding-top: 0.625em;
+    padding-bottom: 1.125em;
+    border-bottom: none;
+}
+
+.ptx-masthead {
+    max-width: 904px;
+    border-right: 1px solid #bababa;
+}
+
+.ptx-masthead .title-container {
+  font-size: 1em;
+  padding-left: 9.68px;
+  overflow: hidden;
+}
+@media screen and (max-width: 480px) {
+  .ptx-masthead .title-container {
+    padding: 0;
+    text-align: center;
+    margin-top: 0.625em;
+  }
+}
+.ptx-masthead .title-container > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  margin: 0;
+  font-size: 2em;
+  line-height: 1.25em;
+  color: #932919;
+}
+@media screen and (max-width: 480px) {
+  .ptx-masthead .title-container > .heading {
+    font-size: 1.5em;
+    line-height: 1.25em;
+    margin: 0;
+    margin-bottom: 0.41667em;
+  }
+}
+.ptx-masthead .title-container > .heading a {
+  color: #932919;
+  background: none;
+  text-decoration: none;
+}
+.ptx-masthead .title-container > .heading .subtitle {
+  font-weight: normal;
+}
+@media screen and (max-width: 800px) {
+  .ptx-masthead .title-container > .heading .subtitle {
+    /* Force the subtitle onto a separate line */
+    display: block;
+    font-size: 1.16667em;
+    line-height: 1.42857em;
+    /* De-emphasize relative to main title */
+    color: #595959;
+    /* Remove colon */
+  }
+  .ptx-masthead .title-container > .heading .subtitle:before {
+    content: normal;
+  }
+}
+.ptx-masthead .logo-link {
+  position: relative;
+  float: left;
+  font-size: 50px;
+  margin-top: 0.1em;
+  margin-left: 9.68px;
+  text-align: center;
+  line-height: 1;
+}
+.ptx-masthead .logo-link img {
+  width: auto;
+  height: auto;
+  /* Allow font-size to control height
+   * so that icon placeholder height matches */
+  max-height: 1em;
+}
+.ptx-masthead .logo-link:empty:before {
+  font-family: "Open Sans";
+  font-size: 1em;
+  content: "\2211";
+  /* Center the icon in a square the size of the parent's font-size */
+  line-height: 1;
+  width: 1em;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  color: #ccc;
+}
+.ptx-masthead .logo-link:empty:hover:before {
+  color: #932919;
+}
+.ptx-masthead .logo-link:empty:active:before {
+  color: #3572a0;
+}
+.ptx-masthead .logo-link {
+  background: transparent;
+  border: none;
+  text-decoration: none;
+}
+@media screen and (max-width: 480px) {
+  .ptx-masthead .logo-link {
+    display: block;
+    float: none;
+    margin: 0;
+    font-size: 50px;
+  }
+}
+.ptx-masthead .byline {
+  color: #333333;
+  font-weight: normal;
+  margin: 0;
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  min-height: inherit;
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+@media screen and (max-width: 480px) {
+  .ptx-masthead .byline {
+    margin-top: 0;
+    font-size: 1em;
+    line-height: 1.25em;
+  }
+}
+.ptx-masthead .byline a {
+  color: #333333;
+}
+.ptx-masthead .byline a:hover, .ptx-masthead .byline a:focus {
+  color: #932919;
+}
+.ptx-masthead .byline a:active {
+  color: #3572a0;
+}
+

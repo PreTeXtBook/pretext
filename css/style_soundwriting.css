@@ -1,0 +1,156 @@
+
+/*
+:root {
+  --documenttitle: #660000;
+  --bodytitle: #8e0a0c; 
+  --bodysubtitle: #A62E1C;
+  --bodytitlehighlight: #eeeff3;  
+  --bodysubtitlehighlight: #fce5e4;  
+
+  --chaptertoc: #6d8899;
+  --chaptertoctext: white;
+  --chaptertocactive: var(--documenttitle);   
+  --chaptertoctextactive: white;
+  --sectiontoc: white;   
+  --sectiontoctext: #6f080b;
+  --sectiontocactive: var(--documenttitle);   
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: #330000;   
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+}
+*/
+
+
+:root {
+/* Colors for titles */
+--chaptertitle: var(--documenttitle);
+--sectiontitle: var(--documenttitle);
+--subsectiontitle: var(--documenttitle);
+
+/* Set colors for blocks */
+
+  --bordercolor: var(--documenttitle);
+  --listbackground: #d0ccbd; /*neutral1*/
+  --insightbackground: #d0c681; /*muted2*/
+  --conventionbackground: #b1a77d; /*muted3*/
+  --notebackground: #93a396; /*muted4*/
+  --examplebackground: #a2bac2; /*muted5*/
+  --warningbackground: #b4bd00; /*bright4*/
+  --observationbackground: #48848d; /*bright6*/
+}
+
+
+/* Headings: */
+
+.ptx-content section.chapter h2.heading {
+  color: var(--chaptertitle);
+}
+
+.ptx-content section.chapter h2.heading .title {
+  display:block;
+  font-size:larger;
+  margin-top: 5pt;
+}
+
+.ptx-content section.section h2.heading {
+  color: var(--sectiontitle);
+  border-top: 1pt solid;
+  border-bottom: 1pt solid;
+  margin-bottom: 20pt;
+  width: 100%;
+}
+.ptx-content section.subsection h2.heading {
+  color: var(--subsectiontitle);
+  border-bottom: 1pt solid;
+  margin-bottom: 20pt;
+  width: 90%;
+}
+
+/* frontmatter headings: */
+.ptx-content section.frontmatter h2.heading {
+  color: var(--chaptertitle);
+  font-size:2em;
+}
+
+.ptx-content section.preface h2.heading, 
+.ptx-content section.acknowledgement h2.heading, 
+.ptx-content section.colophon h2.heading {
+  color: var(--chaptertitle);
+  margin-bottom: 15pt;
+  font-size: 1.75em;
+}
+
+.ptx-content section.preface h2.heading .title {
+  display:block;
+  font-size:larger;
+}
+
+/* Blocks: */
+
+/* set background colors */
+.ptx-content .list {
+  background-color: var(--listbackground);
+}
+.ptx-content .insight {
+  background-color: var(--insightbackground);
+}
+.ptx-content .convention {
+  background-color: var(--conventionbackground);
+}
+.ptx-content .note {
+  background-color: var(--notebackground);
+}
+.ptx-content .example {
+  background-color: var(--examplebackground);
+}
+.ptx-content .warning {
+  background-color: var(--warningbackground);
+}
+.ptx-content .observation {
+  background-color: var(--observationbackground);
+}
+
+/* set titles and borders */
+.ptx-content .remark-like,
+.ptx-content .example-like,
+.ptx-content .list {
+    padding: 1em;
+    border-radius: 10px;
+    margin-bottom: 1em;
+    border: 2px solid var(--bordercolor);
+}
+
+.ptx-content .example-like .example-like {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: inherit;
+}
+
+
+/* override list margins */
+.ptx-content .list {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.ptx-content .remark-like .heading,
+/* .ptx-content .example-like .heading, */
+.ptx-content .list figcaption {
+  display: block;
+  margin-top: -0.5em !important;
+  padding-bottom: 1em;
+  font-size: large; /*sets font caption size to match h6*/
+}
+
+

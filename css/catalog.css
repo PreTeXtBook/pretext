@@ -1,0 +1,94 @@
+
+.projects a {
+    text-decoration: none;
+}
+.projects p {
+    margin: 0;
+}
+.projects p + p {
+    margin-top: 0.75em;
+}
+
+.projects .category {
+    max-width: 700px;
+}
+.projects .fact-sheet-knowl {
+    display: none;
+}
+.projects .description-knowl {
+    display: none;
+}
+.projects .awards-knowl {
+    display: none;
+}
+.projects .book-summary {
+    margin-left: 2em;
+    padding-left: 0.5em;
+}
+.projects .book-summary + .book-summary {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    margin-top: 1em;
+}
+
+.projects .book-summary:nth-of-type(even) {
+    background: #efe;
+}
+.projects .badges {
+    margin-top: 0.25em;
+    padding-left: 0.5em;
+    min-height: 30px;
+}
+.projects .badges img {
+    max-height: 25px;
+}
+.projects .badges img + img {
+    margin-left: 5px;
+}
+.projects .badge.award + .badge:not(.award) {
+    margin-left: 2em;
+}
+.projects .badge.license {
+    margin-right: 0.5em;
+    float: right;
+}
+
+.projects .biblio > .title {
+    font-style: italic;
+    font-size: 120%;
+}
+.projects .biblio > .authors {
+    margin-left: 0.25em;
+}
+
+.projects .category > .title {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 0.4em;
+    margin-left: 1em;
+    background: #ccf;
+    font-size: 150%;
+    padding: 0.5em 0 0.25em 0.2em;
+}
+
+.projects .blurb {
+    margin-top: 0.2em;
+    padding-left: 0.5em;
+}
+.projects .category .blurb .id-ref {  /* why that name? */
+    font-style: italic;
+    font-size: 90%;
+    margin-left: 0.5em;
+}
+.projects .category .description {
+    padding: 0.5em 2em 0.5em 2em;
+}
+[data-knowl]:hover, [data-knowl]:active, [data-knowl].active {
+    color: #8a1200;
+    background: #ffedeb;
+/*
+    margin-bottom: 0;
+*/
+    border-bottom: none;
+}
+

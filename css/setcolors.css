@@ -1,0 +1,452 @@
+
+/* This file assigns the main colors, using variables that
+   have been set previously. */
+
+body.pretext {
+  color: var(--bodyfontcolor);
+}
+
+.ptx-masthead .title-container > .heading, .ptx-masthead .title-container > .heading a, .ptx-masthead .logo-link:empty:hover:before, .ptx-masthead .byline a {
+  color: var(--documenttitle, #2a5ea4);
+}
+
+.ptx-masthead .title-container > .heading a:active, .ptx-masthead .logo-link:empty:active:before, .ptx-masthead .byline a:active {
+  color: var(--bodytitle, #932c1c);
+}
+
+
+/* Start by assuming any TOC item is a section, change others as appropriate */
+.ptx-toc .toc-item {
+  color: var(--sectiontoctext, #404040);
+  background-color: var(--sectiontoc);
+  border-color: var(--tocborder, #afc2e5);
+}
+.ptx-toc .toc-item.active {
+  color: var(--sectiontoctextactive);
+  background-color: var(--sectiontocactive);
+  border-color: var(--highlighttocborder);
+}
+
+/* this looks weird but it matches previous ways the colors were applied */
+.ptx-toc:not(.depth2) .toc-chapter {
+  background-color: var(--chaptertocactive);
+  color: var(--chaptertoctextactive);
+}
+/* override for focused view */
+.ptx-toc.focused:not(.depth2) .toc-chapter {  
+  background-color: var(--chaptertoc);
+  color: var(--chaptertoctext);
+}
+
+
+/* All top level items styled like chapters to match old styling */
+.ptx-toc > .toc-item-list > .toc-item {
+  color: var(--chaptertoctext);
+  background-color: var(--chaptertoc);
+}
+.ptx-toc > .toc-item-list > .toc-item.active { 
+  color: var(--chaptertoctextactive);
+  background-color: var(--chaptertocactive);
+  border-color: var(--highlighttocborder);
+}
+
+
+.ptx-toc .toc-item > .toc-title-box > a:is(:hover, :focus) {
+  color: var(--highlighttoctext, #321a0c);
+  background-color: var(--highlighttoc);
+  border-color: var(--highlighttocborder, #ec704b);
+}
+
+/* top level parts/front/backmatter styled as parts*/
+.ptx-toc.focused > .toc-item-list > :is(.toc-frontmatter, .toc-part, .toc-backmatter) {
+  background-color: var(--parttoc);
+  color: var(--parttoctext);
+}
+.ptx-toc.focused > .toc-item-list > :is(.toc-frontmatter, .toc-part, .toc-backmatter).active { 
+  background-color: var(--parttocactive);
+  color: var(--parttoctextactive);
+}
+
+.ptx-toc.focused .toc-chapter {
+  background-color: var(--chaptertoc);
+  color: var(--chaptertoctext);
+}
+.ptx-toc.focused .toc-chapter.active { 
+  background-color: var(--chaptertocactive);
+  color: var(--chaptertoctextactive);
+}
+
+/* Anything under a chapter, front matter, back matter styled as section */
+.ptx-toc.focused :is(.toc-chapter, .toc-frontmatter, .toc-backmatter) > ul > .toc-item {
+  background-color: var(--sectiontoc);
+  color: var(--sectiontoctext);
+}
+.ptx-toc.focused :is(.toc-chapter, .toc-frontmatter, .toc-backmatter) > ul > .toc-item.active {
+  background-color: var(--sectiontocactive);
+  color: var(--sectiontoctextactive);
+}
+
+
+.ptx-content .summary-links a {
+  color: var(--sectiontoctext);
+}
+.ptx-content .summary-links a:hover, .ptx-content .summary-links a:focus {
+  color: var(--highlighttoctext);
+  background: var(--highlighttoc);
+}
+
+.ptx-content [data-knowl], .ptx-content [data-knowl]:hover, .ptx-content [data-knowl]:active, .ptx-content [data-knowl].active, .ptx-content summary {
+    color: var(--bodytitle);
+}
+.ptx-content [data-knowl]:hover, .ptx-content [data-knowl]:active, .ptx-content [data-knowl].active {
+    color: var(--bodyfontcolorhighlight);
+    background-color: var(--bodytitlehighlight);
+}
+
+/* next two groups concern accessibility, so check when making changes */
+.ptx-content .para > a.internal {
+    color: var(--bodytitle);
+}
+.ptx-content .para > a.external {
+    color: var(--bodysubtitle);
+}
+.ptx-content .para > a.internal:hover, .ptx-content .para > a.internal:hover *,
+.ptx-content .para > a.internal:focus, .ptx-content .para > a.internal:focus * {
+    color: var(--bodyfontcolorhighlight);
+    background-color: var(--bodytitlehighlight);
+}
+.ptx-content .para > a.external:hover, .ptx-content .para > a.external:hover *,
+.ptx-content .para > a.external:focus, .ptx-content .para > a.external:focus * {
+    color: var(--bodyfontcolorhighlight);
+    background-color: var(--bodysubtitlehighlight);
+}
+
+.ptx-content .playvideo {
+    background-color: var(--videoplay);
+}
+
+.ptx-content .goal-like {
+  border-color: var(--chaptertoc);
+}
+
+.ptx-content .assemblage-like {
+    border-color: var(--assemblageborder);
+    background-color: var(--assemblagebackground);
+}
+
+.ptx-content .knowl-output {
+    border-color: var(--knowlborder);
+    background-color: var(--knowlbackground);
+}
+.ptx-content .knowl-footer {
+    background-color: var(--knowlborder);
+}
+
+/* 
+  pastel
+*/
+.pretext[data-atmosphere="pastel"],
+.pretext[data-atmosphere="pastel"] .ptx-main {
+  background: #dbf5ff;
+    background: #efe;
+}
+.pretext[data-atmosphere="pastel"] {
+  --documenttitle: #2a5ea4;
+  --bodytitle: #A62E1C;
+  --bodysubtitle: #2B5F82;
+  --bodytitlehighlight: #e0e9ff;
+  --bodyfonttitlehighlight: #306;
+  --bodysubtitlehighlight: #FCE5E4;
+
+  --chaptertoc: #dbf5ff;
+  --chaptertoc: #dcdcf9;
+  --chaptertoctext: #444444;
+  --chaptertocactive: #fae5b6;
+  --chaptertoctextactive: #303030;
+  --sectiontoc: #ffeeee;
+  --sectiontoctext: #404040;
+  --sectiontocactive: #fae5b6;
+  --sectiontoctextactive: #202020;
+  --tocborder: #afc2e5;
+
+  --highlighttoc: #fac793;
+  --highlighttoc: #fadfa3;
+  --highlighttoctext: #321a0c;
+  --highlighttocborder: #ec704b;
+
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f4f4fe;
+
+  --knowlborder: #e0e9ff;
+  --knowlbackground: #f5f8ff;
+}
+
+.pretext[data-atmosphere="pastel"] .ptx-toc {
+  scrollbar-color: var(--documenttitlelight) #efe;
+}
+.pretext[data-atmosphere="pastel"] .ptx-navbar {
+    background: #efe;
+  background: #dbf5ff;
+}
+.pretext[data-atmosphere="pastel"] .ptx-masthead {
+    background: #efe;
+  background: #dbf5ff;
+}
+.pretext[data-atmosphere="pastel"] .ptx-sidebar {
+    background: #ffd;
+}
+
+/* twilight */
+
+.pretext[data-atmosphere="darktwilight"] {
+  --bodyfontcolor: #ddd;
+  --bodyfontcolorhighlight: #222;
+  --documenttitle: #2a5ea4;
+  --documenttitledark: #20477b;
+  --documenttitlelight: #abd;
+  --bodytitle: #abd; 
+  --bodysubtitle: #dcb;
+  --bodytitlehighlight: #ad6;
+  --bodyfonttitlehighlight: #306;
+  --bodysubtitlehighlight: #363;
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: hsl(9, 72%, 30%);  /* #832615; */
+  --chaptertoctext: #dee;
+  --chaptertocactive: var(--documenttitle);
+  --chaptertoctextactive: white;
+  --sectiontoc: hsl(0, 0%, 40%);
+  --sectiontoctext: #eed;
+  --sectiontocactive: var(--documenttitle);
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: var(--documenttitledark);
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #003;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+
+  --bannerbackground: hsl(0, 0%, 33%);
+  --navbarbackground: hsl(0, 0%, 33%);
+  --footerbackground: hsl(0, 0%, 30%);
+  --mainbackground: hsl(0, 0%, 27%);
+  --buttonbackground: hsl(225, 80%, 25%);
+  --codebackground: hsl(120, 100%, 17%);
+  --linkbackground: hsl(120, 90%, 23%);
+  --linkbackgroundhighlight: hsl(0, 0%, 70%);
+  --keybackground: hsl(0, 100%, 20%);
+
+}
+
+/* dark */
+
+.pretext[data-atmosphere="dark"] {
+  --bodyfontcolor: #ddd;
+  --bodyfontcolorhighlight: #222;
+  --documenttitle: #2a5ea4;
+  --documenttitledark: #20477b;
+  --documenttitlelight: #8ab;
+  --bodytitle: #abd; 
+  --bodysubtitle: #dcb;
+  --bodytitlehighlight: #ad6;
+  --bodyfonttitlehighlight: #306;
+  --bodysubtitlehighlight: #363;
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: hsl(5, 86%, 24%);  
+  --chaptertoctext: #dee;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: hsl(0, 0%, 27%);
+  --sectiontoctext: #eed;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: var(--documenttitledark);
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #003;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+
+  --bannerbackground: hsl(0, 0%, 20%);
+  --navbarbackground: hsl(0, 0%, 20%);
+  --footerbackground: hsl(0, 0%, 22%);
+  --mainbackground: hsl(0, 0%, 17%);
+  --buttonbackground: hsl(232, 90%, 19%);
+  --codebackground: hsl(120, 100%, 15%);
+  --linkbackground: hsl(120, 90%, 20%);
+  --linkbackgroundhighlight: hsl(0, 0%, 70%);
+  --keybackground: hsl(0, 100%, 19%);
+
+}
+
+
+/* midnight */
+
+.pretext[data-atmosphere="darkmidnight"] {
+  --bodyfontcolor: #ddd;
+  --bodyfontcolorhighlight: #222;
+  --documenttitle: #2a5ea4;
+  --documenttitledark: #20477b;
+  --documenttitlelight: #8ab;
+  --bodytitle: #abd; 
+  --bodysubtitle: #dcb;
+  --bodytitlehighlight: #ad9;
+  --bodyfonttitlehighlight: #306;
+  --bodysubtitlehighlight: #363;
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
+
+  --chaptertoc: hsl(0, 100%, 17%);
+  --chaptertoctext: #dee;
+  --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --chaptertoctextactive: white;
+  --sectiontoc: hsl(0, 0%, 13%);
+  --sectiontoctext: #eed;
+  --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
+  --sectiontoctextactive: white;
+  --tocborder: #152f53;
+
+  --highlighttoc: var(--documenttitledark);
+  --highlighttoctext: white;
+  --highlighttocborder: var(--chaptertoc);
+
+  --videoplay: var(--bodytitle);
+  --assemblageborder: #1100aa;
+  --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #003;
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlbackground: var(--assemblagebackground);
+
+  --bannerbackground: hsl(0, 0%, 16%);
+  --navbarbackground: hsl(0, 0%, 16%);
+  --footerbackground: hsl(0, 0%, 13%);
+  --mainbackground: hsl(0, 0%, 7%);
+  --buttonbackground: hsl(240, 100%, 13%);
+  --codebackground: hsl(120, 100%, 17%);
+  --linkbackground: hsl(120, 90%, 20%);
+  --linkbackgroundhighlight: hsl(0, 0%, 70%);
+  --keybackground: hsl(0, 100%, 17%);
+}
+
+.pretext[data-atmosphere*="dark"] {
+  background: var(--mainbackground);
+}
+.pretext[data-atmosphere*="dark"] .ptx-page > .ptx-main {
+    background: var(--mainbackground);
+    color: var(--bodyfontcolor);
+}
+.pretext[data-atmosphere*="dark"] .ptx-content .summary-links a {
+    background: var(--documenttitledark);
+    background: var(--chaptertoc);
+}
+.pretext[data-atmosphere*="dark"] .ptx-navbar {
+    background: var(--navbarbackground);
+}
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link,
+.pretext[data-atmosphere*="dark"] .ptx-content-footer .button,
+.pretext[data-atmosphere*="dark"] .ptx-navbar .button {
+  background-color: var(--buttonbackground);
+  color: var(--bodyfontcolor);
+}
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .feedback-link:hover,
+.pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover,
+.pretext[data-atmosphere*="dark"] .ptx-navbar .button:hover,
+.pretext[data-atmosphere*="dark"] .ptx-content-footer .button:hover {
+  background-color: var(--linkbackgroundhighlight);
+  color: var(--bodyfontcolorhighlight);
+}
+.pretext[data-atmosphere*="dark"] .ptx-navbar .calculator-toggle {
+  background-color: var(--buttonbackground);
+}
+.pretext[data-atmosphere*="dark"] .ptx-navbar .calculator-toggle:hover {
+  background-color: var(--linkbackgroundhighlight);
+  color: var(--bodyfontcolorhighlight);
+}
+
+.pretext[data-atmosphere*="dark"] .ptx-masthead {
+    background: var(--bannerbackground);
+}
+
+.pretext[data-atmosphere*="dark"] .ptx-page-footer {
+    background: var(--footerbackground);
+    border-top-color: #447;
+    border-bottom-color: #447;
+}
+.pretext[data-atmosphere*="dark"] .ptx-page-footer .logo {
+    background: #779;
+    border-radius: 0.4em;
+}
+.pretext[data-atmosphere*="dark"] .ptx-masthead .title-container > .pretext .heading,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .title-container > .heading a,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .logo-link:empty:hover::before,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .byline,
+.pretext[data-atmosphere*="dark"] .ptx-masthead .byline a {
+  color: var(--documenttitlelight);
+}
+.pretext[data-atmosphere*="dark"] .ptx-toc {
+  scrollbar-color: var(--documenttitlelight) var(--footerbackground);
+}
+.pretext[data-atmosphere*="dark"] .ptx-content .code-inline {
+/*
+  color: var(--documenttitledark);
+*/
+  background: var(--codebackground);
+}
+.pretext[data-atmosphere*="dark"] .ptx-content .kbdkey {
+/*
+  color: var(--documenttitledark);
+*/
+  background: var(--keybackground);
+}
+.pretext[data-atmosphere*="dark"] .ptx-content .goal-like > .heading {
+  background:  var(--chaptertoc);
+}
+.pretext[data-atmosphere*="dark"] .ptx-content a.url,
+.pretext[data-atmosphere*="dark"] .ptx-content a.internal,
+.pretext[data-atmosphere*="dark"] .ptx-content a.external {
+  color: #ddc;
+  background-color: var(--linkbackground);
+  color: var(--bodyfontcolor);
+}
+
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl] {
+  background-color: var(--linkbackground);
+  color: var(--bodyfontcolor);
+}
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl]:hover,
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl]:active,
+.pretext[data-atmosphere*="dark"] .ptx-content [data-knowl].active {
+  background-color: var(--linkbackgroundhighlight);
+  color: var(--bodyfontcolorhighlight);
+}
+.pretext[data-atmosphere*="dark"] .ptx-page .ptx-main .ptx-content .knowl-content > .solution-like {
+  background: #606;
+}
+

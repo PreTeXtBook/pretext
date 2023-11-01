@@ -1,0 +1,194 @@
+/*******************************************************************************
+ * Navbar Stylesheet
+ *******************************************************************************
+ *
+ * Authors: David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */
+
+nav.ptx-navbar {
+  background: #ededed;
+  border: 0;
+  border-top: 1px solid #bababa;
+  border-bottom: 1px solid #bababa;
+  margin: 0;
+  z-index: 100;
+  font-family: "Open Sans";
+  overflow: visible;
+  display: flex;
+}
+
+.ptx-navbar .button {
+  font-size: 1.0em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+
+  color: #333333;
+  background-color: #ededed;
+  border: 0;
+  border-right: 1px solid #bababa;
+
+  /* Disable accidental text-selection */
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ptx-navbar .button:focus {
+  outline: thin dotted #333;
+  outline-offset: -2px;
+}
+
+.ptx-navbar .button:active {
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+
+.ptx-navbar .button:hover {
+  background-color: #fafafa;
+}
+
+.ptx-navbar .button:active {
+  background-color: #e0e0e0;
+}
+
+.ptx-navbar .button.disabled {
+  opacity: .4;
+  color: #333333;
+  background: #ededed;
+  box-shadow: none;
+}
+
+.ptx-navbar .toc-toggle {
+  width: 240px;
+  gap: 0.4em;
+}
+
+.ptx-navbar .button .icon {
+  font-size: 1.5em;
+}
+
+.ptx-navbar :is(.treebuttons, .nav-runestone-controls) {
+  display: flex;
+}
+
+.ptx-navbar .treebuttons {
+  flex: 1 1 210px;
+  justify-content: end;
+}
+
+.ptx-navbar .nav-runestone-controls {
+  flex: 1 1 70px;
+  justify-content: end;
+}
+
+.pretext .navbar .dropdown {
+  height: 34px;
+}
+
+
+.ptx-navbar :is(.treebuttons, .nav-runestone-controls) > *:first-child {
+  border-left: 1px solid #bababa;
+}
+
+
+.ptx-navbar .treebuttons > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 75px;
+}
+
+.ptx-navbar .treebuttons .icon {
+  margin: 0 -7px;  /* chevrons have lots of horizontal padding */
+}
+
+.ptx-navbar :is(.index-button, .calculator-toggle)  .icon {
+  display: none;
+}
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton) .name {
+  display: none;
+}
+
+.ptx-navbar .index-button {
+  width: 70px;
+}
+
+.ptx-navbar .calculator-toggle {
+  width: 60px;
+  min-height: 32px;
+  text-align: center;
+  border-radius: 20px;
+  margin-left: 5px;
+  border: 2px solid #66f;
+  line-height: 25px;
+  margin-top: 1px;
+  background-color: #eef;
+}
+
+.ptx-navbar .calculator-toggle.open {
+  background: #fee;
+  border: 2px solid #f66;
+}
+
+@media screen and (max-width: 800px) {
+  .ptx-navbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ededed;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 5px;
+  }
+  
+  .ptx-navbar .nav-runestone-controls {
+    flex: 0;
+  }
+  .ptx-navbar .toc-toggle {
+    flex: 2 1 100px;
+  }
+  .ptx-navbar .treebuttons {
+    flex: 3 1 150px; /* 3:2 ratio with toc-toggle */
+  }
+  .ptx-navbar .treebuttons > * {
+    flex: 1 1;
+    min-width: 35px
+  }
+  .ptx-navbar .index-button {
+    display: none;
+  }
+  
+  .ptx-navbar :is(.treebuttons) > *:first-child {
+    border-left: 0;
+  }
+
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+    display: none;
+  }
+
+  .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+    display: inline-block;
+  }
+
+  .ptx-navbar .nav-runestone-controls > *:first-child {
+    border-left: 0
+  }
+
+  .ptx-navbar .calculator-toggle {
+    width: auto;
+    height: 35px;
+    border-radius: 0;
+    margin-left: 0;
+    border: 0;
+    border-right: 1px solid #bababa;
+    line-height: inherit;
+    margin-top: 0;
+    background-color: inherit;
+  }
+}

@@ -1,0 +1,273 @@
+/*******************************************************************************
+ * shell_X.css controls the overall arrangement of the blocks on the page.
+ *******************************************************************************
+ *
+ * Authors: David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */
+
+/* The overall structure is
+  html
+    head
+    body.pretext
+      header.ptx-masthead
+      nav.ptx-navbar
+      div.ptx-page
+        div.sidebar
+          nav.ptx-toc
+        main.ptx-main
+          div.ptx-content
+          div.ptx-content-footer
+      div.ptx-page-footer
+*/
+
+.pretext .ptx-masthead {
+  position: relative;
+  background: #fafafa;
+  min-height: inherit;
+  border: none;
+}
+
+.pretext .ptx-navbar {
+  position: sticky;
+  top: 0;
+  max-width: 904px;
+}
+
+.pretext .ptx-page {
+  position: relative;
+}
+
+.pretext .ptx-sidebar {
+  position: sticky;
+  top: 41px;
+  float: left;
+  width: 240px;
+}
+
+.pretext .ptx-toc {
+    position: sticky;
+    top: 50px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    height: calc(100vh - 60px);
+}
+
+.pretext .ptx-page > .ptx-main {
+  display: block;
+  position: relative;
+  overflow-y: hidden;
+  margin: 0 0 0 240px;
+  padding: 1px 0 0 0;
+  background: white;
+  border-left: 1px solid #ccc;
+}
+@media screen and (max-width: 800px) {
+  .pretext .ptx-page > .ptx-main {
+    margin-left: 0;
+    left: auto;
+  }
+}
+
+.pretext .ptx-page > .ptx-main .ptx-content {
+  max-width: 600px;
+  margin: 32px;
+}
+@media screen and (max-width: 663px) {
+  .pretext .ptx-page > .ptx-main .ptx-content {
+    /* Decrease the margins */
+    margin: 28px;
+  }
+}
+
+/*
+.ptx-content.serif .para {
+  font-family: "PT Serif", "Times New Roman", serif;
+  font-size: 105%;
+}
+.ptx-content.serif #text-in-paragraphs .para,
+.ptx-content.serif #Bcd .para,
+.ptx-content.serif #interesting-corollary .para {
+  font-family: "Roboto Serif", serif;
+  font-size: 12pt;
+  line-height: 1.20;
+  font-variation-settings: 'wdth' 100;
+
+}
+.ptx-content.serif #table-calisthenics .para,
+.ptx-content.serif #section-7 .para,
+.ptx-content.serif #section-11 .para {
+  font-family: "Tinos", serif;
+  font-size: 115%;
+  line-height: 1.30;
+}
+
+.ptx-content.serif #section-6 .para,
+.ptx-content.serif #section-6 .para {
+  font-family: "Noto", serif;
+  font-size: 115%;
+  line-height: 1.30;
+}
+*/
+
+/* text in lists was big */
+.ptx-content.serif .para .para,
+.ptx-content[data-font="RS"] .para .para {
+  font-size: 100%;
+}
+
+.ptx-content[data-font="RS"] .code-inline {
+  background: #f6f6f6;
+  border: 1px solid #eee;
+  padding: 0.01em 0.15em 0.03em 0.15em;
+  margin-left: 0.15em;
+  margin-right: 0.15em;
+  border-radius: 0;
+}
+
+.pretext .ptx-content-footer {
+  margin-top: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  max-width: 650px;
+}
+.pretext .ptx-content-footer .button {
+  cursor: pointer;
+  text-align: center;
+  color: #333333;
+  background-color: #ededed;
+  border: 1px solid #bababa;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.pretext .ptx-content-footer .button:hover,
+.pretext .ptx-content-footer .button:active,
+.pretext .ptx-content-footer .button:focus {
+  background-color: #fafafa;
+}
+
+.pretext .ptx-content-footer .button.top-button {
+  text-align: center;
+  width: 40px;
+  height: 50px;
+}
+.pretext .ptx-content-footer .button.previous-button,
+.pretext .ptx-content-footer .button.next-button {
+  font-size: 1.0em;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  height: 35px;
+  width: 65px;
+  /* Disable accidental text-selection */
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float: left;
+  position: relative;
+  margin-top: 0.5em;
+}
+.pretext .ptx-content-footer .previous-button {
+  text-align: left;
+}
+.pretext .ptx-content-footer .next-button {
+  text-align: right;
+}
+
+.pretext .ptx-content-footer .name {
+  position: relative;
+  bottom: 0;
+}
+.pretext .ptx-content-footer .icon {
+  font-size: 1.3em;
+  Position: relative;
+  bottom: -0.1em;
+}
+.pretext .ptx-content-footer .previous-button .icon {
+  margin-left: 0.3em;
+  margin-right: 0.2em;
+}
+.pretext .ptx-content-footer .next-button .icon {
+  margin-left: 0.2em;
+  margin-right: 0.3em;
+}
+.pretext .ptx-content-footer .next-button {
+  text-align: right;
+}
+.pretext .ptx-content-footer .previous-button {
+    width: 70px;
+    float: right;
+    border-left: 1px solid #bababa;
+    border-right: 1px solid #bababa;
+}
+.pretext .ptx-content-footer .next-button {
+    width: 70px;
+    float: right;
+    border-right: 1px solid #bababa;
+}
+
+
+
+.pretext .ptx-content-footer .top-button {
+  display: block;
+}
+
+.pretext .ptx-content-footer .top-button .icon,
+.pretext .ptx-content-footer .top-button .name {
+  display: block;
+}
+.pretext .ptx-content-footer .top-button .icon {
+  bottom: 0;
+}
+.pretext .ptx-content-footer .top-button .name {
+  position: relative;
+  bottom: 0.4em;
+}
+
+@media screen and (max-width: 800px) {
+  .pretext .ptx-navbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+   }
+  .pretext .ptx-sidebar {
+    display: none;
+  }
+  .pretext .ptx-content-footer {
+    display: none;
+  }
+/*
+  .pretext .ptx-content-footer {
+    margin-bottom: 60px;
+  }
+*/
+  .pretext .ptx-toc {
+    height: calc(100vh - 50px);
+  }
+  .pretext .ptx-navbar .calculator-toggle,
+  .pretext .ptx-navbar .index-button {
+    display: none;
+  }
+  .pretext .ptx-navbar .toc-toggle {
+    width: 25%;
+  }
+  .pretext .ptx-navbar .treebuttons {
+    width: 75%;
+  }
+  .pretext .ptx-navbar .previous-button,
+  .pretext .ptx-navbar .up-button,
+  .pretext .ptx-navbar .next-button {
+    width: 33.3%;
+  }
+}
+
+/*******************************************************************************
+ *
+ * Authors: David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */

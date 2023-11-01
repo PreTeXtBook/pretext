@@ -1,0 +1,3178 @@
+
+.ptx-content section .para.credit + .para.credit {
+    margin-top: 0.25em;
+}
+.ptx-content section .para.credit > .title {
+    font-weight: 700;
+    margin-right: 0.5em;
+}
+/* .ptx-content section .para.credit > .title::after {
+    content: ": ";
+} */
+
+.ptx-content section .para.copyright {
+    margin-top: 2.5em;
+}
+.ptx-content section .para.license {
+    margin-top: 2.5em;
+}
+
+/* stacked headings in the solutions backmatter */
+.ptx-content section > .heading + .heading,
+.ptx-content section section > .heading + .heading {
+    margin-top: 0.5em;
+}
+.ptx-content section.solutions > h3.heading,
+.ptx-content section.solutions section > h3.heading {
+    font-size: 1.6em;
+}
+.ptx-content section.solutions > h4.heading,
+.ptx-content section.solutions section > h4.heading {
+    font-size: 1.45em;
+}
+.ptx-content section.solutions > h5.heading,
+.ptx-content section.solutions section > h5.heading {
+    font-size: 1.35em;
+}
+.ptx-content section.solutions > h6.heading,
+.ptx-content section.solutions section > h6.heading {
+    font-size: 1.25em;
+}
+
+.ptx-content .bibitem + .bibentry {
+    display: inline-block;
+    width: 90%;
+}
+.ptx-content .bibitem {
+    display: inline-block;
+    vertical-align: top;
+    width: 7%;
+    margin-right: 0;
+}
+
+.ptx-content figcaption {
+    font-weight: normal;
+}
+
+.ptx-content figcaption {
+    margin-top: 0.6em;
+    margin-left: auto;
+    margin-right: auto;
+/*  Commenting this out because the initial letter of some captions were cut off
+    text-indent: -30px;
+*/
+}
+
+.ptx-content figure.table-like figcaption:first-child {
+    font-style: oblique;
+    margin-top: 0;
+}
+.ptx-content figure.table-like figcaption:first-child .type,
+.ptx-content figure.table-like figcaption:first-child .codenumber {
+    font-style: normal;
+}
+
+.ptx-content section figcaption .codenumber,
+.ptx-content section figcaption .type {
+    font-weight: 700;
+    font-size: inherit;
+}
+
+.ptx-content figcaption .codenumber:after {
+    content: "\2002";
+}
+.ptx-content figcaption .type:last-of-type::after {
+   /* so, not followed by a span.codenumber */
+   /* not sure where this is used */
+    content: "\2002";
+}
+
+.ptx-content figcaption code.code-inline {
+    white-space: pre;
+}
+
+.ptx-content figure > figcaption:first-child {
+    margin-top: 1.5em;
+}
+
+.ptx-content figcaption + .named-list-content {
+    margin-top: 0.6em;
+}
+.ptx-content figcaption + .named-list-content > .introduction > .para:first-child {
+    margin-top: 0;
+}
+.ptx-content figcaption + table,
+.ptx-content figcaption + .tabular-box {
+    margin-top: 0.5em;
+}
+
+.ptx-content .definition-like .para > .emphasis {
+    font-weight: 700;
+}
+.ptx-content em.alert {
+    font-weight: bold;
+}
+
+.unprocessed {
+    padding: 8px;
+    background-color: rgb(255,230,230)
+}
+
+.unprocessed .unprocessed {
+    margin: 8px;
+    background-color: rgb(255,200,255)
+}
+
+.unprocessed .unprocessed .unprocessed {
+    margin: 8px;
+    background-color: rgb(205,205,255)
+}
+
+.ptx-content section.introduction + section {
+    margin-top: 2em;
+}
+
+.ptx-content {
+    margin: 0;
+}
+
+.ptx-content .runestone.parsons_section {
+    display: inline-block;
+    max-width: unset;
+}
+
+.ptx-content .runestone.ac_section {
+    width: 60em;
+    max-width: unset;
+}
+.ptx-content .runestone.ac_section .ac_section {
+    max-width: unset;
+}
+.ptx-content .runestone.ac_section > div {
+    max-width: unset;
+}
+
+.ptx-content .runestone > .parsons {
+    width: 60em;
+    max-width: unset;
+}
+
+.ptx-content .runestone .parsons {
+    margin: 0;
+}
+.ptx-content .runestone.parsons_section > .parsons {
+    width: max-content;
+    padding-right: 1em;
+}
+.ptx-content .runestone .parsons .sortable-code-container {
+    text-align: unset;
+}
+.ptx-content .runestone .parsons .parsons-text,
+.ptx-content .runestone .parsons .parsons-controls {
+    margin-left: 0;
+    margin-right: 0;
+}
+.ptx-content .runestone .parsons .sortable-code + .sortable-code {
+    margin-right: 0;
+}
+
+.ptx-content .runestone .parsons .runestone_caption_text {
+    max-width: 660px;
+}
+
+.runestonebustmenu {
+   position: absolute;
+   right: 0;
+   top: 0;
+}
+.runestonebustmenu .dropdown-content {
+   position: absolute;
+   right: 2em;
+   left: unset;
+   top: 1em;
+}
+@media screen and (max-width: 800px) {
+/*
+    .runestonebustmenu { display: none }
+*/
+    nav .dropdown .dropdown-content {
+        top: unset;
+        bottom: 36px;
+    }
+
+    .activecode-toggle { display: none }
+}
+/* above may be obsolete because we do not have the runestonebustmenu class in overhaul?
+*/
+.pretext .navbar .dropdown {
+    height: 35px;
+}
+
+.ptx-content section section + section {
+    margin-top: 3em;
+}
+
+
+.ptx-content .sidebyside > .para, .ptx-content .sidebyside > figure, .ptx-content .sidebyside > img, .ptx-content .sidebyside > table, .ptx-content .sidebyside > tabular, .ptx-content .sidebyside > section, .ptx-content .sidebyside > .paragraphs {
+    display: inline-block;
+    margin: 0;
+}
+.ptx-content .sidebyside .sbspanel > table {
+/* see Sec 23.12 of sample article */
+    overflow-x: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content .sidebyside figcaption {
+    padding-left: 1em;
+    padding-right: 0;
+    padding-bottom: 0;
+    margin: 0.75em 0 0 0;
+}
+
+
+.ptx-content figcaption {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+
+.ptx-content .sidebyside > .para {   /* what about sbspanel? */
+    width: 32%;
+    vertical-align: top;
+}
+
+.ptx-content .sidebyside > .para.left, .ptx-content .sidebyside > .para.middle, .ptx-content .sidebyside > .para.right {
+    vertical-align: middle;
+}
+
+.ptx-content .sidebyside > .para + img {
+    vertical-align: middle;
+}
+
+.ptx-content .sidebyside .sbsrow .sbsheader {
+    margin-top: 0;
+}
+
+.ptx-content .sbsgroup {
+    width: 100%;
+}
+
+.ptx-content .sidebyside {
+    width: 100%;
+}
+
+.ptx-content .sbsrow {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Components of three types of "sbsrow" */
+
+/* titles, totally centered text */
+.ptx-content .sbsheader {
+    text-align: center;
+    justify-content: center;
+    font-size: 1em;
+}
+
+.ptx-content .sbspanel:empty { /* can only happen when partially created */
+    height: 10em;
+    background-color: rgb(221, 221, 255);
+}
+/* containers of desired width for actual content */
+.ptx-content .sbspanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.ptx-content .sbspanel.top {  /* also the default */
+    justify-content: flex-start;
+}
+.ptx-content .sbspanel.middle {
+    justify-content: center;  /* should that be space-between? */
+}
+.ptx-content .sbspanel.bottom {
+    justify-content: flex-end;
+}
+
+.ptx-content .sbspanel > .para:first-child {
+    margin-top: 0;
+}
+
+/* fixed-width items are centered horizontally in their panel */
+/* always used in conjunction with sbspanel                   */
+.ptx-content .fixed-width {
+    align-items: center;
+}
+
+/* captions, centered until word-wrapped */
+.ptx-content .sbscaption {
+    justify-content: center;
+}
+
+
+/*  good for table, bad for image
+.ptx-content .sidebyside {
+    overflow-x: scroll;
+}
+*/
+
+.ptx-content table {
+    border-spacing: 0;
+}
+
+.ptx-content table {
+    border-collapse: collapse;
+}
+
+.ptx-content .image-box + table,
+.ptx-content .image-box + .sidebyside > .sbsrow:first-child > .sbspanel > table:first-child {
+    margin-top: 1.5em;
+}
+
+.ptx-content table tr td,
+.ptx-content table tr th {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.ptx-content table tr td {
+    font-size: 90%;
+}
+
+.ptx-content table tr td.l {
+    text-align: left;
+}
+.ptx-content table tr td.c {
+    text-align: center;
+}
+.ptx-content table tr td.r {
+    text-align: right;
+}
+.ptx-content table tr td.j {
+    text-align: justify;
+}
+.ptx-content table tr td.lines {
+        white-space: nowrap;
+}
+
+
+.ptx-content table tr td.t {
+    vertical-align: top;
+}
+.ptx-content table tr td.b {
+    vertical-align: bottom;
+}
+.ptx-content table tr td.m {
+    vertical-align: middle;
+}
+
+.ptx-content table tr td.vv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+}
+
+.ptx-content table tr td.vcv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    text-align: center;
+}
+
+.ptx-content table tr td.vcvv {
+    border-left: 2px solid #000;
+    border-right: 4px solid #000;
+    text-align: center;
+}
+
+.ptx-content table tr td.vlv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    text-align: left;
+}
+
+.ptx-content table tr td.vrv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    text-align: right;
+}
+
+.ptx-content table tr td.rv {
+    border-right: 2px solid #000;
+    text-align: right;
+}
+
+.ptx-content table tr td.vr {
+    border-left: 2px solid #000;
+    text-align: right;
+}
+
+.ptx-content table tr td.lv {
+    border-right: 2px solid #000;
+    text-align: left;
+}
+
+.ptx-content table tr td.vl {
+    border-left: 2px solid #000;
+    text-align: left;
+}
+.ptx-content table tr td.cv {
+    border-right: 2px solid #000;
+    text-align: center;
+}
+
+.ptx-content table tr td.Xv {
+    border-right: 2px solid #000;
+    text-align: left;
+}
+
+.ptx-content table tr td.vc {
+    border-left: 2px solid #000;
+    text-align: center;
+}
+
+.ptx-content table tr td.hline {
+    padding: 0;
+}
+
+.ptx-content table tr td.hlinethick {
+
+    padding-left: 0px;
+    padding-right: 0px;
+
+}
+
+.ptx-content table tr td.hline hr  {
+
+    margin-top:0;
+    margin-bottom:0;
+    margin-left: -1px;
+    margin-right: -1px;
+    border: 1px solid rgb(0,0,0);
+
+}
+
+.ptx-content table tr td.hlinethick hr  {
+
+    margin-top:0;
+    margin-bottom:0;
+    margin-left: -1px;
+    margin-right: -1px;
+    border: 2px solid rgb(0,0,0);
+
+}
+
+.center table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content table tr th.b1,
+.ptx-content table tr td.b1 {
+    border-bottom: 1px solid #000;
+}
+.ptx-content table tr th.b2,
+.ptx-content table tr td.b2 {
+    border-bottom: 2px solid #000;
+}
+.ptx-content table tr th.b3,
+.ptx-content table tr td.b3 {
+    border-bottom: 3px solid #000;
+}
+.ptx-content table tr th.b0,
+.ptx-content table tr td.b0 {
+    border-bottom: none;
+}
+
+.ptx-content table tr th.t1,
+.ptx-content table tr td.t1 {
+    border-top: 1px solid #000;
+}
+.ptx-content table tr th.t2,
+.ptx-content table tr td.t2 {
+    border-top: 2px solid #000;
+}
+.ptx-content table tr th.t3,
+.ptx-content table tr td.t3 {
+    border-top: 3px solid #000;
+}
+.ptx-content table tr th.t0,
+.ptx-content table tr td.t0 {
+    border-top: none;
+}
+
+.ptx-content table tr th.r1,
+.ptx-content table tr td.r1 {
+    border-right: 1px solid #000;
+}
+.ptx-content table tr th.r2,
+.ptx-content table tr td.r2 {
+    border-right: 2px solid #000;
+}
+.ptx-content table tr th.r3,
+.ptx-content table tr td.r3 {
+    border-right: 3px solid #000;
+}
+.ptx-content table tr th.r0,
+.ptx-content table tr td.r0 {
+    border-right: none;
+}
+
+.ptx-content table tr th.l1,
+.ptx-content table tr td.l1 {
+    border-left: 1px solid #000;
+}
+.ptx-content table tr th.l2,
+.ptx-content table tr td.l2 {
+    border-left: 2px solid #000;
+}
+.ptx-content table tr th.l3,
+.ptx-content table tr td.l3 {
+    border-left: 3px solid #000;
+}
+.ptx-content table tr th.l0,
+.ptx-content table tr td.l0 {
+    border-left: none;
+}
+
+.ptx-content table tr td img {
+    max-width: 200px;
+    margin-right: 30px;
+}
+
+.ptx-content table.notation-list tr th {
+    text-align: left;
+}
+.ptx-content table.notation-list tr td {
+    text-align:left;
+    vertical-align:top;
+}
+.ptx-content table.notation-list tr th {
+    margin-left: 2em;
+}
+.ptx-content table.notation-list tr td {
+    margin-left: 1em;
+}
+
+.ptx-content tr th.r0.l0,
+.ptx-content tr td.r0.l0 {
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+}
+
+.ptx-content table tr td span.decimal {
+    float: left;
+    text-align: right;
+}
+
+.ptx-content table tr.header-vertical th {
+    writing-mode: vertical-rl;
+    padding-left: 2em;
+/*
+    transform: rotate(180deg);
+*/
+}
+
+.ptx-content table + article {
+    margin-top: 1em;
+}
+
+.ptx-content .hidden-knowl-wrapper .hiddenproof,
+.ptx-content .blob > article.hiddenproof,
+.ptx-content section > article.hiddenproof  {
+    margin-top: 0.3em;
+}
+
+.ptx-content .hidden-knowl-wrapper article {
+    display: inline;
+}
+
+/* next disabled accidentally or on purpose? */
+.apretext-content figure.figure-like {
+    overflow: auto;
+}
+.ptx-content figure.figure-like {
+    margin-left: 0;
+    margin-right: 0;
+}
+.ptx-content figure.table-like {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.ptx-content figure.table-like.list {
+    margin-right: 0;
+}
+
+/* why was this ever added ?
+.ptx-content figure.figure-like figcaption {
+    overflow: hidden;
+}
+*/
+
+.ptx-content a > tt {
+    font-size: 110%;
+}
+
+.ptx-content section .videolink a:link {
+    background-size: 0;
+}
+.ptx-content .playvideo {
+    cursor: pointer;
+}
+
+.ptx-content .videobig {
+    padding-right: 0.3em;
+    padding-left: 0.3em;
+    font-size: 85%;
+/*    background: #ffff66;
+*/
+    background-color: rgba(255,255,100,0.9);
+    display: inline-block;
+    position: relative;
+    top: 100px;
+    cursor: zoom-in;
+}
+.ptx-content .videobig.nofigure {
+    /* not actually used */
+}
+.ptx-content .knowl .videobig {
+    display: none;
+}
+
+.ptx-content .videosmall {
+    padding-right: 0.3em;
+    padding-left: 0.3em;
+    font-size: 80%;
+    background-color: rgba(255,255,100,0.9);
+    display: inline-block;
+    position: absolute;
+    left: -250px;
+    z-index: 1001;
+    cursor: zoom-out;
+}
+
+
+.ptx-content .exercise-like ol li table {
+    margin-bottom: 0.5em;
+}
+
+.ptx-content .exercise-like > ol li + li {
+    margin-top: 0.5em;
+}
+.ptx-content .solution > ol li + li {
+    margin-top: 0.5em;
+}
+
+/* should be the default
+.ptx-content section.worksheet > .heading,
+.ptx-content section section.worksheet > .heading,
+.ptx-content section section section.worksheet > .heading {
+  display: block;
+}
+*/
+.ptx-content section.worksheet > .heading > .codenumber {
+    display: inline-block;
+    vertical-align: top;
+}
+.ptx-content section.worksheet > .heading > .title {
+    display: inline-block;
+    max-width: 70%;
+}
+.ptx-content .heading .print-links {
+    display: inline-block;
+    float: right;
+    vertical-align: top;
+    width: 19%;
+    text-align: right;
+}
+.standalone .ptx-content .heading .print-links {
+    display: none;
+}
+.standalone.worksheet .previous-button,
+.standalone.worksheet .up-button,
+.standalone.worksheet .next-button {
+    display: none;
+}
+.standalone.worksheet .ptx-navbar .toc-toggle {
+    display: none;
+}
+.standalone.worksheet .ptx-content [data-knowl]:hover,
+.standalone.worksheet .ptx-content [data-knowl]:active,
+.standalone.worksheet .ptx-content [data-knowl].active {
+    background: none;
+    color: black;
+}
+.standalone.worksheet .ptx-content [data-knowl]::after {
+    border: none;
+}
+.standalone.worksheet .ptx-content .knowl-content {
+    padding: 0;
+}
+.standalone.worksheet .ptx-content article > .knowl-output.original {
+    margin: 0;
+}
+
+.ptx-content .appendix .heading > .type {
+    display: inline;
+}
+.ptx-content .heading.hide-type > .type {
+    display: none;
+}
+
+.ptx-content .heading .print-links > a {
+    font-family: "Open Sans";
+    font-size: 0.6em;
+    font-weight: bold;
+    padding: 0.1em 0.2em;
+    background: #ffa;
+    border: 2px solid green;
+}
+.ptx-content .heading .print-links > a.us {
+    background: #eef;
+    color: #9b1c2c;
+    border-color: #041E42;
+}
+.ptx-content .heading .print-links > a + a {
+    margin-left: 0.25em;
+}
+
+.ptx-content .autopermalink {
+    position: absolute;
+    display: inline-block;
+    top: 3px;
+    left: -1.9em;
+    font-size: 85%;
+    color: #a00;
+    opacity: 0.05;
+    margin-top: 0.1em;
+}
+
+.ptx-content li > .para > .autopermalink {
+    left: -3.4em;
+    top: 0;
+}
+.ptx-content .autopermalink a {
+    color: #a00;
+}
+.ptx-content .autopermalink > * {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+/* when jumping to a permalink, push down so sticky navbar does not cover */
+:target {
+    /* scroll-snap-margin-top: 45px;   for safari, except it doesn't work */
+    scroll-margin-top: 45px;
+}
+
+.ptx-content .para > .autopermalink {
+    margin-top: 0.2em;
+}
+
+.ptx-content .exercises > .autopermalink,
+.ptx-content .introduction > .autopermalink,
+.ptx-content .glossary > .autopermalink {
+    margin-top: 0.3em;
+/*
+    margin-top: 1em;
+*/
+}
+.ptx-content .appendix > .autopermalink,
+.ptx-content .chapter > .autopermalink,
+.ptx-content .index > .autopermalink,
+.ptx-content .section > .autopermalink {
+    margin-top: 0.3em;
+/*
+    margin-top: 2.7em;
+*/
+}
+.ptx-content .subsection > .autopermalink,
+.ptx-content .references > .autopermalink,
+.ptx-content .exercises > .autopermalink {
+    margin-top: 0.3em;
+/*
+    margin-top: 2.0em;
+*/
+}
+.ptx-content .figure-like > .autopermalink {
+    margin-top: 1.4em;
+}
+
+.ptx-content .subsubsection > .autopermalink {
+    margin-top: 0;
+}
+.ptx-content .exercisegroup > .autopermalink {
+/*
+    margin-top: 0.3em;
+*/
+    margin-top: 1.4em;
+}
+
+.ptx-content .autopermalink:hover {
+    opacity: 1;
+    background: #eeddff;
+}
+.ptx-content .permalink-alert {
+    position: absolute;
+    top: -3em;
+    left: 5em;
+    padding: 1.5em 2em;
+    background: #fff;
+    border: 3px solid blue;
+    z-index: 2001;
+}
+
+.navbar .indexnav {
+    position: absolute;
+    top: 46px;
+    right: 0;
+}
+.mininav {
+    float: left;
+    padding-top: 0.7ex;
+    padding-left: 1ex;
+}
+
+/* the index at the back of the book */
+
+.indexjump {
+    margin-left: 1.5ex;
+    margin-top: 0.2ex;
+    padding-top: 0;
+    float: left;
+    line-height: 0.95;
+}
+
+.indexjump a {
+    padding-left: 2.5px;
+    padding-right: 0.5px;
+    width: 2.5ex;
+/*
+ *  *  omitted, because we put a space in the source
+ *      padding-right: 3px;
+ *      */
+    margin-right: -1px;
+    color: inherit;
+    font-size: 80%;
+    text-align: center;
+}
+.indexjump a::after{
+    content: "";
+    display: inline-block;
+}
+.indexjump a:nth-of-type(14){
+    padding-left: 1.8ex;
+}
+.indexjump a:last-child {
+    padding-right: 10px;
+}
+
+.indexjump a:hover {
+    background: #eeaaff;
+}
+
+.ptx-content .indexitem {
+    margin-top: 2px;
+}
+
+.ptx-content .subindexitem {
+    margin-left: 2em;
+    font-size: 95%;
+    margin-top: -1px;
+}
+
+.ptx-content .subsubindexitem {
+    margin-left: 3.5em;
+    font-size: 95%;
+    margin-top: -1px;
+}
+
+.ptx-content .indexknowl {
+    margin-left: 0.11em;
+}
+.ptx-content em + .indexknowl  {
+    margin-left: -0.25em;
+}
+.ptx-content .indexknowl a {
+    margin-left: 2em;
+}
+
+.ptx-content .indexitem .see,
+.ptx-content .subindexitem .see,
+.ptx-content .subsubindexitem .see {
+    margin-left: 1em;
+    margin-right: 0;
+}
+.ptx-content .indexitem .seealso,
+.ptx-content .subindexitem .seealso,
+.ptx-content .subsubindexitem .seealso {
+    margin-left: 1em;
+    margin-right: 0;
+}
+.ptx-content .indexitem .see em,
+.ptx-content .subindexitem .see em,
+.ptx-content .subsubindexitem .see em,
+.ptx-content .indexitem .seealso em,
+.ptx-content .subindexitem .seealso em,
+.ptx-content .subsubindexitem .seealso em {
+    margin-right: 0.25em;
+    font-style: italic;
+}
+/*  note that multiple things after "see" are in separate spans */
+.ptx-content .indexitem .see + .see,
+.ptx-content .subindexitem .see + .see,
+.ptx-content .subsubindexitem .see + .see,
+.ptx-content .indexitem .seealso + .seealso,
+.ptx-content .subindexitem .seealso + .seealso,
+.ptx-content .subsubindexitem .seealso + .seealso {
+     margin-left: 0;
+     margin-right: 0;
+}
+
+.ptx-content .indexitem .indexknowl {
+    font-size: 90%;
+}
+
+.ptx-content .indexitem [data-knowl], .ptx-content .subindexitem [data-knowl], .ptx-content .indexitem [data-knowl]:hover {
+    padding-right: 2px;
+    padding-left: 2px;
+}
+.ptx-content .indexknowl [data-knowl]:hover, .ptx-content .indexknowl .active[data-knowl] {
+    margin-left: 2em;
+}
+
+.ptx-content .subindexitem .indexknowl {
+    font-size: 95%;
+}
+.ptx-content .subsubindexitem .indexknowl {
+    font-size: 95%;
+}
+
+.ptx-content .indexletter {
+    margin-top: 1.5em;
+}
+
+/* end index */
+
+.ptx-content .hidden-knowl-wrapper .heading {
+    display: inline;
+}
+.ptx-content .heading + .hidden-knowl-wrapper {
+    display: inline;
+}
+
+.ptx-content .cols2 .knowl-output, .ptx-content .cols3 .knowl-output, .ptx-content .cols4 .knowl-output, .ptx-content .cols5 .knowl-output, .ptx-content .cols5 .knowl-output {
+    width: 100%;
+}
+
+.ptx-content .cols2 + *, .ptx-content .cols3 + *, .ptx-content .cols4 + *, .ptx-content .cols5 + *, .ptx-content .cols6 + * {
+    clear: both;
+}
+/* does the next line eliminate the need for the previous line? */
+.ptx-content .cols2::after, .ptx-content .cols3::after, .ptx-content .cols4::after, .ptx-content .cols5::after, .ptx-content .cols6::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.ptx-content section > ol:last-child,
+.ptx-content section > ul:last-child {
+    margin-bottom: 1.5em;
+}
+/* because of */
+/* .ptx-content .colsN > li:last-child {
+    padding-bottom: 1em;
+}
+*/
+.ptx-content section > ol:last-child > li:last-child,
+.ptx-content section > ul:last-child > li:last-child {
+    padding-bottom: 0em;
+}
+
+/* does this do anything which is not accomplished by the colsN::after above? */
+/* seems not
+.ptx-content .cols2:last-child::after, .ptx-content .cols3:last-child::after, .ptx-content .cols4:last-child::after, .ptx-content .cols5:last-child::after, .ptx-content .cols6:last-child::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+*/
+
+.ptx-content .cols2 > li:nth-child(2n+1),
+.ptx-content .cols3 > li:nth-child(3n+1),
+.ptx-content .cols4 > li:nth-child(4n+1),
+.ptx-content .cols5 > li:nth-child(5n+1),
+.ptx-content .cols6 > li:nth-child(6n+1) {
+    clear: left;
+}
+/* need to repeat for .colsN */
+.ptx-content .exercise-like ol.cols2 li {
+    margin-top: 0.5em;
+}
+
+.ptx-content .cols2 > li,
+.ptx-content .cols3 > li,
+.ptx-content .cols4 > li,
+.ptx-content .cols5 > li,
+.ptx-content .cols6 > li {
+    float: left;
+}
+
+.ptx-content .incontext {
+    display: block;
+    font-size: 85%;
+    text-align: right;
+}
+
+.ptx-content .terminology {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.ptx-content .emphasis {
+    font-style: italic;
+}
+.ptx-content .emphasis .emphasis {
+    font-weight: bold;
+}
+
+/* the "pink flash" when navigating to a target
+*/
+:target {
+    animation: target-fade 15s 1;
+}
+@-webkit-keyframes target-fade {
+    0% { background-color: rgba(120,0,120,.3); }
+    100% { background-color: inherit;
+           opacity: 1; }
+}
+@-moz-keyframes target-fade {
+    0% { background-color: rgba(120,0,120,.3); }
+    100% { background-color: inherit;
+           opacity: 1; }
+}
+
+
+.ptx-content .autoterm [knowl], .ptx-content .autoterm [knowl]:after {
+    font-weight: inherit;
+    color: inherit;
+    padding: 0;
+    margin-bottom: inherit;
+    border-bottom: inherit;
+    border-bottom-color: inherit;
+}
+
+.ptx-content .autoterm [knowl]:hover {
+    background: #ffddff;
+    border-top: 2px dotted purple;
+    border-bottom: 1px dotted red;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.ptx-content ol li.custom-list-style-type {
+    list-style-type: none;
+}
+
+.ptx-content ol li.custom-list-style-type:before {
+     content: attr(label) "\00A0\00A0 ";
+}
+
+.ptx-content ol.no-marker,
+.ptx-content ul.no-marker,
+.ptx-content li.no-marker {
+    list-style-type: none;
+}
+
+.ptx-content ol.decimal {
+    list-style-type: decimal;
+}
+.ptx-content ol.lower-alpha {
+    list-style-type: lower-alpha;
+}
+.ptx-content ol.upper-alpha {
+    list-style-type: upper-alpha;
+}
+.ptx-content ol.lower-roman {
+    list-style-type: lower-roman;
+}
+.ptx-content ol.upper-roman {
+    list-style-type: upper-roman;
+}
+.ptx-content ul.disc {
+    list-style-type: disc;
+}
+.ptx-content ul.square {
+    list-style-type: square;
+}
+.ptx-content ul.circle {
+    list-style-type: circle;
+}
+.ptx-content ol.no-marker,
+.ptx-content ul.no-marker {
+    list-style-type: none;
+}
+
+/* needed for dl, but probably won't cause harm elsewhere */
+.ptx-content section,
+.ptx-content article,
+.ptx-content figure {
+    clear: both;
+}
+
+/* dl is used for glossaries and descriptions lists.
+   Glossaries are simple:  bold word by itself on a line.
+        Definition indented on the next line.
+        Vertical space before the next term.
+
+   Description lists are more complicated.  The wider version
+   (refering to the horizontal indentation of the definition;
+    this is the default)
+   has the (wrapped) term inline with the definition.
+
+   The narrow version is complicated because the term is inline
+   with its definition if it fits, otherwise it is on the line above.
+   That means the vertical space between entries can't be handled by
+   a top margin on the dt.  Instead we have an ::after on the dd .
+ */
+
+.ptx-content dl {
+    margin-top: 1em;
+    margin-left: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+}
+.ptx-content dl dd {
+    margin-top: 0;
+}
+.ptx-content dl dd::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.ptx-content dl.glossary dt {
+    margin-top: 1.25em;
+}
+.ptx-content dl.description-list dt,
+.ptx-content dl.description-list dd {
+    margin-top: 1em;
+}
+.ptx-content dl.description-list.narrow dt {
+    margin-top: 0;
+}
+.ptx-content dl.glosary dt:first-of-type,
+.ptx-content dl.description-list dt:first-of-type,
+.ptx-content dl.glosary dd:first-of-type,
+.ptx-content dl.description-list dd:first-of-type {
+    margin-top: 0;
+}
+.ptx-content dl dd .para {
+    margin-top: 1em;
+}
+.ptx-content dl dt > .para:first-child, .ptx-content dl dd > .para:first-child {
+    margin-top: 0;
+}
+
+
+.ptx-content dl > dt {
+    font-weight: bold;
+    max-width: 55ex;
+}
+
+.ptx-content dl.description-list dt {
+    float: left;
+    clear: left;
+    text-align: right;
+    width: 18ex;
+}
+.ptx-content dl.description-list.narrow dt,
+.ptx-content dl.glossary dt {
+    text-align: left;
+}
+.ptx-content dl.glossary dd {
+    margin-left: 5ex;
+}
+.ptx-content dl.description-list dd {
+    margin-left: 22ex;
+}
+.ptx-content dl.description-list.narrow dd {
+    margin-left: 12ex;
+}
+.ptx-content dl.description-list dt:first-of-type {
+    clear: none;
+}
+.ptx-content dl.description-list.narrow dd::after {
+    content: "";
+    display: block;
+    height: 1em;
+    clear: left;
+}
+.ptx-content dl.description-list.narrow dd:last-child::after {
+    height: 0;
+}
+
+.ptx-content dl.description-list dt {
+    float: left;
+    clear: both;
+    margin-right: 1ex;
+}
+.ptx-content dl.description-list.narrow dt {
+    width: unset;
+    max-width: 55ex;
+    text-align: left;
+}
+.ptx-content dl.description-list.narrow dd {
+    margin-left: 0;
+    margin-top: 0;
+    width: 31em;
+    max-width: calc(100% - 12ex);
+    float: right;
+    clear: right;
+}
+
+.ptx-content dl.description-list + * {
+    clear: both;
+}
+
+@media screen and (max-width: 480px) {
+  .ptx-content dl.description-list dt {
+    float: none;
+    margin-left: 0;
+    text-align: left;
+  }
+  .ptx-content dl.description-list dd,
+  .ptx-content dl.description-list.narrow dd {
+    margin-top: 0.5em;
+    margin-left: 3em;
+    max-width: calc(100% - 3em);
+  }
+}
+/* where do we have nested dl? */
+.ptx-content dl.description-list dl dt {
+    width: 8ex;
+}
+.ptx-content dl.description-list dd dd {
+    margin-left: 18ex;
+}
+.ptx-content dl.description-list dl dd {
+    margin-left: 12ex;
+}
+.ptx-content [data-knowl] > mjx-mrow .TEX-I {
+    font-family: MJXZERO !important;
+    font-style: normal !important;
+}
+
+/* remove this when MathJax fixes the bug that was setting the width to 0 */
+/* as in  $x=0$.  becomes  $x=0\text{.}$ */
+.ptx-content .knowl mjx-mtext > mjx-utext,
+.ptx-content mjx-mtext > mjx-utext {
+    width: revert !important;
+}
+.ptx-content mjx-msup mjx-utext,
+.ptx-content mjx-msub mjx-utext {
+    display: inline;
+}
+
+/* to stop things being blue when rendering MathJax with SVG */
+a.mjx-svg-href  {
+    fill: inherit;
+    stroke: inherit;
+}
+
+.displaymath + .para {
+    margin-top: 0
+}
+
+/* for long math formulas and tables to scroll on small screens */
+@media screen and (max-width: 943px) {
+  .ptx-content .displaymath {
+     position: relative;
+     overflow-x: auto;
+  }
+/* maybe the remainder of this case is subsumed by the above,
+   and also does not apply to MJ3 */
+  .ptx-content .mjx-chtml.MJXc-display {
+    /*Allow users on smaller screens to scroll equations*/
+    /*horizontally when they don't fit on the screen*/
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .ptx-content .figure-like {
+    overflow-x: auto;
+  }
+
+  .ptx-content #MathJax_ZoomFrame {
+    position: static;
+    background: white;
+  }
+  .ptx-content #MathJax_Zoom {
+    background-color: inherit;
+    border: 0;
+    padding: 0;
+    position: absolute;
+    overflow-x: auto;
+    overflow-y: visible;
+    left: 10% !important;
+    max-height: none !important;
+  }
+}
+
+/*  http://sites.wcsu.edu/mbxml/OER_Linear_Alg/glossary.html
+   to fix the extra margin on top of the next term when
+   the previous definition ends in display math
+   May need to make less specific
+*/
+.ptx-content dd .displaymath:last-child .MJXc-display {
+    margin-bottom: 0;
+}
+
+.floatnav {
+    margin-top: 8px;
+    margin-left: 50px;
+}
+
+.floatnav a {
+    padding-left: 3px;
+/*
+ *  omitted, because we put a space in the source
+    padding-right: 3px;
+*/
+    margin-right: -1px;
+    color: inherit;
+}
+
+/* Example 4.8 of sample article (compare main page of sample book (4^{th} edition)`*/
+.ptx-content a .heading .mjx-chtml {
+    z-index: 1;
+    background: #fff;
+}
+.ptx-content .hidden-knowl-wrapper [data-knowl]::after, .ptx-content .hidden-knowl-wrapper [data-knowl]:hover::after, .ptx-content .hidden-knowl-wrapper .active[data-knowl]::after {
+    right: 7px;
+}
+
+.floatnav a:hover {
+    background: #eeaaff;
+}
+
+.ptx-content .unselectable {  /* from Alex Jordan */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+/* Adapted from William Hammond (attributed to David Carlisle) */
+/* "mathjax-users" Google Group, 2015-12-27 */
+
+.ptx-content .latex-logo {font-family: "PT Serif", "Times New Roman", Times, serif;}
+
+.ptx-content .latex-logo .A {font-size: 75%; text-transform: uppercase; vertical-align: .5ex;
+         margin-left: -.48em; margin-right: -.2em;}
+
+.ptx-content .latex-logo .E {vertical-align:-.5ex; text-transform: uppercase;
+         margin-left: -.18em; margin-right: -.12em; }
+
+.ptx-content .fillin {
+    display: inline-block;
+    border-bottom-style: solid;
+    border-width: 1px;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+}
+.ptx-content .fillin.underline {
+    display: inline-block;
+    border-bottom-style: solid;
+    border-width: 1px;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+}
+.ptx-content .fillin.box {
+    display: inline-block;
+    border: none;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+    outline: 1px solid black;
+    height: 1.3em;
+}
+.ptx-content .fillin.shade {
+    display: inline-block;
+    border: none;
+    margin-right: 0.1em;
+    margin-left: 0.1em;
+    margin-bottom: -0.25em;
+    background-color: #eee;
+    height: 1.3em;
+}
+
+
+/*
+ *  .hiddenproof
+ */
+
+/* knowlified proofs are in an article.hiddenproof */
+/* .ptx-content .hiddenproof .heading,   ???? can't happen, because the a does the hiding? */
+.ptx-content .hiddenproof > a > .heading {
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* show wide equation overflow even when no scroll bars,
+from Jiří Lebl */
+.ptx-content .MJXc-display, .ptx-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
+.ptx-content pre.prettyprint,
+.ptx-content pre.plainprint,
+.ptx-content pre.console,
+.ptx-content .code-box {
+    background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+}
+.ptx-content .runestone .code-box {
+    background-image: none;
+}
+.ptx-content .knowl-output .MJXc-display {
+    background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
+}
+/* this should have a variable name, maybe? */
+.ptx-content .knowl-output.original .MJXc-display {
+    background: inherit;
+}
+
+.ptx-content .assemblage-like .MJXc-display {
+/*
+    background-image: none;
+    background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+*/
+    background-image: linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--assemblagebackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--assemblagebackground));
+}
+
+
+.ptx-content .knowl-output .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,243,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,243,0));
+}
+.ptx-content .knowl-output .knowl-output .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,243,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,243,254,0));
+}
+
+
+
+/* not sure where this was being used, but it made short knowls
+ * look bad, like the hint here:
+ * SAFurtherReading.html
+*/
+.ptx-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
+    margin-bottom: 0.5em;
+}
+.ptx-content .knowl-output .knowl .knowl-content > .solution-like,
+.ptx-content .knowl-output .knowl .knowl-content > .solution-like:not(.incontext) {
+    margin-bottom: 0.15em;
+}
+.ptx-content .knowl-output .knowl .knowl-content > .solution-like.hint {
+    border-left: 1px solid #0f0;
+    padding-left: 0.35em;
+    background: #efe;
+}
+.ptx-content .knowl-output .knowl .knowl-content > .solution-like.answer {
+    border-left: 2px solid #00f;
+    padding-left: 0.35em;
+    background: #eef;
+}
+.ptx-content .knowl-output .knowl .knowl-content > .solution-like.solution {
+    border-left: 3px solid #c0c;
+    padding-left: 0.5em;
+    background: #fef;
+}
+
+.ptx-content .knowl-content > article:first-child,
+.ptx-content .knowl-content > .solution-like:first-child {
+/* padding, not margin, to get colored background (and not be absorbed) */
+    padding-top: 0.25em;
+}
+.ptx-content .knowl-footer {
+    display: none;
+}
+
+.ptx-content .exercisegroup > .conclusion {
+    margin-left: 1.5em;
+}
+
+.ptx-content .exercise-like .introduction {
+    display: inline;
+}
+.ptx-content .exercise-like .introduction .heading {
+    display: inline;
+}
+.ptx-content .exercise-like .introduction .para:first-child {
+    display: inline;
+}
+.ptx-content .exercise-like .introduction::after {
+    content: "";
+    display: block;
+}
+.ptx-content .exercise-like .conclusion::before {
+    content: "";
+    display: block;
+    margin-top: 0.25em;
+}
+
+
+/* if hints and solutions are in .posterior, then
+ * some of the above styling does not apply */
+
+.ptx-content article.exercise-like + .posterior {
+    margin-top: -0.75em;
+}
+
+
+.ptx-content article.example-like .hint {
+    display: block;
+    margin-top: -0.75em;
+}
+
+
+.ptx-content .exercisegroup .exercisegroup-exercises.cols2, .ptx-content .exercisegroup .exercisegroup-exercises.cols3, .ptx-content .exercisegroup .exercisegroup-exercises.cols4, .ptx-content .exercisegroup .exercisegroup-exercises.cols5, .ptx-content .exercisegroup .exercisegroup-exercises.cols6 {
+    width: 100%;
+    display:inline-flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+    align-items:flex-start;
+    align-content:flex-start;
+}
+
+.ptx-content .exercisegroup .exercisegroup-exercises.cols1 {
+    display:inline;
+}
+
+.ptx-content .exercisegroup .exercisegroup-exercises.cols1 .knowl-output {
+    display: block;
+}
+
+.ptx-content .exercisegroup .cols1 > article.exercise-like {flex-basis: calc(100% - 2em);}
+.ptx-content .exercisegroup .cols2 > article.exercise-like {flex-basis: calc(50% - 2em);}
+.ptx-content .exercisegroup .cols3 > article.exercise-like {flex-basis: calc(33.33% - 2em);}
+.ptx-content .exercisegroup .cols4 > article.exercise-like {flex-basis: calc(25% - 2em);}
+.ptx-content .exercisegroup .cols5 > article.exercise-like {flex-basis: calc(20% - 2em);}
+.ptx-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(16.66% - 2em);}
+
+/* math directly adajacent to words is wrapped to avoid bad line breaks */
+.ptx-content .mathword {
+    white-space: nowrap;
+}
+
+.ptx-content .unit,
+.ptx-content .quantity {
+    white-space: nowrap;
+    word-spacing: -0.25ex;
+    margin-right: 0.125em;
+}
+.ptx-content .unit sub,
+.ptx-content .unit sup,
+.ptx-content .quantity sub,
+.ptx-content .quantity sup {
+     word-spacing: normal;
+}
+
+.ptx-content .code-inline,
+.ptx-content .code-block,
+.ptx-content .console,
+.ptx-content .program,
+.ptx-content .program code {
+    font-family: "Inconsolata", monospace;
+}
+.ptx-content .code-block,
+.ptx-content .console,
+.ptx-content .program {
+    overflow-x: auto;
+}
+
+.ptx-content .code-inline {
+    font-size: 1em;
+    white-space: pre;
+    color: inherit;
+    background: #eeeeee;
+    border: 1px solid #dddddd;
+    padding: 0.0625em 0.25em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    border-radius: 0.2em;
+}
+.ptx-content .code-inline:first-child {
+    margin-left: 0;
+}
+.ptx-content .title .code-inline {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+.ptx-content a .code-inline {
+    background: #f6f6f6;
+}
+
+.ptx-content .kbdkey {
+    background: #f1f1f1;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    padding: 1px 2px 0 2px;
+    vertical-align: 0.1em;
+    font-size: 110%;
+    line-height: 1;
+    box-shadow: 2px 2px grey;
+    display: inline-block;
+    margin-right: 3px;
+}
+.ptx-content .kbdkey {
+    color: #333;
+}
+
+.ptx-content .sagecell_sessionOutput pre {
+    font-family: 'Inconsolata', monospace;
+}
+
+.ptx-content .sagecell {
+    white-space: normal;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+}
+.ptx-content .sage-interact.sagecell {
+    margin: 0;
+}
+
+.ptx-content .sagecell_evalButton {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  padding: 0 0.65em;
+}
+.ptx-content .sagecell_evalButton {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  /* Disable accidental text-selection */
+  user-select: none;
+  /* Truncate overflowing text with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+  border-radius: 3px;
+}
+.ptx-content .sagecell_evalButton {
+  color: #383838;
+  background-image: linear-gradient(#f7f7f7, #bbbbbb);
+  border-color: #c4c4c4;
+}
+.ptx-content .sagecell_evalButton:hover {
+  color: #181868;
+  background-image: linear-gradient(#bbbbbb, #f7f7f7);
+}
+.ptx-content .sagecell_evalButton:focus,
+.ptx-content .sagecell_evalButton:active {
+  color: #20160b;
+  background-image: linear-gradient(#ff6852, #ffd7d1);
+  border-color: #ff2822;
+}
+
+.ptx-content .sagecell .sagecell_editor {
+  margin-bottom: 8px;
+}
+
+.ptx-content .booktitle {
+    font-style: oblique;
+}
+
+.ptx-content .objectives > .heading,
+.ptx-content .outcomes > .heading {
+    font-size: 1.25em;
+}
+
+/* Born-hidden example with a very long title */
+/* http://physics.thomasmore.edu/ConnectedPhysics/sss-netforce.html */
+.ptx-content a .heading {
+    white-space: normal;
+}
+
+
+.ptx-content .solutions > a, .ptx-content .solutions > a:hover, .ptx-content .solutions > a.active,
+.ptx-content .instructions > a, .ptx-content .instructions > a:hover, .ptx-content .instructions > a.active {
+    display: inline-block;
+    margin-right: 1.5em;
+}
+
+/* When the knowl is a Hint, Answer, or Solution, put a little
+   triangle in front of it */
+.ptx-content .solutions > a::before,
+.ptx-content .instructions > a::before {
+    content: '\25ba';
+    font-size: 70%;
+    color: #06a;
+    position: relative;
+    top: -2px;
+    right: 3px;
+}
+.ptx-content .solutions > a.active::before,
+.ptx-content .instructions > a.active::before {
+    content: '\25bc';
+    animation-name: solutiontriangle;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+}
+.ptx-content .solutions > a[data-knowl]::after,
+.ptx-content .instructions > a[data-knowl]::after {
+    left: 12px;
+}
+@keyframes solutiontriangle {
+    from {content: '\25ba';}
+    to {content: '\25bc';}
+}
+
+.ptx-content section.solutions {
+    font-size: 90%;
+    padding-left: 1em;
+    border-left: 1em solid #eeeeee;
+}
+
+.ptx-content.ptx-content > section.solutions:first-child {
+    padding-left: 0;
+    border-left: none;
+}
+
+.ptx-content article.example-like > .solution-like,
+.ptx-content article.exercise-like > .solution-like {
+    margin-top: 1.0em;
+    padding-left: 0.7em;
+}
+.ptx-content article.example-like > .solution-like > .heading,
+.ptx-content article.exercise-like > .solution-like > .heading {
+    font-size: 100%;
+    font-weight: 700;
+    margin-right: 0.25em;
+    display: inline;
+}
+.ptx-content article.example-like > .solution-like > .heading + .para,
+.ptx-content article.exercise-like > .solution-like > .heading + .para {
+    display: inline;
+}
+
+
+
+
+/* these were taken from the local add-on.css.
+ * need to check if the are needed.
+ */
+
+.ptx-content article > figure:first-child {
+    margin-top: 0;
+}
+
+.ptx-content figure + figure,
+.ptx-content figure + .sidebyside,
+.ptx-content .sidebyside + .sidebyside,
+.ptx-content article + figure,
+.ptx-content .sidebyside + figure {
+    padding-top: 1.0em;
+}
+
+
+.ptx-content img {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* is .cs for commutative diagrams? */
+.ptx-content img.cs {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content img:not(.cs) {
+    max-width: 650px;
+}
+
+.ptx-content .tabular-box.natural-width table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content figure img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content figure img + img {
+    margin-top: 30px;
+}
+
+.ptx-content div.center img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content div.center + div.center > img {
+    margin-top: 60px;
+}
+
+.ptx-content div.center > img + img {
+    margin-top: 60px;
+}
+
+.ptx-content figure table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ptx-content .caption {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 100%;
+    text-align: center;
+}
+
+
+.ptx-content figure.wrap img {
+    width: 250px;
+}
+.ptx-content figure.wrap {
+    float: right;
+    margin-right: 0;
+    margin-left: 30px;
+}
+.ptx-content figure img.wrap {
+    float: right;
+    margin: 0;
+}
+
+.ptx-content figure figcaption.wrap {
+    margin: 10px;
+    font-size: 100%;
+    text-align: center;
+}
+
+.ptx-content figure, .ptx-content .image-box {
+    margin-top: 0.5em;
+}
+.ptx-content figure .image-box {
+    margin-top: 0;
+}
+.ptx-content .sidebyside figure {
+    margin-top: 0;
+}
+.ptx-content .image-box img,  /* See sample article Graphics section */
+.ptx-content img.contained,  /* See sample article Graphics section */
+.ptx-content .sbspanel img {
+   /* previously these were hard-coded in the HTML */
+    width: 100%;
+    height: auto;
+}
+
+/* these seem to be obsolete because an img has to be in a .image-box .
+   Check on that.
+.ptx-content .sbspanel > img:not(.draw_on_me):not(.mag_popup),
+.ptx-content figure > img:not(.draw_on_me):not(.mag_popup),
+.ptx-content figure > div > img:not(.draw_on_me):not(.mag_popup),
+*/
+.ptx-content .image-box > img:not(.draw_on_me):not(.mag_popup) {
+    cursor: zoom-in;
+}
+.ptx-content img.mag_popup {
+    border: 1px solid #666;
+    box-shadow: 4px 6px 4px #999;
+    cursor: zoom-out;
+    max-width: 600px;
+}
+.ptx-content .mag_popup_container {
+    width:100%;
+    position:absolute;
+    z-index:1001;
+    overflow-x: visible;
+}
+
+.ptx-content .image-box,
+.ptx-content .audio-box,
+.ptx-content .video-box,
+.ptx-content .asymptote-box {
+    position: relative;
+}
+.ptx-content .image-box .asymptote-box iframe.asymptote,
+.ptx-content iframe.asymptote,
+.ptx-content .video-box .video,
+.ptx-content .video-box .video-poster {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+.ptx-content section > .audio-box,
+.ptx-content section > .video-box,
+.ptx-content section > .image-box {
+    margin-top: 0.75em;
+}
+
+.ptx-content .audio {
+    width: 100%;
+}
+
+.caption .heading {
+    font-weight: bold;
+}
+
+.caption .counter {
+    font-weight: bold;
+}
+
+.ptx-content div.quote {
+    padding-left: 40px;
+    padding-right: 10px;
+    margin-bottom: 1em;
+}
+
+.minipage  + .minipage {
+    display: inline-block;
+}
+
+.ptx-content code.inline {
+    background: none;
+    border: none;
+}
+
+/* These next are for Prism */
+.ptx-content pre.program,
+.ptx-content pre.program code,
+.ptx-content pre.code-block,
+.ptx-content pre.code-block code {
+    line-height: 1.1;
+}
+.ptx-content section > .code-box,
+.ptx-content .para + .code-box,
+.ptx-content section > .code-block,
+.ptx-content .para + .code-block {
+    margin-top: 1em;
+}
+
+.ptx-content pre.program,
+.ptx-content pre.code-block {
+    margin-top: 0;
+    padding-left: 15px;
+    border-left: 1px solid #aaa;
+    font-size: 93%;
+    overflow: auto;
+}
+.ptx-content pre.program:before,
+.ptx-content pre.code-block:before {
+    content:' ';
+    font-size: 50%;
+    border-top: 1px solid #aaa;
+    display: block;
+    margin-right: auto;
+    margin-left: -15px;
+    width: 3.0em;
+}
+
+.ptx-content pre[data-line].program, 
+.ptx-content pre[data-line].code-block
+{
+    padding-left: 2.5em;
+}
+
+.ptx-content pre[data-line].program:before,
+.ptx-content pre[data-line].code-block:before {
+    margin-left: -5em;
+}
+
+.ptx-content pre.program.line-numbers,
+.ptx-content pre.code-block.line-numbers
+{
+    padding-left: 3.5em;
+    overflow: visible;
+}
+
+.ptx-content pre.program.line-numbers:before,
+.ptx-content pre.code-block.line-numbers:before {
+    margin-left: -7em;
+}
+
+/* fine tune next 3 based on line-height of surrounding pre  */
+.ptx-content pre[data-line].line-numbers code {
+    padding-top: 0em;  /* increase with line-height */
+}
+.ptx-content pre[data-line].line-numbers .line-highlight {
+    margin-top: 0em; /* decreases as line-height increases */
+}
+.ptx-content pre[data-line]:not(.line-numbers) .line-highlight {
+    margin-top: 0.6em; /* decreases as line-height increases */
+}
+
+
+/* next is for the old code formatting js */
+.ptx-content pre.prettyprint,
+.ptx-content pre.plainprint {
+    margin-top: 0;
+    padding-left: 15px;
+    border-left: 1px solid #aaa;
+    font-size: 93%;
+    overflow: auto;
+/* preveiously turned off the border and padding from pretty.css */
+}
+
+.ptx-content pre.prettyprint:before,
+.ptx-content pre.plainprint:before {
+    content:'';
+    font-size: 50%;
+    border-top: 1px solid #aaa;
+    display: block;
+    margin-right: auto;
+    margin-left: -15px;
+    width: 2.5em;
+}
+
+.ptx-content .objectives {
+    margin-bottom: 1.25em;
+}
+
+
+.ptx-content ol > li {
+    padding-left: 0.25em;
+}
+.ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: calc(49% - 1.75em); min-width: 190px}
+/*
+.ptx-content ol.cols2 > li, .ptx-content ul.cols2 > li { width: 50%; min-width: 240px}
+*/
+.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+/*
+.ptx-content ol.cols3 > li, .ptx-content ul.cols3 > li { width: 31%; min-width: 160px}
+*/
+.ptx-content ol.cols4 > li, .ptx-content ul.cols4 > li { width: calc(24.5% - 1.25em); min-width: 100px}
+.ptx-content ol.cols5 > li, .ptx-content ul.cols5 > li { width: calc(19.5% - 0.75em); min-width: 90px}
+.ptx-content ol.cols6 > li, .ptx-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}
+/* sample-article sec 5 */
+.ptx-content ul.cols2 > li:nth-child(odd), .ptx-content ol.cols2 > li:nth-child(odd) {
+   padding-right: 1.5em;
+   padding-right: 2em;
+}
+
+/*
+.ptx-content .cols2 > li:first-child,
+.ptx-content .cols3 > li:first-child,
+.ptx-content .cols4 > li:first-child,
+.ptx-content .cols5 > li:first-child,
+.ptx-content .cols6 > li:first-child {
+    margin-top: 0.5em;
+}
+*/
+
+.ptx-content .cols2  ol,
+.ptx-content .cols3  ol,
+.ptx-content .cols4  ol,
+.ptx-content .cols5  ol,
+.ptx-content .cols6  ol {
+    padding-left: 0.7em;
+}
+.ptx-content .exercisegroup-exercises > article.exercise-like {
+    margin-top: 1em;
+}
+
+
+/* see http://bob.cs.sonoma.edu/IntroCompOrg-RPi/exercises-10.html
+  for examples of an odd number of items in a cols2, followed by
+  a hint */
+.ptx-content .cols2 > li:last-child:nth-child(odd) {
+    float: none !important;
+    padding-top: 0.5em;
+}
+
+
+/* http://spot.pcc.edu/math/APEXCalculus/sec_prod_quot_rules.html
+ * solution to Example 2.4.14
+ */
+.ptx-content .solution ol li {
+    margin-top: 1em;
+    padding-left: 0.5em;
+}
+
+/* solution to Example 4.2.12 in http://spot.pcc.edu/math/orcca-draft/orcca/section-radical-expressions-and-rational-exponents.html
+*/
+.ptx-content .solution ol li > .para:first-child, .ptx-content .solution ol li > .displaymath:first-child {
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 0;
+}
+.ptx-content .solution ol li > .displaymath:first-child .MJXc-display {
+    margin-top: 0;
+}
+
+
+.ptx-content .exercise-like ol li {
+    margin-top: 1em;
+    padding-left: 0.5em;
+}
+
+.ptx-content .exercise-like > .cols2 > li { width: calc(49% - 2.5em)}
+.ptx-content .exercise-like > .cols3 > li { width: calc(33% - 2.5em)}
+.ptx-content .exercise-like > .cols4 > li { width: calc(24.5% - 2.5em)}
+.ptx-content .exercise-like > .cols5 > li { width: calc(19.5% - 2.5em)}
+.ptx-content .exercise-like > .cols6 > li { width: calc(16.3% - 2.5em)}
+
+/* A colsN in a knowl needs to be narrower because of the margin/padding of the knowl */
+.ptx-content .knowl .exercise-like > .cols2 > li { width: calc(49% - 2em)}
+/* next 4 not actually checked: just copied from cols2 */
+.ptx-content .knowl .exercise-like > .cols3 > li { width: calc(33% - 2em)}
+.ptx-content .knowl .exercise-like > .cols4 > li { width: calc(24.5% - 2em)}
+.ptx-content .knowl .exercise-like > .cols5 > li { width: calc(19.5% - 2em)}
+.ptx-content .knowl .exercise-like > .cols6 > li { width: calc(16.3% - 2em)}
+
+
+.ptx-content .exercise-like ol li > .para:first-child {
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 0;
+}
+
+.ptx-content .contributor .contributor-name {
+    font-variant: small-caps;
+}
+.ptx-content .contributor .contributor-info {
+    font-size: 88%;
+    font-style: italic;
+    margin-left: 3ex;
+}
+.ptx-content .contributor {
+    margin-top: 3ex;
+}
+.ptx-content .contributor + .contributor {
+    margin-top: 1.5ex;
+}
+
+.ptx-content .contributor + .para {
+    margin-top: 3ex;
+}
+
+.ptx-content .frontmatter .contributors, .ptx-content .book .contributors {
+    text-align: center;
+    font-style: normal;
+}
+
+.pretext .searchwrapper {
+    max-width: 900px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 39px;
+}
+
+.pretext .searchwrapper .cse .gsc-control-cse, .searchwrapper .gsc-control-cse  {
+    padding: 0;
+    border: none;
+    width: 25ex;
+}
+.pretext .searchwrapper .cse .gsc-search-button input.gsc-search-button-v2, .searchwrapper input.gsc-search-button-v2 {
+    padding: 2px 2px;
+}
+.pretext .searchwrapper form.gsc-search-box {
+    margin: 0;
+}
+.pretext .searchwrapper table.gsc-search-box {
+    margin: 0;
+}
+.pretext .searchwrapper .gsc-search-box-tools .gsc-search-box .gsc-input {
+    padding: 0;
+}
+.pretext .searchwrapper .gsib_a {
+    padding: 0 0 0 5px;
+}
+.pretext .searchwrapper .gsc-input-box {
+    height: 3.0ex;
+}
+.pretext .searchwrapper form.gsc-search-box {
+    font-size: 12px;
+}
+
+/* turn off the green parentheses Alex does not like */
+.ptx-content div.CodeMirror span.CodeMirror-matchingbracket {color: #090;}
+
+.ptx-content .image-archive {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;  /* was auto */
+    margin-top: 0.75em;
+    padding-bottom: 0.25em;
+    text-align: center;
+}
+.ptx-content .image-archive > a {
+    display: inline-block;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    font-family: monospace;
+}
+
+.ptx-content iframe {
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+}
+
+.ptx-content .times-sign {
+    font-size: larger;
+    vertical-align: -0.15ex;
+}
+/* temporary for Geogebra development: replace with a more
+  restrictive selector for articles */
+.ptx-content article.notranslate {
+    margin-top: 0;
+}
+
+/*
+nested tasks. see
+https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#aBc
+*/
+
+/* 9/27/23  added "article" because of details.exercise-like */
+.ptx-content article.exercise-like > .exercise-like {
+    margin-left: 40px;
+}
+.ptx-content article.exercise-like > .exercise-like.task {
+    margin-left: 20px;
+}
+.ptx-content article.exercise-like > .exercise-like > .para {
+    margin-top: 1.25em;
+/*    margin-bottom: 0.25em; */
+}
+.ptx-content article.example-like > .heading + .introduction {
+    display: inline;
+}
+.ptx-content article.example-like > .heading + .introduction > .para:first-child {
+    display: inline;
+}
+.ptx-content article.example-like > .exercise-like > .para {
+    margin-top: 1.25em;
+}
+
+/* end of nested tasks */
+
+/* genus and species in italics */
+.ptx-content .taxon {
+    font-style: italic;
+}
+
+/* Sage stuff */
+.ptx-content .sageanswer {
+    font-family: monospace;
+    white-space: pre;
+    margin-left: 3em;
+    margin-bottom: 2em;
+}
+.ptx-content .sageanswer .key {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 1em;
+}
+.ptx-content .sageanswer .output {
+    display: inline-block;
+    vertical-align: top;
+}
+.ptx-content .CodeMirror-code pre.CodeMirror-line {
+    padding-bottom: 5px;
+/* the next item is the CodeMirror default, which was
+ previously over-ridden */
+    padding-left: 6px;
+}
+
+/* used when knowl content is hidden in the page */
+.ptx-content .hidden-content, .pretext .hidden-content {
+/* things will be different after 2022 overhaul */
+    display: none;
+}
+
+.ptx-content hr.ptx-pagebreak {
+    width: 30em;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2.0em;
+    margin-top: 0;
+    height: 4em;
+    border: 0;
+    border-bottom: 1px dashed #ccc;
+}
+
+.ptx-content hr.ptx-pagebreak:after {
+    content: "page";
+    display: inline-block;
+    position: relative;
+    top: 4.0em;
+    font-size: 80%;
+    padding: 0 0.25em;
+    background: white;
+}
+
+/*
+   See 10.1.8c in http://faculty.valpo.edu/calculus3ibl/ch10_01_gradient.html
+and condider having this replace line 3338 of the general code (which uses .heading + p)
+*/
+.ptx-content .example-like > .exercise-like > .para:first-of-type {
+    display: inline;
+}
+.ptx-content .example-like > .exercise-like > .aside-like {
+    margin-top: -3em;
+}
+.ptx-content .example-like > .exercise-like > .aside-like.front {
+    margin-top: 0;
+}
+
+.ptx-content meta {
+    display: none;
+}
+
+.ptx-content .summary-links a {
+  color: #671d12;
+  background: #f0f0f0;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ptx-content .summary-links a:hover, .ptx-content .summary-links a:focus {
+  color: white;
+  background: #671d12;
+}
+.ptx-content .summary-links a .codenumber {
+  color: #303030;
+  margin-right: 0.41667em;
+}
+
+.ptx-content .summary-links a:hover .codenumber, .ptx-content .summary-links a:focus .codenumber {
+  color: #f0f0f0;
+}
+
+
+
+.ptx-content .summary-links {
+    margin-top: 4em;
+}
+.ptx-content section + .summary-links {
+    margin-top: 2em;
+}
+.ptx-content .summary-links ul {
+    list-style-type:none;
+}
+.ptx-content .summary-links li {
+    margin-top: 0;
+}
+.ptx-content section .summary-links li .title {
+    font-style: normal;
+}
+.ptx-content .summary-links a {
+  position: relative;
+  display: block;
+  font-size: 1.5em;
+  line-height: 1.25em;
+  padding: 0.41667em 0.83333em;
+  margin-top: 0.20833em;
+  border-radius: 3px;
+  padding-right: 2.06667em;
+}
+.ptx-content .summary-links a:after {
+  right: 0.83333em;
+}
+.ptx-content .summary-links a:after {
+  content: "";
+  position: absolute;
+  /* center vertically */
+  top: 50%;
+  margin-top: -0.4em;
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid #c9c9c9;
+}
+.ptx-content .summary-links a, .ptx-content .summary-links a:link, .ptx-content .summary-links a:visited {
+  cursor: pointer;
+}
+.ptx-content .summary-links a:hover:after {
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid white;
+}
+.ptx-content .summary-links a {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+@media screen and (max-width: 480px) {
+  .ptx-content .summary-links a {
+    font-size: 1em;
+    line-height: 1.25em;
+  }
+}
+.ptx-content .summary-links a .codenumber {
+  margin-right: 0.41667em;
+}
+
+.ptx-content .summary-links a:active {
+  position: relative;
+  color: white;
+  background: #932919;
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
+}
+.ptx-content .summary-links a:active:after {
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid white;
+}
+.ptx-content .summary-links a:focus {
+  outline: thin dotted #333;
+  outline-offset: -2px;
+  /**
+   * Remove stupid inner dotted border applied by Firefox on focus
+   * See http://stackoverflow.com/a/199319/1599617
+   */
+}
+
+
+/* also see section > heading for worksheets, maybe around line 1200 */
+/* one-page documents in the browser */
+
+body.standalone.worksheet .ptx-content .onepage > .heading {
+    margin-top: 0;
+    font-size: 1.3em;
+}
+body.standalone.worksheet .ptx-content .onepage > .introduction {
+    margin-top: 0.4em;
+}
+body.standalone.worksheet .ptx-content .onepage > .introduction > .heading {
+    font-size: 1.1em;
+}
+body.standalone.worksheet .ptx-content .onepage .solutions,
+body.standalone.worksheet .ptx-content .onepage .instructions {
+    display: none;
+}
+body.standalone .ptx-content .worksheet {
+/*
+    padding: 40px 45px 45px 55px;
+*/
+    padding: 40px 0 45px 0;
+    border: 2px solid grey;
+    margin: 0;
+/* height: 1243px; */
+}
+
+body.standalone .ptx-content .onepage {
+/*    padding: 40px 45px 45px 55px;
+    padding: 0 0 45px 0;
+*/
+    padding: 40px 45px 45px 55px;
+    border-bottom: 2px solid grey;
+    margin: 0;
+/* height: 1243px; */
+}
+body.standalone .ptx-content .onepage + .onepage {
+/*
+    padding-top: 40px;
+*/
+    border-top: 2px solid grey;
+}
+/* there may be worksheet content before the first page
+   or after the last page
+*/
+body.standalone .ptx-content .onepage.firstpage {
+    padding-top: 0
+}
+body.standalone .ptx-content .onepage.lastpage {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+body.standalone .ptx-content .worksheet > *:last-child {
+    padding-bottom: 0 !important
+}
+.ptx-content .onepage + .onepage {
+    margin-top: 2.5em;
+    padding-top: 1.5em;
+    border-top: 1px dashed #aaa;
+}
+.ptx-content .onepage + .onepage::before {
+    content: "pagebreak";
+    text-align: center;
+    margin-left: 40%;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: absolute;
+    top: -0.8em;
+    font-size: 80%;
+    font-style: italic;
+    background: white;
+}
+
+body.standalone .ptx-content .onepage + .onepage {
+    margin-top: 10px;
+}
+body.standalone .ptx-content .onepage + .onepage::before {
+    content: none;
+}
+
+body.standalone .ptx-content .onepage article {
+    padding-left: 0;
+    border: none;
+}
+body.standalone .ptx-content .onepage article::after {
+    all: unset;
+}
+.ptx-content .onepage > .para:first-child,
+.ptx-content .onepage > article:first-child {
+    margin-top: 0;
+}
+.ptx-content section + .onepage.firstpage,
+.ptx-content article + .onepage.firstpage,
+.ptx-content .para + .onepage.firstpage {
+    margin-top: 1.25em;
+}
+
+/* not good, because of image next to image
+.ptx-content .onepage .sbspanel + .sbspanel {
+    padding-left: 1.25em;
+    border-left: 1px solid grey;
+    margin-left: -1.25em;
+}
+*/
+body.worksheet .ptx-content .onepage .sbspanel + .sbspanel > .exercise::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding-left: 1.25em;
+    border-left: 1px solid grey;
+    margin-left: -1.25em;
+    z-index: -100;  /* to not block editable content */
+}
+
+body.standalone.worksheet .ptx-content section article.task {
+    margin-left: 0;
+}
+body.standalone.worksheet .ptx-content section article.task > .heading {
+    font-weight: normal;
+}
+
+body.standalone .autopermalink {
+    display: none;
+}
+
+body.standalone.worksheet .ptx-content .onepage .workspace {
+    border: 2px dotted grey;
+    background: #f3fff3;
+/*  Sally suggests light and dark blue
+    background: linear-gradient(
+        #eef 0px, #eef 200px,
+        #eef 200px, #99f 205px,
+        #99f 205px, #99f 100%)
+*/
+}
+body.standalone.worksheet .ptx-content .onepage .workspace.squashed {
+    border: 2px dotted grey;
+    background: #ffe;
+}
+
+body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
+    border: 15px solid;
+    border-image: repeating-linear-gradient(
+      -35deg,
+      #f33,
+      #f33 10px,
+      #000 10px,
+      #000 20px
+    ) 20;
+/*
+    background: linear-gradient(
+        #ff0 0%, #ff0 8%,
+        #000 8%, #000 9%,
+        #ff6 9%, #ff6 17%,
+        #555 17%, #555 19%,
+        #ff8 19%, #ff8 26%,
+        #777 26%, #777 29%,
+        #ffa 29%, #ffa 37%,
+        #aaa 37%, #aaa 41%,
+        #ffd 41%, #ffd 48%,
+        #ccc 48%, #ccc 52%,
+        #ffd 52%, #ffd 59%,
+        #aaa 59%, #aaa 63%,
+        #ffa 63%, #ffa 71%,
+        #777 71%, #777 74%,
+        #ff8 74%, #ff8 81%,
+        #555 81%, #555 83%,
+        #ff6 83%, #ff6 91%,
+        #000 91%, #000 92%,
+        #ff0 92%, #ff0 100%
+        );
+*/
+    background: yellow;
+}
+
+body.has-sidebar-left.mathbook-loaded.standalone.worksheet .ptx-page .ptx-main {
+    margin-left: 0;
+}
+body.standalone.worksheet .ptx-page > .ptx-main .ptx-content {
+    max-width: 1030px;
+    width: 1030px;
+    margin-right: 0;
+}
+body.standalone.worksheet.a4 .ptx-page > .ptx-main .ptx-content {
+    max-width: 1001px;
+    width: 1001px;
+}
+
+body.standalone.worksheet .ptx-content .goal-like {
+    border: none;
+    padding: 0;
+}
+body.standalone.worksheet .ptx-content .goal-like > .heading {
+    margin-top: -0.5em;
+    padding: 0;
+    margin: 0;
+    font-size: 1.1em;
+}
+body.standalone.worksheet .ptx-content section.worksheet > .heading {
+    display: inline;
+    font-size: 1.1em;
+}
+/* becaues the worksheet has no side margins but the .onepage does */
+body.standalone.worksheet .ptx-content section.worksheet > .heading,
+body.standalone.worksheet .ptx-content section.worksheet > .objectives,
+body.standalone.worksheet .ptx-content section.worksheet > .introduction,
+body.standalone.worksheet .ptx-content section.worksheet > .conclusion {
+    margin-left: 55px;
+    margin-right: 40px;
+}
+body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
+    display: inline;
+}
+
+/* printing for one-page worksheets */
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
+    left: 0 !important;
+    top: 0 !important;
+}
+
+/* move to the color file(s) and figure out next comment */
+/*
+.ptx-content a.internal {
+    color: #900;
+}
+.ptx-content a.internal:hover {
+    background-color: #ddf;
+}
+*/
+/* check whether class="url" under Endnotes in pretext-epub.xsl can be
+   changed to class = "external"*/
+.ptx-content a.url,
+.ptx-content a.external {
+    color: #22a;
+}
+.ptx-content a.url:hover,
+.ptx-content a.external:hover {
+    background: #ffd;
+}
+
+/*
+.ptx-content a.internal:hover,
+.ptx-content a.external:hover,
+.ptx-content a.internal:focus,
+.ptx-content a.external:focus {
+    text-decoration: underline;
+}
+*/
+
+/* style for poems */
+
+.ptx-content .poem {
+    margin-top: 1.5em;
+}
+.ptx-content .poem {
+    display: table;
+    margin-top: 1.5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    width: auto;
+    max-width: 90%;
+}
+
+.ptx-content .poem > .heading {
+    display: block;
+    text-align: center;
+}
+.ptx-content section article.poem > .heading::after {
+    content: "";
+}
+.ptx-content .poem > .heading > .title {
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 1.2em;
+}
+
+.ptx-content .poem .author {
+    font-style: italic;
+    margin-top: 0.75em;
+}
+.ptx-content .poem .author.left {
+    text-align: left;
+}
+.ptx-content .poem .author.center {
+    text-align: center;
+}
+.ptx-content .poem .author.right {
+    text-align: right;
+}
+
+.ptx-content .poem .stanza > .heading {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    line-height: 1em;
+}
+.ptx-content .poem .stanza + .stanza {
+    margin-top: 1em;
+}
+.ptx-content .poem .heading + .stanza {
+    margin-top: 0.2em;
+}
+.ptx-content .poem .heading + .line {
+    margin-top: 0.2em;
+}
+
+.ptx-content .poem .line.left {
+    text-align: left;
+    margin-left: 4em;
+    text-indent: -4em;
+}
+.ptx-content .poem .line.center {
+    text-align: center;
+}
+.ptx-content .poem .line.right {
+    text-align: right;
+}
+.ptx-content .poem .tab {
+    margin-left: 2em;
+}
+
+/* GeoGebra calculator */
+
+.calculator-container {
+    position: fixed;
+    z-index: 100;
+    bottom: 5px;
+    right: 5px;
+/*
+    width: 320px;
+*/
+    width: 253px;
+/*
+    height: 600px;
+*/
+    height: 460px;
+}
+@media screen and (max-width: 800px) {
+    .calculator-container {
+         bottom: 50px !important;
+    }
+}
+
+.toolBPanel {
+    overflow: hidden !important;
+}
+.toolBPanel:hover {
+    overflow: auto !important;
+}
+
+/* Preview of annual edition */
+
+.pretext main .para.newstuff {
+    border-right: 6px solid #6f6;
+    background:  #dfd;
+}
+.pretext main li.newstuff {
+    border-right: 6px solid #66f;
+    background:  #eef;
+}
+.pretext main li.newstuff .para.newstuff {
+    border-right: none;
+    background: inherit;
+}
+.pretext main article.newstuff {
+    border-right: 6px solid #ff6;
+    background:  #ffd;
+}
+.pretext main section.newstuff {
+    border-right: 10px solid #f6f;
+}
+.pretext main a[data-knowl].newstuff {
+    border: 1px solid #f33;
+    background: #fdd;
+}
+
+#aboelkins-ACS .ptx-main .ptx-content > section:first-of-type > section:first-of-type > .project-like:first-of-type li {
+    font-size: 300%
+}
+/*  WW problems */
+
+.ptx-content .wwprob table.attemptResults {
+    margin-left: 2em;
+    background: #efefef;
+    padding: 0.2em;
+}
+.ptx-content .wwprob table.attemptResults + .attemptResultsSummary {
+    margin-top: 1em;
+}
+
+.ptx-content .wwprob .problem-main-form {
+    margin-top: 1em;
+    background: #eeeeff;
+    padding: 0.5em;
+}
+.ptx-content .wwprob td.ResultsWithoutError {
+    background: #9f9;
+}
+.ptx-content .wwprob td.ResultsWithError {
+    background: #f99;
+}
+
+.ptx-content .wwprob tr th {
+    text-align: center;
+    padding: 0.2em 1em 0.2em 1em;
+}
+.ptx-content .wwprob tr td {
+    text-align: center;
+}
+.ptx-content .wwprob tr td:empty {
+    background: #fff;
+}
+
+.ptx-content .wwprob ol, .ptx-content .wwprob ul {
+    margin-top: 0.75em !important;
+}
+
+.ptx-content .wwprob .problem {
+    background: #fdfdfd;
+}
+
+.ptx-content .wwprob .problem a {
+    text-decoration: none;
+}
+
+.ptx-content .wwprob #footer {
+    font-size: 70%;
+    text-align: right;
+}
+
+.ptx-content .marginresource {
+    position: relative;
+    height: 0;
+    left: 40em;
+    top: 1em;
+}
+.ptx-content .marginresource a {
+    color: blue;
+}
+.ptx-content .marginresource a[knowl] {
+    border-bottom: 1px dotted blue;
+}
+.ptx-content .marginresource .icon {
+    font-size: 200%;
+    margin-right: 1em;
+    display: inline-block;
+}
+.ptx-content .marginresource .resource_description {
+    display: inline-block;
+}
+.ptx-content .marginresource .resource_links {
+    display: block;
+    margin-left: 2em;
+}
+
+.collectedworks .knowl-output {
+    border: 12px
+    solid #D6E3FF;
+    background: none repeat scroll 0% 0% #FAFCFF;
+    border-radius: 4px;
+    margin-bottom: 1.25em;
+}
+
+.collectedworks .subjectwork {
+    max-width: 750px;
+}
+
+.collectedworks .bib {
+    margin-bottom: 1em;
+}
+
+.collectedworks .bibitem + .bibentry {
+    display: inline;
+}
+
+.collectedworks .bibitem {
+    display: inline;
+    font-weight: bold;
+    margin-right: 1em;
+}
+.collectedworks .work .title a {
+    text-decoration: none;
+    color: #009;
+}
+.collectedworks .work .title {
+}
+
+
+.iconlegend {
+    position: absolute;
+    margin-top: 0.5em;
+    top: 0;
+    left: 920px;
+    line-height: 1;
+}
+
+.iconlegend .icon_name {
+    font-size: 90%;
+    margin-right: 1em;
+}
+.icongroup + .icongroup {
+    margin-left: 1em;
+}
+
+/* interactive WeBWorK */
+
+label.webwork {
+display:inline-flex;
+flex-direction:column;
+}
+
+label.correct .status {
+background-color: #a0f0a0;
+}
+
+label.partly-correct .status {
+ color: #ffcc66;
+}
+
+label.incorrect .status {
+  color: #b00;
+}
+label.incorrect .status::before {
+    content: " ";
+}
+
+.feedback {
+ word-wrap:break-word;
+}
+
+label.correct .feedback {
+ background-color: #00ffcc;
+}
+
+label.partly-correct .feedback {
+ color: #ffcc66;
+}
+
+label.incorrect .feedback {
+ color: #e07070;
+}
+
+
+.ptx-content .webwork-button {
+    border-radius: 3px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid #999;
+    background-color: #ffffff;
+}
+
+.ptx-content .webwork-button:hover {
+    cursor: pointer;
+    background-color: #e0e0ff;
+    border: 1px solid #000;
+}
+.ptx-content .webwork-button:active {
+    cursor: pointer;
+    background-color: #a0a0a0;
+    border: 1px solid #999;
+}
+
+.webwork img, .webwork + .knowl-output img {max-width:100%;}
+
+.ptx-content .exercise-wrapper form button {
+    border-radius: 3px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid #999;
+    color: black;
+    background-color: #ffffff;
+}
+.ptx-content .webwork-button.activate {
+    width: 22px;
+    height: 22px;
+    background-image: url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
+    background-size: contain;
+    position: absolute;
+    right: -35px;
+}
+
+article.project-like > .heading + div.ptx-runestone-container > div.runestone,
+article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
+    margin-top: 0.5em;
+}
+
+/* hack for runestone */
+/*
+.ptx-content .exercise-wrapper form button.btn-success {
+    background-color: #5cb85c;
+}
+*/
+/* to undo Runestone's presentermode.css */
+.ptx-content .bottom {
+    position: unset;
+}
+
+/* to undo Runestone's draganddrop.css */
+.ptx-content .rsdraggable {
+    font-size: 100%;
+}
+
+.ptx-content .exercise-wrapper form button:hover {
+    cursor: pointer;
+    background-color: #e0e0ff;
+    border: 1px solid #000;
+}
+.ptx-content .exercise-wrapper form button:active {
+    background-color: #f0f0f0;
+}
+.ptx-content .exercise-wrapper form button + button {
+    margin-left: 0.8em;
+}
+
+.ptx-content .exercise-wrapper,
+.ptx-content .exercise-wrapper form,
+.ptx-content .exercise-wrapper form > div:first-child {
+    display: inline-block;
+    vertical-align: top;
+    width: 100%; /* for live ww to open at 100% wide */
+}
+.ptx-content .knowl .exercise-wrapper,
+.ptx-content .knowl .exercise-wrapper form,
+.ptx-content .knowl .exercise-wrapper form > div:first-child {
+    width: 100%;
+}
+/*
+.ptx-content .exercise-wrapper form {
+     max-width: 95%;
+}
+*/
+.ptx-content .exercise-wrapper > .para:first-child,
+.ptx-content .exercisegroup .exercise-wrapper > .para:first-child {
+    margin-top: 0;
+    display: inline;
+}
+/* next is realted to having exercises start in-line with their exercise number,
+   including when a static WW problem is made interactive */
+/* not sure this was the right way to do it */
+/* see https://opentext.uleth.ca/apex-calculus/sec_antider.html#exercise-722 */
+.ptx-content .heading + .exercise-wrapper {
+    display: inline-block;
+    max-width: 95%;
+    width: 100%;
+}
+/*
+.ptx-content .exercisegroup .heading + .exercise-wrapper {
+    width: auto;
+}
+*/
+.ptx-content .cols2 .heading + .exercise-wrapper {
+    width: auto;
+}
+
+/* next two need to be separate due to limitations in Chrome and Safari */
+@media screen and (max-width: 600px) {
+    .ptx-content .exercisegroup .cols2 > article.exercise-like {flex-basis: calc(100% - 2em);}
+    .ptx-content .exercisegroup .cols3 > article.exercise-like {flex-basis: calc(100% - 2em);}
+    .ptx-content .exercisegroup .cols4 > article.exercise-like {flex-basis: calc(50% - 2em);}
+    .ptx-content .exercisegroup .cols5 > article.exercise-like {flex-basis: calc(50% - 2em);}
+    .ptx-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(33.3% - 2em);}
+    .ptx-content .exercisegroup .cols2 .heading + .exercise-wrapper { max-width: 100%; }
+}
+@media screen and (max-width: 850px) and (min-width: 786px) {
+    .ptx-content .exercisegroup .cols2 > article.exercise-like {flex-basis: calc(100% - 2em);}
+    .ptx-content .exercisegroup .cols3 > article.exercise-like {flex-basis: calc(100% - 2em);}
+    .ptx-content .exercisegroup .cols4 > article.exercise-like {flex-basis: calc(50% - 2em);}
+    .ptx-content .exercisegroup .cols5 > article.exercise-like {flex-basis: calc(50% - 2em);}
+    .ptx-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(33.3% - 2em);}
+    .ptx-content .exercisegroup .cols2 .heading + .exercise-wrapper { max-width: 100%; }
+}
+
+.APEXlogo {
+    white-space: nowrap;
+}
+.APEXlogo .A {
+    margin-right: -0.07em;
+}
+.APEXlogo .P {
+    margin-right: -0.33em;
+    position: relative;
+    top: -0.30em;
+}
+.APEXlogo .E {
+    position: relative;
+   top: 0.33em;
+}
+
+/* testing */
+
+
+.runestone-profile .dropdown-content {
+    position: absolute;
+    display: none;
+    right: 0;
+    top: 35px;
+    text-align: left;
+    border: 1px solid;
+    border-color: #600;
+    border-color: var(--tocborder);
+}
+.runestone-profile.dropdown:hover {
+    background-color: #ddd;
+    overflow: visible;
+}
+.runestone-profile.dropdown:hover .dropdown-content {
+    display: block;
+}
+.runestone-profile .dropdown-content {
+    background-color: white;
+    z-index: 1800;
+    min-width: 100px;
+    padding: 5px;
+}
+.runestone-profile .dropdown-content a {
+    display: block;
+    text-decoration: none;
+    color: #662211;
+    padding: 2px 8px;
+}
+.runestone-profile.dropdown .dropdown-content a:hover {
+    background-color: #671d12;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: var(--chaptertoc);
+}
+.runestone-profile.dropdown .dropdown-content hr {
+    margin-bottom: 4px;
+    margin-top: 4px;
+    border-color: #600;
+    border-color: var(--sectiontoctext);
+}

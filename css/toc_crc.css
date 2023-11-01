@@ -1,0 +1,276 @@
+
+/* over-ride default css */
+.ptx-toc > ul.structural > li:not(:first-child) {
+  margin-top: 0;
+}
+.ptx-toc ul.structural li a {
+  border-bottom: 0;
+}
+
+.ptx-toc ul.structural li li  a {
+  border-bottom: none;  /*solid #999 1px;  */
+}
+.ptx-toc ul.structural .toc-title-box {
+  border-top: solid #999 1px;
+}
+.ptx-toc ul.structural li ul.structural li:last-child {
+  margin-bottom: 0;
+}
+
+.ptx-toc {
+    width: 240px;
+    margin: 0;
+    font-size: 14.72px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #fff;
+}
+
+/* Aligns toc to the top and side of the allotted space, respectively */
+.ptx-toc ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.ptx-toc ul a,
+.ptx-toc ul .part a,
+.ptx-toc ul .frontmatter a {
+    font-weight: 700;
+    font-size: .9em;
+}
+.ptx-toc ul ul li a {
+    font-weight: 400;
+    grid-template-columns: 1.5em 1fr;
+}
+
+.ptx-toc .toc-chapter .toc-item-list .toc-item .codenumber {
+    font-size: 80%;
+    padding-top: 0.16em;
+}
+/* no codenumbers on subsections (anything under section) */
+.ptx-toc .toc-section .toc-item-list .toc-item a > .codenumber {
+    display: none;
+}
+.ptx-toc .toc-section .toc-item-list .toc-item a:hover > .codenumber {
+    display: inline-block;
+}
+
+.ptx-toc ul ul a > .title {
+    margin-left: 0;
+}
+.ptx-toc ul ul a > .title:empty::after {
+    content: "empty heading!";
+    font-weight: bold;
+}
+.ptx-toc ul ul ul a > .title {
+    margin-left: 0.5em;
+    font-size: 90%;
+}
+.ptx-toc ul ul ul ul a > .title {
+    margin-left: 2em;
+    font-size: 90%;
+    font-style: italic;
+}
+
+.ptx-toc ul li a {
+    text-decoration: none;
+}
+
+.ptx-toc > ul > li a {
+    font-weight: bold;
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    padding-left: 0.2em;
+}
+/*
+.ptx-toc ul li ul a:hover {
+    padding-top: -10px;
+}
+*/
+
+.ptx-toc ul li a:active {
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+
+
+/* ************************************************** */
+/* Above code may be old.  New code below             */
+/* ************************************************** */
+
+
+/* TOC is initially closed in the CRC style */
+/* The onload js will close it, but you get an odd fluttering effect */
+
+/* comment out because we need to fix the fluttering effect.
+   if this is hidden by default, the page is not usable without JavaScript
+.ptx-sidebar {
+    display: none;
+}
+*/
+
+
+
+/* Links inside the dropdown */
+.ptx-toc a {
+    padding: .25em .5em .25em .5em;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: .9em;
+    margin: 0px;
+}
+
+.ptx-toc ul,
+.ptx-toc ul li {
+    list-style-type: none;
+    margin: 0px;
+/*    width: 255px; */ /* This one is key to making items menu uniform width */
+    padding-inline-start: 0px;
+}
+
+/* The anchor carries the grid content  */
+/* undo what is in toc_default.css */
+.ptx-toc ul li a {
+    display: grid;
+/*  made titles too wide */
+/*
+    width: 240px;
+*/
+    grid-gap: 3px;
+    grid-template-columns: 1.25em 10fr;
+    grid-template-areas:
+        "toc-codenumber toc-content";
+}
+.ptx-toc {
+  position: sticky;
+  top: 0;
+  width: unset;
+  height: 100vh;
+}
+
+/*
+.ptx-toc::after {
+    content: "";
+    display: block;
+    height: 13em;
+    background: #fff;
+}
+*/
+
+.ptx-toc::after {
+    content: url("data:image/svg+xml; utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='338 3000 8772 6866'%3E%3Cg style='stroke-width:.025in; stroke:black; fill:none'%3E%3Cpolyline points='472,3590 472,9732 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:butt;' d='M 4724,9448 A 4660 4660 0 0 1 8598 9259 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:174;stroke-linecap:butt;' d='M 4488,9685 A 4228 4228 0 0 0 472 9732 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:butt;' d='M 4724,3590 A 4241 4241 0 0 1 8598 3496 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:round;' d='M 850,3496 A 4241 4241 0 0 1 4724 3590 '%3E%3C/path%3E%3Cpath style='stroke:%23000000;stroke-width:126;stroke-linecap:round;' d='M 850,9259 A 4507 4507 0 0 1 4724 9448 '%3E%3C/path%3E%3Cpolyline points='5385,4299 4062,8125 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='8598,3496 8598,9259 ' style='stroke:%23000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='850,3496 850,9259 ' style='stroke:%23000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='4960,9685 4488,9685 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='3070,4582 1889,6141 3070,7700 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='6418,4582 7600,6141 6418,7700 ' style='stroke:%23000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpolyline points='8976,3590 8976,9732 ' style='stroke:%23000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; '%3E%3C/polyline%3E%3Cpath style='stroke:%23000000;stroke-width:174;stroke-linecap:butt;' d='M 4960,9685 A 4228 4228 0 0 1 8976 9732 '%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    display: block;
+    height: 13em;
+    padding: 2em 1em;
+    background: #fff;
+}
+
+.ptx-toc > ul:first-child > li:last-child {
+    border-bottom: 4px solid #669;
+}
+
+
+
+/**** Use serif font for Roman numerals ****/
+/* .ptx-TOC-codenumber  */
+.ptx-toc a > .codenumber {
+    font-family:  "PT Serif", "Times New Roman", Times, serif;
+    grid-area: toc-codenumber;
+}
+
+/* .ptx-TOC-contents */
+.ptx-toc a > .title {
+    grid-area: toc-content;
+}
+
+.ptx-toc.depth0 ul.structural {
+    display: none;
+}
+.ptx-toc.depth1 ul.structural ul.structural {
+    display: none;
+}
+.ptx-toc.depth2 ul.structural ul.structural ul.structural {
+    display: none;
+}
+.ptx-toc.depth3 ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+.ptx-toc.depth4 ul.structural ul.structural ul.structural ul.structural ul.structural {
+    display: none;
+}
+
+
+/* Hide all but active area of book */
+.ptx-toc.focused ul.structural:not(.contains-active) > li {
+    display: none;
+}
+.ptx-toc.focused ul.structural li.active > ul > li {
+    display: block;
+}
+
+/* Hooks for js based switching */
+.ptx-toc.focused ul.structural:not(.contains-active) > li.visible {
+    display: block;
+}
+.ptx-toc.focused ul.structural li.active > ul > li.hidden {
+    display: none ;
+}
+
+
+.ptx-toc.focused  > ul.structural > li:not(:first-child) {
+    margin-top: 0em;
+}
+.ptx-toc.focused ul.structural li ul.structural a:hover {
+    border: 0;
+}
+
+
+.toc-title-box {
+    display: flex;
+}
+
+.ptx-toc ul.structural li .toc-title-box a {
+    flex: 1 1;
+}
+
+.ptx-toc.focused .toc-expander {
+    border: 0;
+    padding: 2px 5px;
+    background: inherit;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.ptx-toc.focused .toc-expander .icon {
+    font-size: 30px;
+    line-height: 18px;
+    font-variation-settings: 'wght' 200;
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) {
+    background-color: var(--highlighttoc);
+    color: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-expander:is(:hover) .icon {
+    fill: var(--highlighttoctext);
+}
+
+.ptx-toc.focused .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
+    transform: rotate(-90deg);
+}
+
+/* Part colors fall back to same as chapter if not defined 
+   Defined here and not in setcolors so that colors_ file can override as include
+    order is toc/colors/setcolors */
+:root {
+    --parttoc: var(--chaptertoc);
+    --parttoctext: var(--chaptertoctext);
+    --parttocactive: var(--documenttitle);
+    --parttoctextactive: var(--chaptertoctextactive);
+}
+/* But if browser supports, make parts very slightly darker than chapters */
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+    :root {
+        --parttoc: color-mix(in srgb, var(--chaptertoc), black 15%);
+    }
+}
