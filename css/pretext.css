@@ -1123,6 +1123,7 @@ xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
 
 .ptx-footnote__number {
     display: inline;
+    cursor: pointer;
 }
 
 .ptx-footnote__number::marker {
