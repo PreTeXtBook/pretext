@@ -182,7 +182,7 @@ function handleWW(ww_id, action) {
 					if (/^\\text\{.*\}$/.test(this_answer)) {this_answer = this_answer.match(/^\\text\{(.*)\}$/)[1]};
 					let quote_escaped_answer = this_answer.replace(/"/g, '\\"');
 					const option = body_div.querySelector(`select[id="${answer}"] option[value="${quote_escaped_answer}"]`);
-					option.setAttribute('selected', 'selected');
+					if (option) {option.setAttribute('selected', 'selected')};
 				}
 			}
 		}
