@@ -3324,6 +3324,8 @@ def html(
 
     if file_format  == "html":
         shutil.copytree(tmp_dir, dest_dir, dirs_exist_ok=True)
+        # ensure sufficient permissions (Python created tmp_dir with 0o700)
+        os.chmod(dest_dir, 0o755)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
         with working_directory(tmp_dir):
