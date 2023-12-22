@@ -3324,8 +3324,6 @@ def html(
 
     if file_format  == "html":
         shutil.copytree(tmp_dir, dest_dir, dirs_exist_ok=True)
-        # ensure sufficient permissions (Python created tmp_dir with 0o700)
-        os.chmod(dest_dir, 0o755)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
         with working_directory(tmp_dir):
@@ -3951,6 +3949,8 @@ def get_temporary_directory():
     global __temps  #  cache of temporary directories
 
     temp_dir = tempfile.mkdtemp()
+    # ensure sufficient permissions (Python created temp_dir with 0o700)
+    os.chmod(temp_dir, 0o755)
     # Register the directory for cleanup at the end of successful
     # execution iff the verbosity is set to level 2 ("debug")
     # So errors, or requesting gross debugging info, will leave the
