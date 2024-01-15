@@ -44,4 +44,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <locale>nl-NL</locale><filename>nl-NL.xml</filename>
     <locale>pt-BR</locale><filename>pt-BR.xml</filename>
     <locale>pt-PT</locale><filename>pt-PT.xml</filename>
+    <locale>zh-HANS</locale><filename>zh-HANS.xml</filename>
 </localizations>

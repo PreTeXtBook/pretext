@@ -53,3 +53,4 @@ Current (partially) implemented language codes and contributors
 * nl-NL, Dutch (Netherlands), Gosia Wrzesinska
 * pt-BR, Portugese (Brazil), Igor Morgado, Vinicius Monego, Leon Silva
 * pt-PT, Portugese (Portugal), António Pereira
+* zh-HANS, Chinese Simplified (China), Hongqi Wang

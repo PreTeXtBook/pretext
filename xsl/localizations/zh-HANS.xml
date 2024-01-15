@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2014-2021 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
+
+<!-- zh-HANS, Chinese Simplified (China) -->
+<!-- Hongqi Wang, whq_nuaa@qq.com, 2024-01-03   -->
+
+<!-- Every localization should specify the direction of the language, -->
+<!-- there is no assumed default.  Left-to-right is "ltr" and         -->
+<!-- right-to-left is "rtl".  Provide these exactly as written since  -->
+<!-- they can migrate untouched into output (e.g. HTML).              -->
+<locale language="zh-HANS" direction="ltr">
+    <!-- THEOREM-LIKE blocks -->
+    <!-- Environments which have proofs, plus proofs themselves -->
+    <localization string-id='theorem'>定理</localization>
+    <localization string-id='corollary'>推论</localization>
+    <localization string-id='lemma'>引理</localization>
+    <localization string-id='algorithm'>算法</localization>
+    <localization string-id='proposition'>命题</localization>
+    <localization string-id='claim'>断言</localization>
+    <localization string-id='fact'>事实</localization>
+    <localization string-id='identity'>恒等</localization>
+    <!-- PROOF-LIKE -->
+    <!-- We know these five names for PROOF-LIKE have subtle shades of meaning. -->
+    <!-- Provide a good translation for "proof" itself, and do your best with   -->
+    <!-- the others.  It is highly likely authors will rename one or more of    -->
+    <!-- the others.                                                            -->
+    <localization string-id='proof'>证明</localization>
+    <localization string-id='argument'>论证</localization>
+    <localization string-id='justification'>论证</localization>
+    <localization string-id='reasoning'>推理</localization>
+    <localization string-id='explanation'>解释</localization>
+    <!-- used for a (logical) portion of a proof -->
+    <localization string-id='case'>情形</localization>
+    <!-- Components of the narrative -->
+    <!-- Mathematical statements without proofs -->
+    <!-- AXIOM-LIKE blocks -->
+    <localization string-id='axiom'>公理</localization>
+    <localization string-id='conjecture'>猜想</localization>
+    <localization string-id='principle'>原理</localization>
+    <localization string-id='heuristic'>启发</localization>
+    <localization string-id='hypothesis'>假设</localization>
+    <localization string-id='assumption'>假设</localization>
+    <!-- Definitions -->
+    <localization string-id='definition'>定义</localization>
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'>方程</localization>
+    <localization string-id='men'>方程</localization>
+    <localization string-id='mrow'>方程</localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'>独立展示</localization>
+    <localization string-id='mdn'>独立展示</localization>
+    <!-- Types of documents, mostly for informational messages -->
+    <localization string-id='volume'>卷册</localization>
+    <localization string-id='book'>书籍</localization>
+    <localization string-id='article'>论文</localization>
+    <localization string-id='letter'>书札</localization>
+    <localization string-id='slideshow'>幻灯片</localization>
+    <localization string-id='memo'>备忘录</localization>
+    <localization string-id='presentation'>演示文稿</localization>
+    <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
+    <localization string-id='frontmatter'>前置页</localization>
+    <localization string-id='part'>部分</localization>
+    <localization string-id='chapter'>章</localization>
+    <localization string-id='appendix'>附录</localization>
+    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
+    <localization string-id='appendices'>附录</localization>
+    <localization string-id='section'>节</localization>
+    <localization string-id='subsection'>子节</localization>
+    <localization string-id='subsubsection'>子子节</localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <localization string-id='slide'>幻灯片</localization>
+    <localization string-id='introduction'>绪言</localization>
+    <localization string-id='conclusion'>结论</localization>
+    <localization string-id='exercises'>练习</localization>
+    <localization string-id='worksheet'>工作单</localization>
+    <localization string-id='reading-questions'>问题</localization>
+    <localization string-id='solutions'>解答</localization>
+    <localization string-id='glossary'>术语</localization>
+    <localization string-id='references'>参考文献</localization>
+    <localization string-id='backmatter'>后置页</localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'>段落</localization>
+    <localization string-id='commentary'>备注</localization>
+    <localization string-id='subparagraph'>子段落</localization>
+    <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'>备注</localization>
+    <localization string-id='convention'>约定</localization>
+    <localization string-id='note'>备注</localization>
+    <localization string-id='observation'>观察</localization>
+    <localization string-id='warning'>警告</localization>
+    <localization string-id='insight'>洞察</localization>
+    <!-- COMPUTATION-LIKE blocks -->
+    <localization string-id='computation'>计算</localization>
+    <localization string-id='technology'>技术</localization>
+    <localization string-id='data'>数据</localization>
+    <!-- ASIDE-LIKE blocks -->
+    <localization string-id='aside'>旁注</localization>
+    <localization string-id='biographical'>传记旁注</localization>
+    <localization string-id='historical'>历史旁注</localization>
+    <!-- EXAMPLE-LIKE blocks -->
+    <localization string-id='example'>例</localization>
+    <localization string-id='question'>问题</localization>
+    <localization string-id='problem'>问题</localization>
+    <!-- PROJECT-LIKE blocks -->
+    <localization string-id='project'>工程</localization>
+    <localization string-id='activity'>活动</localization>
+    <localization string-id='exploration'>探究</localization>
+    <localization string-id='task'>任务</localization>
+    <localization string-id='investigation'>调查</localization>
+    <!-- assemblages are collections of minimally structured material -->
+    <localization string-id='assemblage'>集</localization>
+    <localization string-id='poem'>诗</localization>
+    <!-- Objectives is the block, objective is a list item within -->
+    <localization string-id='objectives'>目标清单</localization>
+    <localization string-id='objective'>目标</localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- These two words need to be different, to avoid ambiguous cross-references -->
+    <localization string-id='outcomes'>成果清单</localization>
+    <localization string-id='outcome'>成果</localization>
+    <!-- "Open" means unsolved, a research question/problem -->
+    <localization string-id='openquestion'>开放问题</localization>
+    <localization string-id='openproblem'>开放问题</localization>
+    <localization string-id='openconjecture'>开放猜想</localization>
+    <!-- "discussion" on open problems -->
+    <localization string-id='context'>上下文</localization>
+    <localization string-id='discussion'>讨论</localization>
+    <localization string-id='opinion'>见解</localization>
+    <localization string-id='status'>状态</localization>
+    <localization string-id='suggestion'>建议</localization>
+    <!--  -->
+    <localization string-id='figure'>图</localization>
+    <localization string-id='table'>表</localization>
+    <localization string-id='listing'>清单</localization>
+    <localization string-id='fn'>脚注</localization>
+    <localization string-id='contributor'>贡献者</localization>
+    <!-- Lists and their items -->
+    <localization string-id='list'>列表</localization>
+    <localization string-id='li'>项</localization>
+    <!-- A term (word) defined in a glossary item -->
+    <localization string-id='gi'>术语</localization>
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'>段落</localization>
+    <localization string-id='blockquote'>引用</localization>
+    <!-- The "pre" element is short for "preformatted text".  PreTeXt uses it -->
+    <!-- more as paragraph, rendered in monospace, with newlines respected. -->
+    <localization string-id='pre'>代码块</localization>
+    <!-- Literate programming, a chunk of computer code -->
+    <localization string-id='fragment'>代码片段</localization>
+    <!-- Parts of an exercise and its solution -->
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
+    <localization string-id='divisionalexercise'>练习</localization>
+    <localization string-id='inlineexercise'>检查点</localization>
+    <localization string-id='worksheetexercise'>工作单练习</localization>
+    <localization string-id='readingquestion'>问题</localization>
+    <localization string-id='webwork'>WeBWorK</localization>
+    <localization string-id='hint'>提示</localization>
+    <localization string-id='answer'>答案</localization>
+    <localization string-id='solution'>解答</localization>
+    <!-- A subdivision of an "exercises" section -->
+    <localization string-id='subexercises'>子练习</localization>
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'>练习组</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>书目项</localization>
+    <!-- Front matter components -->
+    <localization string-id='toc'>目录</localization>
+    <localization string-id='abstract'>摘要</localization>
+    <localization string-id='preface'>前言</localization>
+    <localization string-id='acknowledgement'>致谢</localization>
+    <localization string-id='biography'>作者简介</localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <localization string-id='about-author'>关于作者</localization>
+    <localization string-id='about-authors'>关于作者</localization>
+    <localization string-id='foreword'>前言</localization>
+    <localization string-id='dedication'>致谢</localization>
+    <localization string-id='colophon'>版权</localization>
+    <!-- Runestone Activities -->
+    <!-- These terms will appear in student activity/engagement -->
+    <!-- reports for an instructor of a Runestone course.       -->
+    <!-- Normally they will not be apparent to a reader.        -->
+    <localization string-id='video'>Video</localization>
+    <localization string-id='program'>Program</localization>
+    <!-- "ActiveCode" and "CodeLens" are Runestone-constructs -->
+    <!-- and so really *should not* be translated.            -->
+    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='program-codelens'>CodeLens</localization>
+    <!-- Back matter components -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'>索引</localization>
+    <localization string-id='jump-to'>跳转:</localization>
+    <!-- Parts of the Index -->
+    <localization string-id='index'>索引</localization>
+    <localization string-id='see'>见</localization>
+    <localization string-id='also'>另见</localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'>符号</localization>
+    <localization string-id='description'>描述</localization>
+    <localization string-id='location'>位置</localization>
+    <localization string-id='page'>页</localization>
+    <localization string-id='continued'>续</localization>
+    <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <localization string-id='skip-to-content'>主要内容</localization>
+    <localization string-id='previous'>向前</localization>
+    <localization string-id='up'>向上</localization>
+    <localization string-id='next'>向后</localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <localization string-id='previous-short'>向前</localization>
+    <localization string-id='up-short'>向上</localization>
+    <localization string-id='next-short'>向后</localization>
+    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <localization string-id='annotations'>注释</localization>
+    <localization string-id='feedback'>反馈</localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'>PreTeXt写就</localization>
+    <!-- Search Results display/dialog -->
+    <!-- The result of a search as part of HTML output will throw up       -->
+    <!-- an overlay window with the search results.  "Search Results"      -->
+    <!-- is like a heading.  It renders like "Search Results: algorithm".  -->
+    <!-- When a reader uses a term that produces no results (perhaps they  -->
+    <!-- misspell the search term) then they get a message to that effect. -->
+    <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
+    <localization string-id='search-results-heading'>搜索结果</localization>
+    <!-- Short phrase, no punctuation -->
+    <localization string-id='no-search-results'>没有结果</localization>
+   <!-- Parts of memos and letters -->
+    <localization string-id='to'>致</localization>
+    <localization string-id='from'>来自</localization>
+    <localization string-id='subject'>主题</localization>
+    <localization string-id='date'>日期</localization>
+    <localization string-id='copy'>抄送</localization>
+    <localization string-id='enclosure'>附件</localization>
+    <!-- Various -->
+    <localization string-id='todo'>待办</localization>
+    <localization string-id='editor'>编辑器</localization>
+    <localization string-id='edition'>版本</localization>
+    <localization string-id='website'>网站</localization>
+    <localization string-id='copyright'>版权</localization>
+    <!-- HTML clickables (lowercase strings to click on) -->
+    <localization string-id='permalink'>永久链接</localization>
+    <localization string-id='incontext'>文中</localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <localization string-id='evaluate'>求解</localization>
+    <!-- <localization string-id='code'>Code</localization> -->
+    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <localization string-id='instructions'>说明</localization>
+    <!-- Interactive exercise feedback messages                   -->
+    <!-- These might be part of a feedback message for submitting -->
+    <!-- an answer, e.g. "Correct!" or "Correct: 50%".            -->
+    <localization string-id='correct'>正确</localization>
+    <localization string-id='incorrect'>错误</localization>
+    <!-- To signal that a reader left an answer blank             -->
+    <localization string-id='blank'>空白</localization>
+    <!-- Submit or check responses                                -->
+    <localization string-id='submit'>提交</localization>
+    <localization string-id='check-responses'>校验</localization>
+    <!-- Reveal correct answers                                   -->
+    <localization string-id='reveal'>显示</localization>
+    <!-- Randomize parameters for a randomizable exercise         -->
+    <localization string-id='randomize'>随机</localization>
+    <!-- Activate an interactive (from a static preview)          -->
+    <localization string-id='activate'>激活</localization>
+    <!-- Reset an interactive to its original state               -->
+    <localization string-id='reset'>重置</localization>
+    <!-- Describe an array of fill-in-the-blanks, say for a matrix -->
+    <localization string-id='array'>数组</localization>
+    <!-- Print page button text -->
+    <localization string-id='print'>打印</localization>
+
+</locale>
