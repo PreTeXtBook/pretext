@@ -263,6 +263,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some groups of elements are counted distinct -->
 <!-- from other blocks.  A configuration element  -->
 <!-- in "docinfo" is indicative of this           -->
+<!-- Note: the "docinfo/numbering" signals will     -->
+<!-- move to the publisher file once numbering gets -->
+<!-- refactored.  The elements work as signals, but -->
+<!-- actual usage needs @level to be effective.     -->
 <xsl:variable name="b-number-figure-distinct" select="boolean($docinfo/numbering/figures)" />
 <!-- project historical default, switch it     -->
 <!-- 2021-07-02: debug variable is unsupported -->
