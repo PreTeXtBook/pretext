@@ -7967,11 +7967,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- build a modern knowl -->
                     <xsl:when test="$knowl='true'">
-                        <!-- empty, but presence needed for accessibility -->
-                        <!-- An HTML "a" without an href attribute does   -->
-                        <!-- not default to role "link" and does not read -->
-                        <!-- as clickable by a screen reader.             -->
-                        <xsl:attribute name="href"/>
+                        <!-- provide href for a fallback beavior if JS is disabled -->
+                        <!-- or knowl loading fails  -->
+                        <xsl:attribute name="href">
+                            <xsl:apply-templates select="$target" mode="url" />
+                        </xsl:attribute>
                         <!-- mark as duplicated content via an xref -->
                         <xsl:attribute name="class">
                             <xsl:text>xref</xsl:text>
