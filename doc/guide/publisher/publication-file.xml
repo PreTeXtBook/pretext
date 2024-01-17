@@ -698,6 +698,17 @@
                 <li><attr>preexpanded-levels</attr> with values <c>1-6</c> (0 is the default). This value controls how many levels from the root of the TOC are initially expanded outside of the path to the current page. Either 0 or 1 will result in the root level of the TOC being expanded (it is on the path to the active page and thus always is expanded). 2 will result in the first two levels of the TOC being visible (e.g. parts and chapters or chapters and sections). 3 would result in three initially visible levels (e.g. parts/chapters/sections), etc...</li>
             </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
         </subsection>
+
+        <subsection xml:id="html-xref-options">
+            <title>xref Options</title>
+            <idx><h>xref</h><h>publisher options</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/xref</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>render-style</attr> with values <c>mixed</c> (default) and <c>link</c>. <c>mixed</c> will render some xref's as knowls and others and traditional HTNL links. <c>link</c> forces all xref's to be rendered as traditional HTML links.</li>
+            </ul>See <xref ref="knowled-content"/> for explanations and details.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">
