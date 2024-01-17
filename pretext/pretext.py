@@ -4106,18 +4106,22 @@ def copy_build_directory(build_dir, dest_dir):
     # are 700 which was problematic.  We also choose not to
     # touch, in any way, the permissions on whatever directory is
     # given as the destination.
+    #
+    # So instead, we iterate over the top level of the build
+    # directory and copy files and directories there individually.
 
-    # 2024-01-17:  The  distutils  module is old (being replaced
-    # by setup), and so should be replaced.  We have isolated its
-    # Instead of shutil.copytree() we could copy top-level files
-    # and directories, using shutil.copy2 and shuti.copytree.
-    # The latter would bneed to allow the directories to exist
-    # (a Python 3.8 change) for the case of repeated builds into
-    # the same directory.
-
-    import distutils.dir_util  # copy_tree()
-
-    distutils.dir_util.copy_tree(build_dir, dest_dir)
+    for filename in os.listdir(build_dir):
+        src = os.path.join(build_dir, filename)
+        if os.path.isfile(src):
+            shutil.copy2(src, dest_dir)
+        elif os.path.isdir(src):
+            dest = os.path.join(dest_dir, filename)
+            # repeated builds may land in the same place,
+            # so allow directories to clobber existing ones
+            shutil.copytree(src, dest, dirs_exist_ok=True)
+        else:
+            msg = "the build directory {} contained an unexpected object, {}"
+            log.debug(msg.format(build_dir, src))
 
 
 def targz(output, source_dir):
