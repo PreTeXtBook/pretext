@@ -4081,14 +4081,16 @@ def get_managed_directories(xml_source, pub_file):
 
 def manage_directories(output_dir, external_abs=None, generated_abs=None):
     # Copies external and generated directories from absolute paths set in external_abs
-    # and generated_abs (unless set to None) into the specified output_dir.
+    # and generated_abs (unless set to None) into a build directory.  Since the
+    # build directory is fresh for each build, these directories should not exist
+    # in advance and the  copytree()  function should raise an error.
     if external_abs is not None:
         external_dir = os.path.join(output_dir, "external")
-        shutil.copytree(external_abs, external_dir, dirs_exist_ok=True)
+        shutil.copytree(external_abs, external_dir)
 
     if generated_abs is not None:
         generated_dir = os.path.join(output_dir, "generated")
-        shutil.copytree(generated_abs, generated_dir, dirs_exist_ok=True)
+        shutil.copytree(generated_abs, generated_dir)
 
 def targz(output, source_dir):
     """Creates a zipped tar file, output; the root of the archive has a single folder, source_dir"""
