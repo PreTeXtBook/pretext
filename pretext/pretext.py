@@ -470,7 +470,7 @@ def latex_image_conversion(
     # not supported outside of the managed directory scheme (2021-07-28)
     # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    manage_directories(tmp_dir, external_abs=external_dir)
+    copy_managed_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # no output (argument 3), stylesheet writes out per-image file
@@ -864,7 +864,7 @@ def latex_tactile_image_conversion(
     # not supported outside of the managed directory scheme (2021-07-28)
     # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    manage_directories(tmp_dir, external_abs=external_dir)
+    copy_managed_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # Output is multiple *.tex files
@@ -2119,7 +2119,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Copy in external resources (e.g., js code)
     _, external_abs = get_managed_directories(xml_source, pub_file)
-    manage_directories(tmp_dir, external_abs=external_abs)
+    copy_managed_directories(tmp_dir, external_abs=external_abs)
 
     # Spawn a new process running a local html.server
     import subprocess
@@ -3321,7 +3321,7 @@ def html(
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    manage_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -3456,7 +3456,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # A "None" value will indicate there was no information
     # (an empty string is impossible due to a slash always being present?)
 
-    manage_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -4079,17 +4079,17 @@ def get_managed_directories(xml_source, pub_file):
     return (generated, external)
 
 
-def manage_directories(output_dir, external_abs=None, generated_abs=None):
+def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     # Copies external and generated directories from absolute paths set in external_abs
     # and generated_abs (unless set to None) into a build directory.  Since the
     # build directory is fresh for each build, these directories should not exist
     # in advance and the  copytree()  function should raise an error.
     if external_abs is not None:
-        external_dir = os.path.join(output_dir, "external")
+        external_dir = os.path.join(build_dir, "external")
         shutil.copytree(external_abs, external_dir)
 
     if generated_abs is not None:
-        generated_dir = os.path.join(output_dir, "generated")
+        generated_dir = os.path.join(build_dir, "generated")
         shutil.copytree(generated_abs, generated_dir)
 
 def targz(output, source_dir):
