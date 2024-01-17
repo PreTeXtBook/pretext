@@ -1852,7 +1852,10 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
         targz(archive_file, folder)
         shutil.copy2(archive_file, dest_dir)
     else:
-        shutil.copytree(folder, os.path.join(dest_dir,folder_name))
+        # with multiple files, we need to copy a tree
+        # see comments at  copy_build_directory()
+        # before replacing with  shutil.copytree()
+        copy_build_directory(folder, os.path.join(dest_dir,folder_name))
 
 
 ################################
@@ -3281,8 +3284,6 @@ def html(
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    import distutils.dir_util  # copy_tree()
-
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
 
@@ -3328,13 +3329,10 @@ def html(
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
 
     if file_format  == "html":
-        # with multiple files, we need to copy a tree, and
-        # shutil.copytree() will balk at overwriting directories
-        # before Python 3.8.  The  distutils  module is old
-        # (being replaced by setup).  So once on Python 3.8 these
-        # copies can be replaced with shutil.copytree() using
-        # the  dirs_exist_ok  keyword
-        distutils.dir_util.copy_tree(tmp_dir, dest_dir)
+        # with multiple files, we need to copy a tree
+        # see comments at  copy_build_directory()
+        # before replacing with  shutil.copytree()
+        copy_build_directory(tmp_dir, dest_dir)
     elif file_format == "zip":
         # working in temporary directory gets simple paths in zip file
         with working_directory(tmp_dir):
@@ -4091,6 +4089,36 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     if generated_abs is not None:
         generated_dir = os.path.join(build_dir, "generated")
         shutil.copytree(generated_abs, generated_dir)
+
+
+def copy_build_directory(build_dir, dest_dir):
+    '''Copy final product from build directory into desired destination directory'''
+
+    # Both directories exist when this is called.
+    # build_dir is a temporary directory we have created
+    # dest_dir will have been error-checked once specified
+
+    # 2024-01-17:  It is tempting to replace this function by
+    # shutil.copytree().  As of Python 3.8, this function allows
+    # the destination directory to exist beforehand, but will
+    # replace the permissions with those of the  build_dir.
+    # When the build_dir is a temporary directory, the permissions
+    # are 700 which was problematic.  We also choose not to
+    # touch, in any way, the permissions on whatever directory is
+    # given as the destination.
+
+    # 2024-01-17:  The  distutils  module is old (being replaced
+    # by setup), and so should be replaced.  We have isolated its
+    # Instead of shutil.copytree() we could copy top-level files
+    # and directories, using shutil.copy2 and shuti.copytree.
+    # The latter would bneed to allow the directories to exist
+    # (a Python 3.8 change) for the case of repeated builds into
+    # the same directory.
+
+    import distutils.dir_util  # copy_tree()
+
+    distutils.dir_util.copy_tree(build_dir, dest_dir)
+
 
 def targz(output, source_dir):
     """Creates a zipped tar file, output; the root of the archive has a single folder, source_dir"""
