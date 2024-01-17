@@ -21,10 +21,8 @@
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
 # 2023-10-13: this module expects Python 3.8 or newer
+#     shutil.copytree now has dirs_exist_ok argument
 # 2021-05-21: this module expects Python 3.6 or newer
-#     copying HTML into cwd twice, might be better with
-#     shutil.copytree(dirs_exist_ok), requires Python 3.8
-#     see comments near copytree() and copy_tree()
 #
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
@@ -73,7 +71,7 @@ import os
 import os.path
 
 # primarily copying entire directory trees of files, also which()
-# TODO: copy() vs copy2() vs copyfile() vs copyfileobj()?
+# we limit ourselves to shutil.copy2 and shutil.copytree
 # Study: https://www.techbeamers.com/python-copy-file/
 import shutil
 
@@ -316,8 +314,8 @@ def asymptote_conversion(
             # setup, depending on the method
             if method == "local":
                 asy_executable_cmd = get_executable_cmd("asy")
-                # perhaps replace following stock advisory with a real version
-                # check using the (undocumented) distutils.version module, see:
+                # perhaps replace following stock advisory
+                # with a real version check.  Perhaps see:
                 # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
                 proc = subprocess.Popen(
                     [asy_executable_cmd[0], "--version"], stderr=subprocess.PIPE
@@ -468,7 +466,6 @@ def latex_image_conversion(
     # Need to copy entire external directory in the managed case.
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
-    # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
     copy_managed_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
@@ -862,7 +859,6 @@ def latex_tactile_image_conversion(
     # Need to copy entire external directory in the managed case.
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
-    # copytree() does not overwrite since tmp_dir is created anew on each use
     _, external_dir = get_managed_directories(xml_source, pub_file)
     copy_managed_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
@@ -3442,8 +3438,6 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # (2) pass tmp_dir (scratch) as destination directory
     latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir)
 
-    # "dirs_exist_ok" keyword is Python 3.8; necessary?
-
     # Create localized filenames for pdflatex conversion step
     # sourcename  needs to match behavior of latex() with above arguments
     basename = os.path.splitext(os.path.split(xml)[1])[0]
@@ -4081,7 +4075,7 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     # Copies external and generated directories from absolute paths set in external_abs
     # and generated_abs (unless set to None) into a build directory.  Since the
     # build directory is fresh for each build, these directories should not exist
-    # in advance and the  copytree()  function should raise an error.
+    # in advance and the  shutil.copytree()  function should raise an error.
     if external_abs is not None:
         external_dir = os.path.join(build_dir, "external")
         shutil.copytree(external_abs, external_dir)
