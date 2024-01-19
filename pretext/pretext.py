@@ -4071,6 +4071,31 @@ def get_managed_directories(xml_source, pub_file):
     return (generated, external)
 
 
+# 2024-01-19: not being used (built, and then not needed)
+def get_platform_host(pub_file):
+    '''Reports the html/platform/@host value from the publication file'''
+
+    # "web": the default
+    # "runestone": electing to host on a Runestone server
+
+    if not(pub_file):
+        return "web"
+
+    pub_tree = ET.parse(pub_file)
+    pub_tree.xinclude()
+    element_list = pub_tree.xpath("/publication/html/platform")
+    if not(element_list):
+        return "web"
+
+    # assume at most one, schema may enforce
+    platform = element_list[0]
+    attrs = platform.attrib
+    if not('host') in attrs:
+        return "web"
+
+    return attrs['host']
+
+
 def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     # Copies external and generated directories from absolute paths set in external_abs
     # and generated_abs (unless set to None) into a build directory.  Since the

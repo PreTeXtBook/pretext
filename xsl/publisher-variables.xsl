@@ -2554,6 +2554,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2019-12-17:  Under development, not documented -->
 
+<!-- 2024-01-18: the value of this option is queried by the Python -->
+<!-- routines, so keep their features and documentation in sync.   -->
+
 <xsl:variable name="host-platform">
     <xsl:apply-templates select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='host']" mode="set-pubfile-variable"/>
 </xsl:variable>
