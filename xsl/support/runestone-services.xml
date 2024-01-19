@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <all>
 	<js type="list">
-		<item type="str">prefix-runtime.e5cf8b79afad4f14.bundle.js</item>
+		<item type="str">prefix-runtime.2438a8bdd6d43b5c.bundle.js</item>
 		<item type="str">prefix-347.8328b60515045466.bundle.js</item>
-		<item type="str">prefix-runestone.3a5641c4e1fe869e.bundle.js</item>
+		<item type="str">prefix-runestone.aeac7cf9ad5c07ef.bundle.js</item>
 	</js>
 	<css type="list">
 		<item type="str">prefix-347.f9add1ca35d5ad93.css</item>
-		<item type="str">prefix-runestone.cec40a61180efd41.css</item>
+		<item type="str">prefix-runestone.f64dcc3632d7a0c3.css</item>
 	</css>
 	<cdn-url type="str">https://runestone.academy/cdn/runestone/</cdn-url>
-	<version type="str">7.1.2</version>
+	<version type="str">7.2.9</version>
 </all>
