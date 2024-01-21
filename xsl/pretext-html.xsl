@@ -7967,8 +7967,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- build a modern knowl -->
                     <xsl:when test="$knowl='true'">
-                        <!-- provide href for a fallback beavior if JS is disabled -->
-                        <!-- or knowl loading fails  -->
+                        <!-- provide href for a fallback behavior if knowl is -->
+                        <!-- disabled intentionally or not                    -->
                         <xsl:attribute name="href">
                             <xsl:apply-templates select="$target" mode="url" />
                         </xsl:attribute>
@@ -7980,6 +7980,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:apply-templates select="$target" mode="knowl-filename">
                                 <xsl:with-param name="origin" select="$origin"/>
                             </xsl:apply-templates>
+                        </xsl:attribute>
+                        <!-- text to use for tooltip/aria  -->
+                        <xsl:attribute name="data-reveal-label">
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'reveal'"/>
+                            </xsl:apply-templates>
+                            <xsl:text> </xsl:text>
+                            <xsl:copy-of select="$content"/>
                         </xsl:attribute>
                     </xsl:when>
                     <!-- build traditional hyperlink -->
