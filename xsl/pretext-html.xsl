@@ -7978,8 +7978,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:apply-templates select="." mode="type-name">
                                 <xsl:with-param name="string-id" select="'reveal'"/>
                             </xsl:apply-templates>
-                            <xsl:text> </xsl:text>
-                            <xsl:copy-of select="$content"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="data-close-label">
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'close'"/>
+                            </xsl:apply-templates>
                         </xsl:attribute>
                     </xsl:when>
                     <!-- build traditional hyperlink -->
