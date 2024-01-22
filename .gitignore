@@ -18,3 +18,5 @@ examples/webwork/minimal/generated/*
 **/build
 # codechat config file (for CLI users)
 codechat_config.yaml
+# CLI logs
+logs

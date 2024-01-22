@@ -2,7 +2,7 @@
 <!-- This file, the project manifest, provides the overall configuration for your PreTeXt project.
 To edit the content of your document, open `source/main.ptx`. 
 See https://pretextbook.org/doc/guide/html/processing-CLI.html#cli-project-manifest. -->
-<project ptx-version="2" source=".">
+<project ptx-version="2" source="." publication=".">
   <targets>
     <!-- We use the default web target to wire up the sample article with CodeChat -->
     <target name="web"
@@ -33,18 +33,18 @@ See https://pretextbook.org/doc/guide/html/processing-CLI.html#cli-project-manif
       source="examples/minimal/source/main.ptx"
       publication="examples/minimal/publication/publication.ptx"/>
     <target name="minimal-print"
-      format="print"
+      format="pdf"
       source="examples/minimal/source/main.ptx"
       publication="examples/minimal/publication/publication.ptx"/>
     <!-- examples/showcase -->
     <target name="showcase-web"
       format="html"
       source="examples/showcase/source/pretext-showcase.ptx"
-      publication="examples/showcase/publication/publication.ptx"/>
+      publication="examples/showcase/publisher/publication.xml"/>
     <target name="showcase-print"
       format="pdf"
       source="examples/showcase/source/pretext-showcase.ptx"
-      publication="examples/showcase/publication/publication.ptx"/>
+      publication="examples/showcase/publisher/publication.xml"/>
     <!-- examples/sample-article -->
     <target name="sample-article-web"
       format="html"
