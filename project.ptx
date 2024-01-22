@@ -1,8 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file, the project manifest, provides the overall configuration for your PreTeXt project. To edit the content of your document, open `source/main.ptx`. See https://pretextbook.org/doc/guide/html/processing-CLI.html#cli-project-manifest. -->
-<project ptx-version="2">
+<!-- This file, the project manifest, provides the overall configuration for your PreTeXt project.
+To edit the content of your document, open `source/main.ptx`. 
+See https://pretextbook.org/doc/guide/html/processing-CLI.html#cli-project-manifest. -->
+<project ptx-version="2" source=".">
   <targets>
-    <target name="web" format="html" />
-    <target name="print" format="pdf" />
+    <!-- We use the default web target to wire up the sample article with CodeChat -->
+    <target name="web"
+      format="html"
+      source="examples/sample-article/sample-article.xml"
+      publication="examples/sample-article/publication.xml"/>
+    <!-- doc/guide -->
+    <target name="guide-web" 
+      format="html" 
+      source="doc/guide/guide.xml"
+      publication="doc/guide/publication.xml"/>
+    <target name="guide-print" 
+      format="pdf" 
+      source="doc/guide/guide.xml"
+      publication="doc/guide/publication.xml"/>
+    <!-- examples/humanities -->
+    <target name="humanities-web"
+      format="html"
+      source="examples/humanities/source/hia.xml"
+      publication="examples/humanities/publication/publication.ptx"/>
+    <target name="humanities-print"
+      format="pdf"
+      source="examples/humanities/source/hia.xml"
+      publication="examples/humanities/publication/publication.ptx"/>
+    <!-- examples/minimal -->
+    <target name="minimal-web"
+      format="html"
+      source="examples/minimal/source/main.ptx"
+      publication="examples/minimal/publication/publication.ptx"/>
+    <target name="minimal-print"
+      format="print"
+      source="examples/minimal/source/main.ptx"
+      publication="examples/minimal/publication/publication.ptx"/>
+    <!-- examples/showcase -->
+    <target name="showcase-web"
+      format="html"
+      source="examples/showcase/source/pretext-showcase.ptx"
+      publication="examples/showcase/publication/publication.ptx"/>
+    <target name="showcase-print"
+      format="pdf"
+      source="examples/showcase/source/pretext-showcase.ptx"
+      publication="examples/showcase/publication/publication.ptx"/>
+    <!-- examples/sample-article -->
+    <target name="sample-article-web"
+      format="html"
+      source="examples/sample-article/sample-article.xml"
+      publication="examples/sample-article/publication.xml"/>
+    <target name="sample-article-print"
+      format="pdf"
+      source="examples/sample-article/sample-article.xml"
+      publication="examples/sample-article/publication.xml"/>
+    <target name="sample-article-print-solutions"
+      format="pdf"
+      source="examples/sample-article/sample-article.xml"
+      publication="examples/sample-article/publication-solution-manual.xml"/>
+    <target name="sample-article-web-oscar"
+      format="html"
+      source="examples/sample-article/sample-article.xml"
+      publication="examples/sample-article/publication-oscarlevin.xml"/>
   </targets>
 </project>
