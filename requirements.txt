@@ -1,0 +1,2 @@
+# <!-- Managed automatically by PreTeXt authoring tools -->
+pretext == 2.3.4
