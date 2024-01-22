@@ -18,7 +18,7 @@
   "image": "oscarlevin/pretext:full",
   // If you only intend to build for web and don't have any latex-image generated assets, you can use a smaller image:
   // "image": "oscarlevin/pretext:lite",
-  "postCreateCommand": "sudo apt update && sudo apt install -y texlive-full --no-install-recommends && sudo apt install -y fonts-font-awesome --no-install-recommends",
+  "postCreateCommand": "sudo apt update && sudo apt install -y texlive-full --no-install-recommends && sudo apt install -y fonts-font-awesome --no-install-recommends && pip install --upgrade --pre pretext",
 
   // Add gh cli as a feature (to support codechat)
   "features": {
