@@ -3318,7 +3318,26 @@ def html(
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
+    # place managed directories - some of these (Asymptote HTML) are
+    # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+
+    # Place support files where expected
+    # 2024-01-18: overkill for CSS, could be slimmed with knowledge
+    # of *which* files are needed.  Though maybe we will have
+    # on-the-fly changes initiated by readers?
+    css_src = os.path.join(get_ptx_path(), "css")
+    css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
+    shutil.copytree(css_src, css_dest)
+
+    js_src = os.path.join(get_ptx_path(), "js")
+    js_dest = os.path.join(tmp_dir, "_static", "pretext", "js")
+    shutil.copytree(js_src, js_dest)
+
+    # 2024-01-18: may migrate these resources up to "js"
+    js_lib_src = os.path.join(get_ptx_path(), "js_lib")
+    js_lib_dest = os.path.join(tmp_dir, "_static", "pretext", "js", "lib")
+    shutil.copytree(js_lib_src, js_lib_dest)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))

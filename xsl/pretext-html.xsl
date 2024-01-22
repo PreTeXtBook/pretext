@@ -101,24 +101,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
-<!-- CSS and Javascript Servers -->
-<!-- We allow processing paramters to specify new servers    -->
-<!-- or to specify the particular CSS file, which may have   -->
-<!-- different color schemes.  The defaults should work      -->
-<!-- fine and will not need changes on initial or casual use -->
-<!-- Files with name colors_*.css set the colors.            -->
-<!-- colors_default is similar to the old mathbook-3.css     -->
-<!-- N.B.: if the CSS has a version bump, then be sure to    -->
-<!-- visit the "css" directory and make an update there      -->
-<!-- for the benefit of offline formats                      -->
-<!-- N.B. leave this as parameters.  A developer of a        -->
-<!-- comprehensive approach to new JS and CSS may want to   -->
-<!-- point to a totally different server (rather than other  -->
-<!-- facilities for testing incremental additions/overrides. -->
-<xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.83'" />
-<xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.33'" />
+<!-- CSS and Javascript Directories -->
+<!-- These are convenience variables to specify file prefixes  -->
+<!-- consistently.  If you know what you are doing you could   -->
+<!-- likely point them elsewhere, even to other servers.       -->
+<!-- So the name says "dir", but effectively it is "location". -->
+<!-- But this is not the intent, nor supported, and thus can   -->
+<!-- change without warning.                                   -->
+<xsl:variable name="html.css.dir" select="'_static/pretext/css'"/>
+<xsl:variable name="html.js.dir" select="'_static/pretext/js'"/>
+<xsl:variable name="html.jslib.dir" select="'_static/pretext/js/lib'"/>
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -8006,7 +7998,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- For pure HTML we can make a true knowl or traditional link -->
 <!-- when an "xref" is authored inside of a display math "mrow" -->
-<!-- Requires https://pretextbook.org/js/lib/mathjaxknowl.js    -->
+<!-- Requires js/lib/mathjaxknowl3.js                           -->
 <!-- loaded as a MathJax extension for knowls to render.        -->
 <!-- See discussion in "xref-link" about "copy-of" necessity.   -->
 <xsl:template match="*" mode="xref-link-display-math">
@@ -10257,7 +10249,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
             <xsl:when test="$webwork-reps-version = 2">
-                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork/2.{$webwork-minor-version}/pretext-webwork.js"></script>
+                <script src="{$html.js.dir}/pretext-webwork/2.{$webwork-minor-version}/pretext-webwork.js"></script>
                 <script src="{$webwork-domain}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
             </xsl:when>
         </xsl:choose>
@@ -12239,7 +12231,9 @@ TODO:
                             <string>[pretext]/mathjaxknowl3.js</string>
                         </array>
                         <map key="paths">
-                            <string key="pretext">https://pretextbook.org/js/lib</string>
+                            <string key="pretext">
+                                <xsl:value-of select="$html.jslib.dir"/>
+                            </string>
                         </map>
                     </map>
                     <map key="startup">
@@ -12691,8 +12685,8 @@ TODO:
         <!-- document-specific variables with search documents -->
         <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
-        <script src="{$html.js.server}/js/{$html.js.version}/pretext_search.js"/>
-        <link href="{$html.css.server}/css/{$html.css.version}/pretext_search.css" rel="stylesheet" type="text/css"/>
+        <script src="{$html.js.dir}/pretext_search.js"/>
+        <link href="{$html.css.dir}/pretext_search.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
 </xsl:template>
 
@@ -12746,7 +12740,7 @@ TODO:
 <!-- Knowl header -->
 <xsl:template name="knowl">
     <xsl:if test="not($b-debug-react)">
-        <script src="{$html.js.server}/js/lib/knowl.js"></script>
+        <script src="{$html.jslib.dir}/knowl.js"></script>
         <!-- Variables are defined to defaults in knowl.js and  -->
         <!-- we can override them with new values here          -->
         <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
@@ -12787,17 +12781,15 @@ TODO:
 
 <!-- PreTeXt Javascript header -->
 <xsl:template name="pretext-js">
-    <script>js_version = <xsl:value-of select="$html.js.version"/></script>
     <xsl:choose>
         <xsl:when test="not($b-debug-react)">
             <!-- condition first on toc present? -->
-            <script src="{$html.js.server}/js/lib/jquery.min.js"></script>
-            <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
-            <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
-            <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
-            <script>miniversion=0.1</script>
-            <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js?x=1"></script>
-            <script src="{$html.js.server}/js/{$html.js.version}/user_preferences.js"></script>
+            <script src="{$html.jslib.dir}/jquery.min.js"></script>
+            <script src="{$html.jslib.dir}/jquery.sticky.js" ></script>
+            <script src="{$html.jslib.dir}/jquery.espy.min.js"></script>
+            <script src="{$html.js.dir}/pretext.js"></script>
+            <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
+            <script src="{$html.js.dir}/user_preferences.js"></script>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
             <script type="module" defer="" src="./static/js/main.js"></script>
@@ -12866,16 +12858,16 @@ TODO:
 <!-- CSS header -->
 <xsl:template name="css">
     <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/pretext_add_on.css" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-shellfile}" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-bannerfile}" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-navbarfile}" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-tocfile}" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-knowlfile}" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-colorfile}" rel="stylesheet" type="text/css" />
-        <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
+        <link href="{$html.css.dir}/pretext.css" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/pretext_add_on.css" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-shellfile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-bannerfile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-navbarfile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-tocfile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-knowlfile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/setcolors.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <xsl:if test="not($html.css.extra = '')">
