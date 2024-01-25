@@ -307,5 +307,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='array'>ڕیزکراو</localization>
     <!-- Print page button text -->
     <localization string-id='print'>پرنت</localization>
-
+    <!-- <localization string-id='close'>Close</localization> -->
 </locale>
