@@ -315,4 +315,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Reset an interactive to its original state               -->
     <localization string-id='reset'>Resetten</localization>
     <!-- <localization string-id='print'>Print</localization> -->
+    <!-- <localization string-id='close'>Close</localization> -->
 </locale>
