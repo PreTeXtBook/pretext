@@ -9032,6 +9032,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Foo <dataurl source="data/runningstatisticstemplate.ots" visual="http://example.com">Runners Template</dataurl> Bar</p>
             <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
             <p>Foo <dataurl source="data/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
+            <p>Testing of output positioning for xref's that are inside containers:</p>
+            <table xml:id="self-referential-tabular-xref">
+                <title>Self-referential Xref In a table</title>
+                <tabular>
+                    <row bottom="medium">
+                        <cell>A</cell>
+                        <cell>B</cell>
+                        <cell>C</cell>
+                        <cell>D</cell>
+                    </row>
+                    <row>
+                        <cell><xref ref="self-referential-tabular-xref" text="type-global" /></cell>
+                        <cell>B</cell>
+                        <cell>C</cell>
+                        <cell>D</cell>
+                    </row>
+                </tabular>
+            </table>
+            
+            <figure>
+                <caption>Xref Inside MathJAX</caption>
+                <p>
+                    <md>
+                        <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
+                        <mrow><xref ref="theorem-FTC" text="type-global"/></mrow>
+                        <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
+                    </md>
+                </p>
+            </figure>
+
+            <p>Now we have two xref's to that same target that has a runestone component. Only the first one clicked should try to render the runestone.<xref ref="program-activecode-python"/><xref ref="program-activecode-python"/></p>
         </section>
 
         <section xml:id="section-internationalization" label="section-internationalization">
