@@ -838,6 +838,11 @@ function WWshowCorrect(ww_id, answers) {
 		const span_id = `${ww_id}-${name}-correct`;
 
 		if (input.type == 'text' && answers[name] && !(iframe.contentDocument.getElementById(span_id))) {
+			const input_id = input.id;
+			const mq_span = iframe.contentDocument.getElementById(`mq-answer-${input_id}`);
+			if (mq_span) {
+				mq_span.style.display = 'none';
+			}
 			const feedbackButton = iframe.contentDocument.getElementById(`${ww_id}-${name}-feedback-button`);
 			if (feedbackButton) {
 				iframe.contentWindow.bootstrap.Popover.getInstance(feedbackButton)?.hide();
