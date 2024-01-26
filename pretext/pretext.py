@@ -493,7 +493,7 @@ def latex_image_conversion(
                 tex_executable_cmd = get_executable_cmd(latex_key)
                 # TODO why this debug line? get_executable_cmd() outputs the same debug info
                 log.debug("tex executable: {}".format(tex_executable_cmd[0]))
-                latex_cmd = tex_executable_cmd + ["-halt-on-error", latex_image]
+                latex_cmd = tex_executable_cmd + ["-interaction=nonstopmode", "-halt-on-error", latex_image]
                 log.info("converting {} to {}".format(latex_image, latex_image_pdf))
                 # Run LaTeX on the image file, usual console transcript is stdout.
                 # "result" is a "CompletedProcess" object.  Specifying an encoding
