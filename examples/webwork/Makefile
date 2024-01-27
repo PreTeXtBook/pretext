@@ -68,12 +68,12 @@ PTXXSL = $(PTX)/xsl
 WWEXAMPLE = $(PTX)/examples/webwork
 
 # XML to apply templates to
-SMPC = $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+SMPC = $(WWEXAMPLE)/sample-chapter/sample-chapter.ptx
 MINI = $(WWEXAMPLE)/minimal/mini.xml
 
 # Publisher files
-SMPCPUB = $(WWEXAMPLE)/sample-chapter/publication.xml
-SMPRSPUB = $(WWEXAMPLE)/sample-chapter/publication-academy.xml
+SMPCPUB = $(WWEXAMPLE)/sample-chapter/publisher/publication.xml
+SMPRSPUB = $(WWEXAMPLE)/sample-chapter/publisher/publication-academy.xml
 MINIPUB = $(WWEXAMPLE)/minimal/publication.xml
 
 # These paths are subdirectories of
@@ -232,7 +232,7 @@ webwork-mini-check:
 # DO NOT MODEL YOUR PROJECT AFTER VARIABLES AND RECIPES BELOW
 # THESE ARE ONLY HERE FOR DEVELOPER TESTING
 
-SMPCPUBNOMAN = $(WWEXAMPLE)/sample-chapter/pub-not-managed.xml
+SMPCPUBNOMAN = $(WWEXAMPLE)/sample-chapter/publisher/pub-not-managed.xml
 MINIPUBNOMAN = $(WWEXAMPLE)/minimal/pub-not-managed.xml
 WWOUT        = $(SCRATCH)/webwork-representations
 
