@@ -1233,6 +1233,19 @@ def webwork_to_xml(
         # version 1: live problems are injected into a div using javascript
         ww_reps_version = "2"
 
+    # Recognize if the original source uses elements that are not supported by this version of WeBWorK
+    unsupported = ww_xml.find("unsupported")
+    for elt in unsupported:
+        eltname = elt.get('name')
+        before = elt.get('before')
+        (major, minor) = before.split('.')
+        if (int(major) > ww_major_version or int(major) == ww_major_version and int(minor) > ww_minor_version):
+            msg = (
+                "PTX:ERROR:   Source uses '{}' element within a webwork element, not supported by WeBWorK versions prior to {}\n"
+                + "                         Server: {}\n"
+            )
+            raise ValueError(msg.format(eltname, before, ww_domain))
+
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
     session = requests.Session()
