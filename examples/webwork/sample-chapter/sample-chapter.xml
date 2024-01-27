@@ -1043,6 +1043,80 @@
             </section>
 
             <section>
+                <title>Sidebyside</title>
+                <p>
+                    Sidebyside is supported when the <webwork/> server is version 2.19 or later.
+                </p>
+
+                <exercise label="sidebyside-demonstration">
+                    <title>Sidebyside Demonstration</title>
+                    <webwork>
+                        <pg-code>
+                        </pg-code>
+                        <statement>
+                            <sidebyside width="40%">
+                                <p>
+                                    This is a paragraph with an image of a blue square next to it.
+                                </p>
+                                <image>
+                                    <latex-image>
+                                        \begin{tikzpicture}
+                                            \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+                                        \end{tikzpicture}
+                                    </latex-image>
+                                </image>
+                            </sidebyside>
+
+                            <sidebyside widths="70% 30%" valign="bottom">
+                                <stack>
+                                    <p>
+                                        This is a paragraph.
+                                    </p>
+                                    <p>
+                                        Another paragraph. A tabular is to the right.
+                                    </p>
+                                </stack>
+                                <tabular>
+                                  <row>
+                                    <cell><m>1</m></cell>
+                                    <cell><m>2</m></cell>
+                                  </row>
+                                  <row>
+                                    <cell><m>3</m></cell>
+                                    <cell><m>4</m></cell>
+                                  </row>
+                                </tabular>
+                            </sidebyside>
+
+                            <p>
+                                Enter the first four odd prime numbers.
+                            </p>
+
+                            <sbsgroup>
+                                <sidebyside>
+                                    <p>
+                                        <m>3={}</m><var name="3" width="5"/>
+                                    </p>
+                                    <p>
+                                        <m>5={}</m><var name="5" width="5"/>
+                                    </p>
+                                </sidebyside>
+                                <sidebyside>
+                                    <p>
+                                        <m>7={}</m><var name="7" width="5"/>
+                                    </p>
+                                    <p>
+                                        <m>11={}</m><var name="11" width="5"/>
+                                    </p>
+                                </sidebyside>
+                            </sbsgroup>
+
+                        </statement>
+                    </webwork>
+                </exercise>
+            </section>
+
+            <section>
                 <title>Tables</title>
 
                 <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
