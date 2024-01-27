@@ -1042,7 +1042,8 @@
                 </exercise>
             </section>
 
-            <section>
+            <!-- Can uncomment the following once the WW default servers (AIM, Runestone) are 2.19 or later. -->
+            <!-- <section>
                 <title>Sidebyside</title>
                 <p>
                     Sidebyside is supported when the <webwork/> server is version 2.19 or later.
@@ -1114,7 +1115,7 @@
                         </statement>
                     </webwork>
                 </exercise>
-            </section>
+            </section> -->
 
             <section>
                 <title>Tables</title>
