@@ -3322,22 +3322,8 @@ def html(
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # Place support files where expected
-    # 2024-01-18: overkill for CSS, could be slimmed with knowledge
-    # of *which* files are needed.  Though maybe we will have
-    # on-the-fly changes initiated by readers?
-    css_src = os.path.join(get_ptx_path(), "css")
-    css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
-    shutil.copytree(css_src, css_dest)
-
-    js_src = os.path.join(get_ptx_path(), "js")
-    js_dest = os.path.join(tmp_dir, "_static", "pretext", "js")
-    shutil.copytree(js_src, js_dest)
-
-    # 2024-01-18: may migrate these resources up to "js"
-    js_lib_src = os.path.join(get_ptx_path(), "js_lib")
-    js_lib_dest = os.path.join(tmp_dir, "_static", "pretext", "js", "lib")
-    shutil.copytree(js_lib_src, js_lib_dest)
+    # place CSS and JS in scratch directory
+    copy_html_css_js(tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -4127,6 +4113,27 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     if generated_abs is not None:
         generated_dir = os.path.join(build_dir, "generated")
         shutil.copytree(generated_abs, generated_dir)
+
+
+def copy_html_css_js(work_dir):
+    '''Copy necessary CSS and JS into working directory'''
+
+    # Place support files where expected
+    # 2024-01-18: overkill for CSS, could be slimmed with knowledge
+    # of *which* files are needed.  Though maybe we will have
+    # on-the-fly changes initiated by readers?
+    css_src = os.path.join(get_ptx_path(), "css")
+    css_dest = os.path.join(work_dir, "_static", "pretext", "css")
+    shutil.copytree(css_src, css_dest)
+
+    js_src = os.path.join(get_ptx_path(), "js")
+    js_dest = os.path.join(work_dir, "_static", "pretext", "js")
+    shutil.copytree(js_src, js_dest)
+
+    # 2024-01-18: may migrate these resources up to "js"
+    js_lib_src = os.path.join(get_ptx_path(), "js_lib")
+    js_lib_dest = os.path.join(work_dir, "_static", "pretext", "js", "lib")
+    shutil.copytree(js_lib_src, js_lib_dest)
 
 
 def copy_build_directory(build_dir, dest_dir):
