@@ -2119,6 +2119,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Copy in external resources (e.g., js code)
     _, external_abs = get_managed_directories(xml_source, pub_file)
     copy_managed_directories(tmp_dir, external_abs=external_abs)
+    # place CSS and JS in scratch directory
+    copy_html_css_js(tmp_dir)
 
     # Spawn a new process running a local html.server
     import subprocess
