@@ -8,7 +8,7 @@
 <!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="git-developer">
+<chapter xml:id="git-developer" label="git-developer">
     <title>Git</title>
 
     <section>
@@ -57,7 +57,7 @@
     </section>
 
     <section>
-        <title>Pull Requests</title>
+        <title label="git-create-pr">Creating Pull Requests</title>
 
         <p>Contributions to the code repository are accomplished with a <term>pull request</term><idx>pull request</idx>.  The short version is that you have a copy of the repository and you make a collection of changes on your copy.  Then you make a request to have your changes <q>pulled into</q> the official (main, canonical) repository.  A pull request is a concept independent of GitHub, but one of GitHub's advantages is that it makes a pull request very easy to create and manage.</p>
 
