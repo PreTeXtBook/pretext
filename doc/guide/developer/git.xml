@@ -101,8 +101,8 @@
         <p>When you learn more about the use of git you will discover there are many additional things you can do to modify and experiment with pull requests.  Here we are concentrating on the first step: getting a pull request onto your system so you can employ it.</p>
     </section>
 
-    <section>
-        <title label="git-create-pr">Creating Pull Requests</title>
+    <section label="git-create-pr">
+        <title>Creating Pull Requests</title>
 
         <p>Contributions to the code repository are accomplished with a <term>pull request</term><idx>pull request</idx>.  The short version is that you have a copy of the repository and you make a collection of changes on your copy.  Then you make a request to have your changes <q>pulled into</q> the official (main, canonical) repository.  A pull request is a concept independent of GitHub, but one of GitHub's advantages is that it makes a pull request very easy to create and manage.</p>
 
