@@ -56,6 +56,51 @@
         <p>A <term>tab</term> is the worst sort of whitespace!  (See <xref ref="git-whitespace"/>.)  There should never ever be any tabs present in any contribution to <pretext/>.  The problem: the <q>width</q> of a tab is different for each person who opens a file.  Two spaces, four spaces, eight spaces, you name it.  So if indentation is accomplished with a mix of tabs and spaces, there is a good chance it might look right to you, but looks wrong to many other developers.  I hit the tab key on my keyboard all the time.  But my editor is set to supply <em>four spaces</em> as a result.  See if your editor will behave similarly.</p>
     </section>
 
+    <section label="git-review-pr">
+        <title>Reviewing Pull Requests</title>
+
+        <p>A <term>pull request</term> (<init>PR</init>) is a way that developers suggest and contribute new code to a git repository.  The <em>next</em> section describes how to make one, and might be interesting reading after you finish <em>this</em> section (but not now!).  Here we will describe how you can test out a pull request, in order to help with evaluation, or if you are simply curious.</p>
+
+        <p>You will need a <term>clone</term> of the repository where the pull request resides.  If you have a fork (see next section) that is fine, too.  We will illustrate with a real <init>PR</init>, <url href="https://github.com/PreTeXtBook/pretext/pull/2096">GitHub #2029</url>.
+            <ol>
+                <li><p>At a command-line, with a working directory at the top-level of the <c>pretext</c> repository, issue<cd>
+                    <cline>git fetch origin pull/2096/head:andrew-pointer-css-2096</cline></cd>
+                    <ul>
+                        <li><c>git</c> is the command-line git executable.</li>
+                        <li><c>fetch</c> means we are going to grab a collection of commits from somewhere.  This is not a <c>pull</c> and that will be incorrect here right now.</li>
+                        <li><c>origin</c> is the somewhere, a repository that has the commits we want.  This name translates to the repository hosted on GitHub, which is where you obtained your clone or fork.  This is known as a <term>remote</term>, and you can have several with different names that you have assigned to them.  <c>git remote -vv</c> will list all your remotes for you.</li>
+                        <li><c>pull/2096/head</c> locates <em>all</em> the commits for PR #2096.  Don't let the use of <c>pull</c> fool you.</li>
+                        <li><c>andrew-pointer-css-2096</c> is a pointer, internal to my clone, that helps me identify the <init>PR</init>, especially when I have many in play at the same time.  In git it is known as a <term>branch</term>.  Andrew wrote it, I have a reminder of the topic, and I find it helpful to have the actual identifying number around.  You are free to do anything you like here for a name of the branch<mdash/>whatever works for you.</li>
+                    </ul></p>
+                </li>
+
+                <li>Now you have one, or more, commits on your system, and a name that helps you locate them as a branch.  Presuming you are on your main branch (<c>master</c> here, but possibly <c>main</c>) you will want to switch to the branch with these new commits as a putative change to the code for you to experiment with.  Easy:
+                    <cd>git switch andrew-pointer-css-2096</cd>
+                </li>
+
+                <li>Now you will want to use the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) to produce whatever output you want to test or examine.  The point is, you now have the proposed modifications available to you for use.</li>
+
+                <li>Optional.  The <init>PR</init> could be several days old, or maybe it has been weeks or months.  So it may be a branch off the state of the code from the past, and the code has moved on and evolved (through accepted pull requests).  While you have <c>andrew-pointer-css-2096</c> as your active branch you can go:
+                    <cd>git rebase master</cd>
+                This will move the branch to be a deviation from the most recent version of the code.  (I say to myself as I type, <q>git rebase ONTO master.</q>)  It is possible this is not what the original author of the <init>PR</init> intended, but for <pretext/> this is rarely an issue.  It is also possible that the movement creates contradictions (<term>conflicts</term>).  Don't panic if this happens, just go:
+                    <cd>git rebase --abort</cd>
+                and it will be like it never happened.</li>
+
+                <li>When you are finished, return to the <c>master</c> branch with
+                    <cd>git switch master</cd>
+                and then delete the branch with
+                    <cd>git branch -d andrew-pointer-css-2096</cd>
+                Aah, git will not let you do that.  It is not clear if this might be important work and you really should not be deleting it.  git cannot tell if this is something original you just created or something that is just a copy of what is safe and sound on GitHub.  So, go:
+                    <cd>git branch -D andrew-pointer-css-2096</cd>
+                using the semi-dangerous <c>-D</c> flag.  Now your clone is back to its original state.</li>
+            </ol>
+        </p>
+
+        <p>This is the procedure described on <url href="https://stackoverflow.com/a/30584951">StackOverflow: How can I check out a GitHub pull request with git?</url>.  On an open pull request within GitHub you can find <q>command line instructions.</q>  These suggest making a (empty) branch in your repository, then doing a pull <em>from the fork belonging to the author of the pull request</em>.  This means the second step will be very different every time since it uses the fork and also a branch name devised by the pull request author.  Functionally equivalent, but we find it more complicated.</p>
+
+        <p>When you learn more about the use of git you will discover there are many additional things you can do to modify and experiment with pull requests.  Here we are concentrating on the first step: getting a pull request onto your system so you can employ it.</p>
+    </section>
+
     <section>
         <title label="git-create-pr">Creating Pull Requests</title>
 
