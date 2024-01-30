@@ -217,8 +217,7 @@
         For example:
       </p>
       <console>
-        <prompt>$ </prompt>
-        <input>pretext -c webwork -p &lt;publisher&gt; aota.ptx</input>
+        <input prompt="$ ">pretext -c webwork -p &lt;publisher&gt; aota.ptx</input>
       </console>
       <p>
         <c>aota.ptx</c> in the example is the root file for your <pretext/> project.
@@ -253,8 +252,7 @@
         You can also use <c>pretext/pretext</c> to build HTML. For example:
       </p>
       <console>
-        <prompt>$ </prompt>
-        <input>pretext -c all -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
+        <input prompt="$ ">pretext -c all -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
         <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
@@ -284,8 +282,7 @@
         you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
       </p>
       <console>
-        <prompt>$ </prompt>
-        <input>pretext -c all -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
+        <input prompt="$ ">pretext -c all -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
         <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
@@ -313,8 +310,7 @@
         For example:
       </p>
       <console>
-        <prompt>$ </prompt>
-        <input>xsltproc -stringparam publisher &lt;publisher&gt; pretext-ww-problem-sets.xsl aota.ptx</input>
+        <input prompt="$ ">xsltproc -stringparam publisher &lt;publisher&gt; pretext-ww-problem-sets.xsl aota.ptx</input>
       </console>
       <p>
         You may need to specify paths to these files.

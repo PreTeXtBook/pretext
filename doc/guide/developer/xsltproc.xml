@@ -23,8 +23,7 @@
     </p>
 
     <console>
-      <prompt>rob@lava:~/mathbook$ </prompt>
-      <input>xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
+      <input prompt="rob@lava:~/mathbook$ ">xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
     </console>
 
     <p>
@@ -274,8 +273,7 @@
     <p>To process a directory with multiple source files, I would proceed as follows.  First make three temporary directories, <c>/tmp/original</c>,<c>/tmp/normal</c>,<c>/tmp/clean</c>, and copy my source files into <c>/tmp/original</c>.  Then, using a BASH shell, and inputting the command all on one long line.</p>
 
     <console>
-    <prompt>rob@lava:/tmp/original$ </prompt>
-    <input>for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
+    <input prompt="rob@lava:/tmp/original$ ">for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
     <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
     </console>
 
@@ -283,23 +281,20 @@
     </p>
 
     <console>
-    <prompt>rob@lava:/tmp$ </prompt>
-    <input>git diff original normal</input>
+    <input prompt="rob@lava:/tmp$ ">git diff original normal</input>
     </console>
 
     <p>Or, try this for a view that might be more informative.</p>
 
     <console>
-    <prompt>rob@lava:/tmp$ </prompt>
-    <input>git diff --word-diff original normal</input>
+    <input prompt="rob@lava:/tmp$ ">git diff --word-diff original normal</input>
     </console>
 
     <p>You may only do the above once, on your first use of this conversion stylesheet.  You will see how your style of authoring <init>XML</init> will undergo some minor changes.  We can repeat the above to actual make the changes necessary due to <pretext />
             deprecations.  Make <c>/tmp/normal</c> the working directory.</p>
 
     <console>
-    <prompt>rob@lava:/tmp/normal$ </prompt>
-    <input>for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
+    <input prompt="rob@lava:/tmp/normal$ ">for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
     <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
     </console>
 
