@@ -1926,7 +1926,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
 <xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
-    <xsl:value-of select="not($b-skip-knowls) and not($html-xref-render-style='link')" />
+    <xsl:param name="link" select="/.." />
+    <xsl:choose>
+        <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never'">
+            <xsl:value-of select="false()"/>
+        </xsl:when>
+        <xsl:when test="$html-xref-knowled = 'maximum'">
+            <xsl:value-of select="true()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- $html-xref-knowled = 'cross-page'                                         -->
+            <!-- Find the nearest common ancestor of the link and target                   -->
+            <!-- https://stackoverflow.com/questions/538293/find-common-parent-using-xpath -->
+            <xsl:variable name="nearest-common-ancestor" select=
+                "./ancestor::*
+                    [count(. | $link/ancestor::*) 
+                    = 
+                    count($link/ancestor::*)
+                    ] [1]"
+            />
+            <xsl:variable name="nearest-ancestor-level">
+                <xsl:apply-templates select="$nearest-common-ancestor" mode="enclosing-level"/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$nearest-ancestor-level >= $publication/common/chunking/@level">
+                    <xsl:value-of select="false()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="true()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- This template makes the knowl content for cross-references    -->
@@ -7934,7 +7965,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="origin" select="''" />
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
     <xsl:variable name="knowl">
-        <xsl:apply-templates select="$target" mode="xref-as-knowl" />
+        <xsl:apply-templates select="$target" mode="xref-as-knowl">
+            <xsl:with-param name="link" select="."/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
         <!-- 1st exceptional case, xref in a webwork, or in    -->
@@ -8009,7 +8042,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- this could be passed as a parameter, but -->
     <!-- we have $target anyway, so can recompute -->
     <xsl:variable name="knowl">
-        <xsl:apply-templates select="$target" mode="xref-as-knowl"/>
+        <xsl:apply-templates select="$target" mode="xref-as-knowl">
+            <xsl:with-param name="link" select="."/>  <!-- AWS Needed??? -->
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$knowl='true'">

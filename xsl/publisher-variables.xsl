@@ -2227,10 +2227,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML XREFS      -->
 <!--                 -->
 
-<!-- How to render xrefs. Default is "mixed" which renders xrefs to divisions as -->
-<!-- links and other xrefs as knowls.  "link" renders all xrefs as links.  -->
-<xsl:variable name="html-xref-render-style">
-    <xsl:apply-templates select="$publisher-attribute-options/html/xref/pi:pub-attribute[@name='render-style']" mode="set-pubfile-variable"/>
+<!-- How to render xrefs. Default is "maximum" which renders xrefs to divisions as -->
+<!-- links and other xrefs as knowls. "never" renders all xrefs as links.          -->
+<!-- "cross-page" renders like "never" within a page and "maximum" otherwise.       -->
+<xsl:variable name="html-xref-knowled">
+    <xsl:apply-templates select="$publisher-attribute-options/html/cross-references/pi:pub-attribute[@name='knowled']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!--                              -->
@@ -3090,9 +3091,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="exercise-worksheet" default="no" options="yes" legacy-stringparam="html.knowl.exercise.worksheet"/>
             <pi:pub-attribute name="exercise-readingquestion" default="no" options="yes" legacy-stringparam="html.knowl.exercise.readingquestion"/>
         </knowl>
-        <xref>
-            <pi:pub-attribute name="render-style" default="mixed" options="link"/>
-        </xref>
+        <cross-references>
+            <pi:pub-attribute name="knowled" default="maximum" options="never cross-page maximum"/>
+        </cross-references>
         <navigation>
             <pi:pub-attribute name="logic" default="linear" options="tree" legacy-stringparam="html.navigation.logic"/>
             <pi:pub-attribute name="upbutton" default="yes" options="no" legacy-stringparam="html.navigation.logic"/>
