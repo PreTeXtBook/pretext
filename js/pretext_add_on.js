@@ -137,7 +137,7 @@ function permalinkDescription(elem) {
     if ((lastChr == '.') || (lastChr == ':'))  {
         retStr = retStr.slice(0,retStr.length - 1);
     }
-    return retStr;
+    return retStr.replace(/[\n\r]/g, "");
 }
 
 /*
