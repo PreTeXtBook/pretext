@@ -82,7 +82,7 @@ class LinkKnowl {
 
   // Returns element the knowl output should be inserted after
   findOutputLocation() {
-    const invalidParents = "table, mjx-container, div.tabular-box";
+    const invalidParents = "table, mjx-container, div.tabular-box, .runestone > .parsons";
     // Start with the link's parent, move up as long as there are invalid parents
     let el = this.linkElement.parentElement;
     let problemAncestor = el.closest(invalidParents);
