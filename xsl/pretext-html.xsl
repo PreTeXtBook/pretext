@@ -1935,16 +1935,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="true()"/>
         </xsl:when>
         <xsl:otherwise>
-            <!-- $html-xref-knowled = 'cross-page'                                         -->
+            <!-- Case $html-xref-knowled = 'cross-page'                                    -->
             <!-- Find the nearest common ancestor of the link and target                   -->
             <!-- https://stackoverflow.com/questions/538293/find-common-parent-using-xpath -->
             <xsl:variable name="nearest-common-ancestor" select=
-                "./ancestor::*
-                    [count(. | $link/ancestor::*) 
-                    = 
-                    count($link/ancestor::*)
-                    ] [1]"
-            />
+                "./ancestor::*[count(. | $link/ancestor::*) = count($link/ancestor::*)] [1]"/>
             <xsl:variable name="nearest-ancestor-level">
                 <xsl:apply-templates select="$nearest-common-ancestor" mode="enclosing-level"/>
             </xsl:variable>
