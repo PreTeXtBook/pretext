@@ -7959,11 +7959,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- build a modern knowl -->
                     <xsl:when test="$knowl='true'">
-                        <!-- empty, but presence needed for accessibility -->
-                        <!-- An HTML "a" without an href attribute does   -->
-                        <!-- not default to role "link" and does not read -->
-                        <!-- as clickable by a screen reader.             -->
-                        <xsl:attribute name="href"/>
+                        <!-- provide href for a fallback behavior if knowl is -->
+                        <!-- disabled intentionally or not                    -->
+                        <xsl:attribute name="href">
+                            <xsl:apply-templates select="$target" mode="url" />
+                        </xsl:attribute>
                         <!-- mark as duplicated content via an xref -->
                         <xsl:attribute name="class">
                             <xsl:text>xref</xsl:text>
@@ -7971,6 +7971,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="data-knowl">
                             <xsl:apply-templates select="$target" mode="knowl-filename">
                                 <xsl:with-param name="origin" select="$origin"/>
+                            </xsl:apply-templates>
+                        </xsl:attribute>
+                        <!-- text to use for tooltip/aria  -->
+                        <xsl:attribute name="data-reveal-label">
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'reveal'"/>
+                            </xsl:apply-templates>
+                        </xsl:attribute>
+                        <xsl:attribute name="data-close-label">
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'close'"/>
                             </xsl:apply-templates>
                         </xsl:attribute>
                     </xsl:when>

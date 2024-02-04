@@ -311,5 +311,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='array'>array</localization>
     <!-- Print page button text -->
     <localization string-id='print'>Print</localization>
+    <!-- Close something interactive                              -->
+    <localization string-id='close'>Close</localization>
 
 </locale>

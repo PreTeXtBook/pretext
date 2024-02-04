@@ -263,4 +263,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Azzera</localization>
     <localization string-id='array'>tabella</localization>
     <localization string-id='print'>Stampa</localization>
+    <!-- <localization string-id='close'>Close</localization> -->
 </locale>
