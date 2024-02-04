@@ -8038,7 +8038,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we have $target anyway, so can recompute -->
     <xsl:variable name="knowl">
         <xsl:apply-templates select="$target" mode="xref-as-knowl">
-            <xsl:with-param name="link" select="."/>  <!-- AWS Needed??? -->
+            <xsl:with-param name="link" select="."/>
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
