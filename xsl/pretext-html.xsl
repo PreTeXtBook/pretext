@@ -1884,7 +1884,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$enclosure" mode="type-name"/>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:if test="$block = 'true'">
+            <xsl:variable name="need-knowl">
+                <xsl:apply-templates select="$enclosure" mode="xref-as-knowl"/>
+            </xsl:variable>
+            <xsl:if test="$block = 'true' and $need-knowl = 'true'">
                 <xsl:apply-templates select="$enclosure" mode="manufacture-knowl">
                     <xsl:with-param name="origin" select="'index'"/>
                 </xsl:apply-templates>
