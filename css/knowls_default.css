@@ -82,6 +82,7 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     border-radius: 10px;
     padding: 0;
     margin-top: 10px;
+    scroll-margin-top: 60px; /* height of header */
 }
 
 .knowl-output.original {
@@ -109,7 +110,17 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     background: inherit;
 }
 
+.knowl-output--hide {
+    display: none;
+}
 
+.knowl-output__error .para:first-child {
+    margin-top: 0;
+}
+
+.knowl-output__error a {
+    text-decoration: underline;
+}
 
 .knowl-output .knowl-output {
     border-width: 6px;
