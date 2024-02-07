@@ -12462,6 +12462,7 @@ TODO:
     </xsl:if>
 
     <!-- 2016-06-13: sage, gap, gp, html, maxima, octave, python, r, and singular -->
+    <!-- 2024-02-07: add macaulay2                                                -->
 
     <xsl:if test=".//sage[not(@type) and (not(@language) or @language='sage') and not(@auto-evaluate = 'yes')]">
         <xsl:call-template name="makesagecell">
@@ -12540,6 +12541,26 @@ TODO:
             </xsl:with-param>
             <xsl:with-param name="b-autoeval" select="true()"/>
             <xsl:with-param name="language-text">HTML</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='macaulay2' and not(@auto-evaluate = 'yes')]">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>macaulay2</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="b-autoeval" select="false()"/>
+            <xsl:with-param name="language-text">Macaulay2</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='macaulay2' and (@auto-evaluate = 'yes')]">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>macaulay2</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="b-autoeval" select="true()"/>
+            <xsl:with-param name="language-text">Macaulay2</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
 
