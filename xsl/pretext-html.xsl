@@ -12431,6 +12431,8 @@ TODO:
                             <xsl:with-param name="string-id" select="'evaluate'"/>
                         </xsl:apply-templates>
                     </string>
+                    <!-- drop-down allows practice with all possible languages -->
+                    <raw key="languages">sagecell.allLanguages</raw>
                 </map>
             </xsl:with-param>
         </xsl:call-template>
