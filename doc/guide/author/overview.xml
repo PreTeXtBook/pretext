@@ -447,7 +447,7 @@
 
         <p>The content of the <tag>output</tag> element is included in PDF output, but not in dynamic instances, since it can be re-computed.  Notably, there is a conversion which pairs input and output into a single file in the format used by Sage's <c>doctest</c> framework.  So if expected output is provided, it becomes automatic to identify when Sage has diverged from your expectations, and you can adjust your examples accordingly.</p>
 
-        <p>The Sage Cell Server can also be configured to interpret different languages, because Sage by default contains everything needed to evaluate code in these languages.  This is done by providing a <attr>language</attr> attribute, where possible values are <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>. The default is <c>sage</c>.</p>
+        <p>The Sage Cell Server can also be configured to interpret different languages, because Sage by default contains everything needed to evaluate code in these languages.  This is done by providing a <attr>language</attr> attribute, where possible values are <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>macaulay2</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>. The default is <c>sage</c>.</p>
 
         <p>Note that the dynamic formats (including the Sage Cell) may run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
     </section>
