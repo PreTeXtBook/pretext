@@ -373,7 +373,7 @@
             </p>
 
             <p>
-                While we use the <c>.ptx</c> extension, the manifest is not technically a pretext document, since it does not agree with the schema.  However, it must have a specific structure to be used with the CLI.  An example of a simple manifest is given in <xref ref="cli-project-manifest-example"/>.  Note this is version 2 manifest; for a comparison of <q>legacy</q> manifests and the current format, see <xref ref="cli-v1vsv2"/>.
+                While we use the <c>.ptx</c> extension, the manifest is not technically a <pretext/> document, since it does not agree with the schema.  However, it must have a specific structure to be used with the CLI.  An example of a simple manifest is given in <xref ref="cli-project-manifest-example"/>.  Note this is version 2 manifest; for a comparison of <q>legacy</q> manifests and the current format, see <xref ref="cli-v1vsv2"/>.
             </p>
 
             <listing xml:id="cli-project-manifest-example">
@@ -409,26 +409,26 @@
             </p>
 
             <p>
-                With just these attributes, as with he manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout.  In particular,
+                With just these attributes, as with the manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout. The following defaults are constucted from the default value for an attribute of the root <tag>project</tag> element with the default value for an attribute of a particular <tag>target</tag> element. Each of the two pieces can be overrided. The net default folders are:
                 <ul>
                     <li><p>The source is <c>source/main.ptx</c>.</p></li>
-                    <li><p>The publication if is <c>publication/publication.ptx</c>.</p></li>
+                    <li><p>The publication file is <c>publication/publication.ptx</c>.</p></li>
                     <li><p>Output is stored in <c>output/</c> (with each target in a subfolder identical to the target's <c>name</c>).</p></li>
                     <li><p>The staging directory to preview deploys is <c>output/stage</c>.</p></li>
                 </ul>
-                Each of these can be modified by adding the appropriate attribute of either the root <tag>project</tag> element or a particular <tag>target</tag> element.
+                Again, each of these can be modified using the appropriate attribute of either the root <tag>project</tag> element or a particular <tag>target</tag> element.
             </p>
 
             <p>
                 In <xref ref="table-cli-project-attributes"/> and <xref ref="table-cli-target-attributes"/> we give all the attributes you can have on the <tag>project</tag> and <tag>target</tag> elements, respectively.  Some attributes can be specified for both elements.  In such cases, the values will be paths, and the path given in the <tag>target</tag>'s attribute will be relative to the path given in the <tag>project</tag>'s attribute. This can be useful, for example, if all targets have publication files in the same folder, but the files for some targets are different.
             </p>
 
-            <p>All paths described below are given relative to the root of your project (i.e., the location of the <c>project.ptx</c> file).</p>
+            <p>All paths described in <xref ref="table-cli-project-attributes"/> are given <em>relative to the root of your project</em> (the location of the <c>project.ptx</c> file).</p>
 
             <table xml:id="table-cli-project-attributes">
                 <title>Attributes available for the <tag>project</tag> element.</title>
-                <tabular>
-                    <col/><col width="70%" valign="top"/>
+                <tabular valign="top">
+                    <col/><col width="70%"/>
                     <row header="yes">
                         <cell>Attribute</cell><cell>Description</cell>
                     </row>
@@ -436,28 +436,30 @@
                         <cell><attr>ptx-version</attr></cell><cell><p>Required.  Must have value 2.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>source</attr></cell><cell><p>Optional, default: "source".  Path to folder holding main source file, relative to project root.</p></cell>
+                        <cell><attr>source</attr></cell><cell><p>Optional, default: <c>source</c>.  Path to folder holding main source file.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>publication</attr></cell><cell><p>Optional, default: "publication".  Path to folder holding publication file, relative to project root.</p></cell>
+                        <cell><attr>publication</attr></cell><cell><p>Optional, default: <c>publication</c>.  Path to folder holding publication file.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>output-dir</attr></cell><cell><p>Optional, default: "output".  Path to folder in which output files/folders for each target will be created.</p></cell>
+                        <cell><attr>output-dir</attr></cell><cell><p>Optional, default: <c>output</c>.  Path to folder in which output files/folders for each target will be created.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>site</attr></cell><cell><p>Optional, default: "site".  Path to folder holding user-provided landing page for deploying multiple targets.</p></cell>
+                        <cell><attr>site</attr></cell><cell><p>Optional, default: <c>site</c>.  Path to folder holding user-provided landing page for deploying multiple targets.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>stage</attr></cell><cell><p>Optional, default: "output/stage".  Path to folder where deployable targets will be collected before they are deployed.</p></cell>
+                        <cell><attr>stage</attr></cell><cell><p>Optional, default: <c>output/stage</c>.  Path to folder where deployable targets will be collected before they are deployed.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>xsl</attr></cell><cell><p>Optional, default: "xsl".  Path to folder holding custom xsl files.</p></cell>
+                        <cell><attr>xsl</attr></cell><cell><p>Optional, default: <c>xsl</c>.  Path to folder holding custom xsl files.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>asy-method</attr></cell><cell><p>Optional, default: "server".  Valid values: "server" or "local". Used to specify whether asymptote images should be generated using the "server" asymptote version or a "local" asymptote install.</p></cell>
+                        <cell><attr>asy-method</attr></cell><cell><p>Optional, default: <c>server</c>.  Valid values: <c>server</c> or <c>local</c>. Used to specify whether asymptote images should be generated using the <c>server</c> asymptote version or a <c>local</c> asymptote install.</p></cell>
                     </row>
                 </tabular>
-            </table>
+            </table>`
+
+            <p>Any file paths described in attributes of a <tag>target</tag> element are relative to a corresponding attribute value from the root <tag>project</tag> element.</p>
 
             <table xml:id="table-cli-target-attributes">
                 <title>Attributes available for the <tag>target</tag> elements.</title>
@@ -470,13 +472,13 @@
                         <cell><attr>name</attr></cell><cell><p>Required.  The name you use when executing a CLI command.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>format</attr></cell><cell><p>Required.  Valid values: "html", "pdf", "latex", "epub", "kindle", "braille", "webwork", and "custom".  The format the target will be built into.</p></cell>
+                        <cell><attr>format</attr></cell><cell><p>Required.  Valid values: <c>html</c>, <c>pdf</c>, <c>latex</c>, <c>epub</c>, <c>kindle</c>, <c>braille</c>, <c>webwork</c>, and <c>custom</c>.  The format the target will be built into.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>source</attr></cell><cell><p>Optional, default: "main.ptx".  Path to the root source file of the project (relative to the value of the <attr>source</attr> of <tag>project</tag>).</p></cell>
+                        <cell><attr>source</attr></cell><cell><p>Optional, default: <c>main.ptx</c>.  Path to the root source file of the project (relative to the value of the <attr>source</attr> of <tag>project</tag>).</p></cell>
                     </row>
                     <row>
-                        <cell><attr>publication</attr></cell><cell><p>Optional, default: "publication.ptx".  Path to publication file (relative to the value of <attr>publication</attr> attribute of <tag>project</tag>).</p></cell>
+                        <cell><attr>publication</attr></cell><cell><p>Optional, default: <c>publication.ptx</c>.  Path to publication file (relative to the value of <attr>publication</attr> attribute of <tag>project</tag>).</p></cell>
                     </row>
                     <row>
                         <cell><attr>output-dir</attr></cell><cell><p>Optional, default: the value of <attr>name</attr>.  Path to folder in which output files/folders will be created (relative to the value of <attr>output-dir</attr> attribute of <tag>project</tag>).</p></cell>
@@ -485,25 +487,25 @@
                         <cell><attr>output-filename</attr></cell><cell><p>Optional, default: generated by pretext. Only valid for formats that produce a single output file.  Path to output file to be built (relative to the value of <attr>output-dir</attr> of the same <tag>target</tag> element).</p></cell>
                     </row>
                     <row>
-                        <cell><attr>deploy-dir</attr></cell><cell><p>Optional, default: None.  Path to subdirectory of deployed site where this target will live.  If deploying multiple targets, then this attribute must have a value for it to be deployed.</p></cell>
+                        <cell><attr>deploy-dir</attr></cell><cell><p>Optional, no default.  Path to subdirectory of deployed site where this target will live.  If deploying multiple targets, then this attribute must have a value for it to be deployed.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>xsl</attr></cell><cell><p>Optional, default: None.  Path to custom <init>XSL</init> file (relative to the value of <attr>xsl</attr> attribute of <tag>project</tag>). Required when <attr>format</attr> is "custom".</p></cell>
+                        <cell><attr>xsl</attr></cell><cell><p>Optional, no default. Required when <attr>format</attr> is <c>custom</c>. Path to custom <init>XSL</init> file (relative to the value of <attr>xsl</attr> attribute of <tag>project</tag>).</p></cell>
                     </row>
                     <row>
-                        <cell><attr>latex-engine</attr></cell><cell><p>Optional, default: "xelatex".  Valid values: "xelatex", "pdflatex", or "latex". Only used on targets that build with latex, to specify what latex command to call in that step.</p></cell>
+                        <cell><attr>latex-engine</attr></cell><cell><p>Optional, default: <c>xelatex</c>.  Valid values: <c>xelatex</c>, <c>pdflatex</c>, or <c>latex</c>. Only used on targets that build with latex, to specify what latex command to call in that step.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>braille-mode</attr></cell><cell><p>Optional, default: "emboss".  Valid values: "emboss" or "electronic". Only used when <attr>format</attr> is "braille", to specify the mode for braille.</p></cell>
+                        <cell><attr>braille-mode</attr></cell><cell><p>Optional, default: <c>emboss</c>.  Valid values: <c>emboss</c> or <c>electronic</c>. Only used when <attr>format</attr> is <c>braille</c>, to specify the mode for braille.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>platform</attr></cell><cell><p>Optional, default: None.  Valid values: "runestone". Only valid when <attr>format</attr> is "html". Used to specify that the target will be hosted on Runestone.</p></cell>
+                        <cell><attr>platform</attr></cell><cell><p>Optional, no default. Only valid when <attr>format</attr> is <c>html</c>.  Valid values: <c>runestone</c>.  Used to specify that the target will be hosted on Runestone.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>compression</attr></cell><cell><p>Optional, default: None.  Valid values: "zip". Only valid when <attr>format</attr> is "html" (but <attr>platform</attr> is not "runestone") or "webwork". Results in output being compressed (as <c>.zip</c> file).</p></cell>
+                        <cell><attr>compression</attr></cell><cell><p>Optional, no default.  Only valid when <attr>format</attr> is <c>webwork</c> or <c>html</c> and <attr>platform</attr> is not <c>runestone</c>. Valid values: <c>zip</c>.  Results in output being compressed (as <c>.zip</c> file).</p></cell>
                     </row>
                     <row>
-                        <cell><attr>asy-method</attr></cell><cell><p>Optional, default: "server".  Valid values: "server" or "local". Overrides the <attr>asy-method</attr> attribute on <tag>project</tag>.</p></cell>
+                        <cell><attr>asy-method</attr></cell><cell><p>Optional, default: <c>server</c>.  Valid values: <c>server</c> or <c>local</c>. Overrides the <attr>asy-method</attr> attribute on <tag>project</tag>.</p></cell>
                     </row>
                 </tabular>
             </table>
