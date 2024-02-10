@@ -10247,14 +10247,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########################## -->
 
 <!-- WeBWorK HTML CSS header -->
-<!-- MathView is a math entry palette tool that could be enabled  -->
-<!-- in the host anonymous course.   It is incorporated only if   -->
-<!-- "webwork-reps" element is present                            -->
-<!-- TODO: should also depend on whether all are presented as static -->
-<!-- TODO: it is unclear if MathView should be loaded here at all; -->
 <xsl:template name="webwork">
     <xsl:if test="$b-has-webwork-reps">
-        <link href="{$webwork-domain}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
         <xsl:choose>
             <xsl:when test="$webwork-reps-version = 1">
                 <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
