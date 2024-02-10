@@ -381,9 +381,9 @@
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>Scaffold::Begin(</xsl:text>
-    <xsl:text>numbered => 1,</xsl:text>
-    <xsl:text>is_open => "correct_or_first_incorrect",</xsl:text>
-    <xsl:text>can_open => </xsl:text>
+    <xsl:text>numbered =&gt; 1,</xsl:text>
+    <xsl:text>is_open =&gt; "correct_or_first_incorrect",</xsl:text>
+    <xsl:text>can_open =&gt; </xsl:text>
     <xsl:choose>
         <xsl:when test="$webwork-task-reveal = 'all'">
             <xsl:text>always,</xsl:text>
@@ -485,7 +485,7 @@
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>Scaffold::Begin(numbered=>1);</xsl:text>
+    <xsl:text>Scaffold::Begin(numbered=&gt;1);</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
@@ -731,7 +731,7 @@
                     <xsl:with-param name="charset" select="concat($apos,'|/?.,+-_~`!@$%^&amp;*')"/>
                 </xsl:call-template>
             </xsl:variable>
-            <xsl:text>TEXT(MODES(PTX=>'',HTML=></xsl:text>
+            <xsl:text>TEXT(MODES(PTX=&gt;'',HTML=&gt;</xsl:text>
             <xsl:if test="$delimiter != $apos">
                 <xsl:text>q</xsl:text>
             </xsl:if>
@@ -2997,10 +2997,10 @@
     <xsl:value-of select="$key"/>
     <xsl:choose>
         <xsl:when test="$b-human-readable">
-            <xsl:text> => </xsl:text>
+            <xsl:text> =&gt; </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>,</xsl:text>
+            <xsl:text>=&gt;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>'</xsl:text>
