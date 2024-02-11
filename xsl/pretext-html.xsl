@@ -10246,8 +10246,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK Embedded Exercises -->
 <!-- ########################## -->
 
-<!-- WeBWorK HTML CSS header -->
-<xsl:template name="webwork">
+<!-- WeBWorK Javascript header -->
+<xsl:template name="webwork-js">
     <xsl:if test="$b-has-webwork-reps">
         <xsl:choose>
             <xsl:when test="$webwork-reps-version = 1">
@@ -10583,7 +10583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:call-template name="webwork" />
+            <xsl:call-template name="webwork-js"/>
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="syntax-highlight"/>
             <xsl:call-template name="google-search-box-js" />
@@ -10733,7 +10733,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:call-template name="webwork" />
+            <xsl:call-template name="webwork-js"/>
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
