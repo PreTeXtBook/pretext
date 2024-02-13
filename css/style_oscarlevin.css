@@ -14,13 +14,13 @@
 :root {
 /* Set colors for environments */
 
-  --assembbody: var(--bluelight, hsl(210, 90%, 80%));
+  --assembbody: var(--bluelight, hsl(210, 90%, 90%));
   --assembborder: var(--blue, hsl(210, 40%, 60%));
   --assembhead: var(--blue, hsl(210, 40%, 75%));
-  --definitionbody: var(--greenlight, hsl(180, 40%, 80%));
+  --definitionbody: var(--greenlight, hsl(180, 40%, 90%));
   --definitionborder: var(--green, hsl(180, 40%, 50%));
   --definitionhead: var(--green, hsl(180, 40%, 50%));
-  --theorembody: var(--violetlight, hsl(270, 40%, 94%));
+  --theorembody: var(--violetlight, hsl(270, 40%, 90%));
   --theoremborder: var(--violet, hsl(270, 40%, 75%));
   --theoremhead: var(--violetdark, hsl(270, 40%, 25%));
   --examplebody: var(--bluedull, hsl(240, 40%, 90%));
@@ -29,14 +29,14 @@
   --examplelikebody: var(--examplebody);
   --examplelikeborder: var(--bluedull, hsl(240, 40%, 75%));
   --examplelikehead: var(--examplelikeborder);
-  --projectbody: var(--greenlight, hsl(180, 40%, 94%));
+  --projectbody: var(--greenlight, hsl(180, 40%, 90%));
   --projectborder: var(--green, hsl(180, 40%, 75%));
   --projecthead: var(--green, hsl(180, 40%, 75%));
   --investigateborder: var(--bluerich, hsl(180, 40%, 25%));
   --goalborder: var(--violetrich, hsl(270, 90%, 25%));
-  --remarklikebody: var(--yellowlight, hsl(59, 55%, 85%));
-  --remarklikeborder: var(--yellow, hsl(59, 55%, 50%));
-  --remarklikehead: var(--yellow, hsl(59, 55%, 50%));
+  --remarklikebody: var(--yellowlight, hsl(330, 55%, 90%));
+  --remarklikeborder: var(--yellow, hsl(330, 55%, 50%));
+  --remarklikehead: var(--yellow, hsl(330, 55%, 50%));
   --computationborder: var(--orangedull, hsl(180, 40%, 75%));
 
   /* temporary workaround for setcolors.css use of assemblage */
