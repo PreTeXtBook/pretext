@@ -196,6 +196,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="labels">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="labels"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="identification">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="identification"/>
@@ -306,7 +312,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
 <xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
-<xsl:variable name="identification-rtf">
+<!-- 2024-02-08: the construction of @label from @xml:id was split  -->
+<!-- out of the "identification" pass, so is located here.  Perhaps -->
+<!-- it can/should move earlier, maybe not.                         -->
+<xsl:variable name="labels-rtf">
     <!-- pass in all elements with authored @xml:id -->
     <!-- to look for authored duplicates            -->
     <xsl:call-template name="duplication-check-xmlid">
@@ -319,7 +328,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="nodes" select="$enrichment//*[@label]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
-    <xsl:apply-templates select="$enrichment" mode="identification"/>
+    <xsl:apply-templates select="$enrichment" mode="labels"/>
+</xsl:variable>
+<xsl:variable name="labels" select="exsl:node-set($labels-rtf)"/>
+
+<xsl:variable name="identification-rtf">
+    <xsl:apply-templates select="$labels" mode="identification"/>
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
@@ -1267,6 +1281,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- without getting duplicates.  The prefixes guarantee    -->
 <!-- that the three uniqueness schemes do not overlap.      -->
 
+<!-- First, we upgrade an authored @xml:id to a @label,       -->
+<!-- WHEN there is no authored @label present.  This is a     -->
+<!-- sort of backward-compatibility maneuver.  An @xml:id     -->
+<!-- now serves only as a sort of internal name for a target  -->
+<!-- node (like a cross-reference, "xref"), while it formerly -->
+<!-- served as a string to generate various bits of output,   -->
+<!-- such as filenames in HTML output.                        -->
+
+<xsl:template match="*" mode="labels">
+    <xsl:copy>
+        <!-- duplicate all attributes -->
+        <xsl:apply-templates select="@*" mode="labels"/>
+        <!-- Case: an authored @xml:id, not an authored @label -->
+        <xsl:if test="@xml:id and not(@label)">
+            <xsl:attribute name="label">
+                <xsl:value-of select="@xml:id"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- recurse -->
+        <xsl:apply-templates select="node()" mode="labels"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- NB: this template is "in progresss".  Likely we will -->
 <!-- generate manufactured @label (recursively) for many  -->
 <!-- elements, which will cause changes in how the        -->
@@ -1277,21 +1314,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- duplicate all attributes, especially  -->
         <!-- preserve any authored @xml:id, @label -->
         <xsl:apply-templates select="@*" mode="identification"/>
-        <!-- We fix up two identifiers, we assume authored @label are rarest, -->
-        <!-- and then authored @xml:id, in order to minimize tests (rather    -->
-        <!-- than the overhead of making two variables and checking them).    -->
-        <!-- [Probably unnecessary]                                           -->
-        <xsl:choose>
-            <xsl:when test="not(@xml:id) and not(@label)"/>
-            <xsl:when test="@xml:id and not(@label)">
-                <xsl:attribute name="label">
-                    <xsl:value-of select="@xml:id"/>
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:when test="not(@xml:id) and @label"/>
-            <!-- both thoughtfully authored, nothing to do -->
-            <xsl:when test="@xml:id and @label"/>
-        </xsl:choose>
         <!-- The following is converging to final as of 2023-10-23, and will be useful    -->
         <!-- for an auto-generated @label in the absence of any other authored string.    -->
         <!--                                                                              -->
