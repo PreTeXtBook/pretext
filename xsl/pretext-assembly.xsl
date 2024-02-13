@@ -1311,35 +1311,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="identification">
     <xsl:param name="parent-id"  select="'root'"/>
     <xsl:copy>
-        <!-- duplicate all attributes, especially  -->
-        <!-- preserve any authored @xml:id, @label -->
+        <!-- duplicate all attributes -->
         <xsl:apply-templates select="@*" mode="identification"/>
-        <!-- The following is converging to final as of 2023-10-23, and will be useful    -->
-        <!-- for an auto-generated @label in the absence of any other authored string.    -->
-        <!--                                                                              -->
         <!-- * Strategy is much like @original-id but maybe needs as much care            -->
-        <!-- * Effectively an @xml:id is promoted to a @label by the first two "when"     -->
         <!-- * Element counts are used to reflect document tree structure                 -->
-        <!-- * Separators are dashes, not initial letters of element names                -->
+        <!-- * Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2).    -->
+        <!-- * Separators are therefore hyphens                                           -->
         <!-- * Colons as separators would create confusion with namespaces                -->
-        <!-- * Prefixed with a full element name aids debugging                           -->
-        <!-- * Salt (digits) added to authored values could decrease risk of collision    -->
+        <!-- * Salt added to authored values could decrease risk of collision             -->
         <xsl:variable name="new-unique-id">
             <xsl:choose>
+                <!-- A @label might be authored.  Or not authored, and   -->
+                <!-- then an authored @xml:id was promoted into a @label -->
                 <xsl:when test="@label">
                     <xsl:value-of select="@label"/>
-                    <!-- add SALT to prevent collisions -->
                 </xsl:when>
                 <!-- this mimics the upgrade of an authored xml:id to a label -->
+                <!-- NB: this never happens right now, because if there is an -->
+                <!-- @xml:id, then it was upgraded to being a @label.         -->
+                <!-- (2024-02-09) We are anticipating                         -->
+                <!--    (a) moving the upgrade, and/or                        -->
+                <!--    (b) generalizing and refactoring this operation       -->
                 <xsl:when test="@xml:id">
                     <xsl:value-of select="@xml:id"/>
-                    <!-- add SALT to prevent collisions -->
                 </xsl:when>
+                <!-- Author has not supplied any sort of identification, no -->
+                <!-- @label and no @xml:id.  So we automatically devise one -->
                 <xsl:otherwise>
                     <xsl:value-of select="$parent-id"/>
-                    <!-- With a colon, the value is not an "NCname" - a "non-colonized" name.    -->
-                    <!-- So fails as source material.  Unclear why we can use it in these trees. -->
-                    <!-- Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2). -->
                     <xsl:text>-</xsl:text>
                     <!-- Start counting from 1, easier to debug -->
                     <xsl:number value="count(preceding-sibling::*) + 1"/>
