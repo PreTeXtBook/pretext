@@ -202,6 +202,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Later, this template only *adds* an attribute to an element -->
+<!-- it is copying over to the result tree.  Here we copy text   -->
+<!-- nodes and the other attributes and the parameters are not   -->
+<!-- needed.  This is a general-purpose template, see comments   -->
+<!-- at further definition for elements.                         -->
 <xsl:template match="node()|@*" mode="id-attribute">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="id-attribute"/>
@@ -1307,6 +1312,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- This general-purpose template constructs unique strings as part   -->
+<!-- of a natural depth-first exploration of the tree.  Strings are    -->
+<!-- reset when provided by authors on elements (ideally via @label).  -->
+<!-- Otherwise the tree structure is reflected by location at each     -->
+<!-- level of the subtree rooted at the last authored string.  A bit   -->
+<!-- unsightly, and only partialy effective to unwind the numers back  -->
+<!-- to an element.  But super-fast to construct and reliably unique   -->
+<!-- (though an author could provide two strings that make a conflict, -->
+<!-- we believe).                                                      -->
+<!-- 2024-02-13: presently just a fancy replacement for the old "identification" pass -->
+
 <xsl:template match="*" mode="id-attribute">
     <xsl:param name="parent-id"  select="'root'"/>
     <xsl:param name="attr-name"  select="''"/>
@@ -1320,7 +1336,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- * Separators are therefore hyphens                                           -->
         <!-- * Colons as separators would create confusion with namespaces                -->
         <!-- * Salt added to authored values could decrease risk of collision             -->
-        <xsl:variable name="new-unique-id">
+        <xsl:variable name="new-id">
             <xsl:choose>
                 <!-- A @label might be authored.  Or not authored, and   -->
                 <!-- then an authored @xml:id was promoted into a @label -->
@@ -1347,18 +1363,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:variable>
         <xsl:attribute name="{$attr-name}">
-            <xsl:value-of select="$new-unique-id"/>
+            <xsl:value-of select="$new-id"/>
         </xsl:attribute>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="id-attribute">
-            <xsl:with-param name="parent-id" select="$new-unique-id"/>
+            <xsl:with-param name="parent-id" select="$new-id"/>
             <xsl:with-param name="attr-name" select="$attr-name"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
-<!-- There is no real putpose to put an @xml:id onto an (X)HTML -->
-<!-- element floating around as part of an interactive.         -->
+<!-- There is no real purpose to put identification onto an     -->
+<!-- (X)HTML element floating around as part of an interactive. -->
 <xsl:template match="xhtml:*" mode="id-attribute">
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
