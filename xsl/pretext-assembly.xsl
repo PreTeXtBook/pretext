@@ -202,9 +202,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="identification">
+<xsl:template match="node()|@*" mode="id-attribute">
     <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="identification"/>
+        <xsl:apply-templates select="node()|@*" mode="id-attribute"/>
     </xsl:copy>
 </xsl:template>
 
@@ -333,7 +333,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="labels" select="exsl:node-set($labels-rtf)"/>
 
 <xsl:variable name="identification-rtf">
-    <xsl:apply-templates select="$labels" mode="identification"/>
+    <xsl:apply-templates select="$labels" mode="id-attribute">
+        <!-- $parent-id defaults to 'root' in template -->
+        <xsl:with-param name="attr-name" select="'unique-id'"/>
+    </xsl:apply-templates>
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
@@ -1304,15 +1307,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- NB: this template is "in progresss".  Likely we will -->
-<!-- generate manufactured @label (recursively) for many  -->
-<!-- elements, which will cause changes in how the        -->
-<!-- "visible-id" template behaves.                       -->
-<xsl:template match="*" mode="identification">
+<xsl:template match="*" mode="id-attribute">
     <xsl:param name="parent-id"  select="'root'"/>
+    <xsl:param name="attr-name"  select="''"/>
+
     <xsl:copy>
         <!-- duplicate all attributes -->
-        <xsl:apply-templates select="@*" mode="identification"/>
+        <xsl:apply-templates select="@*" mode="id-attribute"/>
         <!-- * Strategy is much like @original-id but maybe needs as much care            -->
         <!-- * Element counts are used to reflect document tree structure                 -->
         <!-- * Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2).    -->
@@ -1345,21 +1346,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:attribute name="unique-id">
+        <xsl:attribute name="{$attr-name}">
             <xsl:value-of select="$new-unique-id"/>
         </xsl:attribute>
         <!-- recurse -->
-        <xsl:apply-templates select="node()" mode="identification">
+        <xsl:apply-templates select="node()" mode="id-attribute">
             <xsl:with-param name="parent-id" select="$new-unique-id"/>
+            <xsl:with-param name="attr-name" select="$attr-name"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
 <!-- There is no real putpose to put an @xml:id onto an (X)HTML -->
 <!-- element floating around as part of an interactive.         -->
-<xsl:template match="xhtml:*" mode="identification">
+<xsl:template match="xhtml:*" mode="id-attribute">
     <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="identification"/>
+        <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
     </xsl:copy>
 </xsl:template>
 
