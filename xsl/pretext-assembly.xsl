@@ -154,12 +154,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pass: elements, attributes, text, whitespace, comments,     -->
 <!-- everything. Various other templates will override these     -->
 <!-- templates to create a new enhanced source tree.             -->
-<xsl:template match="node()|@*" mode="original-labels">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="original-labels"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="version">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="version"/>
@@ -248,8 +242,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 
+<!-- This pass adds 100% internal identification for elements before    -->
+<!-- anything has been added or subtracted. The tree it builds is used  -->
+<!-- for constructing "View Source" knowls in HTML output as a form of  -->
+<!-- always-accurate documentation.                                     -->
 <xsl:variable name="original-labeled-rtf">
-    <xsl:apply-templates select="/" mode="original-labels"/>
+    <xsl:apply-templates select="/" mode="id-attribute">
+        <!-- $parent-id defaults to 'root' in template -->
+        <xsl:with-param name="attr-name" select="'original-id'"/>
+    </xsl:apply-templates>
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
@@ -1141,76 +1142,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="pagebreak" mode="repair"/>
 
 
-<!-- This pass adds 100% internal identification for elements before    -->
-<!-- anything has been added or subtracted. The tree it builds is used  -->
-<!-- for constructing "View Source" knowls in HTML output as a form of  -->
-<!-- always-accurate documentation.                                     -->
-<!--                                                                    -->
-<!-- See also the "assembly-id" template below as a second motivation.  -->
-<!--                                                                    -->
-<!-- Key properties of the id:                                          -->
-<!--     - built with descent through tree, so fast                     -->
-<!--     - unique (numbers give depth and breadth within subtree)       -->
-<!--     - resets on discovered @xml:id                                 -->
-<!--     - minimal computation (counting siblings)                      -->
-<!--     - somewhat insensitive to source edits far away                -->
-<xsl:template match="*" mode="original-labels">
-    <xsl:param name="parent-id" select="'root-'"/>
-
-    <xsl:copy>
-        <!-- duplicate all existing attributes, -->
-        <xsl:apply-templates select="@*" mode="original-labels"/>
-        <!-- capture the id we will use *and* build upon -->
-        <xsl:variable name="new-id">
-            <xsl:choose>
-                <!-- authored @label, so reset to this subtree -->
-                <xsl:when test="@label">
-                    <xsl:value-of select="@label"/>
-                </xsl:when>
-                <!-- or mimic later upgrade of xml:id -> label -->
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$parent-id"/>
-                    <!-- This particular letter is totally irrelevant, could    -->
-                    <!-- be a dash, it is just a separator.  We don't want the  -->
-                    <!-- numbers (next) to coalesce ( 2,13 = 21,3 = "213" ) and -->
-                    <!-- wreck uniqueness.  But a hint of an element name may   -->
-                    <!-- make some debugging activity easier.                   -->
-                    <xsl:value-of select="substring(local-name(), 1, 1)"/>
-                    <!-- Location *within its level* of the tree, while level    -->
-                    <!-- itself is implicit in the number of separator letters   -->
-                    <!-- accumulated.  This makes this string unique within      -->
-                    <!-- the subtree rooted at the most recent authored @xml:id. -->
-                    <xsl:value-of select="count(preceding-sibling::*) + 1"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <!-- Add this id as an attribute -->
-        <xsl:attribute name="original-id">
-            <xsl:value-of select="$new-id"/>
-        </xsl:attribute>
-        <!-- If we have reset to a subtree (due to an authored @xml:id) -->
-        <!-- then we want a dash after the value of @xml:id and the     -->
-        <!-- sequence of letters and numbers (but *not* as part of the  -->
-        <!-- id we just added).  We smoosh this on as a concatenation   -->
-        <!-- in recursion just below.                                   -->
-        <xsl:variable name="lead-separator">
-            <xsl:choose>
-                <xsl:when test="@xml:id or @label">
-                    <xsl:text>-</xsl:text>
-                </xsl:when>
-                <xsl:otherwise/>
-            </xsl:choose>
-        </xsl:variable>
-         <!-- Attributes done, recurse into children  -->
-         <!-- nodes, passing updated id, possible sep -->
-        <xsl:apply-templates select="node()" mode="original-labels">
-            <xsl:with-param name="parent-id" select="concat($new-id, $lead-separator)"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
 
 <!-- Some maniulations of source require stable identification *before*     -->
 <!-- we assign @unique-id values for general use in the very late           -->
@@ -1321,8 +1252,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to an element.  But super-fast to construct and reliably unique   -->
 <!-- (though an author could provide two strings that make a conflict, -->
 <!-- we believe).                                                      -->
-<!-- 2024-02-13: presently just a fancy replacement for the old "identification" pass -->
-
 <xsl:template match="*" mode="id-attribute">
     <xsl:param name="parent-id"  select="'root'"/>
     <xsl:param name="attr-name"  select="''"/>
@@ -1343,12 +1272,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@label">
                     <xsl:value-of select="@label"/>
                 </xsl:when>
-                <!-- this mimics the upgrade of an authored xml:id to a label -->
-                <!-- NB: this never happens right now, because if there is an -->
-                <!-- @xml:id, then it was upgraded to being a @label.         -->
-                <!-- (2024-02-09) We are anticipating                         -->
-                <!--    (a) moving the upgrade, and/or                        -->
-                <!--    (b) generalizing and refactoring this operation       -->
+                <!-- This mimics the upgrade of an authored xml:id to a label -->
+                <!-- NB: this might not ever happen in some passes, when an   -->
+                <!-- @xml:id value has been upgraed to a @label value in a    -->
+                <!-- prior pass, because if there was an @xml:id, then it     -->
+                <!-- was upgraded to being a @label and if this "choose" gets -->
+                <!-- here, then the next test is false.                       -->
                 <xsl:when test="@xml:id">
                     <xsl:value-of select="@xml:id"/>
                 </xsl:when>
