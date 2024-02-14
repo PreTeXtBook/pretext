@@ -95,7 +95,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Part 1: drop the clickable for the knowl via placement  -->
         <!-- of the application of the "view-source-knowl" template -->
         <div>
-            <a data-knowl="{$filename}">
+            <!-- A little weak on accessibility        -->
+            <!-- No URL in href, always a modern knowl -->
+            <!-- No localization of Reveal/Close text  -->
+            <a href="" class="xref" data-knowl="{$filename}" data-reveal-label="Open" data-close-label="Close">
                 <!-- TODO: internationalize me? -->
                 <xsl:text>View Source</xsl:text>
             </a>
