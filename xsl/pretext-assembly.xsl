@@ -1238,6 +1238,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="@xml:id"/>
             </xsl:attribute>
         </xsl:if>
+        <!-- Case: a @label provided in source by author                 -->
+        <!-- It is helpful to distinguish between an authored @label and -->
+        <!-- one that this template creates by copying over a @xml:id.   -->
+        <!-- So we drop an (empty) attribute as a boolean indicator.     -->
+        <!-- This form will simplify checks later at "run-time".         -->
+        <xsl:if test="@label">
+            <xsl:attribute name="authored-label"/>
+        </xsl:if>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="labels"/>
     </xsl:copy>
