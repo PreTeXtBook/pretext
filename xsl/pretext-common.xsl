@@ -3810,13 +3810,44 @@ Book (with parts), "section" at level 3
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
 <xsl:template match="exercise|program|datafile|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id">
-    <!-- Once we generate labels, we can warn an author that they should   -->
-    <!-- be committing to a long-term @label value for database entries.   -->
-    <!-- We do this by checking for the $gen-id-sep string being present   -->
-    <!-- in the value of @label.  At this time, consider making a -common  -->
-    <!-- function that will examine both an @xml:id value or a @label for  -->
-    <!-- an "authored" pproperty, this could be set in the assembly phase. -->
-
+    <!-- With no @xml:id and no @label we realize the author has not given    -->
+    <!-- any thought to a (semi-)peersistent identifire for the Runestone     -->
+    <!-- database.  So we call that out as an error.  And we do not even      -->
+    <!-- attempt to fallback to an automatically generated string, which      -->
+    <!-- would be malleable over time and editing.                            -->
+    <!-- As part of backwards-compatibility, we copy old @xml:id values into  -->
+    <!-- fresh @label.  But have an internal  @authored-label attribute whose -->
+    <!-- absence alerts us to the copying, which is now not best practice.    -->
+    <xsl:choose>
+        <xsl:when test="not(@xml:id) and not(@authored-label)">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>" element&#xa;</xsl:text>
+                <xsl:text>has been encountered without a @label attribute and without a @xml:id attribute.&#xa;</xsl:text>
+                <xsl:text>This will cause this Runestone component to fail to perform and there will be no&#xa;</xsl:text>
+                <xsl:text>identification of this component in the Runestone database.  You must add a&#xa;</xsl:text>
+                <xsl:text>@label attribute with a unique value.  (It is not necessary to add a @xml:id, &#xa;</xsl:text>
+                <xsl:text>it is consulted as part of a backward-compatibility arrangement you do not need).&#xa;</xsl:text>
+                <xsl:text>[You may get more than one message about this instance.]&#xa;</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+        <xsl:when test="not(@authored-label)">
+            <xsl:message>
+                <xsl:text>PTX:WARNING:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>" element&#xa;</xsl:text>
+                <xsl:text>has been encountered without a @label attribute.  For reasons of backward-compatibility &#xa;</xsl:text>
+                <xsl:text>we have used the value of an @xml:id.  This may not be what you want, and as of 2024-02-15 &#xa;</xsl:text>
+                <xsl:text>is no longer best practice.  You can copy the @xml:id value exactly into a new @label &#xa;</xsl:text>
+                <xsl:text>attribute and this warning will stop AND your project's entries in any Runestone database &#xa;</xsl:text>
+                <xsl:text>will be preserved and function exactly as before.&#xa;</xsl:text>
+                <xsl:text>[You may get more than one message about this instance.]&#xa;</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+    </xsl:choose>
     <!-- Prefix just for RS server builds, in order that the database -->
     <!-- of exercises gets a globally unique identifier.              -->
     <xsl:if test="$b-host-runestone">
@@ -3825,6 +3856,8 @@ Book (with parts), "section" at level 3
         <xsl:value-of select="$docinfo/document-id/@edition"/>
         <xsl:text>_</xsl:text>
     </xsl:if>
+    <!-- We require a @label attribute, but allow it to be -->
+    <!-- the result of an automatic copy from an @xml:id.  -->
     <xsl:value-of select="@label"/>
 </xsl:template>
 
