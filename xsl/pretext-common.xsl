@@ -9813,16 +9813,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
             </xsl:message>
         </xsl:if>
-        <xsl:if test="contains(., $gen-id-sep)">
-            <xsl:message>
-                <xsl:text>PTX:ERROR:      The character sequence "</xsl:text>
-                <xsl:value-of select="$gen-id-sep"/>
-                <xsl:text>" in the authored @xmlid "</xsl:text>
-                <xsl:value-of select="." />
-                <xsl:text>" is reserved for internal use by PreTeXt.&#xa;</xsl:text>
-                <xsl:text>                Please edit your source to use a new value for this @xml:id.  Until then, results will be unpredictable.</xsl:text>
-            </xsl:message>
-        </xsl:if>
         <!-- unique HTML id's in use for PreTeXt-provided UI -->
         <xsl:if test="(. = 'masthead') or
                       (. = 'content') or
