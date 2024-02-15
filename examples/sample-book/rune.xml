@@ -172,7 +172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
             </statement>
-            <program xml:id="python-summation" interactive='activecode' language="python" label="pyton-sum-total" include="python-statistics">
+            <program xml:id="python-summation" interactive='activecode' language="python" label="python-sum-total" include="python-statistics">
                 <input>
                 loan_total = 0
                 for loan in loan_amount:
@@ -201,7 +201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
             </statement>
-            <program xml:id="python-summation-two" interactive='activecode' language="python" label="pyton-sum-total-two" include=" python-hello-world python-statistics ">
+            <program xml:id="python-summation-two" interactive='activecode' language="python" label="python-sum-total-two" include=" python-hello-world python-statistics ">
                 <input>
                 loan_total = 0
                 for loan in loan_amount:
