@@ -8567,7 +8567,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
                     </statement>
-                    <program interactive="activecode" language="python">
+                    <program label="partial-program-two" interactive="activecode" language="python">
                         <input>
                         for i in range(10):
                             print(i)
