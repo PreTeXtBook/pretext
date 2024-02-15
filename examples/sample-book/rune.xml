@@ -423,7 +423,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
             </statement>
-            <program interactive="activecode" language="python">
+            <program label="activity-program" interactive="activecode" language="python">
                 <input>
                 for i in range(10):
                     print(i)
@@ -2235,7 +2235,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The next simple <tag>exercise</tag> will be a <q>short answer</q> question on a capable interactive platform since we have included a <tag>response</tag> element.</p>
 
-            <exercise>
+            <exercise label="interactive-short-answer">
                 <title>Inline Exercise in a Subsection</title>
 
                 <statement>
@@ -3364,7 +3364,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p>Run the following program and observe the information provided at each step.</p>
                     </statement>
-                    <program interactive="activecode" language="python">
+                    <program label="python-active-code-first" interactive="activecode" language="python">
                         <input>
                         for i in range(10):
                             print(i)
@@ -3431,7 +3431,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p>Run the following program and observe the information provided at each step.</p>
                     </statement>
-                    <program interactive="activecode" language="python">
+                    <program label="python-active-code-second" interactive="activecode" language="python">
                         <input>
                         for i in range(10):
                             print(i)
