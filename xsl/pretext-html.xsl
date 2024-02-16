@@ -1380,7 +1380,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (replaces index/[main,sub,sub]).                    -->
     <!-- Start attribute is actual end of a "page            -->
     <!-- range", goodies at @finish.                         -->
-    <!-- "commentary" is elective, so process, or not        -->
     <!-- NB: latter half of @select is deprecated usage      -->
     <!-- new style is index/index-list for the division,     -->
     <!-- we don't want that picked up in the deprecated      -->
@@ -1401,7 +1400,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- sorting, and really only used to be sure a "see"    -->
     <!-- *follows* the page locator.                         -->
     <xsl:variable name="index-items">
-        <xsl:for-each select="$document-root//idx[not(@start) and (not(ancestor::commentary) or $b-commentary)] | //index[not(index-list) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
+        <xsl:for-each select="$document-root//idx[not(@start)] | //index[not(index-list) and not(@start)]">
             <index>
                 <!-- identify content of primary sort key      -->
                 <!-- this follows the logic of creating key[1] -->
@@ -1917,17 +1916,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
 </xsl:template>
-<!-- As an elective enhancement, we only make a knowl of -->
-<!-- the commentary if they are being displayed anyway,  -->
-<!-- since we may not want the content to bleed through  -->
-<!-- into a knowl posted publicly                        -->
 <!-- TEMPORARY: var/li is a WeBWorK popup or radio button, -->
 <!-- which is not a cross-reference target (it originates  -->
 <!-- in PG-code), and an error results when the heading in -->
 <!-- the knowl content tries to compute a number           -->
-<xsl:template match="commentary" mode="xref-as-knowl">
-    <xsl:value-of select="$b-commentary" />
-</xsl:template>
 <xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:param name="link" select="/.." />
     <xsl:choose>
@@ -2578,8 +2570,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Title only, paragraphs, commentary   -->
-<!-- No title, then nothing happens       -->
+<!-- Title only, paragraphs         -->
+<!-- No title, then nothing happens -->
 <!-- TODO: titles will be mandatory sometime -->
 <xsl:template match="*" mode="heading-title-paragraphs">
     <xsl:if test="title/*|title/text()">
@@ -2775,7 +2767,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (6) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
+<!-- Commentary -->
+<!-- 2024-02-16: deprecated, and not expected to survive      -->
+<!-- the assembly phase but we kill it here explicity, rather -->
+<!-- than having a default template process the contents.     -->
+<!-- (This should be expanded as a new implementation.)       -->
+<xsl:template match="commentary"/>
+
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -3482,46 +3481,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="paragraphs" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates>
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- Commentary -->
-<!-- Like "paragraphs" but electively not displayed -->
-
-<!-- Not born-hidden by choice -->
-<xsl:template match="commentary" mode="is-hidden">
-    <xsl:text>false</xsl:text>
-</xsl:template>
-
-<!-- Overall enclosing element -->
-<xsl:template match="commentary" mode="body-element">
-    <xsl:text>article</xsl:text>
-</xsl:template>
-
-<!-- And its CSS class -->
-<xsl:template match="commentary" mode="body-css-class">
-    <xsl:value-of select="local-name()"/>
-</xsl:template>
-
-<!-- When born use this heading -->
-<xsl:template match="commentary" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
-</xsl:template>
-
-<!-- Heading for interior of xref-knowl content -->
-<xsl:template match="commentary" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
-</xsl:template>
-
-<!-- Primary content of generic "body" template -->
-<!-- Pass along b-original flag                 -->
-<!-- Simply process contents, we restrict here  -->
-<xsl:template match="commentary" mode="wrapped-content">
-    <xsl:param name="b-original" select="true()" />
-    <!-- coordinate select with schema's BlockStatementNoCaption -->
-    <!-- Note that index items are dealt with elsewhere          -->
-    <xsl:apply-templates select="idx|p|blockquote|pre|aside|sidebyside|sbsgroup">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5233,7 +5192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 
@@ -5243,51 +5202,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:if>
-    <!-- A "commentary" element is a top-level block,    -->
-    <!-- unlike a subsidiary element like a "hint",      -->
-    <!-- which must be elected to be visible, so this is -->
-    <!-- a bit of an ad-hock hack to handle this case    -->
-    <!-- No prelude, postlude, PROOF-LIKE for commentary -->
-    <xsl:if test="not(self::commentary) or $b-commentary">
-        <xsl:variable name="body-elt">
-            <xsl:apply-templates select="." mode="body-element" />
-        </xsl:variable>
-        <xsl:element name="{$body-elt}">
-            <xsl:attribute name="class">
-                <xsl:apply-templates select="." mode="body-css-class" />
-            </xsl:attribute>
-            <!-- Label original, but not if embedded            -->
-            <!-- Then id goes onto the knowl text, so locatable -->
-            <xsl:if test="$b-original and not($block-type = 'hidden')">
-                <xsl:apply-templates select="." mode="html-id-attribute"/>
-                <xsl:apply-templates select="." mode="permid-attribute"/>
-            </xsl:if>
-            <!-- If visible, heading interior to article -->
-            <xsl:if test="$block-type = 'visible'">
-                <xsl:apply-templates select="." mode="heading-birth" />
-            </xsl:if>
-            <!-- If xref-knowl, heading interior to article -->
-            <xsl:if test="$block-type = 'xref'">
-                <xsl:apply-templates select="." mode="heading-xref-knowl" />
-            </xsl:if>
-            <!-- After the heading, and before the actual guts, we      -->
-            <!-- sometimes annotate with a knowl showing the source     -->
-            <!-- of the current element.  This calls a stub, unless     -->
-            <!-- a separate stylesheet is used to define the template,  -->
-            <!-- and the method is defined there.  An "fn" necessarily  -->
-            <!-- comes through here since it is realized as a knowl,    -->
-            <!-- but it is a silly thing to annotate.  We skip it       -->
-            <!-- promptly on the receiving end, instead of adding       -->
-            <!-- clutter here.                                          -->
-            <xsl:apply-templates select="." mode="view-source-knowl"/>
-            <!-- Then actual content, respecting b-original flag  -->
-            <!-- Pass $block-type for Sage cells to know environs -->
-            <xsl:apply-templates select="." mode="wrapped-content">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="block-type" select="$block-type" />
-            </xsl:apply-templates>
-        </xsl:element>
-    </xsl:if>
+    <xsl:variable name="body-elt">
+        <xsl:apply-templates select="." mode="body-element" />
+    </xsl:variable>
+    <xsl:element name="{$body-elt}">
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="body-css-class" />
+        </xsl:attribute>
+        <!-- Label original, but not if embedded            -->
+        <!-- Then id goes onto the knowl text, so locatable -->
+        <xsl:if test="$b-original and not($block-type = 'hidden')">
+            <xsl:apply-templates select="." mode="html-id-attribute"/>
+            <xsl:apply-templates select="." mode="permid-attribute"/>
+        </xsl:if>
+        <!-- If visible, heading interior to article -->
+        <xsl:if test="$block-type = 'visible'">
+            <xsl:apply-templates select="." mode="heading-birth" />
+        </xsl:if>
+        <!-- If xref-knowl, heading interior to article -->
+        <xsl:if test="$block-type = 'xref'">
+            <xsl:apply-templates select="." mode="heading-xref-knowl" />
+        </xsl:if>
+        <!-- After the heading, and before the actual guts, we      -->
+        <!-- sometimes annotate with a knowl showing the source     -->
+        <!-- of the current element.  This calls a stub, unless     -->
+        <!-- a separate stylesheet is used to define the template,  -->
+        <!-- and the method is defined there.  An "fn" necessarily  -->
+        <!-- comes through here since it is realized as a knowl,    -->
+        <!-- but it is a silly thing to annotate.  We skip it       -->
+        <!-- promptly on the receiving end, instead of adding       -->
+        <!-- clutter here.                                          -->
+        <xsl:apply-templates select="." mode="view-source-knowl"/>
+        <!-- Then actual content, respecting b-original flag  -->
+        <!-- Pass $block-type for Sage cells to know environs -->
+        <xsl:apply-templates select="." mode="wrapped-content">
+            <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="block-type" select="$block-type" />
+        </xsl:apply-templates>
+    </xsl:element>
     <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
     <!-- parent theorem, but as a sibling, following.  It might  -->
     <!-- be a hidden knowl, it might just be the PROOF-LIKE      -->
