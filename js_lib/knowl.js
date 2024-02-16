@@ -1,18 +1,113 @@
-// Code for link based knowls
+// Code controlling behavior of xref knowls and born hidden knowls
 
 // Assumes this file is loaded as part of initial page
 window.addEventListener("load", (event) => {
-  addLinkKnowls(document);
+  addKnowls(document);
 });
 
-function addLinkKnowls(target) {
+function addKnowls(target) {
   const xrefs = target.querySelectorAll("[data-knowl]");
   for (const xref of xrefs) {
     LinkKnowl.initializeXrefKnowl(xref);
   }
+
+  const bornHiddens = target.querySelectorAll(".born-hidden-knowl");
+  for (const bhk of bornHiddens) {
+    const summary = bhk.querySelector(":scope > summary");
+    const contents = bhk.querySelector(":scope > div");
+    new SlideRevealer(summary, contents, bhk);
+  }
+
 }
 
-// A LinkKnowl managages a single link based knowl
+// Used to animate both types of knowls
+class SlideRevealer {
+  static STATE = Object.freeze({
+    INACTIVE: 0,
+    CLOSING: 1,
+    EXPANDING: 2
+  });
+
+  // triggerElement is the element clicked to open/close
+  // contentElement is the element that will hide/reveal
+  // animatedElement is the element that will grow/shrink as contentElement is modified
+  //    may be the same as contentElement or a parent of it
+  constructor(triggerElement, contentElement, animatedElement) {
+    this.triggerElement = triggerElement;
+    this.contentElement = contentElement;
+    this.animatedElement = animatedElement;
+
+    // mid animation state tracking
+    this.animation = null;
+    this.animationState = SlideRevealer.STATE.INACTIVE;
+
+    this.triggerElement.addEventListener('click', (e) => this.onClick(e));
+  }
+
+  onClick(e) {
+    // Stop default behavior from the browser
+    if (e) e.preventDefault();
+
+    // Add an overflow on the <details> to avoid content overflowing
+    this.animatedElement.style.overflow = 'hidden';
+
+    // Check if the element is being closed or is already closed
+    if (this.animationState === SlideRevealer.STATE.CLOSING || !this.animatedElement.open) {
+      // Force the [open] attribute (needed if animated element is details)
+      this.animatedElement.open = true;
+      this.contentElement.style.display = '';
+      // Wait for the next frame to call the toggle function
+      window.requestAnimationFrame(() => this.toggle(true));
+    } else if (this.animationState === SlideRevealer.STATE.EXPANDING || this.animatedElement.open) {
+      this.toggle(false);
+    }
+  }
+
+  toggle(expanding) {
+    let closedHeight = 0;
+    if (this.animatedElement.contains(this.triggerElement))
+      closedHeight = this.triggerElement.offsetHeight;
+    const fullHeight = closedHeight + this.contentElement.offsetHeight;
+
+    const startHeight = `${expanding ? closedHeight : fullHeight}px`;
+    const endHeight = `${expanding ? fullHeight : closedHeight}px`;
+
+    // Cancel any existing animation
+    if (this.animation) {
+      this.animation.cancel();
+    }
+
+    // Start animation
+    this.animationState = expanding ? SlideRevealer.STATE.EXPANDING : SlideRevealer.STATE.CLOSING;
+    this.animation = this.animatedElement.animate({
+      height: [startHeight, endHeight]
+    }, {
+      duration: 400,
+      easing: 'ease'
+    });
+
+    this.animation.onfinish = () => { this.onAnimationFinish(expanding); };
+    this.animation.oncancel = () => { this.animationState = SlideRevealer.STATE.INACTIVE; };
+  }
+
+  onAnimationFinish(isOpen) {
+    // Clear animation state
+    this.animation = null;
+    this.animationState = SlideRevealer.STATE.INACTIVE;
+
+    // Make sure animated element has open (needed for details)
+    this.animatedElement.open = isOpen;
+
+    // Clear styles used in animation
+    this.animatedElement.style.height = this.animatedElement.style.overflow = '';
+    if (!isOpen)
+      this.contentElement.style.display = 'none';
+  }
+}
+
+
+
+// A LinkKnowl manages a single link based knowl
 class LinkKnowl {
   // Used to uniquely identify XrefKnowls
   static xrefCount = 0;
@@ -62,12 +157,11 @@ class LinkKnowl {
   // Assumes output is already created
   toggle() {
     this.linkElement.classList.toggle("active");
-    this.updateLabels(this.linkElement.classList.contains("active"));
-
-    this.outputElement.classList.toggle("knowl-output--hide");
+    const isActive = this.linkElement.classList.contains("active");
+    this.updateLabels(isActive);
 
     // Scroll to reveal if needed
-    if (!this.outputElement.classList.contains("knowl-output--hide")) {
+    if (isActive) {
       const h = this.outputElement.getBoundingClientRect().height;
       if (h > window.innerHeight) {
         // knowl is taller than window, scroll to top of knowl
@@ -99,7 +193,7 @@ class LinkKnowl {
     const outputContentsId = "knowl-output-" + this.uid;
     const linkTarget = this.linkElement.getAttribute("data-knowl");
 
-    const placeholderText = `<div class='knowl-output knowl-output--hide' id='${outputId}' aria-live='polite'>`
+    const placeholderText = `<div class='knowl-output' style='display:none;' id='${outputId}' aria-live='polite'>`
       + `<div class='knowl'>`
       + `<div class='knowl-content' id='${outputContentsId}'>`
       + `Loading '${linkTarget}'`
@@ -153,10 +247,15 @@ class LinkKnowl {
     } else {
       this.createOutputElement();
 
+      const slideHandler = new SlideRevealer(this.linkElement, this.outputElement, this.outputElement);
+      //slideHandler is now responsible for handling clicks to this element
+      this.linkElement.addEventListener('click', slideHandler);
+
       // Wait up to a half second in hopes of avoiding double content change
       // then render to show loading message
       let loadingTimeout = setTimeout(() => {
         loadingTimeout = null;
+        slideHandler.onClick(); //fake initial click
         this.toggle();
       }, 500);
 
@@ -171,10 +270,11 @@ class LinkKnowl {
           }
           // Now give code that follows .1 seconds to render before making visible
           setTimeout(() => {
+            slideHandler.onClick(); //fake initial click
             this.toggle();
           }, 100);
 
-          // check embeded runestone interactives by loading content into a temp container
+          // check embedded runestone interactives by loading content into a temp container
           // we want to not render any that already are on page. Dupe IDs probably bad
           const runestoneElements = tempContainer.querySelectorAll(".ptx-runestone-container");
           [...runestoneElements].forEach((e) => {
@@ -196,7 +296,7 @@ class LinkKnowl {
 
           // render any knowls and mathjax in the knowl
           MathJax.typesetPromise([target]);
-          addLinkKnowls(target);
+          addKnowls(target);
 
           // force any scripts (e.g. sagecell) to execute by evaling them
           [...target.getElementsByTagName("script")].forEach((s) => {
