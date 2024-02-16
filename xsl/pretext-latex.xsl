@@ -2326,17 +2326,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$miscellaneous-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
-    <!-- Commentary -->
-    <!-- "commentary" is elective, with global switch set at startup -->
-    <xsl:if test="$b-commentary">
-        <xsl:variable name="instance" select="($document-root//commentary)[1]"/>
-        <xsl:if test="$instance">
-            <xsl:text>%%&#xa;</xsl:text>
-            <xsl:text>%% tcolorbox, with style, for elected commentary&#xa;</xsl:text>
-            <xsl:text>%%&#xa;</xsl:text>
-            <xsl:apply-templates select="$instance" mode="environment"/>
-        </xsl:if>
-    </xsl:if>
 </xsl:template>
 
 <!-- Text Alignment, Right and Bottom -->
@@ -2767,20 +2756,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="second-trip" select="true()"/>
         </xsl:apply-templates>
     </xsl:if>
-</xsl:template>
-
-<!-- "commentary" -->
-<!-- Body:  \begin{commentary}{title}      -->
-<!-- Title comes with punctuation, always. -->
-<!-- 2023-09-05: parbox=false  should be "fixed" but   -->
-<!-- this element is in mid-deprecation, so we'll just -->
-<!-- leave it as-is.                                   -->
-<xsl:template match="commentary" mode="environment">
-    <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
-    <xsl:text>\tcbset{ commentarystyle/.style={</xsl:text>
-    <xsl:apply-templates select="." mode="tcb-style" />
-    <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{commentary}[3]{title={#2}, phantomlabel={#3}, breakable, parbox=false, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- PROOF-LIKE (regular, major) -->
@@ -3263,16 +3238,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="self::conclusion">
         <xsl:text>before skip=3ex</xsl:text>
     </xsl:if>
-</xsl:template>
-
-<!-- "commentary" -->
-<!-- "Greg's L" with tcolorbox and tikz code. The "enhanced" -->
-<!-- skin is necessary for the predefined "frame.*" nodes    -->
-<!-- The 5% horizontal leg is a "partway modifier", from     -->
-<!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
-<xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>blockspacingstyle, skin=enhanced,fonttitle=\blocktitlefont\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
-    <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
 <!-- PROOF-LIKE -->
@@ -5345,21 +5310,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Commentary -->
-<!-- For an enhanced edition, like an Instructor's Manual. -->
-<!-- Must be elected by a publisher, based on the switch.  -->
-<xsl:template match="commentary">
-    <xsl:if test="$b-commentary">
-        <!-- environment, title, label string, newline -->
-        <xsl:text>\begin{commentary}</xsl:text>
-        <xsl:apply-templates select="." mode="block-options"/>
-        <xsl:text>%&#xa;</xsl:text>
-        <!-- coordinate select with schema's BlockStatementNoCaption       -->
-        <!-- Note sufficiency and necessity of processing index items here -->
-        <xsl:apply-templates select="idx|p|blockquote|pre|aside|sidebyside|sbsgroup" />
-        <xsl:text>\end{commentary}&#xa;</xsl:text>
-        <xsl:apply-templates select="." mode="pop-footnote-text"/>
-    </xsl:if>
-</xsl:template>
+<!-- 2024-02-16: deprecated, and not expected to survive      -->
+<!-- the assembly phase but we kill it here explicity, rather -->
+<!-- than having a default template process the contents.     -->
+<!-- (This should be expanded as a new implementation.)       -->
+<xsl:template match="commentary"/>
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 
@@ -5382,7 +5337,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  the "unique-id", which suffices for                 -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|assemblage" mode="block-options">
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}</xsl:text>
@@ -5604,9 +5559,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############### -->
 
 <!-- Exercise Group -->
-<!-- We interrupt a run of exercises with short commentary, -->
+<!-- We interrupt a run of exercises with short discussion, -->
 <!-- typically instructions for a list of similar exercises -->
-<!-- Commentary goes in an introduction and/or conclusion   -->
+<!-- discussion goes in an introduction and/or conclusion   -->
 <!-- When we point to these, we use custom hypertarget, etc -->
 <xsl:template match="exercisegroup">
     <!-- Determine the number of columns -->
@@ -6810,9 +6765,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
-<!-- Note: a commentary may be present in PTX, but not in LaTeX         -->
 <xsl:template match="p">
-    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::commentary or self::sidebyside]">
+    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
     <!-- we can't cross-reference here without an @xml:id -->
@@ -10708,7 +10662,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- present as part of processing  biblio/note.             -->
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl)] and not(ancestor::note/parent::biblio)">
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl)] and not(ancestor::note/parent::biblio)">
             <!-- a footnote in the text of a caption will migrate to -->
             <!-- the auxiliary file for use in the "list of figures" -->
             <!-- and there is some confusion of braces and the use   -->
@@ -10746,8 +10700,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
 <!-- "wait" and pop all interior footnotes later.                  -->
 <!-- NB: these templates could be improved with an entity          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|commentary|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise|dl/li" mode="pop-footnote-text">
-    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::commentary or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl)]) = 0">
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise|dl/li" mode="pop-footnote-text">
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl)]) = 0">
         <xsl:for-each select=".//fn">
             <xsl:text>\footnotetext[</xsl:text>
             <xsl:apply-templates select="." mode="serial-number"/>
