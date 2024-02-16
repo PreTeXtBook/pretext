@@ -3819,7 +3819,7 @@ Book (with parts), "section" at level 3
     <!-- fresh @label.  But have an internal  @authored-label attribute whose -->
     <!-- absence alerts us to the copying, which is now not best practice.    -->
     <xsl:choose>
-        <xsl:when test="not(@xml:id) and not(@authored-label)">
+        <xsl:when test="$b-host-runestone and not(@xml:id) and not(@authored-label)">
             <xsl:message>
                 <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
@@ -3833,7 +3833,7 @@ Book (with parts), "section" at level 3
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
-        <xsl:when test="not(@authored-label)">
+        <xsl:when test="$b-host-runestone and not(@authored-label)">
             <xsl:message>
                 <xsl:text>PTX:WARNING:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
