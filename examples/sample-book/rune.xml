@@ -389,7 +389,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>In interactive formats, try creating and running a Python program below.  Use CodeLens to step through the program.</p>
             </statement>
             <program interactive="activecode" language="python"/>
-            <hint>We didn't really ask you to do anything.</hint>
+            <hint><p>We didn't really ask you to do anything.</p></hint>
         </exercise>
 
         <exercise label="coding-exercise-partial-one">
@@ -429,7 +429,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     print(i)
                 </input>
             </program>
-            <answer>We're still not really sure.</answer>
+            <answer><p>We're still not really sure.</p></answer>
         </activity>
 
         <exercise>
@@ -445,7 +445,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </input>
                 </program>
             </statement>
-            <solution>We're not really sure. Still.</solution>
+            <solution><p>We're not really sure. Still.</p></solution>
         </exercise>
 
         <exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
@@ -2529,7 +2529,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </p>
                 </block>
             </blocks>
-            <hint>Dorothy will not be much help with this proof.</hint>
+            <hint><p>Dorothy will not be much help with this proof.</p></hint>
         </exercise>
 
         <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
@@ -2650,7 +2650,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Thus <m>n\equiv 0\mod 2</m>.</p>
                 </block>
             </blocks>
-            <hint>Dorothy will not be much help with this proof.</hint>
+            <hint><p>Dorothy will not be much help with this proof.</p></hint>
         </exercise>
 
         <exercise label="prime-number-program-numbered-right" language="python" adaptive="yes" indentation="hide">
@@ -3370,7 +3370,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             print(i)
                         </input>
                     </program>
-                    <answer>We're still not really sure.</answer>
+                    <answer><p>We're still not really sure.</p></answer>
                 </task>
             </task>
 
@@ -3437,7 +3437,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             print(i)
                         </input>
                     </program>
-                    <answer>We're still not really sure.</answer>
+                    <answer><p>We're still not really sure.</p></answer>
                 </task>
             </task>
         </exploration>
@@ -3757,4 +3757,3 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </section>
 
 </chapter>
-

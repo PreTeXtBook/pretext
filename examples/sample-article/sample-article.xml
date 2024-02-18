@@ -80,7 +80,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--
         Extra packages, package options, and package settings for latex-based images.
         Inserted in the preamble for LaTeX output.
-        Inserted in the preamble to each standalone latex-based image for HMTL SVG output.
+        Inserted in the preamble to each standalone latex-based image for HTML SVG output.
         -->
         <latex-image-preamble>
         \usepackage{pgfplots}               % loads tikz package
@@ -503,7 +503,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </sage>
 
             <!-- https://github.com/sagemath/sagecell/blob/master/contrib/vm/container_manager.py#L260 -->
-            <p>The Sage Cell server importants a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
+            <p>The Sage Cell server imports a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
 
             <sage language="r">
                 <input>
@@ -523,7 +523,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </input>
             </sage>
 
-            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitioons from other cells.</p>
+            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitions from other cells.</p>
 
             <sage type="practice" />
 
@@ -1546,7 +1546,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
 
-                <p>This paragraph is intended to make a <tag>fillin</tag> appear right at the start of <fillin chacaters="20"/> the second line  in print and then the next paragraph has nothing but a <tag>fillin</tag>. Both are for testing purposes.</p>
+                <p>This paragraph is intended to make a <tag>fillin</tag> appear right at the start of <fillin characters="20"/> the second line  in print and then the next paragraph has nothing but a <tag>fillin</tag>. Both are for testing purposes.</p>
 
                 <p><fillin characters="5"/></p>
 
@@ -8250,7 +8250,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>True/False</title>
 
-                <p>A True/False question.</p>
+                <introduction>
+                  <p>A True/False question.</p>
+                </introduction>
 
                 <exercise label="vector-space-dimension">
                     <title>True/False</title>
@@ -8270,7 +8272,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Multiple-Choice</title>
 
-                <p>Multiple-Choice problem</p>
+                <introduction>
+                  <p>Multiple-Choice problem</p>
+                </introduction>
 
                 <exercise label="multiple-choice-not-randomized">
                     <title>Multiple-Choice, Not Randomized, One Answer</title>
@@ -8316,7 +8320,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Parsons Problem, Math Proof</title>
 
-                <p>With some MathJax.</p>
+                <introduction>
+                  <p>With some MathJax.</p>
+                </introduction>
 
                 <exercise label="number-theory-proof" adaptive="yes">
                     <title>Parsons Problem, Mathematical Proof</title>
@@ -8344,7 +8350,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>Thus <m>n\equiv 0\mod 2</m>.</p>
                         </block>
                     </blocks>
-                    <hint>Dorothy will not be much help with this proof.</hint>
+                    <hint>
+                      <p>Dorothy will not be much help with this proof.</p>
+                    </hint>
                 </exercise>
 
             </exercises>
@@ -8352,7 +8360,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Parsons Problem, Code</title>
 
-                <p>Programming Parsons problem, requiring indentation.</p>
+                <introduction>
+                  <p>Programming Parsons problem, requiring indentation.</p>
+                </introduction>
 
                 <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
                     <title>Parsons Problem, Programming</title>
@@ -8403,7 +8413,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Matching</title>
 
-                <p>Events and dates.</p>
+                <introduction>
+                  <p>Events and dates.</p>
+                </introduction>
 
                 <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
                 <exercise label="matching-dates">
@@ -8439,7 +8451,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Clickable Area</title>
 
-                <p>Words, not code.</p>
+                <introduction>
+                  <p>Words, not code.</p>
+                </introduction>
 
                 <exercise label="clickable-text">
                     <title>Clickable Areas, <q>Regular</q> Text</title>
@@ -8461,7 +8475,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Old-Style Fillin-In</title>
 
-                <p>Do not use this as a model for new exercises.  Just for backwards-compatibility.</p>
+                <introduction>
+                  <p>Do not use this as a model for new exercises.  Just for backwards-compatibility.</p>
+                </introduction>
 
                 <exercise label="fillin-string-integer">
                     <title>Fill-In, String and Number Answers</title>
@@ -8529,7 +8545,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>ActiveCode</title>
 
-                <p>ActiveCode, Python program.</p>
+                <introduction>
+                  <p>ActiveCode, Python program.</p>
+                </introduction>
 
                 <listing xml:id="program-activecode-python">
                     <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
@@ -8544,7 +8562,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>CodeLens</title>
 
-                <p>A steppable Python program.</p>
+                <introduction>
+                  <p>A steppable Python program.</p>
+                </introduction>
 
                 <listing xml:id="program-codelens-python">
                     <caption>A Python program, stepable with CodeLens</caption>
@@ -8559,7 +8579,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Activity with An ActiveCode</title>
 
-                <p>Something to do with ActiveCode program.</p>
+                <introduction>
+                  <p>Something to do with ActiveCode program.</p>
+                </introduction>
 
                 <activity xml:id="coding-exercise-partial-two">
                     <title>Activity Coding Exercise</title>
@@ -8573,7 +8595,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             print(i)
                         </input>
                     </program>
-                    <answer>We're still not really sure.</answer>
+                    <answer><p>We're still not really sure.</p></answer>
                 </activity>
             </exercises>
 
@@ -13568,16 +13590,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 Find the values of the following expressions:</p>
                             </introduction>
                             <task workspace="1in">
-                              <m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m>
+                              <p><m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m></p>
                             </task>
                             <task workspace="1.0in">
-                              <m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m>
+                              <p><m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m></p>
                             </task>
                             <task workspace="1in">
-                              <m>\lVert{\vec v}_1\rVert = <fillin/></m>
+                              <p><m>\lVert{\vec v}_1\rVert = <fillin/></m></p>
                             </task>
                             <task workspace="1in">
-                              <m>\lVert{\vec v}_4\rVert = <fillin/></m>
+                              <p><m>\lVert{\vec v}_4\rVert = <fillin/></m></p>
                             </task>
                             <task workspace="1in">
                               <p>Are any of these vectors perpendicular to each other? <fillin/></p>
