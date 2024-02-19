@@ -683,12 +683,14 @@
             Paragraph =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     TextParagraph
                 }
             ParagraphLined =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     element line {TextShort}+
                 }
@@ -1784,7 +1786,7 @@
                 }
             TableRow =
                 element row {
-                    attribute header {"yes" | "no"}?,
+                    attribute header {"yes" | "no" | "vertical"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderBottom?,
@@ -1939,12 +1941,15 @@
                     attribute archive {text}?,
                     attribute source {text},
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {text},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {text}? &amp;
+                          element description {(Paragraph | Tabular)+}?
                         )
-                    )?
+                      )
+                    )
                 }
             ImageCode =
                 element image {
@@ -1954,20 +1959,30 @@
                     attribute margins {text}?,
                     attribute archive {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {(text | WWVariable)+}? &amp;
+                          element description {(Paragraph | Tabular)+}? &amp;
+                          (
+                            element latex-image {
+                              LabelID?,
+                              text
+                            } |
+                            element asymptote {
+                              LabelID?,
+                              text
+                            } |
+                            element sageplot {
+                                LabelID?,  
+                                attribute variant {'2d'|'3d'}?,
+                                attribute aspect {text}?,
+                                text
+                            }
+                          )
                         )
-                    )?,
-                    (
-                        element latex-image {text} |
-                        element asymptote {text} |
-                        element sageplot {
-                            attribute variant {'2d'|'3d'}?,
-                            attribute aspect {text}?,
-                            text
-                        }
+                      )
                     )
                 }
             ImageWW =
@@ -1975,15 +1990,18 @@
                     attribute pg-name {text}?,
                     attribute width {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {(text | WWVariable)+}? &amp;
+                          element description {(Paragraph | Tabular)+}? &amp;
+                          element latex-image {
+                            text
+                          }?
                         )
-                    )?,
-                    element latex-image {
-                        text
-                    }?
+                      )
+                    )
                 }
             </code>
         </fragment>
@@ -2038,6 +2056,7 @@
             Interactive =
                 element interactive {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     attribute aspect { text }?,
                     attribute width { text }?,
@@ -2076,6 +2095,7 @@
             Slate =
                 element slate {
                     UniqueID?,
+                    LabelID?,
                     (
                       JessieCodeAtt |
                       (
@@ -2168,6 +2188,7 @@
             Video =
                 element video {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -2400,6 +2421,7 @@
             ParagraphAreas =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     TextParagraphAreas
                 }
@@ -2567,6 +2589,7 @@
             WebWorkAuthored =
                 element webwork {
                     UniqueID?,
+                    LabelID?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
                     element description {
@@ -2713,6 +2736,8 @@
             <code>
             UniqueID =
                 attribute xml:id {text}
+            LabelID =
+                attribute label {text}
             PermanentID =
                 attribute permid {text}
             Title =
@@ -2733,10 +2758,12 @@
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2744,6 +2771,7 @@
                 Index*
             MetaDataAltTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2753,6 +2781,7 @@
                 Index*
             MetaDataLinedTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2762,6 +2791,7 @@
                 Index*
             MetaDataSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2772,6 +2802,7 @@
                 Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2782,6 +2813,7 @@
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2789,6 +2821,7 @@
                 Index*
             MetaDataAltTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2796,6 +2829,7 @@
                 Index*
             MetaDataTitleCreatorOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2804,6 +2838,7 @@
                 Index*
             MetaDataCaption =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2815,18 +2850,6 @@
 
     </section>
 
-    <section>
-        <title>Labels as Unique IDs (experimental)</title>
-        <p>We assume that everywhere an xml:id can go, we can also now put a label.</p>
-        <fragment xml:id="label">
-            <title>Labels as Unique IDs</title>
-            <code>
-            UniqueID |=
-                attribute xml:id {text}?,
-                attribute label {text}?
-            </code>
-        </fragment>
-    </section>
     <section>
         <title>Miscellaneous</title>
 
@@ -3367,7 +3390,6 @@
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
-            <fragref ref="label"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }
