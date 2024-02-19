@@ -8551,7 +8551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <listing xml:id="program-activecode-python">
                     <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-                    <program xml:id="python-hello-world" interactive='activecode' language="python">
+                    <program xml:id="python-hello-world" label="python-hello-world" interactive='activecode' language="python">
                         <input>
                         print("Hello, World!")
                         </input>
@@ -8568,7 +8568,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <listing xml:id="program-codelens-python">
                     <caption>A Python program, stepable with CodeLens</caption>
-                    <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+                    <program xml:id="python-hello-world-code-lens" label="python-hello-world-code-lens" interactive="codelens" language="python">
                         <input>
                         print('Hello, World!')
                         </input>
@@ -8583,7 +8583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                   <p>Something to do with ActiveCode program.</p>
                 </introduction>
 
-                <activity xml:id="coding-exercise-partial-two">
+                <activity xml:id="coding-exercise-partial-two" label="coding-exercise-partial-two">
                     <title>Activity Coding Exercise</title>
 
                     <statement>
