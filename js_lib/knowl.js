@@ -14,7 +14,7 @@ function addKnowls(target) {
   const bornHiddens = target.querySelectorAll(".born-hidden-knowl");
   for (const bhk of bornHiddens) {
     const summary = bhk.querySelector(":scope > summary");
-    const contents = bhk.querySelector(":scope > div");
+    const contents = bhk.querySelector(":scope > summary + *");
     new SlideRevealer(summary, contents, bhk);
   }
 
