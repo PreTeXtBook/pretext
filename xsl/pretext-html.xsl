@@ -2065,6 +2065,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- An xref to an mrow results in a knowl      -->
                 <!-- whose content is more than just the xref,  -->
                 <!-- it is the entire containing md or mdn      -->
+
+                <!-- NB: the Javascript controlling the animation of the   -->
+                <!-- open/close of a knowl, presumes it begins with an     -->
+                <!-- element enclosing the content.  This is guaranteed by -->
+                <!-- the "body" template via the "body-element" template.  -->
                 <xsl:choose>
                     <xsl:when test="self::mrow">
                         <xsl:apply-templates select="parent::*" mode="body">
@@ -2796,8 +2801,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- the clickable that is visible on the page -->
         <summary>
            <xsl:apply-templates select="." mode="heading-birth" />
-       </summary>
-        <!-- the content of the knowl, to be revealed later -->
+        </summary>
+        <!-- the content of the knowl, to be revealed later        -->
+        <!-- NB: the Javascript controlling the animation of the   -->
+        <!-- open/close of a knowl, presumes it begins with an     -->
+        <!-- element enclosing the content.  This is guaranteed by -->
+        <!-- the "body" template via the "body-element" template.  -->
         <xsl:apply-templates select="." mode="body">
             <xsl:with-param name="block-type" select="'hidden'" />
             <xsl:with-param name="b-original" select="$b-original" />
@@ -2823,6 +2832,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <xsl:apply-templates select="." mode="heading-birth"/>
         </summary>
+        <!-- the content of the knowl, to be revealed later        -->
+        <!-- NB: the Javascript controlling the animation of the   -->
+        <!-- open/close of a knowl, presumes it begins with an     -->
+        <!-- element enclosing the content.  This is guaranteed by -->
+        <!-- the "body" template via the "body-element" template.  -->
         <xsl:apply-templates select="." mode="body"/>
     </details>
     <!-- xref-knowl content is manufactured elsewhere in a brute-force   -->
