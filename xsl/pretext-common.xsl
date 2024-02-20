@@ -3819,6 +3819,11 @@ Book (with parts), "section" at level 3
     <!-- fresh @label.  But have an internal  @authored-label attribute whose -->
     <!-- absence alerts us to the copying, which is now not best practice.    -->
     <xsl:choose>
+         <!-- 2024-02-20: neuter thse warnings.  Somehow, it seems @authored-label -->
+         <!-- is not very reliable.  Were added in commit 29a42dc689cd772a         -->
+        <!--  -->
+        <xsl:when test="true()"/>
+        <!--  -->
         <xsl:when test="$b-host-runestone and not(@xml:id) and not(@authored-label)">
             <xsl:message>
                 <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
