@@ -698,6 +698,17 @@
                 <li><attr>preexpanded-levels</attr> with values <c>1-6</c> (0 is the default). This value controls how many levels from the root of the TOC are initially expanded outside of the path to the current page. Either 0 or 1 will result in the root level of the TOC being expanded (it is on the path to the active page and thus always is expanded). 2 will result in the first two levels of the TOC being visible (e.g. parts and chapters or chapters and sections). 3 would result in three initially visible levels (e.g. parts/chapters/sections), etc...</li>
             </ul>See <xref ref="html-navigation"/> for explanations and details.</p>
         </subsection>
+
+        <subsection xml:id="html-xref-options">
+            <title>xref Options</title>
+            <idx><h>xref</h><h>publisher options</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/cross-references</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>knowled</attr> with values <c>maximum</c> (default), <c>never</c> and <c>cross-page</c>. <c>maximum</c> will render xref's to structural elements as HTML links and xref's to smaller elements as knowls. <c>never</c> forces all xref's to be rendered as traditional HTML links. <c>cross-page</c> bases the rendering decision on if the xref and its target are on the same page. If so, the xref is always rendered as an HTML link. If the link and target are on different pages, the behavior is the same as <c>maximum</c></li>
+            </ul>See <xref ref="knowled-content"/> for explanations and details.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">
