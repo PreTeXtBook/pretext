@@ -3496,6 +3496,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher option to surround emdash, deprecated 2022-11-20 -->
 <xsl:param name="emdash.space" select="''" />
 
+<!-- "commentary" element relegated to version support, so string    -->
+<!-- parameter is deprecated and ineffective, deprecated 2024-02-16. -->
+<xsl:param name="commentary" select="''" />
+
 <!-- ###################################### -->
 <!-- Parameter Deprecation Warning Messages -->
 <!-- ###################################### -->
@@ -4121,6 +4125,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="date-string" select="'2023-05-05'" />
         <xsl:with-param name="message" select="'the  html/navigation/@style  publication file entry has been removed, since the &quot;compact&quot; option is no longer implemented, and the only option left is &quot;full&quot;.  Remove your publication file entry to stop this message re-appearing'" />
             <xsl:with-param name="incorrect-use" select="($publication/html/navigation/@style != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2024-02-16  "commentary" string parameter deprecated with changes in "commentary" element -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2024-02-16'" />
+        <xsl:with-param name="message" select="'the  commentary  string parameter has been deprecated, is no longer functional, and has no replacement.  Instead control the visibility of a &quot;commentary&quot; element by placing it into a component and using version support.  You likely also have related deprecation messages about that situation which are more informative.'" />
+            <xsl:with-param name="incorrect-use" select="($commentary != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>
