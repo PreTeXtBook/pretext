@@ -450,3 +450,165 @@ body.pretext {
   background: #606;
 }
 
+  
+  /* TEMPORARY -- TESTING STANDARD DARK MODE NEEDS REFACTORING */
+  /* Duplicates of .pretext[data-atmosphere="dark"] .pretext[data-atmosphere*="dark"] rules from above */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bodyfontcolor: #ddd;
+      --bodyfontcolorhighlight: #222;
+      --documenttitle: #2a5ea4;
+      --documenttitledark: #20477b;
+      --documenttitlelight: #8ab;
+      --bodytitle: #abd;
+      --bodysubtitle: #dcb;
+      --bodytitlehighlight: #ad6;
+      --bodyfonttitlehighlight: #306;
+      --bodysubtitlehighlight: #363;
+      /*
+          The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+          ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+          (The second condition will guarantee an adequate contrast with white.)
+        */
+  
+      --chaptertoc: hsl(5, 86%, 24%);
+      --chaptertoctext: #dee;
+      --chaptertocactive: var(--documenttitle);
+      /* often the same as documenttitle */
+      --chaptertoctextactive: white;
+      --sectiontoc: hsl(0, 0%, 27%);
+      --sectiontoctext: #eed;
+      --sectiontocactive: var(--documenttitle);
+      /* often the same as documenttitle */
+      --sectiontoctextactive: white;
+      --tocborder: #152f53;
+  
+      --highlighttoc: var(--documenttitledark);
+      --highlighttoctext: white;
+      --highlighttocborder: var(--chaptertoc);
+  
+      --videoplay: var(--bodytitle);
+      --assemblageborder: #1100aa;
+      --assemblagebackground: #f5f8ff;
+      --assemblagebackground: #003;
+  
+      --knowlborder: var(--bodytitlehighlight);
+      --knowlbackground: var(--assemblagebackground);
+  
+      --bannerbackground: hsl(0, 0%, 20%);
+      --navbarbackground: hsl(0, 0%, 20%);
+      --footerbackground: hsl(0, 0%, 22%);
+      --mainbackground: hsl(0, 0%, 17%);
+      --buttonbackground: hsl(232, 90%, 19%);
+      --codebackground: hsl(120, 100%, 15%);
+      --linkbackground: hsl(120, 90%, 20%);
+      --linkbackgroundhighlight: hsl(0, 0%, 70%);
+      --keybackground: hsl(0, 100%, 19%);
+    }
+  
+    body.pretext {
+      background: var(--mainbackground);
+    }
+  
+    .pretext .ptx-page>.ptx-main {
+      background: var(--mainbackground);
+      color: var(--bodyfontcolor);
+    }
+  
+    .pretext .ptx-content .summary-links a {
+      background: var(--documenttitledark);
+      background: var(--chaptertoc);
+    }
+  
+    .pretext .ptx-navbar {
+      background: var(--navbarbackground);
+    }
+  
+    .pretext .ptx-page-footer .feedback-link,
+    .pretext .ptx-content-footer .button,
+    .pretext .ptx-navbar .button {
+      background-color: var(--buttonbackground);
+      color: var(--bodyfontcolor);
+    }
+  
+    .pretext .ptx-page-footer .feedback-link:hover,
+    .pretext .ptx-content-footer .button:hover,
+    .pretext .ptx-navbar .button:hover,
+    .pretext .ptx-content-footer .button:hover {
+      background-color: var(--linkbackgroundhighlight);
+      color: var(--bodyfontcolorhighlight);
+    }
+  
+    .pretext .ptx-navbar .calculator-toggle {
+      background-color: var(--buttonbackground);
+    }
+  
+    .pretext .ptx-navbar .calculator-toggle:hover {
+      background-color: var(--linkbackgroundhighlight);
+      color: var(--bodyfontcolorhighlight);
+    }
+  
+    .pretext .ptx-masthead {
+      background: var(--bannerbackground);
+    }
+  
+    .pretext .ptx-page-footer {
+      background: var(--footerbackground);
+      border-top-color: #447;
+      border-bottom-color: #447;
+    }
+  
+    .pretext .ptx-page-footer .logo {
+      background: #779;
+      border-radius: 0.4em;
+    }
+  
+    .pretext .ptx-masthead .title-container>.pretext .heading,
+    .pretext .ptx-masthead .title-container>.heading a,
+    .pretext .ptx-masthead .logo-link:empty:hover::before,
+    .pretext .ptx-masthead .byline,
+    .pretext .ptx-masthead .byline a {
+      color: var(--documenttitlelight);
+    }
+  
+    .pretext .ptx-toc {
+      scrollbar-color: var(--documenttitlelight) var(--footerbackground);
+    }
+  
+    .pretext .ptx-content .code-inline {
+      background: var(--codebackground);
+    }
+  
+    .pretext .ptx-content .kbdkey {
+      background: var(--keybackground);
+    }
+  
+    .pretext .ptx-content .goal-like>.heading {
+      background: var(--chaptertoc);
+    }
+  
+    .pretext .ptx-content a.url,
+    .pretext .ptx-content a.internal,
+    .pretext .ptx-content a.external {
+      color: #ddc;
+      background-color: var(--linkbackground);
+      color: var(--bodyfontcolor);
+    }
+  
+    .pretext .ptx-content [data-knowl] {
+      background-color: var(--linkbackground);
+      color: var(--bodyfontcolor);
+    }
+  
+    .pretext .ptx-content [data-knowl]:hover,
+    .pretext .ptx-content [data-knowl]:active,
+    .pretext .ptx-content [data-knowl].active {
+      background-color: var(--linkbackgroundhighlight);
+      color: var(--bodyfontcolorhighlight);
+    }
+  
+    .pretext .ptx-page .ptx-main .ptx-content .knowl-content>.solution-like {
+      background: #606;
+    }
+  }
+  /* END TEMPORARY */
