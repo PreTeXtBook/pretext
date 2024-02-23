@@ -13106,12 +13106,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam odio orci, ullamcorper eget quam et, viverra tristique magna. Integer auctor arcu a sapien pulvinar elementum. Mauris porta, nulla id molestie dignissim, urna dolor rutrum ligula, eu elementum odio nisl sed libero. Nulla nec libero sem.</p>
 
-            <!-- control visibility with version support, but until -->
-            <!-- 2024-02-13 we also need to use a string parameter  -->
+            <!-- 2024-02-16: now control visibility with version support, if not, a fatal error -->
             <commentary component="instructor">
-                <title>Some Commentary</title>
-                <idx>commentary</idx>
-
                 <p>Nullam vulputate metus a diam rutrum vehicula. Sed cursus iaculis venenatis. Morbi ullamcorper at mi non facilisis. Cras sit amet justo vel ante luctus placerat. Nunc in ligula iaculis enim condimentum suscipit eget vel mi. Ut at sapien mauris. Vestibulum nec tellus pellentesque, placerat nunc ac, luctus turpis.</p>
 
                 <p>Curabitur eros nibh, lacinia at commodo ut, feugiat sit amet velit. Pellentesque venenatis dui vehicula, porta magna at, dignissim metus. Nam fringilla tortor nec dignissim dictum. Cras tempor purus nisi, sit amet aliquam risus ornare vel. Proin ullamcorper pulvinar elementum. Praesent gravida magna in imperdiet pretium. In sed consectetur arcu. Donec imperdiet, urna in egestas suscipit, risus dolor ultrices erat, id ultricies sem nisl eget ex. Fusce at mattis sem. Fusce lacinia purus tellus, nec fringilla nisi maximus vel.<idx><h>commentary</h><h>contained paragraph</h></idx></p>
