@@ -160,6 +160,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="commentary">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="commentary"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="webwork">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork"/>
@@ -259,12 +265,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
+<xsl:variable name="commentary-rtf">
+    <xsl:apply-templates select="$version" mode="commentary"/>
+</xsl:variable>
+<xsl:variable name="commentaried" select="exsl:node-set($commentary-rtf)"/>
+
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$version//webwork"/>
+<xsl:variable name="all-webwork" select="$commentaried//webwork"/>
 
 <xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$version" mode="webwork"/>
+    <xsl:apply-templates select="$commentaried" mode="webwork"/>
 </xsl:variable>
 <xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
@@ -1463,6 +1474,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise/>
     </xsl:choose>
 </xsl:template>
+
+<!-- ########## -->
+<!-- Commentary -->
+<!-- ########## -->
+
+<!-- Unwrap any "commentary" that survives versions.  This is the      -->
+<!-- entire feature-set of a "commentary" element.  The schema         -->
+<!-- should enforce, and the code assumes, that every "commentary"     -->
+<!-- does have a @component attribute.  It would make no sense not to. -->
+<xsl:template match="commentary" mode="commentary">
+    <!-- do not duplicate "commentary", do not replicate   -->
+    <!-- @component, do replicate element and text children -->
+    <xsl:apply-templates select="node()" mode="commentary"/>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Numbering -->
