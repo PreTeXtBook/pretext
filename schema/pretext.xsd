@@ -755,14 +755,7 @@
   </xs:group>
   <xs:element name="commentary">
     <xs:complexType>
-      <xs:complexContent>
-        <xs:extension base="MetaDataTitle">
-          <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
-            <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
+      <xs:attribute name="component" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="reading-questions">

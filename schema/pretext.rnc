@@ -317,9 +317,7 @@
                 }
             Commentary =
                 element commentary {
-                    MetaDataTitle,
-                    Index*,
-                    BlockStatementNoCaption+
+                    attribute component { text }
                 }
             
             ReadingQuestions =

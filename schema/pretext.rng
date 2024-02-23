@@ -901,13 +901,7 @@
   </define>
   <define name="Commentary">
     <element name="commentary">
-      <ref name="MetaDataTitle"/>
-      <zeroOrMore>
-        <ref name="Index"/>
-      </zeroOrMore>
-      <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
-      </oneOrMore>
+      <attribute name="component"/>
     </element>
   </define>
   <define name="ReadingQuestions">

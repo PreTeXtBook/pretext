@@ -296,7 +296,7 @@
 
         <p>The <c>NoNumber</c> variant allows for light-weight sectioning of un-numbered divisions, such as a Preface.</p>
 
-        <p><tag>commentary</tag> is elective, so should not have any numbered items ever, so the <q>NoNumber</q> provision is implicit.</p>
+        <p><tag>commentary</tag> is elective and is only functional with version support, hence a <attr>component</attr> attribute.  (2024-02-16: <tag>commentary</tag> could be eliminated in favor of a full-on use of version support, so try that first.</p>
 
         <fragment xml:id="paragraphs">
             <title>Paragraphs division</title>
@@ -315,9 +315,7 @@
                 }
             Commentary =
                 element commentary {
-                    MetaDataTitle,
-                    Index*,
-                    BlockStatementNoCaption+
+                    attribute component { text }
                 }
             </code>
         </fragment>
