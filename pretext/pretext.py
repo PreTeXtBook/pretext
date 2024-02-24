@@ -2521,9 +2521,9 @@ def _split_brf(filename):
             if len(re.findall("^[ ]{2}#([a-j]+?) ", line)) > 0:
                 numbered_chapter = True
                 chapter_number = brf_to_num(re.findall("^[ ]{2}#([a-j]+?) ", line)[0])
-            elif len(re.findall("^[ ]{2},\*apt} #([a-j]+?) ", line)) > 0:
+            elif len(re.findall("^[ ]{2},\\*apt} #([a-j]+?) ", line)) > 0:
                 numbered_chapter = True
-                chapter_number = brf_to_num(re.findall("^[ ]{2},\*apt} #([a-j]+?) ", line)[0])
+                chapter_number = brf_to_num(re.findall("^[ ]{2},\\*apt} #([a-j]+?) ", line)[0])
             else:
                 numbered_chapter = False
                 chapter_number = -1
