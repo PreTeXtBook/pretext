@@ -100,7 +100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-latex-print" select="true()"/>
 <!-- There are not even labels for page numbers, beside -->
 <!-- the fact that they don't make much sense           -->
-<xsl:param name="latex.pageref" select="'no'"/>
+<xsl:variable name="latex-pageref" select="'no'"/>
 
 <!-- We have a switch for just this situation, to force -->
 <!-- (overrule) the auto-detetion of the necessity for  -->
