@@ -36,12 +36,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
-<!-- "commentary" -->
-<!-- Green and ugly -->
-<xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>size=minimal, attach title to upper, after title={\space}, fonttitle=\bfseries, coltitle=black, colback=green</xsl:text>
-</xsl:template>
-
 <!-- "objectives", "outcomes",etc. -->
 <!-- Default tcb, identically      -->
 <xsl:template match="&GOAL-LIKE;" mode="tcb-style">

@@ -131,12 +131,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textcolor{LightCoral}{#1}</xsl:text>
 </xsl:template>
 
-<!-- "commentary" -->
-<!-- No options, so whatever is default tcolorbox -->
-<xsl:template match="commentary" mode="tcb-style">
-    <xsl:text/>
-</xsl:template>
-
 <!-- "proof" -->
 <!-- Changes: Bold upright font, abnormally large spacing after title, no tombstone. -->
 <!-- bwminimalstyle is part of the mathbook-latex.xsl file, uncertain                -->
