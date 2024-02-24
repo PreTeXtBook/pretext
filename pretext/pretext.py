@@ -1607,8 +1607,6 @@ def webwork_to_xml(
                         log.warning(msg.format(destination_image_file, ext))
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
-        # Start appending XML children
-        response_root = ET.fromstring(bytes(response_text, encoding='utf-8'))
         # Use "webwork-reps" as parent tag for the various representations of a problem
         webwork_reps = ET.SubElement(webwork_representations, "webwork-reps")
         webwork_reps.set("version", ww_reps_version)
@@ -1630,6 +1628,9 @@ def webwork_to_xml(
             p = ET.SubElement(statement, "p")
             p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
             continue
+
+        # Start appending XML children
+        response_root = ET.fromstring(bytes(response_text, encoding='utf-8'))
 
         # This recursive function is needed in the case of nested tasks.
         # It is written in such a way to handle task with no nesting, and even an exercise without any task.
