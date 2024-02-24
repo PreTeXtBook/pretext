@@ -1382,7 +1382,7 @@ def webwork_to_xml(
         file_empty = "ERROR:  This problem file was empty!" in response.text
 
         no_compile = (
-            "ERROR caught by Translator while processing problem file:" in response.text
+            "ERROR caught by Translator while processing" in response.text
         )
 
         bad_xml = False
@@ -1407,6 +1407,9 @@ def webwork_to_xml(
         badness_tip = ""
         badness_type = ""
         badness_base64 = ""
+        # NB: in WeBWorK 2.17+, the response from a nonexistent problem is not distinguishable from
+        # the response from a problem that has broken code. So even when a file is empty, file_empty
+        # will be false and instead no_compile will be true.
         if file_empty:
             badness_msg = "PTX:ERROR: WeBWorK problem {} was empty\n"
             badness_tip = ""
@@ -1414,7 +1417,7 @@ def webwork_to_xml(
             badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7"
         elif no_compile:
             badness_msg = (
-                "PTX:ERROR: WeBWorK problem {} with seed {} did not compile  \n{}\n"
+                "PTX:ERROR: WeBWorK problem {} with seed {} is either empty or failed to compile  \n{}\n"
             )
             badness_tip = (
                 "  Use -a to halt with full PG and returned content"
@@ -1422,7 +1425,7 @@ def webwork_to_xml(
                 else "  Use -a to halt with returned content"
             )
             badness_type = "compile"
-            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=="
+            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEb2VzIE5vdCBFeGlzdCBPciBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=="
         elif bad_xml:
             badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
             badness_tip = "  Use -a to halt with returned content"
