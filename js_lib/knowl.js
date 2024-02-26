@@ -198,7 +198,6 @@ class LinkKnowl {
       + `<div class='knowl-content' id='${outputContentsId}'>`
       + `Loading '${linkTarget}'`
       + `</div>`
-      + `<div class='knowl-footer'>${linkTarget}</div>`
       + `</div></div></div>`;
 
     const temp = document.createElement("template");

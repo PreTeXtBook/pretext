@@ -138,9 +138,6 @@ body.pretext {
     border-color: var(--knowlborder);
     background-color: var(--knowlbackground);
 }
-.ptx-content .knowl-footer {
-    background-color: var(--knowlborder);
-}
 
 /* 
   pastel

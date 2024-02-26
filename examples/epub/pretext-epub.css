@@ -419,30 +419,6 @@ section article.theorem-like li {
 .knowl-output .knowl-output .knowl-output .knowl-output {
     background: #ffffff;
 }
-.knowl-footer {
-  position: relative;
-  bottom: -9px;
-  font-size: x-small;
-  background: #ddf;
-  color: grey;
-  padding: 0 0 0 12px;
-  margin:  -10px 0 0 0;
-}
-.knowl-footer a {
-  color: #006;
-}
-.knowl-footer a:hover {
-  background: none;
-  color: #88f;
-}
-.knowl-footer:after {
-    content: "\2002";
-}
-
-.knowl-output .knowl-output .knowl-footer {
-  bottom: -5px;
-  margin:  -5px 0 0 0;
-}
 
 .knowl-output + .knowl-output {
     margin-top: 0;
