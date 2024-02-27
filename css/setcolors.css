@@ -447,3 +447,13 @@ body.pretext {
   background: #606;
 }
 
+/* link/knowl coloring */
+:root {
+  --knowlLinkColor: var(--documenttitle);
+  --linkColor: var(--bodysubtitle);
+  --linkBackground: var(--bodysubtitlehighlight);
+  --knowlNested1Background: #f5f5ff;
+  --knowlNested2Background: #fffff5;
+  --knowlNested3Background: #f5ffff;
+  --knowlNested4Background: #fff5f5;
+}
