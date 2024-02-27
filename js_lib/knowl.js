@@ -53,12 +53,15 @@ class SlideRevealer {
 
     // Check if the element is being closed or is already closed
     if (this.animationState === SlideRevealer.STATE.CLOSING || !this.animatedElement.open) {
-      // Force the [open] attribute (needed if animated element is details)
-      this.animatedElement.open = true;
+      // Force the [open] attributes - allow for similar targetting of xref and born-hidden knowls
+      this.animatedElement.setAttribute("open","");
+      this.triggerElement.setAttribute("open","");
       this.contentElement.style.display = '';
       // Wait for the next frame to call the toggle function
       window.requestAnimationFrame(() => this.toggle(true));
     } else if (this.animationState === SlideRevealer.STATE.EXPANDING || this.animatedElement.open) {
+      this.animatedElement.removeAttribute("open");
+      this.triggerElement.removeAttribute("open");
       this.toggle(false);
     }
   }
@@ -77,12 +80,15 @@ class SlideRevealer {
       this.animation.cancel();
     }
 
+    // Animate ~500 pixels per second with max of 1 second
+    const animDuration = Math.min( (Math.abs(closedHeight - fullHeight) / 500 * 1000), 1000);
+
     // Start animation
     this.animationState = expanding ? SlideRevealer.STATE.EXPANDING : SlideRevealer.STATE.CLOSING;
     this.animation = this.animatedElement.animate({
       height: [startHeight, endHeight]
     }, {
-      duration: 400,
+      duration: animDuration,
       easing: 'ease'
     });
 
@@ -134,6 +140,8 @@ class LinkKnowl {
     // Stash a copy of the original title for use in aria-label
     // If no title, use textContent
     knowlLinkElement.setAttribute("data-base-title", knowlLinkElement.getAttribute("title") || this.linkElement.textContent);
+
+    knowlLinkElement.classList.add("knowl__link");
 
     this.updateLabels(false);
 
@@ -193,12 +201,9 @@ class LinkKnowl {
     const outputContentsId = "knowl-output-" + this.uid;
     const linkTarget = this.linkElement.getAttribute("data-knowl");
 
-    const placeholderText = `<div class='knowl-output' style='display:none;' id='${outputId}' aria-live='polite'>`
-      + `<div class='knowl'>`
-      + `<div class='knowl-content' id='${outputContentsId}'>`
+    const placeholderText = `<div class='knowl__content' style='display:none;' id='${outputId}' aria-live='polite' id='${outputContentsId}'>`
       + `Loading '${linkTarget}'`
-      + `</div>`
-      + `</div></div></div>`;
+      + `</div>`;
 
     const temp = document.createElement("template");
     temp.innerHTML = placeholderText;
@@ -288,17 +293,16 @@ class LinkKnowl {
           });
 
           // now move all contents to the real output element
-          const target = document.getElementById("knowl-output-" + this.uid);
           const children = [...tempContainer.children];
-          target.innerHTML = "";
-          target.append(...children);
+          this.outputElement.innerHTML = "";
+          this.outputElement.append(...children);
 
           // render any knowls and mathjax in the knowl
-          MathJax.typesetPromise([target]);
-          addKnowls(target);
+          MathJax.typesetPromise([this.outputElement]);
+          addKnowls(this.outputElement);
 
           // force any scripts (e.g. sagecell) to execute by evaling them
-          [...target.getElementsByTagName("script")].forEach((s) => {
+          [...this.outputElement.getElementsByTagName("script")].forEach((s) => {
             if (
               s.getAttribute("type") === null ||
               s.getAttribute("type") === "text/javascript"
