@@ -17,7 +17,6 @@ function addKnowls(target) {
     const contents = bhk.querySelector(":scope > summary + *");
     new SlideRevealer(summary, contents, bhk);
   }
-
 }
 
 // Used to animate both types of knowls
@@ -52,16 +51,14 @@ class SlideRevealer {
     this.animatedElement.style.overflow = 'hidden';
 
     // Check if the element is being closed or is already closed
-    if (this.animationState === SlideRevealer.STATE.CLOSING || !this.animatedElement.open) {
+    if (this.animationState === SlideRevealer.STATE.CLOSING || !this.animatedElement.hasAttribute("open")) {
       // Force the [open] attributes - allow for similar targetting of xref and born-hidden knowls
       this.animatedElement.setAttribute("open","");
       this.triggerElement.setAttribute("open","");
       this.contentElement.style.display = '';
       // Wait for the next frame to call the toggle function
       window.requestAnimationFrame(() => this.toggle(true));
-    } else if (this.animationState === SlideRevealer.STATE.EXPANDING || this.animatedElement.open) {
-      this.animatedElement.removeAttribute("open");
-      this.triggerElement.removeAttribute("open");
+    } else if (this.animationState === SlideRevealer.STATE.EXPANDING || this.animatedElement.hasAttribute("open")) {
       this.toggle(false);
     }
   }
@@ -75,18 +72,25 @@ class SlideRevealer {
     const startHeight = `${expanding ? closedHeight : fullHeight}px`;
     const endHeight = `${expanding ? fullHeight : closedHeight}px`;
 
+    // Need to animate padding to avoid extra height for xref knowls
+    const padding = this.animatedElement.offsetHeight - this.animatedElement.clientHeight;
+    const startPad = `${expanding ? 0 : padding}px`;
+    const endPad = `${expanding ? padding : 0}px`;
+
     // Cancel any existing animation
     if (this.animation) {
       this.animation.cancel();
     }
 
-    // Animate ~500 pixels per second with max of 1 second
-    const animDuration = Math.min( (Math.abs(closedHeight - fullHeight) / 500 * 1000), 1000);
+    // Animate ~400 pixels per second with max of 0.75 second and min of 0.25
+    const animDuration = Math.max( Math.min( (Math.abs(closedHeight - fullHeight) / 400 * 1000), 750), 250);
 
     // Start animation
     this.animationState = expanding ? SlideRevealer.STATE.EXPANDING : SlideRevealer.STATE.CLOSING;
     this.animation = this.animatedElement.animate({
-      height: [startHeight, endHeight]
+      height: [startHeight, endHeight],
+      paddingTop: [startPad, endPad],
+      paddingBottom: [startPad, endPad]
     }, {
       duration: animDuration,
       easing: 'ease'
@@ -102,10 +106,13 @@ class SlideRevealer {
     this.animationState = SlideRevealer.STATE.INACTIVE;
 
     // Make sure animated element has open (needed for details)
-    this.animatedElement.open = isOpen;
+    if(!isOpen) {
+      this.animatedElement.removeAttribute("open");
+      this.triggerElement.removeAttribute("open");
+    }
 
     // Clear styles used in animation
-    this.animatedElement.style.height = this.animatedElement.style.overflow = '';
+    this.animatedElement.style.overflow = '';
     if (!isOpen)
       this.contentElement.style.display = 'none';
   }
