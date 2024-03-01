@@ -95,17 +95,9 @@ body.pretext {
   background: var(--highlighttoc);
 }
 
-.ptx-content [data-knowl], .ptx-content [data-knowl]:hover, .ptx-content [data-knowl]:active, .ptx-content [data-knowl].active, .ptx-content summary {
-    color: var(--bodytitle);
-}
-.ptx-content [data-knowl]:hover, .ptx-content [data-knowl]:active, .ptx-content [data-knowl].active {
-    color: var(--bodyfontcolorhighlight);
-    background-color: var(--bodytitlehighlight);
-}
-
 /* next two groups concern accessibility, so check when making changes */
 .ptx-content .para > a.internal {
-    color: var(--bodytitle);
+    color: var(--bodysubtitle);
 }
 .ptx-content .para > a.external {
     color: var(--bodysubtitle);
@@ -113,7 +105,7 @@ body.pretext {
 .ptx-content .para > a.internal:hover, .ptx-content .para > a.internal:hover *,
 .ptx-content .para > a.internal:focus, .ptx-content .para > a.internal:focus * {
     color: var(--bodyfontcolorhighlight);
-    background-color: var(--bodytitlehighlight);
+    background-color: var(--bodysubtitlehighlight);
 }
 .ptx-content .para > a.external:hover, .ptx-content .para > a.external:hover *,
 .ptx-content .para > a.external:focus, .ptx-content .para > a.external:focus * {
@@ -137,9 +129,6 @@ body.pretext {
 .ptx-content .knowl-output {
     border-color: var(--knowlborder);
     background-color: var(--knowlbackground);
-}
-.ptx-content .knowl-footer {
-    background-color: var(--knowlborder);
 }
 
 /* 
@@ -450,3 +439,13 @@ body.pretext {
   background: #606;
 }
 
+/* link/knowl coloring */
+:root {
+  --knowlLinkColor: var(--documenttitle);
+  --linkColor: var(--bodysubtitle);
+  --linkBackground: var(--bodysubtitlehighlight);
+  --knowlNested1Background: #f5f5ff;
+  --knowlNested2Background: #fffff5;
+  --knowlNested3Background: #f5ffff;
+  --knowlNested4Background: #fff5f5;
+}

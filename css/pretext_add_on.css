@@ -1492,9 +1492,6 @@ from Jiří Lebl */
 /* padding, not margin, to get colored background (and not be absorbed) */
     padding-top: 0.25em;
 }
-.ptx-content .knowl-footer {
-    display: none;
-}
 
 .ptx-content .exercisegroup > .conclusion {
     margin-left: 1.5em;

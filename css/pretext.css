@@ -134,11 +134,6 @@ nav .ptx-navbar {
     display: inline;
 }
 
-/* Oscar Levin figured out the cause of chrome showing a funny border focus */
-.ptx-content .knowl .para {
-    position: unset;
-}
-
 /* CSS defult values:
 https://www.w3schools.com/cssref/css_default_values.asp
 */
@@ -263,9 +258,6 @@ so that we can set our own later */
     display: inline;
 }
 
-.ptx-content .exercisegroup article.exercise-like .solution .para:first-child {
-    margin-top: -3px;  /* because of the 10px (instread of 7) on the .knowl-content */
-}
 .ptx-content .exercisegroup article.exercise-like li > .para:first-child {
     margin-top: 0;
 }
@@ -283,9 +275,6 @@ so that we can set our own later */
 }
 .ptx-content .exercisegroup .conclusion .heading {
     margin-top: 0.5em;
-}
-.ptx-content .exercisegroup .hidden-knowl-wrapper {
-    margin: 0;
 }
 .ptx-content .exercisegroup article + article {
     margin-top: 1em;
@@ -323,81 +312,6 @@ so that we can set our own later */
     margin-top: 0;
 }
 
-.ptx-content .exercisegroup article + .hidden-knowl-wrapper {
-    margin-left: 4em;
-}
-
-/* make it look like a list, and have entra indenting when already more indented */
-.ptx-content .exercise-like .introduction + .hidden-knowl-wrapper,
-.ptx-content .exercise-like .conclusion {
-    margin-left: 1.0em;
-}
-.ptx-content .exercisegroup .exercise-like .introduction + .hidden-knowl-wrapper,
-.ptx-content .exercisegroup .exercise-like .conclusion {
-    margin-left: 1.5em;
-}
-.ptx-content section > .hidden-knowl-wrapper {
-    margin-top: 1em;
-}
-.ptx-content article + .hidden-knowl-wrapper {
-    margin-top: 1em;
-}
-.ptx-content .knowl-content > section:first-child > .heading:first-child {
-    margin-top: 0;
-}
-
-
-
-/* 9/23/23 a knowled article is now in a "details", so we add style
-   to mimic the old style below  */
-
-.ptx-content section  .born-hidden-knowl > summary {
-    cursor: pointer;
-}
-
-.ptx-content section > .born-hidden-knowl  > summary::marker,
-.ptx-content article + .born-hidden-knowl  > summary::marker {
-  content: "";
-}
-
-.ptx-content section > .born-hidden-knowl , .ptx-content .paragraphs > .born-hidden-knowl ,
-.ptx-content article + .born-hidden-knowl  {
-    margin-top: 1.25em;
-}
-.ptx-content .born-hidden-knowl summary + article {
-    margin-top: 1em;
-}
-.ptx-content section .born-hidden-knowl  + .born-hidden-knowl ,
-.ptx-content section .introduction + .born-hidden-knowl ,
-.ptx-content section .para + .born-hidden-knowl ,
-.ptx-content section .posterior + .born-hidden-knowl  {
-    margin-top: 1.75em;
-}
-
-.ptx-content .born-hidden-knowl  > article {
-  padding-top: 0.25em;
-}
-.ptx-content .born-hidden-knowl  > article:not(.theorem-like):not(.definition-like) {
-  padding: 0.25em;
-  padding-left: 0.5em;
-  padding-bottom: 0;
-}
-.ptx-content .born-hidden-knowl  > article {
-  background-color: #f5f5ff;
-}
-.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > article,
-.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > .answer {
-  margin: 0.5em;
-  padding: 0.25em;
-  padding-left: 0.5em;
-  background-color: #fffff5;
-}
-.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > article .born-hidden-knowl  > article {
-  background-color: #fff5ff;
-}
-.ptx-content .born-hidden-knowl  > article .born-hidden-knowl  > article .born-hidden-knowl  > article .born-hidden-knowl  > article {
-  background-color: #fafffa;
-}
 
 /* this > may be too restrictive.  The purpose is to not put a
    top margin on an article at the top of a knowl */
@@ -574,22 +488,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .ptx-content .abstract > .title + .para {
     display: inline;
 }
-
-/* born hidden articls are now in "details", so adding markup
-to immitate what is below.  */
-
-.ptx-content .born-hidden-knowl summary,
-.ptx-content .born-hidden-knowl summary > .heading {
-    position: relative;
-}
-
-.ptx-content .born-hidden-knowl summary > .heading {
-    font-size: 1.125em;
-    line-height: 1.125em;
-    margin-top: 0;
-    display: inline;
-}
-
 
 /*       -----      */
 
