@@ -2821,7 +2821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text> born-hidden-knowl</xsl:text>
         </xsl:attribute>
         <!-- the clickable that is visible on the page -->
-        <summary>
+        <summary class="knowl__link">
            <xsl:apply-templates select="." mode="heading-birth" />
         </summary>
         <!-- the content of the knowl, to be revealed later        -->
@@ -5208,6 +5208,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{$body-elt}">
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="body-css-class" />
+            <xsl:if test="$block-type = 'hidden'">
+                <xsl:text> knowl__content</xsl:text>
+            </xsl:if>
         </xsl:attribute>
         <!-- Label original, but not if embedded            -->
         <!-- Then id goes onto the knowl text, so locatable -->
