@@ -3388,8 +3388,8 @@ Book (with parts), "section" at level 3
         <xsl:value-of select="$lang-element/@locale-lang"/>
     </xsl:variable>
 
-    <!-- Now, build the actual translation -->
-    <xsl:variable name="translation">
+    <!-- Now, build the actual translation via a lookup -->
+    <xsl:variable name="lookup">
         <xsl:choose>
             <!-- First, look in docinfo for document-specific rename with correct language -->
             <xsl:when test="$docinfo/rename[@element=$str-id and @xml:lang=$lang]">
@@ -3412,6 +3412,33 @@ Book (with parts), "section" at level 3
                     <xsl:value-of select="key('localization-key', $str-id)"/>
                 </xsl:for-each>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Exceptions to failed lookups                     -->
+    <!-- Some un-implemented translations are ubiquitous, -->
+    <!-- so we recognize failure and fallback to English  -->
+    <xsl:variable name="translation">
+        <xsl:choose>
+            <!-- $lookup is good, echo it -->
+            <xsl:when test="not($lookup = '')">
+                <xsl:value-of select="$lookup"/>
+            </xsl:when>
+            <!-- substitute English since $lookup is empty     -->
+            <!-- NB: could test with an "or" for multiple      -->
+            <!-- exceptions and then get en-US version with a  -->
+            <!-- proper lookup as a single statement, but not  -->
+            <!-- bothering yet.                                -->
+            <!-- "Close" is on every knowl, too many warnings  -->
+            <xsl:when test="$str-id = 'close'">
+                <xsl:text>Close</xsl:text>
+            </xsl:when>
+            <!-- "Reveal" is on every knowl, too many warnings -->
+            <xsl:when test="$str-id = 'reveal'">
+                <xsl:text>Reveal</xsl:text>
+            </xsl:when>
+            <!-- $lookup empty and not exceptional    -->
+            <!-- echo the empty lookup as translation -->
+            <xsl:otherwise/>
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
