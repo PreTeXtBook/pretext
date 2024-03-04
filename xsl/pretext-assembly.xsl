@@ -1183,6 +1183,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
 </xsl:template>
 
+<!-- This template produces identification that happens early in the  -->
+<!-- passes this stylesheet executes.  The idea is that some elements -->
+<!-- get replaced wholesale (such as an "interactive" being replaced  -->
+<!-- by a "sidebyside" in the creation of a static precursor.  But we -->
+<!-- want these ids, especially if automatic, to be consistent when   -->
+<!-- used in derived versions (such as manufacturing, or displaying,  -->
+<!-- a QR code file for a static "interactive").                      -->
+<!-- NB: this template needs to be defined in this stylesheet, since  -->
+<!-- we want the stylesheet to be independent, and the template is    -->
+<!-- also applied here.                                               -->
+<!-- NB: this template needs work.                                    -->
+<xsl:template match="*" mode="visible-id-early">
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- Identification -->
