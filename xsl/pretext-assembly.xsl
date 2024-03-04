@@ -1210,21 +1210,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this template needs to be defined in this stylesheet, since  -->
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
-<!-- NB: this template needs work.                                    -->
 <xsl:template match="*" mode="visible-id-early">
-    <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:value-of select="@label"/>
-        </xsl:when>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number from="book|article|letter|memo" level="any" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
 
