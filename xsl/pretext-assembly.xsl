@@ -306,8 +306,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="exercise" select="exsl:node-set($exercise-rtf)"/>
 
+<xsl:variable name="assembly-label-rtf">
+    <xsl:apply-templates select="$exercise" mode="id-attribute">
+        <!-- $parent-id defaults to 'root' in template -->
+        <xsl:with-param name="attr-name" select="'assembly-id'"/>
+    </xsl:apply-templates>
+</xsl:variable>
+<xsl:variable name="assembly-label" select="exsl:node-set($assembly-label-rtf)"/>
+
 <xsl:variable name="representations-rtf">
-    <xsl:apply-templates select="$exercise" mode="representations"/>
+    <xsl:apply-templates select="$assembly-label" mode="representations"/>
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 
