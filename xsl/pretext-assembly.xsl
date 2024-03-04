@@ -98,7 +98,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- recursively defined, variables, this discussion may be        -->
 <!-- relevant.  (This is repeated verbatim in the other            -->
 <!-- stylesheet).                                                  -->
-
+<!--  -->
+<!-- Note too, that we want this stylesheet to be independent, and -->
+<!-- that can be tested with the  pretext-enhanced-source.xsl      -->
+<!-- stylesheet.  There is one danger: any (modal) template        -->
+<!-- applied here, needs to be defined here.  "Normal" conversions -->
+<!-- will import things like "pretext-common.xsl" and templates    -->
+<!-- defined there will be available.  But when not defined here,  -->
+<!-- the default is to just apply default templates to the         -->
+<!-- content, which may generally just produce a lot of text.      -->
+<!-- Which is no good, say as an attribute value.                  -->
 
 <!-- Isolate computation of numbers -->
 <xsl:import href="./pretext-numbers.xsl"/>
