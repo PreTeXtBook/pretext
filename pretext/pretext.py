@@ -3564,7 +3564,6 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
             texc = e
 
     try:
-        outputfn("comprehensive messages, warnings, and errors:")
         parse_t = threading.Thread(target=transform)
         parse_t.start()
         still_alive = True
@@ -3574,6 +3573,13 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
             still_alive = parse_t.is_alive()
 
             end = len(xslt.error_log)
+
+            # if there are any messages and we are just
+            # starting out, produce an explanatory line
+            # start will be reset to non-zero, so this is
+            # one-time only, and never if there are no messages
+            if (start == 0) and (end > 0):
+                outputfn("messages from the log for XSL processing (indented):")
             # print out any unprinted messages from error_log
             for line in range(start, end):
                 outputfn(f"    * {xslt.error_log[line].message}")
