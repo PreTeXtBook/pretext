@@ -1202,6 +1202,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
 
+<!-- [Ed. this once prefaced the "visible-id-early" template, a weak  -->
+<!-- forerunner of the "assembly-id" template.  But the commentary    -->
+<!-- is still good, so we have preserved it here.]                    -->
+<!-- This template produces identification that happens early in the  -->
+<!-- passes this stylesheet executes.  The idea is that some elements -->
+<!-- get replaced wholesale (such as an "interactive" being replaced  -->
+<!-- by a "sidebyside" in the creation of a static precursor.  But we -->
+<!-- want these ids, especially if automatic, to be consistent when   -->
+<!-- used in derived versions (such as manufacturing, or displaying,  -->
+<!-- a QR code file for a static "interactive").                      -->
+<!-- NB: this template needs to be defined in this stylesheet, since  -->
+<!-- we want the stylesheet to be independent, and the template is    -->
+<!-- also applied here.                                               -->
 
 <xsl:template match="audio|video|interactive" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
@@ -1215,17 +1228,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect</xsl:message>
     <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
 </xsl:template>
-
-<!-- This template produces identification that happens early in the  -->
-<!-- passes this stylesheet executes.  The idea is that some elements -->
-<!-- get replaced wholesale (such as an "interactive" being replaced  -->
-<!-- by a "sidebyside" in the creation of a static precursor.  But we -->
-<!-- want these ids, especially if automatic, to be consistent when   -->
-<!-- used in derived versions (such as manufacturing, or displaying,  -->
-<!-- a QR code file for a static "interactive").                      -->
-<!-- NB: this template needs to be defined in this stylesheet, since  -->
-<!-- we want the stylesheet to be independent, and the template is    -->
-<!-- also applied here.                                               -->
 
 
 <!-- ############## -->
