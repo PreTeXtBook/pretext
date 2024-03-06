@@ -31,7 +31,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl date str"
     exclude-result-prefixes="pi"
 >
 
@@ -2382,5 +2383,141 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ###################################### -->
+<!-- Static versions of Interactive Content -->
+<!-- ###################################### -->
+
+<!-- Templates for the pre-processor (and other stylesheets) to use -->
+<!-- for the creation of static versions of interactive content.    -->
+
+<!-- The HTML conversion generates "standalone" pages for videos   -->
+<!-- and other interactives.  Then the LaTeX conversion will make  -->
+<!-- links to these pages (eg, via QR codes).  And we might use    -->
+<!-- these pages as the basis for scraping preview images.  So we  -->
+<!-- place a template here to achieve consistency across uses.     -->
+<!--  -->
+<!-- NB: it could be tempting to change this template to stuff     -->
+<!-- these "iframe" files into a dedicated directory.  Even though -->
+<!-- this template ensures some consistency, a pile of links still -->
+<!-- need to change, such as the "script" tag for locations of     -->
+<!-- extra JS as part of making one of these go.                   -->
+<xsl:template match="*" mode="iframe-filename">
+    <xsl:apply-templates select="." mode="visible-id-early" />
+    <xsl:text>-if.html</xsl:text>
+</xsl:template>
+
+<xsl:template match="audio|video|interactive" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="visible-id-early" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
+<xsl:template match="audio|video|interactive" mode="standalone-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="standalone-filename" />
+    </xsl:if>
+    <!-- empty without a baseurl -->
+</xsl:template>
+
+<xsl:template match="audio|video|interactive" mode="embed-iframe-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="iframe-filename" />
+    </xsl:if>
+    <!-- empty without a baseurl -->
+</xsl:template>
+
+<!-- These interactives *are* iFrames, so we don't build a dedicated   -->
+<!-- page to make them into iFrames.  Over in -html we construct a URL -->
+<!-- for each one, embedded in a iFrame construction.  We need to work -->
+<!-- out the right thing to do for an "Embed" link in static formats.  -->
+<!-- For now, an empty result means no link in sttic formats.          -->
+<!-- NB: coordinate with "create-iframe-page" in -html                 -->
+<xsl:template match="audio|video"  mode="embed-iframe-url"/>
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]"  mode="embed-iframe-url"/>
+
+
+<!-- Static URL's -->
+<!-- Predictable and/or stable URLs for versions         -->
+<!-- of interactives available online.  These are        -->
+<!--                                                     -->
+<!--   (1) "standalone" pages for author/local material, -->
+<!--       as a product of the HTML conversion           -->
+<!--   (2) computable addresses of network resources,    -->
+<!--       eg the YouTube page of a resource             -->
+
+<!-- Point to HTML-produced, and canonically-hosted, standalone page -->
+<!-- NB: baseurl is assumed to have a trailing slash                 -->
+
+<xsl:template match="audio[@source|@href]|video[@source|@href]|interactive" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <xsl:apply-templates select="." mode="standalone-filename" />
+</xsl:template>
+
+<!-- Natural override for YouTube videos               -->
+<!-- Better - standalone page, with "View on You Tube" -->
+
+<!-- NB: ampersand is escaped for LaTeX use, be careful with switch to QR codes via Python! -->
+
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
+    <xsl:apply-templates select="." mode="youtube-view-url" />
+    <xsl:if test="@start">
+        <xsl:text>\&amp;start=</xsl:text>
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <xsl:if test="@end">
+        <xsl:text>\&amp;end=</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
+    <xsl:variable name="youtube">
+        <xsl:choose>
+            <xsl:when test="@youtubeplaylist">
+                <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>https://www.youtube.com/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>playlist?list=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:when>
+        <xsl:when test="contains($youtube, ' ')">
+            <xsl:text>watch_videos?video_ids=</xsl:text>
+            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>watch?v=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Vimeo view URL -->
+<xsl:template match="video[@vimeo]" mode="static-url">
+    <xsl:text>https://vimeo.com/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
+</xsl:template>
+
+<!-- A bit different than above, but same mode -->
+<!-- When a "datafile" is produced in a static -->
+<!-- context, then we append the $baseurl, and -->
+<!-- provide the external directory.           -->
+<xsl:template match="dataurl[@source]" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <!-- empty when not using managed directories -->
+    <xsl:value-of select="$external-directory"/>
+    <xsl:apply-templates select="@source" />
+</xsl:template>
 
 </xsl:stylesheet>
