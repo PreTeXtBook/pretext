@@ -7550,6 +7550,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
+                <p>It is also possible to add <tag>script</tag> elements within an interactive that contain properly escaped JS code. These elements will be placed at the end of the document created to hold the interactive content and can interactive with the other elements within the interactive but can not directly interact with the surrounding page.</p>
+
+                <p>Authors are strongly discouraged from trying to incorporate complex code in the form of a <tag>script</tag>, but it can be a useful tool to call more complex code that is linked via <attr>source</attr> on the <tag>interactive</tag>.</p>
+
+                <p>This example uses a <tag>script</tag> to draw <q>Hello World</q> to a <tag>slate</tag> </p>
+
+                <figure xml:id="figure-simple-js-script">
+                    <caption>A simple embedded script example</caption>
+
+                    <interactive aspect="6:1" xml:id="interactive-simple-js-script" platform="javascript" source="code/roesler/kinematics.js">
+                        <slate aspect="6:1" xml:id="simple-js-script" surface="canvas"/>
+                        <script>
+                            const canvas = document.getElementById("simple-js-script");
+                            const ctx = canvas.getContext("2d");
+                            ctx.font = "40px sans-serif";
+                            ctx.fillText("Hello world", 10, 50);
+                        </script>
+                    </interactive>
+                </figure>
+
             </subsection>
 
             <subsection>
