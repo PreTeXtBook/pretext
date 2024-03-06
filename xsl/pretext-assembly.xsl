@@ -1185,12 +1185,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Another way to think about this is as an "early" id, versus the        -->
 <!-- more general "late" id.                                                -->
 <!--                                                                        -->
+<!-- audio|video|interactive                                                -->
+<!--     Static versions of these interactive elements have previews        -->
+<!--     (YouTube thumbnails, automatically generated screenshots),         -->
+<!--     generated QR codes, and various links meant for use in static      -->
+<!--     contexts.  So we form names of these related objects based on      -->
+<!--     an "earlier" id.                                                   -->
+<!--                                                                        -->
 <!-- datafile                                                               -->
 <!--     For static versions of this Runestone component, when the file is  -->
 <!--     a text file provided in the external directory, we need to         -->
 <!--     interrogate the file manufactured in the generated directory in    -->
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
+
+<xsl:template match="audio|video|interactive" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
 
 <xsl:template match="datafile" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
