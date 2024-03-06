@@ -1171,6 +1171,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="pagebreak" mode="repair"/>
 
 
+<!-- ########### -->
+<!-- Assembly ID -->
+<!-- ########### -->
 
 <!-- Some maniulations of source require stable identification *before*     -->
 <!-- we assign @unique-id values for general use in the very late           -->
@@ -1199,6 +1202,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
 
+
 <xsl:template match="audio|video|interactive" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
@@ -1222,9 +1226,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this template needs to be defined in this stylesheet, since  -->
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
-<xsl:template match="*" mode="visible-id-early">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
 
 
 <!-- ############## -->
@@ -2297,7 +2298,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <image>
                             <xsl:attribute name="pi:generated">
                                 <xsl:text>preview/</xsl:text>
-                                <xsl:apply-templates select="." mode="visible-id-early"/>
+                                <xsl:apply-templates select="." mode="assembly-id"/>
                                 <xsl:text>-preview.png</xsl:text>
                             </xsl:attribute>
                         </image>
@@ -2307,7 +2308,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <image>
                             <xsl:attribute name="pi:generated">
                                 <xsl:text>youtube/</xsl:text>
-                                <xsl:apply-templates select="." mode="visible-id-early"/>
+                                <xsl:apply-templates select="." mode="assembly-id"/>
                                 <xsl:text>.jpg</xsl:text>
                             </xsl:attribute>
                         </image>
@@ -2335,7 +2336,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <image>
                         <xsl:attribute name="pi:generated">
                             <xsl:text>qrcode/</xsl:text>
-                            <xsl:apply-templates select="." mode="visible-id-early"/>
+                            <xsl:apply-templates select="." mode="assembly-id"/>
                             <xsl:text>.png</xsl:text>
                         </xsl:attribute>
                     </image>
@@ -2424,12 +2425,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- need to change, such as the "script" tag for locations of     -->
 <!-- extra JS as part of making one of these go.                   -->
 <xsl:template match="audio|video|interactive" mode="iframe-filename">
-    <xsl:apply-templates select="." mode="visible-id-early" />
+    <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
 <xsl:template match="audio|video|interactive" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id-early" />
+    <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="standalone-filename">
