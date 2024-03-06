@@ -1174,9 +1174,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some maniulations of source require stable identification *before*     -->
 <!-- we assign @unique-id values for general use in the very late           -->
-<!-- "identification" phase.  This is a role for the "original-id" which    -->
-<!-- is formed based soley on the author's source (which may get versioned, -->
-<!-- customized, repaired, etc.).  It should suffice for "big" objects      -->
+<!-- "identification" phase.  This is a role for the "@assembly-id" which   -->
+<!-- is formed after the author's source has been versioned, customized,    -->
+<!-- repaired, but before replacements. It should suffice for "big" objects -->
 <!-- which are unlikely to change much (other than going away in a version) -->
 <!-- and may only be "repaired" in a one-to-one cosmetic rename.  We use    -->
 <!-- this sparingly, thus we are careful about the match, along with        -->
@@ -1193,7 +1193,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     construct unique-id.                                               -->
 
 <xsl:template match="datafile" mode="assembly-id">
-    <xsl:value-of select="@original-id"/>
+    <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
 <xsl:template match="*" mode="assembly-id">
