@@ -2395,8 +2395,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
-<!--  -->
-<!-- NB: it could be tempting to change this template to stuff     -->
+<!--                                                               -->
+<!-- We need to always import this assembly stylesheet, so these   -->
+<!-- templates will be available in all conversions, but notably   -->
+<!-- in the creation of a "universal" static version of the        -->
+<!-- document ("assembly-static" in the pretext/pretext script)    -->
+<!-- which is fed to specific conversion into static output        -->
+<!-- formats (e.g. LaTeX, braille).  As such, these templates      -->
+<!-- should                                                        -->
+<!--   (a) be applied someplace as part of the assembly process    -->
+<!--   (b) produce only text (i.e. not XML, not HTML, not LaTeX)   -->
+
+
+<!-- NB: it could be tempting to change the next template to stuff -->
 <!-- these "iframe" files into a dedicated directory.  Even though -->
 <!-- this template ensures some consistency, a pile of links still -->
 <!-- need to change, such as the "script" tag for locations of     -->
@@ -2462,6 +2473,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Better - standalone page, with "View on You Tube" -->
 
 <!-- NB: ampersand is escaped for LaTeX use, be careful with switch to QR codes via Python! -->
+<!-- POTENTIAL BUG: this should be un-LaTeX'ed for general use and then  -->
+<!-- sanitized on the receiving end in the LaTeX conversion, or maybe    -->
+<!-- the LaTeX conversion will do just fine if the right URL package is  -->
+<!-- used and the ampersand is handled correctly?                        -->
 
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
     <xsl:apply-templates select="." mode="youtube-view-url" />
