@@ -1202,6 +1202,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
 
+<!-- NB: we believe the @assembly-id will equal the @unique-id    -->
+<!-- ("visible-id" template) for objects at the level of blocks,  -->
+<!-- and certainly for any object replaced by a different static  -->
+<!-- representation.  But for generated objects, e.g. QR codes,   -->
+<!-- it would be best if the generation process used the          -->
+<!-- "assembly-id" template for guranteed consistency.  This *is* -->
+<!-- being done for "datafile" but is technical debt otherwise.   -->
+
 <!-- [Ed. this once prefaced the "visible-id-early" template, a weak  -->
 <!-- forerunner of the "assembly-id" template.  But the commentary    -->
 <!-- is still good, so we have preserved it here.]                    -->
