@@ -2030,11 +2030,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:value-of select="$rsid"/>
                                 <xsl:text>_editor</xsl:text>
                             </xsl:attribute>
-                            <!-- conditional attributes shared with parsons activecodes -->
-                            <xsl:call-template name="runestone-activecode-editor-attributes">
-                                <xsl:with-param name="active-language" select="$active-language"/>
-                                <xsl:with-param name="hosting" select="$hosting"/>
-                            </xsl:call-template>
+                            <xsl:attribute name="data-question_label"/>
+                            <!-- Code Lens only for certain languages -->
+                            <xsl:attribute name="data-codelens">
+                                <xsl:choose>
+                                    <xsl:when test="@codelens = 'no'">
+                                        <xsl:text>false</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                                        <xsl:text>true</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                                        <xsl:text>true</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>false</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:attribute>
+                            <!-- allow @datafile attribute on <program> -->
+                            <xsl:if test="@datafile">
+                                <!-- multiple files, coma- or space- separated -->
+                                <xsl:variable name="tokens" select="str:tokenize(@datafile, ', ')"/>
+                                <xsl:attribute name="data-datafile">
+                                    <xsl:for-each select="$tokens">
+                                        <xsl:value-of select="."/>
+                                        <!-- n - 1 separators, required by receiving Javascript -->
+                                        <!-- comma-separated this time                          -->
+                                        <xsl:if test="following-sibling::token">
+                                            <xsl:text>,</xsl:text>
+                                        </xsl:if>
+                                    </xsl:for-each>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <!-- allow @include attribute on <program> -->
+                            <xsl:if test="@include">
+                                <!-- space-separated this time -->
+                                <xsl:attribute name="data-include">
+                                    <xsl:apply-templates select="@include" mode="runestone-targets">
+                                        <xsl:with-param name="separator" select="' '"/>
+                                    </xsl:apply-templates>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <!-- SQL (only) needs an attribute so it can find some code -->
+                            <xsl:if test="$active-language = 'sql'">
+                                <xsl:attribute name="data-wasm">
+                                    <xsl:text>/_static</xsl:text>
+                                </xsl:attribute>
+                                <!-- A SQL database can be provided for automated  -->
+                                <!-- testing of correct answers via unit tests.    -->
+                                <!-- This is a location in the external directory. -->
+                                <xsl:if test="@database">
+                                    <xsl:attribute name="data-dburl">
+                                        <xsl:choose>
+                                            <xsl:when test="$b-managed-directories">
+                                                <xsl:value-of select="$external-directory"/>
+                                                <xsl:value-of select="@database"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="@database"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </xsl:if>
                             <!-- the code itself as text -->
                             <xsl:call-template name="sanitize-text">
                                 <xsl:with-param name="text" select="input" />
