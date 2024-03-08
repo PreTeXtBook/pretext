@@ -1889,6 +1889,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- Code Lens only for certain languages -->
                             <xsl:attribute name="data-codelens">
                                 <xsl:choose>
+                                    <xsl:when test="@codelens = 'no'">
+                                        <xsl:text>false</xsl:text>
+                                    </xsl:when>
                                     <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
                                         <xsl:text>true</xsl:text>
                                     </xsl:when>
