@@ -3236,7 +3236,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Place the <attr>interactive</attr> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
 
-            <p>Note that a Python ActiveCode automatically is enabled with a CodeLens button and requires no preparation of any trace data.  So a reader can form any type of Python program and closely examine its behavior.</p>
+            <p>For languages that support CodeLens, a button will be created that allows the reader to step through the program. For some programs, especially ones using libraries like turtle graphics or image, CodeLens will not function. To prevent showing the CodeLens button on programs for it will not work, authors can set the <attr>codelens</attr> attribute to <c>no</c>.</p>
 
             <p>Note also that a data file may be provided independently for consumption by an ActiveCode program.  See <xref ref="topic-datafile"/>.</p>
 
