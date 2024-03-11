@@ -9715,7 +9715,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- accumulate script tags *after* HTML elements -->
                     <xsl:apply-templates select="@source" />
                     <!-- accumulate script elements *after* @source scripts -->
-                    <xsl:apply-templates select="script" mode="interactive-script"/>
+                    <xsl:apply-templates select="script"/>
                 </div>
             </body>
         </html>
@@ -10196,7 +10196,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Scripts are added in order, after all other elements -->
 <!-- in the interactive, include scripts created from     -->
 <!-- @source directives in the interactive element        -->
-<xsl:template match="script" mode="interactive-script">
+<xsl:template match="interactive[@platform = 'javascript']/script">
     <script>
         <xsl:value-of select="."/>
     </script>
