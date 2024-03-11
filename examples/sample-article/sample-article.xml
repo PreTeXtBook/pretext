@@ -8557,6 +8557,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </input>
                     </program>
                 </listing>
+
+                <listing xml:id="program-activecode-python-no-codelens">
+                    <caption>An interactive Python program without codelens.</caption>
+                    <program xml:id="python-hello-world-no-codelens" label="python-hello-world-no-codelens" interactive='activecode' language="python" codelens="no">
+                        <input>
+                        print("Hello, World!")
+                        </input>
+                    </program>
+                </listing>
             </exercises>
 
             <exercises>
