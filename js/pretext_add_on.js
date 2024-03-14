@@ -117,7 +117,17 @@ function permalinkDescription(elem) {
         }
         resultNodes = headerNode.getElementsByClassName("title");
         if (resultNodes.length > 0) {
-            titleStr = resultNodes[0].innerText;
+            for (let n of resultNodes[0].childNodes) {
+                if (n.nodeType == Node.TEXT_NODE) {
+                    titleStr += n.nodeValue;
+                } else if (n.nodeType == Node.ELEMENT_NODE) {
+                    if (n.classList.contains("process-math")) {
+                        titleStr += n.innerText.replace(/[\n\r]/g, "");
+                    } else {
+                        titleStr += n.innerText;
+                    }
+                }
+            }
         }
     }
     retStr = typeStr;
@@ -137,7 +147,7 @@ function permalinkDescription(elem) {
     if ((lastChr == '.') || (lastChr == ':'))  {
         retStr = retStr.slice(0,retStr.length - 1);
     }
-    return retStr.replace(/[\n\r]/g, "");
+    return retStr;
 }
 
 /*
