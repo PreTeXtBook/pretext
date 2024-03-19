@@ -3970,7 +3970,7 @@ def get_temporary_directory():
 
     global __temps  #  cache of temporary directories
 
-    temp_dir = tempfile.mkdtemp()
+    temp_dir = tempfile.mkdtemp(prefix="pretext_")
     # Register the directory for cleanup at the end of successful
     # execution iff the verbosity is set to level 2 ("debug")
     # So errors, or requesting gross debugging info, will leave the
