@@ -54,9 +54,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:str="http://exslt.org/strings"
+    xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="pi str"
 >
-<!-- Do we need xmlns:exsl="http://exslt.org/common"? -->
 
 <!-- ########################## -->
 <!-- Text Manipulation Routines -->
