@@ -470,8 +470,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="$exercise-style = 'static'">
-            <xsl:variable name="parent-id">
-                <xsl:apply-templates select="ancestor::exercise" mode="visible-id" />
+            <xsl:variable name="parent-id" select="ancestor::exercise/@label">
+               <!--<xsl:apply-templates select="ancestor::exercise" mode="assembly-id" />-->
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="expression" select="@expr"/>
@@ -1282,6 +1282,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- also applied here.                                               -->
 
 <xsl:template match="audio|video|interactive" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
+<xsl:template match="exercise[@exercise-interactive='fillin' and setup]" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 

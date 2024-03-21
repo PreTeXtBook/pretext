@@ -1102,6 +1102,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     if external_abs:
         external_dir = os.path.join(tmp_dir, "external")
         shutil.copytree(external_abs, external_dir)
+    copy_html_css_js(tmp_dir)
 
     # Spawn a new process running a local html.server
     import subprocess
