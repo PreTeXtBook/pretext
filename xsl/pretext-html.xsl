@@ -9724,7 +9724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
 <!-- NB: coordinate with "embed-iframe-url" in -common                  -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@doenetml|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
@@ -9787,6 +9787,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>.min.js</xsl:text>
     </xsl:variable>
     <script src="{$d3-library-url}"></script>
+</xsl:template>
+
+<!-- DoenetML header libraries -->
+<xsl:template match="interactive[@platform = 'doenetml']" mode="header-libraries">
+    <link rel="stylesheet" type="text/css" href="https://dev.doenet.org/cdn/style.css" />
+    <script onload="onLoad()" type="module" src="https://dev.doenet.org/cdn/doenet-standalone.js"></script>
+    <script>
+        <xsl:text>function onLoad() {window.renderDoenetToContainer(document.querySelector(".doenetml-applet"))}</xsl:text>
+    </script>
 </xsl:template>
 
 <!-- Javascript header libraries (none) -->
@@ -10082,6 +10091,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
           </xsl:element>
       </xsl:when>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="slate[@surface = 'doenetml']">
+    <div class="doenetml-applet">
+        <div class="doenetml-loading" style="text-align:center">
+            <p><image src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/></p>
+            <p><xsl:text>Waiting on the page to load...</xsl:text></p>
+        </div>
+        <script type="text/doenetml">
+            <xsl:value-of select="text()"/>
+        </script>
+    </div>
 </xsl:template>
 
 <!-- Utilities -->
