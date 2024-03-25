@@ -78,19 +78,20 @@ function handleWW(ww_id, action) {
         const iframe = ww_container.querySelector('.problem-iframe');
         const formData = new FormData(iframe.contentDocument.getElementById(ww_id + "-form"));
         const params = new URLSearchParams(formData);
-        url = new URL(ww_domain + '/webwork2/html2xml?' + params.toString())
+        url = new URL(ww_domain + '/webwork2/render_rpc?' + params.toString())
         url.searchParams.append("answersSubmitted", '1');
         url.searchParams.append('WWsubmit', "1");
     } else {
-        url = new URL(ww_domain + '/webwork2/html2xml');
+        url = new URL(ww_domain + '/webwork2/render_rpc');
         url.searchParams.append("problemSeed", ww_container.dataset.current_seed);
         if (ww_problemSource) url.searchParams.append("problemSource", ww_problemSource);
         else if (ww_sourceFilePath) url.searchParams.append("sourceFilePath", ww_sourceFilePath);
         url.searchParams.append("answersSubmitted", '0');
         url.searchParams.append("displayMode", "MathJax");
         url.searchParams.append("courseID", ww_course_id);
-        url.searchParams.append("userID", ww_user_id);
-        url.searchParams.append("course_password", ww_course_password);
+        url.searchParams.append("user", ww_user_id);
+        url.searchParams.append("passwd", ww_course_password);
+        url.searchParams.append("disableCookes", '1');
         url.searchParams.append("outputformat", "raw");
         // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
         url.searchParams.append("showSolutions", ww_container.dataset.hasSolution == 'true' ? '1' : '0');
@@ -103,6 +104,7 @@ function handleWW(ww_id, action) {
         // Create the form that will contain the text and input fields of the interactive problem.
         const form = document.createElement("form");
         form.id = ww_id + "-form";
+        form.dataset.iframeHeight = 1;
 
         // Create a div for the problem text.
         const body_div = document.createElement("div");
@@ -191,13 +193,14 @@ function handleWW(ww_id, action) {
             psvn:             data.inputs_ref.psvn,
             courseName:       ww_course_id,
             courseID:         ww_course_id,
-            userID:           ww_user_id,
-            course_password:  ww_course_password,
+            user:             ww_user_id,
+            passwd:           ww_course_password,
             displayMode:      "MathJax",
             session_key:      data.rh_result.session_key,
             outputformat:     "raw",
             language:         data.formLanguage,
             showSummary:      data.showSummary,
+            disableCookies:   '1',
             // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
             showSolutions:    ww_container.dataset.hasSolution == 'true' ? '1' : '0',
             showHints:        ww_container.dataset.hasHint == 'true' ? '1' : '0',
@@ -304,182 +307,75 @@ function handleWW(ww_id, action) {
             }
         }
 
-        if (action == 'check') {
-            // Runestone trigger
-            // TODO: condition on platform=Runestone
-            $("body").trigger('runestone_ww_check', data)
-
-            const inputs = body_div.querySelectorAll("input:not([type=hidden])");
-            for (const input of inputs) {
-                const name = input.name;
-                if (input.type == 'text' && answers[name]) {
-                    const score = data.rh_result.answers[name].score;
-                    let headline = '';
-                    let correctClass = '';
-                    if (score >= 1) {
-                        headline = localize_correct + '!';
-                        correctClass = 'correct';
-                    } else if (score > 0 && score < 1) {
-                        headline = `${Math.round(score * 100)}% ${localize_correct}.`;
-                        correctClass = 'partly-correct';
-                    } else if (data.rh_result.answers[name].student_ans == '') {
-                        headline = localize_blank + '.';
-                        correctClass = 'blank';
-                    } else if (score <= 0) {
-                        headline = localize_incorrect + '.';
-                        correctClass = 'incorrect';
-                    }
-                    let title = `<span class="${correctClass}">${headline}</span>`;
-                    let message = (data.rh_result.answers[name].ans_message ? data.rh_result.answers[name].ans_message : '');
-                    input.classList.add(correctClass);
-
-                }
-
-                if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
-                    const score = data.rh_result.answers[name].score;
-                    const student_ans = data.rh_result.answers[name].student_value || data.rh_result.answers[name].student_ans;
-                    const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
-                    if (input.value == student_ans) {
-                        if (score == 1) {
-                            input.parentNode.classList.add('correct');
-                        } else {
-                            input.parentNode.classList.add('incorrect');
-                        }
-                    }
-                }
-
-                if (input.type.toUpperCase() == 'CHECKBOX' && answers[name]) {
-                    const score = data.rh_result.answers[name].score;
-                    const student_ans = data.rh_result.answers[name].student_ans;
-                    const correct_ans = data.rh_result.answers[name].correct_ans;
-                    if (input.value == data.rh_result.answers[name].firstElement) {
-                        const checkbox_div = input.parentNode.parentNode;
-                        if (score == 1) {
-                            checkbox_div.classList.add('correct');
-                        } else {
-                            checkbox_div.classList.add('incorrect');
-                        }
-                    }
-                }
-            }
-
-            const hiddenInputs = body_div.querySelectorAll("input[type=hidden]");
-            for (const input of hiddenInputs) {
-                const name = input.name;
-                if (!input.nextElementSibling) continue;
-                const graphtoolContainer = input.nextElementSibling.nextElementSibling;
-                if (graphtoolContainer && answers[name] && graphtoolContainer.classList.contains('graphtool-container')) {
-                    graphtoolContainer.style.position = 'relative';
-                    const score = data.rh_result.answers[name].score;
-                    let title = '';
-                    if (score == 1) {
-                        title = `<span class="correct">${localize_correct}</span>`;
-                    } else if (score > 0 && score < 1) {
-                        title = `<span class="partly-correct">${Math.round(score * 100)}% ${localize_correct}.</span>`;
-                    } else if (data.rh_result.answers[name].student_ans == '') {
-                        // do nothing if the submitted answer is blank and the problem has not already been scored as correct
-                        continue;
-                    } else if (score == 0) {
-                        title = `<span class="incorrect">${localize_incorrect}.</span>`;
-                    }
-                    if (score == 1) {
-                        graphtoolContainer.classList.add('correct');
-                    } else {
-                        graphtoolContainer.classList.add('incorrect');
-                    }
-
-                }
-            }
-
-            const selects = body_div.querySelectorAll("select:not([type=hidden])");
-            for (const select of selects) {
-                const name = select.name;
-                const score = data.rh_result.answers[name].score;
-                let title = '';
-                if (score == 1) {
-                    headline = localize_correct + '!';
-                    correctClass = 'correct';
-                } else {
-                    headline = localize_incorrect + '.';
-                    correctClass = 'incorrect';
-                }
-                select.classList.add(correctClass);
-                title = `<span class="${correctClass}">${headline}</span>`;
-                // put a span around select since select does not support ::after pseudo elements
-                let psSpan = document.createElement('span');
-                psSpan.classList.add("select-wrapper", correctClass);
-                select.parentNode.insertBefore(psSpan, select);
-                psSpan.appendChild(select);
-            }
-        }
-
         let iframeContents = '<!DOCTYPE html><head>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
-            `<script>window.MathJax = {
-              tex: {
-                inlineMath: [['\\\\(','\\\\)']],
-                tags: "none",
-                useLabelIds: true,
-                tagSide: "right",
-                tagIndent: ".8em",
-                packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl']}
-              },
-              options: {
-                ignoreHtmlClass: "tex2jax_ignore",
-                processHtmlClass: "has_am",
-                renderActions: {
-                    findScript: [10, function (doc) {
-                        document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {
-                            const display = !!node.type.match(/; *mode=display/);
-                            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                            const text = document.createTextNode('');
-                            node.parentNode.replaceChild(text, node);
-                            math.start = {node: text, delim: '', n: 0};
-                            math.end = {node: text, delim: '', n: 0};
-                            doc.math.push(math);
-                        });
-                    }, '']
-                },
-              },
-              chtml: {
-                scale: 0.88,
-                mtextInheritFont: true
-              },
-              loader: {
-                load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],
-                paths: {pretext: "https://pretextbook.org/js/lib"},
-              },
-            };
+            `<script>
+                window.MathJax = {
+                    tex: { packages: { '[+]': ['noerrors'] } },
+                    loader: { load: ['input/asciimath', '[tex]/noerrors'] },
+                    startup: {
+                        ready() {
+                            const AM = MathJax.InputJax.AsciiMath.AM;
+
+                            // Modify existing AsciiMath triggers.
+                            AM.symbols[AM.names.indexOf('**')] = {
+                                input: '**',
+                                tag: 'msup',
+                                output: '^',
+                                tex: null,
+                                ttype: AM.TOKEN.INFIX
+                            };
+
+                            const i = AM.names.indexOf('infty');
+                            AM.names[i] = 'infinity';
+                            AM.symbols[i] = { input: 'infinity', tag: 'mo', output: '\u221E', tex: 'infty', ttype: AM.TOKEN.CONST };
+
+                            return MathJax.startup.defaultReady();
+                        }
+                    },
+                    options: {
+                        renderActions: {
+                            findScript: [
+                                10,
+                                (doc) => {
+                                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                                        const math = new doc.options.MathItem(
+                                            node.textContent,
+                                            doc.inputJax[0],
+                                            !!node.type.match(/; *mode=display/)
+                                        );
+                                        const text = document.createTextNode('');
+                                        node.parentNode.replaceChild(text, node);
+                                        math.start = { node: text, delim: '', n: 0 };
+                                        math.end = { node: text, delim: '', n: 0 };
+                                        doc.math.push(math);
+                                    }
+                                },
+                                ''
+                            ]
+                        },
+                        ignoreHtmlClass: 'tex2jax_ignore'
+                    }
+                };
             </script>` +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>' +
-            '<script src="https://pretextbook.org/js/lib/knowl.js" defer></script>' +
+            '<script src="_static/pretext/js/lib/knowl.js" defer></script>' +
             '<link rel="stylesheet" href="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>';
 
         // Determine javascript and css dependencies
         const extra_css_files = [];
         const extra_js_files = [];
-        //if (data.rh_result.flags.extra_js_files) {
-        //    for (const jsFile of data.rh_result.flags.extra_js_files) {
-        //        if (jsFile.file == "js/apps/GraphTool/graphtool.min.js" || jsFile.file == "js/apps/Scaffold/scaffold.js") {
-        //            extra_css_files.push({ file: 'js/vendor/bootstrap/css/bootstrap.css', external: '0' });
-        //            extra_css_files.push({ file: 'themes/math4/math4.css', external: '0' });
-        //            extra_js_files.push({ file: 'js/vendor/bootstrap/js/bootstrap.js', external: '0' });
-        //        }
-        //    }
-        //}
 
         if (data.extra_css_files) data.extra_css_files.unshift(...extra_css_files);
         else data.extra_css_files = extra_css_files;
         for (const cssFile of data.extra_css_files) {
-            if (/knowl/.test(cssFile.file)) continue;
             iframeContents += '<link rel="stylesheet" href="' + (cssFile.external !== '1' ? ww_domain : '') + cssFile.file + '"/>';
         }
 
         if (data.extra_js_files) data.extra_js_files.unshift(...extra_js_files);
         else data.extra_js_files = extra_js_files;
         for (const jsFile of data.extra_js_files) {
-            if (/knowl/.test(jsFile.file)) continue;
             iframeContents += '<script src="' + (jsFile.external !== '1' ? ww_domain : '') + jsFile.file + '" ' +
                 Object.keys(jsFile.attributes || {}).reduce((ret, key) => {
                     ret += key + '="' + jsFile.attributes[key] + '" '; return ret;
@@ -487,81 +383,19 @@ function handleWW(ww_id, action) {
         }
 
         iframeContents +=
-            '<link rel="stylesheet" href="https://pretextbook.org/css/0.31/pretext_add_on.css"/>' +
-            '<link rel="stylesheet" href="https://pretextbook.org/css/0.31/knowls_default.css"/>' +
+            '<link rel="stylesheet" href="_static/pretext/css/pretext_add_on.css"/>' +
+            '<link rel="stylesheet" href="_static/pretext/css/knowls_default.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>' +
             `<style>
-            html { overflow-y: hidden; }
-            html body { background:unset; margin: 0; }
-            body { font-size: initial; line-height: initial; padding:2px; }
-            .hidden-content { display: none; }
-            input[type="text"], input[type="radio"], label, select {
-                height: auto;
-                width: auto;
-                max-width: unset;
-                margin: 0;
-                font-size: initial;
-                /*font-family: sans-serif;*/
-                line-height: initial;
-            }
-            input[type="text"] {
-                padding: 1px;
-                padding-inline: 2px;
-                border-width: 1px;
-                border-style: inset;
-                border-color: rgb(133, 133, 133);
-                border-radius: 0;
-                box-shadow: unset;
-                transition: none;
-            }
-            input[type="text"]:focus, input[type="text"]:active {
-                box-shadow: unset;
-                border-width: 1px;
-                border-style: inset;
-                border-radius: 4px;
-                border-color: rgb(133, 133, 133);
-                outline: auto;
-            }
-            input[type="radio"] {
-                box-sizing: border-box;
-                margin-block: 3px 0;
-                margin-inline: 5px 3px;
-                vertical-align: unset;
-            }
-            span.nobreak {
-                white-space: nowrap;
-            }
-            div.PGML img.image-view-elt {
-                max-width:100%;
-            }
-            label {
-                display: inline-block;
-            }
-            select {
-                margin: 0;
-                border-width: 1px;
-                border-style: inset;
-                display: inline-block;
-                padding-block: 1px;
-                vertical-align: baseline;
-                background-color: unset;
-                padding-inline: 0;
-            }
-            .accordion-body.expanded {
-                overflow-y: visible;
-                overflow-x: clip;
-            }
-            .graphtool-answer-container .graphtool-graph {
-                margin: 0;
-                width: 300px;
-                height: 300px;
-            }
-            .graphtool-answer-container .graphtool-number-line {
-                height: 57px;
-            }
-            .quill-toolbar {
-                box-sizing: content-box;
-            }
+                html { overflow-y: hidden; }
+                html body { background:unset; margin: 0; }
+                body { font-size: initial; line-height: initial; padding:2px; }
+                .hidden-content { display: none; }
+                span.nobreak { white-space: nowrap; }
+                div.PGML img.image-view-elt { max-width:100%; }
+                .graphtool-answer-container .graphtool-graph { margin: 0; width: 300px; height: 300px; }
+                .graphtool-answer-container .graphtool-number-line { height: 57px; }
+                .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
             </style>` +
             '</head><body><main class="pretext-content problem-content">' + form.outerHTML + '</main></body>' +
             '</html>';
@@ -585,7 +419,7 @@ function handleWW(ww_id, action) {
                 ww_container.prepend(iframe);
             }
 
-            iFrameResize({ checkOrigin: false, scrolling: 'omit', heightCalculationMethod: 'lowestElement' }, iframe);
+            iFrameResize({ checkOrigin: false, scrolling: 'omit', heightCalculationMethod: 'taggedElement' }, iframe);
 
             iframe.addEventListener('load', () => {
                 // Set up form submission from inside the iframe.
@@ -741,6 +575,10 @@ function adjustSrcHrefs(container,ww_domain) {
     container.querySelectorAll('[href]').forEach((node) => {
         const href = node.attributes.href.value;
         if (href !== '#' && !href.match(/^[a-z]+:\/\//i)) node.href = ww_domain + '/' + href;
+    });
+    container.querySelectorAll('[data-knowl-url]').forEach((node) => {
+        const dku = node.dataset.knowlUrl;
+        if (dku !== '#' && !dku.match(/^[a-z]+:\/\//i)) node.dataset.knowlUrl = ww_domain + dku;
     });
     container.querySelectorAll('[src]').forEach((node) => {
         node.src = new URL(node.attributes.src.value, ww_domain).href;
