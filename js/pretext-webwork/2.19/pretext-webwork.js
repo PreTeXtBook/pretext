@@ -104,6 +104,7 @@ function handleWW(ww_id, action) {
         // Create the form that will contain the text and input fields of the interactive problem.
         const form = document.createElement("form");
         form.id = ww_id + "-form";
+        form.dataset.iframeHeight = 1;
 
         // Create a div for the problem text.
         const body_div = document.createElement("div");
@@ -418,7 +419,7 @@ function handleWW(ww_id, action) {
                 ww_container.prepend(iframe);
             }
 
-            iFrameResize({ checkOrigin: false, scrolling: 'omit', heightCalculationMethod: 'lowestElement' }, iframe);
+            iFrameResize({ checkOrigin: false, scrolling: 'omit', heightCalculationMethod: 'taggedElement' }, iframe);
 
             iframe.addEventListener('load', () => {
                 // Set up form submission from inside the iframe.
