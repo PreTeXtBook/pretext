@@ -454,7 +454,7 @@ function handleWW(ww_id, action) {
             };
             </script>` +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>' +
-            '<script src="https://pretextbook.org/js/lib/knowl.js" defer></script>' +
+            '<script src="_static/pretext/js/lib/knowl.js" defer></script>' +
             '<link rel="stylesheet" href="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>';
 
@@ -489,8 +489,8 @@ function handleWW(ww_id, action) {
         }
 
         iframeContents +=
-            '<link rel="stylesheet" href="https://pretextbook.org/css/0.31/pretext_add_on.css"/>' +
-            '<link rel="stylesheet" href="https://pretextbook.org/css/0.31/knowls_default.css"/>' +
+            '<link rel="stylesheet" href="_static/pretext/css/pretext_add_on.css"/>' +
+            '<link rel="stylesheet" href="_static/pretext/css/knowls_default.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>' +
             `<style>
             html { overflow-y: hidden; }
