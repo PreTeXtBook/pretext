@@ -417,41 +417,54 @@ function handleWW(ww_id, action) {
 
         let iframeContents = '<!DOCTYPE html><head>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
-            `<script>window.MathJax = {
-              tex: {
-                inlineMath: [['\\\\(','\\\\)']],
-                tags: "none",
-                useLabelIds: true,
-                tagSide: "right",
-                tagIndent: ".8em",
-                packages: {'[+]': ['base', 'extpfeil', 'ams', 'amscd', 'newcommand', 'knowl']}
-              },
-              options: {
-                ignoreHtmlClass: "tex2jax_ignore",
-                processHtmlClass: "has_am",
-                renderActions: {
-                    findScript: [10, function (doc) {
-                        document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {
-                            const display = !!node.type.match(/; *mode=display/);
-                            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-                            const text = document.createTextNode('');
-                            node.parentNode.replaceChild(text, node);
-                            math.start = {node: text, delim: '', n: 0};
-                            math.end = {node: text, delim: '', n: 0};
-                            doc.math.push(math);
-                        });
-                    }, '']
-                },
-              },
-              chtml: {
-                scale: 0.88,
-                mtextInheritFont: true
-              },
-              loader: {
-                load: ['input/asciimath', '[tex]/extpfeil', '[tex]/amscd', '[tex]/newcommand', '[pretext]/mathjaxknowl3.js'],
-                paths: {pretext: "https://pretextbook.org/js/lib"},
-              },
-            };
+            `<script>
+                window.MathJax = {
+                    tex: { packages: { '[+]': ['noerrors'] } },
+                    loader: { load: ['input/asciimath', '[tex]/noerrors'] },
+                    startup: {
+                        ready() {
+                            const AM = MathJax.InputJax.AsciiMath.AM;
+
+                            // Modify existing AsciiMath triggers.
+                            AM.symbols[AM.names.indexOf('**')] = {
+                                input: '**',
+                                tag: 'msup',
+                                output: '^',
+                                tex: null,
+                                ttype: AM.TOKEN.INFIX
+                            };
+
+                            const i = AM.names.indexOf('infty');
+                            AM.names[i] = 'infinity';
+                            AM.symbols[i] = { input: 'infinity', tag: 'mo', output: '\u221E', tex: 'infty', ttype: AM.TOKEN.CONST };
+
+                            return MathJax.startup.defaultReady();
+                        }
+                    },
+                    options: {
+                        renderActions: {
+                            findScript: [
+                                10,
+                                (doc) => {
+                                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                                        const math = new doc.options.MathItem(
+                                            node.textContent,
+                                            doc.inputJax[0],
+                                            !!node.type.match(/; *mode=display/)
+                                        );
+                                        const text = document.createTextNode('');
+                                        node.parentNode.replaceChild(text, node);
+                                        math.start = { node: text, delim: '', n: 0 };
+                                        math.end = { node: text, delim: '', n: 0 };
+                                        doc.math.push(math);
+                                    }
+                                },
+                                ''
+                            ]
+                        },
+                        ignoreHtmlClass: 'tex2jax_ignore'
+                    }
+                };
             </script>` +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>' +
             '<script src="_static/pretext/js/lib/knowl.js" defer></script>' +
