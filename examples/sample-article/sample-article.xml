@@ -8176,6 +8176,89 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
             </subsection>
+
+            <subsection xml:id="interactive-doenetml">
+                <title>DoenetML</title>
+
+                <p>
+                    <url href="https://doenet.org">DoenetML</url> is a markup language
+                    inspired by <pretext/> for semantically describing interactive
+                    mathematics applets for the web. Use
+                    <c>interactive[@platform="doenetml"]</c> with a
+                    <c>slate[@surface="doenetml"]</c> to include DoenetML content
+                    within your document.
+                </p>
+                <p>
+                    Since DoenetML is similar to,
+                    but not completely compatible with, XML, it cannot be authored
+                    directly within a PreTeXt document without painstakingly escaping
+                    every <c>&lt;</c> as <c>&amp;lt;</c> and every <c>&amp;</c>
+                    as <c>&amp;amp;</c>. However, a convenient workflow to avoid this
+                    is to author your DoenetML in a separate file like
+                    <c>example.doenetml</c>, then include this file
+                    within your <pretext/> document using
+                    <c>&lt;xi:include parse="text" src="path/to/example.doenetml"/&gt;</c>.
+                </p>
+
+                <figure xml:id="figure-doenetml">
+                    <caption>DoenetML example</caption>
+                    <interactive xml:id="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
+                        <slate surface="doenetml">
+                            &lt;p&gt;
+                            Adjust the vectors &lt;m&gt;\vec u&lt;/m&gt;, &lt;m&gt;\vec v&lt;/m&gt;, and &lt;m&gt;\vec w&lt;/m&gt; in the
+                            left graph to visualize the areas calculated by
+                            &lt;m&gt;\det[\vec u\hspace{0.5em}\vec w]&lt;/m&gt;, &lt;m&gt;\det[\vec v\hspace{0.5em}\vec w]&lt;/m&gt;,
+                            and
+                            &lt;m&gt;\det[\vec u+\vec v\hspace{0.5em}\vec w]&lt;/m&gt;.
+                          &lt;/p&gt;
+                          &lt;setup&gt;&lt;line through=&quot;(0,0) $v&quot; name=&quot;vLine&quot;/&gt;&lt;math simplify  name=&quot;c&quot;&gt;$cv.x/$v.x&lt;/math&gt;&lt;/setup&gt;
+                          &lt;sideBySide&gt;
+                            &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
+                              &lt;m draggable=&quot;false&quot; anchor=&quot;(10,14)&quot;&gt;
+                                \det[\vec u\hspace{0.5em}\vec w],
+                                \det[\vec v\hspace{0.5em}\vec w]
+                              &lt;/m&gt;
+                              &lt;point name=&quot;u&quot; styleNumber=&quot;3&quot;&gt;
+                                (6,2)
+                                &lt;label&gt;&lt;m&gt;\vec u&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;point name=&quot;w&quot; styleNumber=&quot;3&quot;&gt;
+                                (3,7)
+                                &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;point name=&quot;uPlusV&quot; styleNumber=&quot;4&quot;&gt;
+                                (9,5)
+                                &lt;label&gt;&lt;m&gt;\vec v&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;polygon vertices=&quot;(0,0) $u $u+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;3&quot;/&gt;
+                              &lt;polygon vertices=&quot;$u $uPlusV $uPlusV+$w $u+$w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;4&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;(0,0) $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$w $uPlusV+$w&quot; styleNumber=&quot;6&quot;/&gt;
+                            &lt;/graph&gt;
+                            &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
+                              &lt;m draggable=&quot;false&quot; anchor=&quot;(12,14)&quot;&gt;
+                                \det[\vec u+\vec v\hspace{0.5em}\vec w]
+                              &lt;/m&gt;
+                              &lt;polygon vertices=&quot;(0,0) $uPlusV $uPlusV+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;2&quot;/&gt;
+                              &lt;point draggable=&quot;false&quot; styleNumber=&quot;3&quot;&gt;
+                                $w
+                                &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;point draggable=&quot;false&quot; styleNumber=&quot;4&quot;&gt;
+                                $uPlusV
+                                &lt;label&gt;&lt;m&gt;\vec u+\vec v&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;lineSegment endpoints=&quot;(0,0) $u&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$u $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$w $w+$u&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$w+$u $w+$uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                            &lt;/graph&gt;
+                          &lt;/sideBySide&gt;
+                        </slate>
+                    </interactive>
+                </figure>
+
+            </subsection>
         </section>
 
         <section xml:id="section-interactive-server" label="section-interactive-server">
