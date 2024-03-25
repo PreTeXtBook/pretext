@@ -91,6 +91,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \usetikzlibrary{arrows,matrix}
         \usetikzlibrary{positioning}        % for Dave R's worksheet
         \usepackage{circuitikz}             % for Virgil P's worksheet
+        \usepackage{nicematrix}             % for multi-run latex-image (label="latex-three-pass")
         </latex-image-preamble>
         <!--
         The Sage Notebook has its own interface and worksheet list.
@@ -3156,6 +3157,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     \addplot[only marks] coordinates {(1,5) (2,3) (3,8) (4,9) (5,5) (6,5) (7,8) (8,2) (9,3)};
                                 \end{axis}
                             \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>The next image requires three passes with <latex/> to get everything in place.  It is placed here to test that the code in the Pythion script correctly recognizes this requirement.</p>
+
+                <figure>
+                    <caption>A matrix with colored entries</caption>
+
+                    <!-- This image needs three passes with LaTeX, which -->
+                    <!-- is supported by the script making this image    -->
+                    <image width="50%">
+                        <latex-image label="latex-three-pass">
+                            \begin{tikzpicture}
+                            \node{
+                                $\begin{bNiceArray}{ccc|cc}[
+                                code-before={\cellcolor{green!72}{1-1,2-2,3-3}\cellcolor{teal!72}{1-2,2-3,3-4}\cellcolor{yellow!72}{1-3,2-4,3-5}}
+                                ]
+                                3 \amp 4 \amp 0 \amp 1 \amp 4 \\
+                                -2 \amp 3 \amp 1 \amp -2 \amp 3 \\
+                                0 \amp 2 \amp 1 \amp 0 \amp 2
+                                \end{bNiceArray}$
+                            };
+                        \end{tikzpicture}
                         </latex-image>
                     </image>
                 </figure>
