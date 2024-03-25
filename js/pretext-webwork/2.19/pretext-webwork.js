@@ -576,6 +576,10 @@ function adjustSrcHrefs(container,ww_domain) {
         const href = node.attributes.href.value;
         if (href !== '#' && !href.match(/^[a-z]+:\/\//i)) node.href = ww_domain + '/' + href;
     });
+    container.querySelectorAll('[data-knowl-url]').forEach((node) => {
+        const dku = node.dataset.knowlUrl;
+        if (dku !== '#' && !dku.match(/^[a-z]+:\/\//i)) node.dataset.knowlUrl = ww_domain + dku;
+    });
     container.querySelectorAll('[src]').forEach((node) => {
         node.src = new URL(node.attributes.src.value, ww_domain).href;
     });
