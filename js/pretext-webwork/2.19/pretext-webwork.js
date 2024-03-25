@@ -306,115 +306,6 @@ function handleWW(ww_id, action) {
             }
         }
 
-        if (action == 'check') {
-            // Runestone trigger
-            // TODO: condition on platform=Runestone
-            $("body").trigger('runestone_ww_check', data)
-
-            const inputs = body_div.querySelectorAll("input:not([type=hidden])");
-            for (const input of inputs) {
-                const name = input.name;
-                if (input.type == 'text' && answers[name]) {
-                    const score = data.rh_result.answers[name].score;
-                    let headline = '';
-                    let correctClass = '';
-                    if (score >= 1) {
-                        headline = localize_correct + '!';
-                        correctClass = 'correct';
-                    } else if (score > 0 && score < 1) {
-                        headline = `${Math.round(score * 100)}% ${localize_correct}.`;
-                        correctClass = 'partly-correct';
-                    } else if (data.rh_result.answers[name].student_ans == '') {
-                        headline = localize_blank + '.';
-                        correctClass = 'blank';
-                    } else if (score <= 0) {
-                        headline = localize_incorrect + '.';
-                        correctClass = 'incorrect';
-                    }
-                    let title = `<span class="${correctClass}">${headline}</span>`;
-                    let message = (data.rh_result.answers[name].ans_message ? data.rh_result.answers[name].ans_message : '');
-                    input.classList.add(correctClass);
-
-                }
-
-                if (input.type.toUpperCase() == 'RADIO' && answers[name]) {
-                    const score = data.rh_result.answers[name].score;
-                    const student_ans = data.rh_result.answers[name].student_value || data.rh_result.answers[name].student_ans;
-                    const correct_ans = data.rh_result.answers[name].correct_choice || data.rh_result.answers[name].correct_ans;
-                    if (input.value == student_ans) {
-                        if (score == 1) {
-                            input.parentNode.classList.add('correct');
-                        } else {
-                            input.parentNode.classList.add('incorrect');
-                        }
-                    }
-                }
-
-                if (input.type.toUpperCase() == 'CHECKBOX' && answers[name]) {
-                    const score = data.rh_result.answers[name].score;
-                    const student_ans = data.rh_result.answers[name].student_ans;
-                    const correct_ans = data.rh_result.answers[name].correct_ans;
-                    if (input.value == data.rh_result.answers[name].firstElement) {
-                        const checkbox_div = input.parentNode.parentNode;
-                        if (score == 1) {
-                            checkbox_div.classList.add('correct');
-                        } else {
-                            checkbox_div.classList.add('incorrect');
-                        }
-                    }
-                }
-            }
-
-            const hiddenInputs = body_div.querySelectorAll("input[type=hidden]");
-            for (const input of hiddenInputs) {
-                const name = input.name;
-                if (!input.nextElementSibling) continue;
-                const graphtoolContainer = input.nextElementSibling.nextElementSibling;
-                if (graphtoolContainer && answers[name] && graphtoolContainer.classList.contains('graphtool-container')) {
-                    graphtoolContainer.style.position = 'relative';
-                    const score = data.rh_result.answers[name].score;
-                    let title = '';
-                    if (score == 1) {
-                        title = `<span class="correct">${localize_correct}</span>`;
-                    } else if (score > 0 && score < 1) {
-                        title = `<span class="partly-correct">${Math.round(score * 100)}% ${localize_correct}.</span>`;
-                    } else if (data.rh_result.answers[name].student_ans == '') {
-                        // do nothing if the submitted answer is blank and the problem has not already been scored as correct
-                        continue;
-                    } else if (score == 0) {
-                        title = `<span class="incorrect">${localize_incorrect}.</span>`;
-                    }
-                    if (score == 1) {
-                        graphtoolContainer.classList.add('correct');
-                    } else {
-                        graphtoolContainer.classList.add('incorrect');
-                    }
-
-                }
-            }
-
-            const selects = body_div.querySelectorAll("select:not([type=hidden])");
-            for (const select of selects) {
-                const name = select.name;
-                const score = data.rh_result.answers[name].score;
-                let title = '';
-                if (score == 1) {
-                    headline = localize_correct + '!';
-                    correctClass = 'correct';
-                } else {
-                    headline = localize_incorrect + '.';
-                    correctClass = 'incorrect';
-                }
-                select.classList.add(correctClass);
-                title = `<span class="${correctClass}">${headline}</span>`;
-                // put a span around select since select does not support ::after pseudo elements
-                let psSpan = document.createElement('span');
-                psSpan.classList.add("select-wrapper", correctClass);
-                select.parentNode.insertBefore(psSpan, select);
-                psSpan.appendChild(select);
-            }
-        }
-
         let iframeContents = '<!DOCTYPE html><head>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
             `<script>
@@ -474,27 +365,16 @@ function handleWW(ww_id, action) {
         // Determine javascript and css dependencies
         const extra_css_files = [];
         const extra_js_files = [];
-        //if (data.rh_result.flags.extra_js_files) {
-        //    for (const jsFile of data.rh_result.flags.extra_js_files) {
-        //        if (jsFile.file == "js/apps/GraphTool/graphtool.min.js" || jsFile.file == "js/apps/Scaffold/scaffold.js") {
-        //            extra_css_files.push({ file: 'js/vendor/bootstrap/css/bootstrap.css', external: '0' });
-        //            extra_css_files.push({ file: 'themes/math4/math4.css', external: '0' });
-        //            extra_js_files.push({ file: 'js/vendor/bootstrap/js/bootstrap.js', external: '0' });
-        //        }
-        //    }
-        //}
 
         if (data.extra_css_files) data.extra_css_files.unshift(...extra_css_files);
         else data.extra_css_files = extra_css_files;
         for (const cssFile of data.extra_css_files) {
-            if (/knowl/.test(cssFile.file)) continue;
             iframeContents += '<link rel="stylesheet" href="' + (cssFile.external !== '1' ? ww_domain : '') + cssFile.file + '"/>';
         }
 
         if (data.extra_js_files) data.extra_js_files.unshift(...extra_js_files);
         else data.extra_js_files = extra_js_files;
         for (const jsFile of data.extra_js_files) {
-            if (/knowl/.test(jsFile.file)) continue;
             iframeContents += '<script src="' + (jsFile.external !== '1' ? ww_domain : '') + jsFile.file + '" ' +
                 Object.keys(jsFile.attributes || {}).reduce((ret, key) => {
                     ret += key + '="' + jsFile.attributes[key] + '" '; return ret;
@@ -506,77 +386,15 @@ function handleWW(ww_id, action) {
             '<link rel="stylesheet" href="_static/pretext/css/knowls_default.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>' +
             `<style>
-            html { overflow-y: hidden; }
-            html body { background:unset; margin: 0; }
-            body { font-size: initial; line-height: initial; padding:2px; }
-            .hidden-content { display: none; }
-            input[type="text"], input[type="radio"], label, select {
-                height: auto;
-                width: auto;
-                max-width: unset;
-                margin: 0;
-                font-size: initial;
-                /*font-family: sans-serif;*/
-                line-height: initial;
-            }
-            input[type="text"] {
-                padding: 1px;
-                padding-inline: 2px;
-                border-width: 1px;
-                border-style: inset;
-                border-color: rgb(133, 133, 133);
-                border-radius: 0;
-                box-shadow: unset;
-                transition: none;
-            }
-            input[type="text"]:focus, input[type="text"]:active {
-                box-shadow: unset;
-                border-width: 1px;
-                border-style: inset;
-                border-radius: 4px;
-                border-color: rgb(133, 133, 133);
-                outline: auto;
-            }
-            input[type="radio"] {
-                box-sizing: border-box;
-                margin-block: 3px 0;
-                margin-inline: 5px 3px;
-                vertical-align: unset;
-            }
-            span.nobreak {
-                white-space: nowrap;
-            }
-            div.PGML img.image-view-elt {
-                max-width:100%;
-            }
-            label {
-                display: inline-block;
-            }
-            select {
-                margin: 0;
-                border-width: 1px;
-                border-style: inset;
-                display: inline-block;
-                padding-block: 1px;
-                vertical-align: baseline;
-                background-color: unset;
-                padding-inline: 0;
-            }
-            .accordion-body.expanded {
-                overflow-y: visible;
-                overflow-x: clip;
-            }
-            .graphtool-answer-container .graphtool-graph {
-                margin: 0;
-                width: 300px;
-                height: 300px;
-            }
-            .graphtool-answer-container .graphtool-number-line {
-                height: 57px;
-            }
-            .quill-toolbar {
-                box-sizing: content-box;
-            }
+                html { overflow-y: hidden; }
+                html body { background:unset; margin: 0; }
+                body { font-size: initial; line-height: initial; padding:2px; }
+                .hidden-content { display: none; }
+                span.nobreak { white-space: nowrap; }
+                div.PGML img.image-view-elt { max-width:100%; }
+                .graphtool-answer-container .graphtool-graph { margin: 0; width: 300px; height: 300px; }
+                .graphtool-answer-container .graphtool-number-line { height: 57px; }
+                .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
             </style>` +
             '</head><body><main class="pretext-content problem-content">' + form.outerHTML + '</main></body>' +
             '</html>';
