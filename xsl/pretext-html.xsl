@@ -10096,7 +10096,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="slate[@surface = 'doenetml']">
     <div class="doenetml-applet">
         <div class="doenetml-loading" style="text-align:center">
-            <p><image src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/></p>
+            <p><img src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/></p>
             <p><xsl:text>Waiting on the page to load...</xsl:text></p>
         </div>
         <script type="text/doenetml">
