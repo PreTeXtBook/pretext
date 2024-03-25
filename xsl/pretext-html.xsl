@@ -9724,7 +9724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These forms *are* iframes, so we don't need to build their content -->
 <!-- NB: coordinate with "embed-iframe-url" in -common                  -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@doenetml|@iframe]" mode="create-iframe-page" />
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]" mode="create-iframe-page" />
 
 
 <!-- ################ -->
