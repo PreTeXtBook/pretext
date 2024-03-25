@@ -78,19 +78,20 @@ function handleWW(ww_id, action) {
         const iframe = ww_container.querySelector('.problem-iframe');
         const formData = new FormData(iframe.contentDocument.getElementById(ww_id + "-form"));
         const params = new URLSearchParams(formData);
-        url = new URL(ww_domain + '/webwork2/html2xml?' + params.toString())
+        url = new URL(ww_domain + '/webwork2/render_rpc?' + params.toString())
         url.searchParams.append("answersSubmitted", '1');
         url.searchParams.append('WWsubmit', "1");
     } else {
-        url = new URL(ww_domain + '/webwork2/html2xml');
+        url = new URL(ww_domain + '/webwork2/render_rpc');
         url.searchParams.append("problemSeed", ww_container.dataset.current_seed);
         if (ww_problemSource) url.searchParams.append("problemSource", ww_problemSource);
         else if (ww_sourceFilePath) url.searchParams.append("sourceFilePath", ww_sourceFilePath);
         url.searchParams.append("answersSubmitted", '0');
         url.searchParams.append("displayMode", "MathJax");
         url.searchParams.append("courseID", ww_course_id);
-        url.searchParams.append("userID", ww_user_id);
-        url.searchParams.append("course_password", ww_course_password);
+        url.searchParams.append("user", ww_user_id);
+        url.searchParams.append("passwd", ww_course_password);
+        url.searchParams.append("disableCookes", '1');
         url.searchParams.append("outputformat", "raw");
         // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
         url.searchParams.append("showSolutions", ww_container.dataset.hasSolution == 'true' ? '1' : '0');
@@ -191,13 +192,14 @@ function handleWW(ww_id, action) {
             psvn:             data.inputs_ref.psvn,
             courseName:       ww_course_id,
             courseID:         ww_course_id,
-            userID:           ww_user_id,
-            course_password:  ww_course_password,
+            user:             ww_user_id,
+            passwd:           ww_course_password,
             displayMode:      "MathJax",
             session_key:      data.rh_result.session_key,
             outputformat:     "raw",
             language:         data.formLanguage,
             showSummary:      data.showSummary,
+            disableCookies:   '1',
             // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
             showSolutions:    ww_container.dataset.hasSolution == 'true' ? '1' : '0',
             showHints:        ww_container.dataset.hasHint == 'true' ? '1' : '0',
