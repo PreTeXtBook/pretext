@@ -667,10 +667,12 @@
         <!-- Composition of two formulas (same look as evaluation)                -->
         <!-- Requires descendent nodes: formula and values to substitute          -->
         <xsl:when test="@mode='substitution'">
+            <xsl:value-of select="$prefix"/>
+            <xsl:text>_menv.composeExpression(</xsl:text>
             <xsl:apply-templates select="formula/*" mode="evaluate">
                 <xsl:with-param name="setupMode" select="$setupMode"/>
             </xsl:apply-templates>
-            <xsl:text>.compose({</xsl:text>
+            <xsl:text>, {</xsl:text>
                 <xsl:apply-templates select="variable" mode="evaluation-binding" >
                     <xsl:with-param name="setupMode" select="$setupMode" />
                 </xsl:apply-templates>
