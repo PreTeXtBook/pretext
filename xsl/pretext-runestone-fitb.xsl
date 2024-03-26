@@ -557,18 +557,22 @@
             <xsl:text>v.</xsl:text>
         </xsl:if>
     </xsl:variable>
+    <xsl:variable name="de_env">
+        <xsl:value-of select="$prefix"/>
+        <xsl:text>_menv</xsl:text>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="@mode='value' or @mode='formula'">
-            <xsl:value-of select="$prefix"/>
-            <xsl:text>_menv.parseExpression(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>.parseExpression(</xsl:text>
             <xsl:call-template name="quote-strip-string">
                 <xsl:with-param name="text" select="."/>
             </xsl:call-template>
             <xsl:text>, "number")</xsl:text>
         </xsl:when>
         <xsl:when test="@mode='evaluate'">
-            <xsl:value-of select="$prefix"/>
-            <xsl:text>_menv.evaluateMathObject(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>.evaluateMathObject(</xsl:text>
                 <xsl:apply-templates select="formula/*" mode="evaluate">
                     <xsl:with-param name="setupMode" select="$setupMode"/>
                 </xsl:apply-templates>
@@ -576,7 +580,9 @@
                 <xsl:apply-templates select="variable" mode="evaluation-binding" >
                     <xsl:with-param name="setupMode" select="$setupMode" />
                 </xsl:apply-templates>
-            <xsl:text>}).reduce()</xsl:text>
+            <xsl:text>}).reduce(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>)</xsl:text>
         </xsl:when>
         <xsl:when test="@mode='random'">
             <!-- Different types of random number generation -->
@@ -654,11 +660,15 @@
             <xsl:text>v.</xsl:text>
         </xsl:if>
     </xsl:variable>
+    <xsl:variable name="de_env">
+        <xsl:value-of select="$prefix"/>
+        <xsl:text>_menv</xsl:text>
+    </xsl:variable>
     <xsl:choose>
         <!-- Simple formula is provided, with or without pattern matching -->
         <xsl:when test="@mode='formula'">
-            <xsl:value-of select="$prefix"/>
-            <xsl:text>_menv.parseExpression(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>.parseExpression(</xsl:text>
             <xsl:call-template name="quote-strip-string">
                 <xsl:with-param name="text" select="."/>
             </xsl:call-template>
@@ -667,8 +677,8 @@
         <!-- Composition of two formulas (same look as evaluation)                -->
         <!-- Requires descendent nodes: formula and values to substitute          -->
         <xsl:when test="@mode='substitution'">
-            <xsl:value-of select="$prefix"/>
-            <xsl:text>_menv.composeExpression(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>.composeExpression(</xsl:text>
             <xsl:apply-templates select="formula/*" mode="evaluate">
                 <xsl:with-param name="setupMode" select="$setupMode"/>
             </xsl:apply-templates>
@@ -676,7 +686,9 @@
                 <xsl:apply-templates select="variable" mode="evaluation-binding" >
                     <xsl:with-param name="setupMode" select="$setupMode" />
                 </xsl:apply-templates>
-            <xsl:text>}).reduce()</xsl:text>
+            <xsl:text>}).reduce(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>)</xsl:text>
         </xsl:when>
         <!-- Derivative of a formula.                        -->
         <!-- Requires descendent nodes: formula, variable    -->
@@ -696,7 +708,9 @@
             <xsl:apply-templates select="formula" mode="evaluate">
                 <xsl:with-param name="setupMode" select="$setupMode"/>
             </xsl:apply-templates>
-            <xsl:text>.evaluate({</xsl:text>
+            <xsl:text>.evaluate(</xsl:text>
+            <xsl:value-of select="$de_env"/>
+            <xsl:text>, {</xsl:text>
             <xsl:apply-templates select="variable" mode="evaluation-binding" >
                 <xsl:with-param name="setupMode" select="$setupMode" />
             </xsl:apply-templates>
@@ -751,17 +765,20 @@
 <!-- The expression can be defined in terms of the parameters and other expressions -->
 <xsl:template match="de-object[@context='formula' and @mode='formula']|de-term[@context='formula']" mode="evaluate">
     <xsl:param name="setupMode" />
-    <xsl:variable name="prefix">
+    <xsl:variable name="de_env">
         <xsl:if test="$setupMode">
             <xsl:text>v.</xsl:text>
         </xsl:if>
+        <xsl:text>_menv</xsl:text>
     </xsl:variable>
-    <xsl:value-of select="$prefix"/>
-    <xsl:text>_menv.parseExpression(</xsl:text>
+    <xsl:value-of select="$de_env"/>
+    <xsl:text>.parseExpression(</xsl:text>
     <xsl:call-template name="quote-strip-string">
         <xsl:with-param name="text" select="."/>
     </xsl:call-template>
-    <xsl:text>).reduce()</xsl:text>
+    <xsl:text>).reduce(</xsl:text>
+    <xsl:value-of select="$de_env"/>
+    <xsl:text>)</xsl:text>
 </xsl:template>
 
 
