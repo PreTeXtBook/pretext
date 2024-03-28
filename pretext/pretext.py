@@ -326,7 +326,7 @@ def asymptote_conversion(
                 # 2021-12-10, Michael Doob: "-noprc" is default for the server,
                 # and newer CLI versions.  Retain for explicit use locally when
                 # perhaps an older version is being employed
-                asy_cli = asy_executable_cmd + ["-f", outform]
+                asy_cli = asy_executable_cmd + ["-f", outform, "-noV"]
                 if outform in ["pdf", "eps"]:
                     asy_cli += ["-noprc", "-iconify", "-tex", "xelatex", "-batchMask"]
                 elif outform in ["svg", "png"]:
