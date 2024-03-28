@@ -207,7 +207,7 @@
         <title>Viewing</title>
         <p>
           You can preview these HTML files you just built using the <term>View</term> command.
-          Again, you can access this in multiple ways: <pretext /> buttom in the toolbar, <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>p</kbd>, etc.
+          Again, you can access this in multiple ways: <pretext /> button in the toolbar, <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>p</kbd>, etc.
           Select <c>View</c> from the dialog.  You may be given options on how to view the document,
           depending on what VS Code plugins you have available to you. Try one or another until
           you're able to view your web build in either a new tab of your browser or a tab within VS Code.
