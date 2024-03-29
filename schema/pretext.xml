@@ -685,6 +685,7 @@
                     UniqueID?,
                     LabelID?,
                     PermanentID?,
+                    Component?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -692,6 +693,7 @@
                     UniqueID?,
                     LabelID?,
                     PermanentID?,
+                    Component?,
                     element line {TextShort}+
                 }
             </code>
@@ -1417,6 +1419,7 @@
             Console =
                 element console {
                     PermanentID?,
+                    Component?,
                     attribute prompt {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -1431,6 +1434,7 @@
             Program =
                 element program {
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
@@ -1456,6 +1460,7 @@
             List =
                 element ol {
                     PermanentID?,
+                    Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
                     element li {
@@ -1468,6 +1473,7 @@
                 } |
                 element ul {
                     PermanentID?,
+                    Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
                     element li {
@@ -1480,6 +1486,7 @@
                 } |
                 element dl {
                     PermanentID?,
+                    Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
                     element li {
                         MetaDataTitle,
@@ -1803,6 +1810,7 @@
             Tabular =
                 element tabular {
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
@@ -1870,6 +1878,7 @@
                 }
             SidebySideAttributes =
                 PermanentID?,
+                Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
                 (AlignmentVertical | attribute valigns {text})?
@@ -1935,6 +1944,7 @@
                 element image {
                     UniqueID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute rotate {text}?,
@@ -1955,6 +1965,7 @@
                 element image {
                     UniqueID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute archive {text}?,
@@ -1968,14 +1979,17 @@
                           (
                             element latex-image {
                               LabelID?,
+                              Component?,
                               text
                             } |
                             element asymptote {
                               LabelID?,
+                              Component?,
                               text
                             } |
                             element sageplot {
                                 LabelID?,  
+                                Component?,
                                 attribute variant {'2d'|'3d'}?,
                                 attribute aspect {text}?,
                                 text
@@ -2017,6 +2031,7 @@
             <code>
             Sage = element sage {
                 PermanentID?,
+                Component?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
                 attribute auto-evaluate {'no'|'yes'}?,
@@ -2058,6 +2073,7 @@
                     UniqueID?,
                     LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute aspect { text }?,
                     attribute width { text }?,
                     attribute platform { text }?,
@@ -2096,6 +2112,7 @@
                 element slate {
                     UniqueID?,
                     LabelID?,
+                    Component?,
                     (
                       JessieCodeAtt |
                       (
@@ -2190,6 +2207,7 @@
                     UniqueID?,
                     LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute aspect {text}?,
@@ -2423,6 +2441,7 @@
                     UniqueID?,
                     LabelID?,
                     PermanentID?,
+                    Component?,
                     TextParagraphAreas
                 }
             Areas = 
@@ -2590,6 +2609,7 @@
                 element webwork {
                     UniqueID?,
                     LabelID?,
+                    Component?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
                     element description {
@@ -2720,6 +2740,7 @@
             <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding these manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
+            <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
@@ -2740,6 +2761,8 @@
                 attribute label {text}
             PermanentID =
                 attribute permid {text}
+            Component = 
+                attribute component {text}
             Title =
                 element title {TextLong}
             LinedTitle =
@@ -2760,11 +2783,13 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2773,6 +2798,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2783,6 +2809,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
@@ -2793,6 +2820,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2804,6 +2832,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
@@ -2815,6 +2844,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
@@ -2823,6 +2853,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
@@ -2831,6 +2862,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
@@ -2840,6 +2872,7 @@
                 UniqueID?,
                 LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
