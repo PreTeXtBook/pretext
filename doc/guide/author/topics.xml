@@ -1095,6 +1095,20 @@
                     </row>
 
                     <row>
+                        <cell><c>type-local-title</c></cell>
+                        <cell><xref ref="overview-title"  text="type-local-title" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-local-title" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-local-title">Extra</xref></cell>
+                    </row>
+
+                    <row>
+                        <cell><c>type-global-title</c></cell>
+                        <cell><xref ref="overview-title"  text="type-global-title" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-global-title" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-global-title">Extra</xref></cell>
+                    </row>
+
+                    <row>
                         <cell><c>phrase-global</c></cell>
                         <cell><xref ref="overview-title"     text="phrase-global" /></cell>
                         <cell><xref ref="topic-divisions" text="phrase-global" /></cell>
