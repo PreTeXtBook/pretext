@@ -8194,6 +8194,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="@text='type-hybrid'">
             <xsl:text>type-hybrid</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='type-global-title'">
+            <xsl:text>type-global-title</xsl:text>
+        </xsl:when>
+        <xsl:when test="@text='type-local-title'">
+            <xsl:text>type-local-title</xsl:text>
+        </xsl:when>
+        <!-- no 'type-hybrid-title' yet -->
         <xsl:when test="@text='phrase-global'">
             <xsl:text>phrase-global</xsl:text>
         </xsl:when>
@@ -8239,6 +8246,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="$xref-text-style='type-hybrid'">
             <xsl:text>type-hybrid</xsl:text>
         </xsl:when>
+        <xsl:when test="$xref-text-style='type-global-title'">
+            <xsl:text>type-global-title</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='type-local-title'">
+            <xsl:text>type-local-title</xsl:text>
+        </xsl:when>
+        <!-- no 'type-hybrid-title' yet -->
         <xsl:when test="$xref-text-style='phrase-global'">
             <xsl:text>phrase-global</xsl:text>
         </xsl:when>
@@ -8344,7 +8358,7 @@ Book (with parts), "section" at level 3
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- Start massive "choose" for exceptions and ten general styles -->
+    <!-- Start massive "choose" for exceptions and twelve general styles -->
     <xsl:choose>
         <xsl:when test="$b-is-contributor-target">
             <xsl:apply-templates select="$target/personname" />
@@ -8433,6 +8447,39 @@ Book (with parts), "section" at level 3
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:when>
+        <xsl:when test="($text-style = 'type-global-title') or ($text-style = 'type-local-title')">
+            <xsl:choose>
+                <!-- content override of type-prefix -->
+                <xsl:when test="$b-has-content">
+                    <xsl:copy-of select="$custom-text" />
+                </xsl:when>
+                <!-- usual, default case -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="type-name" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:apply-templates select="." mode="xref-text-separator"/>
+            <!-- only difference in behavior is global/local number -->
+            <xsl:choose>
+                <xsl:when test="$text-style = 'type-global-title'">
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="$text-style = 'type-local-title'">
+                    <xsl:apply-templates select="$target" mode="serial-number"/>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+            <xsl:variable name="the-title">
+                <xsl:apply-templates select="$target" mode="title-xref"/>
+            </xsl:variable>
+            <!-- no title, no problem -->
+            <xsl:if test="not($the-title = '')">
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
+                <xsl:value-of select="$the-title"/>
+            </xsl:if>
         </xsl:when>
         <!-- special case for phrase options and list items of anonymous lists        -->
         <!-- catch this first and provide no text at all (could provide busted text?) -->
