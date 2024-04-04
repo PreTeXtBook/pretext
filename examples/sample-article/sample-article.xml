@@ -9061,6 +9061,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Instructions for Interactives are not numbered, so use a simpler @text -->
                 <li><p>Cross-reference to <tag>instructions</tag> of an <tag>interactive</tag>: <xref ref="kinematics-instructions" text="title"/></p></li>
                 <li><p>A hyperlink to a <tag>subexercises</tag> via its required title (no number is assigned): <xref ref="hard-subexercises" text="title"/></p></li>
+                <li><p>You can request the text to be a type, then a number, then a title: <xref ref="theorem-FTC" text="type-global-title"/></p></li>
+                <li><p>Asking for the text to be a type, then a number, then a title, when there is no title, is not a problem: <xref ref="corollary-FTC-derivative" text="type-local-title"/></p></li>
                 <!-- Accumulate examples here -->
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
