@@ -8478,7 +8478,8 @@ Book (with parts), "section" at level 3
             <!-- no title, no problem -->
             <xsl:if test="not($the-title = '')">
                 <xsl:apply-templates select="." mode="xref-text-separator"/>
-                <xsl:value-of select="$the-title"/>
+                <!-- title might have markup (eg math in HTML), so copy -->
+                <xsl:copy-of select="$the-title"/>
             </xsl:if>
         </xsl:when>
         <!-- special case for phrase options and list items of anonymous lists        -->
