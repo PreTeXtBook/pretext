@@ -595,13 +595,12 @@ function translateHintSol(ww_id, body_div, ww_domain, b_ptx_has_hint, b_ptx_has_
     const hintSols = body_div.querySelectorAll('.accordion.hint,.accordion.solution');
     if (hintSols.length == 0) {return};
 
-    const parent = hintSols[0].parentNode;
-
-    solutionlikewrapper = document.createElement('div');
-    solutionlikewrapper.classList.add('solutions');
-    parent.insertBefore(solutionlikewrapper, hintSols[0]);
-
     for (const hintSol of hintSols) {
+        const parent = hintSol.parentNode;
+        solutionlikewrapper = document.createElement('div');
+        solutionlikewrapper.classList.add('solutions');
+        parent.insertBefore(solutionlikewrapper, hintSol);
+
         const hintSolType = hintSol.classList.contains('hint') ? 'hint' : 'solution';
 
         if ((hintSolType == 'solution' && !b_ptx_has_solution) ||
