@@ -1939,12 +1939,15 @@
                     attribute archive {text}?,
                     attribute source {text},
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {text},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {text}? &amp;
+                          element description {(Paragraph | Tabular)+}?
                         )
-                    )?
+                      )
+                    )
                 }
             ImageCode =
                 element image {
@@ -1954,20 +1957,30 @@
                     attribute margins {text}?,
                     attribute archive {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {(text | WWVariable)+}? &amp;
+                          element description {(Paragraph | Tabular)+}? &amp;
+                          (
+                            element latex-image {
+                              LabelID?,
+                              text
+                            } |
+                            element asymptote {
+                              LabelID?,
+                              text
+                            } |
+                            element sageplot {
+                                LabelID?,
+                                attribute variant {'2d'|'3d'}?,
+                                attribute aspect {text}?,
+                                text
+                            }
+                          )
                         )
-                    )?,
-                    (
-                        element latex-image {text} |
-                        element asymptote {text} |
-                        element sageplot {
-                            attribute variant {'2d'|'3d'}?,
-                            attribute aspect {text}?,
-                            text
-                        }
+                      )
                     )
                 }
             ImageWW =
@@ -1975,15 +1988,18 @@
                     attribute pg-name {text}?,
                     attribute width {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {(text | WWVariable)+}? &amp;
+                          element description {(Paragraph | Tabular)+}? &amp;
+                          element latex-image {
+                            text
+                          }?
                         )
-                    )?,
-                    element latex-image {
-                        text
-                    }?
+                      )
+                    )
                 }
             </code>
         </fragment>
