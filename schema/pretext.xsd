@@ -1139,6 +1139,7 @@
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="prompt"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
@@ -1151,6 +1152,7 @@
         <xs:element name="input" type="xs:string"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
       <xs:attribute name="language"/>
@@ -1196,6 +1198,7 @@
             </xs:element>
           </xs:sequence>
           <xs:attribute name="permid"/>
+          <xs:attribute name="component"/>
           <xs:attribute name="cols">
             <xs:simpleType>
               <xs:restriction base="xs:token">
@@ -1236,6 +1239,7 @@
         </xs:element>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="cols">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1273,6 +1277,7 @@
         </xs:element>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="width">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1661,6 +1666,7 @@
   </xs:element>
   <xs:attributeGroup name="SidebySideAttributes">
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute name="margins"/>
     <xs:attribute name="width"/>
     <xs:attribute name="widths"/>
@@ -1748,9 +1754,9 @@
     <xs:sequence>
       <xs:element name="image">
         <xs:complexType>
-          <xs:sequence minOccurs="0">
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="shortdescription" type="xs:string"/>
-            <xs:element minOccurs="0" name="description">
+            <xs:element name="description">
               <xs:complexType>
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="Paragraph"/>
@@ -1758,9 +1764,10 @@
                 </xs:choice>
               </xs:complexType>
             </xs:element>
-          </xs:sequence>
+          </xs:choice>
           <xs:attribute ref="xml:id"/>
           <xs:attribute name="permid"/>
+          <xs:attribute name="component"/>
           <xs:attribute name="width"/>
           <xs:attribute name="margins"/>
           <xs:attribute name="rotate"/>
@@ -1782,32 +1789,36 @@
     <xs:sequence>
       <xs:element name="image">
         <xs:complexType>
-          <xs:sequence>
-            <xs:sequence minOccurs="0">
-              <xs:element name="shortdescription">
-                <xs:complexType mixed="true">
-                  <xs:sequence>
-                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element minOccurs="0" name="description">
-                <xs:complexType>
-                  <xs:choice maxOccurs="unbounded">
-                    <xs:group ref="Paragraph"/>
-                    <xs:element ref="tabular"/>
-                  </xs:choice>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="shortdescription">
+              <xs:complexType mixed="true">
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="description">
+              <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="Paragraph"/>
+                  <xs:element ref="tabular"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
             <xs:choice>
-              <xs:element ref="latex-image"/>
+              <xs:element name="latex-image">
+                <xs:complexType mixed="true">
+                  <xs:attribute name="label"/>
+                  <xs:attribute name="component"/>
+                </xs:complexType>
+              </xs:element>
               <xs:element ref="asymptote"/>
               <xs:element ref="sageplot"/>
             </xs:choice>
-          </xs:sequence>
+          </xs:choice>
           <xs:attribute ref="xml:id"/>
           <xs:attribute name="permid"/>
+          <xs:attribute name="component"/>
           <xs:attribute name="width"/>
           <xs:attribute name="margins"/>
           <xs:attribute name="archive"/>
@@ -1823,10 +1834,16 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="latex-image" type="xs:string"/>
-  <xs:element name="asymptote" type="xs:string"/>
+  <xs:element name="asymptote">
+    <xs:complexType mixed="true">
+      <xs:attribute name="label"/>
+      <xs:attribute name="component"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="sageplot">
     <xs:complexType mixed="true">
+      <xs:attribute name="label"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="variant">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1842,26 +1859,24 @@
     <xs:sequence>
       <xs:element name="image">
         <xs:complexType>
-          <xs:sequence>
-            <xs:sequence minOccurs="0">
-              <xs:element name="shortdescription">
-                <xs:complexType mixed="true">
-                  <xs:sequence>
-                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element minOccurs="0" name="description">
-                <xs:complexType>
-                  <xs:choice maxOccurs="unbounded">
-                    <xs:group ref="Paragraph"/>
-                    <xs:element ref="tabular"/>
-                  </xs:choice>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-            <xs:element minOccurs="0" ref="latex-image"/>
-          </xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="shortdescription">
+              <xs:complexType mixed="true">
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" ref="var"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="description">
+              <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="Paragraph"/>
+                  <xs:element ref="tabular"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="latex-image" type="xs:string"/>
+          </xs:choice>
           <xs:attribute name="pg-name"/>
           <xs:attribute name="width"/>
           <xs:attribute name="decorative">
@@ -1951,6 +1966,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="yes"/>
             <xs:enumeration value="no"/>
+            <xs:enumeration value="vertical"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -2001,6 +2017,7 @@
         <xs:element maxOccurs="unbounded" ref="row"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
       <xs:attribute name="row-headers">
@@ -2043,6 +2060,7 @@
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="doctest"/>
       <xs:attribute name="tolerance"/>
       <xs:attribute name="auto-evaluate">
@@ -2066,7 +2084,9 @@
   <xs:element name="video">
     <xs:complexType>
       <xs:attribute ref="xml:id"/>
+      <xs:attribute name="label"/>
       <xs:attribute name="permid"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
       <xs:attribute name="aspect"/>
@@ -2445,6 +2465,8 @@
             </xs:choice>
           </xs:sequence>
           <xs:attribute ref="xml:id"/>
+          <xs:attribute name="label"/>
+          <xs:attribute name="component"/>
           <xs:attribute name="seed" type="xs:integer"/>
           <xs:attribute name="copy"/>
         </xs:complexType>
@@ -2599,8 +2621,14 @@
   <xs:attributeGroup name="UniqueID">
     <xs:attribute ref="xml:id" use="required"/>
   </xs:attributeGroup>
+  <xs:attributeGroup name="LabelID">
+    <xs:attribute name="label" use="required"/>
+  </xs:attributeGroup>
   <xs:attributeGroup name="PermanentID">
     <xs:attribute name="permid" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="Component">
+    <xs:attribute name="component" use="required"/>
   </xs:attributeGroup>
   <xs:group name="Title">
     <xs:sequence>
@@ -2662,7 +2690,9 @@
   </xs:group>
   <xs:attributeGroup name="MetaDataTarget">
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
   </xs:attributeGroup>
   <xs:complexType name="MetaDataTitle">
     <xs:sequence>
@@ -2670,7 +2700,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2682,7 +2714,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2697,7 +2731,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2712,7 +2748,9 @@
   </xs:group>
   <xs:attributeGroup name="MetaDataSubtitle">
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
@@ -2731,7 +2769,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2743,7 +2783,9 @@
   </xs:group>
   <xs:attributeGroup name="MetaDataTitleOptional">
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
@@ -2757,7 +2799,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2768,7 +2812,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2779,7 +2825,9 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="label"/>
     <xs:attribute name="permid"/>
+    <xs:attribute name="component"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2809,7 +2857,9 @@
         <xs:complexType mixed="true">
           <xs:group ref="TextParagraph"/>
           <xs:attribute ref="xml:id"/>
+          <xs:attribute name="label"/>
           <xs:attribute name="permid"/>
+          <xs:attribute name="component"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2826,7 +2876,9 @@
             </xs:element>
           </xs:sequence>
           <xs:attribute ref="xml:id"/>
+          <xs:attribute name="label"/>
           <xs:attribute name="permid"/>
+          <xs:attribute name="component"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <include href="pretext.rng"/>
   <define name="Interactive">
     <element name="interactive">
@@ -7,7 +7,13 @@
         <ref name="UniqueID"/>
       </optional>
       <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
       </optional>
       <optional>
         <attribute name="aspect"/>
@@ -30,23 +36,45 @@
       <optional>
         <attribute name="version"/>
       </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="Slate"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
-        </choice>
-      </zeroOrMore>
-      <optional>
-        <element name="instructions">
+      <interleave>
+        <zeroOrMore>
           <choice>
-            <zeroOrMore>
-              <ref name="BlockText"/>
-            </zeroOrMore>
-            <text/>
+            <ref name="Slate"/>
+            <ref name="SideBySideNoCaption"/>
+            <ref name="SideBySideGroupNoCaption"/>
           </choice>
-        </element>
-      </optional>
+        </zeroOrMore>
+        <optional>
+          <element name="instructions">
+            <mixed>
+              <ref name="MetaDataTitleOptional"/>
+              <ref name="BlockText"/>
+            </mixed>
+          </element>
+        </optional>
+        <optional>
+          <element name="static">
+            <ref name="Image"/>
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Stack" combine="choice">
+    <element name="stack">
+      <oneOrMore>
+        <choice>
+          <ref name="Tabular"/>
+          <ref name="Image"/>
+          <ref name="Video"/>
+          <ref name="Program"/>
+          <ref name="Console"/>
+          <ref name="Paragraph"/>
+          <ref name="Preformatted"/>
+          <ref name="List"/>
+          <ref name="Slate"/>
+        </choice>
+      </oneOrMore>
     </element>
   </define>
   <define name="Slate">
@@ -54,24 +82,113 @@
       <optional>
         <ref name="UniqueID"/>
       </optional>
-      <attribute name="surface"/>
       <optional>
-        <choice>
-          <attribute name="source"/>
-          <attribute name="material"/>
-        </choice>
+        <ref name="LabelID"/>
       </optional>
       <optional>
-        <attribute name="aspect"/>
+        <ref name="Component"/>
       </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="Paragraph"/>
-          <ref name="Tabular"/>
-          <ref name="SideBySideNoCaption"/>
-        </choice>
-      </zeroOrMore>
+      <choice>
+        <ref name="JessieCodeAtt"/>
+        <group>
+          <attribute name="surface"/>
+          <optional>
+            <choice>
+              <attribute name="source"/>
+              <attribute name="material"/>
+            </choice>
+          </optional>
+          <optional>
+            <attribute name="aspect"/>
+          </optional>
+          <zeroOrMore>
+            <choice>
+              <ref name="Paragraph"/>
+              <ref name="Tabular"/>
+              <ref name="SideBySideNoCaption"/>
+              <ref name="SlateInput"/>
+              <optional>
+                <element name="xhtml:button">
+                  <attribute name="type"/>
+                  <attribute name="id"/>
+                  <zeroOrMore>
+                    <text/>
+                  </zeroOrMore>
+                </element>
+              </optional>
+              <zeroOrMore>
+                <text/>
+              </zeroOrMore>
+            </choice>
+          </zeroOrMore>
+        </group>
+      </choice>
     </element>
+  </define>
+  <define name="JessieCodeAtt">
+    <attribute name="surface">
+      <value>jessiecode</value>
+    </attribute>
+    <optional>
+      <attribute name="axis">
+        <choice>
+          <value>true</value>
+          <value>false</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="grid">
+        <choice>
+          <value>true</value>
+          <value>false</value>
+        </choice>
+      </attribute>
+    </optional>
+    <choice>
+      <attribute name="source"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </choice>
+  </define>
+  <define name="SlateInput">
+    <choice>
+      <element name="xhtml:input">
+        <optional>
+          <attribute name="type"/>
+        </optional>
+        <optional>
+          <attribute name="value"/>
+        </optional>
+        <optional>
+          <attribute name="onkeypress"/>
+        </optional>
+        <optional>
+          <attribute name="onclick"/>
+        </optional>
+        <optional>
+          <attribute name="style"/>
+        </optional>
+      </element>
+      <element name="input">
+        <optional>
+          <attribute name="type"/>
+        </optional>
+        <optional>
+          <attribute name="value"/>
+        </optional>
+        <optional>
+          <attribute name="onkeypress"/>
+        </optional>
+        <optional>
+          <attribute name="onclick"/>
+        </optional>
+        <optional>
+          <attribute name="style"/>
+        </optional>
+      </element>
+    </choice>
   </define>
   <!-- add Interactives where used -->
   <define name="BlockStatement" combine="choice">
@@ -1011,14 +1128,6 @@
       </element>
     </choice>
   </define>
-  <define name="UniqueID" combine="choice">
-    <optional>
-      <attribute name="xml:id"/>
-    </optional>
-    <optional>
-      <attribute name="label"/>
-    </optional>
-  </define>
   <define name="TrueFalse">
     <ref name="MetaDataTitleOptional"/>
     <optional>
@@ -1165,11 +1274,16 @@
               </choice>
             </attribute>
           </optional>
-          <mixed>
-            <optional>
-              <ref name="BlockText"/>
-            </optional>
-          </mixed>
+          <oneOrMore>
+            <mixed>
+              <optional>
+                <ref name="BlockText"/>
+              </optional>
+              <optional>
+                <ref name="CodeLine"/>
+              </optional>
+            </mixed>
+          </oneOrMore>
         </group>
         <oneOrMore>
           <element name="choice">
@@ -1181,11 +1295,16 @@
                 </choice>
               </attribute>
             </optional>
-            <mixed>
-              <optional>
-                <ref name="BlockText"/>
-              </optional>
-            </mixed>
+            <oneOrMore>
+              <mixed>
+                <optional>
+                  <ref name="BlockText"/>
+                </optional>
+                <optional>
+                  <ref name="CodeLine"/>
+                </optional>
+              </mixed>
+            </oneOrMore>
           </element>
         </oneOrMore>
       </choice>
@@ -1283,6 +1402,112 @@
       <empty/>
     </element>
   </define>
+  <!-- Selectable areas -->
+  <define name="Area">
+    <element name="area">
+      <optional>
+        <attribute name="correct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <ref name="TextLong"/>
+    </element>
+  </define>
+  <define name="TextLongAreas">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="Area"/>
+          <ref name="Character"/>
+          <ref name="Generator"/>
+          <ref name="Verbatim"/>
+          <ref name="GroupAreas"/>
+          <ref name="MathInline"/>
+          <ref name="Music"/>
+          <ref name="Reference"/>
+          <ref name="WWVariable"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
+  <define name="GroupAreas" combine="choice">
+    <choice>
+      <element name="q">
+        <ref name="TextLongAreas"/>
+      </element>
+      <element name="sq">
+        <ref name="TextLongAreas"/>
+      </element>
+    </choice>
+  </define>
+  <define name="TextParagraphAreas">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="Character"/>
+          <ref name="Generator"/>
+          <ref name="Verbatim"/>
+          <ref name="Group"/>
+          <ref name="WWVariable"/>
+          <ref name="MathInline"/>
+          <ref name="Music"/>
+          <ref name="Reference"/>
+          <ref name="CodeDisplay"/>
+          <ref name="MathDisplay"/>
+          <ref name="List"/>
+          <ref name="Footnote"/>
+          <ref name="Notation"/>
+          <ref name="Index"/>
+          <ref name="Area"/>
+          <ref name="GroupAreas"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
+  <define name="ParagraphAreas">
+    <element name="p">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <ref name="TextParagraphAreas"/>
+    </element>
+  </define>
+  <define name="Areas">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <attribute name="number"/>
+    </optional>
+    <ref name="StatementExercise"/>
+    <optional>
+      <ref name="Feedback"/>
+    </optional>
+    <element name="areas">
+      <oneOrMore>
+        <ref name="ParagraphAreas"/>
+      </oneOrMore>
+    </element>
+    <zeroOrMore>
+      <ref name="Hint"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Answer"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Solution"/>
+    </zeroOrMore>
+  </define>
   <!-- General feedback element -->
   <define name="Feedback">
     <element name="feedback">
@@ -1301,6 +1526,7 @@
         <ref name="Parsons"/>
         <ref name="Matching"/>
         <ref name="FreeResponse"/>
+        <ref name="Areas"/>
       </choice>
     </element>
   </define>
@@ -1311,6 +1537,7 @@
       <ref name="Parsons"/>
       <ref name="Matching"/>
       <ref name="FreeResponse"/>
+      <ref name="Areas"/>
     </choice>
   </define>
 </grammar>

@@ -1268,6 +1268,9 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
         <attribute name="prompt"/>
       </optional>
       <optional>
@@ -1295,6 +1298,9 @@
     <element name="program">
       <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1333,6 +1339,9 @@
           <ref name="PermanentID"/>
         </optional>
         <optional>
+          <ref name="Component"/>
+        </optional>
+        <optional>
           <attribute name="cols">
             <choice>
               <value>2</value>
@@ -1366,6 +1375,9 @@
       <element name="ul">
         <optional>
           <ref name="PermanentID"/>
+        </optional>
+        <optional>
+          <ref name="Component"/>
         </optional>
         <optional>
           <attribute name="cols">
@@ -1408,6 +1420,9 @@
       <element name="dl">
         <optional>
           <ref name="PermanentID"/>
+        </optional>
+        <optional>
+          <ref name="Component"/>
         </optional>
         <optional>
           <attribute name="width">
@@ -1833,6 +1848,9 @@
       <ref name="PermanentID"/>
     </optional>
     <optional>
+      <ref name="Component"/>
+    </optional>
+    <optional>
       <attribute name="margins"/>
     </optional>
     <optional>
@@ -1918,6 +1936,9 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
         <attribute name="width"/>
       </optional>
       <optional>
@@ -1930,20 +1951,22 @@
         <attribute name="archive"/>
       </optional>
       <attribute name="source"/>
-      <optional>
-        <choice>
+      <choice>
+        <attribute name="decorative">
+          <value>yes</value>
+        </attribute>
+        <group>
           <optional>
             <attribute name="decorative">
-              <choice>
-                <value>yes</value>
-                <value>no</value>
-              </choice>
+              <value>no</value>
             </attribute>
           </optional>
-          <group>
-            <element name="shortdescription">
-              <text/>
-            </element>
+          <interleave>
+            <optional>
+              <element name="shortdescription">
+                <text/>
+              </element>
+            </optional>
             <optional>
               <element name="description">
                 <oneOrMore>
@@ -1954,9 +1977,9 @@
                 </oneOrMore>
               </element>
             </optional>
-          </group>
-        </choice>
-      </optional>
+          </interleave>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="ImageCode">
@@ -1968,6 +1991,9 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
         <attribute name="width"/>
       </optional>
       <optional>
@@ -1976,25 +2002,27 @@
       <optional>
         <attribute name="archive"/>
       </optional>
-      <optional>
-        <choice>
+      <choice>
+        <attribute name="decorative">
+          <value>yes</value>
+        </attribute>
+        <group>
           <optional>
             <attribute name="decorative">
-              <choice>
-                <value>yes</value>
-                <value>no</value>
-              </choice>
+              <value>no</value>
             </attribute>
           </optional>
-          <group>
-            <element name="shortdescription">
-              <oneOrMore>
-                <choice>
-                  <text/>
-                  <ref name="WWVariable"/>
-                </choice>
-              </oneOrMore>
-            </element>
+          <interleave>
+            <optional>
+              <element name="shortdescription">
+                <oneOrMore>
+                  <choice>
+                    <text/>
+                    <ref name="WWVariable"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
             <optional>
               <element name="description">
                 <oneOrMore>
@@ -2005,30 +2033,48 @@
                 </oneOrMore>
               </element>
             </optional>
-          </group>
-        </choice>
-      </optional>
-      <choice>
-        <element name="latex-image">
-          <text/>
-        </element>
-        <element name="asymptote">
-          <text/>
-        </element>
-        <element name="sageplot">
-          <optional>
-            <attribute name="variant">
-              <choice>
-                <value>2d</value>
-                <value>3d</value>
-              </choice>
-            </attribute>
-          </optional>
-          <optional>
-            <attribute name="aspect"/>
-          </optional>
-          <text/>
-        </element>
+            <choice>
+              <element name="latex-image">
+                <optional>
+                  <ref name="LabelID"/>
+                </optional>
+                <optional>
+                  <ref name="Component"/>
+                </optional>
+                <text/>
+              </element>
+              <element name="asymptote">
+                <optional>
+                  <ref name="LabelID"/>
+                </optional>
+                <optional>
+                  <ref name="Component"/>
+                </optional>
+                <text/>
+              </element>
+              <element name="sageplot">
+                <optional>
+                  <ref name="LabelID"/>
+                </optional>
+                <optional>
+                  <ref name="Component"/>
+                </optional>
+                <optional>
+                  <attribute name="variant">
+                    <choice>
+                      <value>2d</value>
+                      <value>3d</value>
+                    </choice>
+                  </attribute>
+                </optional>
+                <optional>
+                  <attribute name="aspect"/>
+                </optional>
+                <text/>
+              </element>
+            </choice>
+          </interleave>
+        </group>
       </choice>
     </element>
   </define>
@@ -2040,25 +2086,27 @@
       <optional>
         <attribute name="width"/>
       </optional>
-      <optional>
-        <choice>
+      <choice>
+        <attribute name="decorative">
+          <value>yes</value>
+        </attribute>
+        <group>
           <optional>
             <attribute name="decorative">
-              <choice>
-                <value>yes</value>
-                <value>no</value>
-              </choice>
+              <value>no</value>
             </attribute>
           </optional>
-          <group>
-            <element name="shortdescription">
-              <oneOrMore>
-                <choice>
-                  <text/>
-                  <ref name="WWVariable"/>
-                </choice>
-              </oneOrMore>
-            </element>
+          <interleave>
+            <optional>
+              <element name="shortdescription">
+                <oneOrMore>
+                  <choice>
+                    <text/>
+                    <ref name="WWVariable"/>
+                  </choice>
+                </oneOrMore>
+              </element>
+            </optional>
             <optional>
               <element name="description">
                 <oneOrMore>
@@ -2069,14 +2117,14 @@
                 </oneOrMore>
               </element>
             </optional>
-          </group>
-        </choice>
-      </optional>
-      <optional>
-        <element name="latex-image">
-          <text/>
-        </element>
-      </optional>
+            <optional>
+              <element name="latex-image">
+                <text/>
+              </element>
+            </optional>
+          </interleave>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="BorderThickness">
@@ -2158,6 +2206,7 @@
           <choice>
             <value>yes</value>
             <value>no</value>
+            <value>vertical</value>
           </choice>
         </attribute>
       </optional>
@@ -2198,6 +2247,9 @@
     <element name="tabular">
       <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -2245,6 +2297,9 @@
         <ref name="PermanentID"/>
       </optional>
       <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
         <attribute name="doctest"/>
       </optional>
       <optional>
@@ -2288,7 +2343,13 @@
         <ref name="UniqueID"/>
       </optional>
       <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -2700,6 +2761,12 @@
         <ref name="UniqueID"/>
       </optional>
       <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
         <attribute name="seed">
           <data type="integer"/>
         </attribute>
@@ -2914,8 +2981,14 @@
   <define name="UniqueID">
     <attribute name="xml:id"/>
   </define>
+  <define name="LabelID">
+    <attribute name="label"/>
+  </define>
   <define name="PermanentID">
     <attribute name="permid"/>
+  </define>
+  <define name="Component">
+    <attribute name="component"/>
   </define>
   <define name="Title">
     <element name="title">
@@ -2967,7 +3040,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>
@@ -2978,7 +3057,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2996,7 +3081,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3020,7 +3111,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3047,7 +3144,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3074,7 +3177,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3107,7 +3216,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3127,7 +3242,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3153,7 +3274,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3176,7 +3303,13 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
       <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -3220,7 +3353,13 @@
         <ref name="UniqueID"/>
       </optional>
       <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
       </optional>
       <ref name="TextParagraph"/>
     </element>
@@ -3231,7 +3370,13 @@
         <ref name="UniqueID"/>
       </optional>
       <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
         <ref name="PermanentID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
       </optional>
       <oneOrMore>
         <element name="line">
