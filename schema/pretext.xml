@@ -1784,7 +1784,7 @@
                 }
             TableRow =
                 element row {
-                    attribute header {"yes" | "no"}?,
+                    attribute header {"yes" | "no" | "vertical"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderBottom?,
