@@ -681,13 +681,17 @@
             Paragraph =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     TextParagraph
                 }
             ParagraphLined =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     element line {TextShort}+
                 }
             </code>
@@ -1413,6 +1417,7 @@
             Console =
                 element console {
                     PermanentID?,
+                    Component?,
                     attribute prompt {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -1427,6 +1432,7 @@
             Program =
                 element program {
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
@@ -1452,6 +1458,7 @@
             List =
                 element ol {
                     PermanentID?,
+                    Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
                     element li {
@@ -1464,6 +1471,7 @@
                 } |
                 element ul {
                     PermanentID?,
+                    Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
                     element li {
@@ -1476,6 +1484,7 @@
                 } |
                 element dl {
                     PermanentID?,
+                    Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
                     element li {
                         MetaDataTitle,
@@ -1782,7 +1791,7 @@
                 }
             TableRow =
                 element row {
-                    attribute header {"yes" | "no"}?,
+                    attribute header {"yes" | "no" | "vertical"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderBottom?,
@@ -1799,6 +1808,7 @@
             Tabular =
                 element tabular {
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
@@ -1866,6 +1876,7 @@
                 }
             SidebySideAttributes =
                 PermanentID?,
+                Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
                 (AlignmentVertical | attribute valigns {text})?
@@ -1931,41 +1942,59 @@
                 element image {
                     UniqueID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {text},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {text}? &amp;
+                          element description {(Paragraph | Tabular)+}?
                         )
-                    )?
+                      )
+                    )
                 }
             ImageCode =
                 element image {
                     UniqueID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute archive {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {(text | WWVariable)+}? &amp;
+                          element description {(Paragraph | Tabular)+}? &amp;
+                          (
+                            element latex-image {
+                              LabelID?,
+                              Component?,
+                              text
+                            } |
+                            element asymptote {
+                              LabelID?,
+                              Component?,
+                              text
+                            } |
+                            element sageplot {
+                                LabelID?,
+                                Component?,
+                                attribute variant {'2d'|'3d'}?,
+                                attribute aspect {text}?,
+                                text
+                            }
+                          )
                         )
-                    )?,
-                    (
-                        element latex-image {text} |
-                        element asymptote {text} |
-                        element sageplot {
-                            attribute variant {'2d'|'3d'}?,
-                            attribute aspect {text}?,
-                            text
-                        }
+                      )
                     )
                 }
             ImageWW =
@@ -1973,15 +2002,18 @@
                     attribute pg-name {text}?,
                     attribute width {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          element shortdescription {(text | WWVariable)+}? &amp;
+                          element description {(Paragraph | Tabular)+}? &amp;
+                          element latex-image {
+                            text
+                          }?
                         )
-                    )?,
-                    element latex-image {
-                        text
-                    }?
+                      )
+                    )
                 }
             </code>
         </fragment>
@@ -1997,6 +2029,7 @@
             <code>
             Sage = element sage {
                 PermanentID?,
+                Component?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
                 attribute auto-evaluate {'no'|'yes'}?,
@@ -2036,7 +2069,9 @@
             Interactive =
                 element interactive {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute aspect { text }?,
                     attribute width { text }?,
                     attribute platform { text }?,
@@ -2044,17 +2079,86 @@
                     attribute iframe { text }?,
                     attribute source { text }?,
                     attribute version { text }?,
-                    (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
-                    element instructions { BlockText* | text }?
+                    (
+                      (
+                        Slate |
+                        SideBySideNoCaption |
+                        SideBySideGroupNoCaption
+                      )* &amp;
+                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &amp;
+                      element static { Image }?
+                    )
+
+                }
+
+            Stack |=
+                element stack {
+                    (
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Slate
+                    )+
                 }
 
             Slate =
                 element slate {
                     UniqueID?,
-                    attribute surface { text },
-                    (attribute source { text } | attribute material { text })?,
-                    attribute aspect { text }?,
-                    (Paragraph | Tabular | SideBySideNoCaption)*
+                    LabelID?,
+                    Component?,
+                    (
+                      JessieCodeAtt |
+                      (
+                        attribute surface { text },
+                        (
+                          attribute source { text } |
+                          attribute material { text }
+                        )?,
+                        attribute aspect { text }?,
+                        (
+                          Paragraph |
+                          Tabular |
+                          SideBySideNoCaption |
+                          SlateInput |
+                          element xhtml:button {
+                            attribute type { text },
+                            attribute id { text },
+                            text*
+                          }? |
+                          text*
+                        )*
+                      )
+                    )
+                }
+
+              JessieCodeAtt =
+                attribute surface {"jessiecode"},
+                attribute axis {"true" | "false"}?,
+                attribute grid {"true" | "false"}?,
+                (
+                  attribute source {text} |
+                  text*
+                )
+
+              SlateInput =
+                element xhtml:input {
+                  attribute type {text}?,
+                  attribute value {text}?,
+                  attribute onkeypress {text}?,
+                  attribute onclick {text}?,
+                  attribute style {text}?
+                } |
+                element input {
+                  attribute type {text}?,
+                  attribute value {text}?,
+                  attribute onkeypress {text}?,
+                  attribute onclick {text}?,
+                  attribute style {text}?
                 }
 
             # add Interactives where used
@@ -2099,7 +2203,9 @@
             Video =
                 element video {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute aspect {text}?,
@@ -2252,12 +2358,12 @@
                     attribute order {xsd:integer}?,
                     ((
                         attribute correct {"yes"|"no"}?,
-                        mixed {BlockText?}
+                        mixed {BlockText?, CodeLine?}+
                     ) |
                     (
                         element choice {
                             attribute correct {"yes"|"no"}?,
-                            mixed {BlockText?}
+                            mixed {BlockText?, CodeLine?}+
                         }+
                     ))
                 }
@@ -2290,6 +2396,62 @@
                 )
             Response =
                 element response {empty}
+
+
+            # Selectable areas
+            Area =
+                element area {
+                    attribute correct {"yes"|"no"}?,
+                    TextLong
+                }
+            TextLongAreas =  mixed { (
+                  Area |
+                  Character |
+                  Generator |
+                  Verbatim |
+                  GroupAreas |
+                  MathInline |
+                  Music |
+                  Reference |
+                  WWVariable)* }
+            GroupAreas |=
+                element q {TextLongAreas} |
+                element sq {TextLongAreas}
+            TextParagraphAreas = mixed { (
+              Character |
+              Generator |
+              Verbatim |
+              Group |
+              WWVariable |
+              MathInline |
+              Music |
+              Reference |
+              CodeDisplay |
+              MathDisplay |
+              List |
+              Footnote |
+              Notation |
+              Index |
+              Area |
+              GroupAreas)* }
+            ParagraphAreas =
+                element p {
+                    UniqueID?,
+                    LabelID?,
+                    PermanentID?,
+                    Component?,
+                    TextParagraphAreas
+                }
+            Areas =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Feedback?,
+                element areas {
+                  ParagraphAreas+
+                },
+                Hint*, Answer*, Solution*
+
             # General feedback element
             Feedback =
                 element feedback {
@@ -2303,14 +2465,16 @@
                     MultipleChoice |
                     Parsons |
                     Matching |
-                    FreeResponse
+                    FreeResponse |
+                    Areas
                 }
             ProjectLike |=
                 TrueFalse |
                 MultipleChoice |
                 Parsons |
                 Matching |
-                FreeResponse
+                FreeResponse |
+                Areas
             </code>
         </fragment>
     </section>
@@ -2442,6 +2606,8 @@
             WebWorkAuthored =
                 element webwork {
                     UniqueID?,
+                    LabelID?,
+                    Component?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
                     element description {
@@ -2572,6 +2738,7 @@
             <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding these manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
+            <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
@@ -2588,8 +2755,12 @@
             <code>
             UniqueID =
                 attribute xml:id {text}
+            LabelID =
+                attribute label {text}
             PermanentID =
                 attribute permid {text}
+            Component =
+                attribute component {text}
             Title =
                 element title {TextLong}
             LinedTitle =
@@ -2608,18 +2779,24 @@
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
                 Index*
             MetaDataAltTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2628,7 +2805,9 @@
                 Index*
             MetaDataLinedTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
@@ -2637,7 +2816,9 @@
                 Index*
             MetaDataSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2647,7 +2828,9 @@
                 Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
@@ -2657,21 +2840,27 @@
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
                 Index*
             MetaDataAltTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
             MetaDataTitleCreatorOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
@@ -2679,7 +2868,9 @@
                 Index*
             MetaDataCaption =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
@@ -2690,18 +2881,6 @@
 
     </section>
 
-    <section>
-        <title>Labels as Unique IDs (experimental)</title>
-        <p>We assume that everywhere an xml:id can go, we can also now put a label.</p>
-        <fragment xml:id="label">
-            <title>Labels as Unique IDs</title>
-            <code>
-            UniqueID |=
-                attribute xml:id {text}?,
-                attribute label {text}?
-            </code>
-        </fragment>
-    </section>
     <section>
         <title>Miscellaneous</title>
 
@@ -3228,6 +3407,7 @@
         <fragment filename="pretext-dev.rnc">
             <title>Development Schema</title>
             <code>
+              namespace xhtml = "http://www.w3.org/1999/xhtml"
                 grammar {
 
                 include "pretext.rnc"
@@ -3241,7 +3421,6 @@
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
-            <fragref ref="label"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }
