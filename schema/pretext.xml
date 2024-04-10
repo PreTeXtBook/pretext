@@ -681,12 +681,14 @@
             Paragraph =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     TextParagraph
                 }
             ParagraphLined =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     element line {TextShort}+
                 }
@@ -2036,6 +2038,7 @@
             Interactive =
                 element interactive {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     attribute aspect { text }?,
                     attribute width { text }?,
@@ -2074,6 +2077,7 @@
             Slate =
                 element slate {
                     UniqueID?,
+                    LabelID?,
                     (
                       JessieCodeAtt |
                       (
@@ -2166,6 +2170,7 @@
             Video =
                 element video {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -2398,6 +2403,7 @@
             ParagraphAreas =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
                     TextParagraphAreas
                 }
@@ -2565,6 +2571,7 @@
             WebWorkAuthored =
                 element webwork {
                     UniqueID?,
+                    LabelID?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
                     element description {
@@ -2711,6 +2718,8 @@
             <code>
             UniqueID =
                 attribute xml:id {text}
+            LabelID =
+                attribute label {text}
             PermanentID =
                 attribute permid {text}
             Title =
@@ -2731,10 +2740,12 @@
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2742,6 +2753,7 @@
                 Index*
             MetaDataAltTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2751,6 +2763,7 @@
                 Index*
             MetaDataLinedTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2760,6 +2773,7 @@
                 Index*
             MetaDataSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2770,6 +2784,7 @@
                 Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2780,6 +2795,7 @@
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2787,6 +2803,7 @@
                 Index*
             MetaDataAltTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2794,6 +2811,7 @@
                 Index*
             MetaDataTitleCreatorOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2802,6 +2820,7 @@
                 Index*
             MetaDataCaption =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
                 XMLBase?,
                 XMLLang?,
@@ -2813,18 +2832,6 @@
 
     </section>
 
-    <section>
-        <title>Labels as Unique IDs (experimental)</title>
-        <p>We assume that everywhere an xml:id can go, we can also now put a label.</p>
-        <fragment xml:id="label">
-            <title>Labels as Unique IDs</title>
-            <code>
-            UniqueID |=
-                attribute xml:id {text}?,
-                attribute label {text}?
-            </code>
-        </fragment>
-    </section>
     <section>
         <title>Miscellaneous</title>
 
@@ -3365,7 +3372,6 @@
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
-            <fragref ref="label"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }
