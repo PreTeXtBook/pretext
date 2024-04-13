@@ -1374,6 +1374,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                     <!-- a block of unit tests for automatic feedback (with, say, an SQL database) -->
+                    <!-- NB: could mimic "program/tests" to avoid empty "tests" elements           -->
                     <xsl:if test="tests">
                         <xsl:text>--unittest--&#xa;</xsl:text>
                         <xsl:call-template name="sanitize-text">
@@ -1955,10 +1956,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:call-template>
                             <!-- optional unit testing, with RS markup to keep it hidden -->
                             <xsl:if test="tests">
-                                <xsl:text>====&#xa;</xsl:text>
-                                <xsl:call-template name="sanitize-text">
-                                    <xsl:with-param name="text" select="tests" />
-                                </xsl:call-template>
+                                <!-- Be wary of empty "test" elements which lead to -->
+                                <!-- empty files, which are possibly not legal      -->
+                                <!-- programs for their target languages, and hence -->
+                                <!-- raise errors due to  the Runestone back-end    -->
+                                <!-- trying to process them.                        -->
+                                <!-- NB: static versions never show "tests" anyway  -->
+                                <xsl:variable name="tests-content">
+                                    <xsl:call-template name="sanitize-text">
+                                        <xsl:with-param name="text" select="tests" />
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <!-- Even if there is no content, the sanitization -->
+                                <!-- template adds a concluding newline            -->
+                                <xsl:if test="not(normalize-space($tests-content) = '')">
+                                    <xsl:text>====&#xa;</xsl:text>
+                                    <!-- historical behavior is to use sanitized version -->
+                                    <xsl:value-of select="$tests-content"/>
+                                </xsl:if>
                             </xsl:if>
                         </textarea>
                     </div>
