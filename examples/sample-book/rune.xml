@@ -421,13 +421,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Activity Coding Exercise</title>
 
             <statement>
-                <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+                <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.  (There is an empty <tag>tests</tag> element here, designed to test relief for an error this will cause on a Runestone server.)</p>
             </statement>
             <program label="activity-program" interactive="activecode" language="python">
                 <input>
                 for i in range(10):
                     print(i)
                 </input>
+                <tests>
+
+                </tests>
             </program>
             <answer><p>We're still not really sure.</p></answer>
         </activity>
