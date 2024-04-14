@@ -526,10 +526,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </subtitle>
                 <!-- edition, too? -->
                 <document-id>
+                    <!-- global variables defined in -common -->
                     <xsl:attribute name="edition">
-                        <xsl:value-of select="$docinfo/document-id/@edition"/>
+                        <xsl:value-of select="$edition"/>
                     </xsl:attribute>
-                    <!-- global variable defined in -common -->
                     <xsl:value-of select="$document-id"/>
                 </document-id>
                 <!-- duplicate blurb, blurb/@shelf for Runestone's convenience -->

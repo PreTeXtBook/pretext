@@ -211,6 +211,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="normalize-space($docinfo/document-id)"/>
 </xsl:variable>
 
+<!-- And an edition is critical for maintaing the -->
+<!-- Runestone database, though it may have other -->
+<!-- uses related to maintaining changes.         -->
+<xsl:variable name="edition">
+    <xsl:value-of select="normalize-space($docinfo/document-id/@edition)"/>
+</xsl:variable>
+
 <!-- The new version can return to the generic version  -->
 <!-- once we kill the dashed version for author use.    -->
 <xsl:variable name="author-tools-new">
@@ -3698,10 +3705,10 @@ Book (with parts), "section" at level 3
     <!-- Prefix just for RS server builds, in order that the database -->
     <!-- of exercises gets a globally unique identifier.              -->
     <xsl:if test="$b-host-runestone">
-        <!-- global variable defined in this stylesheet -->
+        <!-- global variables defined in this stylesheet -->
         <xsl:value-of select="$document-id"/>
         <xsl:text>_</xsl:text>
-        <xsl:value-of select="$docinfo/document-id/@edition"/>
+        <xsl:value-of select="$edition"/>
         <xsl:text>_</xsl:text>
     </xsl:if>
     <!-- We require a @label attribute, but allow it to be -->
