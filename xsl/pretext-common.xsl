@@ -202,8 +202,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use this to distinguish one document from another.  -->
 <!-- The global variable here is empty to signal         -->
 <!-- "no choice" by the author.                          -->
+<!-- NB: at some point this should be specified as an    -->
+<!-- attribute, rather than as content, which would make -->
+<!-- things like newlines less likely to appear.  Much   -->
+<!-- as "doucment-id/@edition" is given.  Keep the       -->
+<!-- normalizationcan, it just becomes less necessary.   -->
 <xsl:variable name="document-id">
-    <xsl:value-of select="$docinfo/document-id"/>
+    <xsl:value-of select="normalize-space($docinfo/document-id)"/>
 </xsl:variable>
 
 <!-- The new version can return to the generic version  -->
@@ -3693,7 +3698,8 @@ Book (with parts), "section" at level 3
     <!-- Prefix just for RS server builds, in order that the database -->
     <!-- of exercises gets a globally unique identifier.              -->
     <xsl:if test="$b-host-runestone">
-        <xsl:value-of select="$docinfo/document-id"/>
+        <!-- global variable defined in this stylesheet -->
+        <xsl:value-of select="$document-id"/>
         <xsl:text>_</xsl:text>
         <xsl:value-of select="$docinfo/document-id/@edition"/>
         <xsl:text>_</xsl:text>

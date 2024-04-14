@@ -529,7 +529,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="edition">
                         <xsl:value-of select="$docinfo/document-id/@edition"/>
                     </xsl:attribute>
-                    <xsl:value-of select="$docinfo/document-id"/>
+                    <!-- global variable defined in -common -->
+                    <xsl:value-of select="$document-id"/>
                 </document-id>
                 <!-- duplicate blurb, blurb/@shelf for Runestone's convenience -->
                 <!-- use "value-of" to enforce assumption there is no markup   -->
