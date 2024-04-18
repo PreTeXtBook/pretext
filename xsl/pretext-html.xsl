@@ -6310,7 +6310,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <details class="image-description" aria-live="polite">
             <summary title="details">
                 <xsl:call-template name="insert-symbol">
-                    <xsl:with-param name="name" select="'description'"/>
+                    <xsl:with-param name="name" select="'info'"/>
                 </xsl:call-template>
             </summary>
             <div>
