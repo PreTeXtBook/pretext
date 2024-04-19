@@ -9791,8 +9791,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- DoenetML header libraries -->
 <xsl:template match="interactive[@platform = 'doenetml']" mode="header-libraries">
-    <link rel="stylesheet" type="text/css" href="https://dev.doenet.org/cdn/style.css" />
-    <script onload="onLoad()" type="module" src="https://dev.doenet.org/cdn/doenet-standalone.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/style.css" />
+    <script onload="onLoad()" type="module" src="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/doenet-standalone.min.js"></script>
     <script>
         <xsl:text>function onLoad() {window.renderDoenetToContainer(document.querySelector(".doenetml-applet"))}</xsl:text>
     </script>
