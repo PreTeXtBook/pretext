@@ -7553,28 +7553,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Note that the <init>HTML</init> that is output can vary slightly from your source in small, harmless ways, such as empty (self-closing) elements being output with both an opening and a closing tag.  Please report any significant discrepancies.  Soon this requirement will be enforced in the code.</p>
                 </warning>
 
-                <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
-
-                <figure>
-                    <caption>1-Dimensional Kinematics</caption>
-                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
-                        <sidebyside width="70%" margins="15%">
-                            <stack>
-                                <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
-                                <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
-                                <slate xml:id="box_v" surface="jsxboard" aspect="6:3" />
-                                <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
-                            </stack>
-                        </sidebyside>
-                        <instructions xml:id="kinematics-instructions">
-                            <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
-                        </instructions>
-                        <static>
-                            <image source="images/kinematics.png" width="60%"/>
-                        </static>
-                    </interactive>
-                </figure>
-
                 <p>It is also possible to add <tag>script</tag> elements within an interactive that contain properly escaped JS code. These elements will be placed at the end of the document created to hold the interactive content and can interactive with the other elements within the interactive but can not directly interact with the surrounding page.</p>
 
                 <p>Authors are strongly discouraged from trying to incorporate complex code in the form of a <tag>script</tag>, but it can be a useful tool to call more complex code that is linked via <attr>source</attr> on the <tag>interactive</tag>.</p>
@@ -7755,6 +7733,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html" visual="jsxgraph.uni-bayreuth.de">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext /> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
 
                 <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
+
+                <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
+
+                <figure>
+                    <caption>1-Dimensional Kinematics</caption>
+                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
+                        <sidebyside width="70%" margins="15%">
+                            <stack>
+                                <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
+                                <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_v" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
+                            </stack>
+                        </sidebyside>
+                        <instructions xml:id="kinematics-instructions">
+                            <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
+                        </instructions>
+                        <static>
+                            <image source="images/kinematics.png" width="60%"/>
+                        </static>
+                    </interactive>
+                </figure>
 
                 <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">Archimedean Spiral</url> is taken from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
 
