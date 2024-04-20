@@ -427,19 +427,12 @@ dfn {
   </p>
 </xsl:template>
 
-
-<xsl:template match="image">
-  <img>
-    <xsl:attribute name="src">
-        <xsl:value-of select="@source" />
-    </xsl:attribute>
-    <xsl:if test="@pause = 'yes'">
-      <xsl:attribute name="class">
-        <xsl:text>fragment</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates/>
-  </img>
+<!-- Images get wrapped in a div with @class="fragment" if they are  -->
+<!-- paused                                                          -->
+<xsl:template match="image[not(ancestor::sidebyside) and (@pause='yes')]">
+    <div class="fragment">
+      <xsl:apply-imports/>
+    </div>
 </xsl:template>
 
 <!-- A "url" with content gets an automatic footnote with the @visual -->
