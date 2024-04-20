@@ -428,18 +428,32 @@ dfn {
 </xsl:template>
 
 
-<xsl:template match="image">
-  <img>
-    <xsl:attribute name="src">
-        <xsl:value-of select="@source" />
+<!-- Override bare image container template to insert @pause -->
+<xsl:template match="image[not(ancestor::sidebyside)]">
+  <xsl:variable name="rtf-layout">
+    <xsl:apply-templates select="." mode="layout-parameters" />
+  </xsl:variable>
+  <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+  <!-- div is constraint/positioning for contained image -->
+  <div class="image-box">
+    <xsl:attribute name="style">
+        <xsl:text>width: </xsl:text>
+        <xsl:value-of select="$layout/width"/>
+        <xsl:text>%;</xsl:text>
+        <xsl:text> margin-left: </xsl:text>
+        <xsl:value-of select="$layout/left-margin"/>
+        <xsl:text>%;</xsl:text>
+        <xsl:text> margin-right: </xsl:text>
+        <xsl:value-of select="$layout/right-margin"/>
+        <xsl:text>%;</xsl:text>
     </xsl:attribute>
     <xsl:if test="@pause = 'yes'">
       <xsl:attribute name="class">
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates/>
-  </img>
+    <xsl:apply-templates select="." mode="image-inclusion"/>
+</div>
 </xsl:template>
 
 <!-- A "url" with content gets an automatic footnote with the @visual -->
