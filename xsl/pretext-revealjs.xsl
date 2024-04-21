@@ -418,42 +418,18 @@ dfn {
 
 <xsl:template match="p">
   <p>
-    <xsl:if test="@pause = 'yes'">
-      <xsl:attribute name="class">
-        <xsl:text>fragment</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="class"/>
     <xsl:apply-templates/>
   </p>
 </xsl:template>
 
-
-<!-- Override bare image container template to insert @pause -->
-<xsl:template match="image[not(ancestor::sidebyside)]">
-  <xsl:variable name="rtf-layout">
-    <xsl:apply-templates select="." mode="layout-parameters" />
-  </xsl:variable>
-  <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-  <!-- div is constraint/positioning for contained image -->
-  <div class="image-box">
-    <xsl:attribute name="style">
-        <xsl:text>width: </xsl:text>
-        <xsl:value-of select="$layout/width"/>
-        <xsl:text>%;</xsl:text>
-        <xsl:text> margin-left: </xsl:text>
-        <xsl:value-of select="$layout/left-margin"/>
-        <xsl:text>%;</xsl:text>
-        <xsl:text> margin-right: </xsl:text>
-        <xsl:value-of select="$layout/right-margin"/>
-        <xsl:text>%;</xsl:text>
+<!-- for pauses, overriding class-mode for images in pretext-html -->
+<xsl:template match="p|image" mode="class">
+  <xsl:if test="@pause = 'yes'">
+    <xsl:attribute name="class">
+      <xsl:text>fragment</xsl:text>
     </xsl:attribute>
-    <xsl:if test="@pause = 'yes'">
-      <xsl:attribute name="class">
-        <xsl:text>fragment</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="image-inclusion"/>
-</div>
+  </xsl:if>
 </xsl:template>
 
 <!-- A "url" with content gets an automatic footnote with the @visual -->
