@@ -12,11 +12,13 @@
  */
 
 function scrollTocToActive() {
+    //Try to figure out current TocItem from URL
     pagefilename  = window.location.href;
     pagefilename  = pagefilename.match(/[^\/]*$/)[0];
+    pagefilename = pagefilename.split("#")[0];
     possibletocentries = document.querySelectorAll('#ptx-toc a[href="' + pagefilename + '"]');
     if (possibletocentries.length == 0) {
-        console.log("linked below a subsection");
+        //linked below a subsection
         pagefilename  = pagefilename.match(/^[^\#]*/)[0];
         possibletocentries = document.querySelectorAll('#ptx-toc a[href="' + pagefilename + '"]');
     }
@@ -24,8 +26,14 @@ function scrollTocToActive() {
         console.log("error, cannot find", pagefilename, "in TOC");
         return
     }
-    possibletocentries[0].scrollIntoView({block: "center"});
-    possibletocentries[0].classList.add("active");}
+
+    //scroll to the active entry... don't use scrollIntoView because it
+    //sets the user'stab position to that item
+    let targetY = possibletocentries[0].offsetTop;
+    document.querySelector("#ptx-toc").scrollTop = targetY;
+
+    possibletocentries[0].classList.add("active");
+}
 
 function toggletoc() {
    thesidebar = document.getElementById("ptx-sidebar");
