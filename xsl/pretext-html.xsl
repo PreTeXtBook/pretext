@@ -5969,7 +5969,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
     <!-- div is constraint/positioning for contained image -->
-    <div>
+    <div class="image-box">
         <xsl:attribute name="style">
             <xsl:text>width: </xsl:text>
             <xsl:value-of select="$layout/width"/>
@@ -5981,8 +5981,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$layout/right-margin"/>
             <xsl:text>%;</xsl:text>
         </xsl:attribute>
-        <!-- fragment for reveal.js pauses -->
-        <xsl:apply-templates select="." mode="class"/>
         <xsl:apply-templates select="." mode="image-inclusion"/>
     </div>
 </xsl:template>
@@ -13227,13 +13225,6 @@ TODO:
             <xsl:value-of select="$warning" />
         </xsl:element>
     </xsl:if>
-</xsl:template>
-
-<!-- the class for image, to be overridden by reveal.js stylesheet -->
-<xsl:template match="image" mode="class">
-  <xsl:attribute name="class">
-    <xsl:text>image-box</xsl:text>
-  </xsl:attribute>
 </xsl:template>
 
 </xsl:stylesheet>

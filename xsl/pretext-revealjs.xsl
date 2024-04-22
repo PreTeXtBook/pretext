@@ -418,19 +418,28 @@ dfn {
 
 <xsl:template match="p">
   <p>
-    <xsl:apply-templates select="." mode="class"/>
+    <xsl:if test="@pause = 'yes'">
+      <xsl:attribute name="class">
+        <xsl:text>fragment</xsl:text>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates/>
   </p>
 </xsl:template>
 
-<!-- for pauses, overriding class-mode for images in pretext-html -->
-<xsl:template match="p|image" mode="class">
+<!-- Images get wrapped in a span with @class="fragment" if they are -->
+<!-- paused                                                          -->
+<xsl:template match="image[not(ancestor::sidebyside)]">
   <xsl:if test="@pause = 'yes'">
-    <xsl:attribute name="class">
-      <xsl:text>fragment</xsl:text>
-    </xsl:attribute>
+    <span class="fragment">
+      <xsl:apply-imports />
+    </span>
+  </xsl:if>
+  <xsl:if test="not(@pause = 'yes')">
+    <xsl:apply-imports />
   </xsl:if>
 </xsl:template>
+
 
 <!-- A "url" with content gets an automatic footnote with the @visual -->
 <!-- attribute value (if non-empty) or a mildly-sanitized version of  -->
