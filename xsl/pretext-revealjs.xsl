@@ -427,17 +427,12 @@ dfn {
   </p>
 </xsl:template>
 
-<!-- Images get wrapped in a span with @class="fragment" if they are -->
+<!-- Images get wrapped in a div with @class="fragment" if they are  -->
 <!-- paused                                                          -->
-<xsl:template match="image[not(ancestor::sidebyside)]">
-  <xsl:if test="@pause = 'yes'">
-    <span class="fragment">
-      <xsl:apply-imports />
-    </span>
-  </xsl:if>
-  <xsl:if test="not(@pause = 'yes')">
-    <xsl:apply-imports />
-  </xsl:if>
+<xsl:template match="image[not(ancestor::sidebyside) and (@pause='yes')]">
+    <div class="fragment">
+      <xsl:apply-imports/>
+    </div>
 </xsl:template>
 
 
