@@ -3013,6 +3013,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercises>
 
+    <section xml:id="polling" label="polling">
+        <title>Polling</title>
+
+        <p>(2024-04-24) This section is experimental, and may not be fully functional as you view it.  No markup in the source document is final and may change at any time.</p>
+
+        <p>We begin with standalone queries, using the <tag>query</tag> element.  Runestone calls these <term>polls</term>.   We plan structures/blocks such as <tag>poll</tag>, <tag>survey</tag>, and <tag>questionnaire</tag>, that will be structured collections of <tag>query</tag>.</p>
+
+        <query label="stoplight-query">
+            <statement>
+                <p>In my town, the stoplights have:</p>
+            </statement>
+            <choices>
+                <choice>
+                    <p>Solid yellow lights.</p>
+                </choice>
+                <choice>
+                    <p>Yellow lights that are solid left-turn arrows.</p>
+                </choice>
+                <choice>
+                    <p>Yellow lights that are blinking left-turn arrows.</p>
+                </choice>
+            </choices>
+        </query>
+
+        <query label="derivative-query">
+            <statement>
+                <p>Which of the following is the derivative of <m>f(x)=x^4\sin(x)</m>?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <p><m>x^5 - \cos(x)</m></p>
+                </choice>
+                <choice>
+                    <p><m>x^4\cos(x) + 4x^3\sin(x)</m></p>
+                </choice>
+                <choice>
+                    <p><m>4x^3\cos(x)</m></p>
+                </choice>
+            </choices>
+        </query>
+
+        <query label="discipline-query" scale="5">
+            <statement>
+                <p>I like computer science better than mathematics.  <q>1</q> is <q>strongly disagree</q> and <q>5</q> is <q>strongly agree</q>.</p>
+            </statement>
+        </query>
+
+        <query label="image-query" scale="5">
+            <statement>
+                <p>Which of the following paintings is your favorite?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <!-- The Calydonian Boar Hunt by Peter Paul Rubens, CC0 -->
+                    <!-- https://www.rawpixel.com/image/14263399/the-calydonian-boar-hunt-peter-paul-rubens -->
+                    <p>The Calydonian Boar Hunt by Peter Paul Rubens</p>
+                    <image source="image-from-rawpixel-id-14263399-jpeg.jpg" width="50%"/>
+                </choice>
+                <choice>
+                    <!-- Lucas Cranach's The fountain of youth (1546) famous painting. CC0-->
+                    <!-- https://www.rawpixel.com/image/3984423/illustration-image-art-people-vintage -->
+                    <p>Lucas Cranach's The fountain of youth (1546)</p>
+                    <image source="image-from-rawpixel-id-3984423-jpeg.jpg" width="50%"/>
+                </choice>
+                <choice>
+                    <!-- William-Adolphe Bouguereau's Temptation (1880) -->
+                    <!-- https://www.rawpixel.com/image/8704110/image-frame-art-vintage -->
+                    <p>William-Adolphe Bouguereau's Temptation (1880)</p>
+                    <image source="image-from-rawpixel-id-8704110-jpeg.jpg" width="50%"/>
+                </choice>
+            </choices>
+        </query>
+    </section>
+
     <exercises xml:id="fill-in-exercises">
         <title>Fill-In Exercises</title>
 
