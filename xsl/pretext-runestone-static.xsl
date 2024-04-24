@@ -835,6 +835,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="solution"/>
 </xsl:template>
 
+<!-- Queries -->
+
+<xsl:template match="query" mode="runestone-to-static">
+    <paragraphs>
+        <!-- no period, it is supplied by conversions -->
+        <!-- TODO: internationalize the term -->
+        <title>Query</title>
+        <!-- reproduce structured statement's pieces -->
+        <xsl:copy-of select="statement/*"/>
+        <!-- nothing to do for @scale style query -->
+        <!-- TODO: perhaps automatically indicate scale -->
+        <xsl:if test="choices">
+            <p><ol format="1.">
+                <xsl:for-each select="choices/choice">
+                    <li>
+                        <xsl:copy-of select="."/>
+                    </li>
+                </xsl:for-each>
+            </ol></p>
+        </xsl:if>
+    </paragraphs>
+</xsl:template>
+
 <!-- Active Code -->
 
 <xsl:template match="*[@exercise-interactive = 'coding']" mode="runestone-to-static">
