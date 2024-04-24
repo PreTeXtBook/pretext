@@ -9393,6 +9393,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="runestone-to-interactive"/>
 </xsl:template>
 
+<!-- Queries -->
+
+<xsl:template match="query">
+    <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+</xsl:template>
+
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console" mode="code-inclusion">

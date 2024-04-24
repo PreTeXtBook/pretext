@@ -2251,7 +2251,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="datafile" mode="representations">
+<xsl:template match="datafile|query" mode="representations">
     <xsl:choose>
         <!-- make a static version, in a PreTeXt style -->
         <!-- for use naturally by most conversions     -->

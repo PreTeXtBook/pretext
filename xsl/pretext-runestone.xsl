@@ -393,7 +393,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|datafile|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
@@ -2219,6 +2219,96 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
     </div>
+</xsl:template>
+
+<!-- ####### -->
+<!-- Queries -->
+<!-- ####### -->
+
+<xsl:template match="query" mode="runestone-to-interactive">
+    <!-- <xsl:text>FOO</xsl:text> -->
+    <xsl:variable name="the-choices" select="choices/choice"/>
+    <div class="ptx-runestone-container">
+        <div class="runestone">
+            <ul data-component="poll">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:attribute name="data-results">
+                    <xsl:choose>
+                        <xsl:when test="(@visibility = 'instructor') or (@visibility = 'all')">
+                            <xsl:value-of select="@visibility"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>instructor</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:apply-templates select="statement"/>
+                <!-- infrastructure to here is common to a query with -->
+                <!-- explicit distinct choices, versus a query with a -->
+                <!-- simple scale for responses                       -->
+                <!-- NB: could define a variable early on indicating  -->
+                <!-- the nature of the poll, should there need to be  -->
+                <!-- more differentiation                             -->
+                <xsl:choose>
+                    <xsl:when test="choices">
+                        <xsl:apply-templates select="choices/choice"/>
+                    </xsl:when>
+                    <xsl:when test="foome">
+                        <!-- context switch will allow "position()" to behave -->
+                        <xsl:for-each select="$the-choices">
+                            <li>
+                                <span class="poll-choice">
+                                    <xsl:value-of select="position()"/>
+                                </span>
+                                <xsl:apply-templates/>
+                            </li>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:when test="@scale">
+                        <!-- generate list items with numbers recursively -->
+                        <xsl:call-template name="numbered-list-items">
+                            <xsl:with-param name="max" select="@scale"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <!-- could add error warning here?  Or rely on schema? -->
+                    <xsl:otherwise/>
+                </xsl:choose>
+            </ul>
+        </div>
+    </div>
+</xsl:template>
+
+<xsl:template match="query/choices/choice">
+    <li>
+        <!-- <span class="poll-choice">
+            <xsl:number/>
+        </span> -->
+        <xsl:number/>
+        <xsl:text>. </xsl:text>
+        <xsl:apply-templates/>
+    </li>
+</xsl:template>
+
+<xsl:template name="numbered-list-items">
+    <!-- always initialize with 1 to start -->
+    <xsl:param name="current" select="'1'"/>
+    <xsl:param name="max"/>
+
+    <xsl:choose>
+        <!-- $current is too big, done with recursion -->
+        <xsl:when test="$current > $max"/>
+        <xsl:otherwise>
+            <!-- make numbered list-item -->
+            <li>
+                <xsl:value-of select="$current"/>
+            </li>
+            <!-- recurse with next integer -->
+            <xsl:call-template name="numbered-list-items">
+                <xsl:with-param name="current" select="$current + 1"/>
+                <xsl:with-param name="max" select="$max"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ######### -->
