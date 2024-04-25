@@ -8202,7 +8202,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-doenetml">
                     <caption>DoenetML example</caption>
-                    <interactive xml:id="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
+                    <!-- A @label is preferred, since it is required for use on Runestone -->
+                    <interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
                         <slate surface="doenetml">
                             &lt;p&gt;
                             Adjust the vectors &lt;m&gt;\vec u&lt;/m&gt;, &lt;m&gt;\vec v&lt;/m&gt;, and &lt;m&gt;\vec w&lt;/m&gt; in the
