@@ -9668,7 +9668,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <!-- A DoenetML interactive lives two lives.  Plain 'ol PreTeXt,  -->
+        <!-- supported by a Doenet CDN for its interactivity.  But when   -->
+        <!-- hosted on Runestone it can communicate its results.  So in   -->
+        <!-- the manifest and then the database and it needs a better id. -->
+        <!-- This is nearly identical to the plain-PreTeXt "html-id",     -->
+        <!-- but with a preference (to become a necessity) for @label.    -->
+        <!-- document-id and version only result inside Runestone builds. -->
+        <xsl:choose>
+            <xsl:when test="@platform = 'doenetml'">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="html-id-attribute"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:attribute name="src">

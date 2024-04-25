@@ -393,7 +393,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
@@ -607,7 +607,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- meet the dead-end monster match below, and the default template will     -->
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
-        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile" mode="runestone-manifest"/>
+        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -630,6 +630,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="datafile" mode="runestone-manifest-label">
     <label>
         <xsl:value-of select="@filename"/>
+    </label>
+</xsl:template>
+
+<xsl:template match="interactive[@platform = 'doenetml']" mode="runestone-manifest-label">
+    <label>
+        <!-- This is not very informative.  Perhaps look up     -->
+        <!-- the tree to find a containing figure with a title  -->
+        <!-- TODO: perhaps via a type name -->
+        <xsl:text>DoenetML Interactive</xsl:text>
     </label>
 </xsl:template>
 
@@ -880,6 +889,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <htmlsrc>
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+        </htmlsrc>
+    </question>
+</xsl:template>
+
+<xsl:template match="interactive[@platform = 'doenetml']" mode="runestone-manifest">
+    <question>
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+        <htmlsrc>
+            <xsl:apply-templates select="." mode="iframe-interactive"/>
         </htmlsrc>
     </question>
 </xsl:template>
