@@ -12337,7 +12337,7 @@ TODO:
         <xsl:attribute name="src">
             <xsl:choose>
                 <xsl:when test="$mathjax4-testing">
-                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.3/</xsl:text>
+                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.6/</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
