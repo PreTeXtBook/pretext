@@ -4147,12 +4147,12 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
 
 
 def copy_html_css_js(work_dir):
-    '''Copy necessary CSS and JS into working directory'''
+    '''Copy all necessary CSS and JS into working directory'''
 
-    # Place support files where expected
-    # 2024-01-18: overkill for CSS, could be slimmed with knowledge
-    # of *which* files are needed.  Though maybe we will have
-    # on-the-fly changes initiated by readers?
+    # Place support files where expected.
+    # We are not careful about placing files that are not used/necessary.
+    # In particular, all CSS themes are present for the situation where
+    # the reader can choose/switch themes on-the-fly.
     css_src = os.path.join(get_ptx_path(), "css")
     css_dest = os.path.join(work_dir, "_static", "pretext", "css")
     shutil.copytree(css_src, css_dest)
