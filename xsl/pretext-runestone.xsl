@@ -897,7 +897,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <question>
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <htmlsrc>
-            <xsl:apply-templates select="." mode="iframe-interactive"/>
+            <xsl:apply-templates select="." mode="interactive-core"/>
         </htmlsrc>
     </question>
 </xsl:template>
