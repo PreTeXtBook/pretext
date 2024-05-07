@@ -3060,6 +3060,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </statement>
         </query>
 
+        <query label="animal-query-absurd" scale="37">
+            <statement>
+                <p>How many stuffed animal toys did you own growing up?  (Testing an absurdly large scale, especially in print.)</p>
+            </statement>
+        </query>
+
         <query label="image-query" scale="5">
             <statement>
                 <p>Which of the following paintings is your favorite?</p>
