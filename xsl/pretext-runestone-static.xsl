@@ -844,19 +844,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <title>Query</title>
         <!-- reproduce structured statement's pieces -->
         <xsl:copy-of select="statement/*"/>
-        <!-- nothing to do for @scale style query -->
-        <!-- TODO: perhaps automatically indicate scale -->
-        <xsl:if test="choices">
-            <p><ol format="1.">
-                <xsl:for-each select="choices/choice">
-                    <li>
-                        <xsl:copy-of select="."/>
-                    </li>
-                </xsl:for-each>
-            </ol></p>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="choices">
+                <p><ol format="1.">
+                    <xsl:for-each select="choices/choice">
+                        <li>
+                            <xsl:copy-of select="."/>
+                        </li>
+                    </xsl:for-each>
+                </ol></p>
+            </xsl:when>
+            <xsl:when test="@scale">
+                <!-- A pre-formatted "display" of the integer choices, -->
+                <!-- which could be printed and circled by the reader. -->
+                <pre>
+                    <xsl:apply-templates select="." mode="scale-choices"/>
+                </pre>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
     </paragraphs>
 </xsl:template>
+
+<!-- Recursively count-up and layout choices with rows of -->
+<!-- 10 choices each, with blank lines between the rows.  -->
+<xsl:template match="query" mode="scale-choices">
+    <xsl:param name="the-choice" select="'1'"/>
+
+    <xsl:choose>
+        <!-- Done.  Emit and that's it -->
+        <xsl:when test="$the-choice = ./@scale">
+            <xsl:value-of select="$the-choice"/>
+        </xsl:when>
+        <!-- Done with a row, but not done.  Newline, and blankline. -->
+        <xsl:when test="$the-choice mod 10 = 0">
+            <xsl:value-of select="$the-choice"/>
+            <xsl:text>&#xa;&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="scale-choices">
+                <xsl:with-param name="the-choice" select="$the-choice + 1"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- Mid-row, use two spaces to separate. -->
+        <xsl:otherwise>
+            <xsl:value-of select="$the-choice"/>
+            <xsl:text>&#x20;&#x20;</xsl:text>
+            <xsl:apply-templates select="." mode="scale-choices">
+                <xsl:with-param name="the-choice" select="$the-choice + 1"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Active Code -->
 
