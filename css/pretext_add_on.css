@@ -2053,8 +2053,7 @@ from Jiří Lebl */
 .ptx-content ol.cols6 > li, .ptx-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}
 /* sample-article sec 5 */
 .ptx-content ul.cols2 > li:nth-child(odd), .ptx-content ol.cols2 > li:nth-child(odd) {
-   padding-right: 1.5em;
-   padding-right: 2em;
+   margin-right: 2em;
 }
 
 /*
