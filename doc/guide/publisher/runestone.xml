@@ -126,7 +126,7 @@
             <li>
                 <p>
                     Log into GitHub and open an issue at
-                    <url href="https://github.com/RunestoneInteractive/RunestoneServer/issues/new" visual="github.com/RunestoneInteractive/RunestoneServer/issues/new"/>
+                    <url href="https://github.com/RunestoneInteractive/rs/issues/new" visual="github.com/RunestoneInteractive/rs/issues/new"/>
                     to request that your project be added to Runestone Academy. Be sure to provide the URL
                     of your GitHub repository (e.g. <c>https://github.com/UserName/repo-name/</c>). Runestone
                     Academy administrators will communicate with you via GitHub to complete this process.
