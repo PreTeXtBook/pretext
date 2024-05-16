@@ -198,6 +198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fix right now.                                                     -->
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')]|$document-root//md[contains(text(),'sfrac')]|$document-root//me[contains(text(),'sfrac')]|$document-root//mrow[contains(text(),'sfrac')])"/>
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
+<xsl:variable name="b-has-doenetml"     select="boolean($document-root//interactive[@platform='doenetml'])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
 <!-- Every page has an index button, with a link to the index -->
@@ -6751,6 +6752,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="font-awesome" />
                 <xsl:call-template name="css" />
+                <xsl:call-template name="doenetml" />
                 <xsl:call-template name="runestone-header"/>
                 <xsl:call-template name="font-awesome" />
             </head>
@@ -9693,6 +9695,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
+<!-- For more complicated interactives, we just point to the page we generate -->
+<xsl:template match="interactive[@platform='doenetml']" mode="iframe-interactive">
+    <div>
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="permid-attribute"/>
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates match="slate[@surface = 'doenetml']"/>
+    </div>
+</xsl:template>
+
 <!-- ######################### -->
 <!-- Source File Interactives  -->
 <!-- ######################### -->
@@ -9816,7 +9828,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/style.css" />
     <script onload="onLoad()" type="module" src="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/doenet-standalone.min.js"></script>
     <script>
-        <xsl:text>function onLoad() {window.renderDoenetToContainer(document.querySelector(".doenetml-applet"))}</xsl:text>
+        <xsl:text>function onLoad() {document.querySelectorAll(".doenetml-applet").forEach(e=>window.renderDoenetToContainer(e)}</xsl:text>
     </script>
 </xsl:template>
 
@@ -10118,8 +10130,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="slate[@surface = 'doenetml']">
     <div class="doenetml-applet">
         <div class="doenetml-loading" style="text-align:center">
-            <p><img src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/></p>
-            <p><xsl:text>Waiting on the page to load...</xsl:text></p>
+            <img width="100px" src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/>
+            <p><xsl:text>Waiting on the applet to load...</xsl:text></p>
         </div>
         <script type="text/doenetml">
             <xsl:value-of select="text()"/>
@@ -10644,6 +10656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="geogebra" />
+            <xsl:call-template name="doenetml" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="runestone-header"/>
@@ -10790,6 +10803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="geogebra" />
+            <xsl:call-template name="doenetml" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="runestone-header"/>
@@ -12923,6 +12937,18 @@ TODO:
 <xsl:template name="geogebra">
     <xsl:if test="$b-has-calculator and contains($html-calculator,'geogebra')">
         <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- DoenetML -->
+<!-- The CSS and JS necessary to run doenetml components -->
+<xsl:template name="doenetml">
+    <xsl:if test="$b-has-doenetml">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/style.css" />
+        <script onload="onLoad()" type="module" src="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/doenet-standalone.min.js"></script>
+        <script>
+            <xsl:text>function onLoad() {document.querySelectorAll(".doenetml-applet").forEach(e=>window.renderDoenetToContainer(e))}</xsl:text>
+        </script>
     </xsl:if>
 </xsl:template>
 
