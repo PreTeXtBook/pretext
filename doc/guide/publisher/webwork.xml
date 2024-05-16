@@ -125,16 +125,27 @@
     </p>
     <pre>
       #### Replace essay boxes with a message
+      my $essay_message = 'If you were logged into a WeBWorK course '
+          . 'and this problem were assigned to you, '
+          . 'you would be able to submit an essay answer '
+          . 'that would be graded later by a human being.';
+
       sub essay_box {
         my $out = MODES(
           TeX => '',
           Latex2HTML => '',
-          HTML => qq!&lt;P>
-            If you were logged into a WeBWorK course
-            and this problem were assigned to you,
-            you would be able to submit an essay answer
-            that would be graded later by a human being.
-          &lt;/P>!,
+          HTML => qq!&lt;p>$essay_message&lt;/p>!,
+          PTX => '',
+        );
+        $out;
+      };
+
+      sub explanation_box {
+        return if ($envir{waiveExplanations});
+        my $out = MODES(
+          TeX => '',
+          Latex2HTML => '',
+          HTML => qq!&lt;p>$essay_message&lt;/p>!,
           PTX => '',
         );
         $out;
