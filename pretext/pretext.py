@@ -3522,7 +3522,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
 #################
 
 # Pythonic replacement for xsltproc executable
-def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.info):
+def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     """
     Apply an XSL stylesheet to an XML source, with control over location of results.
 
@@ -3534,8 +3534,6 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
     output_dir   - a directory for exsl:document() templates to write to
     stringparams - a dictionary of option/value string:string pairs to
                    pass to  xsl:param  elements of the stylesheet
-    outputfn     - a function for routing output of error messages. Any
-                   such function should process its parameters like print
 
     N.B. The value of a "publisher" string parameter passed in the
     "stringparams" argument must be a complete path, since a relative
@@ -3613,17 +3611,26 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}, outputfn=log.in
             # start will be reset to non-zero, so this is
             # one-time only, and never if there are no messages
             if (start == 0) and (end > 0):
-                outputfn("messages from the log for XSL processing (indented):")
+                log.info("messages from the log for XSL processing:")
             # print out any unprinted messages from error_log
-            for line in range(start, end):
-                outputfn(f"    * {xslt.error_log[line].message}")
+            for line in xslt.error_log[start:end]:
+                if "PTX:FATAL" in line.message:
+                    log.critical(f"* {line.message}")
+                elif "PTX:ERROR" in line.message or "PTX:BUG" in line.message:
+                    log.error(f"* {line.message}")
+                elif "PTX:WARNING" in line.message:
+                    log.warning(f"* {line.message}")
+                elif "PTX:DEBUG" in line.message:
+                    log.debug(f"* {line.message}")
+                else:
+                    log.info(f"* {line.message}")
             start = end
         if texc is None:
-            outputfn("successful application of {}".format(xsl))
+            log.info("successful application of {}".format(xsl))
         else:
             raise (texc)
     except Exception as e:
-        outputfn("processing with {} has failed\n".format(xsl))
+        log.error("processing with {} has failed\n".format(xsl))
         # report any errors on failure (indented)
         raise (e)
     finally:
