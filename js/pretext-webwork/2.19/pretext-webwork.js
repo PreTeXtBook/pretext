@@ -616,7 +616,7 @@ function translateHintSol(ww_id, body_div, ww_domain, b_ptx_has_hint, b_ptx_has_
         knowlSummary.className = '';
         knowlSummary.classList.add('knowl__link');
 
-        const summaryLabel = knowlSummary.getElementsByTagName('div')[0];
+        const summaryLabel = knowlSummary.children[0];
         summaryLabel.remove();
 
         const newLabelSpan = document.createElement('span');
