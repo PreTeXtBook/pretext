@@ -12869,6 +12869,10 @@ TODO:
             <script src="{$html.js.dir}/pretext.js"></script>
             <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
             <script src="{$html.js.dir}/user_preferences.js"></script>
+            <xsl:if test="$debug.style.browser = 'yes'">
+                <script src="{$html.js.dir}/style_browser.js"></script>
+                <xsl:comment>Enabling css style browser.</xsl:comment>
+            </xsl:if>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
             <script type="module" defer="" src="./static/js/main.js"></script>
