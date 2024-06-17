@@ -115,6 +115,13 @@ class SlideRevealer {
     this.animatedElement.style.overflow = '';
     if (!isOpen)
       this.contentElement.style.display = 'none';
+
+    if (isOpen) {
+      let hasCallback = this.contentElement.querySelectorAll("[data-knowl-callback]");
+      hasCallback.forEach((el) => {
+        window[el.getAttribute("data-knowl-callback")](el, open);
+      });
+    }
   }
 }
 
