@@ -4897,6 +4897,144 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!--                       -->
+<!-- Circular Case Numbers -->
+<!--                       -->
+
+<xsl:template match="ol" mode="formatted-case-cycle-numbers">
+    <xsl:param name="from" />
+    <xsl:param name="to" />
+    <xsl:variable name="format-code">
+        <xsl:choose>
+            <xsl:when test="self::node()[@format-code]">
+                <xsl:value-of select="./@format-code" />
+            </xsl:when>
+            <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="adjusted-from">
+        <xsl:choose>
+            <xsl:when test="$format-code = '0'"><xsl:value-of select="$from - 1" /></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$from" /></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="adjusted-to">
+        <xsl:choose>
+            <xsl:when test="$format-code = '0'"><xsl:value-of select="$to - 1" /></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$to" /></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="original-marker-suffix" select="./@marker-suffix" />
+    <xsl:variable name="marker-suffix">
+        <xsl:choose>
+            <!-- Strip out any trailing dot from the marker format. -->
+            <xsl:when test="substring($original-marker-suffix, string-length($original-marker-suffix)) = '.'">
+                <xsl:value-of select="substring($original-marker-suffix,1,string-length($original-marker-suffix) - 1)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$original-marker-suffix" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="./@marker-prefix" />
+    <xsl:number value="$adjusted-from" format="{$format-code}" />
+    <xsl:value-of select="$marker-suffix" />
+    <xsl:text>CYCLENUMBERSEPARATOR</xsl:text>
+    <xsl:value-of select="./@marker-prefix" />
+    <xsl:number value="$adjusted-to" format="{$format-code}" />
+    <xsl:value-of select="$marker-suffix" />
+</xsl:template>
+
+<xsl:template match="*" mode="default-formatted-case-cycle-numbers">
+    <xsl:param name="from" />
+    <xsl:param name="to" />
+    <xsl:number value="$from" />
+    <xsl:text>CYCLENUMBERSEPARATOR</xsl:text>
+    <xsl:number value="$to" />
+</xsl:template>
+
+<xsl:template match="case" mode="case-cycle-numbers">
+    <xsl:variable name="cycle-position">
+        <xsl:number count="case[@direction='cycle']" />
+    </xsl:variable>
+    <xsl:number value="$cycle-position" />
+    <xsl:text>|</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$cycle-position = count(../case[@direction='cycle'])">
+            <xsl:if test="$cycle-position = 1">
+                <xsl:message>PTX:WARNING: a "case" with @direction "cycle" should be one of several</xsl:message>
+                <xsl:apply-templates select="../.." mode="location-report"/>
+            </xsl:if>
+            <xsl:number value="1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:number value="$cycle-position + 1" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="proof[@ref]/case" mode="case-cycle">
+    <!-- NB existence/validity of "@ref" is already error checked   -->
+    <!-- by code that augments the proof title based on the "@ref". -->
+    <xsl:variable name="cycle-numbers">
+        <xsl:apply-templates select="." mode="case-cycle-numbers" />
+    </xsl:variable>
+    <xsl:variable name="cycle-position" select="substring-before($cycle-numbers,'|')" />
+    <xsl:variable name="cycle-position-plus-one" select="substring-after($cycle-numbers,'|')" />
+    <xsl:variable name="target" select="id(../@ref)"/>
+    <!-- "@ref" should point to something containing an "ol". -->
+    <!-- NB In future this might be a "statement" child of a  -->
+    <!-- THEOREM-LIKE instead of specifically a THEOREM-LIKE. -->
+    <xsl:choose>
+        <xsl:when test="$target//ol[1]">
+            <xsl:apply-templates select="$target//ol[1]" mode="formatted-case-cycle-numbers">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING:   a cross-reference ("ref") from a "<xsl:value-of select="local-name(..)"/>" containing at least one "case" with "direction" set to "cycle" uses a reference [<xsl:value-of select="../@ref"/>] that does not point to an element that contains an "ol".</xsl:message>
+            <xsl:apply-templates select="../.." mode="location-report"/>
+            <xsl:apply-templates select="." mode="default-formatted-case-cycle-numbers">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="proof[not(@ref)]/case" mode="case-cycle">
+    <xsl:variable name="cycle-numbers">
+        <xsl:apply-templates select="." mode="case-cycle-numbers" />
+    </xsl:variable>
+    <xsl:variable name="cycle-position" select="substring-before($cycle-numbers,'|')" />
+    <xsl:variable name="cycle-position-plus-one" select="substring-after($cycle-numbers,'|')" />
+    <xsl:choose>
+        <!-- Check if the proof has a "statement" sibling        -->
+        <!-- (implying the proof is a child of THEOREM-LIKE)     -->
+        <!-- where that "statement" sibling contains an "ol"     -->
+        <!-- from which we can copy the marker information.      -->
+        <!-- NB We don't filter on "ol[@marker]" because we      -->
+        <!-- still need to honour the format code which may      -->
+        <!-- be derived from nesting. Not relevant now because   -->
+        <!-- our "ol" should be top level in its "statement" but -->
+        <!-- potentially relevant later if THEOREM-LIKE supports -->
+        <!-- multiple "statement" children which will become the -->
+        <!-- top-level numbering for any list-like children.     -->
+        <xsl:when test="../preceding-sibling::statement[1]//ol[1]">
+            <xsl:apply-templates select="../preceding-sibling::statement[1]//ol[1]" mode="formatted-case-cycle-numbers">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="default-formatted-case-cycle-numbers">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- TESTING -->
 <!-- Some test images and debugging output, -->

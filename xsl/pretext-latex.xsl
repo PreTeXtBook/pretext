@@ -1060,6 +1060,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Arrows for iff PROOF-LIKEs, with trailing space&#xa;</xsl:text>
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
+        <!-- \bigl and \bigr in case the ol/@markers adorning #1 and #2 involve delimiters -->
+        <xsl:text>\newcommand{\cycleimplication}[2]{$\bigl($#1 $\Rightarrow$ #2$\bigr)$}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
@@ -5445,7 +5447,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <!-- optional direction, given by attribute -->
+    <!-- handle optional direction, given by attribute -->
     <xsl:choose>
         <xsl:when test="@direction='forward'">
             <xsl:text>\forwardimplication</xsl:text>
@@ -5453,7 +5455,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@direction='backward'">
             <xsl:text>\backwardimplication</xsl:text>
         </xsl:when>
-        <!-- DTD will catch incorrect values -->
+        <xsl:when test="@direction='cycle'">
+            <xsl:variable name="case-cycle-numbers">
+                <xsl:apply-templates select="." mode="case-cycle" />
+            </xsl:variable>
+            <xsl:text>\cycleimplication{</xsl:text>
+            <xsl:value-of select="substring-before($case-cycle-numbers,'CYCLENUMBERSEPARATOR')" />
+            <xsl:text>}{</xsl:text>
+            <xsl:value-of select="substring-after($case-cycle-numbers,'CYCLENUMBERSEPARATOR')" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+    <!-- DTD will catch incorrect values -->
     </xsl:choose>
     <xsl:text>}</xsl:text>
     <!-- optional title -->
