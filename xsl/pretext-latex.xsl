@@ -6766,8 +6766,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
 <xsl:template match="p">
-    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
-        <xsl:text>\par&#xa;</xsl:text>
+    <xsl:variable name="node-preceding-current" select="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1]" />
+    <xsl:if test="$node-preceding-current[self::p or self::paragraphs or self::sidebyside or self::case]">
+        <xsl:text>\par</xsl:text>
+        <xsl:if test="$node-preceding-current[self::paragraphs or self::case]">
+            <xsl:text>\medskip</xsl:text>
+        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- we can't cross-reference here without an @xml:id -->
     <!-- place it on a line of its own just prior to guts -->
