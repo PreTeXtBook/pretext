@@ -4539,7 +4539,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>Purple</p></li>
                 </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can specify the <latex /> version to match if it is important.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
                     <li>
                         <title>A title on a top-level item</title>
                         <p>Level 1, first.</p>

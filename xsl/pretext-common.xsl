@@ -4349,9 +4349,7 @@ Book (with parts), "section" at level 3
 <!-- First, the number of a list item within its own ordered list.  This -->
 <!-- trades on the PTX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
-    <xsl:variable name="code">
-        <xsl:apply-templates select=".." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="code" select="../@format-code" />
     <xsl:number format="{$code}" />
 </xsl:template>
 
@@ -5902,50 +5900,6 @@ Book (with parts), "section" at level 3
         <!-- now done, report level -->
         <xsl:otherwise>
             <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-
-<!-- Labels of ordered lists have formatting codes, which  -->
-<!-- we detect here and pass on to other more specialized  -->
-<!-- templates for implementation specifics                -->
-<!-- In order: Arabic (0-based), Arabic (1-based)          -->
-<!-- lower-case Latin, upper-case Latin,                   -->
-<!-- lower-case Roman numeral, upper-case Roman numeral    -->
-<!-- Absent a label attribute, defaults go 4 levels deep   -->
-<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
-<!-- lower-case Roman numeral, upper-case Latin            -->
-<xsl:template match="ol" mode="format-code">
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:choose>
-                <xsl:when test="contains(@marker,'0')">0</xsl:when>
-                <xsl:when test="contains(@marker,'1')">1</xsl:when>
-                <xsl:when test="contains(@marker,'a')">a</xsl:when>
-                <xsl:when test="contains(@marker,'A')">A</xsl:when>
-                <xsl:when test="contains(@marker,'i')">i</xsl:when>
-                <xsl:when test="contains(@marker,'I')">I</xsl:when>
-                <!-- DEPRECATED 2015-12-12 -->
-                <xsl:when test="@marker=''" />
-                <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:variable name="level">
-                <xsl:apply-templates select="." mode="ordered-list-level" />
-            </xsl:variable>
-            <xsl:choose>
-                <xsl:when test="$level='0'">1</xsl:when>
-                <xsl:when test="$level='1'">a</xsl:when>
-                <xsl:when test="$level='2'">i</xsl:when>
-                <xsl:when test="$level='3'">A</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
