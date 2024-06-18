@@ -536,6 +536,20 @@
         <p>It is possible to author <webwork/> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork/> questions from a textbook into a single archive suitable for uploading into a traditional <webwork/> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
     </section>
 
+    <section xml:id="overview-myopenmath">
+        <title>MyOpenMath Exercises</title>
+        <idx>myopenmath exercise</idx>
+
+        <p>MyOpenMath is a hosted online homework system with tens of thousands 
+        of prebuilt questions. These questions can be embedded in PreTeXt using the
+        <tag>myopenmath</tag> tag. See <xref ref="topic-myopenmath"/> for details.</p>
+
+        <p>In the web output, the MyOpenMath question will be embedded and 
+        interactive.  In static output, the a static version of the question will
+        be included.  Note that while all questions will display in web output,
+        some MyOpenMath questions may not convert to static format correctly</p>
+    </section>
+
     <section xml:id="overview-url">
         <title><init>URL</init>s and External References</title>
         <idx>URL</idx>

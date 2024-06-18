@@ -4168,6 +4168,72 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
     </section>
 
+    <section xml:id="topic-myopenmath">
+        <title>MyOpenMath Exercises</title>
+        <idx>myopenmath exercise</idx>
+
+        <p>MyOpenMath is a hosted online homework system with tens of thousands 
+        of prebuilt questions.</p>
+
+        <p>In the web output, the MyOpenMath question will be embedded and 
+        interactive.  In static output, the a static version of the question will
+        be included.  Note that while all questions will display in web output,
+        some MyOpenMath questions may not convert to static format correctly</p>
+
+        <p>To include a MyOpenMath question, you'll first need an account on 
+        <url href="https://myopenmath.com/" visual="myopenmath.com">MyOpenMath.com</url>
+        where you can browse the question libaries and look up the question ID. 
+        Then in your PreTeXt document include a <tag>myopenmath</tag> element 
+        with a <attr>problem</attr> attribute with the MyOpenMath question ID.</p>
+
+        <p>To further control the web behavior of the embedded question, you can 
+        optionally include a <attr>params</attr> attribute containing a comma-separated
+        list of parameters, like <code>maxtries=1,showhints=0</code>, which can include:
+        <dl>
+            <li>
+                <title>maxtries</title>
+                <p>(default 0): Set to more than 0 to set the max tries on a 
+                question part before it gets disabled, and before a scaffolded 
+                question will move on to the next part.</p>
+            </li>
+            <li>
+                <title>hidescoreval</title>
+                <p>(default 0): Set to 1 to hide the "score: #" that displays 
+                after submitting a question. Score markers (check or x) will 
+                still show.</p>
+            </li>
+            <li>
+                <title>showansafter</title>
+                <p>(default 1, or maxtries if set): Set to have the answer show 
+                after this many tries. Set to 0 to have answers never show.</p>
+            </li>
+            <li>
+                <title>showhints</title>
+                <p>(default 3): Set to 0 to suppress help features, like hints 
+                and video buttons.</p>
+            </li>
+            <li>
+                <title>allowregen</title>
+                <p>(default 1): setting this to 1 will show a "Try another version" 
+                button after submitting.</p>
+            </li>
+            <li>
+                <title>submitall</title>
+                <p>(default 0): Set to 1 for all parts to get submitted, regardless of whether all parts are answered.</p>
+            </li>
+            <li>
+                <title>seed</title>
+                <p>(default random): To set a specific seed (1-9999) to force a 
+                specific version of the question to display</p>
+            </li>
+        </dl>
+        </p>
+
+
+
+
+    </section>
+
     <section xml:id="topic-url">
         <title><init>URL</init>s and External References</title>
         <idx>URL</idx>
