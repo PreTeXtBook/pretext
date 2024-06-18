@@ -4195,6 +4195,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 question will move on to the next part.</p>
             </li>
             <li>
+                <title>hidescoreval</title>
+                <p>(default 0): Set to 1 to hide the "score: #" that displays 
+                after submitting a question. Score markers (check or x) will 
+                still show.</p>
+            </li>
+            <li>
                 <title>showansafter</title>
                 <p>(default 1, or maxtries if set): Set to have the answer show 
                 after this many tries. Set to 0 to have answers never show.</p>
