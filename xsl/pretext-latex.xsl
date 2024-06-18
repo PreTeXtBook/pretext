@@ -7064,21 +7064,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utility templates to translate @marker specification -->
 <!-- for use with LaTeX enumitem package's label keyword  -->
 <xsl:template match="ol" mode="latex-list-label">
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
-    <!-- deconstruct the left and right adornments of the label   -->
-    <!-- or provide the default adornments, consistent with LaTeX -->
-    <!-- in the middle, translate PTX codes for enumitem package  -->
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:value-of select="substring-before(@marker, $format-code)" />
-        </xsl:when>
-        <xsl:when test="$format-code='a'">
-            <xsl:text>(</xsl:text>
-        </xsl:when>
-        <xsl:otherwise />
-    </xsl:choose>
+    <xsl:variable name="format-code" select="./@format-code" />
+    <xsl:value-of select="./@marker-prefix" />
     <xsl:choose>
         <xsl:when test="$format-code = '0'">\arabic*</xsl:when>
         <xsl:when test="$format-code = '1'">\arabic*</xsl:when>
@@ -7090,18 +7077,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:value-of select="substring-after(@marker, $format-code)" />
-        </xsl:when>
-        <xsl:when test="$format-code='a'">
-            <xsl:text>)</xsl:text>
-        </xsl:when>
-        <xsl:when test="($format-code='a') or ($format-code='i') or ($format-code='A')">
-            <xsl:text>.</xsl:text>
-        </xsl:when>
-        <xsl:otherwise />
-    </xsl:choose>
+    <xsl:value-of select="./@marker-suffix" />
 </xsl:template>
 
 <xsl:template match="ul" mode="latex-list-label">
@@ -7148,9 +7124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol">
     <!-- need to switch on 0-1 for ol Arabic -->
     <!-- no harm if called on "ul"           -->
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="format-code" select="./@format-code" />
     <!-- Determine the number of columns -->
     <!-- Restrict to 1-6 via the schema  -->
     <xsl:variable name="ncols">
@@ -7172,12 +7146,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
     <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
-        <xsl:text>[label=</xsl:text>
+        <xsl:text>[label={</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:if test="$format-code = '0'">
             <xsl:text>, start=0</xsl:text>
         </xsl:if>
-        <xsl:text>]</xsl:text>
+        <xsl:text>}]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />

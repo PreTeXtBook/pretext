@@ -238,11 +238,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
+    <xsl:param name="ordered-list-level" select="0"/>
 
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$parent-struct"/>
             <xsl:with-param name="level" select="$level"/>
+            <xsl:with-param name="ordered-list-level" select="$ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -1635,6 +1637,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
+    <xsl:param name="ordered-list-level" />
 
     <xsl:variable name="the-serial">
         <xsl:apply-templates select="." mode="division-serial-number"/>
@@ -1661,6 +1664,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="next-level" select="$level + 1"/>
+    <xsl:variable name="next-ordered-list-level">
+        <xsl:choose>
+            <xsl:when test="self::exercises or self::worksheet or self::reading-questions or self::references">
+                <xsl:number value="1" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:number value="0" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:copy>
         <xsl:attribute name="struct">
             <xsl:value-of select="$parent-struct"/>
@@ -1674,6 +1687,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$new-struct"/>
             <xsl:with-param name="level" select="$next-level"/>
+            <xsl:with-param name="ordered-list-level" select="$next-ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -1709,6 +1723,114 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
+
+<!-- Labels of ordered lists have formatting codes, which  -->
+<!-- we detect here and pass on to other more specialized  -->
+<!-- templates for implementation specifics                -->
+<!-- In order: Arabic (0-based), Arabic (1-based)          -->
+<!-- lower-case Latin, upper-case Latin,                   -->
+<!-- lower-case Roman numeral, upper-case Roman numeral    -->
+<!-- Absent a label attribute, defaults go 4 levels deep   -->
+<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
+<!-- lower-case Roman numeral, upper-case Latin            -->
+<xsl:template match="ol" mode="format-code">
+    <xsl:param name="level"/>
+    <xsl:choose>
+        <xsl:when test="@marker">
+            <xsl:choose>
+                <xsl:when test="contains(@marker,'0')">0</xsl:when>
+                <xsl:when test="contains(@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(@marker,'I')">I</xsl:when>
+                <!-- DEPRECATED 2015-12-12 -->
+                <xsl:when test="@marker=''" />
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$level='0'">1</xsl:when>
+                <xsl:when test="$level='1'">a</xsl:when>
+                <xsl:when test="$level='2'">i</xsl:when>
+                <xsl:when test="$level='3'">A</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ol" mode="augment">
+    <xsl:param name="ordered-list-level"/>
+    <xsl:variable name="this-level">
+        <xsl:choose>
+            <xsl:when test="self::ol">
+                <xsl:value-of select="$ordered-list-level" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="0" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="next-level" select="$this-level + 1" />
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="." mode="format-code">
+            <xsl:with-param name="level" select="$this-level"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- deconstruct the left and right adornments of the label   -->
+    <!-- or provide default adornments, consistent with LaTeX     -->
+    <!-- then store them                                          -->
+    <xsl:variable name="marker-prefix">
+        <xsl:choose>
+            <xsl:when test="@marker">
+                <xsl:value-of select="substring-before(@marker, $format-code)" />
+            </xsl:when>
+            <xsl:when test="$format-code='a'">
+                <xsl:text>(</xsl:text>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="marker-suffix">
+        <xsl:choose>
+            <xsl:when test="@marker">
+                <xsl:value-of select="substring-after(@marker, $format-code)" />
+            </xsl:when>
+            <xsl:when test="$format-code='a'">
+                <xsl:text>)</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>.</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:copy>
+        <xsl:attribute name="ordered-list-level">
+            <xsl:value-of select="$this-level"/>
+        </xsl:attribute>
+        <xsl:if test="self::ol">
+            <xsl:attribute name="format-code">
+                <xsl:value-of select="$format-code"/>
+            </xsl:attribute>
+            <xsl:attribute name="marker-prefix">
+                <xsl:value-of select="$marker-prefix"/>
+            </xsl:attribute>
+            <xsl:attribute name="marker-suffix">
+                <xsl:value-of select="$marker-suffix"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="ordered-list-level" select="$next-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Exercises -->

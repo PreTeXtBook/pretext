@@ -5871,12 +5871,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Utility templates to translate PTX              -->
 <!-- enumeration style to HTML list-style-type       -->
-<!-- NB: this is currently inferior to latex version -->
-<!-- NB: all pre-, post-formatting is lost           -->
+<!-- NB: this may not be needed any more             -->
 <xsl:template match="ol" mode="html-list-class">
-    <xsl:variable name="mbx-format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="mbx-format-code" select="./@format-code" />
     <xsl:choose>
         <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
@@ -5914,14 +5911,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- need to switch on 0-1 for ol Arabic -->
     <!-- no harm if called on "ul"           -->
     <xsl:variable name="mbx-format-code">
-        <xsl:apply-templates select="." mode="format-code" />
+        <xsl:choose>
+            <xsl:when test="self::ol">
+                <xsl:value-of select="./@format-code" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="format-code" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:element name="{local-name(.)}">
-        <xsl:if test="$mbx-format-code = '0'">
-            <xsl:attribute name="start">
-                <xsl:text>0</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
             <xsl:variable name="cols-class-name">
@@ -5933,10 +5932,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$cols-class-name"/>
             </xsl:if>
         </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id" />
+        </xsl:attribute>
         <xsl:apply-templates select="li">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
+</xsl:template>
+
+<!-- Markers -->
+<xsl:template match="ol" mode="ol-marker-style">
+    <xsl:variable name="mbx-format-code" select="./@format-code" />
+    <xsl:variable name="mbx-html-id">
+        <xsl:apply-templates select="." mode="html-id" />
+    </xsl:variable>
+    <!-- set up custom counter for this ol -->
+    <xsl:text>#</xsl:text>
+    <xsl:value-of select="$mbx-html-id" />
+    <xsl:text> { counter-set: </xsl:text>
+    <xsl:value-of select="$mbx-html-id" />
+    <xsl:text>&#x20;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$mbx-format-code = '0'">-1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>; }&#xa;</xsl:text>
+    <!-- format child li's -->
+    <xsl:text>#</xsl:text>
+    <xsl:value-of select="$mbx-html-id" />
+    <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
+    <xsl:value-of select="./@marker-prefix" />
+    <xsl:text>&quot;counter(</xsl:text>
+    <xsl:value-of select="$mbx-html-id" />
+    <xsl:text>,</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
+        <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
+        <xsl:when test="$mbx-format-code = 'a'">lower-alpha</xsl:when>
+        <xsl:when test="$mbx-format-code = 'A'">upper-alpha</xsl:when>
+        <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
+        <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>)&quot;</xsl:text>
+    <xsl:value-of select="./@marker-suffix" />
+    <xsl:text>&quot;; }&#xa;</xsl:text>
+    <!-- increment custom counter -->
+    <xsl:text>#</xsl:text>
+    <xsl:value-of select="$mbx-html-id" />
+    <xsl:text> &gt; li { counter-increment: </xsl:text>
+    <xsl:value-of select="$mbx-html-id" />
+    <xsl:text>; }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- We let CSS react to narrow titles for dl -->
@@ -10679,6 +10728,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="css" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
+            <!-- Custom styles for li where parent ol has @marker specified -->
+            <style>
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:apply-templates select="$document-root//ol" mode="ol-marker-style"/>
+            </style>
         </head>
         <body>
             <!-- potential document-id per-page -->
