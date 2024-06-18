@@ -2361,6 +2361,8 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
             f.write('<?xml version="1.0" encoding="utf-8"?>\n')
             if r.status_code == 200:
                 problemcontent = r.text
+                # add pi namespace
+                problemcontent = problemcontent.replace('<myopenmath', '<myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal"')
                 # extract any images in content
                 for match in re.finditer(graphics_pattern, problemcontent):
                     image_url = match.group(2)
@@ -2375,8 +2377,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         imageresp.raw.decode_content = True
                         shutil.copyfileobj(imageresp.raw, imagefile)
                     # replace image source, using pi:generated
-                    newtagstart = ('<image xmlns:pi="http://pretextbook.org/2020/pretext/internal"' + 
-                        match.group(1) + 'pi:generated="' + imageloc + '"')
+                    newtagstart = ('<image' + match.group(1) + 'pi:generated="' + imageloc + '"')
                     problemcontent = problemcontent.replace(match.group(0), newtagstart)
                 
                 f.write(problemcontent)
