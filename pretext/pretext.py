@@ -2312,6 +2312,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     import urllib.parse 
+    import PIL.Image
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2376,8 +2377,15 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                     with open(image_path, "wb") as imagefile:
                         imageresp.raw.decode_content = True
                         shutil.copyfileobj(imageresp.raw, imagefile)
-                    # replace image source, using pi:generated
-                    newtagstart = ('<image' + match.group(1) + 'pi:generated="' + imageloc + '"')
+                    imgwidthtag = ''
+                    try: 
+                        img = PIL.Image.open(image_path)
+                        imgwidthtag = ' width="' + str(round(img.width/6)) + '%" '
+                        img.close()
+                    except Exception as e:
+                        log.info("Unable to read image width of " + image_path)
+                    # replace image source, using pi:
+                    newtagstart = ('<image' + imgwidthtag + match.group(1) + 'pi:generated="' + imageloc + '"')
                     problemcontent = problemcontent.replace(match.group(0), newtagstart)
                 
                 f.write(problemcontent)
