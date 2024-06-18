@@ -10589,7 +10589,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>https://www.myopenmath.com/embedq2.php?id=</xsl:text>
                 <xsl:value-of select="@problem" />
                 <!-- can't disable escaping text of an attribute -->
-                <xsl:text>&amp;frame_id=mom</xsl:text>
+                <xsl:text>&amp;theme=embedbasicsans&amp;frame_id=mom</xsl:text>
                 <xsl:value-of select="generate-id()" />
             </xsl:attribute>
         </iframe>
