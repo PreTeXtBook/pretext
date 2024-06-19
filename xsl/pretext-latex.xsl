@@ -7146,12 +7146,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
     <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
-        <xsl:text>[label=</xsl:text>
+        <xsl:text>[label={</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:if test="$format-code = '0'">
             <xsl:text>, start=0</xsl:text>
         </xsl:if>
-        <xsl:text>]</xsl:text>
+        <xsl:text>}]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />
