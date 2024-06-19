@@ -2090,7 +2090,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             # First index contains original baseurl of hosted site (not used)
             for preview_fragment in interactives:
                 # loaded page url containing interactive
-                input_page = os.path.join(baseurl, preview_fragment + ".html")
+                input_page = baseurl + "/" + preview_fragment + ".html"
                 # filename of saved preview image
                 filename = preview_fragment + "-preview.png"
 
@@ -2106,7 +2106,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 # wait again, 5 seconds, for more than just splash screens, etc
                 await page.wait_for_timeout(5000)
                 # list of locations, need first (and only) one
-                elt = page.locator(xpath);
+                elt = page.locator(xpath)
                 await elt.screenshot(path=filename, scale="css")
 
                 # copy
