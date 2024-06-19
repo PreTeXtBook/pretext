@@ -65,6 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Modularize lots of Runestone-specific code    -->
 <!-- Likely need not be an "import" (v. "include") -->
 <xsl:import href="./pretext-runestone.xsl"/>
+<xsl:import href="./pretext-runestone-fitb.xsl"/>
 
 <!-- Routines to provide "View Source" annotations on HTML output   -->
 <!-- as a service on the PreTeXt website. NB: we use an "include"   -->
@@ -200,6 +201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
+<xsl:variable name="b-dynamics-static-seed" select="false()"/>
 <!-- Every page has an index button, with a link to the index -->
 <!-- Here we assume there is at most one                      -->
 <!-- (The old style of specifying an index is deprecated)     -->
@@ -4572,6 +4574,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
+        <!-- Dynamic fillin is broken out separately because the test for -->
+        <!-- correctness as well as feedback is dynamically chosen.       -->
+        <xsl:when test="@exercise-interactive = 'fillin'">
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+            </xsl:if>
+        </xsl:when>
         <!-- Finally nothing too exceptional, do the usual drill. Consider -->
         <!-- structured versus unstructured, non-interactive.              -->
         <xsl:when test="statement">
@@ -6771,6 +6780,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
+                <xsl:apply-templates select="." mode="primary-navigation"/>
                 <xsl:call-template name="latex-macros" />
                 <xsl:call-template name="enable-editing" />
                  <header id="ptx-masthead" class="ptx-masthead">
@@ -8466,30 +8476,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Davide Cervone                                                       -->
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
 <xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
-    <xsl:variable name="characters">
-        <xsl:choose>
-            <xsl:when test="@characters">
-                <xsl:value-of select="@characters" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>10</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <span class="fillin {$fillin-text-style}" role="img">
-        <xsl:attribute name="aria-label">
-            <xsl:value-of select="$characters" />
-            <xsl:text>-character blank</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>width: </xsl:text>
-            <xsl:value-of select="5 * $characters div 11" />
-            <xsl:text>em;</xsl:text>
-        </xsl:attribute>
-    </span>
-    <xsl:if test="@rows or @cols">
-        <xsl:apply-templates select="." mode="fillin-array"/>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="ancestor::exercise[@exercise-interactive='fillin']">
+            <xsl:apply-imports />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="characters">
+                <xsl:choose>
+                    <xsl:when test="@characters">
+                        <xsl:value-of select="@characters" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>10</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <span class="fillin {$fillin-text-style}" role="img">
+                <xsl:attribute name="aria-label">
+                    <xsl:value-of select="$characters" />
+                    <xsl:text>-character blank</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="5 * $characters div 11" />
+                    <xsl:text>em;</xsl:text>
+                </xsl:attribute>
+            </span>
+            <xsl:if test="@rows or @cols">
+                <xsl:apply-templates select="." mode="fillin-array"/>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Implication Symbols -->
