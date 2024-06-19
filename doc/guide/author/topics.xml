@@ -3256,6 +3256,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>ActiveCode elements that are language <c>sql</c> can make use of an SQLite database file. This is different than a <c>datafile</c> (which is expected to be text or an image). To include a database file, use the <attr>database</attr> on the <tag>program</tag> element and specify the file to load as a string relative to the <attr>@external</attr> top-level directory</p>
 
+            <p>The <tag>program</tag> element can have two attributes, <attr>compiler-args</attr> and <attr>linker-args</attr>, which are strings passed verbatim to the compiler and linker (respectively).  This is only relevant for programs running on a Runestone server (rather than in a browser).</p>
+
             <p>If you want to include code from one or more preceding <tag>program</tag> elements, use the <attr>include</attr> attribute whose value is a list (comma-separated or space-separated) of <attr>xml:id</attr>s for the code you want included.</p>
         </subsection>
 
