@@ -163,6 +163,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>An ActiveCode running on the Runestone server (rather than in a browser) can be provided with attributes that are flags to influence the compiler and linker, as in this <tag>program</tag> recycled from before.</p>
+
+        <listing xml:id="program-activecode-java-flags">
+            <title>Informal Java <q>Hello, World</q>, with flags</title>
+            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</caption>
+            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
+                <title>"hi" in Java</title>
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
         <p>Now a programming exercise.  The program upcoming is going to <term>include</term> all the code of the program preceding.  This is accomplished with an <attr>include</attr> attribute on the <em>including</em> program whose value is the <attr>xml:id</attr> of the <em>included</em> program.  So by running the next program, it should pass all of its three tests (for example another example using unit tests, see <xref ref="unit-test-example"/>).  Now reload the page, do not run the program in the listing, and then see that the program in the exercise still runs correctly.</p>
 
         <p>You'll see nothing that tells the reader that the one chunk of code is prefacing the other.  And in static formats it might be even less obvious.  So you will want to say <em>something</em> to alert the reader.  Here it is easy: <xref ref="exercise-python-including"/> includes all the code from <xref ref="listing-python-included"/>.</p>
