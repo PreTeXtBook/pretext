@@ -2113,6 +2113,52 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 shutil.copy2(filename, dest_dir)
             await browser.close()
 
+    # Start http server in a thread
+    def start_server():
+        '''
+        Starts a simple http.server on port 8888 if available, or finds a random port.  Returns the port and the server object.
+        '''
+        try:
+            import http.server
+            import socketserver
+            import threading
+            import random
+        except ImportError:
+            raise ImportError("http.server, socketserver, threading, random")
+
+        # Subclass SimpleHTTPRequestHandler to send messages to log.debug:
+        class MyHandler(http.server.SimpleHTTPRequestHandler):
+            def log_message(self, format, *args):
+                log.debug("http.server: " + format % args)
+                return
+        # Find a port to use
+        port = 8888
+        attempts = 0
+        max_attempts = 10
+        while attempts < max_attempts:
+            try:
+                log.debug("Trying http.server on port {}".format(port))
+                server = socketserver.TCPServer(("localhost", port), MyHandler)
+                thread = threading.Thread(target=server.serve_forever)
+                thread.start()
+                log.debug(f"Started http.server on port {port}")
+                return port, server
+            except Exception as e:
+                log.debug("http.server error: port {} in use; (error {})".format(port, e))
+                port = random.randint(49152, 65535)
+                attempts += 1
+        else:
+            raise OSError("Unable to open http.server for interactive previews")
+
+    def stop_server(server):
+        try:
+            log.debug("Stopping http.server")
+            server.shutdown()
+            log.debug("http.server shutdown successful")
+        except Exception as e:
+            log.warning("http.server shutdown failed; perhaps it wasn't running? error: {}".format(e))
+
+    # Main content of preview_images function:
     log.info(
         "using playwright package to create previews for interactives from {} for placement in {}".format(
             xml_source, dest_dir
@@ -2145,54 +2191,23 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # place CSS and JS in scratch directory
     copy_html_css_js(tmp_dir)
 
-    # Spawn a new process running a local html.server
-    import subprocess
-    import random
-    # Try a standard port and if it fails, try a random port
-    port = 8888
-    looking_for_port = True
-    numAttempt = 0
-    maxAttempts = 10  # In case failure is not due to blocked ports.
-    while looking_for_port and numAttempt < maxAttempts:
-        try:
-            numAttempt = numAttempt + 1
-            log.info(f"Opening subprocess http.server with port={port}")
-            # -u so that stdout and stderr are not cached
-            server = subprocess.Popen([sys.executable, "-u", "-m", "http.server", f"{port}", "-d", tmp_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            # Check if terminated. Allow 1 second to start-up.
-            try:
-                result = server.wait(1)
-                log.debug(f"Server startup failed")
-                port = random.randint(49152, 65535)
-                log.debug(f"Trying port {port} instead")
-            # The exception is success because process did not terminate.
-            except subprocess.TimeoutExpired:
-                looking_for_port = False
-        except OSError:
-            # Not sure if this will ever trigger b/c Python itself should start
-            log.debug(f"Subprocess to open http.server failed")
-            port = random.randint(49152, 65535)
-            log.debug(f"Trying port {port} instead.\n")
-    if numAttempt >= maxAttempts:
-        log.error("Unable to open http.server for interactive previews")
-
     # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
     # TODO: just write to "dest_dir"?
     with working_directory(tmp_dir):
         # event loop and copy, terminating server process even if interrupted
         try:
-            log.debug("Using http.server subprocess {}".format(server.pid))
+            log.debug("Starting event loop for playwright, after starting server")
+            port, server = start_server()
             baseurl = "http://localhost:{}".format(port)
-            asyncio.get_event_loop().run_until_complete(generate_previews(interactives, baseurl, dest_dir))
+            asyncio.get_event_loop().run_until_complete(
+                generate_previews(interactives, baseurl, dest_dir)
+            )
         finally:
-            # close the server and report (debug) results
-            log.info("Closing http.server subprocess")
-            server.kill()
-            log.debug("Log data from http.server:")
-            server_output = server.stderr.read()
-            for line in server_output.split("\n"):
-                log.debug(line)
+            # close the server
+            log.info("Closing http.server thread")
+            if server:
+                stop_server(server)
 
 
 ############
