@@ -2058,6 +2058,70 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 #####################################
 #
+#  Mermaid images
+#
+#####################################
+
+def mermaid_images(
+    xml_source, pub_file, stringparams, xmlid_root, dest_dir
+):
+    msg = 'converting Mermaid diagrams from {} to png graphics for placement in {}'
+    log.info(msg.format(xml_source, dest_dir))
+
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-mermaid.xsl")
+
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+
+    log.info("extracting Mermaid diagrams from {}".format(xml_source))
+    log.info(
+        "string parameters passed to extraction stylesheet: {}".format(stringparams)
+    )
+    #generate mmd files with markdown to be converted to png
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+
+    #Need a prettier way to get set value from pub file...
+    mermaid_theme = "default"
+    if pub_file:
+        pub_tree = ET.parse(pub_file)
+        mmd_elt = pub_tree.xpath("/publication/common/mermaid")
+        if mmd_elt:
+            attrs = mmd_elt[0].attrib
+            if "theme" in attrs:
+                mermaid_theme = mmd_elt[0].attrib['theme']
+
+    import glob
+    # Resulting *.mmd files are in tmp_dir, switch there to work
+    with working_directory(tmp_dir):
+        mmd_executable_cmd = get_executable_cmd("mermaid")
+        log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
+        for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
+            filebase, _ = os.path.splitext(mmddiagram)
+            versions = [ 
+                {"name":"-color", "opts":["-s", "4", "-t", mermaid_theme]}, 
+                {"name":"-bw", "opts":["-s", "4", "-t", "neutral"]}
+            ]
+            for version in versions:
+                mmdout = "{}.{}".format(filebase + version['name'], 'png')
+                mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout] + version['opts']
+                log.debug("mermaid conversion {}".format(" ".join(mmd_cmd)))
+                subprocess.call(mmd_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+                if os.path.exists(mmdout):
+                    shutil.copy2(mmdout, dest_dir)
+                else:
+                    msg = [
+                        "the Mermaid output {} was not built".format(mmdout),
+                    ]
+                    log.warning("\n".join(msg))
+
+#####################################
+#
 #  Interactive preview screenshotting
 #
 #####################################

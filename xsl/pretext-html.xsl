@@ -198,6 +198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fix right now.                                                     -->
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')]|$document-root//md[contains(text(),'sfrac')]|$document-root//me[contains(text(),'sfrac')]|$document-root//mrow[contains(text(),'sfrac')])"/>
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
+<xsl:variable name="b-has-mermaid"      select="boolean($document-root//image[mermaid]|/image[mermaid])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
 <!-- Every page has an index button, with a link to the index -->
@@ -5985,6 +5986,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<xsl:template match="mermaid[ancestor::image]" mode="image-inclusion">
+    <pre class="mermaid">
+        <xsl:value-of select="." />
+    </pre>
+</xsl:template>
+
 <!-- The div for a panel of a sidebyside will provide  -->
 <!-- the constraint/positioning of the contained image -->
 <!-- If the panel is a PTX "figure" then there will be -->
@@ -9820,6 +9827,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </script>
 </xsl:template>
 
+<xsl:template match="image/mermaid" mode="header-libraries">
+    <xsl:call-template name="mermaid-header"/>
+</xsl:template>
+
 <!-- Javascript header libraries (none) -->
 <xsl:template match="interactive[@platform = 'javascript']" mode="header-libraries" />
 
@@ -10648,6 +10659,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="css" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
+            <xsl:call-template name="mermaid-header" />
         </head>
         <body>
             <!-- potential document-id per-page -->
@@ -12931,6 +12943,19 @@ TODO:
     <xsl:if test="$b-has-jsxgraph">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- Mermaid header libraries -->
+<xsl:template name="mermaid-header">
+    <xsl:if test="$b-has-mermaid">
+        <script type="module">
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+            mermaid.initialize({
+                securityLevel: 'loose',
+                theme: '<xsl:value-of select="$publication/common/mermaid/@theme"/>',
+            });
+        </script>
     </xsl:if>
 </xsl:template>
 
