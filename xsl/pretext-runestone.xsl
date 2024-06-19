@@ -1970,6 +1970,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                     </xsl:attribute>
                                 </xsl:if>
                             </xsl:if>
+                            <!-- compiler arguments for hosted languages -->
+                            <xsl:if test="@compiler-args and ($hosting = 'jobeserver')">
+                                <xsl:attribute name="data-compileargs">
+                                    <xsl:value-of select="@compiler-args"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <!-- linker arguments for hosted languages -->
+                            <xsl:if test="@linker-args and ($hosting = 'jobeserver')">
+                                <xsl:attribute name="data-linkargs">
+                                    <xsl:value-of select="@linker-args"/>
+                                </xsl:attribute>
+                            </xsl:if>
                             <!-- the code itself as text -->
                             <xsl:call-template name="sanitize-text">
                                 <xsl:with-param name="text" select="input" />
