@@ -143,6 +143,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='mathstyle']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<xsl:variable name="mermaid-theme">
+    <xsl:apply-templates select="$publisher-attribute-options/common/mermaid/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- Em dash Width -->
 
 <xsl:variable name="emdash-space">
@@ -3084,6 +3088,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="textstyle" default="underline" options="box shade"/>
             <pi:pub-attribute name="mathstyle" default="shade" options="underline box"/>
         </fillin>
+        <mermaid>
+            <pi:pub-attribute name="theme" default="default" options="dark forest light"/>
+        </mermaid>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
