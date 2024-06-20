@@ -191,6 +191,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
+<xsl:variable name="b-has-myopenmath"   select="boolean($document-root//myopenmath)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <!-- 2023-10-18: this is a bit buggy, as it ignores the "men" element.  -->
@@ -10329,6 +10330,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- MyOpenMath Javascript header -->
+<xsl:template name="myopenmath-js">
+    <xsl:if test="$b-has-myopenmath">
+        <script src="{$html.js.dir}/lti_iframe_resizer.js"></script>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Fail if WeBWorK extraction and merging has not been done -->
 <xsl:template match="webwork[*]">
     <xsl:message>PTX:ERROR: A document that uses WeBWorK nees to incorporate a file</xsl:message>
@@ -10570,21 +10579,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- full page width and when revealed in a knowl it shrinks -->
     <!-- to fill available width.  In another application, the   -->
     <!-- width might come from an author's source.               -->
-    <div style="width:100%;">
+    <div id="mom{generate-id()}wrap" style="width:100%;overflow:visible;position:relative">
         <!-- This preserves the aspect-ratio, and there is no       -->
         <!-- clipping.  Basically this says scale the iframe to     -->
         <!-- fill whatever width is available in the containing div -->
-        <iframe style="object-fit: contain; width: 100%;">
+        <iframe id="mom{generate-id()}" style="position:absolute;z-index:1;object-fit: contain; width: 100%" 
+            frameborder="0" data-knowl-callback="sendResizeRequest">
             <xsl:attribute name="src">
-                <xsl:text>https://www.myopenmath.com/embedq.php?id=</xsl:text>
+                <xsl:text>https://www.myopenmath.com/embedq2.php?id=</xsl:text>
                 <xsl:value-of select="@problem" />
                 <!-- can't disable escaping text of an attribute -->
-                <xsl:text>&amp;resizer=true</xsl:text>
+                <xsl:text>&amp;frame_id=mom</xsl:text>
+                <xsl:value-of select="generate-id()" />
+                <xsl:if test="@params != ''">
+                    <xsl:text>&amp;</xsl:text>
+                    <xsl:value-of select="str:replace(@params, ',', '&amp;')" />
+                </xsl:if>
             </xsl:attribute>
         </iframe>
     </div>
-    <!-- not so great -->
-    <!-- <script>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script> -->
 </xsl:template>
 
 <!--                         -->
@@ -10652,6 +10665,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork-js"/>
+            <xsl:call-template name="myopenmath-js"/>
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="syntax-highlight"/>
             <xsl:call-template name="google-search-box-js" />
@@ -10802,6 +10816,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork-js"/>
+            <xsl:call-template name="myopenmath-js"/>
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />

@@ -2478,6 +2478,9 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
+    import urllib.parse
+    import PIL.Image
+
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
@@ -2504,6 +2507,12 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     id_filename = os.path.join(tmp_dir, "mom-ids.txt")
     log.debug("MyOpenMath id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    # prep regex for looking for images
+    graphics_pattern = re.compile(r'<image(.*?)source="([^"]*)"')
+    images_dir = os.path.join(dest_dir, 'images')
+    if not (os.path.isdir(images_dir)):
+        os.mkdir(images_dir)
+
     # "run" an assignment for the list of problem numbers
     with open(id_filename, "r") as id_file:
         # read lines, skipping blank lines
@@ -2512,14 +2521,41 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         url = "https://www.myopenmath.com/util/mbx.php?id={}".format(problem)
         path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
         log.info("downloading MOM #{} to {}...".format(problem, path))
-        # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
-        # removed some settings wrapper from around the URL, otherwise verbatim
-        r = requests.get(url, stream=True)
-        with open(path, "wb") as f:
-            f.write(__xml_header.encode("utf-8"))
+
+        # download question xml
+        r = requests.get(url)
+        with open(path, "w", encoding="utf-8") as f:
+            # f.write(__xml_header.encode("utf-8"))
+            f.write('<?xml version="1.0" encoding="utf-8"?>\n')
             if r.status_code == 200:
-                r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f)
+                problemcontent = r.text
+                # add pi namespace
+                problemcontent = problemcontent.replace('<myopenmath', '<myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal"')
+                # extract any images in content
+                for match in re.finditer(graphics_pattern, problemcontent):
+                    image_url = match.group(2)
+                    image_url_parsed = urllib.parse.urlparse(image_url)
+                    image_filename = os.path.basename(image_url_parsed.path)
+                    imageloc = 'problems/images/' + image_filename
+                    image_path = os.path.join(images_dir, image_filename)
+                    # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
+                    # removed some settings wrapper from around the URL, otherwise verbatim
+                    imageresp = requests.get(image_url, stream=True)
+                    with open(image_path, "wb") as imagefile:
+                        imageresp.raw.decode_content = True
+                        shutil.copyfileobj(imageresp.raw, imagefile)
+                    imgwidthtag = ''
+                    try:
+                        img = PIL.Image.open(image_path)
+                        imgwidthtag = ' width="' + str(round(img.width/6)) + '%" '
+                        img.close()
+                    except Exception as e:
+                        log.info("Unable to read image width of " + image_path)
+                    # replace image source, using pi:
+                    newtagstart = ('<image' + imgwidthtag + match.group(1) + 'pi:generated="' + imageloc + '"')
+                    problemcontent = problemcontent.replace(match.group(0), newtagstart)
+
+                f.write(problemcontent)
             else:
                 msg = "PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?"
                 raise OSError(msg.format(r.status_code, url))

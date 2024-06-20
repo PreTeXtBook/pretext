@@ -3013,7 +3013,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <p>The <pretext/> source below describes a simple TikZ picture, nd is followed by the picture itself.  The rectangle is 8 centimeters wide.  The Guide is produced as a <init>PDF</init> with 10 point text and a text width of <m>6.5</m> inches.  (This is too wide for comfortable reading, and contrary to our recommendations.  See <xref ref="best-practice-too-much-text"/>.)   Normally, a choice of 10 point text would result in a width of <m>340</m> point, or about <m>4.7</m> inches.</p>
 
                     <p>So we compute the fraction of the available width required, as a percentage:
-                        <me>\frac{8\text{ cm}}{6.5\text{ in}} = 
+                        <me>\frac{8\text{ cm}}{6.5\text{ in}} =
                             \frac{8\text{ cm}\left(\frac{1\text{ in}}{2.54\text{ cm}}\right)}{6.5\text{ in}} =
                             0.4846 = 48.46\%</me>
                     and we use that as the width of the image.</p>
@@ -4166,6 +4166,68 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <p>There may be an argument for a <attr>ref</attr> attribute that would behave similar to <attr>scope</attr>.  Make a feature request if you need it?</p>
 
+    </section>
+
+    <section xml:id="topic-myopenmath">
+        <title>MyOpenMath Exercises</title>
+        <idx>myopenmath exercise</idx>
+
+        <p>MyOpenMath is a hosted online homework system with tens of thousands
+        of prebuilt questions.</p>
+
+        <p>In the web output, the MyOpenMath question will be embedded and
+        interactive.  In static output, the a static version of the question will
+        be included.  Note that while all questions will display in web output,
+        some MyOpenMath questions may not convert to static format correctly</p>
+
+        <p>To include a MyOpenMath question, you'll first need an account on
+        <url href="https://myopenmath.com/" visual="myopenmath.com">MyOpenMath.com</url>
+        where you can browse the question libaries and look up the question ID.
+        Then in your PreTeXt document include a <tag>myopenmath</tag> element
+        with a <attr>problem</attr> attribute with the MyOpenMath question ID.</p>
+
+        <p>To further control the web behavior of the embedded question, you can
+        optionally include a <attr>params</attr> attribute containing a comma-separated
+        list of parameters, like <code>maxtries=1,showhints=0</code>, which can include:
+        <dl>
+            <li>
+                <title>maxtries</title>
+                <p>(default 0): Set to more than 0 to set the max tries on a
+                question part before it gets disabled, and before a scaffolded
+                question will move on to the next part.</p>
+            </li>
+            <li>
+                <title>hidescoreval</title>
+                <p>(default 0): Set to 1 to hide the "score: #" that displays
+                after submitting a question. Score markers (check or x) will
+                still show.</p>
+            </li>
+            <li>
+                <title>showansafter</title>
+                <p>(default 1, or maxtries if set): Set to have the answer show
+                after this many tries. Set to 0 to have answers never show.</p>
+            </li>
+            <li>
+                <title>showhints</title>
+                <p>(default 3): Set to 0 to suppress help features, like hints
+                and video buttons.</p>
+            </li>
+            <li>
+                <title>allowregen</title>
+                <p>(default 1): setting this to 1 will show a "Try another version"
+                button after submitting.</p>
+            </li>
+            <li>
+                <title>submitall</title>
+                <p>(default 0): Set to 1 for all parts to get submitted, regardless of whether all parts are answered.</p>
+            </li>
+            <li>
+                <title>seed</title>
+                <p>(default random): To set a specific seed (1-9999) to force a
+                specific version of the question to display</p>
+            </li>
+        </dl>
+        </p>
     </section>
 
     <section xml:id="topic-url">

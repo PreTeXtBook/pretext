@@ -13399,7 +13399,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercise>
                 <title>Negative Numbers and Exponents</title>
                 <introduction>
-                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
                 </introduction>
                 <myopenmath problem="2572" />
             </exercise>
@@ -13407,9 +13407,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercise>
                 <title>A Statistical Test</title>
                 <introduction>
-                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
                 </introduction>
                 <myopenmath problem="7492" />
+            </exercise>
+
+            <exercise>
+                <title>With an image</title>
+                <introduction>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
+                </introduction>
+                <myopenmath problem="2168" />
             </exercise>
         </section>
 
