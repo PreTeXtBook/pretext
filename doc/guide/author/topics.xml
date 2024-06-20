@@ -2114,7 +2114,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>There is no provision for a <tag>feedback</tag> element.  Further explanation may be provided in a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.  Also, a good interactive interface can provide assistance to a reader by telling them if they have too few or too many blocks, or combining or removing blocks, and so on.</p>
 
-            <p>As of 2022-06-14 work is underway to relax the strict ordering assumed of the blocks.  So there will be extra markup to specify a poset or directed acyclic graph on the blocks.</p>
+            <p>It is possible to specify a partial ordering of blocks using the <attr>tag</attr> and <attr>depends</attr> attributes of <tag>block</tag>. <attr>tag</attr> is used to identify the block with a string. <attr>depends</attr> should be a space-separated list of the <attr>tag</attr> of each block that precedeasdf the current block. The interactive version of the exercise will mark as correct any ordering of blocks that is valid according to the described dependencies. Static versions of the answer will only display the cannonical answer as determined by the order of the blocks in the source document.</p>
         </subsection>
 
         <subsection xml:id="horizontal-parsons-problems">

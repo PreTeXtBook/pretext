@@ -1120,6 +1120,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>true</xsl:text>
                         </xsl:attribute>
                     </xsl:if>
+                    <xsl:if test="blocks/block/@depends">
+                        <xsl:attribute name="data-grader">
+                            <xsl:text>dag</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
                     <!-- author asks student to provide indentation via  -->
                     <!-- the indentation-enabled "drop" text window      -->
                     <!-- (not relevant for natural language)             -->
@@ -1146,6 +1151,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="blocks/block" mode="vertical-blocks">
     <xsl:param name="b-natural"/>
+    <xsl:variable name="tag">
+        <xsl:choose>
+            <xsl:when test="@tag|@depends">
+                <xsl:text> #tag:</xsl:text>
+                <xsl:value-of select="@tag"/>
+                <xsl:text>; depends:</xsl:text>
+                <xsl:value-of select="str:replace(@depends, ' ', ',')"/>
+                <xsl:text>;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
 
     <xsl:choose>
         <xsl:when test="choice">
@@ -1153,9 +1169,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- default on "choice" is  correct="no" -->
             <xsl:apply-templates select="choice[@correct = 'yes']">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
+                <xsl:with-param name="tag" select="$tag"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="choice[not(@correct = 'yes')]">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
+                <xsl:with-param name="tag"/>
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
@@ -1176,6 +1194,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="@correct = 'no'">
                 <xsl:text> #distractor</xsl:text>
             </xsl:if>
+            <xsl:value-of select="$tag"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="following-sibling::block">
@@ -1185,6 +1204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="blocks/block/choice">
     <xsl:param name="b-natural"/>
+    <xsl:param name="tag"/>
 
     <!-- Exactly one choice is correct, it is placed first. -->
     <!-- Then the  n - 1  separators can be placed on all   -->
@@ -1208,6 +1228,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(@correct = 'yes')">
         <xsl:text> #paired</xsl:text>
     </xsl:if>
+    <xsl:value-of select="$tag"/>
 </xsl:template>
 
 <!-- Parsons Problem (Horizontal)-->
