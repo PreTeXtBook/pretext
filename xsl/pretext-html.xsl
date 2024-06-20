@@ -12346,13 +12346,6 @@ TODO:
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
-        <!-- probably should be universal, but only adding for MJ 4    -->
-        <!-- TODO: make a literal "script" element with this attribute -->
-        <xsl:if test="$mathjax4-testing">
-            <xsl:attribute name="type">
-                <xsl:text>text/javascript</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
         <xsl:attribute name="src">
             <xsl:choose>
                 <xsl:when test="$mathjax4-testing">
