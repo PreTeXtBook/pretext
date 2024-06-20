@@ -12232,118 +12232,125 @@ TODO:
 <!-- have mathematics in them (suggested by P. Krautzberger)    -->
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
-    <xsl:element name="script">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
-        <xsl:text>window.MathJax = </xsl:text>
-        <xsl:call-template name="json">
-            <xsl:with-param name="content">
-                <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <map key="tex">
-                        <array key="inlineMath">
-                            <array>
-                                <string>\(</string>
-                                <string>\)</string>
-                            </array>
-                        </array>
-                        <string key="tags">none</string>
-                        <string key="tagSide">right</string>
-                        <string key="tagIndent">.8em</string>
-                        <map key="packages">
-                            <array key="[+]">
-                                <string>base</string>
-                                <!-- 2023-10-19: this provides backward-compatible behavior -->
-                                <!-- and could be removed at the first sign of trouble      -->
-                                <xsl:if test="not(contains($latex-packages-mathjax, '\require{extpfeil}'))">
-                                    <string>extpfeil</string>
-                                </xsl:if>
-                                <string>ams</string>
-                                <string>amscd</string>
-                                <string>color</string>
-                                <string>newcommand</string>
-                                <string>knowl</string>
-                            </array>
-                        </map>
-                    </map>
-                    <map key="options">
-                        <string key="ignoreHtmlClass">tex2jax_ignore|ignore-math</string>
-                        <string key="processHtmlClass">process-math</string>
-                        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
-                            <map key="renderActions">
-                                <array key="findScript">
-                                    <number>10</number>
-                                    <raw>
-                                        <xsl:text>function (doc) {&#xa;</xsl:text>
-                                        <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
-                                        <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
-                                        <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
-                                        <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
-                                        <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
-                                        <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-                                        <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-                                        <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
-                                        <xsl:text>            });&#xa;</xsl:text>
-                                        <xsl:text>        }</xsl:text>
-                                    </raw>
-                                    <string></string>
+    <xsl:choose>
+        <xsl:when test="$mathjax4-testing">
+            <script src="_static/pretext/js/mathjax_startup.js"></script>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="script">
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
+                <xsl:text>window.MathJax = </xsl:text>
+                <xsl:call-template name="json">
+                    <xsl:with-param name="content">
+                        <map xmlns="http://www.w3.org/2005/xpath-functions">
+                            <map key="tex">
+                                <array key="inlineMath">
+                                    <array>
+                                        <string>\(</string>
+                                        <string>\)</string>
+                                    </array>
                                 </array>
-                            </map>
-                        </xsl:if>
-                    </map>
-                    <map key="chtml">
-                        <number key="scale">0.98</number>
-                        <boolean key="mtextInheritFont">true</boolean>
-                    </map>
-                    <map key="loader">
-                        <array key="load">
-                            <string>input/asciimath</string>
-                            <string>[tex]/extpfeil</string>
-                            <string>[tex]/amscd</string>
-                            <string>[tex]/color</string>
-                            <string>[tex]/newcommand</string>
-                            <string>[pretext]/mathjaxknowl3.js</string>
-                        </array>
-                        <map key="paths">
-                            <string key="pretext">
-                                <xsl:value-of select="$html.jslib.dir"/>
-                            </string>
-                        </map>
-                    </map>
-                    <map key="startup">
-                        <xsl:choose>
-                            <xsl:when test="$b-debug-react">
-                                <boolean key="typeset">false</boolean>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <!-- tell Runestone components that MathJax is all loaded -->
-                                <raw>
-                                    <xsl:text>pageReady() {&#xa;</xsl:text>
-                                    <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
-                                    <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
-                                    <xsl:text>      rsMathReady();&#xa;</xsl:text>
-                                    <xsl:text>      }&#xa;</xsl:text>
-                                    <xsl:text>    )}</xsl:text>
-                                </raw>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </map>
-                    <!-- optional presentation mode gets clickable, large math -->
-                    <xsl:if test="$b-html-presentation">
-                        <map key="options">
-                            <map key="menuOptions">
-                                <map key="settings">
-                                    <string key="zoom">Click</string>
-                                    <string key="zscale">300%</string>
+                                <string key="tags">none</string>
+                                <string key="tagSide">right</string>
+                                <string key="tagIndent">.8em</string>
+                                <map key="packages">
+                                    <array key="[+]">
+                                        <string>base</string>
+                                        <!-- 2023-10-19: this provides backward-compatible behavior -->
+                                        <!-- and could be removed at the first sign of trouble      -->
+                                        <xsl:if test="not(contains($latex-packages-mathjax, '\require{extpfeil}'))">
+                                            <string>extpfeil</string>
+                                        </xsl:if>
+                                        <string>ams</string>
+                                        <string>amscd</string>
+                                        <string>color</string>
+                                        <string>newcommand</string>
+                                        <string>knowl</string>
+                                    </array>
                                 </map>
                             </map>
+                            <map key="options">
+                                <string key="ignoreHtmlClass">tex2jax_ignore|ignore-math</string>
+                                <string key="processHtmlClass">process-math</string>
+                                <xsl:if test="$b-has-webwork-reps or $b-has-sage">
+                                    <map key="renderActions">
+                                        <array key="findScript">
+                                            <number>10</number>
+                                            <raw>
+                                                <xsl:text>function (doc) {&#xa;</xsl:text>
+                                                <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
+                                                <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
+                                                <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
+                                                <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
+                                                <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
+                                                <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+                                                <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
+                                                <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
+                                                <xsl:text>            });&#xa;</xsl:text>
+                                                <xsl:text>        }</xsl:text>
+                                            </raw>
+                                            <string></string>
+                                        </array>
+                                    </map>
+                                </xsl:if>
+                            </map>
+                            <map key="chtml">
+                                <number key="scale">0.98</number>
+                                <boolean key="mtextInheritFont">true</boolean>
+                            </map>
+                            <map key="loader">
+                                <array key="load">
+                                    <string>input/asciimath</string>
+                                    <string>[tex]/extpfeil</string>
+                                    <string>[tex]/amscd</string>
+                                    <string>[tex]/color</string>
+                                    <string>[tex]/newcommand</string>
+                                    <string>[pretext]/mathjaxknowl3.js</string>
+                                </array>
+                                <map key="paths">
+                                    <string key="pretext">
+                                        <xsl:value-of select="$html.jslib.dir"/>
+                                    </string>
+                                </map>
+                            </map>
+                            <map key="startup">
+                                <xsl:choose>
+                                    <xsl:when test="$b-debug-react">
+                                        <boolean key="typeset">false</boolean>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <!-- tell Runestone components that MathJax is all loaded -->
+                                        <raw>
+                                            <xsl:text>pageReady() {&#xa;</xsl:text>
+                                            <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
+                                            <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
+                                            <xsl:text>      rsMathReady();&#xa;</xsl:text>
+                                            <xsl:text>      }&#xa;</xsl:text>
+                                            <xsl:text>    )}</xsl:text>
+                                        </raw>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </map>
+                            <!-- optional presentation mode gets clickable, large math -->
+                            <xsl:if test="$b-html-presentation">
+                                <map key="options">
+                                    <map key="menuOptions">
+                                        <map key="settings">
+                                            <string key="zoom">Click</string>
+                                            <string key="zscale">300%</string>
+                                        </map>
+                                    </map>
+                                </map>
+                            </xsl:if>
                         </map>
-                    </xsl:if>
-                </map>
-            </xsl:with-param>
-        </xsl:call-template>
-        <xsl:text>;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:element>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>;</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
