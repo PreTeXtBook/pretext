@@ -2478,7 +2478,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
-    import urllib.parse 
+    import urllib.parse
     import PIL.Image
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -2545,7 +2545,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         imageresp.raw.decode_content = True
                         shutil.copyfileobj(imageresp.raw, imagefile)
                     imgwidthtag = ''
-                    try: 
+                    try:
                         img = PIL.Image.open(image_path)
                         imgwidthtag = ' width="' + str(round(img.width/6)) + '%" '
                         img.close()
