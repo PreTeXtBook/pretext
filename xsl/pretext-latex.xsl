@@ -1054,15 +1054,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-    <xsl:if test="$document-root//case[@direction]">
-        <!-- Perhaps customize these via something like tex-macro-style      -->
-        <!-- And/or move these closer to the environment where they are used -->
-        <xsl:text>%% Arrows for iff PROOF-LIKEs, with trailing space&#xa;</xsl:text>
-        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
-        <!-- \bigl and \bigr in case the ol/@markers adorning #1 and #2 involve delimiters -->
-        <xsl:text>\newcommand{\cycleimplication}[2]{$\bigl($#1 $\Rightarrow$ #2$\bigr)$}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
         <!-- NB: needs a rename (and duplication) before exposing publicly  -->
@@ -5439,6 +5430,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- cases in PROOF-LIKEs -->
+
+<!-- First we need to set up arrow symbols for this output target. -->
+<!-- Perhaps customize these via something like tex-macro-style.   -->
+<xsl:template name="double-right-arrow-symbol">
+    <xsl:text>$\Rightarrow$</xsl:text>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <xsl:text>$\Leftarrow$</xsl:text>
+</xsl:template>
+<!-- Also need a "delimiter space" for when "direction" is "cycle". -->
+<xsl:template name="case-cycle-delimiter-space" />
+
+<!-- case -->
 <!-- Three arguments: direction arrow, title, label -->
 <!-- The environment combines and styles            -->
 <xsl:template match="case">
@@ -5447,26 +5451,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <!-- handle optional direction, given by attribute -->
-    <xsl:choose>
-        <xsl:when test="@direction='forward'">
-            <xsl:text>\forwardimplication</xsl:text>
-        </xsl:when>
-        <xsl:when test="@direction='backward'">
-            <xsl:text>\backwardimplication</xsl:text>
-        </xsl:when>
-        <xsl:when test="@direction='cycle'">
-            <xsl:variable name="case-cycle-numbers">
-                <xsl:apply-templates select="." mode="case-cycle" />
-            </xsl:variable>
-            <xsl:text>\cycleimplication{</xsl:text>
-            <xsl:value-of select="substring-before($case-cycle-numbers,'CYCLENUMBERSEPARATOR')" />
-            <xsl:text>}{</xsl:text>
-            <xsl:value-of select="substring-after($case-cycle-numbers,'CYCLENUMBERSEPARATOR')" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-    <!-- DTD will catch incorrect values -->
-    </xsl:choose>
+    <!-- optional direction, given by attribute -->
+    <xsl:apply-templates select="." mode="case-direction" />
     <xsl:text>}</xsl:text>
     <!-- optional title -->
     <xsl:text>{</xsl:text>

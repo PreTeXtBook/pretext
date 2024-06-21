@@ -2671,6 +2671,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A case in a PROOF-LIKE, eg "(=>) Necessity." -->
+
+<!-- First we need to set up arrow symbols for this output target. -->
+<xsl:template name="double-right-arrow-symbol">
+    <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
+    <xsl:comment>Style arrows in CSS?</xsl:comment>
+    <xsl:text>&#x21d2;</xsl:text>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
+    <xsl:comment>Style arrows in CSS?</xsl:comment>
+    <xsl:text>&#x21d0;</xsl:text>
+</xsl:template>
+<!-- Also need a "delimiter space" for when "direction" is "cycle". -->
+<xsl:template name="case-cycle-delimiter-space">
+    <!-- 'HAIR SPACE'  (U+200A)                -->
+    <!-- 'WORD JOINER' (U+2060)                -->
+    <!-- Prevents line break after whitespace. -->
+    <!-- May not work in Firefox.              -->
+    <xsl:text>&#x200a;&#x2060;</xsl:text>
+</xsl:template>
+
 <!-- case -->
 <xsl:template match="*" mode="heading-case">
     <xsl:variable name="hN">
@@ -2681,37 +2702,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>heading</xsl:text>
         </xsl:attribute>
         <!-- optional direction, given by attribute -->
-        <xsl:choose>
-            <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
-            <xsl:when test="@direction='forward'">
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d2;)&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
-            <xsl:when test="@direction='backward'">
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d0;)&#xa0;</xsl:text>
-            </xsl:when>
-            <xsl:when test="@direction='cycle'">
-                <xsl:variable name="case-cycle-numbers">
-                    <xsl:apply-templates select="." mode="case-cycle" />
-                </xsl:variable>
-                <!-- 'HAIR SPACE'  (U+200A)                            -->
-                <!-- In case ol/@marker adornment involves delimeters. -->
-                <!-- 'WORD JOINER' (U+2060)                            -->
-                <!-- Prevents line break after whitespace.             -->
-                <!-- May not work in Firefox.                          -->
-                <xsl:text>(&#x200a;&#x2060;</xsl:text>
-                <xsl:value-of select="substring-before($case-cycle-numbers,'CYCLENUMBERSEPARATOR')" />
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
-                <xsl:text>&#xa0;&#x21d2;&#xa0;</xsl:text>
-                <xsl:value-of select="substring-after($case-cycle-numbers,'CYCLENUMBERSEPARATOR')" />
-                <xsl:text>&#x200a;&#x2060;)&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- DTD will catch wrong values -->
-            <xsl:otherwise />
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="case-direction" />
         <!-- If there is a title, the following will produce it. If -->
         <!-- no title, and we don't have a direction already, the   -->
         <!-- following will produce a default title, eg "Case."     -->
@@ -2720,7 +2711,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:element>
 </xsl:template>
-
 
 <!-- Heading Utilities -->
 

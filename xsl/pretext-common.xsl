@@ -4901,7 +4901,28 @@ Book (with parts), "section" at level 3
 <!-- Circular Case Numbers -->
 <!--                       -->
 
-<xsl:template match="ol" mode="formatted-case-cycle-numbers">
+<!-- These two templates are to facilitate outputting ⇒	and ⇐ in different target formats. -->
+<!-- They are (or should be) overridden with appropriate templates of same name in the     -->
+<!-- -latex, -html, etc conversions.                                                       -->
+<xsl:template name="double-right-arrow-symbol">
+    <xsl:message>PTX:ERROR: A "case" has "direction" equal to either "forward" or "cycle", but the conversion for this output target does not have a double right arrow symbol defined.</xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <xsl:message>PTX:ERROR: A "case" has "direction" equal to "backward", but the conversion for this output target does not have a double left arrow symbol defined.</xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+<!-- This template is to add an extra small horizontal space between the outer delimiters -->
+<!-- and the inner content of the "cycle" title for a "case", in case the "marker" on the -->
+<!-- corresponding "ol" also involves delimiters. Not an error if this is left undefined  -->
+<!-- or is defined to be a null string in a particular conversion stylesheet, in which    -->
+ <!-- case no extra space is added. -->
+<xsl:template name="case-cycle-delimiter-space">
+    <xsl:message>PTX:WARNING: A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+
+<xsl:template match="ol" mode="marker-formatted-case-cycle">
     <xsl:param name="from" />
     <xsl:param name="to" />
     <xsl:variable name="format-code">
@@ -4936,21 +4957,32 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:value-of select="./@marker-prefix" />
-    <xsl:number value="$adjusted-from" format="{$format-code}" />
-    <xsl:value-of select="$marker-suffix" />
-    <xsl:text>CYCLENUMBERSEPARATOR</xsl:text>
-    <xsl:value-of select="./@marker-prefix" />
-    <xsl:number value="$adjusted-to" format="{$format-code}" />
-    <xsl:value-of select="$marker-suffix" />
+    <xsl:call-template name="formatted-case-cycle">
+        <xsl:with-param name="from">
+            <xsl:value-of select="./@marker-prefix" />
+            <xsl:number value="$adjusted-from" format="{$format-code}" />
+            <xsl:value-of select="$marker-suffix" />                    
+        </xsl:with-param>
+        <xsl:with-param name="to">
+            <xsl:value-of select="./@marker-prefix" />
+            <xsl:number value="$adjusted-to" format="{$format-code}" />
+            <xsl:value-of select="$marker-suffix" />                    
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*" mode="default-formatted-case-cycle-numbers">
+<xsl:template name="formatted-case-cycle">
     <xsl:param name="from" />
     <xsl:param name="to" />
-    <xsl:number value="$from" />
-    <xsl:text>CYCLENUMBERSEPARATOR</xsl:text>
-    <xsl:number value="$to" />
+    <xsl:text>(</xsl:text>
+    <xsl:call-template name="case-cycle-delimiter-space" />
+    <xsl:value-of select="$from" />
+    <xsl:text>&#xa0;</xsl:text>
+    <xsl:call-template name="double-right-arrow-symbol" />
+    <xsl:text>&#xa0;</xsl:text>
+    <xsl:value-of select="$to" />
+    <xsl:call-template name="case-cycle-delimiter-space" />
+    <xsl:text>)&#xa0;</xsl:text>
 </xsl:template>
 
 <xsl:template match="case" mode="case-cycle-numbers">
@@ -4987,7 +5019,7 @@ Book (with parts), "section" at level 3
     <!-- THEOREM-LIKE instead of specifically a THEOREM-LIKE. -->
     <xsl:choose>
         <xsl:when test="$target//ol[1]">
-            <xsl:apply-templates select="$target//ol[1]" mode="formatted-case-cycle-numbers">
+            <xsl:apply-templates select="$target//ol[1]" mode="marker-formatted-case-cycle">
                 <xsl:with-param name="from" select="$cycle-position" />
                 <xsl:with-param name="to" select="$cycle-position-plus-one" />
             </xsl:apply-templates>
@@ -4995,10 +5027,10 @@ Book (with parts), "section" at level 3
         <xsl:otherwise>
             <xsl:message>PTX:WARNING:   a cross-reference ("ref") from a "<xsl:value-of select="local-name(..)"/>" containing at least one "case" with "direction" set to "cycle" uses a reference [<xsl:value-of select="../@ref"/>] that does not point to an element that contains an "ol".</xsl:message>
             <xsl:apply-templates select="../.." mode="location-report"/>
-            <xsl:apply-templates select="." mode="default-formatted-case-cycle-numbers">
+            <xsl:call-template name="formatted-case-cycle">
                 <xsl:with-param name="from" select="$cycle-position" />
                 <xsl:with-param name="to" select="$cycle-position-plus-one" />
-            </xsl:apply-templates>
+            </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5010,29 +5042,50 @@ Book (with parts), "section" at level 3
     <xsl:variable name="cycle-position" select="substring-before($cycle-numbers,'|')" />
     <xsl:variable name="cycle-position-plus-one" select="substring-after($cycle-numbers,'|')" />
     <xsl:choose>
-        <!-- Check if the proof has a "statement" sibling        -->
-        <!-- (implying the proof is a child of THEOREM-LIKE)     -->
-        <!-- where that "statement" sibling contains an "ol"     -->
-        <!-- from which we can copy the marker information.      -->
-        <!-- NB We don't filter on "ol[@marker]" because we      -->
-        <!-- still need to honour the format code which may      -->
-        <!-- be derived from nesting. Not relevant now because   -->
-        <!-- our "ol" should be top level in its "statement" but -->
-        <!-- potentially relevant later if THEOREM-LIKE supports -->
-        <!-- multiple "statement" children which will become the -->
-        <!-- top-level numbering for any list-like children.     -->
+        <!-- Check if the "proof" has a "statement" sibling    -->
+        <!-- (implying the "proof" is a child of THEOREM-LIKE) -->
+        <!-- where that "statement" sibling contains an "ol"   -->
+        <!-- from which we can copy the marker information.    -->
+        <!-- NB We don't filter on "ol[@marker]" because we    -->
+        <!-- still need to honour the format code which may    -->
+        <!-- be derived from nesting during -assembly. Not     -->
+        <!-- relevant now because our "ol" should be top level -->
+        <!-- in its "statement" but potentially relevant in    -->
+        <!-- future if THEOREM-LIKE supports multiple          -->
+        <!-- "statement" children which would then become the  -->
+        <!-- top-level numbering for any list-like children.   -->
         <xsl:when test="../preceding-sibling::statement[1]//ol[1]">
-            <xsl:apply-templates select="../preceding-sibling::statement[1]//ol[1]" mode="formatted-case-cycle-numbers">
+            <xsl:apply-templates select="../preceding-sibling::statement[1]//ol[1]" mode="marker-formatted-case-cycle">
                 <xsl:with-param name="from" select="$cycle-position" />
                 <xsl:with-param name="to" select="$cycle-position-plus-one" />
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="default-formatted-case-cycle-numbers">
+            <xsl:call-template name="formatted-case-cycle">
                 <xsl:with-param name="from" select="$cycle-position" />
                 <xsl:with-param name="to" select="$cycle-position-plus-one" />
-            </xsl:apply-templates>
+            </xsl:call-template>
         </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="case" mode="case-direction">
+    <xsl:choose>
+        <xsl:when test="@direction='forward'">
+            <xsl:text>(</xsl:text>
+            <xsl:call-template name="double-right-arrow-symbol" />
+            <xsl:text>)&#xa0;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@direction='backward'">
+            <xsl:text>(</xsl:text>
+            <xsl:call-template name="double-left-arrow-symbol" />
+            <xsl:text>)&#xa0;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@direction='cycle'">
+            <xsl:apply-templates select="." mode="case-cycle" />
+        </xsl:when>
+        <!-- DTD will catch wrong values -->
+        <xsl:otherwise />
     </xsl:choose>
 </xsl:template>
 
