@@ -49,7 +49,7 @@
 </xsl:variable>
 <xsl:variable name="defaultIncorrectResponse">
     <xsl:text>Try again.</xsl:text>
-</xsl:variable> 
+</xsl:variable>
 
 <!-- ========================================================= -->
 <!-- The Runestone element is based on JSON scripts describing -->
@@ -363,7 +363,7 @@
                 <xsl:copy-of select="ancestor::exercise//evaluation/evaluate[position() = $blankNum]"/>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:variable> 
+    </xsl:variable>
     <xsl:variable name="checkCorrectTest">
         <xsl:choose>
             <xsl:when test="exsl:node-set($check)/evaluate/test[@correct='yes']">
@@ -429,7 +429,7 @@
     <!-- Default feedback for the blank. Always evaluates true.   -->
     <xsl:text>, {"feedback": "</xsl:text>
     <xsl:value-of select="$defaultIncorrectResponse"/>
-    <xsl:text>"}]</xsl:text>         
+    <xsl:text>"}]</xsl:text>
 </xsl:template>
 
 <xsl:template match="test" mode="create-test-feedback">
@@ -616,30 +616,12 @@
                     <xsl:text>, ans</xsl:text>
                 </xsl:when>
                 <xsl:when test="name($curTest) = 'mathcmp'">
-                    <xsl:message>
-                        <xsl:text>!mathcmp:1!</xsl:text>
-                        <xsl:value-of select="name($curTest/*[1])"/>
-                        <xsl:call-template name="escape-quote-xml">
-                            <xsl:with-param name="xml_content" select="$curTest/*[1]"/>
-                        </xsl:call-template> 
-                    </xsl:message>
-                    <xsl:message>
-                        <xsl:text>!mathcmp:2!</xsl:text>
-                        <xsl:value-of select="name($curTest/*[2])"/>
-                        <xsl:call-template name="escape-quote-xml">
-                            <xsl:with-param name="xml_content" select="$curTest/*[2]"/>
-                        </xsl:call-template> 
-                    </xsl:message>
                     <xsl:apply-templates select="$curTest/*[1]" mode="evaluate"/>
                     <xsl:text>, </xsl:text>
                     <xsl:apply-templates select="$curTest/*[2]" mode="evaluate"/>
                 </xsl:when>
                 <!-- An implied equal compares the submitted answer to the given expression. -->
                 <xsl:otherwise>   <!-- Must be expression: #var or #de-object -->
-                <xsl:message>
-                    <xsl:text>!other!</xsl:text>
-                    <xsl:value-of select="name($curTest)"/>
-                </xsl:message>
                 <xsl:apply-templates select="$curTest" mode="evaluate"/>
                     <xsl:text>, ans</xsl:text>
                 </xsl:otherwise>
@@ -923,10 +905,6 @@
             <xsl:text>v.</xsl:text>
         </xsl:if>
     </xsl:variable>
-    <xsl:message>
-        <xsl:text>!eval!evaluate!!</xsl:text>
-        <xsl:value-of select="./@expr"/>
-    </xsl:message>
     <xsl:value-of select="$prefix"/>
     <xsl:value-of select="./@expr"/>
 </xsl:template>
