@@ -1,0 +1,17 @@
+<xml><dynamic-substitution id="dynamic-fitb-simple-formula"><eval-subst expr="x1">-5</eval-subst>
+<eval-subst expr="x2">-2</eval-subst>
+<eval-subst expr="x3">2</eval-subst>
+<eval-subst expr="y0">5</eval-subst>
+<eval-subst expr="base_cubic">\left(x--5\right) \left(x--2\right) \left(x-2\right)</eval-subst>
+<eval-subst expr="base_yint">-20</eval-subst>
+<eval-subst expr="y0">5</eval-subst>
+<eval-subst expr="base_cubic">\left(x--5\right) \left(x--2\right) \left(x-2\right)</eval-subst>
+<eval-subst expr="y0">5</eval-subst>
+<eval-subst expr="A">-0.25</eval-subst>
+<eval-subst expr="cubic">-0.25 \left(x--5\right) \left(x--2\right) \left(x-2\right)</eval-subst>
+</dynamic-substitution><dynamic-substitution id="function-decomposition"><eval-subst expr="composition">4 \left(-1 x-3\right)^{3}+5</eval-subst>
+<eval-subst expr="innerFormula">-1 x-3</eval-subst>
+<eval-subst expr="innerFormula">-1 x-3</eval-subst>
+<eval-subst expr="innerFormula">-1 x-3</eval-subst>
+<eval-subst expr="outerFormula">4 x^{3}+5</eval-subst>
+</dynamic-substitution></xml>
