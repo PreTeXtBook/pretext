@@ -1054,13 +1054,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-    <xsl:if test="$document-root//case[@direction]">
-        <!-- Perhaps customize these via something like tex-macro-style      -->
-        <!-- And/or move these closer to the environment where they are used -->
-        <xsl:text>%% Arrows for iff PROOF-LIKEs, with trailing space&#xa;</xsl:text>
-        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
         <!-- NB: needs a rename (and duplication) before exposing publicly  -->
@@ -5437,6 +5430,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- cases in PROOF-LIKEs -->
+
+<!-- First we need to set up arrow symbols for this output target. -->
+<!-- Perhaps customize these via something like tex-macro-style.   -->
+<xsl:template name="double-right-arrow-symbol">
+    <xsl:text>$\Rightarrow$</xsl:text>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <xsl:text>$\Leftarrow$</xsl:text>
+</xsl:template>
+<!-- Also need a "delimiter space" for when "direction" is "cycle". -->
+<xsl:template name="case-cycle-delimiter-space" />
+
+<!-- case -->
 <!-- Three arguments: direction arrow, title, label -->
 <!-- The environment combines and styles            -->
 <xsl:template match="case">
@@ -5446,15 +5452,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <!-- optional direction, given by attribute -->
-    <xsl:choose>
-        <xsl:when test="@direction='forward'">
-            <xsl:text>\forwardimplication</xsl:text>
-        </xsl:when>
-        <xsl:when test="@direction='backward'">
-            <xsl:text>\backwardimplication</xsl:text>
-        </xsl:when>
-        <!-- DTD will catch incorrect values -->
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="case-direction" />
     <xsl:text>}</xsl:text>
     <!-- optional title -->
     <xsl:text>{</xsl:text>
