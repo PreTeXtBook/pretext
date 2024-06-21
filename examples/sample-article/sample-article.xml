@@ -8896,15 +8896,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercises>
                 <title>Dynamic Fill-In</title>
 
+                <introduction>
+                  <p>The first problem illustrates revised markup for fill-in problems that don't involve randomization and use simple string and number comparison tests. Later exercises illustrate the use of dynamically generated mathematical expressions.</p>
+                </introduction>
+
+                <exercise label="fillin-string-integer-new">
+                    <title>Fill-In, String and Number Answers</title>
+
+                    <statement>
+                        <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
+                        <p><fillin mode="string" correct="int"/> <c>age = </c> <fillin mode="number" correct="5"/><c>;</c></p>
+                    </statement>
+                    <evaluation>
+                        <evaluate>
+                            <test>
+                                <strcmp use-correct='yes'/>
+                                <feedback>
+                                  <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                                </feedback>
+                            </test>
+                            <test>
+                                <strcmp>.*</strcmp>
+                                <feedback>
+                                    <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                        <evaluate>
+                            <test>
+                                <numcmp use-correct='yes'/>
+                                <feedback>
+                                    <p>An integer variable may be initialized to a value.</p>
+                                </feedback>
+                            </test>
+                            <test>
+                                <strcmp>.*</strcmp>
+                                <feedback>
+                                    <p>Use <c>5</c> as the initial value of the variable.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                    </evaluation>
+                </exercise>
+
                 <exercise label="dynamic-fitb-simple-formula">
                     <title>Fill-In Formula (Dynamic)</title>
                     <statement>
                         <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval expr="x1"/></m>,  <m>x=<eval expr="x2"/></m>, and <m>x=<eval expr="x3"/></m> and so that <m>f(0)=<eval expr="y0"/></m>.</p>
-                        <p><m>f(x)=</m> <fillin name="st_cubic" correct="x3"/></p>
+                        <p><m>f(x)=</m> <fillin name="st_cubic" mode="math-formula" correct="x3"/></p>
                     </statement>
                     <solution>
                         <p>
-                            Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form,
+                            Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form, 
                             <me>f(x) = A <eval expr="base_cubic"/></me>
                             with an unknown scaling multiple <m>A</m>.
                         </p>
@@ -8921,38 +8964,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </solution>
                     <setup seed="314159">
-                        <de-object name="y0" context="number" mode="random">
-                            <options distribution="discrete" min="-8" max="8" by="1" nonzero="yes"/>
+                        <de-object name="y0" context="number">
+                            <de-random distribution="discrete" min="-8" max="8" by="1" nonzero="yes"/>
                         </de-object>
-                        <de-object name="x1" context="number" mode="random">
-                            <options distribution="discrete" min="-8" max="-4" by="1"/>
+                        <de-object name="x1" context="number">
+                            <de-random distribution="discrete" min="-8" max="-4" by="1"/>
                         </de-object>
-                        <de-object name="d1" context="number" mode="random">
-                            <options distribution="discrete" min="1" max="4" by="1"/>
+                        <de-object name="d1" context="number">
+                            <de-random distribution="discrete" min="1" max="4" by="1"/>
                         </de-object>
-                        <de-object name="d2" context="number" mode="random">
-                            <options distribution="discrete" min="1" max="4" by="1"/>
+                        <de-object name="d2" context="number">
+                            <de-random distribution="discrete" min="1" max="4" by="1"/>
                         </de-object>
-                        <de-object name="x2" context="number" mode="formula">{{x1}}+{{d1}}</de-object>
-                        <de-object name="x3" context="number" mode="formula">{{x2}}+{{d2}}</de-object>
-                        <de-object name="base_cubic" context="formula" mode="formula">
-                            (x-{{x1}})*(x-{{x2}})*(x-{{x3}})
+                        <de-object name="x2" context="number">
+                            <de-number>{{x1}}+{{d1}}</de-number>
                         </de-object>
-                        <de-object name="base_yint" context="number" mode="evaluate">
-                            <formula><eval expr="base_cubic"/></formula>
-                            <variable name="x">0</variable>
+                        <de-object name="x3" context="number">
+                            <de-number>{{x2}}+{{d2}}</de-number>
                         </de-object>
-                        <de-object name="A" context="number" mode="formula">
-                            {{y0}}/{{base_yint}}
+                        <de-object name="base_cubic" context="formula">
+                            <de-expression>(x-{{x1}})*(x-{{x2}})*(x-{{x3}})</de-expression>
                         </de-object>
-                        <de-object name="cubic" context="formula" mode="formula">
-                            {{A}}*(x-{{x1}})*(x-{{x2}})*(x-{{x3}})
+                        <de-object name="base_yint" context="number">
+                            <de-evaluate>
+                                <formula><eval expr="base_cubic"/></formula>
+                                <variable name="x">0</variable>
+                            </de-evaluate>                            
+                        </de-object>
+                        <de-object name="A" context="number">
+                            <de-number>{{y0}}/{{base_yint}}</de-number>
+                        </de-object>
+                        <de-object name="cubic" context="formula">
+                            <de-expression>{{A}}*(x-{{x1}})*(x-{{x2}})*(x-{{x3}})</de-expression>
                         </de-object>
                     </setup>
                     <evaluation>
-                        <evaluate submit="st_cubic">
+                        <evaluate name="st_cubic">
                             <test correct="yes">
-                                <eval expr="cubic"/>
+                                <mathcmp expr="cubic"/>
+                            </test>
+                            <test>
+                                <mathcmp>
+                                    <de-expression>x+1</de-expression>
+                                    <eval expr="ans"/>
+                                </mathcmp>
+                                <feedback>Short</feedback>
                             </test>
                         </evaluate>
                     </evaluation>
@@ -8965,8 +9021,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
                         </p>
                         <p>
-                        <m>f(x) = </m> <fillin width="15" correct="outerFormula" name="fGiven"/> 
-                        and <m>g(x)=</m> <fillin width="15" correct="innerFormula" name="gGiven"/>
+                        <m>f(x) = </m> <fillin width="15" mode="math-formula" correct="outerFormula" name="fGiven"/> 
+                        and <m>g(x)=</m> <fillin width="15" mode="math-formula" correct="innerFormula" name="gGiven"/>
                         </p>
                     </statement>
                     <solution>
@@ -8981,83 +9037,95 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </solution>
                     <setup seed="4321">
-                        <de-object name="a" context="number" mode="random">
-                            <options distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
+                        <de-object name="a" context="number">
+                            <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
                         </de-object>
-                        <de-object name="n" context="number" mode="random">
-                            <options distribution="discrete" min="2" max="5" />
+                        <de-object name="n" context="number">
+                            <de-random distribution="discrete" min="2" max="5" />
                         </de-object>
-                        <de-object name="b" context="number" mode="random">
-                            <options distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
+                        <de-object name="b" context="number">
+                            <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
                         </de-object>
-                        <de-object name="c" context="number" mode="random">
-                            <options distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
+                        <de-object name="c" context="number">
+                            <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
                         </de-object>
-                        <de-object name="d" context="number" mode="random">
-                            <options distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
+                        <de-object name="d" context="number">
+                            <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
                         </de-object>
-                        <de-object name="outerFormula" context="formula" mode="formula">{{a}}*x^{{n}}+{{b}}</de-object>
-                        <de-object name="innerFormula" context="formula" mode="formula">{{c}}*x+{{d}}</de-object>
-                        <de-object name="identityFunction" context="formula" mode="formula">x</de-object>
-                        <de-object name="composition" context="formula" mode="substitution">
-                        <formula><eval expr="outerFormula"/></formula>
-                        <variable name="x"><eval expr="innerFormula"/></variable>
+                        <de-object name="outerFormula" context="formula">
+                            <de-expression>{{a}}*x^{{n}}+{{b}}</de-expression>
+                        </de-object>
+                        <de-object name="innerFormula" context="formula">
+                            <de-expression>{{c}}*x+{{d}}</de-expression>
+                        </de-object>
+                        <de-object name="identityFunction" context="formula">
+                            <de-expression>x</de-expression>
+                        </de-object>
+                        <de-object name="composition" context="formula">
+                            <de-expression mode="substitution">
+                                <formula><eval expr="outerFormula"/></formula>
+                                <variable name="x"><eval expr="innerFormula"/></variable>
+                            </de-expression>
                         </de-object>
                     </setup>
                     <evaluation answers-coupled="yes">
-                        <evaluate submit="fGiven">
-                        <test>
-                            <eval expr="identityFunction"/>
-                            <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
-                        </test>
-                        <test>
-                            <not>
-                                <equal>
-                                    <eval expr="composition"/>
-                                    <de-object context="formula" mode="substitution">
-                                        <formula><eval expr="fGiven"/></formula>
-                                        <variable name="x"><eval expr="gGiven"/></variable>
-                                    </de-object>
-                                </equal>
-                            </not>
-                            <equal>
-                            <eval expr="composition"/>
-                            <de-object context="formula" mode="substitution">
-                                <formula><eval expr="gGiven"/></formula>
-                                <variable name="x"><eval expr="fGiven"/></variable>
-                            </de-object>
-                            </equal>
-                            <feedback>You have composed in the wrong order.</feedback>
-                        </test>
+                        <evaluate name="fGiven">
+                            <test>
+                                <mathcmp expr="identityFunction"/>
+                                <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                            </test>
+                            <test>
+                                <logical op="and">
+                                    <logical op="not">
+                                        <mathcmp>
+                                            <eval expr="composition"/>
+                                            <de-expression context="formula" mode="substitution">
+                                                <formula><eval expr="fGiven"/></formula>
+                                                <variable name="x"><eval expr="gGiven"/></variable>
+                                            </de-expression>
+                                        </mathcmp>
+                                    </logical>
+                                    <mathcmp>
+                                        <eval expr="composition"/>
+                                        <de-expression context="formula" mode="substitution">
+                                            <formula><eval expr="gGiven"/></formula>
+                                            <variable name="x"><eval expr="fGiven"/></variable>
+                                        </de-expression>
+                                    </mathcmp>
+                                </logical>
+                                <feedback>You have composed in the wrong order.</feedback>
+                            </test>
                         </evaluate>
-                        <evaluate submit="gGiven">
-                        <test>
-                            <eval expr="identityFunction"/>
-                            <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
-                        </test>
+                        <evaluate name="gGiven">
+                            <test>
+                                <mathcmp expr="identityFunction"/>
+                                <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                            </test>
                         </evaluate>
                         <evaluate all="yes">
                             <test correct="yes">
-                                <equal>
-                                    <eval expr="composition"/>
-                                    <de-object context="formula" mode="substitution">
-                                        <formula><eval expr="fGiven"/></formula>
-                                        <variable name="x"><eval expr="gGiven"/></variable>
-                                    </de-object>
-                                </equal>
-                                <not>
-                                    <equal>
-                                        <eval expr="fGiven"/>
-                                        <eval expr="identityFunction"/>
-                                    </equal>
-                                </not>
-                                <not>
-                                    <equal>
-                                        <eval expr="gGiven"/>
-                                        <eval expr="identityFunction"/>
-                                    </equal>
-                                </not>
-                            <feedback>Excellent!</feedback>
+                                <logical op="and">
+                                    <mathcmp>
+                                        <eval expr="composition"/>
+                                        <de-expression context="formula" mode="substitution">
+                                            <formula><eval expr="fGiven"/></formula>
+                                            <variable name="x"><eval expr="gGiven"/></variable>
+                                        </de-expression>
+                                    </mathcmp>
+                                    <logical op="not">
+                                        <mathcmp>
+                                            <eval expr="fGiven"/>
+                                            <eval expr="identityFunction"/>
+                                        </mathcmp>
+                                    </logical>
+                                    <logical op="not">
+                                        <mathcmp>
+                                            <eval expr="gGiven"/>
+                                            <eval expr="identityFunction"/>
+                                        </mathcmp>
+                                    </logical>
+                                </logical>
+                                <feedback>Excellent!</feedback>
                             </test>
                         </evaluate>
                     </evaluation>
