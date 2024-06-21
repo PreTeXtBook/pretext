@@ -732,7 +732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>This claim is an equivalence: it is true if and only if it is correct.</p>
                     </statement>
                     <proof>
-                        <p>Our purpose here is to show how you can structure a proof with cases, such as an equivalence structured with the arrows typically used to demonstrate the two <q>directions</q> involved in the proof, by using the <c>direction</c> attribute on a <c>case</c> element.</p>
+                        <p>Our purpose here is to show how you can structure a proof with cases, such as an equivalence structured with the arrows typically used to demonstrate the two <q>directions</q> involved in the proof, by using the <attr>direction</attr> attribute on a <tag>case</tag> element.</p>
 
                         <case direction="forward">
                             <p>Nulla non lectus suscipit, bibendum leo quis, dignissim justo. In urna turpis, tincidunt id elementum id, faucibus ac tellus.</p>
@@ -767,6 +767,139 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>This proof should fill exactly three lines (as of defaults in place 2018-12-31) and so the tombstone/Halmos should be on a fourth line, and then <em>flush right</em>. xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx.</p>
                     </proof>
                 </claim>
+
+                <claim xml:id="claim-with-tfae-cases">
+                    <title>A List of Equivalent Statements</title>
+                    <statement>
+                        <p>
+                            The following are equivalent.
+                            <ol marker="(i)">
+                                <li>This statement is equivalent to all those below.</li>
+                                <li>This statement is equivalent to the statement above and to all those below.</li>
+                                <li>This statement is equivalent to the two statements above and to the statement below.</li>
+                                <li>This statement is equivalent to all those above.</li>
+                            </ol>
+                        </p>
+                    </statement>
+                    <proof>
+                        <p>Our purpose here is to show how you can structure a proof with cases to address the circular logic required to prove the equivalence of a list of statements, by using the <attr>direction</attr> attribute on a <tag>case</tag> element. You should order the list of statements in the order that you would like to prove ``this statement implies the next.''</p>
+
+                        <case direction="cycle">
+                            <p>Here we would prove that the first statement implies the second.</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <p>Here we would prove that the second statement implies the third.</p>
+                        </case>
+
+                        <case direction="cycle" xml:id="cycle">
+                            <title>The trickiest case</title>
+
+                            <p>This time we include a title to describe the nature of this case. But we would still need to prove that the third statement implies the last.</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <title>Wrap-around</title>
+
+                            <p>Finally, we would complete the cycle of logic by proving that the last statement implies the first.</p>
+                        </case>
+
+                    </proof>
+                </claim>
+
+                <p>We can also use <attr>direction</attr> set to <c>cycle</c> in a stand-alone proof of our TFAE claim. If we include a <attr>ref</attr> on the <tag>proof</tag> that points to the original claim, then the formatting of the markers on the statement list will be honored in our cases.</p>
+
+                <proof ref="claim-with-tfae-cases">
+                    <p>Once again we will prove that the four statements in <xref ref="claim-with-tfae-cases" /> are equivalent.</p>
+
+                    <case direction="cycle">
+                        <p>Another argument that the first statement implies the second.</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <p>And another argument that the second statement implies the third.</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <title>Not so tricky this time</title>
+
+                        <p>Why did we find it so difficult before to prove that the third statement implies the last?</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <title>Wrap-around</title>
+
+                        <p>And once more we complete the cycle of logic.</p>
+                    </case>
+
+                </proof>
+
+                <p>A couple more times to check that the default list markers get applied to the directional cases properly.</p>
+
+                <claim xml:id="another-claim-with-tfae-cases">
+                    <title>Another List of Equivalent Statements</title>
+                    <statement>
+                        <p>
+                            The <tag>ol</tag> that creates the list below does not have <attr>marker</attr>.
+                            <ol>
+                                <li>This statement is equivalent to the two below.</li>
+                                <li>This statement is equivalent to both the statement above and to the statement below.</li>
+                                <li>This statement is equivalent to the two above.</li>
+                            </ol>
+                        </p>
+                    </statement>
+                    <proof>
+                        <p>You know the drill by now.</p>
+
+                        <case direction="cycle">
+                            <p>Does the first statement imply the second?</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <title>The <q>middle</q> case</title>
+                            <p>Does the second statement imply the third?</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <p>And finally, does the third imply the first?</p>
+                        </case>
+
+                    </proof>
+                </claim>
+
+                <p>This proof includes a <attr>ref</attr> to the preceding claim.</p>
+
+                <proof ref="another-claim-with-tfae-cases">
+
+                    <case direction="cycle">
+                        <p>Does the first statement imply the second?</p>
+                        </case>
+                        
+                    <case direction="cycle">
+                        <title>The <q>middle</q> case</title>
+                        <p>Does the second statement imply the third?</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <p>And finally, does the third imply the first?</p>
+                    </case>
+
+                </proof>
+
+                <p>This proof does not include a <attr>ref</attr>, and so the direction indicators get default markers.</p>
+
+                <proof>
+
+                    <case direction="cycle">
+                        <p>Does the first statement imply the second?</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <p>And finally, does the second imply the first?</p>
+                    </case>
+
+                </proof>
+
             </subsection>
 
             <!--
