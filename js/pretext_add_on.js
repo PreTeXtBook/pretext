@@ -545,9 +545,9 @@ window.addEventListener("load",function(event) {
      });
 });
 
-window.addEventListener("load",function(event) {
-       if(window.location.href.includes("/preview/")) {
-           console.log("            found preview", window.location.href);
+window.addEventListener("load", function(event) {
+       if((new URLSearchParams(window.location.search)).has("ptxpreview")) {
+           console.log("            found ptxpreview", window.location.href);
            $("main p[id], main article[id], main li[id], main section[id], main a[data-knowl]").each(function() {
                var thisid = $(this).attr('id');
                if( thisid && ( (thisid.length > 3 && !thisid.includes("-part") && !thisid.startsWith("fn-")) || thisid.startsWith("p-") ) ) {
@@ -556,7 +556,7 @@ window.addEventListener("load",function(event) {
                }
            })
        } else {
-           console.log("not preview", window.location.href);
+           console.log("no ptxpreview", window.location.href);
        }
 });
 
