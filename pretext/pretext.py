@@ -4500,6 +4500,50 @@ def working_directory(path):
         os.chdir(current_directory)
         log.debug(f"Successfully changed directory back to {current_directory}")
 
+
+def get_publisher_variable(xml_source, pub_file, params, variable):
+    """Get a computed publisher-variable's value via variable name"""
+
+    # IMPORTANT: to report the value of a (computed) publisher variable,
+    # two related routines are involved.  For a variable not previously
+    # supported, a developer must take action to implement a report. The
+    # XSL in the "utilities/report-publisher-variable.xsl" stylesheet must
+    # include the report of a value, which will be captured in a temporary
+    # file to be read by the Python routine "get_publisher_variable()".
+
+    log.debug("determining value of publisher variable '{}'".format(variable))
+
+    if pub_file:
+        params["publisher"] = pub_file
+
+    # construct filename for the XSL to report variable/value pairs
+    reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
+
+    # file to receive result of stylesheet
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
+    temp_file = os.path.join(tmp_dir, "pub_var.txt")
+    log.debug("file of publisher variables: {}".format(temp_file))
+
+    # Apply the stylesheet, with source and publication file
+    xsltproc(reporting_xslt, xml_source, temp_file, None, params)
+
+    # pardse file into a dictionary, interogate with variable
+    pairs = {}
+    with open(temp_file, 'r') as f:
+        for line in f:
+            parts = line.split()
+            pairs[parts[0]] =  parts[1]
+
+    if variable in pairs:
+        return pairs[variable]
+    else:
+        msg = '\n'.join(["the publisher variable '{}' could not be located.",
+                        "Did you spell it correctly or does it need implementation?",
+                        "If the latter, read instructions in code comments in the relevant routines."])
+        raise ValueError(msg.format(variable))
+
+
 ###########################
 #
 #  Module-level definitions
