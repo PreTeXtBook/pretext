@@ -73,6 +73,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$external-directory-source"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2024-06-26 Mermaid theme -->
+    <xsl:text>mermaid-theme</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$mermaid-theme"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--

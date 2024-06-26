@@ -2238,15 +2238,7 @@ def mermaid_images(
     #generate mmd files with markdown to be converted to png
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
-    #Need a prettier way to get set value from pub file...
-    mermaid_theme = "default"
-    if pub_file:
-        pub_tree = ET.parse(pub_file)
-        mmd_elt = pub_tree.xpath("/publication/common/mermaid")
-        if mmd_elt:
-            attrs = mmd_elt[0].attrib
-            if "theme" in attrs:
-                mermaid_theme = mmd_elt[0].attrib['theme']
+    mermaid_theme = get_publisher_variable(xml_source, pub_file, stringparams, 'mermaid-theme')
 
     import glob
     # Resulting *.mmd files are in tmp_dir, switch there to work
