@@ -545,20 +545,7 @@ window.addEventListener("load",function(event) {
      });
 });
 
-window.addEventListener("load", function(event) {
-       if((new URLSearchParams(window.location.search)).has("ptxpreview")) {
-           console.log("            found ptxpreview", window.location.href);
-           $("main p[id], main article[id], main li[id], main section[id], main a[data-knowl]").each(function() {
-               var thisid = $(this).attr('id');
-               if( thisid && ( (thisid.length > 3 && !thisid.includes("-part") && !thisid.startsWith("fn-")) || thisid.startsWith("p-") ) ) {
-                 $( this ).addClass("newstuff");
-                 console.log("           found new", this)
-               }
-           })
-       } else {
-           console.log("no ptxpreview", window.location.href);
-       }
-});
+
 
 /*
 window.addEventListener("load",function(event) {
