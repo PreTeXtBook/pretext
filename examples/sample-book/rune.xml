@@ -2566,17 +2566,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Try putting the blocks in a valid order to calculate and print<c>c</c> Only use the required blocks. There are many valid orderings.</p>
             </statement>
             <blocks>
-                <block order="5" tag="math">
+                <block order="5" name="math">
                     <cline>import math</cline>
                 </block>
                 <block order="7" correct="no">
                     <cline>import antigravity</cline>
                 </block>
-                <block order="6" tag="a">
+                <block order="6" name="a">
                     <cline>a = 3</cline>
                     <cline><nbsp/></cline>
                 </block>
-                <block order="2" tag="b">
+                <block order="2" name="b">
                     <choice correct="yes">
                         <cline>b = 4</cline>
                     </choice>
@@ -2584,10 +2584,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cline>4 = b</cline>
                     </choice>
                 </block>
-                <block order="3" tag="cSq" depends="a b">
+                <block order="3" name="cSq" depends="a b">
                     <cline>cSquared = a ** 2 + b ** 2</cline>
                 </block>
-                <block order="1" tag="c" depends="cSq math">
+                <block order="1" name="c" depends="cSq math">
                     <cline>c = math.sqrt(cSquared)</cline>
                 </block>
                 <block order="4" depends="c">

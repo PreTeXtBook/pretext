@@ -1151,11 +1151,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="blocks/block" mode="vertical-blocks">
     <xsl:param name="b-natural"/>
-    <xsl:variable name="tag">
+    <xsl:variable name="name">
         <xsl:choose>
-            <xsl:when test="@tag|@depends">
+            <xsl:when test="@name|@depends">
                 <xsl:text> #tag:</xsl:text>
-                <xsl:value-of select="@tag"/>
+                <xsl:value-of select="@name"/>
                 <xsl:text>; depends:</xsl:text>
                 <xsl:value-of select="str:replace(@depends, ' ', ',')"/>
                 <xsl:text>;</xsl:text>
@@ -1169,11 +1169,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- default on "choice" is  correct="no" -->
             <xsl:apply-templates select="choice[@correct = 'yes']">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
-                <xsl:with-param name="tag" select="$tag"/>
+                <xsl:with-param name="name" select="$name"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="choice[not(@correct = 'yes')]">
                 <xsl:with-param name="b-natural" select="$b-natural"/>
-                <xsl:with-param name="tag"/>
+                <xsl:with-param name="name"/>
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
@@ -1194,7 +1194,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="@correct = 'no'">
                 <xsl:text> #distractor</xsl:text>
             </xsl:if>
-            <xsl:value-of select="$tag"/>
+            <xsl:value-of select="$name"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="following-sibling::block">
@@ -1204,7 +1204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="blocks/block/choice">
     <xsl:param name="b-natural"/>
-    <xsl:param name="tag"/>
+    <xsl:param name="name"/>
 
     <!-- Exactly one choice is correct, it is placed first. -->
     <!-- Then the  n - 1  separators can be placed on all   -->
@@ -1228,7 +1228,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(@correct = 'yes')">
         <xsl:text> #paired</xsl:text>
     </xsl:if>
-    <xsl:value-of select="$tag"/>
+    <xsl:value-of select="$name"/>
 </xsl:template>
 
 <!-- Parsons Problem (Horizontal)-->
