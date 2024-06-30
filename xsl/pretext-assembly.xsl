@@ -963,6 +963,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
 
+<!-- Add input element around text in program when missing                           -->
+<!-- Looking for text inside a program but not directly inside input;                -->
+<!-- parent must not have any other children and the text must not be all whitespace -->
+<xsl:template match="text()[ancestor::program and not(parent::input) and count(parent::*) = 1 and normalize-space(.)]" mode="repair">
+    <input>
+        <xsl:copy/>
+    </input>
+</xsl:template>
+
 <!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
 <xsl:template match="program/@interactive" mode="repair">
     <xsl:choose>
