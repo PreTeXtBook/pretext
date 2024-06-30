@@ -10060,14 +10060,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>And some self-referential XSL:</p>
 
+            <!-- input element intentionally ommited here. Pretext processor should correct. -->
             <program language="xslt" margins="15%">
-                <input>
-                <![CDATA[<xsl:template match="biblio" mode="number">
-                    <xsl:apply-templates select="." mode="structural-number" />
-                    <xsl:text>.</xsl:text>
-                    <xsl:number from="references" level="any" count="biblio" />
-                </xsl:template>]]>
-                </input>
+            <![CDATA[<xsl:template match="biblio" mode="number">
+                <xsl:apply-templates select="." mode="structural-number" />
+                <xsl:text>.</xsl:text>
+                <xsl:number from="references" level="any" count="biblio" />
+            </xsl:template>]]>
             </program>
 
             <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>
