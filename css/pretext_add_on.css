@@ -2792,32 +2792,6 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
     overflow: auto !important;
 }
 
-/* Preview of annual edition */
-
-.pretext main .para.newstuff {
-    border-right: 6px solid #6f6;
-    background:  #dfd;
-}
-.pretext main li.newstuff {
-    border-right: 6px solid #66f;
-    background:  #eef;
-}
-.pretext main li.newstuff .para.newstuff {
-    border-right: none;
-    background: inherit;
-}
-.pretext main article.newstuff {
-    border-right: 6px solid #ff6;
-    background:  #ffd;
-}
-.pretext main section.newstuff {
-    border-right: 10px solid #f6f;
-}
-.pretext main a[data-knowl].newstuff {
-    border: 1px solid #f33;
-    background: #fdd;
-}
-
 #aboelkins-ACS .ptx-main .ptx-content > section:first-of-type > section:first-of-type > .project-like:first-of-type li {
     font-size: 300%
 }
