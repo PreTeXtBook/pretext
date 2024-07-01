@@ -27,7 +27,7 @@ Example: TikZ code for graphics images can be extracted and written
 into "standalone" files with XSL, and then this script will continue
 on to apply LaTeX to the files, creating a PDF, then optionally
 convert these PDFS into other formats, e.g. creating  SVG images
-via the  pdf2svg  utility.
+via the  pyMuPDF library.
 
 `pretext.cfg`
 -------------

@@ -144,62 +144,6 @@
               One thing to keep in mind: with MikTeX, you <em>must</em> run an initial update from the MikTeX pacakage manager before it will work correctly.
             </p>
           </li>
-
-          <li>
-            <title>pdf2svg</title>
-            <p>
-              If your book contains <latex /> images such as TikZ, the <pretext />-CLI will process those images using whatever version of <latex /> you installed,
-              and then it needs <c>pdf2svg</c> to convert the output to <init>SVG</init> format for use in <init>HTML</init>.
-            </p>
-
-            <p>
-              There is no Windows <q>installer</q> for thos program. Instead, it is available as a GitHub repository.
-              The easiest way to get it onto your computer is to use the newly-installed Git Bash terminal.
-              The first time you open Git Bash, your <em>working directory</em> might be the root <c>c:</c> drive.
-              Type <c>pwd</c> to find out what folder you're in.
-              It doesn't matter where you install <c>pdf2svg</c>, as long as you're aware of where it is.
-              If you want to change to a different folder, you can do so using the <c>cd</c> command.
-            </p>
-
-            <p>
-              An important note of caution: avoid using directories such as <c>Program Files</c> that have spaces in the name.
-              This can cause problems with some of the scripts used by the <pretext />-CLI.
-              For this example, we will choose to place the program in our own user directory.
-              In Git Bash, type <c>cd Users/Sean</c> (where you will replace <q>Sean</q> with your own user name, as long as it doesn't contain spaces).
-            </p>
-
-            <p>
-              Next, go to the <url href="https://github.com/jalios/pdf2svg-windows" visual="github.com/jailos/pdf2svg-windows">pdf2svg repository on GitHub</url>.
-              Click on the <q>Code</q> button, and then click on the clipboard icon to copy the <init>URL</init>, as shown below:
-            </p>
-
-            <image width="85%" source="pdf2svg-download.png">
-              <description>Screenshot of the GitHub page for the pdf2svg project, showing where to click to copy the project URL to the clipboard</description>
-            </image>
-
-            <p>
-              Next, in Git Bash, type <c>git clone</c> and then right-click to paste the <init>URL</init> you copied,
-              or use the keyboard shortcut <kbd>Shift</kbd>-<kbd>Insert</kbd>. Hit <kbd>Enter</kbd>.
-            </p>
-
-            <p>
-              You will now have the necessary software downloaded to your computer.
-              In my example, it is now available in <c>C:\Users\Sean\pdf2svg-windows</c>.
-              To complete the installation, we need to add the program to the Windows environment variables.
-              Hit the <kbd>Windows</kbd> key, and type <q>path</q>. Open the suggested program.
-            </p>
-
-            <p>
-              As shown below, click on the <q>Environment Variables...</q> button, then click on the line beginning with <q>Path</q>,
-              and click on the <q>Edit</q> button.
-              You can then click on <q>Browse</q>, and find the <c>pdf2svg-windows</c> folder you just downloaded.
-            </p>
-
-            <p>
-              You should now have a working installation of <c>pdf2svg</c>.
-              To confirm, type <c>which pdf2svg</c> in Git Bash. It should display the path to the <c>pdf2svg</c>program. (You may have to restart Git Bash first.)
-            </p>
-          </li>
         </dl>
       </p>
 
@@ -365,7 +309,7 @@
         Finally, we are ready to install the <pretext />-CLI. This is perhaps the easiest step of the whole process.
         From the Git Bash terminal, first type <c>which python</c> to confirm that Python has been successfully added to the PATH.
         You should see the path to your Python program if things are working correctly.
-        If you don't, you may need to reinstall Python, or you can manually add it as we did for <c>pdf2svg</c>.
+        If you don't, you may need to reinstall Python, or you can manually add it.
       </p>
 
       <p>

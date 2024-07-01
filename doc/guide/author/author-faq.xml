@@ -59,30 +59,7 @@
         <li>
             <title>How do I install <c>pdf2svg</c>?</title>
             <p>
-              <c>pdf2svg</c> is necessary for TikZ diagrams in HTML.
-            </p>
-
-            <p>
-              On Debian or Ubuntu Linux:
-              <c>sudo apt-get install pdf2svg</c>.
-            </p>
-
-            <p>
-              To install <c>pdf2svg</c> on a Mac, you will need to install MacPorts.
-              Read the directions carefully, since you will need to install Xcode
-              (available from the Mac App Store) first.
-              Make sure that the command line tools are installed by running Xcode.
-              After Xcode is installed read the directions to install Macports.
-              Once MacPorts is installed run the following command to install <c>pdf2svg</c>:
-              <c>sudo port install pdf2svg</c>.
-              Be patient as this will take a few minutes.
-              To get rid of any intermediate build files, run the command
-              <c>sudo port clean --all all</c>.
-              Again be patient.
-            </p>
-
-            <p>
-              If you have trouble with MacPorts, try HomeBrew.
+              As of July 2024, you no longer need <c>pdf2svg</c> to process latex-images; we now use the python <c>pyMuPDF</c> library instead.
             </p>
         </li>
 

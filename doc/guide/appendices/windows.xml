@@ -264,45 +264,6 @@
     <p>Congratulations, you have successfully installed ImageMagick.</p>
   </section>
 
-  <section xml:id="section-installing-pdf2svg">
-    <title>Installing <c>pdf2svg</c></title>
-    <introduction>
-      <p>The installation procedure uses <c>git</c>. Open Git Bash and change to your root directory:<cd>cd /c</cd>Clone the repository into <c>C:\pdf2svg</c>:<cd>git clone https://github.com/jalios/pdf2svg-windows.git pdf2svg</cd></p>
-    </introduction>
-    <subsection xml:id="subsection-change-path-environment-variable-pdf2svg">
-      <title>Change PATH environment variable</title>
-      <p>We need to add the <c>pdf2svg</c> program to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" />.</p>
-      <list xml:id="steps-change-path-environment-variable-pdf2svg">
-        <title>Path Environment Variable for <c>pdf2svg</c></title>
-        <ol>
-          <li>
-            <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
-          </li>
-          <li>
-            <p>Click the Environment Variables button near the bottom of the dialog.</p>
-          </li>
-          <li>
-            <p>In the bottom part of the dialog labeled <q>System environment variables</q>, look for a variable named <c>PATH</c>. You may need to scroll.</p>
-          </li>
-          <li>
-            <p>If you do find the <c>PATH</c> variable, select it and click the Edit... button.</p>
-          </li>
-          <li>
-            <p>You should see a dialog with two text fields. Your variable name should be <c>PATH</c>.</p>
-          </li>
-          <li>
-            <p>Place the cursor in the existing value and press the End key, so that the cursor moves to the back of the line. The <c>PATH</c> string is a <c>;</c>-delimited list of full path names, so append the string <c>C:\pdf2svg\dist-32bits;</c> or <c>C:\pdf2svg\dist-64bits;</c> (note the semicolon) to the existing value. </p>
-          </li>
-          <li>
-            <p>Click OK to save changes.</p>
-          </li>
-        </ol>
-      </list>
-    </subsection>
-    <conclusion>
-      <p>Congratulations, you have successfully installed <c>pdf2svg</c>.</p>
-    </conclusion>
-  </section>
 
   <section xml:id="section-jing">
     <title>Installing jing</title>
