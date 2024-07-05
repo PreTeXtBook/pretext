@@ -2618,15 +2618,6 @@ body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
 body.has-sidebar-left.mathbook-loaded.standalone.worksheet .ptx-page .ptx-main {
     margin-left: 0;
 }
-body.standalone.worksheet .ptx-page > .ptx-main .ptx-content {
-    max-width: 1030px;
-    width: 1030px;
-    margin-right: 0;
-}
-body.standalone.worksheet.a4 .ptx-page > .ptx-main .ptx-content {
-    max-width: 1001px;
-    width: 1001px;
-}
 
 body.standalone.worksheet .ptx-content .goal-like {
     border: none;
