@@ -4342,8 +4342,8 @@ def get_managed_directories(xml_source, pub_file):
             missing_dir_error = " ".join(
                 [
                     'the directory "{}" implied by the value "{}" in the',
-                    '"source/directories/@{}" entry of the publisher file does not',
-                    "exist. Check the spelling, create the necessary directory, or entirely",
+                    '"source/directories/@{}" entry of the publisher file does not exist and could',
+                    "not be created. Check the spelling, create the necessary directory, or entirely",
                     'remove the whole "source/directories" element of the publisher file.'
                 ]
             )
@@ -4353,22 +4353,22 @@ def get_managed_directories(xml_source, pub_file):
                 if os.path.isabs(raw_path):
                     raise ValueError(abs_path_error.format(gen_attr, raw_path))
                 else:
-                    abs_path = os.path.join(source_dir, raw_path)
+                    generated = os.path.join(source_dir, raw_path)
                 try:
-                    generated = verify_input_directory(abs_path)
+                    os.makedirs(generated, exist_ok=True)
                 except:
-                    raise ValueError(missing_dir_error.format(abs_path, raw_path, gen_attr))
+                    raise ValueError(missing_dir_error.format(generated, raw_path, gen_attr))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
                 if os.path.isabs(raw_path):
                     raise ValueError(abs_path_error.format(ext_attr, raw_path))
                 else:
-                    abs_path = os.path.join(source_dir, raw_path)
+                    external = os.path.join(source_dir, raw_path)
                 try:
-                    external = verify_input_directory(abs_path)
+                    os.makedirs(external, exist_ok=True)
                 except:
-                    raise ValueError(missing_dir_error.format(abs_path, raw_path, ext_attr))
+                    raise ValueError(missing_dir_error.format(external, raw_path, gen_attr))
     # pair of discovered absolute paths
     return (generated, external)
 
