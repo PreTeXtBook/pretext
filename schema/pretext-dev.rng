@@ -1128,6 +1128,21 @@
       </element>
     </choice>
   </define>
+  <define name="MyOpenMath">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <ref name="IntroductionText"/>
+    </optional>
+    <element name="myopenmath">
+      <attribute name="problem"/>
+      <optional>
+        <attribute name="params"/>
+      </optional>
+    </element>
+    <optional>
+      <ref name="ConclusionText"/>
+    </optional>
+  </define>
   <define name="TrueFalse">
     <ref name="MetaDataTitleOptional"/>
     <optional>
@@ -1521,6 +1536,7 @@
   <define name="Exercise" combine="choice">
     <element name="exercise">
       <choice>
+        <ref name="MyOpenMath"/>
         <ref name="TrueFalse"/>
         <ref name="MultipleChoice"/>
         <ref name="Parsons"/>
@@ -1532,6 +1548,7 @@
   </define>
   <define name="ProjectLike" combine="choice">
     <choice>
+      <ref name="MyOpenMath"/>
       <ref name="TrueFalse"/>
       <ref name="MultipleChoice"/>
       <ref name="Parsons"/>

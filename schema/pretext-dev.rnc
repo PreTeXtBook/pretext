@@ -429,6 +429,14 @@
                     (MathRow | MathIntertext)*
                 }
             
+            MyOpenMath =
+                MetaDataTitleOptional,
+                IntroductionText?,
+                element myopenmath {
+                    attribute problem {text},
+                    attribute params {text}?
+                },
+                ConclusionText?
             TrueFalse =
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -573,6 +581,7 @@
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
+                    MyOpenMath |
                     TrueFalse |
                     MultipleChoice |
                     Parsons |
@@ -581,6 +590,7 @@
                     Areas
                 }
             ProjectLike |=
+                MyOpenMath |
                 TrueFalse |
                 MultipleChoice |
                 Parsons |
