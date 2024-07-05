@@ -2411,7 +2411,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*" mode="representations"/>
         <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
         <xsl:choose>
-            <xsl:when test="$exercise-style = 'static'">
+            <xsl:when test="($exercise-style = 'static') and not($b-extracting-pg)">
                 <!-- locate the static representation in a file, generated independently -->
                 <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">
