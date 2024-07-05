@@ -1147,9 +1147,9 @@
   </xs:element>
   <xs:element name="output" type="xs:string"/>
   <xs:element name="program">
-    <xs:complexType>
+    <xs:complexType mixed="true">
       <xs:sequence>
-        <xs:element name="input" type="xs:string"/>
+        <xs:element minOccurs="0" name="input" type="xs:string"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
       <xs:attribute name="component"/>

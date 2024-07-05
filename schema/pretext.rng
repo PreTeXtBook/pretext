@@ -1327,9 +1327,12 @@
           <value>codelens</value>
         </attribute>
       </optional>
-      <element name="input">
+      <choice>
+        <element name="input">
+          <text/>
+        </element>
         <text/>
-      </element>
+      </choice>
     </element>
   </define>
   <define name="List">

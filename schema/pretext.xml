@@ -1398,7 +1398,7 @@
     <section>
         <title>Verbatim Text</title>
 
-        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.</p>
+        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.  A <tag>program</tag> maybe structured with an <tag>input</tag> element, or simply text.</p>
 
         <fragment xml:id="verbatimdisplay">
             <title>Verbatim displays</title>
@@ -1439,7 +1439,9 @@
                     attribute line-numbers {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
-                    element input {text}
+                    (
+                        element input {text} | text
+                    )
                 }
             </code>
         </fragment>

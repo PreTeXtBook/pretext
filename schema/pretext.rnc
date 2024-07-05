@@ -501,7 +501,9 @@
                     attribute line-numbers {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
-                    element input {text}
+                    (
+                        element input {text} | text
+                    )
                 }
             
             List =
