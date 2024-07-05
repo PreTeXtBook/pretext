@@ -38,8 +38,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Not documented, for development use only -->
+<!-- Override the Runestone manifest file     -->
 <xsl:param name="debug.rs.services.file" select="''"/>
 <xsl:variable name="b-debugging-rs-services" select="not($debug.rs.services.file = '')"/>
+<!-- Use dev version of Runestone files       -->
+<xsl:param name="debug.rs.dev" select="''" />
+<xsl:variable name="b-debugging-rs" select="not($debug.rs.dev = '')"/>
+
+<!-- Using local versions of Runestone files   -->
+<xsl:param name="rs-local-files" select="''" />
+<xsl:variable name="b-local-rs" select="$rs-local-files = 'yes'"/>
 
 
 <!-- ######################## -->
@@ -308,11 +316,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- just becomes true all the time.  Indentation predicts this. -->
     <xsl:if test="$b-host-runestone or $b-needs-runestone">
     <xsl:comment>*** Runestone Services ***</xsl:comment>
+
     <xsl:text>&#xa;</xsl:text>
-    <xsl:for-each select="$runestone-services/all/js/item[not($b-altrs-services)]|$altrs-js-tokens[$b-altrs-services]">
-        <script type="text/javascript">
-            <xsl:attribute name="src">
+    <xsl:variable name="rs-fileroot">
+        <xsl:choose>
+            <xsl:when test="$b-local-rs">
+                <xsl:message>Build using local Runestone files</xsl:message>
+                <xsl:text>_static/runestone/</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>Using Runestone CDN files</xsl:message>
                 <xsl:value-of select="$runestone-cdn"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:for-each select="$runestone-services/all/js/item[not($b-altrs-services)]|$altrs-js-tokens[$b-altrs-services]">
+        <script>
+            <xsl:attribute name="src">
+                <xsl:value-of select="$rs-fileroot"/>
                 <xsl:value-of select="."/>
             </xsl:attribute>
         </script>
@@ -320,7 +341,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$runestone-services/all/css/item[not($b-altrs-services)]|$altrs-css-tokens[$b-altrs-services]">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
-                <xsl:value-of select="$runestone-cdn"/>
+                <xsl:value-of select="$rs-fileroot"/>
                 <xsl:value-of select="."/>
             </xsl:attribute>
         </link>

@@ -3556,6 +3556,51 @@ def _runestone_services(params):
     altrs_version = services.xpath("/all/version")[0].text
     return (altrs_js, altrs_css, altrs_cdn_url, altrs_version)
 
+# todo - rewrite other code that does similar things to use this function?
+def get_web_asset(url):
+    """Get the contents of an http request"""
+    try:
+        import requests
+    except ImportError:
+        msg = 'The "requests" module is not available and is necessary for downloading files.'
+        log.debug(msg)
+        raise Exception(msg)
+
+    try:
+        services_response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        msg = '\n'.join(['There was a network problem while trying to download "{}"',
+                            'and the reported problem is:',
+                            '{}'
+                            ])
+        log.debug(msg.format(url, e))
+        raise Exception(msg.format(url, e))
+
+    # Check that an online request was "OK", HTTP response code 200
+    response_status_code = services_response.status_code
+    if response_status_code != 200:
+        msg = '\n'.join(["The file {} was not found",
+                            "the server returned response code {}"
+                            ])
+        log.debug(msg.format(url, response_status_code))
+        raise Exception(msg.format(url, response_status_code))
+
+    return services_response.content
+
+def download_file(url, dest_filename):
+    """Write a web asset to a local file"""
+    contents = get_web_asset(url)
+    try:
+        import pathlib
+        output_file = pathlib.Path(dest_filename)
+        output_file.parent.mkdir(exist_ok=True, parents=True)
+
+        with open(dest_filename, 'wb') as f:
+            f.write(contents)
+        print(dest_filename, "downloaded")
+    except Exception as e:
+        raise Exception("Failed to save download", dest_filename)
+
 def html(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
@@ -3570,26 +3615,58 @@ def html(
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
-    # See if we can get the very latest Runestone Services from the Runestone
-    # CDN.  A non-empty version (fourth parameter) indicates success
-    #  "altrs" = alternate Runestone
-    altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
-    online_success = (altrs_version != '')
-    # report repository version always, supersede if newer found
-    msg = 'Runestone Services (via PreTeXt repository): version {}'
-    log.info(msg.format(get_runestone_services_version()))
-    if online_success:
-        msg = 'Runestone Services (using newer, via online CDN query): version {}'
-        log.info(msg.format(altrs_version))
-    # with a successful online query, we load up some string parameters
-    # the receiving stylesheet has the parameters default to empty strings
-    # which translates to consulting the services file in the repository,
-    # so we do nothing when the online query fails
-    if online_success:
-        stringparams["altrs-js"] = altrs_js
-        stringparams["altrs-css"] = altrs_css
-        stringparams["altrs-cdn-url"] = altrs_cdn_url
-        stringparams["altrs-version"] = altrs_version
+    # Decide what Runestone assets to use
+    if "debug.rs.dev" not in stringparams:
+        # See if we can get the very latest Runestone Services from the Runestone
+        # CDN.  A non-empty version (fourth parameter) indicates success
+        #  "altrs" = alternate Runestone
+        altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
+        online_success = (altrs_version != '')
+        # report repository version always, supersede if newer found
+        msg = 'Runestone Services (via PreTeXt repository): version {}'
+        log.info(msg.format(get_runestone_services_version()))
+        if online_success:
+            msg = 'Runestone Services (using newer, via online CDN query): version {}'
+            log.info(msg.format(altrs_version))
+            # with a successful online query, we load up some string parameters
+            # the receiving stylesheet has the parameters default to empty strings
+            # which translates to consulting the services file in the repository,
+            # so we do nothing when the online query fails
+            stringparams["altrs-js"] = altrs_js
+            stringparams["altrs-css"] = altrs_css
+            stringparams["altrs-cdn-url"] = altrs_cdn_url
+            stringparams["altrs-version"] = altrs_version
+
+            # get all the runestone files and place in tmp dir
+            asset_file_name = "dist-{}.tgz".format(altrs_version)
+            output_dir = os.path.join(tmp_dir, "_static", "runestone")
+            asset_full_path = os.path.join(output_dir, asset_file_name)
+            final_output_path = os.path.join(dest_dir, "_static", "runestone", asset_file_name)
+            if file_format  == "html" and os.path.exists(final_output_path):
+                log.info("Using existing Runestone assets. Delete _static/runestone to force download.")
+                os.path.exists(asset_full_path)
+                stringparams["rs-local-files"] = "yes"
+            else:
+                try:
+                    msg = 'Downloading Runestone assets for version {}'
+                    log.info(msg.format(altrs_version))
+                    download_file(altrs_cdn_url + asset_file_name, asset_full_path)
+                    log.info("Extracting Runestone assets")
+                    import tarfile 
+                    file = tarfile.open(asset_full_path) 
+                    file.extractall(output_dir) 
+                    file.close()
+                    stringparams["rs-local-files"] = "yes"
+                except Exception as e:
+                    log.warning(e)
+                    log.warning("Failed to download all Runestone files - will rely on links to web resources")
+    else:
+        log.info("Building for local developmental Runestone assets. Make sure to build Runestone components to _static/runestone in the output directory.")
+        stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+        stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
+        stringparams["altrs-cdn-url"] = ""
+        stringparams["altrs-version"] = "dev"
+        stringparams["rs-local-files"] = "yes"
 
     # support publisher file, and subtree argument
     if pub_file:
