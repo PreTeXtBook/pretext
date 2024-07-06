@@ -2404,14 +2404,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
     <xsl:text>\newlength{\fillinmaxwidth}&#xa;</xsl:text>
     <xsl:text>\newlength{\fillincontract}&#xa;</xsl:text>
-    <xsl:text>\newlength{\fillinheight}&#xa;</xsl:text>
+    <xsl:text>\newlength{\charmaxwidth}\setlength{\charmaxwidth}{0.5em}&#xa;</xsl:text>
+    <xsl:text>\newlength{\charminwidth}\setlength{\charminwidth}{0.1em}&#xa;</xsl:text>
+    <xsl:text>\newlength{\fillinheight}</xsl:text>
     <xsl:if test="$fillin-text-style = 'shade'">
         <xsl:text>\definecolor{fillintextshade}{gray}{0.9}</xsl:text>
     </xsl:if>
     <xsl:text>\newcommand{\fillintext}[1]{%&#xa;</xsl:text>
-    <xsl:text>\setlength{\fillinmaxwidth}{#1em*\real{0.5}}%&#xa;</xsl:text>
-    <xsl:text>\setlength{\fillincontract}{#1em*\real{0.5}*\real{0.2}}%&#xa;</xsl:text>
-    <xsl:text>\setlength{\fillinheight}{\heightof{\strut}+1.2pt}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinmaxwidth}{#1\charmaxwidth}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillincontract}{#1\charminwidth}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinheight}{\baselineskip}\addtolength{\fillinheight}{1.2pt}&#xa;</xsl:text>
     <xsl:choose>
         <xsl:when test="$fillin-text-style = 'underline'">
             <xsl:text>\strut\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\fillinmaxwidth minus \fillincontract\nobreak\strut%&#xa;</xsl:text>
