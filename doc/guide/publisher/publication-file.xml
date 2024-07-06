@@ -150,15 +150,15 @@
 
         <subsection xml:id="common-qrcode-image">
             <title>QR code image</title>
-            <idx><h>common option</h><h>qrcode</h></idx>
-            <idx><h>qrcode</h><h>common option</h></idx>
+            <idx><h>common option</h><h>qr-code</h></idx>
+            <idx><h>qr-code</h><h>common option</h></idx>
 
             <p>
                 QR codes for videos and interactive elements can have an image placed in their
                 center. This image file should be square, and stored in the external assets folder.
                 To use this image in your QR codes, use
                 <cd>
-                    <cline>/publication/common/qrcode/@image</cline>
+                    <cline>/publication/common/qr-code/@image</cline>
                 </cd>
                 with a value of the file path, relative to external assets folder.
             </p>
