@@ -1906,7 +1906,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$b-latex-print">
         <xsl:text>%% For a print PDF, no surrounding boxes, so simply textcolor (but still active to preserve spacing)&#xa;</xsl:text>
-        <xsl:text>\hypersetup{hidelinks=true}&#xa;</xsl:text>
+        <!-- https://tex.stackexchange.com/questions/503000/          -->
+        <!-- unexpected-value-for-option-hidelinkshyperref-is-ignored -->
+        <!-- https://tex.stackexchange.com/a/503001                   -->
+        <xsl:text>\hypersetup{hidelinks}&#xa;</xsl:text>
     </xsl:if>
     <!-- Hyperref gives names to destinations for links that look like      -->
     <!-- "section*.5.2" which you can guess is the second section of        -->
