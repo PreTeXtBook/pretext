@@ -6399,12 +6399,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
+    <!-- Make it less likely there will be a page break between the heading and first piece of content -->
+    <xsl:text>{\makeatletter\@beginparpenalty=10000\makeatother</xsl:text>
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
     </xsl:apply-templates>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*[1]">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="*[position() > 1]">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
     <!-- separate hints after all but final one -->
@@ -6419,12 +6425,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-solution" />
 
+    <!-- Make it less likely there will be a page break between the heading and first piece of content -->
+    <xsl:text>{\makeatletter\@beginparpenalty=10000\makeatother</xsl:text>
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
     </xsl:apply-templates>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*[1]">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="*[position() > 1]">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
     <!-- separate answers after all but final one -->
@@ -6438,12 +6450,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
 
+    <!-- Make it less likely there will be a page break between the heading and first piece of content -->
+    <xsl:text>{\makeatletter\@beginparpenalty=10000\makeatother</xsl:text>
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
     </xsl:apply-templates>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*[1]">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="*[position() > 1]">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
     <!-- separate solutions after all but final one -->
