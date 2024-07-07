@@ -147,6 +147,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/mermaid/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- QR code image to be placed at center of QR codes -->
+<xsl:variable name="qrcode-image">
+    <xsl:apply-templates select="$publisher-attribute-options/common/qrcode/pi:pub-attribute[@name='image']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- Em dash Width -->
 
 <xsl:variable name="emdash-space">
@@ -3088,6 +3093,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="textstyle" default="underline" options="box shade"/>
             <pi:pub-attribute name="mathstyle" default="shade" options="underline box"/>
         </fillin>
+        <qrcode>
+            <pi:pub-attribute name="image" default="" freeform="yes"/>
+        </qrcode>
         <mermaid>
             <pi:pub-attribute name="theme" default="default" options="dark forest light"/>
         </mermaid>
