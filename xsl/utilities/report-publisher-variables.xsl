@@ -78,6 +78,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$mermaid-theme"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2024-07-07 QR code image -->
+    <xsl:text>qrcode-image</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$qrcode-image"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--

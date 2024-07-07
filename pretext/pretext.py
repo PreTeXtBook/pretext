@@ -2134,14 +2134,15 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     stringparams = stringparams.copy()
 
     # Establish whether there is an image from pub file
-    pub_tree = ET.parse(pub_file)
+    has_image = False
     try:
-        image = pub_tree.find('common').find('qr-code').get('image')
+        image = get_publisher_variable(xml_source, pub_file, stringparams, 'qrcode-image')
         _, external_dir = get_managed_directories(xml_source, pub_file)
         image_path = os.path.join(external_dir, image)
-        has_image = True
+        if (image != '' and os.path.exists(image_path)):
+            has_image = True
     except:
-        has_image = False
+        pass
 
     # https://pypi.org/project/qrcode/
     try:
@@ -4520,7 +4521,7 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
     # Apply the stylesheet, with source and publication file
     xsltproc(reporting_xslt, xml_source, temp_file, None, params)
 
-    # pardse file into a dictionary, interogate with variable
+    # parse file into a dictionary, interrogate with variable
     pairs = {}
     with open(temp_file, 'r') as f:
         for line in f:

@@ -40,7 +40,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- fillin styles are "underline" (the default for text),  -->
         <!-- "box", and "shade" (the default for math)              -->
         <fillin textstyle="underline" mathstyle="shade"/>
-        <qr-code image="misc/ptx-logo-square.png"/>
+        <qrcode image="misc/ptx-logo-square.png"/>
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->
