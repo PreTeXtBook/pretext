@@ -3638,11 +3638,11 @@ def html(
 
             # get all the runestone files and place in tmp dir
             asset_file_name = "dist-{}.tgz".format(altrs_version)
-            output_dir = os.path.join(tmp_dir, "_static", "runestone")
+            output_dir = os.path.join(tmp_dir, "_static")
             asset_full_path = os.path.join(output_dir, asset_file_name)
-            final_output_path = os.path.join(dest_dir, "_static", "runestone", asset_file_name)
+            final_output_path = os.path.join(dest_dir, "_static", asset_file_name)
             if file_format  == "html" and os.path.exists(final_output_path):
-                log.info("Using existing Runestone assets. Delete _static/runestone to force download.")
+                log.info("Using existing Runestone assets. Delete files in _static to force download.")
                 os.path.exists(asset_full_path)
                 stringparams["rs-local-files"] = "yes"
             else:
@@ -3660,7 +3660,7 @@ def html(
                     log.warning(e)
                     log.warning("Failed to download all Runestone files - will rely on links to web resources")
     else:
-        log.info("Building for local developmental Runestone assets. Make sure to build Runestone components to _static/runestone in the output directory.")
+        log.info("Building for local developmental Runestone assets. Make sure to build Runestone components to _static in the output directory.")
         stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
         stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
         stringparams["altrs-cdn-url"] = ""
