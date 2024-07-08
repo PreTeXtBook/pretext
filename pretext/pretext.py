@@ -3597,7 +3597,6 @@ def download_file(url, dest_filename):
 
         with open(dest_filename, 'wb') as f:
             f.write(contents)
-        print(dest_filename, "downloaded")
     except Exception as e:
         raise Exception("Failed to save download", dest_filename)
 
