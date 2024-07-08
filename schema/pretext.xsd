@@ -1148,8 +1148,9 @@
   <xs:element name="output" type="xs:string"/>
   <xs:element name="program">
     <xs:complexType mixed="true">
-      <xs:sequence>
-        <xs:element minOccurs="0" name="input" type="xs:string"/>
+      <xs:sequence minOccurs="0">
+        <xs:element name="input" type="xs:string"/>
+        <xs:element minOccurs="0" ref="tests"/>
       </xs:sequence>
       <xs:attribute name="permid"/>
       <xs:attribute name="component"/>
@@ -1174,6 +1175,7 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="tests" type="xs:string"/>
   <xs:group name="List">
     <xs:choice>
       <xs:element name="ol">

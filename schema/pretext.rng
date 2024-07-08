@@ -1328,9 +1328,16 @@
         </attribute>
       </optional>
       <choice>
-        <element name="input">
-          <text/>
-        </element>
+        <group>
+          <element name="input">
+            <text/>
+          </element>
+          <optional>
+            <element name="tests">
+              <text/>
+            </element>
+          </optional>
+        </group>
         <text/>
       </choice>
     </element>

@@ -502,7 +502,11 @@
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
                     (
-                        element input {text} | text
+                        (
+                            element input {text},
+                            element tests {text}?
+                        )
+                        | text
                     )
                 }
             
