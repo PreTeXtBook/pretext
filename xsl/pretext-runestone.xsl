@@ -321,11 +321,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="rs-fileroot">
         <xsl:choose>
             <xsl:when test="$b-local-rs">
-                <xsl:message>Build using local Runestone files</xsl:message>
                 <xsl:text>_static/</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>Using Runestone CDN files</xsl:message>
                 <xsl:value-of select="$runestone-cdn"/>
             </xsl:otherwise>
         </xsl:choose>
