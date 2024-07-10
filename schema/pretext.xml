@@ -1440,9 +1440,9 @@
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
                     (
-                        element input {text} | text
-                    )
-                    element tests {text}?
+                        element input {text},
+                        element tests {text}?
+                    ) | text
                 }
             </code>
         </fragment>
