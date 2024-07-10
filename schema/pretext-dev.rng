@@ -1205,6 +1205,25 @@
     <zeroOrMore>
       <ref name="Solution"/>
     </zeroOrMore>
+    <optional>
+      <optional>
+        <element name="preamble">
+          <optional>
+            <attribute name="indent"/>
+          </optional>
+          <text/>
+        </element>
+      </optional>
+      <ref name="Program"/>
+      <optional>
+        <element name="postamble">
+          <optional>
+            <attribute name="indent"/>
+          </optional>
+          <text/>
+        </element>
+      </optional>
+    </optional>
   </define>
   <define name="Block">
     <element name="block">
