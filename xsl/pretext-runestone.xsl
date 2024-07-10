@@ -2161,7 +2161,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so can be used as part of Runestone for All, while others     -->
 <!-- require a JOBE server on the Runestone server.  This template -->
 <!-- simply returns the necessary hosting capability.              -->
-<xsl:template match="program" mode="activecode-host">
+<xsl:template match="*" mode="activecode-host">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
