@@ -2339,7 +2339,18 @@
                         attribute randomize {"yes"|"no"}?,
                         Block+
                     },
-                    Hint*, Answer*, Solution*
+                    Hint*, Answer*, Solution*,
+                    (
+                        element preamble {
+                            attribute indent text?,
+                            text
+                        }?,
+                        Program,
+                        element postamble {
+                            attribute indent text?,
+                            text
+                        }?,
+                    )?
             Block =
                 element block {
                     attribute order {xsd:integer}?,
