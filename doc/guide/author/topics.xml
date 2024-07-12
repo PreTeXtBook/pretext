@@ -3155,7 +3155,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <pre>
                 &lt;figure xml:id="figure-mermaid-git"&gt;
-                    &lt;caption&gt;Mermaid Git Diagram&gt;/caption&gt;
+                    &lt;caption&gt;Mermaid Git Diagram&lt;/caption&gt;
                     &lt;image xml:id="mermaid-git-image"&gt;
                         &lt;mermaid&gt;
                     ---
