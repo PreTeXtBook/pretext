@@ -8905,12 +8905,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <statement>
                         <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
-                        <p><fillin mode="string" correct="int"/> <c>age = </c> <fillin mode="number" correct="5"/><c>;</c></p>
+                        <p><fillin mode="string" answer="int"/> <c>age = </c> <fillin mode="number" answer="5"/><c>;</c></p>
                     </statement>
                     <evaluation>
                         <evaluate>
                             <test>
-                                <strcmp use-correct='yes'/>
+                                <strcmp use-answer='yes'/>
                                 <feedback>
                                   <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
                                 </feedback>
@@ -8924,7 +8924,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </evaluate>
                         <evaluate>
                             <test>
-                                <numcmp use-correct='yes'/>
+                                <numcmp use-answer='yes'/>
                                 <feedback>
                                     <p>An integer variable may be initialized to a value.</p>
                                 </feedback>
@@ -8942,25 +8942,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise label="dynamic-fitb-simple-formula">
                     <title>Fill-In Formula (Dynamic)</title>
                     <statement>
-                        <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval expr="x1"/></m>,  <m>x=<eval expr="x2"/></m>, and <m>x=<eval expr="x3"/></m> and so that <m>f(0)=<eval expr="y0"/></m>.</p>
-                        <p><m>f(x)=</m> <fillin name="st_cubic" mode="math-formula" correct="x3"/></p>
+                        <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
+                        <p><m>f(x)=</m> <fillin name="st_cubic" mode="math-formula" ansobj="x3"/></p>
                     </statement>
                     <solution>
                         <p>
                             Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form, 
-                            <me>f(x) = A <eval expr="base_cubic"/></me>
+                            <me>f(x) = A <eval obj="base_cubic"/></me>
                             with an unknown scaling multiple <m>A</m>.
                         </p>
                         <p>
                             When we evaluate <m>f(x)</m> at <m>x=0</m> using this formula, we find
-                            <me>f(0) = <eval expr="base_yint"/>A</me>.
-                            Since we also know <m>f(0)=<eval expr="y0"/></m>, we can write down the equation
-                            <me>A <eval expr="base_cubic"/> = <eval expr="y0"/></me>
-                            and find that <m>A=<eval expr="A"/></m>.
+                            <me>f(0) = <eval obj="base_yint"/>A</me>.
+                            Since we also know <m>f(0)=<eval obj="y0"/></m>, we can write down the equation
+                            <me>A <eval obj="base_cubic"/> = <eval obj="y0"/></me>
+                            and find that <m>A=<eval obj="A"/></m>.
                         </p>
                         <p>
                             Consequently, we can write our function in the form
-                            <me>f(x)=<eval expr="cubic"/></me>.
+                            <me>f(x)=<eval obj="cubic"/></me>.
                         </p>
                     </solution>
                     <setup seed="314159">
@@ -8977,38 +8977,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <de-random distribution="discrete" min="1" max="4" by="1"/>
                         </de-object>
                         <de-object name="x2" context="number">
-                            <de-number>{{x1}}+{{d1}}</de-number>
+                            <de-number>x1+d1</de-number>
                         </de-object>
                         <de-object name="x3" context="number">
-                            <de-number>{{x2}}+{{d2}}</de-number>
+                            <de-number>x2+d2</de-number>
                         </de-object>
                         <de-object name="base_cubic" context="formula">
-                            <de-expression>(x-{{x1}})*(x-{{x2}})*(x-{{x3}})</de-expression>
+                            <de-expression>(x-x1)*(x-x2)*(x-x3)</de-expression>
                         </de-object>
                         <de-object name="base_yint" context="number">
                             <de-evaluate>
-                                <formula><eval expr="base_cubic"/></formula>
+                                <formula><eval obj="base_cubic"/></formula>
                                 <variable name="x">0</variable>
                             </de-evaluate>                            
                         </de-object>
                         <de-object name="A" context="number">
-                            <de-number>{{y0}}/{{base_yint}}</de-number>
+                            <de-number>y0/base_yint</de-number>
                         </de-object>
                         <de-object name="cubic" context="formula">
-                            <de-expression>{{A}}*(x-{{x1}})*(x-{{x2}})*(x-{{x3}})</de-expression>
+                            <de-expression>A*(x-x1)*(x-x2)*(x-x3)</de-expression>
                         </de-object>
                     </setup>
                     <evaluation>
                         <evaluate name="st_cubic">
                             <test correct="yes">
-                                <mathcmp expr="cubic"/>
-                            </test>
-                            <test>
-                                <mathcmp>
-                                    <de-expression>x+1</de-expression>
-                                    <eval expr="ans"/>
-                                </mathcmp>
-                                <feedback>Short</feedback>
+                                <mathcmp obj="cubic"/>
                             </test>
                         </evaluate>
                     </evaluation>
@@ -9017,20 +9010,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Decompose the Function</title>
                     <statement>
                         <p>
-                        Consider the function <me>h(x)=<eval expr="composition"/></me>.
+                        Consider the function <me>h(x)=<eval obj="composition"/></me>.
                         Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
                         </p>
                         <p>
-                        <m>f(x) = </m> <fillin width="15" mode="math-formula" correct="outerFormula" name="fGiven"/> 
-                        and <m>g(x)=</m> <fillin width="15" mode="math-formula" correct="innerFormula" name="gGiven"/>
+                        <m>f(x) = </m> <fillin width="15" mode="math-formula" ansobj="outerFormula" name="fGiven"/> 
+                        and <m>g(x)=</m> <fillin width="15" mode="math-formula" ansobj="innerFormula" name="gGiven"/>
                         </p>
                     </statement>
                     <solution>
                         <p>
-                        Noticing that the expression <m><eval expr="innerFormula"/></m> appears inside parentheses with a power,
-                        it makes sense to think of that as the inner function, defining <m>g(x) = <eval expr="innerFormula"/></m>.
+                        Noticing that the expression <m><eval obj="innerFormula"/></m> appears inside parentheses with a power,
+                        it makes sense to think of that as the inner function, defining <m>g(x) = <eval obj="innerFormula"/></m>.
                         The outer function describes what happens to that.
-                        If we imagined replacing the formula <m><eval expr="innerFormula"/></m> with a box and then call that box our variable <m>x</m>, we find the outer function is given by <m>f(x) = <eval expr="outerFormula"/></m>.
+                        If we imagined replacing the formula <m><eval obj="innerFormula"/></m> with a box and then call that box our variable <m>x</m>, we find the outer function is given by <m>f(x) = <eval obj="outerFormula"/></m>.
                         </p>
                         <p>
                         This is not the only non-trivial composition. Can you find others?
@@ -9053,78 +9046,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
                         </de-object>
                         <de-object name="outerFormula" context="formula">
-                            <de-expression>{{a}}*x^{{n}}+{{b}}</de-expression>
+                            <de-expression>a*x^n+b</de-expression>
                         </de-object>
                         <de-object name="innerFormula" context="formula">
-                            <de-expression>{{c}}*x+{{d}}</de-expression>
+                            <de-expression>c*x+d</de-expression>
                         </de-object>
                         <de-object name="identityFunction" context="formula">
                             <de-expression>x</de-expression>
                         </de-object>
                         <de-object name="composition" context="formula">
                             <de-expression mode="substitution">
-                                <formula><eval expr="outerFormula"/></formula>
-                                <variable name="x"><eval expr="innerFormula"/></variable>
+                                <formula><eval obj="outerFormula"/></formula>
+                                <variable name="x"><eval obj="innerFormula"/></variable>
                             </de-expression>
                         </de-object>
                     </setup>
                     <evaluation answers-coupled="yes">
                         <evaluate name="fGiven">
                             <test>
-                                <mathcmp expr="identityFunction"/>
+                                <mathcmp obj="identityFunction"/>
                                 <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
                             </test>
                             <test>
-                                <logical op="and">
-                                    <logical op="not">
+                                <logic op="and">
+                                    <logic op="not">
                                         <mathcmp>
-                                            <eval expr="composition"/>
+                                            <eval obj="composition"/>
                                             <de-expression context="formula" mode="substitution">
-                                                <formula><eval expr="fGiven"/></formula>
-                                                <variable name="x"><eval expr="gGiven"/></variable>
+                                                <formula><eval obj="fGiven"/></formula>
+                                                <variable name="x"><eval obj="gGiven"/></variable>
                                             </de-expression>
                                         </mathcmp>
-                                    </logical>
+                                    </logic>
                                     <mathcmp>
-                                        <eval expr="composition"/>
+                                        <eval obj="composition"/>
                                         <de-expression context="formula" mode="substitution">
-                                            <formula><eval expr="gGiven"/></formula>
-                                            <variable name="x"><eval expr="fGiven"/></variable>
+                                            <formula><eval obj="gGiven"/></formula>
+                                            <variable name="x"><eval obj="fGiven"/></variable>
                                         </de-expression>
                                     </mathcmp>
-                                </logical>
+                                </logic>
                                 <feedback>You have composed in the wrong order.</feedback>
                             </test>
                         </evaluate>
                         <evaluate name="gGiven">
                             <test>
-                                <mathcmp expr="identityFunction"/>
+                                <mathcmp obj="identityFunction"/>
                                 <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
                             </test>
                         </evaluate>
                         <evaluate all="yes">
                             <test correct="yes">
-                                <logical op="and">
+                                <logic op="and">
                                     <mathcmp>
-                                        <eval expr="composition"/>
+                                        <eval obj="composition"/>
                                         <de-expression context="formula" mode="substitution">
-                                            <formula><eval expr="fGiven"/></formula>
-                                            <variable name="x"><eval expr="gGiven"/></variable>
+                                            <formula><eval obj="fGiven"/></formula>
+                                            <variable name="x"><eval obj="gGiven"/></variable>
                                         </de-expression>
                                     </mathcmp>
-                                    <logical op="not">
+                                    <logic op="not">
                                         <mathcmp>
-                                            <eval expr="fGiven"/>
-                                            <eval expr="identityFunction"/>
+                                            <eval obj="fGiven"/>
+                                            <eval obj="identityFunction"/>
                                         </mathcmp>
-                                    </logical>
-                                    <logical op="not">
+                                    </logic>
+                                    <logic op="not">
                                         <mathcmp>
-                                            <eval expr="gGiven"/>
-                                            <eval expr="identityFunction"/>
+                                            <eval obj="gGiven"/>
+                                            <eval obj="identityFunction"/>
                                         </mathcmp>
-                                    </logical>
-                                </logical>
+                                    </logic>
+                                </logic>
                                 <feedback>Excellent!</feedback>
                             </test>
                         </evaluate>
