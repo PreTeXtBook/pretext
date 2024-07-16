@@ -356,11 +356,6 @@ dfn {
 <xsl:template match="slide">
     <section>
           <h3>
-              <xsl:if test="@source-number">
-                <xsl:value-of select="@source-label"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="@source-number"/>:
-              </xsl:if>
               <xsl:apply-templates select="." mode="title-full" />
           </h3>
           <div align="left">
@@ -504,7 +499,8 @@ dfn {
 <xsl:template match="definition">
   <div class="boxed definition">
     <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
+      <xsl:apply-templates select="." mode="type-name" />
+      <xsl:text> </xsl:text>
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
     <xsl:apply-templates select="statement"/>
@@ -516,14 +512,8 @@ dfn {
   <div class="theorem">
   <div>
     <h3>
-      <xsl:choose>
-      <xsl:when test="@source-number">
-        <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="type-name" />:
-      </xsl:otherwise>
-    </xsl:choose>
+      <xsl:apply-templates select="." mode="type-name" />:
+      <xsl:text> </xsl:text>
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
       <xsl:apply-templates select="statement"/>
@@ -539,7 +529,8 @@ dfn {
 <xsl:template match="example|activity|note">
   <div class="activity">
     <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
+      <xsl:apply-templates select="." mode="type-name" /> 
+      <xsl:text> </xsl:text>
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
       <xsl:apply-templates />
@@ -549,7 +540,8 @@ dfn {
 <xsl:template match="fact">
   <div class="definition">
     <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
+      <xsl:apply-templates select="." mode="type-name" />
+      <xsl:text> </xsl:text>
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
       <xsl:apply-templates/>
