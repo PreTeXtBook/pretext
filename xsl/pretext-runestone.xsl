@@ -1945,6 +1945,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:attribute>
+							<xsl:if test="@stdin">
+								<xsl:attribute name="data-stdin">
+									<xsl:value-of select="@stdin"/>
+								</xsl:attribute>
+							</xsl:if>
+
                             <!-- allow @datafile attribute on <program> -->
                             <xsl:if test="@datafile">
                                 <!-- multiple files, coma- or space- separated -->

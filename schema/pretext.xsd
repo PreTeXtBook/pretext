@@ -1166,6 +1166,7 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="highlight-lines"/>
+	  <xs:attribute name="stdin"/>
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">
