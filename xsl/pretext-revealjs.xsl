@@ -501,9 +501,6 @@ dfn {
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="definition" mode="type-name">
-  <xsl:text>Definition</xsl:text>
-</xsl:template>
 <xsl:template match="definition">
   <div class="boxed definition">
     <h3>
@@ -515,18 +512,6 @@ dfn {
 </xsl:template>
 
 
-<xsl:template match="theorem" mode="type-name">
-  <xsl:text>Theorem</xsl:text>
-</xsl:template>
-<xsl:template match="corollary" mode="type-name">
-  <xsl:text>Corollary</xsl:text>
-</xsl:template>
-<xsl:template match="lemma" mode="type-name">
-  <xsl:text>Lemma</xsl:text>
-</xsl:template>
-<xsl:template match="proposition" mode="type-name">
-  <xsl:text>Proposition</xsl:text>
-</xsl:template>
 <xsl:template match="theorem|corollary|lemma|proposition">
   <div class="theorem">
   <div>
@@ -551,15 +536,6 @@ dfn {
 </div>
 </xsl:template>
 
-<xsl:template match="example" mode="type-name">
-  <xsl:text>Example</xsl:text>
-</xsl:template>
-<xsl:template match="activity" mode="type-name">
-  <xsl:text>Activity</xsl:text>
-</xsl:template>
-<xsl:template match="note" mode="type-name">
-  <xsl:text>Note</xsl:text>
-</xsl:template>
 <xsl:template match="example|activity|note">
   <div class="activity">
     <h3>
@@ -570,9 +546,6 @@ dfn {
   </div>
 </xsl:template>
 
-<xsl:template match="fact" mode="type-name">
-  <xsl:text>Fact</xsl:text>
-</xsl:template>
 <xsl:template match="fact">
   <div class="definition">
     <h3>
