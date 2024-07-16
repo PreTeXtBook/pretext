@@ -794,6 +794,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:for-each select="ancestor::exercise/setup/var/condition[1]/feedback">
             <xsl:apply-templates select="node()" mode="fillin-solution"/>
         </xsl:for-each>
+        <xsl:for-each select=".//fillin[@answer]">
+            <xsl:variable name="fillin-name" select="@name"/>
+            <xsl:choose>
+                <!-- If #evaluate matches by name, find feedback on a correct result -->
+                <xsl:when test="ancestor::exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']">
+                    <xsl:apply-templates select="ancestor::exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
+                </xsl:when>
+                <!-- Otherwise #evaluate matches by order, find feedback on a correct result -->
+                <xsl:when test="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']">
+                    <xsl:apply-templates select="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:for-each>
     </solution>
 </xsl:template>
 
@@ -817,6 +830,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$setup-var/condition[1]/@string">
             <xsl:value-of select="$setup-var/condition[1]/@string"/>
         </xsl:when>
+    </xsl:choose>
+    <fillin characters="1"/>
+</xsl:template>
+
+<!-- Fill-In the Blanks (Complete) -->
+
+<xsl:template match="*[@exercise-interactive = 'fillin']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="statement/preceding-sibling::*"/>
+    <!-- reproduce statement identically, but replace var w/ fillin -->
+    <xsl:apply-templates select="statement" mode="fillin-statement"/>
+    <!-- Any authored hints, answers, solutions, not derived from   -->
+    <!-- problem formulation. *Before* automatic ones, so numbering -->
+    <!-- matches interactive versions on authored ones.             -->
+    <xsl:copy-of select="hint"/>
+    <xsl:copy-of select="answer"/>
+    <xsl:choose>
+        <xsl:when test="solution[@include-automatic='no']">
+            <xsl:copy-of select="solution"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="statement" mode="fillin-solution"/>
+            <xsl:copy-of select="solution"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Fillin Statement -->
+<xsl:template match="fillin" mode="fillin-statement">
+    <fillin>
+        <xsl:attribute name="characters">
+            <xsl:choose>
+                <xsl:when test="@width">
+                    <xsl:value-of select="@width"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- arbitrary default width -->
+                    <xsl:text>5</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+    </fillin>
+</xsl:template>
+
+<!-- Fillin complete solution -->
+<xsl:template match="fillin" mode="fillin-solution">
+    <!-- Correct answer is in @answer. -->
+    <fillin characters="1"/>
+    <xsl:choose>
+        <xsl:when test="@mode='math' or @mode='number'">
+            <m><xsl:value-of select="@answer"/></m>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@answer"/>
+        </xsl:otherwise>
     </xsl:choose>
     <fillin characters="1"/>
 </xsl:template>
