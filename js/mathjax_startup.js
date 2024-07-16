@@ -37,7 +37,7 @@ let mathJaxOpts = {
     "load": [
       //"ui/lazy", // Vastly speeds up time to visible content. But breaks embedded knowl parsing
       "input/asciimath",
-      "[tex]/extpfeil",
+      //"[tex]/extpfeil",  //remove backwards compatibility?
       "[tex]/amscd",
       "[tex]/color",
       "[tex]/newcommand",
