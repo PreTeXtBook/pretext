@@ -112,7 +112,7 @@ ul {
   border-radius: 2px 10px 2px;
   padding: 4px;
 }
-.definition-like,.theorem,.activity {
+.definition-like,.theorem,.project-like {
   border-width: 0.5px;
   border-style: solid;
   border-radius: 2px 10px 2px;
@@ -128,7 +128,7 @@ ul {
 .proof {
   background: #ffffff90;
 }
-.activity {
+.project-like {
   background: #60800010;
 }
 dfn {
@@ -512,17 +512,6 @@ dfn {
   </div>
 </xsl:if>
 </div>
-</xsl:template>
-
-<xsl:template match="example|activity|note">
-  <div class="activity">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> 
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates />
-  </div>
 </xsl:template>
 
 <xsl:template match="fact">
