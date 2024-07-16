@@ -112,14 +112,14 @@ ul {
   border-radius: 2px 10px 2px;
   padding: 4px;
 }
-.definition,.theorem,.activity {
+.definition-like,.theorem,.activity {
   border-width: 0.5px;
   border-style: solid;
   border-radius: 2px 10px 2px;
   padding: 1%;
   margin-bottom: 2em;
 }
-.definition {
+.definition-like {
   background: #00608010;
 }
 .theorem {
@@ -495,18 +495,6 @@ dfn {
         </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
-
-<xsl:template match="definition">
-  <div class="boxed definition">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" />
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-    <xsl:apply-templates select="statement"/>
-</div>
-</xsl:template>
-
 
 <xsl:template match="theorem|corollary|lemma|proposition">
   <div class="theorem">
