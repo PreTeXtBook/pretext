@@ -310,7 +310,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="$runestone-services/all/js/item[not($b-altrs-services)]|$altrs-js-tokens[$b-altrs-services]">
-        <script type="text/javascript">
+        <script defer="true" type="text/javascript">
             <xsl:attribute name="src">
                 <xsl:value-of select="$runestone-cdn"/>
                 <xsl:value-of select="."/>
