@@ -103,6 +103,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <script src="{$reveal-root}/plugin/math/math.js"></script>
 
           <!--  Some style changes from regular pretext-html -->
+          <!-- Note: the box around a "theorem" does not contain -->
+          <!-- the associated "proof" because the HTML does not  -->
+          <!-- provide an enclosure containing both.             -->
           <style>
 ul {
   display: block !important;
@@ -112,7 +115,7 @@ ul {
   border-radius: 2px 10px 2px;
   padding: 4px;
 }
-.definition-like,.theorem,.project-like {
+.definition-like,.theorem-like,.project-like {
   border-width: 0.5px;
   border-style: solid;
   border-radius: 2px 10px 2px;
@@ -122,10 +125,10 @@ ul {
 .definition-like {
   background: #00608010;
 }
-.theorem {
+.theorem-like {
   background: #ff000010;
 }
-.proof {
+.proof-like {
   background: #ffffff90;
 }
 .project-like {
@@ -494,35 +497,6 @@ dfn {
             <xsl:with-param name="width" select="$width" />
         </xsl:apply-templates>
     </xsl:element>
-</xsl:template>
-
-<xsl:template match="theorem|corollary|lemma|proposition">
-  <div class="theorem">
-  <div>
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" />:
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates select="statement"/>
-  </div>
-  <xsl:if test="&PROOF-LIKE;">
-  <div class="proof">
-    <xsl:apply-templates select="&PROOF-LIKE;"/>
-  </div>
-</xsl:if>
-</div>
-</xsl:template>
-
-<xsl:template match="fact">
-  <div class="definition">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" />
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates/>
-  </div>
 </xsl:template>
 
 <xsl:template match="xref">
