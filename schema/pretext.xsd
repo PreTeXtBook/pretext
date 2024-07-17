@@ -3200,6 +3200,7 @@
       <xs:choice>
         <xs:element ref="q"/>
         <xs:element ref="sq"/>
+        <xs:element ref="dblbrackets"/>
         <xs:element ref="angles"/>
         <xs:element ref="dblbrackets"/>
       </xs:choice>
@@ -3249,12 +3250,12 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="angles">
+  <xs:element name="dblbrackets">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="dblbrackets">
+  <xs:element name="angles">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
     </xs:complexType>
@@ -3457,6 +3458,8 @@
         <xs:element ref="rsq"/>
         <xs:element ref="rq"/>
         <xs:element ref="lq"/>
+        <xs:element ref="ldblbracket"/>
+        <xs:element ref="rdblbracket"/>
         <xs:element ref="langle"/>
         <xs:element ref="rangle"/>
       </xs:choice>
@@ -3507,6 +3510,12 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="lq">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ldblbracket">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="rdblbracket">
     <xs:complexType/>
   </xs:element>
   <xs:element name="langle">

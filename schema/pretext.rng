@@ -3753,6 +3753,9 @@
       <element name="sq">
         <ref name="TextLong"/>
       </element>
+      <element name="dblbrackets">
+        <ref name="TextLong"/>
+      </element>
       <element name="angles">
         <ref name="TextLong"/>
       </element>
@@ -3981,6 +3984,12 @@
         <empty/>
       </element>
       <element name="lq">
+        <empty/>
+      </element>
+      <element name="ldblbracket">
+        <empty/>
+      </element>
+      <element name="rdblbracket">
         <empty/>
       </element>
       <element name="langle">

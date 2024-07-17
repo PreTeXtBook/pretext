@@ -1476,6 +1476,7 @@
             Group |=
                 element q {TextLong} |
                 element sq {TextLong} |
+                element dblbrackets {TextLong} |
                 element angles {TextLong} |
                 element dblbrackets {TextLong}
                 
@@ -1566,6 +1567,8 @@
                 element rsq {empty} |
                 element rq {empty} |
                 element lq {empty} |
+                element ldblbracket {empty} |
+                element rdblbracket {empty} |
                 element langle {empty}|
                 element rangle {empty}
             
