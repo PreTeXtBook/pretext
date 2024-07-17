@@ -486,6 +486,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- run with none.  Part of                                          -->
     <!-- https://tex.stackexchange.com/questions/250165/                  -->
     <!-- normal-body-text-within-tcolorbox                                -->
+    <!-- In a similar fashion we save/restore the parskip, only should    -->
+    <!-- an ambitious publisher try to set it globally                    -->
     <xsl:text>%% Save default paragraph indentation and parskip for use later, when adjusting parboxes&#xa;</xsl:text>
     <xsl:text>\newlength{\normalparindent}&#xa;</xsl:text>
     <xsl:text>\newlength{\normalparskip}&#xa;</xsl:text>
