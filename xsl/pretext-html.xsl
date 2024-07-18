@@ -9657,7 +9657,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="ggbMaterialHeight">
-        <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
+        <xsl:choose>
+            <xsl:when test="@material-height">
+                <xsl:value-of select="@material-height"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <!-- iframe options not implemented: -->
     <!-- smb = show menu bar                   -->
@@ -9989,6 +9996,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="height">
         <xsl:apply-templates select="." mode="get-height-pixels" />
     </xsl:variable>
+    <xsl:variable name="material-width">
+        <xsl:choose>
+            <xsl:when test="@material-width">
+                <xsl:value-of select="@material-width"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$width"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="material-height">
+        <xsl:choose>
+            <xsl:when test="@material-height">
+                <xsl:value-of select="@material-height"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$height"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- We need a Javascript identifier to name the applet -->
     <xsl:variable name="applet-name">
         <xsl:apply-templates select="." mode="visible-id-no-dash" />
@@ -10082,9 +10109,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>width:</xsl:text><xsl:value-of select="$width" />
+        <xsl:text>width:</xsl:text><xsl:value-of select="$material-width" />
         <xsl:text>,&#xa;</xsl:text>
-        <xsl:text>height:</xsl:text><xsl:value-of select="$height" />
+        <xsl:text>height:</xsl:text><xsl:value-of select="$material-height" />
         <xsl:text>,&#xa;</xsl:text>
         <xsl:if test="normalize-space(text())">
             <xsl:text>appletOnLoad:</xsl:text>
