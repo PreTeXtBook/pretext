@@ -3510,15 +3510,12 @@
   <define name="Url">
     <element name="url">
       <attribute name="href"/>
-      <choice>
-        <group>
-          <attribute name="visual"/>
-          <ref name="TextShort"/>
-        </group>
-        <optional>
-          <attribute name="visual"/>
-        </optional>
-      </choice>
+      <optional>
+        <attribute name="visual"/>
+      </optional>
+      <optional>
+        <ref name="TextShort"/>
+      </optional>
     </element>
   </define>
   <define name="Xref">

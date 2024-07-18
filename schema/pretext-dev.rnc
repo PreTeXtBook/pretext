@@ -390,19 +390,6 @@
                     ConclusionDivision?
                 }
             
-            Url |=
-                element url {
-                    attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )| TextShort |
-                        (
-                        attribute visual {text}?
-                        )
-                    )
-                }
-            
             MathDisplay |=
                 element me {
                     MetaDataTarget?,

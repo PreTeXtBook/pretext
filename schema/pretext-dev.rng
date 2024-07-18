@@ -1019,21 +1019,6 @@
       </optional>
     </element>
   </define>
-  <define name="Url" combine="choice">
-    <element name="url">
-      <attribute name="href"/>
-      <choice>
-        <group>
-          <attribute name="visual"/>
-          <ref name="TextShort"/>
-        </group>
-        <ref name="TextShort"/>
-        <optional>
-          <attribute name="visual"/>
-        </optional>
-      </choice>
-    </element>
-  </define>
   <define name="MathDisplay" combine="choice">
     <choice>
       <element name="me">

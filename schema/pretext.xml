@@ -1246,13 +1246,8 @@
             Url =
                 element url {
                     attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )|(
-                        attribute visual {text}?
-                        )
-                    )
+                    attribute visual {text}?,
+                    TextShort?
                 }
             Xref =
                 element xref {
@@ -1323,29 +1318,6 @@
             </code>
         </fragment>
 
-    </section>
-
-    <section>
-        <title>References (experimental)</title>
-        <p>Here we collect experimental versions of reference-like elements.  Specifically, changes to Url, that only recommend a visual element when the URL element contains content.</p>
-
-        <fragment xml:id="reference-dev">
-            <title>References (experimental)</title>
-            <code>
-            Url |=
-                element url {
-                    attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )| TextShort |
-                        (
-                        attribute visual {text}?
-                        )
-                    )
-                }
-            </code>
-        </fragment>
     </section>
 
     <section>
