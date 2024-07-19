@@ -9692,6 +9692,56 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
 </xsl:template>
 
+
+<!-- Raw Bibliographic Entry Formatting              -->
+<!-- Markup really, not full-blown data preservation -->
+
+<!-- Title in italics -->
+<xsl:template match="biblio[@type='raw']/title">
+    <xsl:apply-templates select="." mode="italic">
+        <xsl:with-param name="content">
+            <xsl:apply-templates/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- No treatment for journal -->
+<xsl:template match="biblio[@type='raw']/journal">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Volume in bold -->
+<xsl:template match="biblio[@type='raw']/volume">
+    <xsl:apply-templates select="." mode="bold">
+        <xsl:with-param name="content">
+            <xsl:apply-templates/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='raw']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
+<!-- Number -->
+<xsl:template match="biblio[@type='raw']/number">
+    <xsl:text>no</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <xsl:call-template name="thin-space-character"/>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Ibid, nee ibidem, empty element -->
+<xsl:template match="biblio[@type='raw']/ibid">
+    <xsl:text>Ibid</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <!-- Generally has a trailing comma, so no thin space -->
+</xsl:template>
+
+
 <!-- Fully marked-up bibtex-style bibliographic entry formatting -->
 <!-- Current treatment assumes elements are in the correct order -->
 

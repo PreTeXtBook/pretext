@@ -9130,43 +9130,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x00F8;</xsl:text>
 </xsl:template>
 
-<!-- Raw Bibliographic Entry Formatting              -->
-<!-- Markup really, not full-blown data preservation -->
-
-<!-- Title in italics -->
-<xsl:template match="biblio[@type='raw']/title">
-    <i><xsl:apply-templates /></i>
-</xsl:template>
-
-<!-- No treatment for journal -->
-<xsl:template match="biblio[@type='raw']/journal">
-    <xsl:apply-templates />
-</xsl:template>
-
-<!-- Volume in bold -->
-<xsl:template match="biblio[@type='raw']/volume">
-    <b><xsl:apply-templates /></b>
-</xsl:template>
-
-<!-- Year in parentheses -->
-<xsl:template match="biblio[@type='raw']/year">
-    <xsl:text>(</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>)</xsl:text>
-</xsl:template>
-
-<!-- Number -->
-<xsl:template match="biblio[@type='raw']/number">
-    <xsl:text>no. </xsl:text>
-    <xsl:apply-templates />
-</xsl:template>
-
-<!-- Ibid, nee ibidem, handle TeX period idosyncracy, empty element -->
-<!-- A 3em dash is used for identical authors                       -->
-<xsl:template match="biblio[@type='raw']/ibid">
-    <xsl:text>Ibid.</xsl:text>
-</xsl:template>
-
 <!-- Implement abstract templates to support      -->
 <!-- formatting of bibliographic entries in HTML. -->
 
