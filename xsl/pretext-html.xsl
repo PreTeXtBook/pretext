@@ -10584,18 +10584,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- full page width and when revealed in a knowl it shrinks -->
     <!-- to fill available width.  In another application, the   -->
     <!-- width might come from an author's source.               -->
-    <div id="mom{generate-id()}wrap" style="width:100%;overflow:visible;position:relative">
+    <xsl:variable name="an-id">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <div id="mom{$an-id}wrap" style="width:100%;overflow:visible;position:relative">
         <!-- This preserves the aspect-ratio, and there is no       -->
         <!-- clipping.  Basically this says scale the iframe to     -->
         <!-- fill whatever width is available in the containing div -->
-        <iframe id="mom{generate-id()}" style="position:absolute;z-index:1;object-fit: contain; width: 100%" 
+        <iframe id="mom{$an-id}" style="position:absolute;z-index:1;object-fit: contain; width: 100%"
             frameborder="0" data-knowl-callback="sendResizeRequest">
             <xsl:attribute name="src">
                 <xsl:text>https://www.myopenmath.com/embedq2.php?id=</xsl:text>
                 <xsl:value-of select="@problem" />
                 <!-- can't disable escaping text of an attribute -->
                 <xsl:text>&amp;frame_id=mom</xsl:text>
-                <xsl:value-of select="generate-id()" />
+                <xsl:value-of select="$an-id" />
                 <xsl:if test="@params != ''">
                     <xsl:text>&amp;</xsl:text>
                     <xsl:value-of select="str:replace(@params, ',', '&amp;')" />
