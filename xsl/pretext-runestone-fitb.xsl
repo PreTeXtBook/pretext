@@ -15,6 +15,16 @@
 <!-- Actual rules for substution when generating HTML     -->
 <!-- ==================================================== -->
 
+<!-- These need to be replaced by localization calls.      -->
+<!-- Or maybe push localization strings to Runestone,      -->
+<!-- since this feedback is only useful in an interactive. -->
+<xsl:template match="*" mode="correct-feedback">
+    <p>Correct!</p>
+</xsl:template>
+
+<xsl:variable name="defaultIncorrectFeedback">
+    <p>Incorrect.</p>
+</xsl:variable>
 
 <!-- Convert fillin tag to an input element on the page -->
 <xsl:template match="exercise[@exercise-interactive='fillin']//fillin">
@@ -43,11 +53,6 @@
         </xsl:if>
     </xsl:element>
 </xsl:template>
-
-<xsl:variable name="defaultIncorrectResponse">
-    <xsl:value-of select="key(localization-key,'incorrect')"/>
-    <xsl:text>.</xsl:text>
-</xsl:variable>
 
 <!-- ========================================================= -->
 <!-- The Runestone element is based on JSON scripts describing -->
@@ -96,7 +101,7 @@
                                         <xsl:apply-templates select="." mode="html-id"/>
                                         <xsl:text>-substitutions</xsl:text>
                                     </xsl:attribute>
-                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
+                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|evaluation//feedback//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
                                 </div>
                             </xsl:if>
                         </xsl:with-param>
@@ -143,15 +148,7 @@
                         <xsl:with-param name="multiAns" select="$multiAns" />
                     </xsl:apply-templates>
                     <xsl:text>]</xsl:text>
-                    <xsl:text>,&#xa;"localize_feedback": ["</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'correct'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>!", "</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'incorrect'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>."]&#xa;}</xsl:text>
+                    <xsl:text>&#xa;}</xsl:text>
                 </script>
             </div>
             <xsl:text>&#xa;</xsl:text>
@@ -463,7 +460,9 @@
                     <xsl:text>);&#xa;}</xsl:text>
                 </xsl:when>
             </xsl:choose>
-            <xsl:text>, "feedback": ""}</xsl:text>
+            <xsl:text>, "feedback": "</xsl:text>
+            <!-- <xsl:apply-templates select="node()" mode="correct-feedback"/> -->
+            <xsl:text>"}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 
@@ -475,7 +474,9 @@
         </xsl:apply-templates>
     </xsl:for-each>
     <!-- Default feedback for the blank. Always evaluates true.   -->
-    <xsl:text>, {"feedback": ""}]</xsl:text>
+    <xsl:text>, {"feedback": "</xsl:text>
+    <xsl:value-of select="$defaultIncorrectFeedback"/>
+    <xsl:text>"}]</xsl:text>
 </xsl:template>
 
 <xsl:template match="test" mode="create-test-feedback">
@@ -489,14 +490,22 @@
         <xsl:with-param name="fillin" select="$fillin" />
     </xsl:apply-templates>
     <xsl:text>, "feedback": "</xsl:text>
-    <xsl:if test="feedback">
-        <!-- serialize HTML as text, then escape as JSON -->
-        <xsl:call-template name="escape-json-string">
-            <xsl:with-param name="text">
-                <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="feedback">
+            <!-- serialize HTML as text, then escape as JSON -->
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$b-correct">
+            <xsl:apply-templates select="." mode="correct-feedback"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$defaultIncorrectFeedback"/>
+        </xsl:otherwise>
+    </xsl:choose>
 <xsl:text>"}</xsl:text>
 </xsl:template>
 
