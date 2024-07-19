@@ -18,9 +18,9 @@
 <!-- These need to be replaced by localization calls.      -->
 <!-- Or maybe push localization strings to Runestone,      -->
 <!-- since this feedback is only useful in an interactive. -->
-<xsl:template match="*" mode="correct-feedback">
+<xsl:variable name="defaultCorrectFeedback">
     <p>Correct!</p>
-</xsl:template>
+</xsl:variable>
 
 <xsl:variable name="defaultIncorrectFeedback">
     <p>Incorrect.</p>
@@ -536,7 +536,7 @@
                 </xsl:when>
             </xsl:choose>
             <xsl:text>, "feedback": "</xsl:text>
-            <!-- <xsl:apply-templates select="node()" mode="correct-feedback"/> -->
+            <xsl:value-of select="$defaultCorrectFeedback"/>
             <xsl:text>"}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -576,7 +576,7 @@
             </xsl:call-template>
         </xsl:when>
         <xsl:when test="$b-correct">
-            <xsl:apply-templates select="." mode="correct-feedback"/>
+            <xsl:value-of select="$defaultCorrectFeedback"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$defaultIncorrectFeedback"/>
