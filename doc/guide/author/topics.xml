@@ -2180,6 +2180,130 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <idx><h>interactive exercises</h><h>fill-in </h></idx>
             <idx><h>exercise</h><h>interactive</h><h>fill-in </h></idx>
 
+            <p>A <term>fill-in-the-blank</term> problem allows the reader to submit free text that is evaluated for correctness. The signal for a fill-in problem is a <tag>statement</tag> containing a sequence of <tag>fillin</tag> elements with a sibling <tag>evaluation</tag> element. Randomized elements to appear in the statement and solution and to be used in evaluation of reader responses requires the presence of an additional <tag>setup</tag> element that is also a sibling to the <tag>statement</tag>. The presence of the <tag>setup</tag> provides the ability for the statement and evaluation of the responses to incorporate random, dynamically generated elements.</p>
+
+            <p>The body of the <tag>statement</tag> is the same as for any exercise-like statement, with the addition of two elements of markup. A <tag>fillin</tag> is placed at the location a blank would be required for the reader's response. Details for this element are described in the next paragraph. When the question includes a <tag>setup</tag>, content can reference the string or TeX representation of the object (if defined) by using a <tag>eval</tag> element, where the name of the object is provided by a <attr>object</attr> attribute.</p>
+
+            <p>The <tag>fillin</tag> element is required to have an <attr>answer</attr> attribute that contains an answer that would be evaluated as correct, in the case that the question has a known, static, valid answer, or an <attr>ansobj</attr> attribute that contains the variable name of a dynamically generated object representing a correct answer, in the case that the problem has an associated <tag>setup</tag>. In addition, the <tag>fillin</tag> is required to have a <c>@mode</c> that characterizes the mode by which the submitted answer will be parsed. Current possible modes are <c>string</c>, <c>number</c>, and <c>math</c> (only for the dynamic implementation). The <tag>fillin</tag> element may have a <attr>width</attr> attribute specifying the number of characters for the static-version blank. For questions that involve dynamic evaluation, a <attr>name</attr> attribute may be used to identify a variable name that will reference the reader's response during dynamic evaluation of <em>other</em> blanks. (A standard <c>ans</c> variable will always be available in the context of each individual response's evaluation.)</p>
+
+            <p>The <tag>evaluation</tag> block will have a sequence of <tag>evaluate</tag> elements, one associated with each of the corresponding <tag>fillin</tag> elements appearing in the <tag>statement</tag>. By default, the association is by order. If each <tag>fillin</tag> has an associated <attr>name</attr>, the association does not need to be in order. Within each <tag>evaluate</tag> element, there will be a sequence of <tag>test</tag> elements that define a comparison rule for the test and the associated feedback provided when the test evaluates as true. Default behavior is that the <attr>answer</attr> or <attr>ansobj</attr> attribute of the corresponding <tag>fillin</tag> is used for comparison to evaluate a correct response. If the author wishes to override this default or wishes to provide specific feedback for a correct response which will also be used for the automatic solution for static versions, the author will identify one <tag>test</tag> element with the attribute <attr>correct="yes"</attr>.</p>
+
+            <p>Within each <tag>test</tag>, the author needs to specify which type of comparison will be used. For non-dynamic questions, three comparisons are available: <tag>numcmp</tag>, <tag>strcmp</tag>, and <tag>jscmp</tag>. For dynamic questions that include <tag>setup</tag>, additional options include <tag>mathcmp</tag> comparisons involving math objects and <tag>logic</tag> elements to construct more complex boolean tests involving these objects, described later. Feedback that is provided to the reader when the comparison is true, beyond saying the response is correct/incorrect, is provided in a <tag>feedback</tag> element which can itself contain structured <pretext/> text including <tag>eval</tag> elements to reference dynamically generated objects.</p>
+
+            <p>A <tag>numcmp</tag> and a <tag>strcmp</tag> can specify that the comparison should be to match the provided answer for the corresponding <tag>fillin</tag> by including the attribute <attr>use-answer="yes"</attr>. Otherwise, these comparisons must specify the value being compared. A <tag>numcmp</tag> provides this with an attribute <attr>value</attr> that indicates the matching value. If the <tag>numcmp</tag> includes the optional <attr>tolerance</attr> attribute, any response in the range of from the given value plus or minus the tolerance will be accepted. Alternatively, the <tag>numcmp</tag> can directly provide a <attr>min</attr> and <attr>max</attr> attribute to specify an arbitrary interval. A <tag>strcmp</tag> that does not include the <attr>use-answer</attr> will have content that defines a matching string or more generally a matching regular-expression. By default, <pretext/> augments the provided string to match the entire response after stripping leading and trailing white space. The attribute <attr>strip="no"</attr> overrides this behavior so that, for example, the match can look for the presence of a pattern within the response rather than matching the entire response. In addition, the attribute <attr>case="insensitive"</attr> makes the regular expression ignore case during the comparison.</p>
+
+            <p>A comparison involving <tag>jscmp</tag> allows the author to provide arbitrary Javascript code that will evaluate to either true/false or a string containing feedback for a valid match, where the reader's evaluated response is available as a variable <c>ans</c> and all of the reader's responses are in an array <c>ans_array</c>. This allows custom evaluation that can allow the evaluation of one blank to depend on what was answered in another blank. The Javascript is evaluated in the context of a local, anonymous function. Nevertheless, the author should take care that no commands are included that invoke mutable side-effects.</p>
+
+            <p>To create dynamic, randomizable versions of a fill-in-the-blank question, a <tag>setup</tag> element is required as a sibling of the <tag>statement</tag> and <tag>evaluation</tag> elements. For the interactive version of these questions, the problem will created with a random number generator initialized with a seed that is stored by the Runestone Component for the reader. This results in the reader seeing the same version the next time they open the question. A button allowing the reader to request a new randomized version changes the seed and regenerates the question. Static representations need to provide consistent versions each time, so the <tag>setup</tag> requires a <attr>seed</attr> attribute.</p>
+
+            <p>Within the <tag>setup</tag>, the author provides statements that will initialize Javascript objects that will be accessible in the <tag>statement</tag>, <tag>solution</tag>, and <tag>evaluation</tag> elements. The author can provide Javascript code within a <tag>setupScript</tag> child of the <tag>setup</tag>. It is likely that the script contents will need to be escaped to avoid XML conflicts, for example by individually escaping problematic characters or surrounding the code with <c>&lt;![CDATA[...]]&gt;</c>. In the context in which the script runs, there is an object <c>v</c> representing the dynamic variable namespace. Any object that the author wants to access should be created as a member of that object, such as <c>v.myObject = ...</c>. The name <c>myObject</c> could then be used (without reference to <c>v</c>) in an <attr>ansobj</attr> attribute of a <tag>fillin</tag>, in an <attr>object</attr> attribute of an <tag>eval</tag> or directly in a <tag>jscmp</tag> comparison.</p>
+
+            <p>To provide randomization, a random number generator based on the current seed is available in the <tag>setupScript</tag> using the object name <c>RNG</c>. The <c>RNG</c> object includes the following methods for generating various types of random values.
+                <ol>
+                    <li><c>RNG.random()</c>: Uniform random values between <m>0</m> and <m>1</m>.</li>
+                    <li><c>RNG.randSign()</c>: Random values <m>+1</m> and <m>-1</m>.</li>
+                    <li><c>RNG.randInt(a,b)</c>: Random integer from <m>a,a+1,a+2,\ldots,b</m>.</li>
+                    <li><c>RNG.randUniform(a,b)</c>: Random floating value <m>a &lt; x &lt; b</m>.</li>
+                    <li><c>RNG.randDiscrete(a,b,dx,nonzero)</c>: Random value <m>x</m> from <m>a,a+dx,a+2dx,\ldots</m> with <m>x \le b</m>. If <c>nonzero=true</c> (optional parameter), then <m>x=0</m> is excluded.</li>
+                </ol>
+            Using this generator will ensure that subsequent visits by the reader to the question will see the same version.</p>
+
+            <p>If the author wishes for reader responses to be parsed to assess format prior to evaluating correctness, <tag>setupScript</tag> should include a declaration of an entry <c>v.types</c>. The value can either be a single parser function applied to all blanks or an array of separate parser functions, one for each <tag>fillin</tag>. A parser function takes a string representing the response for the blank and returns the parsed object. If there is an error in the structure of the response, the function should <c>throw new TypeError(errMsg)</c>, and the <c>errMsg</c> will be provided as feedback for the response without performing any of the tests.</p>
+
+            <p>The Runestone Component that implements interactivity takes the HTML generated from the <tag>statement</tag> after the <tag>setup</tag> is processed and performs substitutions of any <tag>eval</tag> elements. The recomputed HTML is then inserted into live webpage. A <tag>postRenderScript</tag> entry in <tag>setup</tag> can be used as a second script that runs as a call-back after this substitution occurs. Such a script would be useful if the script requires access to the actual webpage elements and not just defining objects for the evaluation context.</p>
+
+            <paragraphs>
+                <title>Math Objects in Dynamic Problems</title>
+
+                <p>A Javascript library that supports some mathematical objects in the dynamic setup and evaluation of fill-in-the-blank problems. In order to access these objects, an XML-interface is provided to interact with the objects in the <tag>setup</tag> and <tag>evaluation</tag> elements. Any <tag>fillin</tag> elements expecting to parse as mathematical objects should use <attr>mode="math"</attr> and assign <attr>ansobj</attr> to the name of a dynamic expression object created in <tag>setup</tag> that represents a correct answer.</p>
+
+                <p>For the <tag>setup</tag> stage, a sequence of <tag>de-object</tag> elements can be used to define mathematical dynamic expression objects. Each <tag>de-object</tag> will have a <attr>name</attr> attribute representing the object name. The mathematical nature of the <tag>de-object</tag> is indicated with a <attr>context</attr> attribute. Currently supported expression types are to represent numbers using <attr>context="number"</attr> and formulas using <attr>context="formula"</attr>.</p>
+
+                <p> The content of the <tag>de-object</tag> element is an XML element that defines the actual expression. The following choices are available, described in the following paragraphs:
+                <ol>
+                    <li><tag>de-random</tag>: create a randomly generated number</li>
+                    <li><tag>de-number</tag>: create a number by providing its value or formula</li>
+                    <li><tag>de-expression</tag>: create an expression or formula involving variables by directly providing a formula or by performing a substitution or a derivative on a previously-defined expression object</li>
+                    <li><tag>de-evaluate</tag>: create a number by evaluating an expression object by replacing each variable with a specified number value</li>
+                </ol>
+                As elements are defined in sequence, formulas used at any stage may include the name of any previously generated object as a valid symbol in the formula.</p>
+
+                <p>To define a random number, use a <tag>de-random</tag> element. The same random number generation routines provided by the <c>RNG</c> object are accessible through this element using a <attr>distribution</attr> attribute and additional attributes for the distribution parameters, some of which come with default values.
+                <ol>
+                    <li><attr>distribution="uniform"</attr>: Parameters are <attr>min=0</attr>, <attr>max=1</attr> as decimal values. Gives a value from the interval <m>(\mathrm{min},\mathrm{max}</m>.</li>
+                    <li><attr>distribution="sign"</attr>: No parameters. Gives <m>\pm 1</m> as possible values.</li>
+                    <li><attr>distribution="integer"</attr>: Parameters are <attr>min</attr>, <attr>max</attr> as integer values. Value is an integer chosen inclusively between <m>\mathrm{min}</m> and <m>\mathrm{max}</m>.</li>
+                    <li><attr>distribution="discrete"</attr>: Parameters include <attr>min</attr>, <attr>max</attr>, <attr>by="1"</attr>, and <attr>nonzero="yes"</attr>. Values chosen from the sequence <m>\mathrm{min} + k \cdot \mathrm{by}</m>, <m>k=0, 1, 2, \ldots</m> that are not greater than <m>\mathrm{max}</m>.</li>
+                </ol>
+                In practice, all distributions can be obtained using just the uniform and discrete distributions.</p>
+
+                <p>To define a number by formula, including defining rational numbers as fractions, use a <tag>de-number</tag> element. The content of the element should be a single number or a formula that results in a constant value. Symbols of previously defined numbers as well as mathematical constants like <c>pi</c> or <c>e</c> may be part of the formula. Any undefined symbols will result in an error.</p>
+
+                <p>To define an expression using a formula that might involve variables, use a <tag>de-expression</tag> with <attr>mode="formula"</attr>. The content of the element can be a mathematical formula that includes both numbers and variables. Previously defined numbers and expressions can be used in the formula by referencing their object name.</p>
+
+                <p>To define an expression that is the partial derivative of another expression with respect to a variable, use <tag>de-expression</tag> with <attr>mode="derivative</attr>. Such an expression must have a <tag>formula</tag> child that contains an object representing the original expression. The content can be either a <tag>eval</tag> with <attr>object</attr> to reference a previously-defined object or a separate <tag>de-expression</tag> defining an expression not saved as a separate object. In addition, the element must contain a <tag>variable</tag> element with <attr>name</attr> indicating the name of the variable of differentiation.</p>
+
+                <p>Formula evaluation and substitution follow a similar pattern. Formula evaluation to compute a number is performed with a <tag>de-evaluate</tag> element, which requires that every variable in the expression is assigned a specific numerical value. Formula substitution is like function composition and allows for any subset of the involved variables to be assigned either number or expression values and uses <tag>de-expression</tag> with <attr>mode="substitution"</attr>. In either event, the element requires a <tag>formula</tag> child element to specify a starting expression using a <tag>eval</tag> element to specify a previously-defined <tag>de-object</tag> or a <tag>de-expression</tag> element to generate a new formula expression. For each variable that will be replaced by a value or another expression, we will include a <tag>variable</tag> with <attr>name</attr> specifying which variable is being replaced. The content of the <tag>variable</tag> element can be an <tag>eval</tag> to reference an existing object or any of the elements that can be used to generate a <tag>de-object</tag>.</p>
+
+                <p>For the <tag>evaluation</tag> block, two comparison elements are accessible<mdash/><tag>mathcmp</tag> for testing whether two math objects are equivalent and <tag>logic</tag> for constructing compound tests involving simple Boolean logical operations. The <tag>mathcmp</tag> comparison is performed by numerically evaluating the two expressions being compared over a range of values for each variable present and verifying that they are numerically within a comparison tolerance.</p>
+
+                <p>To compare the reader's submitted response to the provided correct answer with <tag>mathcmp</tag>, use <attr>use-answer="yes"</attr>. To compare the submitted response to any other object, the <tag>mathcmp</tag> element should have a single evaluated math object as content, which could include a newly generated expression using <tag>de-expression</tag> that is based on the submitted responses. To compare two different math objects, the <tag>mathcmp</tag> should have two math objects. For convenience, there are some implicit representations available as well, illustrated in <xref ref="list-mathcmp-expressions-structure"/>.</p>
+
+                <listing xml:id="list-mathcmp-expressions-structure">
+                    <program>
+                        <input><![CDATA[
+                            <!-- Compare submitted response with fillin answer -->
+                            <mathcmp use-answer="yes"/>
+        
+                            <!-- Compare submitted response with pre-computed object -->
+                            <mathcmp obj="objName"/>
+        
+                            <!-- Compare submitted response with pre-computed object (alternate) -->
+                            <mathcmp>
+                              <eval obj="objName"/>
+                            </mathcmp
+        
+                            <!-- Implicit mathcmp with submitted response (alternate) -->
+                            <eval obj="objName"/>
+        
+                            <!-- Compare submitted response with newly generated object -->
+                            <mathcmp>
+                              <de-expression/>
+                            </mathcmp>
+        
+                            <!-- Implicit mathcmp with submitted response (alternate) -->
+                            <de-expression/>
+        
+                            <!-- Compare with newly generated object with pre-computed object -->
+                            <mathcmp>
+                              <de-expression/>
+                              <eval obj="objName"/>
+                            </mathcmp>
+        
+                            <!-- Compare two newly generated objects -->
+                            <mathcmp>
+                              <de-expression/>
+                              <de-expression/>
+                            </mathcmp>
+                        ]]>
+                        </input>
+                    </program>
+                    <caption>Possible structures for using <tag>mathcmp</tag> within a <tag>test</tag>. The <tag>de-expression</tag> would be replaced by any valid construction as described for the <tag>setup</tag>.</caption>
+                </listing>
+
+                <p>Compound logical structures are created using the <tag>logic</tag> element in the place of a comparison. To specify which operation is being used, the <attr>op</attr> attribute is set to one of <attr>op="and"</attr>, <attr>op="or"</attr>, or <attr>op="not"</attr>. The operations are considered <m>n</m>-ary, meaning that the contents should be one or more comparison elements, which might include additional logic. The <attr>op="and"</attr> will evaluate as true when <em>all</em> of the children comparisons evaluate as true. The <attr>op="or"</attr> will evaluate as true when <em>at least one</em> of the children comparisons evaluates as true. The <attr>op="not"</attr> is technically implemented as the negation of <attr>op="and"</attr>, and so will evaluate as true when <em>at least one</em> of the children comparisons evaluates as <em>false</em>. In the absence of any <tag>logic</tag>, there is always an implicit <attr>op="and"</attr> so that any sequence of comparisons within a single <tag>test</tag>, all comparisons are required to evaluate as true.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Static Representations</title>
+
+                <p>A static version will include an automatic <tag>solution</tag> which <q>fills in</q> each blank with the correct answer that is provided by the <tag>fillin</tag>. The feedback text specified in the <tag>evaluation</tag> that associated with a correct response for each of the <tag>fillin</tag> blanks are then provided in sequence. Consequently, the author should ensure that the feedback for a <tag>test</tag> with <attr>correct="yes"</attr> makes sense in the context of a back-of-the-book solution and not just as immediate feedback in an interactive setting.</p>
+
+                <p>If the author provides an optional <tag>solution</tag> element, this text will also be included as a solution. This solution may contain <tag>eval</tag> elements in the same manner as described for the <tag>statement</tag> element. The automatic solution can be disabled by including <attr>include-automatic="no"</attr> as an attribute of the <tag>solution</tag>.</p>
+
+                <p>To build the static version, <pretext/> needs to generate the dynamic substitution rules. Each dynamic question that includes <tag>setup</tag> is processed using its corresponding static seed to evaluate the potential substitutions. The resulting substitutions are stored in one of the generated files. Using the <pretext/>-CLI, the substitution file is generated using the command <c>pretext generate dynamic-subs -t static-target</c> where <c>static-target</c> is replaced by a static project target such as PDF.</p>
+            </paragraphs>
+
             <p>As of 2022-06-14 a major effort is underway to provide comprehensive markup for <term>fill-in-the-blank</term> problems.  Until then, there is transitional markup intended only to supply a migration path for projects originally authored for Runestone servers (<xref ref="runestone"/>).  So (a) our documentation is sparse, and (b) there will be no backward-compatible improvements.  So in particular, new projects should wait for the new markup.  Also, studying examples may be a useful way to augment what is described here.</p>
 
             <p>A <tag>statement</tag> is enriched with empty <tage>var</tage> elements which will render as the blanks in the problem.</p>

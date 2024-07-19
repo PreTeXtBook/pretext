@@ -460,7 +460,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
 <!-- ##################################################### -->
-<xsl:template match="setup[de-object|postSetupScript]|evaluation" mode="dynamic-substitution">
+<xsl:template match="setup[de-object|postSetupScript]" mode="dynamic-substitution">
     <xsl:if test="$exercise-style = 'dynamic'">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
@@ -468,23 +468,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="eval[@expr]" mode="dynamic-substitution">
+<!-- <xsl:template match="evaluation" mode="dynamic-substitution">
     <xsl:choose>
-        <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="$exercise-style = 'static'">
-            <xsl:variable name="parent-id" select="ancestor::exercise/@label">
-               <!--<xsl:apply-templates select="ancestor::exercise" mode="assembly-id" />-->
+            <evaluation/>
+        </xsl:when>
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+ -->
+<xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="parent-id">
+                <xsl:apply-templates select="ancestor::exercise/@label" />
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
-            <xsl:variable name="expression" select="@expr"/>
+            <xsl:variable name="object" select="@ansobj"/>
             <xsl:variable name="substitution">
-                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@expr=$expression]"/>
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
             </xsl:variable>
             <xsl:message>
                 <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
                 <xsl:value-of select="$parent-id"/>
                 <xsl:text>$</xsl:text>
-                <xsl:value-of select="$expression"/>
+                <xsl:value-of select="$object"/>
+                <xsl:text>=</xsl:text>
+                <xsl:value-of select="$substitution"/>
+            </xsl:message>
+            <xsl:copy>
+                <xsl:attribute name="answer">
+                    <xsl:value-of select="$substitution"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="@*|node()" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="eval[@obj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <!-- static, for multiple conversions, but primarily LaTeX -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="parent-id">
+               <xsl:apply-templates select="ancestor::exercise/@label" />
+            </xsl:variable>
+            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
+            <xsl:variable name="object" select="@obj"/>
+            <xsl:variable name="substitution">
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            </xsl:variable>
+            <xsl:message>
+                <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
+                <xsl:value-of select="$parent-id"/>
+                <xsl:text>$</xsl:text>
+                <xsl:value-of select="$object"/>
                 <xsl:text>=</xsl:text>
                 <xsl:value-of select="$substitution"/>
             </xsl:message>
@@ -2002,7 +2049,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- new dynamic fillin goes here, perhaps:                     -->
             <!-- statement//fillin[(@*|node()) and not(@characters|@fill)]? -->
-            <xsl:when test="statement[.//fillin and ancestor::exercise/evaluation]">
+            <xsl:when test="statement//fillin and evaluation">
                 <xsl:text>fillin</xsl:text>
             </xsl:when>
             <!-- only interactive programs make sense after a "statement" -->
@@ -2091,6 +2138,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                       |
