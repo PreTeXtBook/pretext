@@ -27,7 +27,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <appearance theme="solarized"/>
         <!-- these are "resources" defaults, but best for a sample -->
         <!-- @minified is not even necessary with @host = 'cdn'    -->
-        <resources host="cdn" minified="yes"/>
+        <resources host="cdn"/>
         <!-- display="yes" is the default so we can see arrows          -->
         <!-- tutorial="yes" is the default                              -->
         <!-- layout="bottom-right" is the default, "edges" is an option -->
