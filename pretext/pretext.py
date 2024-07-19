@@ -1059,26 +1059,29 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
             subst_xml = open(subst_file, "w")
             subst_xml.write("<xml>")
             # First index contains original baseurl of hosted site (not used)
-            for dynamic_exercise in dynamic_elements:
+            for dynamic_entry in dynamic_elements:
+                entries = dynamic_entry.split("\t")
+                dynamic_container = entries[0]
+                dynamic_task = entries[1]
                 # loaded page url containing interactive
-                input_page = os.path.join(baseurl, dynamic_exercise + ".html")
+                input_page = os.path.join(baseurl, dynamic_container + ".html")
 
                 # progress report
-                msg = 'extracting substitutions for exercise with identifier "{}" on page {}'
-                log.info(msg.format(dynamic_exercise, input_page))
+                msg = 'extracting substitutions for exercise-interactive with identifier "{}" on page {}'
+                log.info(msg.format(dynamic_task, input_page))
 
                 # goto page and wait for content to load
                 await page.goto(input_page, wait_until='domcontentloaded')
                 await page.wait_for_timeout(1000)
                 # see what Runestone substituted into the expressions
-                xpath = "//div[@id='{}-substitutions']".format(dynamic_exercise)
+                xpath = "//div[@id='{}-substitutions']".format(dynamic_task)
                 elt = page.locator(xpath)
                 exercise_substitutions = await elt.inner_html()
 
                 # add this to the XML of all substitutions
                 # redundancies will be present but don't matter
                 element = '<dynamic-substitution id="{}">'
-                subst_xml.write(element.format(dynamic_exercise))
+                subst_xml.write(element.format(dynamic_task))
                 subst_xml.write(exercise_substitutions)
                 subst_xml.write("</dynamic-substitution>")
 

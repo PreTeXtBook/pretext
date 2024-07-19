@@ -8543,7 +8543,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
 <xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
     <xsl:choose>
-        <xsl:when test="ancestor::exercise[@exercise-interactive='fillin']">
+        <xsl:when test="ancestor::statement/../@exercise-interactive='fillin'">
             <xsl:apply-imports />
         </xsl:when>
         <xsl:otherwise>

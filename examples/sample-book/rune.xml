@@ -3361,7 +3361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <exercise label="fillin-strings-">
             <title>Fill-In, New Markup Strings</title>
             <statement>
-                <p>The word I'm thinking about is "magic." What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try "pizzazz.")</p>
+                <p>The word I'm thinking about is <q>magic</q>. What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try <q>pizzazz</q>.")</p>
             </statement>
             <evaluation>
                 <evaluate>
