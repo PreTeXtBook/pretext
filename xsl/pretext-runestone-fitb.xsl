@@ -27,7 +27,12 @@
 </xsl:variable>
 
 <!-- Convert fillin tag to an input element on the page -->
-<xsl:template match="exercise[@exercise-interactive='fillin']//fillin">
+<xsl:template match="exercise[@exercise-interactive='fillin']//fillin
+                     | project[@exercise-interactive='fillin']//fillin
+                     | activity[@exercise-interactive='fillin']//fillin
+                     | exploration[@exercise-interactive='fillin']//fillin
+                     | investigation[@exercise-interactive='fillin']//fillin
+                     | task[@exercise-interactive='fillin']//fillin">
     <xsl:param name="b-human-readable" />
     <xsl:variable name="parent-id">
         <xsl:apply-templates select="ancestor::exercise" mode="html-id" />
@@ -51,6 +56,9 @@
         <xsl:if test="@name">
             <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
         </xsl:if>
+        <xsl:if test="@width">
+            <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
+        </xsl:if>
     </xsl:element>
 </xsl:template>
 
@@ -60,7 +68,12 @@
 <!-- The HTML will contain this JSON and Runestone extracts it -->
 <!-- and inserts it into the HTML page via JS.                 -->
 <!-- ========================================================= -->
-<xsl:template match="exercise[@exercise-interactive='fillin']" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive='fillin']
+                     | project[@exercise-interactive='fillin']
+                     | activity[@exercise-interactive='fillin']
+                     | exploration[@exercise-interactive='fillin']
+                     | investigation[@exercise-interactive='fillin']
+                     | task[@exercise-interactive='fillin']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="html-id"/>
     </xsl:variable>
@@ -74,7 +87,7 @@
                 <script type="application/json">
                     <xsl:text>{&#xa;</xsl:text>
                     <!-- A seed is provided to generate consistent static content -->
-                    <xsl:if test="$b-dynamics-static-seed">
+                    <xsl:if test="setup and $b-dynamics-static-seed">
                         <xsl:text>"static_seed": "</xsl:text>
                         <xsl:choose>
                             <xsl:when test="setup/@seed">
@@ -404,9 +417,9 @@
 
 <!-- Deal with possibility of global checker for all blanks -->
 <xsl:template match="evaluation" mode="get-multianswer-check">
-    <xsl:variable name="responseTree" select="ancestor::exercise//statement//fillin" />
-    <xsl:if test="count($responseTree) > 1 and ancestor::exercise//evaluation/evaluate[@all='yes']/test">
-        <xsl:apply-templates select="ancestor::exercise//evaluation/evaluate[@all='yes']/test" mode="create-test-feedback">
+    <xsl:variable name="responseTree" select="../statement//fillin" />
+    <xsl:if test="count($responseTree) > 1 and evaluate[@all='yes']/test">
+        <xsl:apply-templates select="evaluate[@all='yes']/test" mode="create-test-feedback">
             <xsl:with-param name="fillin" select="$responseTree"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -425,11 +438,11 @@
     </xsl:variable>
     <xsl:variable name="check">
         <xsl:choose>
-            <xsl:when test="ancestor::exercise//evaluation/evaluate[@name = $fillinName]">
-                <xsl:copy-of select="ancestor::exercise//evaluation/evaluate[@name = $fillinName]"/>
+            <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
+                <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="ancestor::exercise//evaluation/evaluate[position() = $blankNum]"/>
+                <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[position() = $blankNum]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>

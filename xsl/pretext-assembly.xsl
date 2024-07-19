@@ -468,24 +468,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="evaluation//mathcmp|evaluation//logic" mode="dynamic-substitution">
-    <xsl:choose>
-        <xsl:when test="$exercise-style = 'static'">
-            <evaluation/>
-        </xsl:when>
-        <xsl:when test="$exercise-style = 'dynamic'">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
-            </xsl:copy>
-        </xsl:when>
-    </xsl:choose>
+<xsl:template match="numcmp|strcmp|jscmp|mathcmp|logic[parent::test]" mode="dynamic-substitution">
+    <xsl:if test="$exercise-style = 'dynamic'">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+        </xsl:copy>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
             <xsl:variable name="parent-id">
-                <xsl:apply-templates select="ancestor::exercise/@label" />
+                <xsl:apply-templates select="ancestor::statement/../@label" />
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@ansobj"/>
@@ -520,7 +515,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="$exercise-style = 'static'">
             <xsl:variable name="parent-id">
-               <xsl:apply-templates select="ancestor::exercise/@label" />
+               <xsl:apply-templates select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/../@label" />
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@obj"/>
@@ -1362,7 +1357,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]" mode="assembly-id">
+<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
+                   | project[@exercise-interactive='fillin' and setup]
+                   | activity[@exercise-interactive='fillin' and setup]
+                   | exploration[@exercise-interactive='fillin' and setup]
+                   | investigation[@exercise-interactive='fillin' and setup]"
+                   mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+<xsl:template match="exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | project[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]"
+                   mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
@@ -1371,7 +1379,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="assembly-id">
-    <xsl:message>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect</xsl:message>
+    <xsl:message>
+        <xsl:text>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect--</xsl:text>
+        <xsl:value-of select="name()"/>
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="@exercise-interactive"/>
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="@assembly-id"/>
+    </xsl:message>
     <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
 </xsl:template>
 
@@ -2168,6 +2183,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                      |
@@ -2179,6 +2195,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                      |
@@ -2190,6 +2207,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                      |
@@ -2201,6 +2219,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                      |
@@ -2212,6 +2231,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]" mode="representations">
     <!-- always preserve "exercise/project" container here, with attributes -->
@@ -2743,10 +2763,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="audio|video|interactive|exercise[@exercise-interactive='fillin' and setup]" mode="standalone-filename">
+<xsl:template match="audio|video|interactive" mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
+<xsl:template match="*" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
+                   | project[@exercise-interactive='fillin' and setup]
+                   | activity[@exercise-interactive='fillin' and setup]
+                   | exploration[@exercise-interactive='fillin' and setup]
+                   | investigation[@exercise-interactive='fillin' and setup]"
+                   mode="standalone-filename">
+    <xsl:apply-templates select="." mode="assembly-id" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise[//task/@exercise-interactive='fillin' and //task/setup]
+                   | project[//task/@exercise-interactive='fillin' and //task/setup]
+                   | activity[//task/@exercise-interactive='fillin' and //task/setup]
+                   | exploration[//task/@exercise-interactive='fillin' and //task/setup]
+                   | investigation[//task/@exercise-interactive='fillin' and //task/setup]"
+                   mode="standalone-filename">
+    <xsl:apply-templates select="." mode="assembly-id" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
+
 <xsl:template match="*" mode="standalone-filename">
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
