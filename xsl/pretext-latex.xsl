@@ -1175,7 +1175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//exercise[@workspace]">
+    <xsl:if test="$document-root//@workspace">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
         <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
