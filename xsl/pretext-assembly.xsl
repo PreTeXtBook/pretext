@@ -460,7 +460,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
 <!-- ##################################################### -->
-<xsl:template match="setup[de-object|postSetupScript]" mode="dynamic-substitution">
+<xsl:template match="setup[de-object|setupScript]" mode="dynamic-substitution">
     <xsl:if test="$exercise-style = 'dynamic'">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
