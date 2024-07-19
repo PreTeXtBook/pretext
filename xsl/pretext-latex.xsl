@@ -10891,86 +10891,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>Ibid.\@\,</xsl:text>
 </xsl:template>
 
-<!-- Fully marked-up bibtex-style bibliographic entry formatting. -->
-<!-- Current treatment assumes elements are in the correct order. -->
+<!-- Implement abstract templates to support      -->
+<!-- formatting of bibliographic entries in HTML. -->
 
-<!-- Comma after author or editor -->
-<xsl:template match="biblio[@type='bibtex']/author">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
-</xsl:template>
-<xsl:template match="biblio[@type='bibtex']/editor">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
-</xsl:template>
+<xsl:template match="*" mode="italic">
+    <xsl:param name="content"/>
 
-<!-- Title in italics, followed by comma -->
-<xsl:template match="biblio[@type='bibtex']/title">
     <xsl:text>\textit{</xsl:text>
-    <xsl:apply-templates select="text()|m"/>
-    <xsl:text>}, </xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Space after journal -->
-<xsl:template match="biblio[@type='bibtex']/journal">
-    <xsl:apply-templates select="text()|m"/>
-    <xsl:text> </xsl:text>
-</xsl:template>
+<xsl:template match="*" mode="bold">
+    <xsl:param name="content"/>
 
-<!-- Volume in bold -->
-<xsl:template match="biblio[@type='bibtex']/volume">
     <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>} </xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Series is plain (but space after) -->
-<xsl:template match="biblio[@type='bibtex']/series">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text> </xsl:text>
+<xsl:template name="biblio-period">
+    <xsl:text>.\@</xsl:text>
 </xsl:template>
-
-<!-- Publisher is plain (but semicolon after) -->
-<xsl:template match="biblio[@type='bibtex']/publisher">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>; </xsl:text>
-</xsl:template>
-
-<!-- Year in parentheses -->
-<xsl:template match="biblio[@type='bibtex']/year">
-    <xsl:text>(</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>) </xsl:text>
-</xsl:template>
-
-<!-- Number, handle TeX period idosyncracy -->
-<xsl:template match="biblio[@type='bibtex']/number">
-    <xsl:text>no.\@\,</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text> </xsl:text>
-</xsl:template>
-
-<!-- A "pubnote", which could contain any publication information -->
-<xsl:template match="biblio[@type='bibtex']/pubnote">
-    <xsl:text> [</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>]</xsl:text>
-</xsl:template>
-
-<!-- Pages should come last, so put a period.    -->
-<!-- Two forms: @start and @end,                 -->
-<!-- or total number as content (as for a book). -->
-<xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>.</xsl:text>
-</xsl:template>
-<!-- For page range, put pp. and handle TeX period -->
-<xsl:template match="biblio[@type='bibtex']/pages[@start]">
-    <xsl:text>pp.\@\,</xsl:text>
-    <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
-    <xsl:text>.</xsl:text>
-</xsl:template>
-
 
 <!-- Annotated Bibliography Items -->
 <!--   Presumably just paragraphs, nothing too complicated -->

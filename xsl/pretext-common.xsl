@@ -9672,6 +9672,118 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 
+<!-- ############## -->
+<!-- Bibliographies -->
+<!-- ############## -->
+
+<!-- Use simple abstract methods to provide necessary formatting      -->
+<!-- for bibliographic items, such as italics (titles), bold (volume) -->
+<!-- and a version of an abbrevation-period.                          -->
+
+<xsl:template match="*" mode="italic">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the italic font</xsl:message>
+</xsl:template>
+
+<xsl:template match="*" mode="bold">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the bold font</xsl:message>
+</xsl:template>
+
+<xsl:template name="biblio-period">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
+</xsl:template>
+
+<!-- Fully marked-up bibtex-style bibliographic entry formatting -->
+<!-- Current treatment assumes elements are in the correct order -->
+
+<!-- Comma after author or editor -->
+<xsl:template match="biblio[@type='bibtex']/author">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+<xsl:template match="biblio[@type='bibtex']/editor">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Title in italics, followed by comma -->
+<xsl:template match="biblio[@type='bibtex']/title">
+    <xsl:apply-templates select="." mode="italic">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="text()|m"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Space after journal -->
+<xsl:template match="biblio[@type='bibtex']/journal">
+    <xsl:apply-templates select="text()|m"/>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Volume in bold -->
+<xsl:template match="biblio[@type='bibtex']/volume">
+    <xsl:apply-templates select="." mode="bold">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="text()"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Series is plain (but space after) -->
+<xsl:template match="biblio[@type='bibtex']/series">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Publisher is plain (but semicolon after) -->
+<xsl:template match="biblio[@type='bibtex']/publisher">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>; </xsl:text>
+</xsl:template>
+
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='bibtex']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>) </xsl:text>
+</xsl:template>
+
+<!-- Number: no. and comma after -->
+<!-- Note: original pure LaTeX implemenation did not have -->
+<!-- a trailing comma, the pure HTML implementation did   -->
+<xsl:template match="biblio[@type='bibtex']/number">
+    <xsl:text>no</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <xsl:call-template name="thin-space-character"/>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- A "pubnote", which could contain any publication information -->
+<xsl:template match="biblio[@type='bibtex']/pubnote">
+    <xsl:text> [</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Pages should come last, so put a period.    -->
+<!-- Two forms: @start and @end,                 -->
+<!-- or total number as content (as for a book). -->
+<xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>.</xsl:text>
+</xsl:template>
+<xsl:template match="biblio[@type='bibtex']/pages[@start]">
+    <xsl:text>pp</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <xsl:call-template name="thin-space-character"/>
+    <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+
 <!-- ############ -->
 <!-- Conveniences -->
 <!-- ############ -->
