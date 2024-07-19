@@ -15,6 +15,16 @@
 <!-- Actual rules for substution when generating HTML     -->
 <!-- ==================================================== -->
 
+<!-- These need to be replaced by localization calls.      -->
+<!-- Or maybe push localization strings to Runestone,      -->
+<!-- since this feedback is only useful in an interactive. -->
+<xsl:template match="*" mode="correct-feedback">
+    <p>Correct!</p>
+</xsl:template>
+
+<xsl:variable name="defaultIncorrectFeedback">
+    <p>Incorrect.</p>
+</xsl:variable>
 
 <!-- Convert fillin tag to an input element on the page -->
 <xsl:template match="exercise[@exercise-interactive='fillin']//fillin">
@@ -43,11 +53,6 @@
         </xsl:if>
     </xsl:element>
 </xsl:template>
-
-<xsl:variable name="defaultIncorrectResponse">
-    <xsl:value-of select="key(localization-key,'incorrect')"/>
-    <xsl:text>.</xsl:text>
-</xsl:variable>
 
 <!-- ========================================================= -->
 <!-- The Runestone element is based on JSON scripts describing -->
@@ -96,7 +101,7 @@
                                         <xsl:apply-templates select="." mode="html-id"/>
                                         <xsl:text>-substitutions</xsl:text>
                                     </xsl:attribute>
-                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
+                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|evaluation//feedback//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
                                 </div>
                             </xsl:if>
                         </xsl:with-param>
@@ -143,99 +148,7 @@
                         <xsl:with-param name="multiAns" select="$multiAns" />
                     </xsl:apply-templates>
                     <xsl:text>]</xsl:text>
-                    <xsl:text>,&#xa;"localize_feedback": ["</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'correct'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>!", "</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'incorrect'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>."]&#xa;}</xsl:text>
-                    <!-- A seed is provided to generate consistent static content -->
-                    <xsl:if test="$b-dynamics-static-seed">
-                        <xsl:text>"static_seed": "</xsl:text>
-                        <xsl:choose>
-                            <xsl:when test="setup/@seed">
-                                <xsl:value-of select="setup/@seed"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <!-- Report if a seed is not provided-->
-                                <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="$the-id"/>" is missing setup @seed for static content generation.</xsl:message>
-                                <xsl:text>1234</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:text>",&#xa;</xsl:text>
-                    </xsl:if>
-                    <!-- The formatted HTML presentation of the problem, -->
-                    <!-- with escape codes for dynamic content, all of   -->
-                    <!-- which is serialized and escaped to a string.    -->
-                    <xsl:text>"problemHtml": </xsl:text>
-                    <xsl:call-template name="escape-quote-xml">
-                        <xsl:with-param name="xml_content">
-                            <xsl:apply-templates select="statement/*" mode="body" />
-                            <xsl:if test="$b-dynamics-static-seed">
-                                <div>
-                                    <xsl:attribute name="id">
-                                        <xsl:apply-templates select="." mode="html-id"/>
-                                        <xsl:text>-substitutions</xsl:text>
-                                    </xsl:attribute>
-                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
-                                </div>
-                            </xsl:if>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <!-- The formatted HTML presentation of the solution, -->
-                    <!-- similar to statement but no fillins              -->
-                    <xsl:text>,&#xa;"solutionHtml": </xsl:text>
-                    <xsl:call-template name="escape-quote-xml">
-                        <xsl:with-param name="xml_content">
-                            <xsl:apply-templates select="solution/*" mode="body" />
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <!-- Add packages that need to be loaded as javascript -->
-                    <xsl:if test="$b-is-dynamic">
-                        <xsl:text>,&#xa;"dyn_imports": [</xsl:text>
-                        <xsl:text>"BTM"</xsl:text>
-                        <!-- Future: add additional packages here -->
-                        <xsl:text>]</xsl:text>
-                    </xsl:if>
-                    <!-- Names assigned to the blanks.      -->
-                    <!-- Empty if none named.               -->
-                    <xsl:text>,&#xa;"blankNames": {</xsl:text>
-                    <xsl:apply-templates select="statement//fillin" mode="declare-blanks" />
-                    <xsl:text>}</xsl:text>
-                    <xsl:if test="$b-is-dynamic">
-                        <!-- The actual setup code is javascript enclosed in quotes. -->
-                        <!-- The declaration creates the objects that are needed.    -->
-                        <!-- The script is included as an escaped string             -->
-                        <xsl:text>,&#xa;"dyn_vars": </xsl:text>
-                        <xsl:call-template name="dynamic-setup" />
-                    </xsl:if>
-                    <!-- An array of tests and feedback for answer evaluation    -->
-                    <!-- Each blank has a corresponding array of test/feedback   -->
-                    <!-- response. The test is Javascript (stringified) that     -->
-                    <!-- returns a boolean response. The first test is for       -->
-                    <!-- correctness. The last response is default.              -->
-                    <xsl:text>,&#xa;"feedbackArray": [</xsl:text>
-                    <!-- In case all answers are based on one test               -->
-                    <xsl:variable name="multiAns">
-                        <xsl:apply-templates select="evaluation" mode="get-multianswer-check" />
-                    </xsl:variable>
-                    <!-- Generate test/feedback pair for each fillin             -->
-                    <xsl:apply-templates select="statement//fillin" mode="dynamic-feedback">
-                        <xsl:with-param name="multiAns" select="$multiAns" />
-                    </xsl:apply-templates>
-                    <xsl:text>]</xsl:text>
-                    <xsl:text>,&#xa;"localize_feedback": ["</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'correct'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>!", "</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'incorrect'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>."]&#xa;}</xsl:text>
+                    <xsl:text>&#xa;}</xsl:text>
                 </script>
             </div>
             <xsl:text>&#xa;</xsl:text>
@@ -622,8 +535,9 @@
                     <xsl:text>);&#xa;}</xsl:text>
                 </xsl:when>
             </xsl:choose>
-            <xsl:text>, "feedback": ""}</xsl:text>
-            <xsl:text>, "feedback": ""}</xsl:text>
+            <xsl:text>, "feedback": "</xsl:text>
+            <!-- <xsl:apply-templates select="node()" mode="correct-feedback"/> -->
+            <xsl:text>"}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 
@@ -635,7 +549,9 @@
         </xsl:apply-templates>
     </xsl:for-each>
     <!-- Default feedback for the blank. Always evaluates true.   -->
-    <xsl:text>, {"feedback": ""}]</xsl:text>
+    <xsl:text>, {"feedback": "</xsl:text>
+    <xsl:value-of select="$defaultIncorrectFeedback"/>
+    <xsl:text>"}]</xsl:text>
     <xsl:text>, {"feedback": ""}]</xsl:text>
 </xsl:template>
 
@@ -650,23 +566,22 @@
         <xsl:with-param name="fillin" select="$fillin" />
     </xsl:apply-templates>
     <xsl:text>, "feedback": "</xsl:text>
-    <xsl:if test="feedback">
-        <!-- serialize HTML as text, then escape as JSON -->
-        <xsl:call-template name="escape-json-string">
-            <xsl:with-param name="text">
-                <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-<xsl:text>"}</xsl:text>
-    <xsl:if test="feedback">
-        <!-- serialize HTML as text, then escape as JSON -->
-        <xsl:call-template name="escape-json-string">
-            <xsl:with-param name="text">
-                <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="feedback">
+            <!-- serialize HTML as text, then escape as JSON -->
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$b-correct">
+            <xsl:apply-templates select="." mode="correct-feedback"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$defaultIncorrectFeedback"/>
+        </xsl:otherwise>
+    </xsl:choose>
 <xsl:text>"}</xsl:text>
 </xsl:template>
 
