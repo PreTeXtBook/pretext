@@ -14280,6 +14280,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </page>
             </worksheet>
+            <worksheet label="worksheet-activity-no-task">
+              <page>
+                <activity workspace="1in">
+                  <statement>
+                    <p>
+                      Just a simple activity here.
+                    </p>
+                  </statement>
+                </activity>
+                <activity workspace="1in">
+                  <statement>
+                    <p>
+                      Here is a second activity.
+                    </p>
+                  </statement>
+                </activity>
+              </page>
+            </worksheet>
+            <worksheet label="worksheet-activity-with-task">
+              <page>
+                <activity>
+                  <introduction>
+                    <p>
+                      This is going to be an activity with tasks.
+                    </p>
+                  </introduction>
+                  <task workspace="0.75in">
+                    <statement>
+                      <p>
+                        Here is the first task.
+                      </p>
+                    </statement>
+                  </task>
+                  <task workspace="0.25in">
+                    <statement>
+                      <p>
+                        Here is the second task.
+                      </p>
+                    </statement>
+                  </task>
+                  <task workspace="1.75in">
+                    <statement>
+                      <p>
+                        Here is the third task.
+                      </p>
+                    </statement>
+                  </task>
+                  <conclusion>
+                    <p>
+                      This is a conclusion that comes after the last task.
+                    </p>
+                  </conclusion>
+                </activity>
+              </page>
+            </worksheet>
         </section>
 
         <section xml:id="exercises-single" label="section-exercises-single">
