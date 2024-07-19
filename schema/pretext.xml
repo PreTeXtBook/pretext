@@ -70,7 +70,7 @@
         <fragment xml:id="start-elements">
             <title>Start elements</title>
             <code>
-            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             </code>
         </fragment>
     </section>
@@ -83,7 +83,7 @@
         <fragment xml:id="gross-structure">
             <title>Gross structure</title>
             <code>
-            Pretext =
+            PretextRoot =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
@@ -711,6 +711,8 @@
                 element rsq {empty} |
                 element rq {empty} |
                 element lq {empty} |
+                element ldblbracket {empty} |
+                element rdblbracket {empty} |
                 element langle {empty}|
                 element rangle {empty}
             </code>
@@ -752,6 +754,8 @@
         <fragment xml:id="exotic-character">
             <title>Exotic characters</title>
             <code>
+            CopyrightCharacter =
+                element copyright {empty}
             Character |=
                 element ellipsis {empty} |
                 element midpoint {empty} |
@@ -760,7 +764,7 @@
                 element pilcrow {empty} |
                 element section-mark {empty} |
                 element copyleft {empty} |
-                element copyright {empty} |
+                CopyrightCharacter |
                 element registered {empty} |
                 element trademark {empty} |
                 element phonomark {empty} |
@@ -799,11 +803,15 @@
         <fragment xml:id="music-character">
             <title>Music characters</title>
             <code>
+            MusicFlat =
+                element flat {empty}
+            MusicSharp =
+                element sharp {empty}
             Music =
                 element doublesharp {empty} |
-                element sharp {empty} |
+                MusicSharp |
                 element natural {empty} |
-                element flat {empty} |
+                MusicFlat |
                 element doubleflat {empty} |
                 element scaledeg {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"} |
                 element timesignature {
@@ -827,8 +835,8 @@
                     attribute parentheses {"yes"|"no"}?,
                     element alteration {
                         (TextSimple |
-                        element sharp {empty} |
-                        element flat {empty})*
+                        MusicSharp |
+                        MusicFlat)*
                     }*
                 }
                 </code>
@@ -918,7 +926,7 @@
             <code>
             Verbatim =
                 element c {text} |
-                element email {text}
+                Email
             </code>
         </fragment>
 
@@ -1243,13 +1251,8 @@
             Url =
                 element url {
                     attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )|(
-                        attribute visual {text}?
-                        )
-                    )
+                    attribute visual {text}?,
+                    TextShort?
                 }
             Xref =
                 element xref {
@@ -1262,12 +1265,14 @@
                         attribute detail {text}?,
                         TextShort
                 }
+            NotationDescription =
+                element description {
+                    TextShort
+                }
             Notation =
                 element notation {
                     element usage {MathInline},
-                    element description {
-                        TextShort
-                    }
+                    NotationDescription
                 }
             </code>
         </fragment>
@@ -1323,29 +1328,6 @@
     </section>
 
     <section>
-        <title>References (experimental)</title>
-        <p>Here we collect experimental versions of reference-like elements.  Specifically, changes to Url, that only recommend a visual element when the URL element contains content.</p>
-
-        <fragment xml:id="reference-dev">
-            <title>References (experimental)</title>
-            <code>
-            Url |=
-                element url {
-                    attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )| TextShort |
-                        (
-                        attribute visual {text}?
-                        )
-                    )
-                }
-            </code>
-        </fragment>
-    </section>
-
-    <section>
         <title>Objectives</title>
 
         <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectives, outcomes, and standards in a variety of ways.</p>
@@ -1398,7 +1380,7 @@
     <section>
         <title>Verbatim Text</title>
 
-        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.</p>
+        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.  A <tag>program</tag> maybe structured with an <tag>input</tag> element, or simply text.</p>
 
         <fragment xml:id="verbatimdisplay">
             <title>Verbatim displays</title>
@@ -1414,6 +1396,13 @@
                 element pre {
                     text | CodeLine+
                 }
+            ConsoleOutput =
+                element output {text}
+            ConsoleInput =
+                element input {
+                    attribute prompt {text}?,
+                    text
+                }
             Console =
                 element console {
                     PermanentID?,
@@ -1422,13 +1411,11 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     (
-                        element input {
-                            attribute prompt {text}?,
-                            text
-                        },
-                        element output {text}?
+                        ConsoleInput,
+                        ConsoleOutput?
                     )+
                 }
+            ProgramInput = element input {text}
             Program =
                 element program {
                     PermanentID?,
@@ -1439,7 +1426,9 @@
                     attribute line-numbers {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
-                    element input {text}
+                    (
+                        ProgramInput | text
+                    )
                 }
             </code>
         </fragment>
@@ -1455,41 +1444,37 @@
         <fragment xml:id="list">
             <title>Lists</title>
             <code>
+            ListItem = element li {
+                (
+                    (MetaDataTarget, TextParagraph)
+                |
+                    (MetaDataTitleOptional, BlockStatement+)
+                )
+            }
+            DefinitionListItem = element li {
+                MetaDataTitle,
+                BlockStatement+
+            }
             List =
                 element ol {
                     PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
-                    element li {
-                        (
-                            (MetaDataTarget, TextParagraph)
-                        |
-                            (MetaDataTitleOptional, BlockStatement+)
-                        )
-                    }+
+                    ListItem+
                 } |
                 element ul {
                     PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
-                    element li {
-                        (
-                            (MetaDataTarget, TextParagraph)
-                        |
-                            (MetaDataTitleOptional, BlockStatement+)
-                        )
-                    }+
+                    ListItem+
                 } |
                 element dl {
                     PermanentID?,
                     Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
-                    element li {
-                        MetaDataTitle,
-                        BlockStatement+
-                    }+
+                    DefinitionListItem+
                 }
             </code>
         </fragment>
@@ -1938,6 +1923,11 @@
             <title>Images</title>
             <code>
             Image = ImageRaster | ImageCode
+            ImageDescription = element description {(Paragraph | Tabular)+}
+            ImageShortDescription = element shortdescription {text}
+            ImageShortDescriptionCode = element shortdescription {
+                (text | WWVariable)+
+            }
             ImageRaster =
                 element image {
                     UniqueID?,
@@ -1953,11 +1943,17 @@
                       (
                         attribute decorative {"no"}?,
                         (
-                          element shortdescription {text}? &amp;
-                          element description {(Paragraph | Tabular)+}?
+                          ImageShortDescription? &amp;
+                          ImageDescription?
                         )
                       )
                     )
+                }
+            CodeLatexImage =
+                element latex-image {
+                    LabelID?,
+                    Component?,
+                    text
                 }
             ImageCode =
                 element image {
@@ -1972,14 +1968,10 @@
                       (
                         attribute decorative {"no"}?,
                         (
-                          element shortdescription {(text | WWVariable)+}? &amp;
-                          element description {(Paragraph | Tabular)+}? &amp;
+                          ImageShortDescriptionCode ? &amp;
+                          ImageDescription? &amp;
                           (
-                            element latex-image {
-                              LabelID?,
-                              Component?,
-                              text
-                            } |
+                            CodeLatexImage |
                             element asymptote {
                               LabelID?,
                               Component?,
@@ -1997,6 +1989,9 @@
                       )
                     )
                 }
+            WWLatexImage = element latex-image {
+                text
+              }
             ImageWW =
                 element image {
                     attribute pg-name {text}?,
@@ -2006,11 +2001,9 @@
                       (
                         attribute decorative {"no"}?,
                         (
-                          element shortdescription {(text | WWVariable)+}? &amp;
-                          element description {(Paragraph | Tabular)+}? &amp;
-                          element latex-image {
-                            text
-                          }?
+                          ImageShortDescriptionCode? &amp;
+                          ImageDescription? &amp;
+                          WWLatexImage?
                         )
                       )
                     )
@@ -2027,6 +2020,8 @@
         <fragment xml:id="sage">
             <title>Sage code</title>
             <code>
+            SageOutput = element output {text}
+            SageInput = element input {text}
             Sage = element sage {
                 PermanentID?,
                 Component?,
@@ -2035,7 +2030,7 @@
                 attribute auto-evaluate {'no'|'yes'}?,
                 attribute language {text}?,
                 attribute type {text}?,
-                (element input {text}, element output {text}?)?
+                (SageInput, SageOutput?)?
             }
             </code>
         </fragment>
@@ -2146,13 +2141,6 @@
                 )
 
               SlateInput =
-                element xhtml:input {
-                  attribute type {text}?,
-                  attribute value {text}?,
-                  attribute onkeypress {text}?,
-                  attribute onclick {text}?,
-                  attribute style {text}?
-                } |
                 element input {
                   attribute type {text}?,
                   attribute value {text}?,
@@ -2239,14 +2227,16 @@
             <title>Poems</title>
             <code>
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
+            PoemAuthor =
+                element author {
+                    AlignmentPoem?,
+                    TextShort
+                }
             Poem =
                 element poem {
                     MetaDataTitleOptional,
                     AlignmentPoem?,
-                    element author {
-                        AlignmentPoem?,
-                        TextShort
-                    }?,
+                    PoemAuthor?,
                     (PoemLine+ | Stanza+)
                 }
             Stanza =
@@ -2271,17 +2261,20 @@
         <fragment xml:id="exercise">
             <title>Exercises</title>
             <code>
+            ExerciseOrderedList =
+                element ol {
+                    attribute cols {text}?,
+                    attribute marker {text}?,
+                    ExerciseListItem+
+                }
+            ExerciseListItem = element li {
+                MetaDataTarget,
+                (TextParagraph | BlockText+)
+            }
             ExerciseBody =
                 (
                     BlockStatement |
-                    element ol {
-                        attribute cols {text}?,
-                        attribute marker {text}?,
-                        element li {
-                            MetaDataTarget,
-                            (TextParagraph | BlockText+)
-                        }+
-                    }
+                    ExerciseOrderedList
                 )+
             StatementExercise =
                 element statement { ExerciseBody }
@@ -2317,6 +2310,14 @@
         <fragment xml:id="exercise-dev">
             <title>Exercises (experimental)</title>
             <code>
+            MyOpenMath =
+                MetaDataTitleOptional,
+                IntroductionText?,
+                element myopenmath {
+                    attribute problem {text},
+                    attribute params {text}?
+                },
+                ConclusionText?
             TrueFalse =
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -2461,6 +2462,7 @@
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
+                    MyOpenMath |
                     TrueFalse |
                     MultipleChoice |
                     Parsons |
@@ -2469,6 +2471,7 @@
                     Areas
                 }
             ProjectLike |=
+                MyOpenMath |
                 TrueFalse |
                 MultipleChoice |
                 Parsons |
@@ -2603,6 +2606,13 @@
                     attribute source {text}?,
                     attribute seed {xsd:integer}?
                 }
+            WWDescription =
+                element description {
+                    (
+                        TextSimple |
+                        SimpleLine+
+                    )
+                }
             WebWorkAuthored =
                 element webwork {
                     UniqueID?,
@@ -2610,12 +2620,7 @@
                     Component?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
-                    element description {
-                        (
-                            TextSimple |
-                            SimpleLine+
-                        )
-                    }?,
+                    WWDescription?,
                     WWMacros?,
                     element pg-code {text}?,
                     (
@@ -2949,23 +2954,27 @@
                     Credit*,
                     Date?
                 }
+            Email = element email {text}
+            PersonName = element personname {TextSimple}
+            Department = element department {TextSimple | ShortLine+}
+            Institution = element institution {TextSimple | ShortLine+}
             Author =
                 element author {
-                    element personname {TextSimple},
-                    element department {TextSimple | ShortLine+}?,
-                    element institution {TextSimple | ShortLine+}?,
-                    element email {text}?
+                    PersonName,
+                    Department?,
+                    Institution?,
+                    Email?
                 }
             Editor =
                 element editor {
-                    element personname {TextSimple},
-                    element department {TextSimple | ShortLine+}?,
-                    element institution {TextSimple | ShortLine+}?,
-                    element email {text}?
+                    PersonName,
+                    Department?,
+                    Institution?,
+                    Email?
                 }
             Credit =
                 element credit {
-                    element title {TextLong},
+                    Title,
                     Author+
                 }
             Date =
@@ -2977,20 +2986,23 @@
                     MetaDataTarget,
                     BlockText+
                 }
+            ColophonCredit = element credit {
+                    element role {TextShort},
+                    element entity {TextLong}
+                }
+            ShortLicense = element shortlicense {TextLong}
+            Website = element website {Url}
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
+                    ColophonCredit*,
                     element edition {text}?,
-                    element website {Url}?,
+                    Website?,
                     element copyright {
                         element year {TextShort},
                         element holder {text},
                         element minilicense {TextShort}?,
-                        element shortlicense {TextLong}?
+                        ShortLicense?
                     }?
                 }
             Biography =
@@ -3036,33 +3048,22 @@
 
         <p>A few simple tweaks to frontmatter elements.</p>
 
-        <p>We give an alternative definition of the ColophonFront to include footnotes in the shortlicense.  This is the only change currently.</p>
+        <p>We give an alternative definition of the two elements in the ColophonFront that are different.</p>
 
         <fragment xml:id="frontmatter-dev">
             <title>Front matter (dev)</title>
             <code>
-            ColophonFront |=
-                element colophon {
-                    MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
-                    element edition {text}?,
-                    element website {
-                        element name {TextShort},
-                        element address {text}
-                    }?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        element shortlicense {
-                            TextLong &amp;
-                            Footnote*
-                        }?
-                    }?
+            ShortLicense_X =
+                element shortlicense {
+                    TextLong &amp;
+                    Footnote*
                 }
+            ShortLicense |= ShortLicense_X
+            Website_X = element website {
+                element name {TextShort},
+                element address {text}
+            }
+            Website |= Website_X
             </code>
         </fragment>
     </section>
@@ -3078,11 +3079,11 @@
             Contributor =
                 element contributor {
                     MetaDataTarget,
-                    element personname {TextSimple},
-                    element department {TextSimple}?,
-                    element institution {TextSimple}?,
+                    PersonName,
+                    Department?,
+                    Institution?,
                     element location {TextSimple}?,
-                    element email {text}?
+                    Email?
                 }
             Contributors =
                 element contributors {
@@ -3223,9 +3224,10 @@
         <fragment xml:id="feedback">
             <title>Feedback link</title>
             <code>
+            FeedbackUrl = element url {text}
             Configuration |=
                 element feedback {
-                    element url {text}
+                    FeedbackUrl
                 }
             </code>
         </fragment>

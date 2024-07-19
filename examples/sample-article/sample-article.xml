@@ -1678,7 +1678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <tag>insert</tag> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <tag>delete</tag>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <tag>stale</tag>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
-                <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+                <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <attr>characters</attr> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
 
                 <p>This paragraph is intended to make a <tag>fillin</tag> appear right at the start of <fillin characters="20"/> the second line  in print and then the next paragraph has nothing but a <tag>fillin</tag>. Both are for testing purposes.</p>
 
@@ -10053,14 +10053,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>And some self-referential XSL:</p>
 
+            <!-- input element intentionally ommited here. Pretext processor should correct. -->
             <program language="xslt" margins="15%">
-                <input>
-                <![CDATA[<xsl:template match="biblio" mode="number">
-                    <xsl:apply-templates select="." mode="structural-number" />
-                    <xsl:text>.</xsl:text>
-                    <xsl:number from="references" level="any" count="biblio" />
-                </xsl:template>]]>
-                </input>
+            <![CDATA[<xsl:template match="biblio" mode="number">
+                <xsl:apply-templates select="." mode="structural-number" />
+                <xsl:text>.</xsl:text>
+                <xsl:number from="references" level="any" count="biblio" />
+            </xsl:template>]]>
             </program>
 
             <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>

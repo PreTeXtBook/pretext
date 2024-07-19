@@ -1,9 +1,9 @@
 
                     grammar {
                 
-            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             
-            Pretext =
+            PretextRoot =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
@@ -202,23 +202,27 @@
                     Credit*,
                     Date?
                 }
+            Email = element email {text}
+            PersonName = element personname {TextSimple}
+            Department = element department {TextSimple | ShortLine+}
+            Institution = element institution {TextSimple | ShortLine+}
             Author =
                 element author {
-                    element personname {TextSimple},
-                    element department {TextSimple | ShortLine+}?,
-                    element institution {TextSimple | ShortLine+}?,
-                    element email {text}?
+                    PersonName,
+                    Department?,
+                    Institution?,
+                    Email?
                 }
             Editor =
                 element editor {
-                    element personname {TextSimple},
-                    element department {TextSimple | ShortLine+}?,
-                    element institution {TextSimple | ShortLine+}?,
-                    element email {text}?
+                    PersonName,
+                    Department?,
+                    Institution?,
+                    Email?
                 }
             Credit =
                 element credit {
-                    element title {TextLong},
+                    Title,
                     Author+
                 }
             Date =
@@ -230,20 +234,23 @@
                     MetaDataTarget,
                     BlockText+
                 }
+            ColophonCredit = element credit {
+                    element role {TextShort},
+                    element entity {TextLong}
+                }
+            ShortLicense = element shortlicense {TextLong}
+            Website = element website {Url}
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
+                    ColophonCredit*,
                     element edition {text}?,
-                    element website {Url}?,
+                    Website?,
                     element copyright {
                         element year {TextShort},
                         element holder {text},
                         element minilicense {TextShort}?,
-                        element shortlicense {TextLong}?
+                        ShortLicense?
                     }?
                 }
             Biography =
@@ -476,6 +483,13 @@
                 element pre {
                     text | CodeLine+
                 }
+            ConsoleOutput =
+                element output {text}
+            ConsoleInput =
+                element input {
+                    attribute prompt {text}?,
+                    text
+                }
             Console =
                 element console {
                     PermanentID?,
@@ -484,13 +498,11 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     (
-                        element input {
-                            attribute prompt {text}?,
-                            text
-                        },
-                        element output {text}?
+                        ConsoleInput,
+                        ConsoleOutput?
                     )+
                 }
+            ProgramInput = element input {text}
             Program =
                 element program {
                     PermanentID?,
@@ -501,44 +513,42 @@
                     attribute line-numbers {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
-                    element input {text}
+                    (
+                        ProgramInput | text
+                    )
                 }
             
+            ListItem = element li {
+                (
+                    (MetaDataTarget, TextParagraph)
+                |
+                    (MetaDataTitleOptional, BlockStatement+)
+                )
+            }
+            DefinitionListItem = element li {
+                MetaDataTitle,
+                BlockStatement+
+            }
             List =
                 element ol {
                     PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
-                    element li {
-                        (
-                            (MetaDataTarget, TextParagraph)
-                        |
-                            (MetaDataTitleOptional, BlockStatement+)
-                        )
-                    }+
+                    ListItem+
                 } |
                 element ul {
                     PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
-                    element li {
-                        (
-                            (MetaDataTarget, TextParagraph)
-                        |
-                            (MetaDataTitleOptional, BlockStatement+)
-                        )
-                    }+
+                    ListItem+
                 } |
                 element dl {
                     PermanentID?,
                     Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
-                    element li {
-                        MetaDataTitle,
-                        BlockStatement+
-                    }+
+                    DefinitionListItem+
                 }
             
             DefinitionLike =
@@ -758,6 +768,11 @@
                 }
             
             Image = ImageRaster | ImageCode
+            ImageDescription = element description {(Paragraph | Tabular)+}
+            ImageShortDescription = element shortdescription {text}
+            ImageShortDescriptionCode = element shortdescription {
+                (text | WWVariable)+
+            }
             ImageRaster =
                 element image {
                     UniqueID?,
@@ -773,11 +788,17 @@
                       (
                         attribute decorative {"no"}?,
                         (
-                          element shortdescription {text}? &
-                          element description {(Paragraph | Tabular)+}?
+                          ImageShortDescription? &
+                          ImageDescription?
                         )
                       )
                     )
+                }
+            CodeLatexImage =
+                element latex-image {
+                    LabelID?,
+                    Component?,
+                    text
                 }
             ImageCode =
                 element image {
@@ -792,14 +813,10 @@
                       (
                         attribute decorative {"no"}?,
                         (
-                          element shortdescription {(text | WWVariable)+}? &
-                          element description {(Paragraph | Tabular)+}? &
+                          ImageShortDescriptionCode ? &
+                          ImageDescription? &
                           (
-                            element latex-image {
-                              LabelID?,
-                              Component?,
-                              text
-                            } |
+                            CodeLatexImage |
                             element asymptote {
                               LabelID?,
                               Component?,
@@ -817,6 +834,9 @@
                       )
                     )
                 }
+            WWLatexImage = element latex-image {
+                text
+              }
             ImageWW =
                 element image {
                     attribute pg-name {text}?,
@@ -826,11 +846,9 @@
                       (
                         attribute decorative {"no"}?,
                         (
-                          element shortdescription {(text | WWVariable)+}? &
-                          element description {(Paragraph | Tabular)+}? &
-                          element latex-image {
-                            text
-                          }?
+                          ImageShortDescriptionCode? &
+                          ImageDescription? &
+                          WWLatexImage?
                         )
                       )
                     )
@@ -895,6 +913,8 @@
                     TableRow+
                 }
             
+            SageOutput = element output {text}
+            SageInput = element input {text}
             Sage = element sage {
                 PermanentID?,
                 Component?,
@@ -903,7 +923,7 @@
                 attribute auto-evaluate {'no'|'yes'}?,
                 attribute language {text}?,
                 attribute type {text}?,
-                (element input {text}, element output {text}?)?
+                (SageInput, SageOutput?)?
             }
             
             MuseScore =
@@ -939,17 +959,20 @@
             AttributesVimeo =
                 attribute vimeo {text}
             
+            ExerciseOrderedList =
+                element ol {
+                    attribute cols {text}?,
+                    attribute marker {text}?,
+                    ExerciseListItem+
+                }
+            ExerciseListItem = element li {
+                MetaDataTarget,
+                (TextParagraph | BlockText+)
+            }
             ExerciseBody =
                 (
                     BlockStatement |
-                    element ol {
-                        attribute cols {text}?,
-                        attribute marker {text}?,
-                        element li {
-                            MetaDataTarget,
-                            (TextParagraph | BlockText+)
-                        }+
-                    }
+                    ExerciseOrderedList
                 )+
             StatementExercise =
                 element statement { ExerciseBody }
@@ -974,14 +997,16 @@
                 }
             
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
+            PoemAuthor =
+                element author {
+                    AlignmentPoem?,
+                    TextShort
+                }
             Poem =
                 element poem {
                     MetaDataTitleOptional,
                     AlignmentPoem?,
-                    element author {
-                        AlignmentPoem?,
-                        TextShort
-                    }?,
+                    PoemAuthor?,
                     (PoemLine+ | Stanza+)
                 }
             Stanza =
@@ -1056,11 +1081,11 @@
             Contributor =
                 element contributor {
                     MetaDataTarget,
-                    element personname {TextSimple},
-                    element department {TextSimple}?,
-                    element institution {TextSimple}?,
+                    PersonName,
+                    Department?,
+                    Institution?,
                     element location {TextSimple}?,
-                    element email {text}?
+                    Email?
                 }
             Contributors =
                 element contributors {
@@ -1075,6 +1100,13 @@
                     attribute source {text}?,
                     attribute seed {xsd:integer}?
                 }
+            WWDescription =
+                element description {
+                    (
+                        TextSimple |
+                        SimpleLine+
+                    )
+                }
             WebWorkAuthored =
                 element webwork {
                     UniqueID?,
@@ -1082,12 +1114,7 @@
                     Component?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
-                    element description {
-                        (
-                            TextSimple |
-                            SimpleLine+
-                        )
-                    }?,
+                    WWDescription?,
                     WWMacros?,
                     element pg-code {text}?,
                     (
@@ -1383,13 +1410,8 @@
             Url =
                 element url {
                     attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )|(
-                        attribute visual {text}?
-                        )
-                    )
+                    attribute visual {text}?,
+                    TextShort?
                 }
             Xref =
                 element xref {
@@ -1402,12 +1424,14 @@
                         attribute detail {text}?,
                         TextShort
                 }
+            NotationDescription =
+                element description {
+                    TextShort
+                }
             Notation =
                 element notation {
                     element usage {MathInline},
-                    element description {
-                        TextShort
-                    }
+                    NotationDescription
                 }
             
             FillInMath = element fillin {
@@ -1460,7 +1484,7 @@
             
             Verbatim =
                 element c {text} |
-                element email {text}
+                Email
             
             Group |=
                 element abbr {TextSimple} |
@@ -1560,6 +1584,8 @@
                 element rsq {empty} |
                 element rq {empty} |
                 element lq {empty} |
+                element ldblbracket {empty} |
+                element rdblbracket {empty} |
                 element langle {empty}|
                 element rangle {empty}
             
@@ -1573,6 +1599,8 @@
                 element prime {empty} |
                 element dblprime {empty}
             
+            CopyrightCharacter =
+                element copyright {empty}
             Character |=
                 element ellipsis {empty} |
                 element midpoint {empty} |
@@ -1581,7 +1609,7 @@
                 element pilcrow {empty} |
                 element section-mark {empty} |
                 element copyleft {empty} |
-                element copyright {empty} |
+                CopyrightCharacter |
                 element registered {empty} |
                 element trademark {empty} |
                 element phonomark {empty} |
@@ -1597,11 +1625,15 @@
                     (text | attribute name {text})
                 }
             
+            MusicFlat =
+                element flat {empty}
+            MusicSharp =
+                element sharp {empty}
             Music =
                 element doublesharp {empty} |
-                element sharp {empty} |
+                MusicSharp |
                 element natural {empty} |
-                element flat {empty} |
+                MusicFlat |
                 element doubleflat {empty} |
                 element scaledeg {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"} |
                 element timesignature {
@@ -1625,8 +1657,8 @@
                     attribute parentheses {"yes"|"no"}?,
                     element alteration {
                         (TextSimple |
-                        element sharp {empty} |
-                        element flat {empty})*
+                        MusicSharp |
+                        MusicFlat)*
                     }*
                 }
                 
@@ -1675,9 +1707,10 @@
             Configuration |=
                 element initialism {text}
             
+            FeedbackUrl = element url {text}
             Configuration |=
                 element feedback {
-                    element url {text}
+                    FeedbackUrl
                 }
             
             Configuration |=

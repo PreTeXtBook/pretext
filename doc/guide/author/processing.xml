@@ -571,7 +571,6 @@
                         latex="latex"
                         pdflatex="pdflatex"
                         xelatex="xelatex"
-                        pdfsvg="pdf2svg"
                         asy="asy"
                         sage="sage"
                         pdfpng="convert"

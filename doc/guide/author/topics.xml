@@ -2114,7 +2114,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>There is no provision for a <tag>feedback</tag> element.  Further explanation may be provided in a <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.  Also, a good interactive interface can provide assistance to a reader by telling them if they have too few or too many blocks, or combining or removing blocks, and so on.</p>
 
-            <p>As of 2022-06-14 work is underway to relax the strict ordering assumed of the blocks.  So there will be extra markup to specify a poset or directed acyclic graph on the blocks.</p>
+            <p>It is possible to specify a partial ordering of blocks using the <attr>name</attr> and <attr>depends</attr> attributes of <tag>block</tag>. <attr>name</attr> is used to assign the block a string identifier. <attr>depends</attr> should be a space-separated list of the <attr>name</attr> of each block that must precede the current block. The interactive version of the exercise will mark as correct any ordering of blocks that is valid according to the described dependencies. Static versions of the answer will only display the cannonical answer as determined by the order of the blocks in the source document.</p>
         </subsection>
 
         <subsection xml:id="horizontal-parsons-problems">
@@ -3279,7 +3279,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <pre>
                 &lt;figure xml:id="figure-mermaid-git"&gt;
-                    &lt;caption&gt;Mermaid Git Diagram&gt;/caption&gt;
+                    &lt;caption&gt;Mermaid Git Diagram&lt;/caption&gt;
                     &lt;image xml:id="mermaid-git-image"&gt;
                         &lt;mermaid&gt;
                     ---
@@ -3360,7 +3360,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>As an instructor, you might want to recycle images from a text for a classroom presentation, a project handout, or an examination question.  As an author, you can elect to make images files available through links in the HTML version, and it is easy and flexible to produce those links automatically.</p>
 
-            <p>First, it is your responsibility to manufacture the files.  For making different formats, the <c>pretext</c> script can sometimes help (<xref ref="pretext-script" />).  The Image Magick <c>convert</c> command is a quick way to make raster images in different formats, while the <c>pdf2svg</c> executable is good for converting vector graphics <init>PDF</init>s into <init>SVG</init>s.  Also, to make this easy to specify, different versions of the same image must have identical paths and names, other than the suffixes.  Finally, the case and spelling of the suffix in your <pretext/> source must match the filename (<eg /> <c>jpg</c> versus <c>JPEG</c>).  OK, those are the ground rules.</p>
+            <p>First, it is your responsibility to manufacture the files.  For making different formats, the <c>pretext</c> script can sometimes help (<xref ref="pretext-script" />).  The Image Magick <c>convert</c> command is a quick way to make raster images in different formats, while the <c>pdf2svg</c> executable is good for converting vector graphics <init>PDF</init>s into <init>SVG</init>s (although now the <c>pretext</c> script uses the <c>pyMuPDF</c> library for these tasks instead).  Also, to make this easy to specify, different versions of the same image must have identical paths and names, other than the suffixes.  Finally, the case and spelling of the suffix in your <pretext/> source must match the filename (<eg /> <c>jpg</c> versus <c>JPEG</c>).  OK, those are the ground rules.</p>
 
             <p>For links for a single image, add the <attr>archive</attr> attribute to the <tag>image</tag> element, such as<cd>
                 <cline>&lt;image  ...  archive="pdf svg"&gt;</cline>

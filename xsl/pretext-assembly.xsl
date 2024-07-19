@@ -1025,6 +1025,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
 
+<!-- Add input element around text in program when missing -->
+<xsl:template match="program[not(input)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <input>
+            <xsl:value-of select="."/>
+        </input>
+    </xsl:copy>
+</xsl:template>
+
 <!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
 <xsl:template match="program/@interactive" mode="repair">
     <xsl:choose>
@@ -2464,7 +2474,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*" mode="representations"/>
         <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
         <xsl:choose>
-            <xsl:when test="$exercise-style = 'static'">
+            <xsl:when test="($exercise-style = 'static') and not($b-extracting-pg)">
                 <!-- locate the static representation in a file, generated independently -->
                 <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">

@@ -660,9 +660,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="example">
   <xsl:text>\begin{example}[</xsl:text>
-  <xsl:if test="@source-number">
-    <xsl:value-of select="@source-number"/>
-  </xsl:if>
   <xsl:apply-templates select="." mode="title-full" />
 <xsl:text>]</xsl:text>
     <xsl:apply-templates/>
@@ -677,9 +674,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:text>\begin{definition}{</xsl:text>
   <xsl:apply-templates select="." mode="type-name" />
   <xsl:choose>
-  <xsl:when test="@source-number">
-    (<xsl:value-of select="@source-number"/>)
-  </xsl:when>
 </xsl:choose>
 <xsl:text>: </xsl:text>
   <xsl:apply-templates select="." mode="title-full" />
@@ -698,9 +692,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:text>\begin{theorem}{</xsl:text>
   <xsl:apply-templates select="." mode="type-name" />
   <xsl:choose>
-  <xsl:when test="@source-number">
-     (<xsl:value-of select="@source-number"/>)
-  </xsl:when>
 </xsl:choose>
 <xsl:text>: </xsl:text>
   <xsl:apply-templates select="." mode="title-full" />

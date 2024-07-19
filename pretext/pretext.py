@@ -424,7 +424,7 @@ def sage_conversion(
             shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, pyMuPDF=False
+    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, pyMuPDF=True
 ):
     # stringparams is a dictionary, best for lxml parsing
 
@@ -577,21 +577,20 @@ def latex_image_conversion(
                     if outformat == "svg" or outformat == "all":
                         if pyMuPDF:
                             # create svg using pymupdf:
+                            log.info("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                             with fitz.Document(latex_image_pdf) as doc:
                                 svg = doc.load_page(0).get_svg_image()
                             with open(latex_image_svg, "w") as f:
                                 f.write(svg)
-                            shutil.copy2(latex_image_svg, dest_dir)
-                            # classic way to produce svg, using pdf2svg:
-                            latex_image_svg = "classic-" + latex_image_svg
-                        pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
-                        # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                        log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
-                        svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
-                        log.info(
-                            "converting {} to {}".format(latex_image_pdf, latex_image_svg)
-                        )
-                        subprocess.call(svg_cmd)
+                        else:
+                            pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
+                            # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                            log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
+                            svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
+                            log.info(
+                                "converting {} to {} using {}".format(latex_image_pdf, latex_image_svg, svg_cmd)
+                            )
+                            subprocess.call(svg_cmd)
                         if not os.path.exists(latex_image_svg):
                             log.error(
                                 "There was a problem converting {} to svg and {} was not created".format(
@@ -602,27 +601,27 @@ def latex_image_conversion(
                     if outformat == "png" or outformat == "all":
                         if pyMuPDF:
                             # create high-quality png using pymupdf:
+                            log.info("converting {} to {}".format(latex_image_pdf, latex_image_png))
                             with fitz.Document(latex_image_pdf) as doc:
                                 png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
                             png.save(latex_image_png)
                             shutil.copy2(latex_image_png, dest_dir)
-                            # classic method: create high-quality png, presumes "convert" executable
-                            latex_image_png = "classic-" + latex_image_png
-                        pdfpng_executable_cmd = get_executable_cmd("pdfpng")
-                        # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                        log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
-                        png_cmd = pdfpng_executable_cmd + [
-                            "-density",
-                            "300",
-                            latex_image_pdf,
-                            "-quality",
-                            "100",
-                            latex_image_png,
-                        ]
-                        log.info(
-                            "converting {} to {}".format(latex_image_pdf, latex_image_png)
-                        )
-                        subprocess.call(png_cmd)
+                        else:
+                            pdfpng_executable_cmd = get_executable_cmd("pdfpng")
+                            # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                            log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
+                            png_cmd = pdfpng_executable_cmd + [
+                                "-density",
+                                "300",
+                                latex_image_pdf,
+                                "-quality",
+                                "100",
+                                latex_image_png,
+                            ]
+                            log.info(
+                                "converting {} to {} using command {}".format(latex_image_pdf, latex_image_png, png_cmd)
+                            )
+                            subprocess.call(png_cmd)
                         if not os.path.exists(latex_image_png):
                             log.error(
                                 "There was a problem converting {} to png and {} was not created".format(
@@ -662,7 +661,6 @@ def latex_image_conversion(
         # 2-space indentation
         image_list = "\n  " + "\n  ".join(failed_images)
         raise ValueError(msg + image_list)
-
 
 #############################################
 #
@@ -2134,14 +2132,15 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     stringparams = stringparams.copy()
 
     # Establish whether there is an image from pub file
-    pub_tree = ET.parse(pub_file)
+    has_image = False
     try:
-        image = pub_tree.find('common').find('qr-code').get('image')
+        image = get_publisher_variable(xml_source, pub_file, stringparams, 'qrcode-image')
         _, external_dir = get_managed_directories(xml_source, pub_file)
         image_path = os.path.join(external_dir, image)
-        has_image = True
+        if (image != '' and os.path.exists(image_path)):
+            has_image = True
     except:
-        has_image = False
+        pass
 
     # https://pypi.org/project/qrcode/
     try:
@@ -4520,7 +4519,7 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
     # Apply the stylesheet, with source and publication file
     xsltproc(reporting_xslt, xml_source, temp_file, None, params)
 
-    # pardse file into a dictionary, interogate with variable
+    # parse file into a dictionary, interrogate with variable
     pairs = {}
     with open(temp_file, 'r') as f:
         for line in f:

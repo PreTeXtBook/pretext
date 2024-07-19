@@ -2618,15 +2618,6 @@ body.standalone.worksheet .ptx-content .onepage .workspace.squashed.tight {
 body.has-sidebar-left.mathbook-loaded.standalone.worksheet .ptx-page .ptx-main {
     margin-left: 0;
 }
-body.standalone.worksheet .ptx-page > .ptx-main .ptx-content {
-    max-width: 1030px;
-    width: 1030px;
-    margin-right: 0;
-}
-body.standalone.worksheet.a4 .ptx-page > .ptx-main .ptx-content {
-    max-width: 1001px;
-    width: 1001px;
-}
 
 body.standalone.worksheet .ptx-content .goal-like {
     border: none;
@@ -2790,32 +2781,6 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
 }
 .toolBPanel:hover {
     overflow: auto !important;
-}
-
-/* Preview of annual edition */
-
-.pretext main .para.newstuff {
-    border-right: 6px solid #6f6;
-    background:  #dfd;
-}
-.pretext main li.newstuff {
-    border-right: 6px solid #66f;
-    background:  #eef;
-}
-.pretext main li.newstuff .para.newstuff {
-    border-right: none;
-    background: inherit;
-}
-.pretext main article.newstuff {
-    border-right: 6px solid #ff6;
-    background:  #ffd;
-}
-.pretext main section.newstuff {
-    border-right: 10px solid #f6f;
-}
-.pretext main a[data-knowl].newstuff {
-    border: 1px solid #f33;
-    background: #fdd;
 }
 
 #aboelkins-ACS .ptx-main .ptx-content > section:first-of-type > section:first-of-type > .project-like:first-of-type li {

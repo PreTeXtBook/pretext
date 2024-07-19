@@ -103,6 +103,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <script src="{$reveal-root}/plugin/math/math.js"></script>
 
           <!--  Some style changes from regular pretext-html -->
+          <!-- Note: the box around a "theorem" does not contain -->
+          <!-- the associated "proof" because the HTML does not  -->
+          <!-- provide an enclosure containing both.             -->
           <style>
 ul {
   display: block !important;
@@ -112,23 +115,23 @@ ul {
   border-radius: 2px 10px 2px;
   padding: 4px;
 }
-.definition,.theorem,.activity {
+.definition-like,.theorem-like,.project-like {
   border-width: 0.5px;
   border-style: solid;
   border-radius: 2px 10px 2px;
   padding: 1%;
   margin-bottom: 2em;
 }
-.definition {
+.definition-like {
   background: #00608010;
 }
-.theorem {
+.theorem-like {
   background: #ff000010;
 }
-.proof {
+.proof-like {
   background: #ffffff90;
 }
-.activity {
+.project-like {
   background: #60800010;
 }
 dfn {
@@ -356,11 +359,6 @@ dfn {
 <xsl:template match="slide">
     <section>
           <h3>
-              <xsl:if test="@source-number">
-                <xsl:value-of select="@source-label"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="@source-number"/>:
-              </xsl:if>
               <xsl:apply-templates select="." mode="title-full" />
           </h3>
           <div align="left">
@@ -499,88 +497,6 @@ dfn {
             <xsl:with-param name="width" select="$width" />
         </xsl:apply-templates>
     </xsl:element>
-</xsl:template>
-
-<xsl:template match="definition" mode="type-name">
-  <xsl:text>Definition</xsl:text>
-</xsl:template>
-<xsl:template match="definition">
-  <div class="boxed definition">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-    <xsl:apply-templates select="statement"/>
-</div>
-</xsl:template>
-
-
-<xsl:template match="theorem" mode="type-name">
-  <xsl:text>Theorem</xsl:text>
-</xsl:template>
-<xsl:template match="corollary" mode="type-name">
-  <xsl:text>Corollary</xsl:text>
-</xsl:template>
-<xsl:template match="lemma" mode="type-name">
-  <xsl:text>Lemma</xsl:text>
-</xsl:template>
-<xsl:template match="proposition" mode="type-name">
-  <xsl:text>Proposition</xsl:text>
-</xsl:template>
-<xsl:template match="theorem|corollary|lemma|proposition">
-  <div class="theorem">
-  <div>
-    <h3>
-      <xsl:choose>
-      <xsl:when test="@source-number">
-        <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="type-name" />:
-      </xsl:otherwise>
-    </xsl:choose>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates select="statement"/>
-  </div>
-  <xsl:if test="&PROOF-LIKE;">
-  <div class="proof">
-    <xsl:apply-templates select="&PROOF-LIKE;"/>
-  </div>
-</xsl:if>
-</div>
-</xsl:template>
-
-<xsl:template match="example" mode="type-name">
-  <xsl:text>Example</xsl:text>
-</xsl:template>
-<xsl:template match="activity" mode="type-name">
-  <xsl:text>Activity</xsl:text>
-</xsl:template>
-<xsl:template match="note" mode="type-name">
-  <xsl:text>Note</xsl:text>
-</xsl:template>
-<xsl:template match="example|activity|note">
-  <div class="activity">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates />
-  </div>
-</xsl:template>
-
-<xsl:template match="fact" mode="type-name">
-  <xsl:text>Fact</xsl:text>
-</xsl:template>
-<xsl:template match="fact">
-  <div class="definition">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates/>
-  </div>
 </xsl:template>
 
 <xsl:template match="xref">

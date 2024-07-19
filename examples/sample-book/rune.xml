@@ -2559,6 +2559,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint><p>Dorothy will not be much help with this proof.</p></hint>
         </exercise>
 
+        <exercise label="parsons-with-partial-order" language="python" adaptive="yes" indentation="hide">
+            <title>Parsons Problem, Partial Ordering</title>
+            <statement>
+                <p>Parsons problems can specify a partial ordering that allows for multiple valid solutions.</p>
+                <p>Try putting the blocks in a valid order to calculate and print<c>c</c> Only use the required blocks. There are many valid orderings.</p>
+            </statement>
+            <blocks>
+                <block order="5" name="math">
+                    <cline>import math</cline>
+                </block>
+                <block order="7" correct="no">
+                    <cline>import antigravity</cline>
+                </block>
+                <block order="6" name="a">
+                    <cline>a = 3</cline>
+                </block>
+                <block order="2" name="b">
+                    <choice correct="yes">
+                        <cline>b = 4</cline>
+                    </choice>
+                    <choice>
+                        <cline>4 = b</cline>
+                    </choice>
+                </block>
+                <block order="3" name="cSq" depends="a b">
+                    <cline>cSquared = a ** 2 + b ** 2</cline>
+                </block>
+                <block order="1" name="c" depends="cSq math">
+                    <cline>c = math.sqrt(cSquared)</cline>
+                </block>
+                <block order="4" depends="c">
+                    <cline>print(c)</cline>
+                </block>
+            </blocks>
+        </exercise>
+
         <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>

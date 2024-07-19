@@ -84,13 +84,6 @@
                 )
 
               SlateInput =
-                element xhtml:input {
-                  attribute type {text}?,
-                  attribute value {text}?,
-                  attribute onkeypress {text}?,
-                  attribute onclick {text}?,
-                  attribute style {text}?
-                } |
                 element input {
                   attribute type {text}?,
                   attribute value {text}?,
@@ -124,28 +117,17 @@
                 ConclusionDivision?
             }
             
-            ColophonFront |=
-                element colophon {
-                    MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
-                    element edition {text}?,
-                    element website {
-                        element name {TextShort},
-                        element address {text}
-                    }?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        element shortlicense {
-                            TextLong &
-                            Footnote*
-                        }?
-                    }?
+            ShortLicense_X =
+                element shortlicense {
+                    TextLong &
+                    Footnote*
                 }
+            ShortLicense |= ShortLicense_X
+            Website_X = element website {
+                element name {TextShort},
+                element address {text}
+            }
+            Website |= Website_X
             
             Configuration |=
                 element blurb {
@@ -390,19 +372,6 @@
                     ConclusionDivision?
                 }
             
-            Url |=
-                element url {
-                    attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )| TextShort |
-                        (
-                        attribute visual {text}?
-                        )
-                    )
-                }
-            
             MathDisplay |=
                 element me {
                     MetaDataTarget?,
@@ -429,6 +398,14 @@
                     (MathRow | MathIntertext)*
                 }
             
+            MyOpenMath =
+                MetaDataTitleOptional,
+                IntroductionText?,
+                element myopenmath {
+                    attribute problem {text},
+                    attribute params {text}?
+                },
+                ConclusionText?
             TrueFalse =
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -573,6 +550,7 @@
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
+                    MyOpenMath |
                     TrueFalse |
                     MultipleChoice |
                     Parsons |
@@ -581,6 +559,7 @@
                     Areas
                 }
             ProjectLike |=
+                MyOpenMath |
                 TrueFalse |
                 MultipleChoice |
                 Parsons |
