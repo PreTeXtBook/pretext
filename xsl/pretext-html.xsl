@@ -9643,7 +9643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="ggbMaterialWidth">
         <xsl:choose>
-            <xsl:when test="@srcWidth">
+            <xsl:when test="@material-width">
                 <xsl:value-of select="@material-width"/>
             </xsl:when>
             <xsl:otherwise>
