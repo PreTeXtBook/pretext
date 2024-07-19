@@ -803,7 +803,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <!-- Otherwise #evaluate matches by order, find feedback on a correct result -->
                 <xsl:when test="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']">
-                    <xsl:apply-templates select="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>/>
+                    <xsl:apply-templates select="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
@@ -860,7 +860,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="hint"/>
     <xsl:copy-of select="answer"/>
     <xsl:choose>
-        <xsl:when test="solution[@include-automatic='no'">
+        <xsl:when test="solution[@include-automatic='no']">
             <xsl:copy-of select="solution"/>
         </xsl:when>
         <xsl:otherwise>

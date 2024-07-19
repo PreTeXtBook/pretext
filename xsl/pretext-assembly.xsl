@@ -468,7 +468,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- <xsl:template match="evaluation" mode="dynamic-substitution">
+<xsl:template match="evaluation//mathcmp|evaluation//logic" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
             <evaluation/>
@@ -480,7 +480,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
 </xsl:template>
- -->
+
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
@@ -547,6 +547,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- An #eval child of test is implicit mathcmp. -->
+<xsl:template match="test/eval[@obj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <evaluation/>
+        </xsl:when>
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ################### -->
 <!-- WeBWorK Manufacture -->

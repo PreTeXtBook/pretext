@@ -3321,6 +3321,362 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </var>
             </setup>
         </exercise>
+
+        <exercise label="fillin-numbers-many-tests">
+            <title>Fill-In, New Markup Numbers</title>
+            <statement>
+                <p>I love <m>\pi</m>. What number am I thinking of, accurate to two decimal places?</p>
+                <p><fillin width="5" answer="3.14"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <numcmp use-answer="yes"/>
+                        <feedback><p>The decimal approximation of <m>\pi</m> is <m>3.1415926535\ldots</m>, but to two decimal places we write <m>3.14</m>.</p></feedback>
+                    </test>
+                    <!-- Example B -->
+                    <test>
+                        <numcmp use-answer="yes" tolerance="0.1"/>
+                        <feedback><p>Your answer is within 0.1 of the value I wanted.</p></feedback>
+                    </test>
+                    <!-- Example C -->
+                    <test>
+                        <numcmp value="42"/>
+                        <feedback><p>That is a reasonable guess, but no.</p></feedback>
+                    </test>
+                    <!-- Example D -->
+                    <test>
+                        <numcmp min="3" max="4"/>
+                        <feedback><p>You chose a value between 3 and 4.</p></feedback>
+                    </test>
+                    <!-- Example E -->
+                    <test>
+                        <numcmp value="3" tolerance="0.5"/>
+                        <feedback><p>You chose a value that rounds to 3.</p></feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-strings-">
+            <title>Fill-In, New Markup Strings</title>
+            <statement>
+                <p>The word I'm thinking about is "magic." What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try "pizzazz.")</p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <!-- Example A -->
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                    <!-- Example B -->
+                    <test>
+                        <strcmp use-answer="yes" case="insensitive"/>
+                        <feedback><p>Some of the characters used the wrong case.</p></feedback>
+                    </test>
+                    <!-- Example C -->
+                    <test>
+                        <strcmp>[0-9]+</strcmp>
+                        <feedback><p>You typed a word made out of digits.</p></feedback>
+                    </test>
+                    <!-- Example D -->
+                    <test>
+                        <strcmp use-answer="yes" strip="no"/>
+                        <feedback><p>Your answer includes the correct word but has extra text.</p></feedback>
+                    </test>
+                    <!-- Example E -->
+                    <test>
+                        <strcmp strip="no" case="insensitive">z.+z</strcmp>
+                        <feedback><p>Your answer includes text surrounded by z's.</p></feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="ex-demo-jscmp-primes">
+            <title>Fill-In, Javascript test of numbers</title>
+            <statement>
+                <p>What is an example of a prime number less than 20? <fillin width="5" answer="13"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <jscmp><!-- test if number is in a list -->
+                        [2, 3, 5, 7, 11, 13, 17, 19].includes(Number(ans))
+                        </jscmp>
+                        <feedback><p>Any number from the list <m>\{2, 3, 5, 7, 11, 13, 17, 19\}</m> is a prime number less than 20.</p></feedback>
+                    </test>
+                    <test>
+                        <jscmp><!-- find why it fails to be in list --><![CDATA[
+                        function(){
+                        const val=Number(ans);
+                        if (val <= 0) { return "You need to give a positive integer." }
+                        if (val >= 20) { return "The integer must be less than 20." }
+                        for (let i=2; i<=3; i++) {
+                            if (val % i == 0) { return `Your answer is composite; for example, it is divisible by ${i}.` }
+                        }
+                        return false;
+                        }()]]>
+                        </jscmp>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-jscmp-palindrome">
+            <title>Fill-In, Javascript test of strings</title>
+            <statement>
+                <p>What is an example of a palindrome? <fillin width="5" answer="radar"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <jscmp><!-- test if string is palindrome -->
+                        function(){
+                            const r1 = new RegExp("^\\w+$");
+                            var result=r1.test(ans);
+                            if (result) {
+                            let revAns = ans.split("").reverse().join("");
+                            result = (ans === revAns);
+                            }
+                            return result; 
+                        }() 
+                        </jscmp>
+                        <feedback><p>Any word that is the same forward and backward is a palindrome.</p></feedback>
+                    </test>
+                    <test>
+                        <strcmp strip="no">\w+\s\w+</strcmp>
+                        <feedback><p>Your response needs to be a single word.</p></feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-random-simple">
+            <title>Fill-In, Simple Randomization with Numbers</title>
+            <statement>
+                <p>What is the square of <m>x=<eval obj="myNum"/></m>? <m>x^2=</m><fillin width="5" mode="number" ansobj="mySquare"/></p>
+            </statement>
+            <setup seed="1234">
+                <setupScript>
+                v.myNum=RNG.randDiscrete(2, 12, 1);
+                v.mySquare=v.myNum**2;
+                </setupScript>
+            </setup>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <numcmp use-answer="yes"/>
+                    </test>
+                    <test>
+                        <numcmp object="myNum"/>
+                        <feedback><p>You responded with the original number. Now square it.</p></feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-math-solve-equation">
+            <title>Fill-In, Dynamic Math with Simple Numerical Answer</title>
+            <statement>
+                <p>Solve the equation <me><eval obj="theFunction"/>=0</me> to get the value of <m>x</m>.</p>
+                <p><m>x = </m> <fillin width="5" ansobj="theAnswer"/></p>
+            </statement>
+            <solution>
+                <p>We want to isolate the <m>x</m> in the equation <m><eval obj="theFunction"/>=0</m>. Because addition of <m><eval obj="b"/></m> is the last operation, we apply the inverse by adding <m><eval obj="negB"/></m> to both sides. The new, but equivalent equation is now <m><eval obj="m"/>x = <eval obj="negB"/></m>. Dividing both sides of the equation by <m><eval obj="m"/></m>, we obtain the solution <m>x=<eval obj="theAnswer"/></m>.</p>
+            </solution>
+            <setup seed="12345">
+                <de-object name="m" context="number">
+                    <de-random distribution="discrete" nonzero="yes" min="-4" max="5" by="1" />
+                </de-object>
+                <de-object name="b" context="number">
+                    <de-random distribution="discrete" min="-10" max="10" />
+                </de-object>
+                <de-object name="negB" context="number">
+                    <de-number>-b</de-number>
+                </de-object>
+                <de-object name="theFunction" context="formula">
+                    <de-expression mode="formula">m*x+b</de-expression>
+                </de-object>
+                <de-object name="theAnswer" context="formula">
+                    <de-expression mode="formula">-b/m</de-expression>
+                </de-object>
+            </setup>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <mathcmp use-answer="yes" />
+                    </test>
+                    <test>
+                        <de-expression mode="formula">{{b}}/{{m}}</de-expression>
+                        <feedback>Check for a sign error while isolating <m>x</m>.</feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-math-find-derivatives">
+            <title>Fill-In, Dynamic Math with Formulas as Answers</title>
+            <statement>
+                <p>Consider the function <m>f(x)=<eval obj="formula"/></m>. Find <m>f'(x)</m> and <m>f''(x)</m>.</p>
+                <p><m>f'(x) = </m> <fillin mode="math" width="15" ansobj="correctD1" name="firstD"/> and <m>f''(x)=</m> <fillin mode="math" width="15" ansobj="correctD2" name="secondD"/></p>
+            </statement>
+            <solution>
+                <p>The derivative of a constant is zero, so <m>\frac{d}{dx}[<eval obj="b"/>]=0</m>. The term <m>x^{<eval obj="n"/>}</m> is a power, so the power rule gives us <m>\frac{d}{dx}[x^{<eval obj="n"/>}]=<eval obj="n"/>x^{<eval obj="nm1"/>}</m>. Putting this together, we find <m>f'(x)=<eval obj="correctD1"/></m>. Applying the power rule a second time, we find <m>f''(x)=<eval obj="correctD2"/></m>.</p>
+            </solution>
+            <setup seed="1234">
+                <de-object name="a" context="number">
+                    <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes"/>
+                </de-object>
+                <de-object name="n" context="number">
+                    <de-random distribution="discrete" min="2" max="5"/>
+                </de-object>
+                <de-object name="nm1" context="number">
+                    <de-number>n-1</de-number>
+                </de-object>
+                <de-object name="nm2" context="number">
+                    <de-number>n-2</de-number>
+                </de-object>
+                <de-object name="b" context="number">
+                    <de-random distribution="discrete" min="-10" max="10" nonzero="yes"/>
+                </de-object>
+                <de-object name="formula" context="formula">
+                    <de-expression mode="formula">a*x^n+b</de-expression>
+                </de-object>
+                <de-object name="correctD1" context="formula">
+                    <de-expression mode="derivative">
+                    <formula><eval obj="formula"/></formula>
+                    <variable name="x"/>
+                    </de-expression>
+                </de-object>
+                <de-object name="correctD2" context="formula">
+                    <de-expression mode="derivative">
+                        <formula><eval obj="correctD1"/></formula>
+                        <variable name="x"/>
+                    </de-expression>
+                </de-object>
+            </setup>
+            <evaluation>
+                <evaluate submit="firstD">
+                    <test correct="yes">
+                        <mathcmp use-answer="yes"/>
+                    </test>
+                    <test>
+                        <mathcmp obj="correctD2"/>
+                        <feedback><p>You confused which derivative is which.</p></feedback>
+                    </test>
+                </evaluate>
+                <evaluate submit="secondD">
+                    <test correct="yes">
+                        <mathcmp use-answer="yes"/>
+                    </test>
+                    <test>
+                        <eval obj="correctD1"/>
+                        <feedback><p>You confused which derivative is which.</p></feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-math-decompose-function">
+            <title>Fill-In, Dynamic Math with Interdependent Formula Checking</title>
+            <statement>
+                <p>Consider the function <me>h(x)=<eval obj="composition"/></me>. Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.</p>
+                <p><m>f(x) = </m> <fillin mode="math" width="15" ansobj="outerFormula" name="fGiven"/> and <m>g(x)=</m> <fillin mode="math" width="15" ansobj="innerFormula" name="gGiven"/></p>
+            </statement>
+            <solution>
+                <p>Noticing that the expression <m><eval obj="innerFormula"/></m> appears inside parentheses with a power, it makes sense to think of that as the inner function, defining <m>g(x) = <eval obj="innerFormula"/></m>. The outer function describes what happens to that. If we imagined replacing the formula <m><eval obj="innerFormula"/></m> with a box and then call that box our variable <m>x</m>, we find the outer function is given by <m>f(x) = <eval obj="outerFormula"/></m>.</p>
+                <p>This is not the only non-trivial composition. Can you find others?</p>
+            </solution>
+            <setup seed="4321">
+                <de-object name="a" context="number">
+                    <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
+                </de-object>
+                <de-object name="n" context="number">
+                    <de-random distribution="discrete" min="2" max="5" />
+                </de-object>
+                <de-object name="b" context="number">
+                    <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
+                </de-object>
+                <de-object name="c" context="number">
+                    <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
+                </de-object>
+                <de-object name="d" context="number">
+                    <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
+                </de-object>
+                <de-object name="outerFormula" context="formula">
+                    <de-expression mode="formula">a*x^n+b</de-expression>
+                </de-object>
+                <de-object name="innerFormula" context="formula">
+                    <de-expression mode="formula">c*x+d</de-expression>
+                </de-object>
+                <de-object name="identityFunction" context="formula">
+                    <de-expression mode="formula">x</de-expression>
+                </de-object>
+                <de-object name="composition" context="formula">
+                    <de-expression mode="substitution">
+                        <formula><eval obj="outerFormula"/></formula>
+                        <variable name="x"><eval obj="innerFormula"/></variable>
+                    </de-expression>
+                </de-object>
+            </setup>
+            <evaluation answers-coupled="yes">
+                <evaluate name="fGiven">
+                    <test>
+                        <eval obj="identityFunction"/>
+                        <feedback><p><m>f(x)=x</m> is not allowed for nontrivial compositions.</p></feedback>
+                    </test>
+                    <test>
+                        <logic op="not">
+                            <mathcmp>
+                                <eval obj="composition"/>
+                                <de-expression context="formula" mode="substitution">
+                                    <formula><eval obj="fGiven"/></formula>
+                                    <variable name="x"><eval obj="gGiven"/></variable>
+                                </de-expression>
+                            </mathcmp>
+                        </logic>
+                        <mathcmp>
+                            <eval obj="composition"/>
+                            <de-expression context="formula" mode="substitution">
+                                <formula><eval obj="gGiven"/></formula>
+                                <variable name="x"><eval obj="fGiven"/></variable>
+                            </de-expression>
+                        </mathcmp>
+                        <feedback><p>You have composed in the wrong order.</p></feedback>
+                    </test>
+                </evaluate>
+                <evaluate name="gGiven">
+                    <test>
+                        <eval obj="identityFunction"/>
+                        <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                    </test>
+                </evaluate>
+                <evaluate all="yes">
+                    <test correct="yes">
+                        <mathcmp>
+                            <eval obj="composition"/>
+                            <de-expression context="formula" mode="substitution">
+                                <formula><eval obj="fGiven"/></formula>
+                                <variable name="x"><eval obj="gGiven"/></variable>
+                            </de-expression>
+                        </mathcmp>
+                        <logic op="not">
+                            <mathcmp>
+                                <eval obj="fGiven"/>
+                                <eval obj="identityFunction"/>
+                            </mathcmp>
+                        </logic>
+                        <logic op="not">
+                            <mathcmp>
+                                <eval obj="gGiven"/>
+                                <eval obj="identityFunction"/>
+                            </mathcmp>
+                        </logic>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
     </exercises>
 
     <exercises>
