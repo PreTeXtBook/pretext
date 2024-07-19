@@ -3680,7 +3680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exercises>
 
     <exercises>
-        <title>Hodgepodge></title>
+        <title>Hodgepodge</title>
 
         <exercise label="true-false-exercise-with-tasks-in-exercises">
             <title>With Tasks in an Exercises Division</title>
