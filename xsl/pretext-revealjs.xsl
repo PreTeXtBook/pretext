@@ -200,46 +200,46 @@ code[class*="language-"], pre[class*="language-"] {
 dfn {
   font-weight: bold;
 }
-.pretext-content ol.no-marker,
-.pretext-content ul.no-marker,
-.pretext-content li.no-marker {
+.ptx-content ol.no-marker,
+.ptx-content ul.no-marker,
+.ptx-content li.no-marker {
     list-style-type: none;
 }
 
-.pretext-content ol.decimal {
+.ptx-content ol.decimal {
     list-style-type: decimal;
 }
-.pretext-content ol.lower-alpha {
+.ptx-content ol.lower-alpha {
     list-style-type: lower-alpha;
 }
-.pretext-content ol.upper-alpha {
+.ptx-content ol.upper-alpha {
     list-style-type: upper-alpha;
 }
-.pretext-content ol.lower-roman {
+.ptx-content ol.lower-roman {
     list-style-type: lower-roman;
 }
-.pretext-content ol.upper-roman {
+.ptx-content ol.upper-roman {
     list-style-type: upper-roman;
 }
-.pretext-content ul.disc {
+.ptx-content ul.disc {
     list-style-type: disc;
 }
-.pretext-content ul.square {
+.ptx-content ul.square {
     list-style-type: square;
 }
-.pretext-content ul.circle {
+.ptx-content ul.circle {
     list-style-type: circle;
 }
-.pretext-content ol.no-marker,
-.pretext-content ul.no-marker {
+.ptx-content ol.no-marker,
+.ptx-content ul.no-marker {
     list-style-type: none;
 }
-.pretext-content .cols1 li,
-.pretext-content .cols2 li,
-.pretext-content .cols3 li,
-.pretext-content .cols4 li,
-.pretext-content .cols5 li,
-.pretext-content .cols6 li {
+.ptx-content .cols1 li,
+.ptx-content .cols2 li,
+.ptx-content .cols3 li,
+.ptx-content .cols4 li,
+.ptx-content .cols5 li,
+.ptx-content .cols6 li {
     float: left;
     padding-right:2em;
 }
@@ -248,7 +248,7 @@ dfn {
         </head>
 
         <body>
-            <div class="reveal pretext-content">
+            <div class="reveal ptx-content">
                 <!-- For mathematics/MathJax, must be located -->
                 <!-- within div.reveal to be effective        -->
                 <xsl:call-template name="latex-macros"/>
