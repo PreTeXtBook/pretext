@@ -178,6 +178,20 @@ ul {
   font-size: calc(var(--r-main-font-size) * 0.6);
 }
 
+
+.ptx-content :is(.image-box, .audio-box, .video-box, .asymptote-box) {
+  position: relative;
+}
+
+.ptx-content iframe.asymptote, .ptx-content iframe.asymptote, .ptx-content .video-box .video, .ptx-content .video-box .video-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
 code[class*="language-"], pre[class*="language-"] {
   padding: 0;
   line-height: 1.2;
