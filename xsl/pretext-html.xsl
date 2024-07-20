@@ -9318,7 +9318,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="out" />
     <xsl:param name="b-original"/>
 
-    <xsl:element name="pre">
+    <xsl:element name="div">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:attribute name="class">
@@ -12520,7 +12520,7 @@ TODO:
     <xsl:param name="language-text" />
 
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class '</xsl:text>
+        <xsl:text>// Make *any* div with class '</xsl:text>
         <xsl:call-template name="sagecell-class-name">
             <xsl:with-param name="language-attribute" select="$language-attribute"/>
             <xsl:with-param name="b-autoeval" select="$b-autoeval"/>
@@ -12532,7 +12532,7 @@ TODO:
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
                     <string key="inputLocation">
-                        <xsl:text>pre.</xsl:text>
+                        <xsl:text>div.</xsl:text>
                         <xsl:call-template name="sagecell-class-name">
                             <xsl:with-param name="language-attribute" select="$language-attribute"/>
                             <xsl:with-param name="b-autoeval" select="$b-autoeval"/>
@@ -12574,12 +12574,12 @@ TODO:
 <!-- template for a "display only" version -->
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
+        <xsl:text>// Make *any* div with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
         <xsl:text>sagecell.makeSagecell(</xsl:text>
         <xsl:call-template name="json">
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <string key="inputLocation">pre.sage-display</string>
+                    <string key="inputLocation">div.sage-display</string>
                     <string key="editor">codemirror-readonly</string>
                     <array key="hide">
                         <string>evalButton</string>
@@ -12597,13 +12597,13 @@ TODO:
 <!-- Generic button, drop-down for languages -->
 <xsl:template name="sagecell-practice">
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
+        <xsl:text>// Make *any* div with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
         <xsl:text>sagecell.makeSagecell(</xsl:text>
         <xsl:call-template name="json">
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <string key="inputLocation">pre.sagecell-practice</string>
+                    <string key="inputLocation">div.sagecell-practice</string>
                     <boolean key="linked">true</boolean>
                     <string key="evalButtonText">
                         <xsl:apply-templates select="." mode="type-name">
