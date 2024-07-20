@@ -266,6 +266,184 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>But this is still visible from the outset.</p>
             </slide>
 
+            <slide>
+                <title>Images, from an external source</title>
+
+                <p>
+                    Images can be included from external sources by placing them in the <c>assets</c> folder.
+                    The image below also appears in the <pretext/> Sample Article,
+                    and originated at <c>www.texample.net</c>.
+                </p>
+
+                <image source="images/complete-graph" width="65%"/>
+                
+                <p>
+                    You will want to ensure your image has an <attr>width</attr> if you want it to fit correctly in your slide.
+                </p>
+            </slide>
+
+            <slide>
+                <title>Images, from source</title>
+                
+                
+                <p>
+                    Images can also be generated from source. TikZ works well, and Asymptote.
+                    They can be placed in a <tag>sidebyside</tag>, and inside a <tag>figure</tag> (or both).
+                </p>
+
+                <p>
+                    Common formatting macros for TikZ and Asymptote (which you expect to use repeatedly)
+                    can be placed in <tag>docinfo</tag>, using <tag>latex-image-preamble</tag>
+                    and <tag>asymptote-preamble</tag>, respectively.
+                </p>
+
+                <p>
+                    Note that 3D Asymptote images will be rendered in WebGL, and will be interactive within your slide.
+                </p>
+
+                <figure xml:id="fig-image-demo">
+                    <caption>Two cone images borrowed from the <pretext /> Sample Article. The one on the left is written in TiZ, and the one on the right is written in Asymptote</caption>
+                    <sidebyside widths="47% 47%">
+                        <!-- <figure xml:id="fig-tikz-cone"> -->
+                            <!-- <caption>The cone from <url href="http://www.frontiernet.net/~eugene.ressler/" visual="www.frontiernet.net/~eugene.ressler/">Sketch</url> used in the Sample Article</caption> -->
+                            <image>
+                                <shortdescription></shortdescription>
+                                <latex-image label="img-tikz">
+                                    \begin{tikzpicture}[join=round]
+                                    \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
+                                    \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
+                                    \tikzstyle{ghostfill} = [fill=white]
+                                        \tikzstyle{ghostdraw} = [draw=black!50]
+                                    \filldraw[conefill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                                        --(-.183,2.067)--cycle;
+                                    \filldraw[conefill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                                        --(.516,2.016)--cycle;
+                                    \filldraw[conefill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                                        --(.913,1.8)--cycle;
+                                    \filldraw[conefill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                                        --(-.775,1.922)--cycle;
+                                    \draw(1.461,.107)--(1.734,.127);
+                                    \draw[arrows=&lt;-&gt;](1.643,1.853)--(1.643,.12);
+                                    \filldraw[conefill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                                        --(.775,1.545)--cycle;
+                                    \draw[arrows=-&gt;,line width=.4pt](.274,-.5)--(0,0)--(0,2.86);
+                                    \draw[arrows=-,line width=.4pt](0,0)--(-1.369,-.1);
+                                    \draw[arrows=-&gt;,line width=.4pt](-1.369,-.1)--(-2.1,-.153);
+                                    \filldraw[conefill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                                        --(-.913,1.667)--cycle;
+                                    \draw(-1.369,.073)--(-1.369,2.76);
+                                    \draw(1.004,1.807)--(1.734,1.86);
+                                    \filldraw[conefill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                                        --(.183,1.4)--cycle;
+                                    \draw[arrows=&lt;-&gt;](0,2.34)--(-.913,2.273);
+                                    \draw(-.913,1.84)--(-.913,2.447);
+                                    \draw[arrows=&lt;-&gt;](0,2.687)--(-1.369,2.587);
+                                    \filldraw[conefill](.183,1.4)--(.274,-.5)--(-.775,-.424)
+                                                        --(-.516,1.45)--cycle;
+                                    \draw[arrows=&lt;-,line width=.4pt](.42,-.767)--(.274,-.5);
+                                    \node[ann] at (-.456,2.307) {$r_0$};
+                                    \node[ann] at (-.685,2.637) {$r_1$};
+                                    \node[ann] at (1.643,.987) {$h$};
+                                    \path (.42,-.767) node[below] {$x$}
+                                        (0,2.86) node[above] {$y$}
+                                        (-2.1,-.153) node[left] {$z$};
+                                    % Second version of the cone
+                                    \begin{scope}[xshift=3.5cm]
+                                    \filldraw[ghostdraw,ghostfill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                                                --(-.183,2.067)--cycle;
+                                    \filldraw[ghostdraw,ghostfill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                                                --(.516,2.016)--cycle;
+                                    \filldraw[ghostdraw,ghostfill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                                                --(.913,1.8)--cycle;
+                                    \filldraw[ghostdraw,ghostfill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                                                --(-.775,1.922)--cycle;
+                                    \filldraw[ghostdraw,ghostfill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                                                --(.775,1.545)--cycle;
+                                    \filldraw[ghostdraw,ghostfill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                                                --(-.913,1.667)--cycle;
+                                    \filldraw[ghostdraw,ghostfill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                                                --(.183,1.4)--cycle;
+                                    \filldraw[fill=red,fill opacity=0.5](-.516,1.45)--(-.775,-.424)--(.274,-.5)
+                                                                        --(.183,1.4)--cycle;
+                                    \fill(-.775,-.424) circle (2pt);
+                                    \fill(.274,-.5) circle (2pt);
+                                    \fill(-.516,1.45) circle (2pt);
+                                    \fill(.183,1.4) circle (2pt);
+                                    \path[font=\footnotesize]
+                                            (.913,1.8) node[right] {$i\hbox{$=$}0$}
+                                            (1.369,.1) node[right] {$i\hbox{$=$}1$};
+                                    \path[font=\footnotesize]
+                                            (-.645,.513) node[left] {$j$}
+                                            (.228,.45) node[right] {$j\hbox{$+$}1$};
+                                    \draw (-.209,.482)+(-60:.25) [yscale=1.3,-&gt;] arc(-60:240:.25);
+                                    \fill[black,font=\footnotesize]
+                                                    (-.516,1.45) node [above] {$P_{00}$}
+                                                    (-.775,-.424) node [below] {$P_{10}$}
+                                                    (.183,1.4) node [above] {$P_{01}$}
+                                                    (.274,-.5) node [below] {$P_{11}$};
+                                    \end{scope}
+                                    \end{tikzpicture}
+                                </latex-image>
+                            </image>
+                        <!-- </figure> -->
+
+                        <!-- <figure xml:id="asy-cone"> -->
+                            <!-- <caption>A 3D cone from the <url href="https://asymptote.sourceforge.io/" visual="asymptote.sourceforge.io/">Asymptote website</url>, which also appears in the Sample Article</caption> -->
+                            <image>
+                                <shortdescription></shortdescription>
+                                
+                                <asymptote label="img-asymptote">
+                                    import solids;
+                                    size(0,150);
+                                    currentprojection=orthographic(0,-30,5);
+
+                                    real r=4;
+                                    real h=10;
+                                    real s=8;
+                                    real x=r*s/h;
+
+                                    real sr=5;
+                                    real xr=r*sr/h;
+
+                                    real s1=sr-0.1;
+                                    real x1=r*s1/h;
+
+                                    real s2=sr+0.2;
+                                    real x2=r*s2/h;
+
+                                    render render=render(compression=0,merge=true);
+
+                                    draw(scale(x1,x1,-s1)*shift(-Z)*unitcone,lightblue+opacity(0.5),render);
+
+                                    path3 p=(x2,0,s2)--(x,0,s+0.005);
+                                    revolution a=revolution(p,Z);
+                                    draw(surface(a),lightblue+opacity(0.5),render);
+
+                                    path3 q=(x,0,s)--(r,0,h);
+                                    revolution b=revolution(q,Z);
+                                    draw(surface(b),white+opacity(0.5),render);
+
+                                    draw((-r-1,0,0)--(r+1,0,0));
+                                    draw((0,0,0)--(0,0,h+1),dashed);
+
+                                    path3 w=(x1,0,s1)--(x2,0,s2)--(0,0,s2);
+                                    revolution b=revolution(w,Z);
+                                    draw(surface(b),blue+opacity(0.5),render);
+                                    draw(circle((0,0,s2),x2));
+                                    draw(circle((0,0,s1),x1));
+
+                                    draw("$x$",(xr,0,0)--(xr,0,sr),red,Arrow3,PenMargin3);
+                                    draw("$r$",(0,0,sr)--(xr,0,sr),N,red);
+                                    draw((string) r,(0,0,h)--(r,0,h),N,red);
+                                    draw((string) h,(r,0,0)--(r,0,h),red,Arrow3,PenMargin3);
+                                    draw((string) s,(-x,0,0)--(-x,0,s),W,red,Arrow3,Bar3,PenMargin3);
+                                </asymptote>
+                            </image>
+                        <!-- </figure> -->
+                    </sidebyside>
+                </figure>
+            </slide>
+
         </section>
     </slideshow>
 </pretext>
