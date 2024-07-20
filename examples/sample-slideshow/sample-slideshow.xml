@@ -24,6 +24,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         </macros>
+        <latex-image-preamble>
+            \usepackage{tikz}
+            \usepackage{nicematrix}             % for multi-run latex-image (label="latex-three-pass")
+        </latex-image-preamble>
     </docinfo>
 
     <slideshow>
