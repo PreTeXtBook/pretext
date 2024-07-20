@@ -93,6 +93,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <xsl:call-template name="sagecell-code" />
             <xsl:apply-templates select="." mode="sagecell" />
+            <xsl:call-template name="syntax-highlight"/>
 
             <!-- load reveal.js resources; w/ v 4.1.2 -->
             <!-- these seem to be *always* minified   -->
@@ -115,25 +116,73 @@ ul {
   border-radius: 2px 10px 2px;
   padding: 4px;
 }
+.reveal pre {
+  box-shadow: none;
+  line-height: 1;
+  font-size: inherit;
+  width: auto;
+  margin: inherit;
+}
+.reveal pre code {
+  display: block;
+  padding: 0;
+  overflow: unset;
+  max-height: unset;
+  word-wrap: normal;
+}
 .definition-like,.theorem-like,.project-like {
   border-width: 0.5px;
   border-style: solid;
   border-radius: 2px 10px 2px;
   padding: 1%;
-  margin-bottom: 2em;
+  margin-bottom: var(--r-block-margin);
 }
 .definition-like {
-  background: #00608010;
+  background: #006080;
+  background: color-mix(in srgb, var(--r-background-color) 75%, #006080);
 }
 .theorem-like {
   background: #ff000010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, #aa0000);
 }
 .proof-like {
-  background: #ffffff90;
+  background: #ffffff;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, #aaaaaa);
 }
 .project-like {
   background: #60800010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, #608000);
 }
+.code-inline {
+  background: #60800010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, var(--r-link-color));
+  padding: 0 3px;
+  border: 1px solid;
+  margin: 3px;
+  display: inline-block;
+}
+.sagecell_sessionOutput {
+  background: white;
+  color: black;
+  border: 0.5px solid var(--r-main-color);
+}
+
+.program {
+  background: #60800010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, var(--r-link-color));
+  max-height: 450px;
+  overflow: auto;
+  border: 0.5px solid var(--r-main-color);
+}
+.ptx-sagecell, .reveal .program {
+  font-size: calc(var(--r-main-font-size) * 0.6);
+}
+
+code[class*="language-"], pre[class*="language-"] {
+  padding: 0;
+  line-height: 1.2;
+}
+
 dfn {
   font-weight: bold;
 }

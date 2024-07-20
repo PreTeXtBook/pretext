@@ -181,6 +181,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </li>
                 </dl></p>
             </slide>
+        </section>
+
+        <section>
+            <title>Blocks and code</title>
 
             <slide>
                 <title>Blocks: <tag>definition</tag></title>
@@ -215,6 +219,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </theorem>
             </slide>
 
+            <slide>
+                <title>Code</title>
+
+                <p>Here is an inline bit of code with surrounding text. <c>print("hello world")</c>. Here is a more text. And some more. And yet more. And a full program... with Prism support.</p>
+                <program language="python" line-numbers="yes">
+                    <title>A simple program</title>
+                    <input>
+                        def f(x):
+                            return x**2
+                        
+                        # many intentional blank lines below...
+                        # you may to zoom out, but at some point better to scroll a long listing
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        print(f(3))
+                    </input>
+                </program>
+            </slide>
+
         </section>
 
         <section>
@@ -223,7 +254,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <slide>
                 <title>Ramanujan and Integration</title>
 
-                <p>This Sage Cell should execute properly, but some extra CSS is being applied.  It is also difficult to edit properly.  Perhaps the two are related.  You may need to zoom out your browser to see all the content, especially after running the cell.</p>
+                <p>This Sage Cell is testing styling.</p>
 
                 <p>We have some mathematics on the page, to look for Javascript interference with MathJax.  An identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me>.</p>
 
