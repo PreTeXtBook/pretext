@@ -102,7 +102,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#x9;</xsl:text>
         <xsl:apply-templates select="." mode="visible-id" />
         <xsl:text>&#xa;</xsl:text>
-    </xsl:for-each>                    
+    </xsl:for-each>
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
     <xsl:apply-templates select="." mode="standalone-page" >
         <xsl:with-param name="content">
