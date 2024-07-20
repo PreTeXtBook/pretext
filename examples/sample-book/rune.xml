@@ -246,7 +246,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tests>
             </program>
         </exercise>
-        
+
         <p>Here is an activecode with <attr>language</attr> set to <c>sql</c> uses the <attr>database</attr> to load a SQLite database file.</p>
 
         <exercise xml:id="exercise-sql-using-db">
@@ -3439,8 +3439,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             let revAns = ans.split("").reverse().join("");
                             result = (ans === revAns);
                             }
-                            return result; 
-                        }() 
+                            return result;
+                        }()
                         </jscmp>
                         <feedback><p>Any word that is the same forward and backward is a palindrome.</p></feedback>
                     </test>
