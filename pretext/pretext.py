@@ -4524,7 +4524,7 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
     with open(temp_file, 'r') as f:
         for line in f:
             parts = line.split()
-            pairs[parts[0]] =  parts[1]
+            pairs[parts[0]] = parts[1] if len(parts) > 1 else None
 
     if variable in pairs:
         return pairs[variable]
