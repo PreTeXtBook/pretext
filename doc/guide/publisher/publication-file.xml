@@ -134,6 +134,20 @@
             <p>In the text itself avoid obscure characters or symbols, and do not use any markup.   Keep it simple.  When used with <latex/> output the scharacters <c>\\</c> will survive in the text to create multiple lines of text in the watermark.  This feature is implemented for <latex/> and <init>HTML</init> output.  See <xref ref="watermarks"/> for more detail and an example.</p>
         </subsection>
 
+        <subsection xml:id="common-mermaid">
+            <title>Mermaid</title>
+            <idx><h>Mermaid themes</h></idx>
+
+            <p>
+                Various themes are available for Mermaid diagrams. To use a theme, set
+                <cd>
+                    <cline>/publication/common/mermaid/@theme</cline>
+                </cd>
+                with a value of the theme name. The default theme is <c>default</c>.
+                See <xref ref="topic-mermaid"/> for more information on Mermaid diagrams.
+            </p>
+        </subsection>
+
         <subsection xml:id="common-qrcode-image">
             <title>QR code image</title>
             <idx><h>common option</h><h>qrcode</h></idx>

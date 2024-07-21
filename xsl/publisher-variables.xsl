@@ -143,6 +143,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/fillin/pi:pub-attribute[@name='mathstyle']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<xsl:variable name="mermaid-theme">
+    <xsl:apply-templates select="$publisher-attribute-options/common/mermaid/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+<!-- QR code image to be placed at center of QR codes -->
+<xsl:variable name="qrcode-image">
+    <xsl:apply-templates select="$publisher-attribute-options/common/qrcode/pi:pub-attribute[@name='image']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- Em dash Width -->
 
 <xsl:variable name="emdash-space">
@@ -1250,6 +1259,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
                 <xsl:message>PTX:WARNING: the publication file entry  source/@webwork-problems  is</xsl:message>
                 <xsl:message>             deprecated, please move to using managed directories</xsl:message>
+            </xsl:when>
+            <!-- no specification, so empty string for filename -->
+            <!-- this will be noted where it is employed        -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:if>
+</xsl:variable>
+
+<!-- Dynamic problem substitutions are formed by Python routines    -->
+<!-- in the   pretext.py  module that opens HTML representations    -->
+<!-- on a local http.server process. The summary of all             -->
+<!-- are recorded in the dynamic-substitutions-file.                -->
+<xsl:variable name="dynamic-substitutions-file">
+    <!-- Only relevant if there are dynamic exercises present.      -->
+    <xsl:if test="$original//exercise//setup">
+        <xsl:choose>
+            <!-- Look in the publication file for the generated directory -->
+            <xsl:when test="$publication/source/directories/@generated">
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'dynamic_subs/dynamic_substitutions.xml'), '&#x20;', '%20')"/>
             </xsl:when>
             <!-- no specification, so empty string for filename -->
             <!-- this will be noted where it is employed        -->
@@ -3065,6 +3093,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="textstyle" default="underline" options="box shade"/>
             <pi:pub-attribute name="mathstyle" default="shade" options="underline box"/>
         </fillin>
+        <qrcode>
+            <pi:pub-attribute name="image" default="" freeform="yes"/>
+        </qrcode>
+        <mermaid>
+            <pi:pub-attribute name="theme" default="default" options="dark forest light"/>
+        </mermaid>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>

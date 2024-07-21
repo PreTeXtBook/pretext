@@ -163,6 +163,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>An ActiveCode running on the Runestone server (rather than in a browser) can be provided with attributes that are flags to influence the compiler and linker, as in this <tag>program</tag> recycled from before.</p>
+
+        <listing xml:id="program-activecode-java-flags">
+            <title>Informal Java <q>Hello, World</q>, with flags</title>
+            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</caption>
+            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
+                <title>"hi" in Java</title>
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
         <p>Now a programming exercise.  The program upcoming is going to <term>include</term> all the code of the program preceding.  This is accomplished with an <attr>include</attr> attribute on the <em>including</em> program whose value is the <attr>xml:id</attr> of the <em>included</em> program.  So by running the next program, it should pass all of its three tests (for example another example using unit tests, see <xref ref="unit-test-example"/>).  Now reload the page, do not run the program in the listing, and then see that the program in the exercise still runs correctly.</p>
 
         <p>You'll see nothing that tells the reader that the one chunk of code is prefacing the other.  And in static formats it might be even less obvious.  So you will want to say <em>something</em> to alert the reader.  Here it is easy: <xref ref="exercise-python-including"/> includes all the code from <xref ref="listing-python-included"/>.</p>
@@ -421,13 +445,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Activity Coding Exercise</title>
 
             <statement>
-                <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
+                <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.  (There is an empty <tag>tests</tag> element here, designed to test relief for an error this will cause on a Runestone server.)</p>
             </statement>
             <program label="activity-program" interactive="activecode" language="python">
                 <input>
                 for i in range(10):
                     print(i)
                 </input>
+                <tests>
+
+                </tests>
             </program>
             <answer><p>We're still not really sure.</p></answer>
         </activity>
@@ -2532,6 +2559,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint><p>Dorothy will not be much help with this proof.</p></hint>
         </exercise>
 
+        <exercise label="parsons-with-partial-order" language="python" adaptive="yes" indentation="hide">
+            <title>Parsons Problem, Partial Ordering</title>
+            <statement>
+                <p>Parsons problems can specify a partial ordering that allows for multiple valid solutions.</p>
+                <p>Try putting the blocks in a valid order to calculate and print<c>c</c> Only use the required blocks. There are many valid orderings.</p>
+            </statement>
+            <blocks>
+                <block order="5" name="math">
+                    <cline>import math</cline>
+                </block>
+                <block order="7" correct="no">
+                    <cline>import antigravity</cline>
+                </block>
+                <block order="6" name="a">
+                    <cline>a = 3</cline>
+                </block>
+                <block order="2" name="b">
+                    <choice correct="yes">
+                        <cline>b = 4</cline>
+                    </choice>
+                    <choice>
+                        <cline>4 = b</cline>
+                    </choice>
+                </block>
+                <block order="3" name="cSq" depends="a b">
+                    <cline>cSquared = a ** 2 + b ** 2</cline>
+                </block>
+                <block order="1" name="c" depends="cSq math">
+                    <cline>c = math.sqrt(cSquared)</cline>
+                </block>
+                <block order="4" depends="c">
+                    <cline>print(c)</cline>
+                </block>
+            </blocks>
+        </exercise>
+
         <exercise label="prime-number-program-indent-yes" language="python" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>
@@ -3009,6 +3072,148 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <response/>
         </exercise>
     </exercises>
+
+    <section xml:id="polling" label="polling">
+        <title>Polling</title>
+
+        <p>(2024-04-24) This section is experimental, and may not be fully functional as you view it.  No markup in the source document is final and may change at any time.</p>
+
+        <p>We begin with standalone queries, using the <tag>query</tag> element.  Runestone calls these <term>polls</term>.   We plan structures/blocks such as <tag>poll</tag>, <tag>survey</tag>, and <tag>questionnaire</tag>, that will be structured collections of <tag>query</tag>.</p>
+
+        <query label="stoplight-query">
+            <statement>
+                <p>In my town, the stoplights have:</p>
+            </statement>
+            <choices>
+                <choice>
+                    <p>Solid yellow lights.</p>
+                </choice>
+                <choice>
+                    <p>Yellow lights that are solid left-turn arrows.</p>
+                </choice>
+                <choice>
+                    <p>Yellow lights that are blinking left-turn arrows.</p>
+                </choice>
+            </choices>
+        </query>
+
+        <query label="derivative-query">
+            <statement>
+                <p>Which of the following is the derivative of <m>f(x)=x^4\sin(x)</m>?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <p><m>x^5 - \cos(x)</m></p>
+                </choice>
+                <choice>
+                    <p><m>x^4\cos(x) + 4x^3\sin(x)</m></p>
+                </choice>
+                <choice>
+                    <p><m>4x^3\cos(x)</m></p>
+                </choice>
+            </choices>
+        </query>
+
+        <query label="discipline-query" scale="5">
+            <statement>
+                <p>I like computer science better than mathematics.  <q>1</q> is <q>strongly disagree</q> and <q>5</q> is <q>strongly agree</q>.</p>
+            </statement>
+        </query>
+
+        <query label="animal-query-absurd" scale="37">
+            <statement>
+                <p>How many stuffed animal toys did you own growing up?  (Testing an absurdly large scale, especially in print.)</p>
+            </statement>
+        </query>
+
+        <query label="image-query" scale="5">
+            <statement>
+                <p>Which of the following paintings is your favorite?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <!-- The Calydonian Boar Hunt by Peter Paul Rubens, CC0 -->
+                    <!-- https://www.rawpixel.com/image/14263399/the-calydonian-boar-hunt-peter-paul-rubens -->
+                    <p>The Calydonian Boar Hunt by Peter Paul Rubens</p>
+                    <image source="image-from-rawpixel-id-14263399-jpeg.jpg" width="50%"/>
+                </choice>
+                <choice>
+                    <!-- Lucas Cranach's The fountain of youth (1546) famous painting. CC0-->
+                    <!-- https://www.rawpixel.com/image/3984423/illustration-image-art-people-vintage -->
+                    <p>Lucas Cranach's The fountain of youth (1546)</p>
+                    <image source="image-from-rawpixel-id-3984423-jpeg.jpg" width="50%"/>
+                </choice>
+                <choice>
+                    <!-- William-Adolphe Bouguereau's Temptation (1880) -->
+                    <!-- https://www.rawpixel.com/image/8704110/image-frame-art-vintage -->
+                    <p>William-Adolphe Bouguereau's Temptation (1880)</p>
+                    <image source="image-from-rawpixel-id-8704110-jpeg.jpg" width="50%"/>
+                </choice>
+            </choices>
+        </query>
+    </section>
+
+    <section xml:id="doenet">
+        <title>DoenetML</title>
+
+        <p>This preliminary DoenetML example is for testing use on a Runestone server, where it will use the SPLICE protocol to report out events.  To the reader, it should <em>behave</em> identically when not on a Runestone server.</p>
+
+        <!-- 2024-04-25: This exact interactive appears in the sample article, within a figure. -->
+        <interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
+            <slate surface="doenetml">
+                &lt;p&gt;
+                Adjust the vectors &lt;m&gt;\vec u&lt;/m&gt;, &lt;m&gt;\vec v&lt;/m&gt;, and &lt;m&gt;\vec w&lt;/m&gt; in the
+                left graph to visualize the areas calculated by
+                &lt;m&gt;\det[\vec u\hspace{0.5em}\vec w]&lt;/m&gt;, &lt;m&gt;\det[\vec v\hspace{0.5em}\vec w]&lt;/m&gt;,
+                and
+                &lt;m&gt;\det[\vec u+\vec v\hspace{0.5em}\vec w]&lt;/m&gt;.
+              &lt;/p&gt;
+              &lt;setup&gt;&lt;line through=&quot;(0,0) $v&quot; name=&quot;vLine&quot;/&gt;&lt;math simplify  name=&quot;c&quot;&gt;$cv.x/$v.x&lt;/math&gt;&lt;/setup&gt;
+              &lt;sideBySide&gt;
+                &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
+                  &lt;m draggable=&quot;false&quot; anchor=&quot;(10,14)&quot;&gt;
+                    \det[\vec u\hspace{0.5em}\vec w],
+                    \det[\vec v\hspace{0.5em}\vec w]
+                  &lt;/m&gt;
+                  &lt;point name=&quot;u&quot; styleNumber=&quot;3&quot;&gt;
+                    (6,2)
+                    &lt;label&gt;&lt;m&gt;\vec u&lt;/m&gt;&lt;/label&gt;
+                  &lt;/point&gt;
+                  &lt;point name=&quot;w&quot; styleNumber=&quot;3&quot;&gt;
+                    (3,7)
+                    &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+                  &lt;/point&gt;
+                  &lt;point name=&quot;uPlusV&quot; styleNumber=&quot;4&quot;&gt;
+                    (9,5)
+                    &lt;label&gt;&lt;m&gt;\vec v&lt;/m&gt;&lt;/label&gt;
+                  &lt;/point&gt;
+                  &lt;polygon vertices=&quot;(0,0) $u $u+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;3&quot;/&gt;
+                  &lt;polygon vertices=&quot;$u $uPlusV $uPlusV+$w $u+$w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;4&quot;/&gt;
+                  &lt;lineSegment endpoints=&quot;(0,0) $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                  &lt;lineSegment endpoints=&quot;$w $uPlusV+$w&quot; styleNumber=&quot;6&quot;/&gt;
+                &lt;/graph&gt;
+                &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
+                  &lt;m draggable=&quot;false&quot; anchor=&quot;(12,14)&quot;&gt;
+                    \det[\vec u+\vec v\hspace{0.5em}\vec w]
+                  &lt;/m&gt;
+                  &lt;polygon vertices=&quot;(0,0) $uPlusV $uPlusV+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;2&quot;/&gt;
+                  &lt;point draggable=&quot;false&quot; styleNumber=&quot;3&quot;&gt;
+                    $w
+                    &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+                  &lt;/point&gt;
+                  &lt;point draggable=&quot;false&quot; styleNumber=&quot;4&quot;&gt;
+                    $uPlusV
+                    &lt;label&gt;&lt;m&gt;\vec u+\vec v&lt;/m&gt;&lt;/label&gt;
+                  &lt;/point&gt;
+                  &lt;lineSegment endpoints=&quot;(0,0) $u&quot; styleNumber=&quot;6&quot;/&gt;
+                  &lt;lineSegment endpoints=&quot;$u $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                  &lt;lineSegment endpoints=&quot;$w $w+$u&quot; styleNumber=&quot;6&quot;/&gt;
+                  &lt;lineSegment endpoints=&quot;$w+$u $w+$uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                &lt;/graph&gt;
+              &lt;/sideBySide&gt;
+            </slate>
+        </interactive>
+    </section>
 
     <exercises xml:id="fill-in-exercises">
         <title>Fill-In Exercises</title>

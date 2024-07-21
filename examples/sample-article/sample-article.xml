@@ -91,6 +91,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \usetikzlibrary{arrows,matrix}
         \usetikzlibrary{positioning}        % for Dave R's worksheet
         \usepackage{circuitikz}             % for Virgil P's worksheet
+        \usepackage{nicematrix}             % for multi-run latex-image (label="latex-three-pass")
         </latex-image-preamble>
         <!--
         The Sage Notebook has its own interface and worksheet list.
@@ -731,7 +732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>This claim is an equivalence: it is true if and only if it is correct.</p>
                     </statement>
                     <proof>
-                        <p>Our purpose here is to show how you can structure a proof with cases, such as an equivalence structured with the arrows typically used to demonstrate the two <q>directions</q> involved in the proof, by using the <c>direction</c> attribute on a <c>case</c> element.</p>
+                        <p>Our purpose here is to show how you can structure a proof with cases, such as an equivalence structured with the arrows typically used to demonstrate the two <q>directions</q> involved in the proof, by using the <attr>direction</attr> attribute on a <tag>case</tag> element.</p>
 
                         <case direction="forward">
                             <p>Nulla non lectus suscipit, bibendum leo quis, dignissim justo. In urna turpis, tincidunt id elementum id, faucibus ac tellus.</p>
@@ -766,6 +767,139 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>This proof should fill exactly three lines (as of defaults in place 2018-12-31) and so the tombstone/Halmos should be on a fourth line, and then <em>flush right</em>. xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx.</p>
                     </proof>
                 </claim>
+
+                <claim xml:id="claim-with-tfae-cases">
+                    <title>A List of Equivalent Statements</title>
+                    <statement>
+                        <p>
+                            The following are equivalent.
+                            <ol marker="(i)">
+                                <li>This statement is equivalent to all those below.</li>
+                                <li>This statement is equivalent to the statement above and to all those below.</li>
+                                <li>This statement is equivalent to the two statements above and to the statement below.</li>
+                                <li>This statement is equivalent to all those above.</li>
+                            </ol>
+                        </p>
+                    </statement>
+                    <proof>
+                        <p>Our purpose here is to show how you can structure a proof with cases to address the circular logic required to prove the equivalence of a list of statements, by using the <attr>direction</attr> attribute on a <tag>case</tag> element. You should order the list of statements in the order that you would like to prove ``this statement implies the next.''</p>
+
+                        <case direction="cycle">
+                            <p>Here we would prove that the first statement implies the second.</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <p>Here we would prove that the second statement implies the third.</p>
+                        </case>
+
+                        <case direction="cycle" xml:id="cycle">
+                            <title>The trickiest case</title>
+
+                            <p>This time we include a title to describe the nature of this case. But we would still need to prove that the third statement implies the last.</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <title>Wrap-around</title>
+
+                            <p>Finally, we would complete the cycle of logic by proving that the last statement implies the first.</p>
+                        </case>
+
+                    </proof>
+                </claim>
+
+                <p>We can also use <attr>direction</attr> set to <c>cycle</c> in a stand-alone proof of our TFAE claim. If we include a <attr>ref</attr> on the <tag>proof</tag> that points to the original claim, then the formatting of the markers on the statement list will be honored in our cases.</p>
+
+                <proof ref="claim-with-tfae-cases">
+                    <p>Once again we will prove that the four statements in <xref ref="claim-with-tfae-cases" /> are equivalent.</p>
+
+                    <case direction="cycle">
+                        <p>Another argument that the first statement implies the second.</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <p>And another argument that the second statement implies the third.</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <title>Not so tricky this time</title>
+
+                        <p>Why did we find it so difficult before to prove that the third statement implies the last?</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <title>Wrap-around</title>
+
+                        <p>And once more we complete the cycle of logic.</p>
+                    </case>
+
+                </proof>
+
+                <p>A couple more times to check that the default list markers get applied to the directional cases properly.</p>
+
+                <claim xml:id="another-claim-with-tfae-cases">
+                    <title>Another List of Equivalent Statements</title>
+                    <statement>
+                        <p>
+                            The <tag>ol</tag> that creates the list below does not have <attr>marker</attr>.
+                            <ol>
+                                <li>This statement is equivalent to the two below.</li>
+                                <li>This statement is equivalent to both the statement above and to the statement below.</li>
+                                <li>This statement is equivalent to the two above.</li>
+                            </ol>
+                        </p>
+                    </statement>
+                    <proof>
+                        <p>You know the drill by now.</p>
+
+                        <case direction="cycle">
+                            <p>Does the first statement imply the second?</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <title>The <q>middle</q> case</title>
+                            <p>Does the second statement imply the third?</p>
+                        </case>
+
+                        <case direction="cycle">
+                            <p>And finally, does the third imply the first?</p>
+                        </case>
+
+                    </proof>
+                </claim>
+
+                <p>This proof includes a <attr>ref</attr> to the preceding claim.</p>
+
+                <proof ref="another-claim-with-tfae-cases">
+
+                    <case direction="cycle">
+                        <p>Does the first statement imply the second?</p>
+                        </case>
+                        
+                    <case direction="cycle">
+                        <title>The <q>middle</q> case</title>
+                        <p>Does the second statement imply the third?</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <p>And finally, does the third imply the first?</p>
+                    </case>
+
+                </proof>
+
+                <p>This proof does not include a <attr>ref</attr>, and so the direction indicators get default markers.</p>
+
+                <proof>
+
+                    <case direction="cycle">
+                        <p>Does the first statement imply the second?</p>
+                    </case>
+
+                    <case direction="cycle">
+                        <p>And finally, does the second imply the first?</p>
+                    </case>
+
+                </proof>
+
             </subsection>
 
             <!--
@@ -1544,7 +1678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <tag>insert</tag> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <tag>delete</tag>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <tag>stale</tag>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
-                <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+                <p>If you need a <q>fill-in blank</q>, like this <fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <attr>characters</attr> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
 
                 <p>This paragraph is intended to make a <tag>fillin</tag> appear right at the start of <fillin characters="20"/> the second line  in print and then the next paragraph has nothing but a <tag>fillin</tag>. Both are for testing purposes.</p>
 
@@ -3160,6 +3294,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
+                <p>The next image requires three passes with <latex/> to get everything in place.  It is placed here to test that the code in the Pythion script correctly recognizes this requirement.</p>
+
+                <figure>
+                    <caption>A matrix with colored entries</caption>
+
+                    <!-- This image needs three passes with LaTeX, which -->
+                    <!-- is supported by the script making this image    -->
+                    <image width="50%">
+                        <latex-image label="latex-three-pass">
+                            \begin{tikzpicture}
+                            \node{
+                                $\begin{bNiceArray}{ccc|cc}[
+                                code-before={\cellcolor{green!72}{1-1,2-2,3-3}\cellcolor{teal!72}{1-2,2-3,3-4}\cellcolor{yellow!72}{1-3,2-4,3-5}}
+                                ]
+                                3 \amp 4 \amp 0 \amp 1 \amp 4 \\
+                                -2 \amp 3 \amp 1 \amp -2 \amp 3 \\
+                                0 \amp 2 \amp 1 \amp 0 \amp 2
+                                \end{bNiceArray}$
+                            };
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
                 <p>PSTricks is a <latex /> package for drawing diagrams and pictures, dating back to the days before <init>PDF</init>, when PostScript (<init>PS</init>) was king.  Given its history, it does not seem to work easily with the <c>pdflatex</c> engine.  But it will work easily with the <c>xelatex</c> engine.  We try to keep this present sample document workable with both engines, so we have presented an example of the use of PSTricks in the <c>xelatex</c>-exclusive sample document where we test obscure fonts and characters.  So your best bet is to look there.<idx>PSTricks</idx></p>
 
                 <p>There are suggestions online that <cd>\usepackage[pdf]{pstricks}</cd>along with <cd>pdflatex --shell-escape *.tex</cd> is workable.  We could not make it happen, and a <q>shell escape</q> can be a dangerous security hole.  That said, updates to this approach are welcome.</p>
@@ -3384,6 +3542,94 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                         draw(s,meshpen=black,render(merge=true));
                         </asymptote>
+                    </image>
+                </figure>
+            </subsection>
+
+            <subsection xml:id="graphics-mermaid">
+                <title>Mermaid Diagrams</title>
+                <idx><h>Mermaid diagrams</h></idx>
+
+                <p><url href="https://mermaid.js.org/" visual="mermaid.js.org">Mermaid</url> is a Markdown-inspired tool for authoring various kinds of diagrams. Below, three of the available diagram types are demonstrated. For a full listing of diagram types, see the <url href="https://mermaid.js.org/intro/#diagram-types">Mermaid Documentation</url>. The <url href="https://mermaid.live/" visual="mermaid.live">Mermaid live editor</url>is a great tool for testing the syntax of your mermaid diagrams.</p>
+
+                <p>In PreTeXt, you can specify a Mermaid theme via <attr>common/mermaid/@theme</attr></p>
+
+                <figure xml:id="figure-mermaid-git">
+                    <caption>Mermaid Git Diagram</caption>
+                    <image xml:id="mermaid-git-image">
+                        <shortdescription>
+                            A git diagram in Mermaid
+                        </shortdescription>
+                        <mermaid>
+                            ---
+                            title: Example Git diagram
+                            ---
+                            gitGraph
+                                commit
+                                commit
+                                branch develop
+                                checkout develop
+                                commit
+                                commit
+                                checkout main
+                                merge develop
+                                commit
+                                commit
+                        </mermaid>
+                    </image>
+                </figure>
+
+                <figure xml:id="figure-mermaid-class">
+                    <caption>Mermaid Class Diagram</caption>
+                    <image xml:id="mermaid-class-image">
+                        <shortdescription>
+                            A class diagram in Mermaid
+                        </shortdescription>
+                        <mermaid>
+                        classDiagram
+                            Animal &lt;|-- Duck
+                            Animal &lt;-- Fish
+                            Animal &lt;|-- Zebra
+                            Animal : +int age
+                            Animal : +String gender
+                            Animal: +isMammal()
+                            Animal: +mate()
+                            class Duck{
+                              +String beakColor
+                              +swim()
+                              +quack()
+                            }
+                            class Fish{
+                              -int sizeInFeet
+                              -canEat()
+                            }
+                            class Zebra{
+                              +bool is_wild
+                              +run()
+                            }
+                        </mermaid>
+                    </image>
+                </figure>
+
+                <figure xml:id="figure-mermaid-sequence">
+                    <caption>Mermaid Seuqnece Diagram</caption>
+                    <image xml:id="mermaid-sequence-image">
+                        <shortdescription>
+                            A sequence diagram in Mermaid
+                        </shortdescription>
+                        <mermaid>
+                        sequenceDiagram
+                            participant Alice
+                            participant Bob
+                            Alice->>John: Hello John, how are you?
+                            loop HealthCheck
+                                John->>John: Fight against hypochondria
+                            end
+                            Note right of John: Rational thoughts &lt;br/>prevail!
+                            John-->>Alice: Great!
+                            John->>Bob: How about you?
+                            Bob-->>John: Jolly good!
+                        </mermaid>
                     </image>
                 </figure>
             </subsection>
@@ -4514,7 +4760,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>Purple</p></li>
                 </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can specify the <latex /> version to match if it is important.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
                     <li>
                         <title>A title on a top-level item</title>
                         <p>Level 1, first.</p>
@@ -7528,25 +7774,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Note that the <init>HTML</init> that is output can vary slightly from your source in small, harmless ways, such as empty (self-closing) elements being output with both an opening and a closing tag.  Please report any significant discrepancies.  Soon this requirement will be enforced in the code.</p>
                 </warning>
 
-                <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
+                <p>It is also possible to add <tag>script</tag> elements within an interactive that contain properly escaped JS code. These elements will be placed at the end of the document created to hold the interactive content and can interactive with the other elements within the interactive but can not directly interact with the surrounding page.</p>
 
-                <figure>
-                    <caption>1-Dimensional Kinematics</caption>
-                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
-                        <sidebyside width="70%" margins="15%">
-                            <stack>
-                                <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
-                                <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
-                                <slate xml:id="box_v" surface="jsxboard" aspect="6:3" />
-                                <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
-                            </stack>
-                        </sidebyside>
-                        <instructions xml:id="kinematics-instructions">
-                            <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
-                        </instructions>
-                        <static>
-                            <image source="images/kinematics.png" width="60%"/>
-                        </static>
+                <p>Authors are strongly discouraged from trying to incorporate complex code in the form of a <tag>script</tag>, but it can be a useful tool to call more complex code that is linked via <attr>source</attr> on the <tag>interactive</tag>.</p>
+
+                <p>This example uses a <tag>script</tag> to draw <q>Hello World</q> to a <tag>slate</tag> </p>
+
+                <figure xml:id="figure-simple-js-script">
+                    <caption>A simple embedded script example</caption>
+
+                    <interactive aspect="6:1" xml:id="interactive-simple-js-script" platform="javascript" source="code/roesler/kinematics.js">
+                        <slate aspect="6:1" xml:id="simple-js-script" surface="canvas"/>
+                        <script>
+                            const canvas = document.getElementById("simple-js-script");
+                            const ctx = canvas.getContext("2d");
+                            ctx.font = "40px sans-serif";
+                            ctx.fillText("Hello world", 10, 50);
+                        </script>
                     </interactive>
                 </figure>
 
@@ -7710,6 +7954,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html" visual="jsxgraph.uni-bayreuth.de">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext /> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
 
                 <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
+
+                <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
+
+                <figure>
+                    <caption>1-Dimensional Kinematics</caption>
+                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
+                        <sidebyside width="70%" margins="15%">
+                            <stack>
+                                <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
+                                <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_v" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
+                            </stack>
+                        </sidebyside>
+                        <instructions xml:id="kinematics-instructions">
+                            <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
+                        </instructions>
+                        <static>
+                            <image source="images/kinematics.png" width="60%"/>
+                        </static>
+                    </interactive>
+                </figure>
 
                 <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">Archimedean Spiral</url> is taken from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
 
@@ -8131,6 +8397,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
             </subsection>
+
+            <subsection xml:id="interactive-doenetml">
+                <title>DoenetML</title>
+
+                <p>
+                    <url href="https://doenet.org">DoenetML</url> is a markup language
+                    inspired by <pretext/> for semantically describing interactive
+                    mathematics applets for the web. Use
+                    <c>interactive[@platform="doenetml"]</c> with a
+                    <c>slate[@surface="doenetml"]</c> to include DoenetML content
+                    within your document.
+                </p>
+                <p>
+                    Since DoenetML is similar to,
+                    but not completely compatible with, XML, it cannot be authored
+                    directly within a PreTeXt document without painstakingly escaping
+                    every <c>&lt;</c> as <c>&amp;lt;</c> and every <c>&amp;</c>
+                    as <c>&amp;amp;</c>. However, a convenient workflow to avoid this
+                    is to author your DoenetML in a separate file like
+                    <c>example.doenetml</c>, then include this file
+                    within your <pretext/> document using
+                    <c>&lt;xi:include parse="text" src="path/to/example.doenetml"/&gt;</c>.
+                </p>
+
+                <figure xml:id="figure-doenetml">
+                    <caption>DoenetML example</caption>
+                    <!-- 2024-04-25: This exact interactive appears in the sample book, for testing on Rynestone. -->
+                    <!-- A @label is preferred, since it is required for use on Runestone -->
+                    <interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
+                        <slate surface="doenetml">
+                            &lt;p&gt;
+                            Adjust the vectors &lt;m&gt;\vec u&lt;/m&gt;, &lt;m&gt;\vec v&lt;/m&gt;, and &lt;m&gt;\vec w&lt;/m&gt; in the
+                            left graph to visualize the areas calculated by
+                            &lt;m&gt;\det[\vec u\hspace{0.5em}\vec w]&lt;/m&gt;, &lt;m&gt;\det[\vec v\hspace{0.5em}\vec w]&lt;/m&gt;,
+                            and
+                            &lt;m&gt;\det[\vec u+\vec v\hspace{0.5em}\vec w]&lt;/m&gt;.
+                          &lt;/p&gt;
+                          &lt;setup&gt;&lt;line through=&quot;(0,0) $v&quot; name=&quot;vLine&quot;/&gt;&lt;math simplify  name=&quot;c&quot;&gt;$cv.x/$v.x&lt;/math&gt;&lt;/setup&gt;
+                          &lt;sideBySide&gt;
+                            &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
+                              &lt;m draggable=&quot;false&quot; anchor=&quot;(10,14)&quot;&gt;
+                                \det[\vec u\hspace{0.5em}\vec w],
+                                \det[\vec v\hspace{0.5em}\vec w]
+                              &lt;/m&gt;
+                              &lt;point name=&quot;u&quot; styleNumber=&quot;3&quot;&gt;
+                                (6,2)
+                                &lt;label&gt;&lt;m&gt;\vec u&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;point name=&quot;w&quot; styleNumber=&quot;3&quot;&gt;
+                                (3,7)
+                                &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;point name=&quot;uPlusV&quot; styleNumber=&quot;4&quot;&gt;
+                                (9,5)
+                                &lt;label&gt;&lt;m&gt;\vec v&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;polygon vertices=&quot;(0,0) $u $u+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;3&quot;/&gt;
+                              &lt;polygon vertices=&quot;$u $uPlusV $uPlusV+$w $u+$w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;4&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;(0,0) $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$w $uPlusV+$w&quot; styleNumber=&quot;6&quot;/&gt;
+                            &lt;/graph&gt;
+                            &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
+                              &lt;m draggable=&quot;false&quot; anchor=&quot;(12,14)&quot;&gt;
+                                \det[\vec u+\vec v\hspace{0.5em}\vec w]
+                              &lt;/m&gt;
+                              &lt;polygon vertices=&quot;(0,0) $uPlusV $uPlusV+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;2&quot;/&gt;
+                              &lt;point draggable=&quot;false&quot; styleNumber=&quot;3&quot;&gt;
+                                $w
+                                &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;point draggable=&quot;false&quot; styleNumber=&quot;4&quot;&gt;
+                                $uPlusV
+                                &lt;label&gt;&lt;m&gt;\vec u+\vec v&lt;/m&gt;&lt;/label&gt;
+                              &lt;/point&gt;
+                              &lt;lineSegment endpoints=&quot;(0,0) $u&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$u $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$w $w+$u&quot; styleNumber=&quot;6&quot;/&gt;
+                              &lt;lineSegment endpoints=&quot;$w+$u $w+$uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
+                            &lt;/graph&gt;
+                          &lt;/sideBySide&gt;
+                        </slate>
+                    </interactive>
+                </figure>
+
+            </subsection>
         </section>
 
         <section xml:id="section-interactive-server" label="section-interactive-server">
@@ -8535,7 +8886,247 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
-        <section xml:id="section-interactive-code" label="section-interactive-code">
+        <section xml:id="section-dynamic-exercises">
+            <title>Dynamic Exercises</title>
+
+            <introduction>
+                <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
+            </introduction>
+
+            <exercises>
+                <title>Dynamic Fill-In</title>
+
+                <introduction>
+                  <p>The first problem illustrates revised markup for fill-in problems that don't involve randomization and use simple string and number comparison tests. Later exercises illustrate the use of dynamically generated mathematical expressions.</p>
+                </introduction>
+
+                <exercise label="fillin-string-integer-new">
+                    <title>Fill-In, String and Number Answers</title>
+
+                    <statement>
+                        <p>Complete the following line of a Python program so that it will declare an integer variable <c>age</c> with an initial value of <c>5</c>.</p>
+                        <p><fillin mode="string" answer="int"/> <c>age = </c> <fillin mode="number" answer="5"/><c>;</c></p>
+                    </statement>
+                    <evaluation>
+                        <evaluate>
+                            <test>
+                                <strcmp use-answer='yes'/>
+                                <feedback>
+                                  <p>A variable of type <c>int</c> is appropriate for whole number ages.</p>
+                                </feedback>
+                            </test>
+                            <test>
+                                <strcmp>.*</strcmp>
+                                <feedback>
+                                    <p>Remember that Java uses just the first three letters of the word <q>integer</q> to define an integral type.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                        <evaluate>
+                            <test>
+                                <numcmp use-answer='yes'/>
+                                <feedback>
+                                    <p>An integer variable may be initialized to a value.</p>
+                                </feedback>
+                            </test>
+                            <test>
+                                <strcmp>.*</strcmp>
+                                <feedback>
+                                    <p>Use <c>5</c> as the initial value of the variable.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                    </evaluation>
+                </exercise>
+
+                <exercise label="dynamic-fitb-simple-formula">
+                    <title>Fill-In Formula (Dynamic)</title>
+                    <statement>
+                        <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
+                        <p><m>f(x)=</m> <fillin name="st_cubic" mode="math-formula" ansobj="x3"/></p>
+                    </statement>
+                    <solution>
+                        <p>
+                            Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form, 
+                            <me>f(x) = A <eval obj="base_cubic"/></me>
+                            with an unknown scaling multiple <m>A</m>.
+                        </p>
+                        <p>
+                            When we evaluate <m>f(x)</m> at <m>x=0</m> using this formula, we find
+                            <me>f(0) = <eval obj="base_yint"/>A</me>.
+                            Since we also know <m>f(0)=<eval obj="y0"/></m>, we can write down the equation
+                            <me>A <eval obj="base_cubic"/> = <eval obj="y0"/></me>
+                            and find that <m>A=<eval obj="A"/></m>.
+                        </p>
+                        <p>
+                            Consequently, we can write our function in the form
+                            <me>f(x)=<eval obj="cubic"/></me>.
+                        </p>
+                    </solution>
+                    <setup seed="314159">
+                        <de-object name="y0" context="number">
+                            <de-random distribution="discrete" min="-8" max="8" by="1" nonzero="yes"/>
+                        </de-object>
+                        <de-object name="x1" context="number">
+                            <de-random distribution="discrete" min="-8" max="-4" by="1"/>
+                        </de-object>
+                        <de-object name="d1" context="number">
+                            <de-random distribution="discrete" min="1" max="4" by="1"/>
+                        </de-object>
+                        <de-object name="d2" context="number">
+                            <de-random distribution="discrete" min="1" max="4" by="1"/>
+                        </de-object>
+                        <de-object name="x2" context="number">
+                            <de-number>x1+d1</de-number>
+                        </de-object>
+                        <de-object name="x3" context="number">
+                            <de-number>x2+d2</de-number>
+                        </de-object>
+                        <de-object name="base_cubic" context="formula">
+                            <de-expression>(x-x1)*(x-x2)*(x-x3)</de-expression>
+                        </de-object>
+                        <de-object name="base_yint" context="number">
+                            <de-evaluate>
+                                <formula><eval obj="base_cubic"/></formula>
+                                <variable name="x">0</variable>
+                            </de-evaluate>                            
+                        </de-object>
+                        <de-object name="A" context="number">
+                            <de-number>y0/base_yint</de-number>
+                        </de-object>
+                        <de-object name="cubic" context="formula">
+                            <de-expression>A*(x-x1)*(x-x2)*(x-x3)</de-expression>
+                        </de-object>
+                    </setup>
+                    <evaluation>
+                        <evaluate name="st_cubic">
+                            <test correct="yes">
+                                <mathcmp obj="cubic"/>
+                            </test>
+                        </evaluate>
+                    </evaluation>
+                </exercise>
+                <exercise label="function-decomposition">
+                    <title>Decompose the Function</title>
+                    <statement>
+                        <p>
+                        Consider the function <me>h(x)=<eval obj="composition"/></me>.
+                        Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
+                        </p>
+                        <p>
+                        <m>f(x) = </m> <fillin width="15" mode="math-formula" ansobj="outerFormula" name="fGiven"/> 
+                        and <m>g(x)=</m> <fillin width="15" mode="math-formula" ansobj="innerFormula" name="gGiven"/>
+                        </p>
+                    </statement>
+                    <solution>
+                        <p>
+                        Noticing that the expression <m><eval obj="innerFormula"/></m> appears inside parentheses with a power,
+                        it makes sense to think of that as the inner function, defining <m>g(x) = <eval obj="innerFormula"/></m>.
+                        The outer function describes what happens to that.
+                        If we imagined replacing the formula <m><eval obj="innerFormula"/></m> with a box and then call that box our variable <m>x</m>, we find the outer function is given by <m>f(x) = <eval obj="outerFormula"/></m>.
+                        </p>
+                        <p>
+                        This is not the only non-trivial composition. Can you find others?
+                        </p>
+                    </solution>
+                    <setup seed="4321">
+                        <de-object name="a" context="number">
+                            <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
+                        </de-object>
+                        <de-object name="n" context="number">
+                            <de-random distribution="discrete" min="2" max="5" />
+                        </de-object>
+                        <de-object name="b" context="number">
+                            <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
+                        </de-object>
+                        <de-object name="c" context="number">
+                            <de-random distribution="discrete" min="-4" max="5" by="1" nonzero="yes" />
+                        </de-object>
+                        <de-object name="d" context="number">
+                            <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
+                        </de-object>
+                        <de-object name="outerFormula" context="formula">
+                            <de-expression>a*x^n+b</de-expression>
+                        </de-object>
+                        <de-object name="innerFormula" context="formula">
+                            <de-expression>c*x+d</de-expression>
+                        </de-object>
+                        <de-object name="identityFunction" context="formula">
+                            <de-expression>x</de-expression>
+                        </de-object>
+                        <de-object name="composition" context="formula">
+                            <de-expression mode="substitution">
+                                <formula><eval obj="outerFormula"/></formula>
+                                <variable name="x"><eval obj="innerFormula"/></variable>
+                            </de-expression>
+                        </de-object>
+                    </setup>
+                    <evaluation answers-coupled="yes">
+                        <evaluate name="fGiven">
+                            <test>
+                                <mathcmp obj="identityFunction"/>
+                                <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                            </test>
+                            <test>
+                                <logic op="and">
+                                    <logic op="not">
+                                        <mathcmp>
+                                            <eval obj="composition"/>
+                                            <de-expression context="formula" mode="substitution">
+                                                <formula><eval obj="fGiven"/></formula>
+                                                <variable name="x"><eval obj="gGiven"/></variable>
+                                            </de-expression>
+                                        </mathcmp>
+                                    </logic>
+                                    <mathcmp>
+                                        <eval obj="composition"/>
+                                        <de-expression context="formula" mode="substitution">
+                                            <formula><eval obj="gGiven"/></formula>
+                                            <variable name="x"><eval obj="fGiven"/></variable>
+                                        </de-expression>
+                                    </mathcmp>
+                                </logic>
+                                <feedback>You have composed in the wrong order.</feedback>
+                            </test>
+                        </evaluate>
+                        <evaluate name="gGiven">
+                            <test>
+                                <mathcmp obj="identityFunction"/>
+                                <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                            </test>
+                        </evaluate>
+                        <evaluate all="yes">
+                            <test correct="yes">
+                                <logic op="and">
+                                    <mathcmp>
+                                        <eval obj="composition"/>
+                                        <de-expression context="formula" mode="substitution">
+                                            <formula><eval obj="fGiven"/></formula>
+                                            <variable name="x"><eval obj="gGiven"/></variable>
+                                        </de-expression>
+                                    </mathcmp>
+                                    <logic op="not">
+                                        <mathcmp>
+                                            <eval obj="fGiven"/>
+                                            <eval obj="identityFunction"/>
+                                        </mathcmp>
+                                    </logic>
+                                    <logic op="not">
+                                        <mathcmp>
+                                            <eval obj="gGiven"/>
+                                            <eval obj="identityFunction"/>
+                                        </mathcmp>
+                                    </logic>
+                                </logic>
+                                <feedback>Excellent!</feedback>
+                            </test>
+                        </evaluate>
+                    </evaluation>
+                </exercise>
+            </exercises>
+        </section>
+
+        <section xml:id="section-interactive-code">
             <title>Interactive Coding</title>
 
             <introduction>
@@ -8552,6 +9143,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing xml:id="program-activecode-python">
                     <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
                     <program xml:id="python-hello-world" label="python-hello-world" interactive='activecode' language="python">
+                        <input>
+                        print("Hello, World!")
+                        </input>
+                    </program>
+                </listing>
+
+                <listing xml:id="program-activecode-python-no-codelens">
+                    <caption>An interactive Python program without codelens.</caption>
+                    <program xml:id="python-hello-world-no-codelens" label="python-hello-world-no-codelens" interactive='activecode' language="python" codelens="no">
                         <input>
                         print("Hello, World!")
                         </input>
@@ -9007,6 +9607,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Instructions for Interactives are not numbered, so use a simpler @text -->
                 <li><p>Cross-reference to <tag>instructions</tag> of an <tag>interactive</tag>: <xref ref="kinematics-instructions" text="title"/></p></li>
                 <li><p>A hyperlink to a <tag>subexercises</tag> via its required title (no number is assigned): <xref ref="hard-subexercises" text="title"/></p></li>
+                <li><p>You can request the text to be a type, then a number, then a title: <xref ref="theorem-FTC" text="type-global-title"/></p></li>
+                <li><p>Asking for the text to be a type, then a number, then a title, when there is no title, is not a problem: <xref ref="corollary-FTC-derivative" text="type-local-title"/></p></li>
                 <!-- Accumulate examples here -->
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
@@ -9451,14 +10053,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>And some self-referential XSL:</p>
 
+            <!-- input element intentionally ommited here. Pretext processor should correct. -->
             <program language="xslt" margins="15%">
-                <input>
-                <![CDATA[<xsl:template match="biblio" mode="number">
-                    <xsl:apply-templates select="." mode="structural-number" />
-                    <xsl:text>.</xsl:text>
-                    <xsl:number from="references" level="any" count="biblio" />
-                </xsl:template>]]>
-                </input>
+            <![CDATA[<xsl:template match="biblio" mode="number">
+                <xsl:apply-templates select="." mode="structural-number" />
+                <xsl:text>.</xsl:text>
+                <xsl:number from="references" level="any" count="biblio" />
+            </xsl:template>]]>
             </program>
 
             <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>
@@ -13079,7 +13680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercise>
                 <title>Negative Numbers and Exponents</title>
                 <introduction>
-                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
                 </introduction>
                 <myopenmath problem="2572" />
             </exercise>
@@ -13087,9 +13688,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <exercise>
                 <title>A Statistical Test</title>
                 <introduction>
-                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
                 </introduction>
                 <myopenmath problem="7492" />
+            </exercise>
+
+            <exercise>
+                <title>With an image</title>
+                <introduction>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
+                </introduction>
+                <myopenmath problem="2168" />
             </exercise>
         </section>
 
@@ -13663,6 +14272,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </exercise>
                     </sidebyside>
                 </page>
+            </worksheet>
+            <worksheet label="worksheet-activity-no-task">
+              <page>
+                <activity workspace="1in">
+                  <statement>
+                    <p>
+                      Just a simple activity here.
+                    </p>
+                  </statement>
+                </activity>
+                <activity workspace="1in">
+                  <statement>
+                    <p>
+                      Here is a second activity.
+                    </p>
+                  </statement>
+                </activity>
+              </page>
+            </worksheet>
+            <worksheet label="worksheet-activity-with-task">
+              <page>
+                <activity>
+                  <introduction>
+                    <p>
+                      This is going to be an activity with tasks.
+                    </p>
+                  </introduction>
+                  <task workspace="0.75in">
+                    <statement>
+                      <p>
+                        Here is the first task.
+                      </p>
+                    </statement>
+                  </task>
+                  <task workspace="0.25in">
+                    <statement>
+                      <p>
+                        Here is the second task.
+                      </p>
+                    </statement>
+                  </task>
+                  <task workspace="1.75in">
+                    <statement>
+                      <p>
+                        Here is the third task.
+                      </p>
+                    </statement>
+                  </task>
+                  <conclusion>
+                    <p>
+                      This is a conclusion that comes after the last task.
+                    </p>
+                  </conclusion>
+                </activity>
+              </page>
             </worksheet>
         </section>
 

@@ -202,8 +202,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use this to distinguish one document from another.  -->
 <!-- The global variable here is empty to signal         -->
 <!-- "no choice" by the author.                          -->
+<!-- NB: at some point this should be specified as an    -->
+<!-- attribute, rather than as content, which would make -->
+<!-- things like newlines less likely to appear.  Much   -->
+<!-- as "doucment-id/@edition" is given.  Keep the       -->
+<!-- normalizationcan, it just becomes less necessary.   -->
 <xsl:variable name="document-id">
-    <xsl:value-of select="$docinfo/document-id"/>
+    <xsl:value-of select="normalize-space($docinfo/document-id)"/>
+</xsl:variable>
+
+<!-- And an edition is critical for maintaing the -->
+<!-- Runestone database, though it may have other -->
+<!-- uses related to maintaining changes.         -->
+<xsl:variable name="edition">
+    <xsl:value-of select="normalize-space($docinfo/document-id/@edition)"/>
 </xsl:variable>
 
 <!-- The new version can return to the generic version  -->
@@ -466,6 +478,9 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 
 <!-- HTML only, a developer must elect to use this CSS file -->
 <xsl:param name="debug.developer.css" select="'no'"/>
+
+<!-- HTML only, to load a js style browser for testing      -->
+ <xsl:param name="debug.style.browser" select="''"/>
 
 <!-- HTML only, testing early-releases of MathJax 4                    -->
 <!-- See: https://github.com/mathjax/MathJax/releases                  -->
@@ -771,7 +786,7 @@ Book (with parts), "section" at level 3
                         <xsl:apply-templates select="text()|var" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="text()|fillin" />
+                        <xsl:apply-templates select="text()|eval|fillin" />
                     </xsl:otherwise>
                 </xsl:choose>
                 <!-- look ahead to absorb immediate clause-ending punctuation   -->
@@ -941,7 +956,7 @@ Book (with parts), "section" at level 3
                 <xsl:apply-templates select="text()|xref|var" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="text()|xref|fillin" />
+                <xsl:apply-templates select="text()|xref|eval|fillin" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -1259,7 +1274,7 @@ Book (with parts), "section" at level 3
                 <xsl:apply-templates select="text()|xref|var" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="text()|xref|fillin" />
+                <xsl:apply-templates select="text()|xref|eval|fillin" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -3646,7 +3661,7 @@ Book (with parts), "section" at level 3
 <!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
-<xsl:template match="exercise|program|datafile|&PROJECT-LIKE;|task|video[@youtube]|exercises" mode="runestone-id">
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|interactive[@platform = 'doenetml']" mode="runestone-id">
     <!-- With no @xml:id and no @label we realize the author has not given    -->
     <!-- any thought to a (semi-)peersistent identifire for the Runestone     -->
     <!-- database.  So we call that out as an error.  And we do not even      -->
@@ -3693,9 +3708,10 @@ Book (with parts), "section" at level 3
     <!-- Prefix just for RS server builds, in order that the database -->
     <!-- of exercises gets a globally unique identifier.              -->
     <xsl:if test="$b-host-runestone">
-        <xsl:value-of select="$docinfo/document-id"/>
+        <!-- global variables defined in this stylesheet -->
+        <xsl:value-of select="$document-id"/>
         <xsl:text>_</xsl:text>
-        <xsl:value-of select="$docinfo/document-id/@edition"/>
+        <xsl:value-of select="$edition"/>
         <xsl:text>_</xsl:text>
     </xsl:if>
     <!-- We require a @label attribute, but allow it to be -->
@@ -4333,9 +4349,7 @@ Book (with parts), "section" at level 3
 <!-- First, the number of a list item within its own ordered list.  This -->
 <!-- trades on the PTX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
-    <xsl:variable name="code">
-        <xsl:apply-templates select=".." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="code" select="../@format-code" />
     <xsl:number format="{$code}" />
 </xsl:template>
 
@@ -4883,6 +4897,197 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!--                       -->
+<!-- Circular Case Numbers -->
+<!--                       -->
+
+<!-- These two templates are to facilitate outputting ⇒	and ⇐ in different target formats. -->
+<!-- They are (or should be) overridden with appropriate templates of same name in the     -->
+<!-- -latex, -html, etc conversions.                                                       -->
+<xsl:template name="double-right-arrow-symbol">
+    <xsl:message>PTX:ERROR: A "case" has "direction" equal to either "forward" or "cycle", but the conversion for this output target does not have a double right arrow symbol defined.</xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <xsl:message>PTX:ERROR: A "case" has "direction" equal to "backward", but the conversion for this output target does not have a double left arrow symbol defined.</xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+<!-- This template is to add an extra small horizontal space between the outer delimiters -->
+<!-- and the inner content of the "cycle" title for a "case", in case the "marker" on the -->
+<!-- corresponding "ol" also involves delimiters. Not an error if this is left undefined  -->
+<!-- or is defined to be a null string in a particular conversion stylesheet, in which    -->
+ <!-- case no extra space is added. -->
+<xsl:template name="case-cycle-delimiter-space">
+    <xsl:message>PTX:WARNING: A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+
+<xsl:template match="ol" mode="marker-formatted-case-cycle">
+    <xsl:param name="from" />
+    <xsl:param name="to" />
+    <xsl:variable name="format-code">
+        <xsl:choose>
+            <xsl:when test="self::node()[@format-code]">
+                <xsl:value-of select="./@format-code" />
+            </xsl:when>
+            <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="adjusted-from">
+        <xsl:choose>
+            <xsl:when test="$format-code = '0'"><xsl:value-of select="$from - 1" /></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$from" /></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="adjusted-to">
+        <xsl:choose>
+            <xsl:when test="$format-code = '0'"><xsl:value-of select="$to - 1" /></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$to" /></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="original-marker-suffix" select="./@marker-suffix" />
+    <xsl:variable name="marker-suffix">
+        <xsl:choose>
+            <!-- Strip out any trailing dot from the marker format. -->
+            <xsl:when test="substring($original-marker-suffix, string-length($original-marker-suffix)) = '.'">
+                <xsl:value-of select="substring($original-marker-suffix,1,string-length($original-marker-suffix) - 1)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$original-marker-suffix" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="formatted-case-cycle">
+        <xsl:with-param name="from">
+            <xsl:value-of select="./@marker-prefix" />
+            <xsl:number value="$adjusted-from" format="{$format-code}" />
+            <xsl:value-of select="$marker-suffix" />
+        </xsl:with-param>
+        <xsl:with-param name="to">
+            <xsl:value-of select="./@marker-prefix" />
+            <xsl:number value="$adjusted-to" format="{$format-code}" />
+            <xsl:value-of select="$marker-suffix" />
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="formatted-case-cycle">
+    <xsl:param name="from" />
+    <xsl:param name="to" />
+    <xsl:text>(</xsl:text>
+    <xsl:call-template name="case-cycle-delimiter-space" />
+    <xsl:value-of select="$from" />
+    <xsl:text>&#xa0;</xsl:text>
+    <xsl:call-template name="double-right-arrow-symbol" />
+    <xsl:text>&#xa0;</xsl:text>
+    <xsl:value-of select="$to" />
+    <xsl:call-template name="case-cycle-delimiter-space" />
+    <xsl:text>)&#xa0;</xsl:text>
+</xsl:template>
+
+<xsl:template match="case" mode="case-cycle-numbers">
+    <xsl:variable name="cycle-position">
+        <xsl:number count="case[@direction='cycle']" />
+    </xsl:variable>
+    <xsl:number value="$cycle-position" />
+    <xsl:text>|</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$cycle-position = count(../case[@direction='cycle'])">
+            <xsl:if test="$cycle-position = 1">
+                <xsl:message>PTX:WARNING: a "case" with @direction "cycle" should be one of several</xsl:message>
+                <xsl:apply-templates select="../.." mode="location-report"/>
+            </xsl:if>
+            <xsl:number value="1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:number value="$cycle-position + 1" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="proof[@ref]/case" mode="case-cycle">
+    <!-- NB existence/validity of "@ref" is already error checked   -->
+    <!-- by code that augments the proof title based on the "@ref". -->
+    <xsl:variable name="cycle-numbers">
+        <xsl:apply-templates select="." mode="case-cycle-numbers" />
+    </xsl:variable>
+    <xsl:variable name="cycle-position" select="substring-before($cycle-numbers,'|')" />
+    <xsl:variable name="cycle-position-plus-one" select="substring-after($cycle-numbers,'|')" />
+    <xsl:variable name="target" select="id(../@ref)"/>
+    <!-- "@ref" should point to something containing an "ol". -->
+    <!-- NB In future this might be a "statement" child of a  -->
+    <!-- THEOREM-LIKE instead of specifically a THEOREM-LIKE. -->
+    <xsl:choose>
+        <xsl:when test="$target//ol[1]">
+            <xsl:apply-templates select="$target//ol[1]" mode="marker-formatted-case-cycle">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING:   a cross-reference ("ref") from a "<xsl:value-of select="local-name(..)"/>" containing at least one "case" with "direction" set to "cycle" uses a reference [<xsl:value-of select="../@ref"/>] that does not point to an element that contains an "ol".</xsl:message>
+            <xsl:apply-templates select="../.." mode="location-report"/>
+            <xsl:call-template name="formatted-case-cycle">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="proof[not(@ref)]/case" mode="case-cycle">
+    <xsl:variable name="cycle-numbers">
+        <xsl:apply-templates select="." mode="case-cycle-numbers" />
+    </xsl:variable>
+    <xsl:variable name="cycle-position" select="substring-before($cycle-numbers,'|')" />
+    <xsl:variable name="cycle-position-plus-one" select="substring-after($cycle-numbers,'|')" />
+    <xsl:choose>
+        <!-- Check if the "proof" has a "statement" sibling    -->
+        <!-- (implying the "proof" is a child of THEOREM-LIKE) -->
+        <!-- where that "statement" sibling contains an "ol"   -->
+        <!-- from which we can copy the marker information.    -->
+        <!-- NB We don't filter on "ol[@marker]" because we    -->
+        <!-- still need to honour the format code which may    -->
+        <!-- be derived from nesting during -assembly. Not     -->
+        <!-- relevant now because our "ol" should be top level -->
+        <!-- in its "statement" but potentially relevant in    -->
+        <!-- future if THEOREM-LIKE supports multiple          -->
+        <!-- "statement" children which would then become the  -->
+        <!-- top-level numbering for any list-like children.   -->
+        <xsl:when test="../preceding-sibling::statement[1]//ol[1]">
+            <xsl:apply-templates select="../preceding-sibling::statement[1]//ol[1]" mode="marker-formatted-case-cycle">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="formatted-case-cycle">
+                <xsl:with-param name="from" select="$cycle-position" />
+                <xsl:with-param name="to" select="$cycle-position-plus-one" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="case" mode="case-direction">
+    <xsl:choose>
+        <xsl:when test="@direction='forward'">
+            <xsl:text>(</xsl:text>
+            <xsl:call-template name="double-right-arrow-symbol" />
+            <xsl:text>)&#xa0;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@direction='backward'">
+            <xsl:text>(</xsl:text>
+            <xsl:call-template name="double-left-arrow-symbol" />
+            <xsl:text>)&#xa0;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@direction='cycle'">
+            <xsl:apply-templates select="." mode="case-cycle" />
+        </xsl:when>
+        <!-- DTD will catch wrong values -->
+        <xsl:otherwise />
+    </xsl:choose>
+</xsl:template>
 
 <!-- TESTING -->
 <!-- Some test images and debugging output, -->
@@ -5886,50 +6091,6 @@ Book (with parts), "section" at level 3
         <!-- now done, report level -->
         <xsl:otherwise>
             <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-
-<!-- Labels of ordered lists have formatting codes, which  -->
-<!-- we detect here and pass on to other more specialized  -->
-<!-- templates for implementation specifics                -->
-<!-- In order: Arabic (0-based), Arabic (1-based)          -->
-<!-- lower-case Latin, upper-case Latin,                   -->
-<!-- lower-case Roman numeral, upper-case Roman numeral    -->
-<!-- Absent a label attribute, defaults go 4 levels deep   -->
-<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
-<!-- lower-case Roman numeral, upper-case Latin            -->
-<xsl:template match="ol" mode="format-code">
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:choose>
-                <xsl:when test="contains(@marker,'0')">0</xsl:when>
-                <xsl:when test="contains(@marker,'1')">1</xsl:when>
-                <xsl:when test="contains(@marker,'a')">a</xsl:when>
-                <xsl:when test="contains(@marker,'A')">A</xsl:when>
-                <xsl:when test="contains(@marker,'i')">i</xsl:when>
-                <xsl:when test="contains(@marker,'I')">I</xsl:when>
-                <!-- DEPRECATED 2015-12-12 -->
-                <xsl:when test="@marker=''" />
-                <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:variable name="level">
-                <xsl:apply-templates select="." mode="ordered-list-level" />
-            </xsl:variable>
-            <xsl:choose>
-                <xsl:when test="$level='0'">1</xsl:when>
-                <xsl:when test="$level='1'">a</xsl:when>
-                <xsl:when test="$level='2'">i</xsl:when>
-                <xsl:when test="$level='3'">A</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -8194,6 +8355,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="@text='type-hybrid'">
             <xsl:text>type-hybrid</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='type-global-title'">
+            <xsl:text>type-global-title</xsl:text>
+        </xsl:when>
+        <xsl:when test="@text='type-local-title'">
+            <xsl:text>type-local-title</xsl:text>
+        </xsl:when>
+        <!-- no 'type-hybrid-title' yet -->
         <xsl:when test="@text='phrase-global'">
             <xsl:text>phrase-global</xsl:text>
         </xsl:when>
@@ -8239,6 +8407,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="$xref-text-style='type-hybrid'">
             <xsl:text>type-hybrid</xsl:text>
         </xsl:when>
+        <xsl:when test="$xref-text-style='type-global-title'">
+            <xsl:text>type-global-title</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='type-local-title'">
+            <xsl:text>type-local-title</xsl:text>
+        </xsl:when>
+        <!-- no 'type-hybrid-title' yet -->
         <xsl:when test="$xref-text-style='phrase-global'">
             <xsl:text>phrase-global</xsl:text>
         </xsl:when>
@@ -8344,7 +8519,7 @@ Book (with parts), "section" at level 3
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- Start massive "choose" for exceptions and ten general styles -->
+    <!-- Start massive "choose" for exceptions and twelve general styles -->
     <xsl:choose>
         <xsl:when test="$b-is-contributor-target">
             <xsl:apply-templates select="$target/personname" />
@@ -8433,6 +8608,40 @@ Book (with parts), "section" at level 3
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:when>
+        <xsl:when test="($text-style = 'type-global-title') or ($text-style = 'type-local-title')">
+            <xsl:choose>
+                <!-- content override of type-prefix -->
+                <xsl:when test="$b-has-content">
+                    <xsl:copy-of select="$custom-text" />
+                </xsl:when>
+                <!-- usual, default case -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="type-name" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:apply-templates select="." mode="xref-text-separator"/>
+            <!-- only difference in behavior is global/local number -->
+            <xsl:choose>
+                <xsl:when test="$text-style = 'type-global-title'">
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="$text-style = 'type-local-title'">
+                    <xsl:apply-templates select="$target" mode="serial-number"/>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+            <xsl:variable name="the-title">
+                <xsl:apply-templates select="$target" mode="title-xref"/>
+            </xsl:variable>
+            <!-- no title, no problem -->
+            <xsl:if test="not($the-title = '')">
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
+                <!-- title might have markup (eg math in HTML), so copy -->
+                <xsl:copy-of select="$the-title"/>
+            </xsl:if>
         </xsl:when>
         <!-- special case for phrase options and list items of anonymous lists        -->
         <!-- catch this first and provide no text at all (could provide busted text?) -->
@@ -9463,6 +9672,168 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 
+<!-- ############## -->
+<!-- Bibliographies -->
+<!-- ############## -->
+
+<!-- Use simple abstract methods to provide necessary formatting      -->
+<!-- for bibliographic items, such as italics (titles), bold (volume) -->
+<!-- and a version of an abbrevation-period.                          -->
+
+<xsl:template match="*" mode="italic">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the italic font</xsl:message>
+</xsl:template>
+
+<xsl:template match="*" mode="bold">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the bold font</xsl:message>
+</xsl:template>
+
+<xsl:template name="biblio-period">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
+</xsl:template>
+
+
+<!-- Raw Bibliographic Entry Formatting              -->
+<!-- Markup really, not full-blown data preservation -->
+
+<!-- Title in italics -->
+<xsl:template match="biblio[@type='raw']/title">
+    <xsl:apply-templates select="." mode="italic">
+        <xsl:with-param name="content">
+            <xsl:apply-templates/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- No treatment for journal -->
+<xsl:template match="biblio[@type='raw']/journal">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Volume in bold -->
+<xsl:template match="biblio[@type='raw']/volume">
+    <xsl:apply-templates select="." mode="bold">
+        <xsl:with-param name="content">
+            <xsl:apply-templates/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='raw']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
+<!-- Number -->
+<xsl:template match="biblio[@type='raw']/number">
+    <xsl:text>no</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <xsl:call-template name="thin-space-character"/>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Ibid, nee ibidem, empty element -->
+<xsl:template match="biblio[@type='raw']/ibid">
+    <xsl:text>Ibid</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <!-- Generally has a trailing comma, so no thin space -->
+</xsl:template>
+
+
+<!-- Fully marked-up bibtex-style bibliographic entry formatting -->
+<!-- Current treatment assumes elements are in the correct order -->
+
+<!-- Comma after author or editor -->
+<xsl:template match="biblio[@type='bibtex']/author">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+<xsl:template match="biblio[@type='bibtex']/editor">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Title in italics, followed by comma -->
+<xsl:template match="biblio[@type='bibtex']/title">
+    <xsl:apply-templates select="." mode="italic">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="text()|m"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- Space after journal -->
+<xsl:template match="biblio[@type='bibtex']/journal">
+    <xsl:apply-templates select="text()|m"/>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Volume in bold -->
+<xsl:template match="biblio[@type='bibtex']/volume">
+    <xsl:apply-templates select="." mode="bold">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="text()"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Series is plain (but space after) -->
+<xsl:template match="biblio[@type='bibtex']/series">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Publisher is plain (but semicolon after) -->
+<xsl:template match="biblio[@type='bibtex']/publisher">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>; </xsl:text>
+</xsl:template>
+
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='bibtex']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>) </xsl:text>
+</xsl:template>
+
+<!-- Number: no. and comma after -->
+<!-- Note: original pure LaTeX implemenation did not have -->
+<!-- a trailing comma, the pure HTML implementation did   -->
+<xsl:template match="biblio[@type='bibtex']/number">
+    <xsl:text>no</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <xsl:call-template name="thin-space-character"/>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>, </xsl:text>
+</xsl:template>
+
+<!-- A "pubnote", which could contain any publication information -->
+<xsl:template match="biblio[@type='bibtex']/pubnote">
+    <xsl:text> [</xsl:text>
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Pages should come last, so put a period.    -->
+<!-- Two forms: @start and @end,                 -->
+<!-- or total number as content (as for a book). -->
+<xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
+    <xsl:apply-templates select="text()"/>
+    <xsl:text>.</xsl:text>
+</xsl:template>
+<xsl:template match="biblio[@type='bibtex']/pages[@start]">
+    <xsl:text>pp</xsl:text>
+    <xsl:call-template name="biblio-period"/>
+    <xsl:call-template name="thin-space-character"/>
+    <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+
 <!-- ############ -->
 <!-- Conveniences -->
 <!-- ############ -->
@@ -10459,6 +10830,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:if test="$document-root//commentary[not(@component)]">
         <xsl:message terminate="yes">PTX:FATAL:    a "commentary" without a @component attribute is a fatal error from 2024-02-16 onward.  Read prior error messages and make the suggested changes.  Quitting...</xsl:message>
     </xsl:if>
+    <!--  -->
+    <!-- 20224-07-08  various mis-matches all settled in favor of "qrcode" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$publication/common/qr-code" />
+        <xsl:with-param name="date-string" select="'2024-07-08'" />
+        <xsl:with-param name="message" select="'the publisher file entry &quot;common/qr-code&quot; is obsolete and is being ignored.  Make a cosmetic change to &quot;common/qrcode&quot;.'"/>
+    </xsl:call-template>
     <!--  -->
 </xsl:template>
 

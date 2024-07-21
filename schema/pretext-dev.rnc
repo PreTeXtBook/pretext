@@ -1,4 +1,5 @@
 
+              namespace xhtml = "http://www.w3.org/1999/xhtml"
                 grammar {
 
                 include "pretext.rnc"
@@ -6,7 +7,9 @@
             Interactive =
                 element interactive {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute aspect { text }?,
                     attribute width { text }?,
                     attribute platform { text }?,
@@ -14,17 +17,79 @@
                     attribute iframe { text }?,
                     attribute source { text }?,
                     attribute version { text }?,
-                    (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
-                    element instructions { BlockText* | text }?
+                    (
+                      (
+                        Slate |
+                        SideBySideNoCaption |
+                        SideBySideGroupNoCaption
+                      )* &
+                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &
+                      element static { Image }?
+                    )
+
+                }
+
+            Stack |=
+                element stack {
+                    (
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Slate
+                    )+
                 }
 
             Slate =
                 element slate {
                     UniqueID?,
-                    attribute surface { text },
-                    (attribute source { text } | attribute material { text })?,
-                    attribute aspect { text }?,
-                    (Paragraph | Tabular | SideBySideNoCaption)*
+                    LabelID?,
+                    Component?,
+                    (
+                      JessieCodeAtt |
+                      (
+                        attribute surface { text },
+                        (
+                          attribute source { text } |
+                          attribute material { text }
+                        )?,
+                        attribute aspect { text }?,
+                        (
+                          Paragraph |
+                          Tabular |
+                          SideBySideNoCaption |
+                          SlateInput |
+                          element xhtml:button {
+                            attribute type { text },
+                            attribute id { text },
+                            text*
+                          }? |
+                          text*
+                        )*
+                      )
+                    )
+                }
+
+              JessieCodeAtt =
+                attribute surface {"jessiecode"},
+                attribute axis {"true" | "false"}?,
+                attribute grid {"true" | "false"}?,
+                (
+                  attribute source {text} |
+                  text*
+                )
+
+              SlateInput =
+                element input {
+                  attribute type {text}?,
+                  attribute value {text}?,
+                  attribute onkeypress {text}?,
+                  attribute onclick {text}?,
+                  attribute style {text}?
                 }
 
             # add Interactives where used
@@ -52,28 +117,17 @@
                 ConclusionDivision?
             }
             
-            ColophonFront |=
-                element colophon {
-                    MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
-                    element edition {text}?,
-                    element website {
-                        element name {TextShort},
-                        element address {text}
-                    }?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        element shortlicense {
-                            TextLong &
-                            Footnote*
-                        }?
-                    }?
+            ShortLicense_X =
+                element shortlicense {
+                    TextLong &
+                    Footnote*
                 }
+            ShortLicense |= ShortLicense_X
+            Website_X = element website {
+                element name {TextShort},
+                element address {text}
+            }
+            Website |= Website_X
             
             Configuration |=
                 element blurb {
@@ -318,19 +372,6 @@
                     ConclusionDivision?
                 }
             
-            Url |=
-                element url {
-                    attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )| TextShort |
-                        (
-                        attribute visual {text}?
-                        )
-                    )
-                }
-            
             MathDisplay |=
                 element me {
                     MetaDataTarget?,
@@ -357,10 +398,14 @@
                     (MathRow | MathIntertext)*
                 }
             
-            UniqueID |=
-                attribute xml:id {text}?,
-                attribute label {text}?
-            
+            MyOpenMath =
+                MetaDataTitleOptional,
+                IntroductionText?,
+                element myopenmath {
+                    attribute problem {text},
+                    attribute params {text}?
+                },
+                ConclusionText?
             TrueFalse =
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -402,12 +447,12 @@
                     attribute order {xsd:integer}?,
                     ((
                         attribute correct {"yes"|"no"}?,
-                        mixed {BlockText?}
+                        mixed {BlockText?, CodeLine?}+
                     ) |
                     (
                         element choice {
                             attribute correct {"yes"|"no"}?,
-                            mixed {BlockText?}
+                            mixed {BlockText?, CodeLine?}+
                         }+
                     ))
                 }
@@ -440,6 +485,62 @@
                 )
             Response =
                 element response {empty}
+
+
+            # Selectable areas
+            Area =
+                element area {
+                    attribute correct {"yes"|"no"}?,
+                    TextLong
+                }
+            TextLongAreas =  mixed { (
+                  Area |
+                  Character |
+                  Generator |
+                  Verbatim |
+                  GroupAreas |
+                  MathInline |
+                  Music |
+                  Reference |
+                  WWVariable)* }
+            GroupAreas |=
+                element q {TextLongAreas} |
+                element sq {TextLongAreas}
+            TextParagraphAreas = mixed { (
+              Character |
+              Generator |
+              Verbatim |
+              Group |
+              WWVariable |
+              MathInline |
+              Music |
+              Reference |
+              CodeDisplay |
+              MathDisplay |
+              List |
+              Footnote |
+              Notation |
+              Index |
+              Area |
+              GroupAreas)* }
+            ParagraphAreas =
+                element p {
+                    UniqueID?,
+                    LabelID?,
+                    PermanentID?,
+                    Component?,
+                    TextParagraphAreas
+                }
+            Areas =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Feedback?,
+                element areas {
+                  ParagraphAreas+
+                },
+                Hint*, Answer*, Solution*
+
             # General feedback element
             Feedback =
                 element feedback {
@@ -449,18 +550,22 @@
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
+                    MyOpenMath |
                     TrueFalse |
                     MultipleChoice |
                     Parsons |
                     Matching |
-                    FreeResponse
+                    FreeResponse |
+                    Areas
                 }
             ProjectLike |=
+                MyOpenMath |
                 TrueFalse |
                 MultipleChoice |
                 Parsons |
                 Matching |
-                FreeResponse
+                FreeResponse |
+                Areas
             
                 }
             

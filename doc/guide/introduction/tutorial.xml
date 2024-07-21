@@ -207,7 +207,7 @@
         <title>Viewing</title>
         <p>
           You can preview these HTML files you just built using the <term>View</term> command.
-          Again, you can access this in multiple ways: <pretext /> buttom in the toolbar, <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>p</kbd>, etc.
+          Again, you can access this in multiple ways: <pretext /> button in the toolbar, <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>p</kbd>, etc.
           Select <c>View</c> from the dialog.  You may be given options on how to view the document,
           depending on what VS Code plugins you have available to you. Try one or another until
           you're able to view your web build in either a new tab of your browser or a tab within VS Code.
@@ -404,19 +404,18 @@
     <section xml:id="tutorial-videos">
       <title>Videos</title>
 
-      <p>Regularly produced videos showcasing how to get started with PreTeXt
-      as the ecosystem evolves over time is curated by
-      <url href="https://clontz.org">Steven Clontz</url>. Roughly once
-      a month, a <q>Getting Started with PreTeXt</q> presentation is offered
-      to new or prospective community members, showcasing the latest recommendations
-      for writing modern PreTeXt.</p>
+      <p>
+        Occassional <q>Getting Started with PreTeXt</q> tutorials are offered to the community via
+        Zoom. For updates on when these are available, subscribe to
+        <url href="https://groups.google.com/g/pretext-announce">the PreTeXt announcements
+        Google Group</url>.
+      </p>
 
-      <p>The most recent recording of this series is provided here for
-      your reference.</p>
+      <p>The most recent recording of this tutorial is provided here for your reference.</p>
 
       <figure xml:id="tutorial-videos-figure">
-          <caption>Getting Started in 2023 March</caption>
-          <video xml:id="tutorial-videos-video" youtube="Z-BfcnZ8Sm8" preview="getting-started-preview.png"/>
+          <caption>Getting Started with PreTeXt, 2023 July</caption>
+          <video xml:id="tutorial-videos-video" youtube="w_Wu5ysIiPQ" preview="getting-started-preview.png"/>
       </figure>
     </section>
 

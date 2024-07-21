@@ -188,6 +188,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="node()|@*" mode="dynamic-substitution">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="representations">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="representations"/>
@@ -232,11 +238,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
+    <xsl:param name="ordered-list-level" select="0"/>
 
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$parent-struct"/>
             <xsl:with-param name="level" select="$level"/>
+            <xsl:with-param name="ordered-list-level" select="$ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -294,6 +302,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
+<!-- Make static substitutions for dynamic exercises.  -->
+<xsl:variable name="dynamic-rtf">
+    <xsl:apply-templates select="$assembly" mode="dynamic-substitution"/>
+</xsl:variable>
+<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)"/>
+
 <!-- Exercises are "tagged" as to their nature (division, inline, -->
 <!-- worksheet, reading, project-like) and interactive exercises  -->
 <!-- get more precise categorization.  The latter is used to      -->
@@ -301,7 +315,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="exercise-rtf">
     <!-- initialize with default, 'inline' -->
-    <xsl:apply-templates select="$assembly" mode="exercise">
+    <xsl:apply-templates select="$dynamic" mode="exercise">
         <xsl:with-param name="division" select="'inline'"/>
     </xsl:apply-templates>
 </xsl:variable>
@@ -440,6 +454,98 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:for-each>
     </xsl:copy>
+</xsl:template>
+
+<!-- ##################################################### -->
+<!-- Dynamic Substitutions                                 -->
+<!-- Cut out dynamic setup and evaluation for static mode. -->
+<!-- ##################################################### -->
+<xsl:template match="setup[de-object|postSetupScript]" mode="dynamic-substitution">
+    <xsl:if test="$exercise-style = 'dynamic'">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
+
+<!-- <xsl:template match="evaluation" mode="dynamic-substitution">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <evaluation/>
+        </xsl:when>
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+ -->
+<xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="parent-id">
+                <xsl:apply-templates select="ancestor::exercise/@label" />
+            </xsl:variable>
+            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
+            <xsl:variable name="object" select="@ansobj"/>
+            <xsl:variable name="substitution">
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            </xsl:variable>
+            <xsl:message>
+                <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
+                <xsl:value-of select="$parent-id"/>
+                <xsl:text>$</xsl:text>
+                <xsl:value-of select="$object"/>
+                <xsl:text>=</xsl:text>
+                <xsl:value-of select="$substitution"/>
+            </xsl:message>
+            <xsl:copy>
+                <xsl:attribute name="answer">
+                    <xsl:value-of select="$substitution"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="@*|node()" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="eval[@obj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <!-- static, for multiple conversions, but primarily LaTeX -->
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="parent-id">
+               <xsl:apply-templates select="ancestor::exercise/@label" />
+            </xsl:variable>
+            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
+            <xsl:variable name="object" select="@obj"/>
+            <xsl:variable name="substitution">
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            </xsl:variable>
+            <xsl:message>
+                <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
+                <xsl:value-of select="$parent-id"/>
+                <xsl:text>$</xsl:text>
+                <xsl:value-of select="$object"/>
+                <xsl:text>=</xsl:text>
+                <xsl:value-of select="$substitution"/>
+            </xsl:message>
+            <xsl:value-of select="$substitution"/>
+        </xsl:when>
+        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
+        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
+        <!-- to/for HTML conversion                                         -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################### -->
@@ -904,6 +1010,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
 
+<!-- Add input element around text in program when missing -->
+<xsl:template match="program[not(input)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <input>
+            <xsl:value-of select="."/>
+        </input>
+    </xsl:copy>
+</xsl:template>
+
 <!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
 <xsl:template match="program/@interactive" mode="repair">
     <xsl:choose>
@@ -1224,7 +1340,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
 
-<xsl:template match="audio|video|interactive" mode="assembly-id">
+<xsl:template match="audio|video|interactive|image" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
+<xsl:template match="exercise[@exercise-interactive='fillin' and setup]" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
@@ -1574,6 +1694,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
+    <xsl:param name="ordered-list-level" />
 
     <xsl:variable name="the-serial">
         <xsl:apply-templates select="." mode="division-serial-number"/>
@@ -1600,6 +1721,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="next-level" select="$level + 1"/>
+    <xsl:variable name="next-ordered-list-level">
+        <xsl:choose>
+            <xsl:when test="self::exercises or self::worksheet or self::reading-questions or self::references">
+                <xsl:number value="1" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:number value="0" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:copy>
         <xsl:attribute name="struct">
             <xsl:value-of select="$parent-struct"/>
@@ -1613,6 +1744,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$new-struct"/>
             <xsl:with-param name="level" select="$next-level"/>
+            <xsl:with-param name="ordered-list-level" select="$next-ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -1648,6 +1780,114 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
+
+<!-- Labels of ordered lists have formatting codes, which  -->
+<!-- we detect here and pass on to other more specialized  -->
+<!-- templates for implementation specifics                -->
+<!-- In order: Arabic (0-based), Arabic (1-based)          -->
+<!-- lower-case Latin, upper-case Latin,                   -->
+<!-- lower-case Roman numeral, upper-case Roman numeral    -->
+<!-- Absent a label attribute, defaults go 4 levels deep   -->
+<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
+<!-- lower-case Roman numeral, upper-case Latin            -->
+<xsl:template match="ol" mode="format-code">
+    <xsl:param name="level"/>
+    <xsl:choose>
+        <xsl:when test="@marker">
+            <xsl:choose>
+                <xsl:when test="contains(@marker,'0')">0</xsl:when>
+                <xsl:when test="contains(@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(@marker,'I')">I</xsl:when>
+                <!-- DEPRECATED 2015-12-12 -->
+                <xsl:when test="@marker=''" />
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$level='0'">1</xsl:when>
+                <xsl:when test="$level='1'">a</xsl:when>
+                <xsl:when test="$level='2'">i</xsl:when>
+                <xsl:when test="$level='3'">A</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ol" mode="augment">
+    <xsl:param name="ordered-list-level"/>
+    <xsl:variable name="this-level">
+        <xsl:choose>
+            <xsl:when test="self::ol">
+                <xsl:value-of select="$ordered-list-level" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="0" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="next-level" select="$this-level + 1" />
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="." mode="format-code">
+            <xsl:with-param name="level" select="$this-level"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- deconstruct the left and right adornments of the label   -->
+    <!-- or provide default adornments, consistent with LaTeX     -->
+    <!-- then store them                                          -->
+    <xsl:variable name="marker-prefix">
+        <xsl:choose>
+            <xsl:when test="@marker">
+                <xsl:value-of select="substring-before(@marker, $format-code)" />
+            </xsl:when>
+            <xsl:when test="$format-code='a'">
+                <xsl:text>(</xsl:text>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="marker-suffix">
+        <xsl:choose>
+            <xsl:when test="@marker">
+                <xsl:value-of select="substring-after(@marker, $format-code)" />
+            </xsl:when>
+            <xsl:when test="$format-code='a'">
+                <xsl:text>)</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>.</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:copy>
+        <xsl:attribute name="ordered-list-level">
+            <xsl:value-of select="$this-level"/>
+        </xsl:attribute>
+        <xsl:if test="self::ol">
+            <xsl:attribute name="format-code">
+                <xsl:value-of select="$format-code"/>
+            </xsl:attribute>
+            <xsl:attribute name="marker-prefix">
+                <xsl:value-of select="$marker-prefix"/>
+            </xsl:attribute>
+            <xsl:attribute name="marker-suffix">
+                <xsl:value-of select="$marker-suffix"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="ordered-list-level" select="$next-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Exercises -->
@@ -1809,6 +2049,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- new dynamic fillin goes here, perhaps:                     -->
             <!-- statement//fillin[(@*|node()) and not(@characters|@fill)]? -->
+            <xsl:when test="statement//fillin and evaluation">
+                <xsl:text>fillin</xsl:text>
+            </xsl:when>
             <!-- only interactive programs make sense after a "statement" -->
             <xsl:when test="statement and program[(@interactive = 'codelens') or (@interactive = 'activecode')]">
                 <xsl:text>coding</xsl:text>
@@ -1895,6 +2138,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
+                               (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
                                (@exercise-interactive = 'shortanswer')]
                       |
@@ -2215,7 +2459,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*" mode="representations"/>
         <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
         <xsl:choose>
-            <xsl:when test="$exercise-style = 'static'">
+            <xsl:when test="($exercise-style = 'static') and not($b-extracting-pg)">
                 <!-- locate the static representation in a file, generated independently -->
                 <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">
@@ -2251,7 +2495,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="datafile" mode="representations">
+<xsl:template match="datafile|query" mode="representations">
     <xsl:choose>
         <!-- make a static version, in a PreTeXt style -->
         <!-- for use naturally by most conversions     -->
@@ -2268,6 +2512,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Static versions of Audio, Video, Interactives -->
+
+<!-- This variable will be overriden during an extraction used to write image files -->
+<xsl:variable name="mermaid-extracting"><xsl:value-of select="false()"/></xsl:variable>
+<xsl:template match="image[mermaid]" mode="representations">
+    <xsl:choose>
+        <xsl:when test="$mermaid-extracting = 'false'">
+            <!-- Generating document -->
+            <xsl:choose>
+                <xsl:when test="$exercise-style = 'dynamic'">
+                    <!-- interactive target -->
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="representations"/>
+                    </xsl:copy>
+                </xsl:when>
+                <xsl:when test="$exercise-style = 'static'">
+                    <!-- static target -->
+                    <image>
+                        <xsl:attribute name="pi:generated">
+                            <xsl:text>mermaid/</xsl:text>
+                            <xsl:apply-templates select="." mode="assembly-id"/>
+                            <xsl:choose>
+                                <!-- latex-print will be B&W target -->
+                                <xsl:when test="$b-latex-print">
+                                    <xsl:text>-bw.png</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>-color.png</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                    </image>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- Extracting Mermaid -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
@@ -2439,7 +2725,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="audio|video|interactive" mode="standalone-filename">
+<xsl:template match="audio|video|interactive|exercise[@exercise-interactive='fillin' and setup]" mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>

@@ -486,9 +486,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- run with none.  Part of                                          -->
     <!-- https://tex.stackexchange.com/questions/250165/                  -->
     <!-- normal-body-text-within-tcolorbox                                -->
-    <xsl:text>%% Save default paragraph indentation for use later, when adjusting parboxes&#xa;</xsl:text>
+    <!-- In a similar fashion we save/restore the parskip, only should    -->
+    <!-- an ambitious publisher try to set it globally                    -->
+    <xsl:text>%% Save default paragraph indentation and parskip for use later, when adjusting parboxes&#xa;</xsl:text>
     <xsl:text>\newlength{\normalparindent}&#xa;</xsl:text>
+    <xsl:text>\newlength{\normalparskip}&#xa;</xsl:text>
     <xsl:text>\AtBeginDocument{\setlength{\normalparindent}{\parindent}}&#xa;</xsl:text>
+    <xsl:text>\AtBeginDocument{\setlength{\normalparskip}{\parskip}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\setparstyle}{\setlength{\parindent}{\normalparindent}\setlength{\parskip}{\normalparskip}}</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
@@ -1054,13 +1059,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-    <xsl:if test="$document-root//case[@direction]">
-        <!-- Perhaps customize these via something like tex-macro-style      -->
-        <!-- And/or move these closer to the environment where they are used -->
-        <xsl:text>%% Arrows for iff PROOF-LIKEs, with trailing space&#xa;</xsl:text>
-        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
         <!-- NB: needs a rename (and duplication) before exposing publicly  -->
@@ -1078,7 +1076,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- solutions to inline exercises -->
         <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{inlinesolution}[4]</xsl:text>
             <xsl:text>{inlinesolutionstyle, title={\hyperref[#4]{#1~#2}\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1087,7 +1085,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
             <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
             <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolution}[4]</xsl:text>
             <xsl:text>{divisionsolutionstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1096,7 +1094,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercisegroup[not(@cols)]">
             <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
             <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolutioneg}[4]</xsl:text>
             <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1105,7 +1103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercisegroup/@cols">
             <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
             <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolutionegcol}[4]</xsl:text>
             <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1123,7 +1121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- set the style -->
             <xsl:text>\tcbset{ </xsl:text>
             <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
             <!-- create the environment -->
             <xsl:text>\newtcolorbox{</xsl:text>
             <xsl:value-of select="$elt-name"/>
@@ -1144,7 +1142,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Numbered, styled with a hanging indent -->
     <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
         <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
         <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
         <xsl:if test="$b-pageref">
@@ -1157,7 +1155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- boxes and get good page breaks (as these problems could be long)        -->
     <xsl:if test="$document-root//exercisegroup[not(@cols)]">
         <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
         <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
         <xsl:if test="$b-pageref">
@@ -1169,7 +1167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
     <xsl:if test="$document-root//exercisegroup/@cols">
         <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, before upper app={\setlength{\parindent}{\normalparindent}} } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, before upper app={\setparstyle} } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
         <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
         <xsl:if test="$b-pageref">
@@ -1177,7 +1175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//exercise[@workspace]">
+    <xsl:if test="$document-root//@workspace">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
         <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
@@ -1764,7 +1762,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
                 <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
                 <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
-                <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false, raster after skip=0.7\baselineskip} }&#xa;</xsl:text>
                 <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont} }&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
@@ -1913,7 +1911,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$b-latex-print">
         <xsl:text>%% For a print PDF, no surrounding boxes, so simply textcolor (but still active to preserve spacing)&#xa;</xsl:text>
-        <xsl:text>\hypersetup{hidelinks=true}&#xa;</xsl:text>
+        <!-- https://tex.stackexchange.com/questions/503000/          -->
+        <!-- unexpected-value-for-option-hidelinkshyperref-is-ignored -->
+        <!-- https://tex.stackexchange.com/a/503001                   -->
+        <xsl:text>\hypersetup{hidelinks}&#xa;</xsl:text>
     </xsl:if>
     <!-- Hyperref gives names to destinations for links that look like      -->
     <!-- "section*.5.2" which you can guess is the second section of        -->
@@ -2411,14 +2412,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
     <xsl:text>\newlength{\fillinmaxwidth}&#xa;</xsl:text>
     <xsl:text>\newlength{\fillincontract}&#xa;</xsl:text>
+    <xsl:text>\newlength{\charmaxwidth}\setlength{\charmaxwidth}{0.5em}&#xa;</xsl:text>
+    <xsl:text>\newlength{\charminwidth}\setlength{\charminwidth}{0.1em}&#xa;</xsl:text>
     <xsl:text>\newlength{\fillinheight}&#xa;</xsl:text>
     <xsl:if test="$fillin-text-style = 'shade'">
         <xsl:text>\definecolor{fillintextshade}{gray}{0.9}</xsl:text>
     </xsl:if>
     <xsl:text>\newcommand{\fillintext}[1]{%&#xa;</xsl:text>
-    <xsl:text>\setlength{\fillinmaxwidth}{#1em*\real{0.5}}%&#xa;</xsl:text>
-    <xsl:text>\setlength{\fillincontract}{#1em*\real{0.5}*\real{0.2}}%&#xa;</xsl:text>
-    <xsl:text>\setlength{\fillinheight}{\heightof{\strut}+1.2pt}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinmaxwidth}{#1\charmaxwidth}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillincontract}{#1\charminwidth}%&#xa;</xsl:text>
+    <xsl:text>\setlength{\fillinheight}{\baselineskip}\addtolength{\fillinheight}{1.2pt}%&#xa;</xsl:text>
     <xsl:choose>
         <xsl:when test="$fillin-text-style = 'underline'">
             <xsl:text>\strut\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\fillinmaxwidth minus \fillincontract\nobreak\strut%&#xa;</xsl:text>
@@ -2557,7 +2560,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--    reasonably expected toto be organized as       -->
 <!--    paragraphs we add to the style:                -->
 <!--                                                   -->
-<!--    before upper app={\setlength{\parindent}{\normalparindent}} -->
+<!--    before upper app={\setparstyle} -->
 <!--                                                   -->
 <!--    which *appends* to the "before upper" code     -->
 <!--    and requires the tcolorbox "hooks" library.    -->
@@ -2777,7 +2780,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#3}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#3}{}}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, after={\par}, </xsl:text>
+    <xsl:text>\hypertarget{#3}{}}, breakable, before upper app={\setparstyle}, after={\par}, </xsl:text>
     <xsl:value-of select="$proof-name"/>
     <xsl:text>style }&#xa;</xsl:text>
 </xsl:template>
@@ -2819,7 +2822,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ objectivesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, objectivesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setparstyle}, objectivesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
@@ -2830,7 +2833,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ outcomesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, outcomesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setparstyle}, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
@@ -2844,7 +2847,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, backcolophonstyle}&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, before upper app={\setparstyle}, backcolophonstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
@@ -2865,7 +2868,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setparstyle}, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2878,7 +2881,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ glossaryitemstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1\space}, phantomlabel={#2}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, glossaryitemstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1\space}, phantomlabel={#2}, breakable, before upper app={\setparstyle}, glossaryitemstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "paragraphs" -->
@@ -2921,7 +2924,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setparstyle}, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -3169,7 +3172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- list will be unbreakable once inside sidebyside     -->
     <xsl:choose>
         <xsl:when test="self::list">
-            <xsl:text>breakable, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
+            <xsl:text>breakable, before upper app={\setparstyle}, </xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>unbreakable, </xsl:text>
@@ -3318,15 +3321,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&ASIDE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setlength{\parindent}{\normalparindent}}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setparstyle}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setlength{\parindent}{\normalparindent}}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setparstyle}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setlength{\parindent}{\normalparindent}}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper ={\setparstyle}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
 </xsl:template>
 
 <!-- FIGURE-LIKE: -->
@@ -5437,6 +5440,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- cases in PROOF-LIKEs -->
+
+<!-- First we need to set up arrow symbols for this output target. -->
+<!-- Perhaps customize these via something like tex-macro-style.   -->
+<xsl:template name="double-right-arrow-symbol">
+    <xsl:text>$\Rightarrow$</xsl:text>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <xsl:text>$\Leftarrow$</xsl:text>
+</xsl:template>
+<!-- Also need a "delimiter space" for when "direction" is "cycle". -->
+<xsl:template name="case-cycle-delimiter-space" />
+
+<!-- case -->
 <!-- Three arguments: direction arrow, title, label -->
 <!-- The environment combines and styles            -->
 <xsl:template match="case">
@@ -5446,15 +5462,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <!-- optional direction, given by attribute -->
-    <xsl:choose>
-        <xsl:when test="@direction='forward'">
-            <xsl:text>\forwardimplication</xsl:text>
-        </xsl:when>
-        <xsl:when test="@direction='backward'">
-            <xsl:text>\backwardimplication</xsl:text>
-        </xsl:when>
-        <!-- DTD will catch incorrect values -->
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="case-direction" />
     <xsl:text>}</xsl:text>
     <!-- optional title -->
     <xsl:text>{</xsl:text>
@@ -6766,8 +6774,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
 <xsl:template match="p">
-    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
-        <xsl:text>\par&#xa;</xsl:text>
+    <xsl:variable name="node-preceding-current" select="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1]" />
+    <xsl:if test="$node-preceding-current[self::p or self::paragraphs or self::sidebyside or self::case]">
+        <xsl:text>\par</xsl:text>
+        <xsl:if test="$node-preceding-current[self::paragraphs or self::case]">
+            <xsl:text>\medskip</xsl:text>
+        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- we can't cross-reference here without an @xml:id -->
     <!-- place it on a line of its own just prior to guts -->
@@ -7059,21 +7072,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utility templates to translate @marker specification -->
 <!-- for use with LaTeX enumitem package's label keyword  -->
 <xsl:template match="ol" mode="latex-list-label">
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
-    <!-- deconstruct the left and right adornments of the label   -->
-    <!-- or provide the default adornments, consistent with LaTeX -->
-    <!-- in the middle, translate PTX codes for enumitem package  -->
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:value-of select="substring-before(@marker, $format-code)" />
-        </xsl:when>
-        <xsl:when test="$format-code='a'">
-            <xsl:text>(</xsl:text>
-        </xsl:when>
-        <xsl:otherwise />
-    </xsl:choose>
+    <xsl:variable name="format-code" select="./@format-code" />
+    <xsl:value-of select="./@marker-prefix" />
     <xsl:choose>
         <xsl:when test="$format-code = '0'">\arabic*</xsl:when>
         <xsl:when test="$format-code = '1'">\arabic*</xsl:when>
@@ -7085,18 +7085,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:value-of select="substring-after(@marker, $format-code)" />
-        </xsl:when>
-        <xsl:when test="$format-code='a'">
-            <xsl:text>)</xsl:text>
-        </xsl:when>
-        <xsl:when test="($format-code='a') or ($format-code='i') or ($format-code='A')">
-            <xsl:text>.</xsl:text>
-        </xsl:when>
-        <xsl:otherwise />
-    </xsl:choose>
+    <xsl:value-of select="./@marker-suffix" />
 </xsl:template>
 
 <xsl:template match="ul" mode="latex-list-label">
@@ -7143,9 +7132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol">
     <!-- need to switch on 0-1 for ol Arabic -->
     <!-- no harm if called on "ul"           -->
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="format-code" select="./@format-code" />
     <!-- Determine the number of columns -->
     <!-- Restrict to 1-6 via the schema  -->
     <xsl:variable name="ncols">
@@ -7167,12 +7154,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
     <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
-        <xsl:text>[label=</xsl:text>
+        <xsl:text>[label={</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:if test="$format-code = '0'">
             <xsl:text>, start=0</xsl:text>
         </xsl:if>
-        <xsl:text>]</xsl:text>
+        <xsl:text>}]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />
@@ -10864,126 +10851,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Raw Bibliographic Entry Formatting              -->
-<!-- Markup really, not full-blown data preservation -->
+<!-- Implement abstract templates to support      -->
+<!-- formatting of bibliographic entries in HTML. -->
 
-<!-- Title in italics -->
-<xsl:template match="biblio[@type='raw']/title">
+<xsl:template match="*" mode="italic">
+    <xsl:param name="content"/>
+
     <xsl:text>\textit{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:copy-of select="$content"/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- No treatment for journal -->
-<xsl:template match="biblio[@type='raw']/journal">
-    <xsl:apply-templates />
-</xsl:template>
+<xsl:template match="*" mode="bold">
+    <xsl:param name="content"/>
 
-<!-- Volume in bold -->
-<xsl:template match="biblio[@type='raw']/volume">
     <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:copy-of select="$content"/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Year in parentheses -->
-<xsl:template match="biblio[@type='raw']/year">
-    <xsl:text>(</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>)</xsl:text>
+<xsl:template name="biblio-period">
+    <xsl:text>.\@</xsl:text>
 </xsl:template>
-
-<!-- Number, handle TeX period idosyncracy -->
-<xsl:template match="biblio[@type='raw']/number">
-    <xsl:text>no.\@\,</xsl:text>
-    <xsl:apply-templates />
-</xsl:template>
-
-<!-- Ibid, nee ibidem, handle TeX period idosyncracy, empty element -->
-<xsl:template match="biblio[@type='raw']/ibid">
-    <xsl:text>Ibid.\@\,</xsl:text>
-</xsl:template>
-
-<!-- Fully marked-up bibtex-style bibliographic entry formatting. -->
-<!-- Current treatment assumes elements are in the correct order. -->
-
-<!-- Comma after author or editor -->
-<xsl:template match="biblio[@type='bibtex']/author">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
-</xsl:template>
-<xsl:template match="biblio[@type='bibtex']/editor">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
-</xsl:template>
-
-<!-- Title in italics, followed by comma -->
-<xsl:template match="biblio[@type='bibtex']/title">
-    <xsl:text>\textit{</xsl:text>
-    <xsl:apply-templates select="text()|m"/>
-    <xsl:text>}, </xsl:text>
-</xsl:template>
-
-<!-- Space after journal -->
-<xsl:template match="biblio[@type='bibtex']/journal">
-    <xsl:apply-templates select="text()|m"/>
-    <xsl:text> </xsl:text>
-</xsl:template>
-
-<!-- Volume in bold -->
-<xsl:template match="biblio[@type='bibtex']/volume">
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>} </xsl:text>
-</xsl:template>
-
-<!-- Series is plain (but space after) -->
-<xsl:template match="biblio[@type='bibtex']/series">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text> </xsl:text>
-</xsl:template>
-
-<!-- Publisher is plain (but semicolon after) -->
-<xsl:template match="biblio[@type='bibtex']/publisher">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>; </xsl:text>
-</xsl:template>
-
-<!-- Year in parentheses -->
-<xsl:template match="biblio[@type='bibtex']/year">
-    <xsl:text>(</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>) </xsl:text>
-</xsl:template>
-
-<!-- Number, handle TeX period idosyncracy -->
-<xsl:template match="biblio[@type='bibtex']/number">
-    <xsl:text>no.\@\,</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text> </xsl:text>
-</xsl:template>
-
-<!-- A "pubnote", which could contain any publication information -->
-<xsl:template match="biblio[@type='bibtex']/pubnote">
-    <xsl:text> [</xsl:text>
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>]</xsl:text>
-</xsl:template>
-
-<!-- Pages should come last, so put a period.    -->
-<!-- Two forms: @start and @end,                 -->
-<!-- or total number as content (as for a book). -->
-<xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
-    <xsl:apply-templates select="text()"/>
-    <xsl:text>.</xsl:text>
-</xsl:template>
-<!-- For page range, put pp. and handle TeX period -->
-<xsl:template match="biblio[@type='bibtex']/pages[@start]">
-    <xsl:text>pp.\@\,</xsl:text>
-    <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
-    <xsl:text>.</xsl:text>
-</xsl:template>
-
 
 <!-- Annotated Bibliography Items -->
 <!--   Presumably just paragraphs, nothing too complicated -->

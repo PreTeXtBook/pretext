@@ -102,7 +102,7 @@
         <title>Images</title>
         <idx>image</idx>
 
-        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag, using the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path from the top-level of the appropriate directory. Read <xref ref="processing-directory-management"/> for details on how to set these directories correctly.  If you are starting a new project, using the <pretext />-CLI (with the command <c>pretext new book</c>, for example), then most of the setup portion is done for you and the top-level directory for images that are created external to the project is called <c>assests</c>, and it is a sibling of the <c>source</c> directory. It is your responsibility to locate that file properly relative to this directory, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you set the <attr>external</attr> top-level directory, and you would place the <c>butterflies.jpg</c> file inside of the <c>images</c> directory.</p>
+        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag, using the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path from the top-level of the appropriate directory. Read <xref ref="processing-directory-management"/> for details on how to set these directories correctly.  If you are starting a new project, using the <pretext />-CLI (with the command <c>pretext new book</c>, for example), then most of the setup portion is done for you and the top-level directory for images that are created external to the project is called <c>assets</c>, and it is a sibling of the <c>source</c> directory. It is your responsibility to locate that file properly relative to this directory, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg"/&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you set the <attr>external</attr> top-level directory, and you would place the <c>butterflies.jpg</c> file inside of the <c>images</c> directory.</p>
 
         <p>The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.  Instead of a width, you can also specify margins and the width will be deduced.</p>
 
@@ -534,6 +534,20 @@
         <idx><h><webwork/></h><h><webwork/> exercise</h></idx>
 
         <p>It is possible to author <webwork/> automated homework problems<idx><h><webwork /></h><h><webwork /> exercise</h></idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork/> questions from a textbook into a single archive suitable for uploading into a traditional <webwork/> server.  This is a big topic, so see the dedicated <xref ref="webwork-author" /> for details.</p>
+    </section>
+
+    <section xml:id="overview-myopenmath">
+        <title>MyOpenMath Exercises</title>
+        <idx>myopenmath exercise</idx>
+
+        <p>MyOpenMath is a hosted online homework system with tens of thousands
+        of prebuilt questions. These questions can be embedded in PreTeXt using the
+        <tag>myopenmath</tag> tag. See <xref ref="topic-myopenmath"/> for details.</p>
+
+        <p>In the web output, the MyOpenMath question will be embedded and
+        interactive.  In static output, the a static version of the question will
+        be included.  Note that while all questions will display in web output,
+        some MyOpenMath questions may not convert to static format correctly</p>
     </section>
 
     <section xml:id="overview-url">

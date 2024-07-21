@@ -93,6 +93,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <xsl:call-template name="sagecell-code" />
             <xsl:apply-templates select="." mode="sagecell" />
+            <xsl:call-template name="syntax-highlight"/>
 
             <!-- load reveal.js resources; w/ v 4.1.2 -->
             <!-- these seem to be *always* minified   -->
@@ -103,6 +104,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <script src="{$reveal-root}/plugin/math/math.js"></script>
 
           <!--  Some style changes from regular pretext-html -->
+          <!-- Note: the box around a "theorem" does not contain -->
+          <!-- the associated "proof" because the HTML does not  -->
+          <!-- provide an enclosure containing both.             -->
           <style>
 ul {
   display: block !important;
@@ -112,68 +116,130 @@ ul {
   border-radius: 2px 10px 2px;
   padding: 4px;
 }
-.definition,.theorem,.activity {
+.reveal pre {
+  box-shadow: none;
+  line-height: 1;
+  font-size: inherit;
+  width: auto;
+  margin: inherit;
+}
+.reveal pre code {
+  display: block;
+  padding: 0;
+  overflow: unset;
+  max-height: unset;
+  word-wrap: normal;
+}
+.definition-like,.theorem-like,.project-like {
   border-width: 0.5px;
   border-style: solid;
   border-radius: 2px 10px 2px;
   padding: 1%;
-  margin-bottom: 2em;
+  margin-bottom: var(--r-block-margin);
 }
-.definition {
-  background: #00608010;
+.definition-like {
+  background: #006080;
+  background: color-mix(in srgb, var(--r-background-color) 75%, #006080);
 }
-.theorem {
+.theorem-like {
   background: #ff000010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, #aa0000);
 }
-.proof {
-  background: #ffffff90;
+.proof-like {
+  background: #ffffff;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, #aaaaaa);
 }
-.activity {
+.project-like {
   background: #60800010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, #608000);
 }
+.code-inline {
+  background: #60800010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, var(--r-link-color));
+  padding: 0 3px;
+  border: 1px solid;
+  margin: 3px;
+  display: inline-block;
+}
+.sagecell_sessionOutput {
+  background: white;
+  color: black;
+  border: 0.5px solid var(--r-main-color);
+}
+
+.program {
+  background: #60800010;
+  background:  color-mix(in srgb, var(--r-background-color) 75%, var(--r-link-color));
+  max-height: 450px;
+  overflow: auto;
+  border: 0.5px solid var(--r-main-color);
+}
+.ptx-sagecell, .reveal .program {
+  font-size: calc(var(--r-main-font-size) * 0.6);
+}
+
+
+.ptx-content :is(.image-box, .audio-box, .video-box, .asymptote-box) {
+  position: relative;
+}
+
+.ptx-content iframe.asymptote, .ptx-content iframe.asymptote, .ptx-content .video-box .video, .ptx-content .video-box .video-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+code[class*="language-"], pre[class*="language-"] {
+  padding: 0;
+  line-height: 1.2;
+}
+
 dfn {
   font-weight: bold;
 }
-.pretext-content ol.no-marker,
-.pretext-content ul.no-marker,
-.pretext-content li.no-marker {
+.ptx-content ol.no-marker,
+.ptx-content ul.no-marker,
+.ptx-content li.no-marker {
     list-style-type: none;
 }
 
-.pretext-content ol.decimal {
+.ptx-content ol.decimal {
     list-style-type: decimal;
 }
-.pretext-content ol.lower-alpha {
+.ptx-content ol.lower-alpha {
     list-style-type: lower-alpha;
 }
-.pretext-content ol.upper-alpha {
+.ptx-content ol.upper-alpha {
     list-style-type: upper-alpha;
 }
-.pretext-content ol.lower-roman {
+.ptx-content ol.lower-roman {
     list-style-type: lower-roman;
 }
-.pretext-content ol.upper-roman {
+.ptx-content ol.upper-roman {
     list-style-type: upper-roman;
 }
-.pretext-content ul.disc {
+.ptx-content ul.disc {
     list-style-type: disc;
 }
-.pretext-content ul.square {
+.ptx-content ul.square {
     list-style-type: square;
 }
-.pretext-content ul.circle {
+.ptx-content ul.circle {
     list-style-type: circle;
 }
-.pretext-content ol.no-marker,
-.pretext-content ul.no-marker {
+.ptx-content ol.no-marker,
+.ptx-content ul.no-marker {
     list-style-type: none;
 }
-.pretext-content .cols1 li,
-.pretext-content .cols2 li,
-.pretext-content .cols3 li,
-.pretext-content .cols4 li,
-.pretext-content .cols5 li,
-.pretext-content .cols6 li {
+.ptx-content .cols1 li,
+.ptx-content .cols2 li,
+.ptx-content .cols3 li,
+.ptx-content .cols4 li,
+.ptx-content .cols5 li,
+.ptx-content .cols6 li {
     float: left;
     padding-right:2em;
 }
@@ -182,7 +248,7 @@ dfn {
         </head>
 
         <body>
-            <div class="reveal pretext-content">
+            <div class="reveal ptx-content">
                 <!-- For mathematics/MathJax, must be located -->
                 <!-- within div.reveal to be effective        -->
                 <xsl:call-template name="latex-macros"/>
@@ -356,11 +422,6 @@ dfn {
 <xsl:template match="slide">
     <section>
           <h3>
-              <xsl:if test="@source-number">
-                <xsl:value-of select="@source-label"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="@source-number"/>:
-              </xsl:if>
               <xsl:apply-templates select="." mode="title-full" />
           </h3>
           <div align="left">
@@ -427,19 +488,12 @@ dfn {
   </p>
 </xsl:template>
 
-
-<xsl:template match="image">
-  <img>
-    <xsl:attribute name="src">
-        <xsl:value-of select="@source" />
-    </xsl:attribute>
-    <xsl:if test="@pause = 'yes'">
-      <xsl:attribute name="class">
-        <xsl:text>fragment</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates/>
-  </img>
+<!-- Images get wrapped in a div with @class="fragment" if they are  -->
+<!-- paused                                                          -->
+<xsl:template match="image[not(ancestor::sidebyside) and (@pause='yes')]">
+    <div class="fragment">
+      <xsl:apply-imports/>
+    </div>
 </xsl:template>
 
 <!-- A "url" with content gets an automatic footnote with the @visual -->
@@ -506,88 +560,6 @@ dfn {
             <xsl:with-param name="width" select="$width" />
         </xsl:apply-templates>
     </xsl:element>
-</xsl:template>
-
-<xsl:template match="definition" mode="type-name">
-  <xsl:text>Definition</xsl:text>
-</xsl:template>
-<xsl:template match="definition">
-  <div class="boxed definition">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-    <xsl:apply-templates select="statement"/>
-</div>
-</xsl:template>
-
-
-<xsl:template match="theorem" mode="type-name">
-  <xsl:text>Theorem</xsl:text>
-</xsl:template>
-<xsl:template match="corollary" mode="type-name">
-  <xsl:text>Corollary</xsl:text>
-</xsl:template>
-<xsl:template match="lemma" mode="type-name">
-  <xsl:text>Lemma</xsl:text>
-</xsl:template>
-<xsl:template match="proposition" mode="type-name">
-  <xsl:text>Proposition</xsl:text>
-</xsl:template>
-<xsl:template match="theorem|corollary|lemma|proposition">
-  <div class="theorem">
-  <div>
-    <h3>
-      <xsl:choose>
-      <xsl:when test="@source-number">
-        <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="type-name" />:
-      </xsl:otherwise>
-    </xsl:choose>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates select="statement"/>
-  </div>
-  <xsl:if test="&PROOF-LIKE;">
-  <div class="proof">
-    <xsl:apply-templates select="&PROOF-LIKE;"/>
-  </div>
-</xsl:if>
-</div>
-</xsl:template>
-
-<xsl:template match="example" mode="type-name">
-  <xsl:text>Example</xsl:text>
-</xsl:template>
-<xsl:template match="activity" mode="type-name">
-  <xsl:text>Activity</xsl:text>
-</xsl:template>
-<xsl:template match="note" mode="type-name">
-  <xsl:text>Note</xsl:text>
-</xsl:template>
-<xsl:template match="example|activity|note">
-  <div class="activity">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates />
-  </div>
-</xsl:template>
-
-<xsl:template match="fact" mode="type-name">
-  <xsl:text>Fact</xsl:text>
-</xsl:template>
-<xsl:template match="fact">
-  <div class="definition">
-    <h3>
-      <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
-      <xsl:apply-templates select="." mode="title-full" />
-    </h3>
-      <xsl:apply-templates/>
-  </div>
 </xsl:template>
 
 <xsl:template match="xref">

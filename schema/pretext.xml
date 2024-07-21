@@ -70,7 +70,7 @@
         <fragment xml:id="start-elements">
             <title>Start elements</title>
             <code>
-            start = Pretext | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             </code>
         </fragment>
     </section>
@@ -83,7 +83,7 @@
         <fragment xml:id="gross-structure">
             <title>Gross structure</title>
             <code>
-            Pretext =
+            PretextRoot =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
@@ -681,13 +681,17 @@
             Paragraph =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     TextParagraph
                 }
             ParagraphLined =
                 element p {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     element line {TextShort}+
                 }
             </code>
@@ -707,6 +711,8 @@
                 element rsq {empty} |
                 element rq {empty} |
                 element lq {empty} |
+                element ldblbracket {empty} |
+                element rdblbracket {empty} |
                 element langle {empty}|
                 element rangle {empty}
             </code>
@@ -748,6 +754,8 @@
         <fragment xml:id="exotic-character">
             <title>Exotic characters</title>
             <code>
+            CopyrightCharacter =
+                element copyright {empty}
             Character |=
                 element ellipsis {empty} |
                 element midpoint {empty} |
@@ -756,7 +764,7 @@
                 element pilcrow {empty} |
                 element section-mark {empty} |
                 element copyleft {empty} |
-                element copyright {empty} |
+                CopyrightCharacter |
                 element registered {empty} |
                 element trademark {empty} |
                 element phonomark {empty} |
@@ -795,11 +803,15 @@
         <fragment xml:id="music-character">
             <title>Music characters</title>
             <code>
+            MusicFlat =
+                element flat {empty}
+            MusicSharp =
+                element sharp {empty}
             Music =
                 element doublesharp {empty} |
-                element sharp {empty} |
+                MusicSharp |
                 element natural {empty} |
-                element flat {empty} |
+                MusicFlat |
                 element doubleflat {empty} |
                 element scaledeg {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"} |
                 element timesignature {
@@ -823,8 +835,8 @@
                     attribute parentheses {"yes"|"no"}?,
                     element alteration {
                         (TextSimple |
-                        element sharp {empty} |
-                        element flat {empty})*
+                        MusicSharp |
+                        MusicFlat)*
                     }*
                 }
                 </code>
@@ -914,7 +926,7 @@
             <code>
             Verbatim =
                 element c {text} |
-                element email {text}
+                Email
             </code>
         </fragment>
 
@@ -1239,13 +1251,8 @@
             Url =
                 element url {
                     attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )|(
-                        attribute visual {text}?
-                        )
-                    )
+                    attribute visual {text}?,
+                    TextShort?
                 }
             Xref =
                 element xref {
@@ -1258,12 +1265,14 @@
                         attribute detail {text}?,
                         TextShort
                 }
+            NotationDescription =
+                element description {
+                    TextShort
+                }
             Notation =
                 element notation {
                     element usage {MathInline},
-                    element description {
-                        TextShort
-                    }
+                    NotationDescription
                 }
             </code>
         </fragment>
@@ -1319,29 +1328,6 @@
     </section>
 
     <section>
-        <title>References (experimental)</title>
-        <p>Here we collect experimental versions of reference-like elements.  Specifically, changes to Url, that only recommend a visual element when the URL element contains content.</p>
-
-        <fragment xml:id="reference-dev">
-            <title>References (experimental)</title>
-            <code>
-            Url |=
-                element url {
-                    attribute href {text},
-                    (
-                        (attribute visual {text},
-                        TextShort
-                        )| TextShort |
-                        (
-                        attribute visual {text}?
-                        )
-                    )
-                }
-            </code>
-        </fragment>
-    </section>
-
-    <section>
         <title>Objectives</title>
 
         <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectives, outcomes, and standards in a variety of ways.</p>
@@ -1394,7 +1380,7 @@
     <section>
         <title>Verbatim Text</title>
 
-        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.</p>
+        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.  A <tag>program</tag> maybe structured with an <tag>input</tag> element, or simply text.</p>
 
         <fragment xml:id="verbatimdisplay">
             <title>Verbatim displays</title>
@@ -1410,30 +1396,39 @@
                 element pre {
                     text | CodeLine+
                 }
+            ConsoleOutput =
+                element output {text}
+            ConsoleInput =
+                element input {
+                    attribute prompt {text}?,
+                    text
+                }
             Console =
                 element console {
                     PermanentID?,
+                    Component?,
                     attribute prompt {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     (
-                        element input {
-                            attribute prompt {text}?,
-                            text
-                        },
-                        element output {text}?
+                        ConsoleInput,
+                        ConsoleOutput?
                     )+
                 }
+            ProgramInput = element input {text}
             Program =
                 element program {
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute language {text}?,
                     attribute line-numbers {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
                     attribute interactive {"codelens"}?,
-                    element input {text}
+                    (
+                        ProgramInput | text
+                    )
                 }
             </code>
         </fragment>
@@ -1449,38 +1444,37 @@
         <fragment xml:id="list">
             <title>Lists</title>
             <code>
+            ListItem = element li {
+                (
+                    (MetaDataTarget, TextParagraph)
+                |
+                    (MetaDataTitleOptional, BlockStatement+)
+                )
+            }
+            DefinitionListItem = element li {
+                MetaDataTitle,
+                BlockStatement+
+            }
             List =
                 element ol {
                     PermanentID?,
+                    Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
-                    element li {
-                        (
-                            (MetaDataTarget, TextParagraph)
-                        |
-                            (MetaDataTitleOptional, BlockStatement+)
-                        )
-                    }+
+                    ListItem+
                 } |
                 element ul {
                     PermanentID?,
+                    Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
-                    element li {
-                        (
-                            (MetaDataTarget, TextParagraph)
-                        |
-                            (MetaDataTitleOptional, BlockStatement+)
-                        )
-                    }+
+                    ListItem+
                 } |
                 element dl {
                     PermanentID?,
+                    Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
-                    element li {
-                        MetaDataTitle,
-                        BlockStatement+
-                    }+
+                    DefinitionListItem+
                 }
             </code>
         </fragment>
@@ -1782,7 +1776,7 @@
                 }
             TableRow =
                 element row {
-                    attribute header {"yes" | "no"}?,
+                    attribute header {"yes" | "no" | "vertical"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderBottom?,
@@ -1799,6 +1793,7 @@
             Tabular =
                 element tabular {
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
@@ -1866,6 +1861,7 @@
                 }
             SidebySideAttributes =
                 PermanentID?,
+                Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
                 (AlignmentVertical | attribute valigns {text})?
@@ -1927,61 +1923,90 @@
             <title>Images</title>
             <code>
             Image = ImageRaster | ImageCode
+            ImageDescription = element description {(Paragraph | Tabular)+}
+            ImageShortDescription = element shortdescription {text}
+            ImageShortDescriptionCode = element shortdescription {
+                (text | WWVariable)+
+            }
             ImageRaster =
                 element image {
                     UniqueID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {text},
-                            element description {(Paragraph | Tabular)+}?
+                          ImageShortDescription? &amp;
+                          ImageDescription?
                         )
-                    )?
+                      )
+                    )
+                }
+            CodeLatexImage =
+                element latex-image {
+                    LabelID?,
+                    Component?,
+                    text
                 }
             ImageCode =
                 element image {
                     UniqueID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute archive {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          ImageShortDescriptionCode ? &amp;
+                          ImageDescription? &amp;
+                          (
+                            CodeLatexImage |
+                            element asymptote {
+                              LabelID?,
+                              Component?,
+                              text
+                            } |
+                            element sageplot {
+                                LabelID?,
+                                Component?,
+                                attribute variant {'2d'|'3d'}?,
+                                attribute aspect {text}?,
+                                text
+                            }
+                          )
                         )
-                    )?,
-                    (
-                        element latex-image {text} |
-                        element asymptote {text} |
-                        element sageplot {
-                            attribute variant {'2d'|'3d'}?,
-                            attribute aspect {text}?,
-                            text
-                        }
+                      )
                     )
                 }
+            WWLatexImage = element latex-image {
+                text
+              }
             ImageWW =
                 element image {
                     attribute pg-name {text}?,
                     attribute width {text}?,
                     (
-                        attribute decorative {"yes" | "no"}? |
+                      attribute decorative {"yes"} |
+                      (
+                        attribute decorative {"no"}?,
                         (
-                            element shortdescription {(text | WWVariable)+},
-                            element description {(Paragraph | Tabular)+}?
+                          ImageShortDescriptionCode? &amp;
+                          ImageDescription? &amp;
+                          WWLatexImage?
                         )
-                    )?,
-                    element latex-image {
-                        text
-                    }?
+                      )
+                    )
                 }
             </code>
         </fragment>
@@ -1995,14 +2020,17 @@
         <fragment xml:id="sage">
             <title>Sage code</title>
             <code>
+            SageOutput = element output {text}
+            SageInput = element input {text}
             Sage = element sage {
                 PermanentID?,
+                Component?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
                 attribute auto-evaluate {'no'|'yes'}?,
                 attribute language {text}?,
                 attribute type {text}?,
-                (element input {text}, element output {text}?)?
+                (SageInput, SageOutput?)?
             }
             </code>
         </fragment>
@@ -2036,7 +2064,9 @@
             Interactive =
                 element interactive {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute aspect { text }?,
                     attribute width { text }?,
                     attribute platform { text }?,
@@ -2044,17 +2074,79 @@
                     attribute iframe { text }?,
                     attribute source { text }?,
                     attribute version { text }?,
-                    (Slate | SideBySideNoCaption | SideBySideGroupNoCaption)*,
-                    element instructions { BlockText* | text }?
+                    (
+                      (
+                        Slate |
+                        SideBySideNoCaption |
+                        SideBySideGroupNoCaption
+                      )* &amp;
+                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &amp;
+                      element static { Image }?
+                    )
+
+                }
+
+            Stack |=
+                element stack {
+                    (
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Slate
+                    )+
                 }
 
             Slate =
                 element slate {
                     UniqueID?,
-                    attribute surface { text },
-                    (attribute source { text } | attribute material { text })?,
-                    attribute aspect { text }?,
-                    (Paragraph | Tabular | SideBySideNoCaption)*
+                    LabelID?,
+                    Component?,
+                    (
+                      JessieCodeAtt |
+                      (
+                        attribute surface { text },
+                        (
+                          attribute source { text } |
+                          attribute material { text }
+                        )?,
+                        attribute aspect { text }?,
+                        (
+                          Paragraph |
+                          Tabular |
+                          SideBySideNoCaption |
+                          SlateInput |
+                          element xhtml:button {
+                            attribute type { text },
+                            attribute id { text },
+                            text*
+                          }? |
+                          text*
+                        )*
+                      )
+                    )
+                }
+
+              JessieCodeAtt =
+                attribute surface {"jessiecode"},
+                attribute axis {"true" | "false"}?,
+                attribute grid {"true" | "false"}?,
+                (
+                  attribute source {text} |
+                  text*
+                )
+
+              SlateInput =
+                element input {
+                  attribute type {text}?,
+                  attribute value {text}?,
+                  attribute onkeypress {text}?,
+                  attribute onclick {text}?,
+                  attribute style {text}?
                 }
 
             # add Interactives where used
@@ -2099,7 +2191,9 @@
             Video =
                 element video {
                     UniqueID?,
+                    LabelID?,
                     PermanentID?,
+                    Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute aspect {text}?,
@@ -2133,14 +2227,16 @@
             <title>Poems</title>
             <code>
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
+            PoemAuthor =
+                element author {
+                    AlignmentPoem?,
+                    TextShort
+                }
             Poem =
                 element poem {
                     MetaDataTitleOptional,
                     AlignmentPoem?,
-                    element author {
-                        AlignmentPoem?,
-                        TextShort
-                    }?,
+                    PoemAuthor?,
                     (PoemLine+ | Stanza+)
                 }
             Stanza =
@@ -2165,17 +2261,20 @@
         <fragment xml:id="exercise">
             <title>Exercises</title>
             <code>
+            ExerciseOrderedList =
+                element ol {
+                    attribute cols {text}?,
+                    attribute marker {text}?,
+                    ExerciseListItem+
+                }
+            ExerciseListItem = element li {
+                MetaDataTarget,
+                (TextParagraph | BlockText+)
+            }
             ExerciseBody =
                 (
                     BlockStatement |
-                    element ol {
-                        attribute cols {text}?,
-                        attribute marker {text}?,
-                        element li {
-                            MetaDataTarget,
-                            (TextParagraph | BlockText+)
-                        }+
-                    }
+                    ExerciseOrderedList
                 )+
             StatementExercise =
                 element statement { ExerciseBody }
@@ -2211,6 +2310,14 @@
         <fragment xml:id="exercise-dev">
             <title>Exercises (experimental)</title>
             <code>
+            MyOpenMath =
+                MetaDataTitleOptional,
+                IntroductionText?,
+                element myopenmath {
+                    attribute problem {text},
+                    attribute params {text}?
+                },
+                ConclusionText?
             TrueFalse =
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -2252,12 +2359,12 @@
                     attribute order {xsd:integer}?,
                     ((
                         attribute correct {"yes"|"no"}?,
-                        mixed {BlockText?}
+                        mixed {BlockText?, CodeLine?}+
                     ) |
                     (
                         element choice {
                             attribute correct {"yes"|"no"}?,
-                            mixed {BlockText?}
+                            mixed {BlockText?, CodeLine?}+
                         }+
                     ))
                 }
@@ -2290,6 +2397,62 @@
                 )
             Response =
                 element response {empty}
+
+
+            # Selectable areas
+            Area =
+                element area {
+                    attribute correct {"yes"|"no"}?,
+                    TextLong
+                }
+            TextLongAreas =  mixed { (
+                  Area |
+                  Character |
+                  Generator |
+                  Verbatim |
+                  GroupAreas |
+                  MathInline |
+                  Music |
+                  Reference |
+                  WWVariable)* }
+            GroupAreas |=
+                element q {TextLongAreas} |
+                element sq {TextLongAreas}
+            TextParagraphAreas = mixed { (
+              Character |
+              Generator |
+              Verbatim |
+              Group |
+              WWVariable |
+              MathInline |
+              Music |
+              Reference |
+              CodeDisplay |
+              MathDisplay |
+              List |
+              Footnote |
+              Notation |
+              Index |
+              Area |
+              GroupAreas)* }
+            ParagraphAreas =
+                element p {
+                    UniqueID?,
+                    LabelID?,
+                    PermanentID?,
+                    Component?,
+                    TextParagraphAreas
+                }
+            Areas =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Feedback?,
+                element areas {
+                  ParagraphAreas+
+                },
+                Hint*, Answer*, Solution*
+
             # General feedback element
             Feedback =
                 element feedback {
@@ -2299,18 +2462,22 @@
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
+                    MyOpenMath |
                     TrueFalse |
                     MultipleChoice |
                     Parsons |
                     Matching |
-                    FreeResponse
+                    FreeResponse |
+                    Areas
                 }
             ProjectLike |=
+                MyOpenMath |
                 TrueFalse |
                 MultipleChoice |
                 Parsons |
                 Matching |
-                FreeResponse
+                FreeResponse |
+                Areas
             </code>
         </fragment>
     </section>
@@ -2439,17 +2606,21 @@
                     attribute source {text}?,
                     attribute seed {xsd:integer}?
                 }
+            WWDescription =
+                element description {
+                    (
+                        TextSimple |
+                        SimpleLine+
+                    )
+                }
             WebWorkAuthored =
                 element webwork {
                     UniqueID?,
+                    LabelID?,
+                    Component?,
                     attribute seed {xsd:integer}?,
                     attribute copy {text}?,
-                    element description {
-                        (
-                            TextSimple |
-                            SimpleLine+
-                        )
-                    }?,
+                    WWDescription?,
                     WWMacros?,
                     element pg-code {text}?,
                     (
@@ -2572,6 +2743,7 @@
             <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding these manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
+            <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
@@ -2588,8 +2760,12 @@
             <code>
             UniqueID =
                 attribute xml:id {text}
+            LabelID =
+                attribute label {text}
             PermanentID =
                 attribute permid {text}
+            Component =
+                attribute component {text}
             Title =
                 element title {TextLong}
             LinedTitle =
@@ -2608,18 +2784,24 @@
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
                 Index*
             MetaDataAltTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2628,7 +2810,9 @@
                 Index*
             MetaDataLinedTitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
@@ -2637,7 +2821,9 @@
                 Index*
             MetaDataSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title,
@@ -2647,7 +2833,9 @@
                 Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
@@ -2657,21 +2845,27 @@
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
                 Index*
             MetaDataAltTitleOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
             MetaDataTitleCreatorOptional =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
@@ -2679,7 +2873,9 @@
                 Index*
             MetaDataCaption =
                 UniqueID?,
+                LabelID?,
                 PermanentID?,
+                Component?,
                 XMLBase?,
                 XMLLang?,
                 Title?,
@@ -2690,18 +2886,6 @@
 
     </section>
 
-    <section>
-        <title>Labels as Unique IDs (experimental)</title>
-        <p>We assume that everywhere an xml:id can go, we can also now put a label.</p>
-        <fragment xml:id="label">
-            <title>Labels as Unique IDs</title>
-            <code>
-            UniqueID |=
-                attribute xml:id {text}?,
-                attribute label {text}?
-            </code>
-        </fragment>
-    </section>
     <section>
         <title>Miscellaneous</title>
 
@@ -2770,23 +2954,27 @@
                     Credit*,
                     Date?
                 }
+            Email = element email {text}
+            PersonName = element personname {TextSimple}
+            Department = element department {TextSimple | ShortLine+}
+            Institution = element institution {TextSimple | ShortLine+}
             Author =
                 element author {
-                    element personname {TextSimple},
-                    element department {TextSimple | ShortLine+}?,
-                    element institution {TextSimple | ShortLine+}?,
-                    element email {text}?
+                    PersonName,
+                    Department?,
+                    Institution?,
+                    Email?
                 }
             Editor =
                 element editor {
-                    element personname {TextSimple},
-                    element department {TextSimple | ShortLine+}?,
-                    element institution {TextSimple | ShortLine+}?,
-                    element email {text}?
+                    PersonName,
+                    Department?,
+                    Institution?,
+                    Email?
                 }
             Credit =
                 element credit {
-                    element title {TextLong},
+                    Title,
                     Author+
                 }
             Date =
@@ -2798,20 +2986,23 @@
                     MetaDataTarget,
                     BlockText+
                 }
+            ColophonCredit = element credit {
+                    element role {TextShort},
+                    element entity {TextLong}
+                }
+            ShortLicense = element shortlicense {TextLong}
+            Website = element website {Url}
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
+                    ColophonCredit*,
                     element edition {text}?,
-                    element website {Url}?,
+                    Website?,
                     element copyright {
                         element year {TextShort},
                         element holder {text},
                         element minilicense {TextShort}?,
-                        element shortlicense {TextLong}?
+                        ShortLicense?
                     }?
                 }
             Biography =
@@ -2857,33 +3048,22 @@
 
         <p>A few simple tweaks to frontmatter elements.</p>
 
-        <p>We give an alternative definition of the ColophonFront to include footnotes in the shortlicense.  This is the only change currently.</p>
+        <p>We give an alternative definition of the two elements in the ColophonFront that are different.</p>
 
         <fragment xml:id="frontmatter-dev">
             <title>Front matter (dev)</title>
             <code>
-            ColophonFront |=
-                element colophon {
-                    MetaDataTarget,
-                    element credit {
-                        element role {TextShort},
-                        element entity {TextLong}
-                    }*,
-                    element edition {text}?,
-                    element website {
-                        element name {TextShort},
-                        element address {text}
-                    }?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        element shortlicense {
-                            TextLong &amp;
-                            Footnote*
-                        }?
-                    }?
+            ShortLicense_X =
+                element shortlicense {
+                    TextLong &amp;
+                    Footnote*
                 }
+            ShortLicense |= ShortLicense_X
+            Website_X = element website {
+                element name {TextShort},
+                element address {text}
+            }
+            Website |= Website_X
             </code>
         </fragment>
     </section>
@@ -2899,11 +3079,11 @@
             Contributor =
                 element contributor {
                     MetaDataTarget,
-                    element personname {TextSimple},
-                    element department {TextSimple}?,
-                    element institution {TextSimple}?,
+                    PersonName,
+                    Department?,
+                    Institution?,
                     element location {TextSimple}?,
-                    element email {text}?
+                    Email?
                 }
             Contributors =
                 element contributors {
@@ -3044,9 +3224,10 @@
         <fragment xml:id="feedback">
             <title>Feedback link</title>
             <code>
+            FeedbackUrl = element url {text}
             Configuration |=
                 element feedback {
-                    element url {text}
+                    FeedbackUrl
                 }
             </code>
         </fragment>
@@ -3228,6 +3409,7 @@
         <fragment filename="pretext-dev.rnc">
             <title>Development Schema</title>
             <code>
+              namespace xhtml = "http://www.w3.org/1999/xhtml"
                 grammar {
 
                 include "pretext.rnc"
@@ -3241,7 +3423,6 @@
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
-            <fragref ref="label"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }

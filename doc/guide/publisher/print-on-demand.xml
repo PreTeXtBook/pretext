@@ -40,7 +40,7 @@
         </li>
     </dl></p>
 
-    <p>In order of increasing professionalism and decreasing convenience, we describe three print-on-demand manufacturers we are familiar with, plus two others. Additions, corrections, updates, and alternatives are all welcome.<dl width="narrow">
+    <p>In order of increasing professionalism and decreasing convenience, we describe three print-on-demand manufacturers we are familiar with, plus three others. Additions, corrections, updates, and alternatives are all welcome.<dl width="narrow">
 
         <li>
             <title>Lulu.com</title>
@@ -69,6 +69,12 @@
             <idx>Ingram</idx>
             <p>IngramSpark (formerly Lightning Source) is a division of Ingram, which is a very large printer, also providing services to major publishers.  Creating an account is not trivial, and you need to provide your own <init>ISBN</init> number.  In return, your book is available at Amazon.com and many other online bookstores automatically, and is in many ways indistinguishable from offerings of large commercial publishers.  There are also options for international distribution.  You can also control settings for discounts and returns.  (2018-03-06)</p>
             <p>Current startup pricing for publishers is forty-nine dollars for either a print book, or print and e-book together.  A recent change seems to be that, like <init>KDP</init>, they will now provide a free <init>ISBN</init> if you don't have one; however, the free <init>ISBN</init> is only usable for as long as you continue to use IngramSpark. (2021-07-21)</p>
+        </li>
+
+        <li>
+            <title>LAD Custom Publishing</title>
+            <idx>LAD Custom Publishing</idx>
+            <p>LAD primarily helps faculty create course packets while remaining copyright compliant, so it has experience with openly licensed educational resources if you need print copies of <pretext/> titles without other print options.  In addition, the <url href="https://ladbookstore.com" visual="ladbookstore.com">LAD Bookstore</url> can be used to print and market your own text without overhead, though as with other solutions an ISBN is free only so long as you use LAD.  One particular advantage for some authors is you can communicate with representatives on the phone or via email, not just through an automated web form.  (2024-07-18)</p>
         </li>
 
         <li>

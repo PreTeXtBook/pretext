@@ -33,12 +33,25 @@ const newboard = (name,title,yaxislabel,units,tmin,tmax,ymin,ymax,f) => {
     // create the x-axis (time)
     xaxis = brd.create('axis', [[-0.5, 0], [1,0]], {name:'t (s)', withLabel:true, label: {position: 'rt', offset: [-15, -15]}});
 
+    // R. Beezer, 2024-04-19: upgrading JSXGraph to 1.0.8 causes
+    // errors when trying to adjust tick marks,  So we comment-out
+    // the manipulations and live with the result, since we cannot
+    // find an adequate way to remove the defaults.  In particular
+    //
+    //       xaxis.removeTicks(xaxis.defaultTicks);
+    //
+    // as suggested by the JSXGraph wiki does not seem to work.
+    // The only downside is that there are some tickmarks
+    // with negative values
+
     // remove default tickmarks
-    xaxis.removeAllTicks();
+    // R. Beezer, 2024-04-19: commented-out next line
+    //xaxis.removeAllTicks();
   
     // create custom tickmarks
     // TODO - these values should not be hard-coded
-    brd.create('ticks',[xaxis,[1,2,3,4,5,6]], {drawLabels:true,label: {offset: [-3, -15]}});
+    // R. Beezer, 2024-04-19: commented-out next line
+    // brd.create('ticks',[xaxis,[1,2,3,4,5,6]], {drawLabels:true,label: {offset: [-3, -15]}});
     
     // create the y-axis
     yaxis = brd.create('axis', [[0, 0], [0,1]], {name:yaxislabel + ' ' + units, withLabel:true, label: {position: 'rt', offset: [10, 0]}});
@@ -72,8 +85,9 @@ board_t.create('text',[5,0.9,'Time']);
 // create the custom t-axis
 taxis = board_t.create('axis', [[-0.5, 0], [1,0]], {name:'t (s)',withLabel:true,label: {position: 'rt',offset: [-15, -15]}});
 taxis.setStraight(false,true);
-taxis.removeAllTicks();
-board_t.create('ticks',[taxis,[1,2,3,4,5,6]], {drawLabels:true,label: {offset: [-3, -15]}});
+// R. Beezer, 2024-04-19: commented-out next two lines
+// taxis.removeAllTicks();
+// board_t.create('ticks',[taxis,[1,2,3,4,5,6]], {drawLabels:true,label: {offset: [-3, -15]}});
 
 // create the actual slider; the 'time' variable will be used in the other boards
 const time = board_t.create('slider',[[0,0],[6,0],[0,0,6]]);
