@@ -9227,7 +9227,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="out" />
     <xsl:param name="b-original"/>
 
-    <xsl:element name="pre">
+    <xsl:element name="div">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:attribute name="class">
@@ -10584,18 +10584,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- full page width and when revealed in a knowl it shrinks -->
     <!-- to fill available width.  In another application, the   -->
     <!-- width might come from an author's source.               -->
-    <div id="mom{generate-id()}wrap" style="width:100%;overflow:visible;position:relative">
+    <xsl:variable name="an-id">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <div id="mom{$an-id}wrap" style="width:100%;overflow:visible;position:relative">
         <!-- This preserves the aspect-ratio, and there is no       -->
         <!-- clipping.  Basically this says scale the iframe to     -->
         <!-- fill whatever width is available in the containing div -->
-        <iframe id="mom{generate-id()}" style="position:absolute;z-index:1;object-fit: contain; width: 100%" 
+        <iframe id="mom{$an-id}" style="position:absolute;z-index:1;object-fit: contain; width: 100%"
             frameborder="0" data-knowl-callback="sendResizeRequest">
             <xsl:attribute name="src">
                 <xsl:text>https://www.myopenmath.com/embedq2.php?id=</xsl:text>
                 <xsl:value-of select="@problem" />
                 <!-- can't disable escaping text of an attribute -->
                 <xsl:text>&amp;frame_id=mom</xsl:text>
-                <xsl:value-of select="generate-id()" />
+                <xsl:value-of select="$an-id" />
                 <xsl:if test="@params != ''">
                     <xsl:text>&amp;</xsl:text>
                     <xsl:value-of select="str:replace(@params, ',', '&amp;')" />
@@ -12382,7 +12385,7 @@ TODO:
         <xsl:attribute name="src">
             <xsl:choose>
                 <xsl:when test="$mathjax4-testing">
-                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.6/</xsl:text>
+                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.7/</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
@@ -12429,7 +12432,7 @@ TODO:
     <xsl:param name="language-text" />
 
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class '</xsl:text>
+        <xsl:text>// Make *any* div with class '</xsl:text>
         <xsl:call-template name="sagecell-class-name">
             <xsl:with-param name="language-attribute" select="$language-attribute"/>
             <xsl:with-param name="b-autoeval" select="$b-autoeval"/>
@@ -12441,7 +12444,7 @@ TODO:
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
                     <string key="inputLocation">
-                        <xsl:text>pre.</xsl:text>
+                        <xsl:text>div.</xsl:text>
                         <xsl:call-template name="sagecell-class-name">
                             <xsl:with-param name="language-attribute" select="$language-attribute"/>
                             <xsl:with-param name="b-autoeval" select="$b-autoeval"/>
@@ -12483,12 +12486,12 @@ TODO:
 <!-- template for a "display only" version -->
 <xsl:template name="sagecell-display">
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
+        <xsl:text>// Make *any* div with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
         <xsl:text>sagecell.makeSagecell(</xsl:text>
         <xsl:call-template name="json">
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <string key="inputLocation">pre.sage-display</string>
+                    <string key="inputLocation">div.sage-display</string>
                     <string key="editor">codemirror-readonly</string>
                     <array key="hide">
                         <string>evalButton</string>
@@ -12506,13 +12509,13 @@ TODO:
 <!-- Generic button, drop-down for languages -->
 <xsl:template name="sagecell-practice">
     <xsl:element name="script">
-        <xsl:text>// Make *any* pre with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
+        <xsl:text>// Make *any* div with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
         <xsl:text>// Their results will be linked, only within language type&#xa;</xsl:text>
         <xsl:text>sagecell.makeSagecell(</xsl:text>
         <xsl:call-template name="json">
             <xsl:with-param name="content">
                 <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <string key="inputLocation">pre.sagecell-practice</string>
+                    <string key="inputLocation">div.sagecell-practice</string>
                     <boolean key="linked">true</boolean>
                     <string key="evalButtonText">
                         <xsl:apply-templates select="." mode="type-name">
