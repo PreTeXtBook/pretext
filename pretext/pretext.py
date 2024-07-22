@@ -3635,7 +3635,50 @@ def html(
             log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
+def revealjs(
+    xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
+):
+    """Convert XML source to reveal.js HTML file"""
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # Consult publisher file for locations of images
+    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+
+    # names for scratch directories
+    tmp_dir = get_temporary_directory()
+
+    # support publisher file, and subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # Optional extra XSL could be None, or sanitized full filename
+    if extra_xsl:
+        extraction_xslt = extra_xsl
+    else:
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-revealjs.xsl")
+
+    # place managed directories - some of these (Asymptote HTML) are
+    # consulted during the XSL run and so need to be placed beforehand
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+
+    # place CSS and JS in scratch directory
+    copy_html_css_js(tmp_dir)
+
+    # Write output into temporary directory
+    log.info("converting {} to HTML in {}".format(xml, tmp_dir))
+    xsltproc(extraction_xslt, xml, out_file, tmp_dir, stringparams)
+
+    if file_format  == "revealjs":
+        # with multiple files, we need to copy a tree
+        # see comments at  copy_build_directory()
+        # before replacing with  shutil.copytree()
+        copy_build_directory(tmp_dir, dest_dir)
+        derivedname = get_output_filename(xml, out_file, dest_dir, ".html")
+    else:
+        raise ValueError("PTX:BUG: HTML file format not recognized")
 
 ##################
 # Assembled Source
