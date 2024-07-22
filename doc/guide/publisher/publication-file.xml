@@ -740,8 +740,9 @@
 
             <p>The<cd>
                 <cline>/publication/revealjs/appearance</cline>
-            </cd>element can have the following attribute:<ul>
+            </cd>element can have the following attributes:<ul>
                 <li><attr>theme</attr>: the base name of a file that is a reveal.js theme.  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
+                <li><attr>number</attr>: whether to include slide numbers on slides.  Values are <c>yes</c> or <c>no</c>.  The default is <c>no</c>.  Note that with the <c>grid</c> navigation mode the slide numbers will be ordered pairs.</li>
             </ul></p>
         </subsection>
 
