@@ -2390,6 +2390,7 @@
             FreeResponse =
                 MetaDataTitleOptional,
                 attribute number {text}?,
+                attribute attachment {"yes" | "no"}?,
                 (
                 (ExerciseBody, Response?) |
                 (StatementExercise, Response?, Hint*, Answer*, Solution*) |

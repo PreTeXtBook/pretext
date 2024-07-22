@@ -1314,6 +1314,14 @@
     <optional>
       <attribute name="number"/>
     </optional>
+    <optional>
+      <attribute name="attachment">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
     <choice>
       <group>
         <ref name="ExerciseBody"/>
