@@ -292,6 +292,9 @@ dfn {
                 <xsl:value-of select="$reveal-navigation-mode"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
+            <xsl:if test="$b-reveal-slide-number">
+                <xsl:text>  slideNumber: true,&#xa;</xsl:text>
+            </xsl:if>
             <xsl:text>  center: false,&#xa;</xsl:text>
             <xsl:text>  hash: true,&#xa;</xsl:text>
             <xsl:text>  transition: 'fade',&#xa;</xsl:text>

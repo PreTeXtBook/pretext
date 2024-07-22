@@ -3000,6 +3000,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Reveal.js Slide Numbering -->
+
+<xsl:variable name="reveal-slide-number">
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='number']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-slide-number" select="$reveal-slide-number= 'yes'"/>
+
 <!-- Reveal.js Controls Back Arrows -->
 
 <xsl:variable name="reveal-control-backarrow">
@@ -3074,8 +3082,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- for publisher file attributes. Each pi:pub-attribute has a name.   -->
 <!-- The following attributes are optional.                             -->
 <!-- default: default string to use (should not contain spaces)         -->
-<!-- options: space-separated lits of options aside from the default    -->
-<!-- freeform: if 'yes' then pub attributee can be anything             -->
+<!-- options: space-separated list of options aside from the default    -->
+<!-- freeform: if 'yes' then pub attribute can be anything              -->
 <!-- stringparam: a stringparam that can override the pubfile entry     -->
 <!-- legacy-stringparam: a deprecated stringparam, last in chain        -->
 <!-- legacy-options: space separated list of retired options            -->
@@ -3176,6 +3184,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <revealjs>
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
+            <pi:pub-attribute name="number" default="no" options="yes"/>
         </appearance>
         <controls>
             <pi:pub-attribute name="backarrows" default="faded" options="hidden visible"/>
