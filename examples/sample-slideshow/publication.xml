@@ -29,8 +29,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <revealjs>
         <appearance theme="solarized"/>
-        <!-- these are "resources" defaults, but best for a sample -->
-        <!-- @minified is not even necessary with @host = 'cdn'    -->
+        <!-- this is a "resources" default, but best for a sample -->
         <resources host="cdn"/>
         <!-- display="yes" is the default so we can see arrows          -->
         <!-- tutorial="yes" is the default                              -->
