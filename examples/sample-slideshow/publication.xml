@@ -23,6 +23,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override defaults as much as possible -->
 <publication>
 
+    <source>
+        <directories external="external" generated="generated"/>
+    </source>
+
     <revealjs>
         <appearance theme="solarized"/>
         <!-- these are "resources" defaults, but best for a sample -->
