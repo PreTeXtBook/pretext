@@ -24,7 +24,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <revealjs>
-        <appearance theme="solarized"/>
+        <!-- there are many reveal.js themes                    -->
+        <!-- see https://revealjs.com/themes/                   -->
+        <!-- to turn slide numbering on, use "yes"              -->
+        <!-- numbering on with "grid" mode gives ordered pairs  -->
+        <appearance theme="solarized" number="no"/>
         <!-- these are "resources" defaults, but best for a sample -->
         <!-- @minified is not even necessary with @host = 'cdn'    -->
         <resources host="cdn"/>
