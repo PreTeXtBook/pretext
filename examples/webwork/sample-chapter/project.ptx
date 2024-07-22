@@ -20,6 +20,18 @@
       <output-dir>published/PTXWW</output-dir>
       <stringparam key="debug.rs.services.file" value="file:////Users/bmiller/rs/bases/rsptx/interactives/runestone/dist/webpack_static_imports.xml" />
     </target>
+    <target name="pdf" pdf-method="xelatex">
+      <format>pdf</format>
+      <source>sample-chapter.ptx</source>
+      <publication>publisher/publication.xml</publication>
+      <output-dir>output/print</output-dir>
+    </target>
+    <target name="tex">
+      <format>latex</format>
+      <source>sample-chapter.ptx</source>
+      <publication>publisher/publication.xml</publication>
+      <output-dir>output/print-latex</output-dir>
+    </target>
   </targets>
   <executables>
     <latex>latex</latex>
