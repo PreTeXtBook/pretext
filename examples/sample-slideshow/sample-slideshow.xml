@@ -280,7 +280,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </p>
 
                 <image source="images/complete-graph" width="65%"/>
-                
+
                 <p>
                     You will want to ensure your image has an <attr>width</attr> if you want it to fit correctly in your slide.
                 </p>
@@ -288,8 +288,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <slide>
                 <title>Images, from source</title>
-                
-                
+
+
                 <p>
                     Images can also be generated from source. TikZ works well, and Asymptote.
                     They can be placed in a <tag>sidebyside</tag>, and inside a <tag>figure</tag> (or both).
@@ -395,7 +395,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- <caption>A 3D cone from the <url href="https://asymptote.sourceforge.io/" visual="asymptote.sourceforge.io/">Asymptote website</url>, which also appears in the Sample Article</caption> -->
                             <image>
                                 <shortdescription></shortdescription>
-                                
+
                                 <asymptote label="img-asymptote">
                                     import solids;
                                     size(0,150);
