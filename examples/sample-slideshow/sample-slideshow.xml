@@ -305,7 +305,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Images, from an external source</title>
 
                 <p>
-                    Images can be included from external sources by placing them in the <c>assets</c> folder.
+                    Images can be included from external sources.
+                    As with other <pretext/> formats,
+                    you can specify the location of your exteral images in the publication file.
                     The image below also appears in the <pretext/> Sample Article,
                     and originated at <c>www.texample.net</c>.
                 </p>
