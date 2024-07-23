@@ -2291,7 +2291,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercises>
 
-    <exercises xml:id="multiple-choice-exercises" group-work="yes" group-size="5">
+    <exercises xml:id="multiple-choice-exercises" groupwork="yes" groupsize="5">
         <title>Multiple Choice Exercises</title>
 
         <introduction>
@@ -3961,4 +3961,90 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>And a final paragraph in the section, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
     </section>
 
+    <worksheet groupwork="yes" groupsize="2">
+        <title>A <q>Group Work</q> Worksheet</title>
+
+        <p>This is a <tag>worksheet</tag> which has a <attr>groupwork</attr> attribute set to <c>yes</c>.  When hosted on Runestone, the exercises within will be available for a group of students tyo submit together.</p>
+
+        <exercise label="groupwork-multiple-choice">
+            <title>Multiple-Choice, Group Work</title>
+            <idx>stop signs</idx>
+            <idx>group work</idx>
+            <statement>
+                <p>What color is a stop sign?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>White might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
+        <p>Worksheets allow for material interleaved with the <tag>exercise</tag> throughout.</p>
+
+        <exercise label="groupwork-number-theory" adaptive="yes">
+            <title>Parsons Problem, Group Work</title>
+            <idx>even numbers</idx>
+            <idx>groupwork</idx>
+            <statement>
+                <p>Create a proof of the theorem: If <m>n</m> is an even number, then <m>n\equiv 0\mod 2</m>.</p>
+            </statement>
+            <blocks>
+                <block order="2">
+                    <p>Suppose <m>n</m> is even.</p>
+                </block>
+                <block order="3">
+                    <choice><p>Then <m>n</m> is a prime number.</p></choice>
+                    <choice correct="yes"><p>Then there exists an <m>m</m> so that <m>n = 2m</m>.</p></choice>
+                    <choice><p>Then there exists an <m>m</m> so that <m>n = 2m + 1</m>.</p></choice>
+                </block>
+                <block order="1" correct="no">
+                    <p>Click the heels of your ruby slippers together three times.</p>
+                </block>
+                <block order="5">
+                    <p>So <m>n = 2m + 0</m>.</p>
+                    <p>This is a superfluous second paragraph in this block.</p>
+                </block>
+                <block order="4">
+                    <p>Thus <m>n\equiv 0\mod 2</m>.</p>
+                </block>
+                <block order="6" correct="no">
+                    <p>And a little bit of irrelevant multi-line math
+                        <md>
+                            <mrow>c^2&amp;a^2+b^2</mrow>
+                            <mrow>&amp;x^2+y^2</mrow>
+                        </md>.
+                    </p>
+                </block>
+            </blocks>
+            <hint><p>Dorothy will not be much help with this proof.</p></hint>
+        </exercise>
+    </worksheet>
 </chapter>
