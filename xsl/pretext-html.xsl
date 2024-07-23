@@ -563,10 +563,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&STRUCTURAL;" mode="structural-division-content">
     <xsl:param name="heading-level"/>
 
+    <!-- Specialized divisions "exercises" and "worksheet" can be used   -->
+    <!-- as vehicles for collections of "exercise" as group work modules -->
+    <!-- NB: this assumes that the "exercises" is an entire page, so     -->
+    <!-- checks if it is a subdivision of a "chapter" (or "appendix").   -->
+    <!-- In other words, these divisions must be Runestone "subchapter". -->
+
+    <xsl:variable name="b-is-groupwork"
+                  select="$b-host-runestone and (@groupwork = 'yes') and (self::worksheet or self::exercises) and (parent::chapter or parent::appendix)"/>
+
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
-    <section class="{local-name(.)}">
+    <section>
+        <xsl:attribute name="class">
+            <xsl:value-of select="local-name(.)"/>
+            <!-- mark "section" for potential styling, etc -->
+            <xsl:if test="$b-is-groupwork">
+                <xsl:text> groupwork</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="permid-attribute"/>
         <xsl:apply-templates select="." mode="section-heading">
@@ -659,6 +675,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercises" mode="structural-division-inner-content">
     <xsl:param name="heading-level"/>
 
+    <!-- Similar to variable above, except we know this is an "exercises" -->
+    <xsl:variable name="b-is-groupwork"
+              select="$b-host-runestone and (@groupwork = 'yes') and (parent::chapter or parent::appendix)"/>
+
     <xsl:variable name="the-exercises">
         <xsl:apply-templates select="*">
             <xsl:with-param name="heading-level" select="$heading-level"/>
@@ -666,11 +686,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:choose>
-        <xsl:when test="@time-limit and (@group-work = 'yes')">
+        <xsl:when test="@time-limit and $b-is-groupwork">
             <xsl:message>PTX:ERROR:   an &quot;exercises&quot; division cannot simultaneously be a timed exam AND group work</xsl:message>
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
-        <xsl:when test="@group-work = 'yes'">
+        <xsl:when test="$b-is-groupwork">
             <!-- the actual list of exercises -->
             <xsl:copy-of select="$the-exercises"/>
             <!-- Infrastructure for groupwork is provided by -->
