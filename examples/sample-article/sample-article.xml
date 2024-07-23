@@ -8489,7 +8489,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     is to author your DoenetML in a separate file like
                     <c>example.doenetml</c>, then include this file
                     within your <pretext/> document using
-                    <c>&lt;xi:include parse="text" src="path/to/example.doenetml"/&gt;</c>.
+                    <c>&lt;xi:include parse="text" href="path/to/example.doenetml"/&gt;</c>.
                 </p>
 
                 <figure xml:id="figure-doenetml">
