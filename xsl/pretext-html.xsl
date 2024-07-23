@@ -621,6 +621,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="structural-division-inner-content">
             <xsl:with-param name="heading-level" select="$next-level"/>
         </xsl:apply-templates>
+
+        <!-- Sometimes conclude with groupwork submission items -->
+        <xsl:if test="$b-is-groupwork">
+            <xsl:apply-templates select="." mode="runestone-groupwork"/>
+        </xsl:if>
     </section>
 </xsl:template>
 
@@ -668,8 +673,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@group-work = 'yes'">
             <!-- the actual list of exercises -->
             <xsl:copy-of select="$the-exercises"/>
-            <!-- group selection and submission features, if hosted on Runestone -->
-            <xsl:apply-templates select="." mode="runestone-group-work"/>
+            <!-- Infrastructure for groupwork is provided by -->
+            <!--   "structural-division-content"             -->
+            <!-- template (early and late in "section")      -->
+            <!-- No progress indicator in this case -->
         </xsl:when>
         <!-- some extra wrapping for timed exercises      -->
         <!-- so we pass the $the-exercises as a parameter -->

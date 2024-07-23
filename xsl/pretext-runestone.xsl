@@ -457,34 +457,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An "exercises" division can be a group work exercise, by virtue -->
 <!-- of selection and submission features at the bottom of the page. -->
-<!-- NB: this assumes that the "exercises" is an entire page, so     -->
-<!-- checks if it is a subdivision of a "chapter" (or "appendix").   -->
-<xsl:template match="exercises" mode="runestone-group-work">
-    <xsl:if test="$b-host-runestone and (parent::chapter or parent::appendix)">
-        <div class="runestone">
-            <div data-component="groupsub">
-                <!-- the Runestone id -->
-                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:attribute name="data-size_limit">
-                    <xsl:choose>
-                        <xsl:when test="@group-size">
-                            <xsl:value-of select="@group-size"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>3</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <!-- students select their partners in their group -->
-                <div>
-                    <select multiple="" class="assignment_partner_select"  style="width: 100%"/>
-                </div>
-                <!-- and a submit button once done -->
-                <div class="groupsub_button"/>
-                <div class="para">The Submit Group button will submit the answer for each each question on this page for each member of your group. It also logs you as the official group submitter.</div>
+<xsl:template match="exercises" mode="runestone-groupwork">
+    <div class="runestone">
+        <div data-component="groupsub">
+            <!-- the Runestone id -->
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+            <xsl:attribute name="data-size_limit">
+                <xsl:choose>
+                    <xsl:when test="@groupsize">
+                        <xsl:value-of select="@groupsize"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>3</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <!-- students select their partners in their group -->
+            <div>
+                <select multiple="" class="assignment_partner_select"  style="width: 100%"/>
             </div>
+            <!-- and a submit button once done -->
+            <div class="groupsub_button"/>
+            <div class="para">The Submit Group button will submit the answer for each each question on this page for each member of your group. It also logs you as the official group submitter.</div>
         </div>
-    </xsl:if>
+    </div>
 </xsl:template>
 
 
