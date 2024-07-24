@@ -8266,7 +8266,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
                 <p>You could also use a base64-encoded string of the <c>.ggb</c> file. You might come across such a string somewhere, or you might generate one by opening a <c>.ggb</c> file in a desktop installation of GeoGebra, and pushing ctrl-shift-B (command-shift-B on a Mac) to get the string in your clipboard. If you do this, you could use a <attr>base64</attr> attribute in place of the <attr>source</attr> attribute in the previous example. We don't do that here because such a string is generally over 5000 characters long and we are keeping the sample article source a bit cleaner.</p>
-
+                <p>The next example shows how you can communicate between a GeoGebra applet and a <tag>slate</tag> contained in the interactive.  The process is mediated by javascript code specified in the <attr>source</attr> attribute of the interactive.  Event listeners in the code update the html when the diagram changes or vice-versa.  MathJax is also notified when it needs to update math. </p>
+                <figure xml:id="figure_Interactive-3d-direction-vector">
+                    <caption>Geogebra/<pretext/> Communications</caption>
+                    <interactive platform="geogebra" aspect="10:8" width="100%" xml:id="ggb_3d-direction-vector_interactive" source="code/ggb/3d-direction-vector.js">
+                        <slate xml:id="ggb_3d-direction-vector_slate" aspect="10:5" surface="geogebra" source="code/ggb/3d-direction-vector.ggb">
+                            evalCommand("B2 = 3");
+                            evalCommand("C2 = -1");
+                            evalCommand("D2 = 2");
+                            evalCommand("B3 = -1");
+                            evalCommand("C3 = 4");
+                            evalCommand("D3 = 1");
+                            setValue("showAB",true);
+                            setValue("showBA",false);
+                            evalCommand("ZoomIn(-Z,-Z,-Z/2,Z,Z,Z/2)");
+                            evalCommand("SetViewDirection((1,1,1/2))");
+                            enableRightClick(false);
+                        </slate>
+                        
+                        <sidebyside width="35%" margins="10%">
+                            <tabular permid="ggb_2__17_table1" halign="right">
+                                <col width="10%" halign="center"/>
+                                <col width="10%" halign="center"/>
+                                <col width="10%" halign="center"/>
+                                <col width="10%" halign="center"/>
+                                <col width="30%" halign="right"/>
+                                <row bottom="minor">
+                                    <cell> <m>\ </m> </cell>
+                                    <cell> <m>x </m> </cell>
+                                    <cell> <m>y</m> </cell>
+                                    <cell> <m>z </m> </cell>
+                                    <cell/>
+                                </row>
+                                <row>
+                                    <cell> <m>\mathbf{A}</m> </cell>
+                                    <cell/>
+                                    <cell/>
+                                    <cell/>
+                                    <cell/>
+                                </row>
+                                <row>
+                                    <cell> <m>\mathbf{B}</m> </cell>
+                                    <cell/>
+                                    <cell/>
+                                    <cell/>
+                                    <cell/>
+                                </row>
+                            </tabular>
+                            <slate surface="html">
+                                <p xmlns="http://www.w3.org/1999/xhtml">
+                                    <button id="a_to_b">Show A to B</button>
+                                    <button id="b_to_a">Show B to A</button>
+                                </p>
+                            </slate>
+                        </sidebyside>
+                        
+                        <sidebyside>
+                            <p permid="info"/>
+                        </sidebyside>
+                        <instructions>
+                            <p>
+                                This interactive shows <m>\vec{r}_{AB}</m>, the displacement vector from <m>\vec{A}</m> to <m>\vec{B}</m> and the corresponding unit displacement vector <m>\lambda_{AB}</m>.
+                            </p>
+                            
+                            <p>
+                                You may change <m>\vec{A}</m> and <m>\vec{B}</m> by moving the red and blue dots.
+                                Click the dot to switch between <m>x</m>-<m>y</m> mode and <m>z</m> mode.
+                                Coordinates of <m>\vec{A}</m> and <m>\vec{B}</m> can also be entered into the table directly.
+                            </p>
+                        </instructions>
+                    </interactive>
+                </figure>
+                
                 <p>Lastly, you may just wish to build something from scratch using GeoGebra API. Note that for accessibilty reasons, some objects are rendered unselectable with the <c>setFixed</c> command. Perhaps this should have been done with the previous examples, but that is more difficult when you do not know all of their names. Note that the GeoGebra scripting command <c>setAttribute</c> also changes the webpage's focus, so it is better to set the perspective using an attribute of the slate.</p>
 
                 <figure>
