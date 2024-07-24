@@ -393,7 +393,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
-<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:attribute>
@@ -457,7 +457,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An "exercises" division can be a group work exercise, by virtue -->
 <!-- of selection and submission features at the bottom of the page. -->
-<xsl:template match="exercises" mode="runestone-groupwork">
+<xsl:template match="exercises|worksheet" mode="runestone-groupwork">
     <div class="runestone">
         <div data-component="groupsub">
             <!-- the Runestone id -->
