@@ -2291,11 +2291,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercises>
 
-    <exercises xml:id="multiple-choice-exercises" groupwork="yes" groupsize="5">
+    <exercises xml:id="multiple-choice-exercises" groupwork="yes" groupsize="5" label="exercises-groupwork">
         <title>Multiple Choice Exercises</title>
 
         <introduction>
-            <p>When this <tag>exercises</tag> division is hosted on Runestone Academy, it will be enabled for group work.  See group selection and submission features at the end of the division. (2023-07-03: experimental.)</p>
+            <p>When this <tag>exercises</tag> division is hosted on Runestone Academy, it will be enabled for group work.  See group selection and submission features are at the end of the division.  See <xref ref="worksheet-groupwork"/> for more detail.  (2024-07-24: experimental.)</p>
         </introduction>
 
         <exercise xml:id="multiple-choice-one" label="multiple-choice-not-randomized">
@@ -3961,10 +3961,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>And a final paragraph in the section, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
     </section>
 
-    <worksheet groupwork="yes" groupsize="2">
+    <worksheet groupwork="yes" groupsize="2" label="worksheet-groupwork">
         <title>A <q>Group Work</q> Worksheet</title>
 
-        <p>This is a <tag>worksheet</tag> which has a <attr>groupwork</attr> attribute set to <c>yes</c>.  When hosted on Runestone, the exercises within will be available for a group of students tyo submit together.</p>
+        <p>This is a <tag>worksheet</tag> which has a <attr>groupwork</attr> attribute set to <c>yes</c>, along with a <attr>label</attr> attribute to assist with the Runestone database.  Note, you can also set a <attr>groupsize</attr> attribute.  When hosted on Runestone, the exercises within will be available for a group of students to submit together.</p>
 
         <exercise label="groupwork-multiple-choice">
             <title>Multiple-Choice, Group Work</title>
