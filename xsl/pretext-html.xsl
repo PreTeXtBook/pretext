@@ -9999,6 +9999,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- period below is Javascript syntax for methods -->
                 <xsl:with-param name="pad" select="concat($applet-onload-argument,'.')" />
             </xsl:call-template>
+            <!-- call a function named 'listeners()' in attached .js file to communicate with other divs -->
+            <xsl:text>listeners(</xsl:text><xsl:value-of select='$applet-onload-argument'/><xsl:text>)</xsl:text>
             <xsl:text>};&#xa;</xsl:text>
         </xsl:if>
         <!-- Parameter reference:                                              -->
@@ -10055,18 +10057,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>};&#xa;</xsl:text>
 
+        <xsl:text>new Promise((resolve, reject) => {&#xa;</xsl:text>
         <xsl:text>var </xsl:text>
             <xsl:value-of select="$applet-name" />
         <xsl:text> = new GGBApplet(</xsl:text>
             <xsl:value-of select="$applet-parameters" />
         <xsl:text>, true);&#xa;</xsl:text>
 
+      <xsl:text>resolve(</xsl:text><xsl:value-of select="$applet-name" /><xsl:text>);})&#xa;</xsl:text>
+      <xsl:text>.then((</xsl:text><xsl:value-of select="$applet-name" /><xsl:text>) => {&#xa;</xsl:text>
         <!-- inject the applet into the div below -->
         <xsl:text>window.onload = function() { </xsl:text>
         <xsl:value-of select="$applet-name" />
         <xsl:text>.inject('</xsl:text>
         <xsl:value-of select="$applet-container" />
         <xsl:text>'); }&#xa;</xsl:text>
+        <xsl:text>},&#xa;</xsl:text>
+        <xsl:text>(error) => {console.log('GGB applet load failure.', error)});&#xa;</xsl:text>
     </script>
     <!-- build a container div with the right shape -->
     <div class="geogebra-applet" id="{$applet-container}">
