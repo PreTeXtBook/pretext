@@ -8,7 +8,6 @@
                 element interactive {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     attribute aspect { text }?,
                     attribute width { text }?,
@@ -528,7 +527,6 @@
                 element p {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     TextParagraphAreas
                 }

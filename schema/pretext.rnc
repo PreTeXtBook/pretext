@@ -492,7 +492,6 @@
                 }
             Console =
                 element console {
-                    PermanentID?,
                     Component?,
                     attribute prompt {text}?,
                     attribute width {text}?,
@@ -505,7 +504,6 @@
             ProgramInput = element input {text}
             Program =
                 element program {
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -531,21 +529,18 @@
             }
             List =
                 element ol {
-                    PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
                     ListItem+
                 } |
                 element ul {
-                    PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
                     ListItem+
                 } |
                 element dl {
-                    PermanentID?,
                     Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
                     DefinitionListItem+
@@ -718,7 +713,6 @@
                     )+
                 }
             SidebySideAttributes =
-                PermanentID?,
                 Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
@@ -776,7 +770,6 @@
             ImageRaster =
                 element image {
                     UniqueID?,
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -803,7 +796,6 @@
             ImageCode =
                 element image {
                     UniqueID?,
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -898,7 +890,6 @@
                 }
             Tabular =
                 element tabular {
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -916,7 +907,6 @@
             SageOutput = element output {text}
             SageInput = element input {text}
             Sage = element sage {
-                PermanentID?,
                 Component?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
@@ -936,7 +926,6 @@
                 element video {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -1201,8 +1190,6 @@
                 attribute xml:id {text}
             LabelID =
                 attribute label {text}
-            PermanentID =
-                attribute permid {text}
             Component =
                 attribute component {text}
             Title =
@@ -1224,13 +1211,11 @@
             MetaDataTarget =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1239,7 +1224,6 @@
             MetaDataAltTitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1250,7 +1234,6 @@
             MetaDataLinedTitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1261,7 +1244,6 @@
             MetaDataSubtitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1273,7 +1255,6 @@
             MetaDataLinedSubtitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1285,7 +1266,6 @@
             MetaDataTitleOptional =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1294,7 +1274,6 @@
             MetaDataAltTitleOptional =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1303,7 +1282,6 @@
             MetaDataTitleCreatorOptional =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1313,7 +1291,6 @@
             MetaDataCaption =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -1340,7 +1317,6 @@
                 element p {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     TextParagraph
                 }
@@ -1348,7 +1324,6 @@
                 element p {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     element line {TextShort}+
                 }

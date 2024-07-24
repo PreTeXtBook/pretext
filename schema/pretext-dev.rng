@@ -10,9 +10,6 @@
         <ref name="LabelID"/>
       </optional>
       <optional>
-        <ref name="PermanentID"/>
-      </optional>
-      <optional>
         <ref name="Component"/>
       </optional>
       <optional>
@@ -1434,9 +1431,6 @@
       </optional>
       <optional>
         <ref name="LabelID"/>
-      </optional>
-      <optional>
-        <ref name="PermanentID"/>
       </optional>
       <optional>
         <ref name="Component"/>

@@ -682,7 +682,6 @@
                 element p {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     TextParagraph
                 }
@@ -690,7 +689,6 @@
                 element p {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     element line {TextShort}+
                 }
@@ -1087,7 +1085,7 @@
     <section>
         <title>Mathematics (experimental)</title>
 
-        <p>We include some additions to math elements, including allowing permid on displayed math and allowing xrefs inside displayed math.</p>
+        <p>We include some additions to math elements, including allowing xrefs inside displayed math.</p>
 
 
         <fragment xml:id="mathematics-dev">
@@ -1405,7 +1403,6 @@
                 }
             Console =
                 element console {
-                    PermanentID?,
                     Component?,
                     attribute prompt {text}?,
                     attribute width {text}?,
@@ -1418,7 +1415,6 @@
             ProgramInput = element input {text}
             Program =
                 element program {
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -1457,21 +1453,18 @@
             }
             List =
                 element ol {
-                    PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
                     ListItem+
                 } |
                 element ul {
-                    PermanentID?,
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
                     ListItem+
                 } |
                 element dl {
-                    PermanentID?,
                     Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
                     DefinitionListItem+
@@ -1792,7 +1785,6 @@
                 }
             Tabular =
                 element tabular {
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -1860,7 +1852,6 @@
                     )+
                 }
             SidebySideAttributes =
-                PermanentID?,
                 Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
@@ -1931,7 +1922,6 @@
             ImageRaster =
                 element image {
                     UniqueID?,
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -1958,7 +1948,6 @@
             ImageCode =
                 element image {
                     UniqueID?,
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -2023,7 +2012,6 @@
             SageOutput = element output {text}
             SageInput = element input {text}
             Sage = element sage {
-                PermanentID?,
                 Component?,
                 attribute doctest {text}?,
                 attribute tolerance {text}?,
@@ -2065,7 +2053,6 @@
                 element interactive {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     attribute aspect { text }?,
                     attribute width { text }?,
@@ -2192,7 +2179,6 @@
                 element video {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
@@ -2440,7 +2426,6 @@
                 element p {
                     UniqueID?,
                     LabelID?,
-                    PermanentID?,
                     Component?,
                     TextParagraphAreas
                 }
@@ -2741,7 +2726,6 @@
 
         <p>Notes: <ul>
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
-            <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding these manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
             <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
@@ -2763,8 +2747,6 @@
                 attribute xml:id {text}
             LabelID =
                 attribute label {text}
-            PermanentID =
-                attribute permid {text}
             Component =
                 attribute component {text}
             Title =
@@ -2786,13 +2768,11 @@
             MetaDataTarget =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 Index*
             MetaDataTitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2801,7 +2781,6 @@
             MetaDataAltTitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2812,7 +2791,6 @@
             MetaDataLinedTitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2823,7 +2801,6 @@
             MetaDataSubtitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2835,7 +2812,6 @@
             MetaDataLinedSubtitle =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2847,7 +2823,6 @@
             MetaDataTitleOptional =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2856,7 +2831,6 @@
             MetaDataAltTitleOptional =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2865,7 +2839,6 @@
             MetaDataTitleCreatorOptional =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
@@ -2875,7 +2848,6 @@
             MetaDataCaption =
                 UniqueID?,
                 LabelID?,
-                PermanentID?,
                 Component?,
                 XMLBase?,
                 XMLLang?,
