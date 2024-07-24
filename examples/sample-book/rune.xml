@@ -25,8 +25,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<!-- permid is for testing friendlier HTML ids for instructors to see -->
-<chapter xml:id="rune" permid="aBc" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="rune" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Runestone Testing</title>
 
     <introduction>
