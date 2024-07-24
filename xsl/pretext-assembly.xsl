@@ -1286,6 +1286,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecated 2021-03-17                 -->
 <xsl:template match="pagebreak" mode="repair"/>
 
+<!-- @permid experiments retired 2024-07-24, -->
+<!-- so eliminated in this phase             -->
+<xsl:template match="@permid" mode="repair"/>
 
 <!-- ########### -->
 <!-- Assembly ID -->
