@@ -8269,8 +8269,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>The next example shows how you can communicate between a GeoGebra applet and a <tag>slate</tag> contained in the interactive.  The process is mediated by javascript code specified in the <attr>source</attr> attribute of the interactive.  Event listeners in the code update the html when the diagram changes or vice-versa.  MathJax is also notified when it needs to update math. </p>
                 <figure xml:id="figure_Interactive-3d-direction-vector">
                     <caption>Geogebra/<pretext/> Communications</caption>
-                    <interactive platform="geogebra" aspect="10:8" width="100%" xml:id="ggb_3d-direction-vector_interactive" source="code/ggb/3d-direction-vector.js">
-                        <slate xml:id="ggb_3d-direction-vector_slate" aspect="10:5" surface="geogebra" source="code/ggb/3d-direction-vector.ggb">
+                    <interactive platform="geogebra" aspect="10:8" width="100%" xml:id="ggb_3d-direction-vector_interactive" source="code/haynes/3d-direction-vector.js">
+                        <slate xml:id="ggb_3d-direction-vector_slate" aspect="10:5" surface="geogebra" source="code/haynes/3d-direction-vector.ggb">
                             evalCommand("B2 = 3");
                             evalCommand("C2 = -1");
                             evalCommand("D2 = 2");
