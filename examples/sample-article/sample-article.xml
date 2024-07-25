@@ -356,7 +356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         the first non-trivial character.
         -->
 
-        <section permid="Abc" xml:id="section-sage-cells" label="section-sage-cells">
+        <section xml:id="section-sage-cells" label="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
             <!-- A version of the title with no markup at all,     -->
             <!-- math is now a Unicode symbol for an integral sign -->
@@ -608,7 +608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="interesting-corollary" label="section-interesting-corollary">
             <title>An Interesting Corollary</title>
 
-            <objectives permid="dEf" xml:id="objectives-structures">
+            <objectives xml:id="objectives-structures">
                 <title>Fundamental Structures</title>
 
                 <introduction>
@@ -637,13 +637,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <!-- ToDo: Should equation references come with parentheses? -->
 
-                <corollary permid="ghI" xml:id="corollary-FTC-derivative">
+                <corollary xml:id="corollary-FTC-derivative">
                     <creator>Leibniz, Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
-                    <proof permid="Jkl" xml:id="proof-FTC-corollary">
+                    <proof xml:id="proof-FTC-corollary">
                         <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" /><mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
@@ -673,7 +673,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </input>
                 </sage>
 
-                <example permid="mNo" xml:id="example-mysterious">
+                <example xml:id="example-mysterious">
                     <title>A Mysterious Derivative!</title>
                     <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
 
@@ -748,7 +748,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>A case may also have a <c>title</c>, whose formatting and structure is entirely up to the author.  This then becomes the text of a cross-reference, as well.</p>
                         </case>
 
-                        <case permid="pqR" direction="forward" xml:id="forward">
+                        <case direction="forward" xml:id="forward">
                             <title>Necessity</title>
 
                             <p>If you like, you can have both indications.</p>
@@ -918,7 +918,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
 
-                    <exercise permid="Stu" xml:id="exercise-essay">
+                    <exercise xml:id="exercise-essay">
                         <title>Essay Question: Compare and Contrast</title>
                         <statement>
                             <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
@@ -970,8 +970,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <hint>
                             <p>A good hint.</p>
                         </hint>
-                        <answer permid="Vwx">
-                            <p permid="Xyz">42.</p>
+                        <answer>
+                            <p>42.</p>
                         </answer>
                         <solution>
                             <p>If your exercise feels like proving a theorem, then you might want to make some comments, but also clearly delineate which part of the solution is a the complete proof.</p>
@@ -1171,7 +1171,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p>The following <tag>project</tag> is nearly identical to the preceding <tag>exercise</tag>.</p>
 
-                    <project permid="aBc" xml:id="project-structured">
+                    <project xml:id="project-structured">
                         <title>A very structured project</title>
 
                         <prelude>
@@ -1187,7 +1187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
-                        <task permid="abC">
+                        <task>
                             <p>Now three paragraphs.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
@@ -1394,7 +1394,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </statement>
                         <solution>
                             <p>This solution will migrate to a list of solutions in the backmatter.  We include a <c>sidebyside</c> as a test.</p>
-                            <sidebyside permid="dEf" width="30%">
+                            <sidebyside width="30%">
                                 <p>This is a skinny paragraph which should be just 30% of the width.</p>
                                 <p>And another skinny paragraph which should also be just 30% of the width.</p>
                             </sidebyside>
@@ -1484,7 +1484,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <!-- content will happen here automatically -->
 
-                    <conclusion permid="deF">
+                    <conclusion>
                         <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
                     </conclusion>
                 </solutions>
@@ -1562,7 +1562,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </paragraphs>
 
 
-                <assemblage permid="Ghi" xml:id="assemblage-basics">
+                <assemblage xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
                     <p>An <tag>assemblage</tag> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <tag>image</tag>, <tag>tabular</tag>, and <tag>program</tag> inside a <tag>sidebyside</tag>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
@@ -1705,7 +1705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>This is a <tag>outcomes</tag> element you are reading, and this is its introduction.  This early section has really grown and we have tried to accomplish many things.  Not all of them are listed here.</p>
                 </introduction>
 
-                <ol permid="gHi">
+                <ol>
                     <li>Display various <q>blocks</q>, fundamental units of the flow.</li>
                     <li xml:id="outcome-structure">More, and this is what the cross-references above are pointing to.</li>
                     <li>Evermore.</li>
@@ -1729,7 +1729,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         in HTML, which are similar, but not identical.
         -->
 
-        <section permid="Bcd" label="section-facts-figures">
+        <section label="section-facts-figures">
             <title>Some Facts and Figures</title>
             <idx>footnotes</idx>
 
@@ -1794,7 +1794,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li permid="bCd"><p permid="bcD">Salmon<idx><h>strange colors</h></idx></p></li>
+                <li><p>Salmon<idx><h>strange colors</h></idx></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
                 <li><p>Puce<idx><h>strange colors</h></idx></p></li>
@@ -2144,7 +2144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
 
-                <p permid="Cde">This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me permid="Fgh">z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
+                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me>z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
@@ -5463,8 +5463,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <table>
                             <title>Table Alignment Example</title>
-                            <!-- permids go onto tabular, so we test picking it up -->
-                            <tabular top="minor" left="minor" halign="center" permid="fhP">
+                            <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
                                 <col />
