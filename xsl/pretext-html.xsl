@@ -7546,6 +7546,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 
     <table class="tabular">
+        <!-- TEMPORARY -->
+        <xsl:apply-templates select="." mode="html-label-only"/>
         <!-- We *actively* enforce header rows being (a) initial, and      -->
         <!-- (b) contiguous.  So following two-part match will do no harm  -->
         <!-- to correct source, but will definitely harm incorrect source. -->
@@ -8190,6 +8192,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:value-of select="str:replace($the-id, '-', '__')" />
+</xsl:template>
+
+<!-- TEMPORARY -->
+<xsl:template match="tabular" mode="html-label-only">
+    <xsl:if test="@label">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@label"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 
