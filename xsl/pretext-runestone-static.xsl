@@ -788,25 +788,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="statement" mode="fillin-solution">
+    <xsl:variable name="exercise" select=".."/>
     <solution>
         <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
         <!-- xerox feedback for correct response on each var -->
-        <xsl:for-each select="ancestor::exercise/setup/var/condition[1]/feedback">
+        <xsl:for-each select="../setup/var/condition[1]/feedback">
             <xsl:apply-templates select="node()" mode="fillin-solution"/>
         </xsl:for-each>
         <xsl:for-each select=".//fillin[@answer]">
             <xsl:variable name="fillin-name" select="@name"/>
+            <xsl:variable name="fillin-pos" select="position()"/>
             <xsl:choose>
                 <!-- If #evaluate matches by name, find feedback on a correct result -->
-                <xsl:when test="ancestor::exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']">
-                    <xsl:apply-templates select="ancestor::exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
+                <xsl:when test="$exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']">
+                    <xsl:apply-templates select="$exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
                 </xsl:when>
                 <!-- Otherwise #evaluate matches by order, find feedback on a correct result -->
-                <xsl:when test="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']">
-                    <xsl:apply-templates select="ancestor::exercise/evaluation/evaluate[position()]/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>/>
+                <xsl:when test="$exercise/evaluation/evaluate[$fillin-pos]/test[@correct='yes']">
+                    <xsl:apply-templates select="$exercise/evaluation/evaluate[$fillin-pos]/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
+        <xsl:if test="../evaluation[@answers-coupled='yes']">
+            <xsl:apply-templates select="$exercise/evaluation/evaluate[@all='yes']/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
+        </xsl:if>
     </solution>
 </xsl:template>
 

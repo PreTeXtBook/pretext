@@ -63,9 +63,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with an indication that the exercise uses the  -->
 <!-- static seed.  Results are HTML files           -->
 <!-- (despite this stylesheet having text output).  -->
-<xsl:template match="exercise[@exercise-interactive='fillin' and ./setup]" mode="extraction">
+<xsl:template match="exercise[@exercise-interactive='fillin' and ./setup]
+                    | project[@exercise-interactive='fillin' and ./setup]
+                    | activity[@exercise-interactive='fillin' and ./setup]
+                    | exploration[@exercise-interactive='fillin' and ./setup]
+                    | investigation[@exercise-interactive='fillin' and ./setup]"
+                    mode="extraction">
     <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:text>&#x9;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR:    Dynamic content missing label "<xsl:value-of select="@visible-id"/>"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- <xsl:value-of select="@label"/> -->
     <xsl:text>&#xa;</xsl:text>
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="exercise[.//task and .//task/@exercise-interactive='fillin' and .//task/setup]
+                    | project[.//task and .//task/@exercise-interactive='fillin' and .//task/setup]
+                    | activity[.//task and .//task/@exercise-interactive='fillin' and .//task/setup]
+                    | exploration[.//task and .//task/@exercise-interactive='fillin' and .//task/setup]
+                    | investigation[.//task and .//task/@exercise-interactive='fillin' and .//task/setup]"
+                    mode="extraction">
+    <!-- filename \t label-identifier -->
+    <xsl:variable name="container" select="."/>
+    <xsl:for-each select="//task[@exercise-interactive='fillin' and setup]">
+        <xsl:apply-templates select="$container" mode="visible-id" />
+        <xsl:text>&#x9;</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:for-each>
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
     <xsl:apply-templates select="." mode="standalone-page" >
         <xsl:with-param name="content">

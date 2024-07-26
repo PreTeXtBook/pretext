@@ -9135,7 +9135,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <evaluate name="fGiven">
                             <test>
                                 <mathcmp obj="identityFunction"/>
-                                <feedback><m>f(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                                <feedback><p><m>f(x)=x</m> is not allowed for nontrivial compositions.</p></feedback>
                             </test>
                             <test>
                                 <logic op="and">
@@ -9156,13 +9156,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </de-expression>
                                     </mathcmp>
                                 </logic>
-                                <feedback>You have composed in the wrong order.</feedback>
+                                <feedback><p>You have composed in the wrong order.</p></feedback>
                             </test>
                         </evaluate>
                         <evaluate name="gGiven">
                             <test>
                                 <mathcmp obj="identityFunction"/>
-                                <feedback><m>g(x)=x</m> is not allowed for nontrivial compositions.</feedback>
+                                <feedback><p><m>g(x)=x</m> is not allowed for nontrivial compositions.</p></feedback>
                             </test>
                         </evaluate>
                         <evaluate all="yes">
@@ -9188,7 +9188,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </mathcmp>
                                     </logic>
                                 </logic>
-                                <feedback>Excellent!</feedback>
                             </test>
                         </evaluate>
                     </evaluation>

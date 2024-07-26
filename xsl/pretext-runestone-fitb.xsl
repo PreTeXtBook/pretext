@@ -15,9 +15,24 @@
 <!-- Actual rules for substution when generating HTML     -->
 <!-- ==================================================== -->
 
+<!-- These need to be replaced by localization calls.      -->
+<!-- Or maybe push localization strings to Runestone,      -->
+<!-- since this feedback is only useful in an interactive. -->
+<xsl:variable name="defaultCorrectFeedback">
+    <p>Correct!</p>
+</xsl:variable>
+
+<xsl:variable name="defaultIncorrectFeedback">
+    <p>Incorrect.</p>
+</xsl:variable>
 
 <!-- Convert fillin tag to an input element on the page -->
-<xsl:template match="exercise[@exercise-interactive='fillin']//fillin">
+<xsl:template match="exercise[@exercise-interactive='fillin']//fillin
+                     | project[@exercise-interactive='fillin']//fillin
+                     | activity[@exercise-interactive='fillin']//fillin
+                     | exploration[@exercise-interactive='fillin']//fillin
+                     | investigation[@exercise-interactive='fillin']//fillin
+                     | task[@exercise-interactive='fillin']//fillin">
     <xsl:param name="b-human-readable" />
     <xsl:variable name="parent-id">
         <xsl:apply-templates select="ancestor::exercise" mode="html-id" />
@@ -41,13 +56,11 @@
         <xsl:if test="@name">
             <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
         </xsl:if>
+        <xsl:if test="@width">
+            <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
+        </xsl:if>
     </xsl:element>
 </xsl:template>
-
-<xsl:variable name="defaultIncorrectResponse">
-    <xsl:value-of select="key(localization-key,'incorrect')"/>
-    <xsl:text>.</xsl:text>
-</xsl:variable>
 
 <!-- ========================================================= -->
 <!-- The Runestone element is based on JSON scripts describing -->
@@ -55,7 +68,12 @@
 <!-- The HTML will contain this JSON and Runestone extracts it -->
 <!-- and inserts it into the HTML page via JS.                 -->
 <!-- ========================================================= -->
-<xsl:template match="exercise[@exercise-interactive='fillin']" mode="runestone-to-interactive">
+<xsl:template match="exercise[@exercise-interactive='fillin']
+                     | project[@exercise-interactive='fillin']
+                     | activity[@exercise-interactive='fillin']
+                     | exploration[@exercise-interactive='fillin']
+                     | investigation[@exercise-interactive='fillin']
+                     | task[@exercise-interactive='fillin']" mode="runestone-to-interactive">
     <xsl:variable name="the-id">
         <xsl:apply-templates select="." mode="html-id"/>
     </xsl:variable>
@@ -69,7 +87,7 @@
                 <script type="application/json">
                     <xsl:text>{&#xa;</xsl:text>
                     <!-- A seed is provided to generate consistent static content -->
-                    <xsl:if test="$b-dynamics-static-seed">
+                    <xsl:if test="setup and $b-dynamics-static-seed">
                         <xsl:text>"static_seed": "</xsl:text>
                         <xsl:choose>
                             <xsl:when test="setup/@seed">
@@ -96,7 +114,7 @@
                                         <xsl:apply-templates select="." mode="html-id"/>
                                         <xsl:text>-substitutions</xsl:text>
                                     </xsl:attribute>
-                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
+                                    <xsl:apply-templates select="(statement|solution)//eval[@obj]|evaluation//feedback//eval[@obj]|statement//fillin[@ansobj]" mode="track-evaluation" />
                                 </div>
                             </xsl:if>
                         </xsl:with-param>
@@ -143,15 +161,7 @@
                         <xsl:with-param name="multiAns" select="$multiAns" />
                     </xsl:apply-templates>
                     <xsl:text>]</xsl:text>
-                    <xsl:text>,&#xa;"localize_feedback": ["</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'correct'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>!", "</xsl:text>
-                    <xsl:apply-templates select="." mode="type-name">
-                        <xsl:with-param name="string-id" select="'incorrect'"/>
-                    </xsl:apply-templates>
-                    <xsl:text>."]&#xa;}</xsl:text>
+                    <xsl:text>&#xa;}</xsl:text>
                 </script>
             </div>
             <xsl:text>&#xa;</xsl:text>
@@ -255,7 +265,7 @@
 <!-- Create the dynamic aspect of the problem.           -->
 <!-- Define all of the mathematical elements as well as  -->
 <!-- objects (e.g. graphs) that might depend on them     -->
-<!-- A script in setup/setupScript is executed after -->
+<!-- A script in setup/setupScript is executed after     -->
 <!-- object-based setup concludes.                       -->
 <!-- A script in setup/postRenderScript is executed      -->
 <!-- after the dynamic creation is complete.             -->
@@ -365,9 +375,9 @@
 
 <!-- Deal with possibility of global checker for all blanks -->
 <xsl:template match="evaluation" mode="get-multianswer-check">
-    <xsl:variable name="responseTree" select="ancestor::exercise//statement//fillin" />
-    <xsl:if test="count($responseTree) > 1 and ancestor::exercise//evaluation/evaluate[@all='yes']/test">
-        <xsl:apply-templates select="ancestor::exercise//evaluation/evaluate[@all='yes']/test" mode="create-test-feedback">
+    <xsl:variable name="responseTree" select="../statement//fillin" />
+    <xsl:if test="count($responseTree) > 1 and evaluate[@all='yes']/test">
+        <xsl:apply-templates select="evaluate[@all='yes']/test" mode="create-test-feedback">
             <xsl:with-param name="fillin" select="$responseTree"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -386,11 +396,11 @@
     </xsl:variable>
     <xsl:variable name="check">
         <xsl:choose>
-            <xsl:when test="ancestor::exercise//evaluation/evaluate[@name = $fillinName]">
-                <xsl:copy-of select="ancestor::exercise//evaluation/evaluate[@name = $fillinName]"/>
+            <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
+                <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="ancestor::exercise//evaluation/evaluate[position() = $blankNum]"/>
+                <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[position() = $blankNum]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -463,7 +473,9 @@
                     <xsl:text>);&#xa;}</xsl:text>
                 </xsl:when>
             </xsl:choose>
-            <xsl:text>, "feedback": ""}</xsl:text>
+            <xsl:text>, "feedback": "</xsl:text>
+            <xsl:value-of select="$defaultCorrectFeedback"/>
+            <xsl:text>"}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 
@@ -475,7 +487,9 @@
         </xsl:apply-templates>
     </xsl:for-each>
     <!-- Default feedback for the blank. Always evaluates true.   -->
-    <xsl:text>, {"feedback": ""}]</xsl:text>
+    <xsl:text>, {"feedback": "</xsl:text>
+    <xsl:value-of select="$defaultIncorrectFeedback"/>
+    <xsl:text>"}]</xsl:text>
 </xsl:template>
 
 <xsl:template match="test" mode="create-test-feedback">
@@ -489,14 +503,22 @@
         <xsl:with-param name="fillin" select="$fillin" />
     </xsl:apply-templates>
     <xsl:text>, "feedback": "</xsl:text>
-    <xsl:if test="feedback">
-        <!-- serialize HTML as text, then escape as JSON -->
-        <xsl:call-template name="escape-json-string">
-            <xsl:with-param name="text">
-                <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="feedback">
+            <!-- serialize HTML as text, then escape as JSON -->
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text">
+                    <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$b-correct">
+            <xsl:value-of select="$defaultCorrectFeedback"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$defaultIncorrectFeedback"/>
+        </xsl:otherwise>
+    </xsl:choose>
 <xsl:text>"}</xsl:text>
 </xsl:template>
 
