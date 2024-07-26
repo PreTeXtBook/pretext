@@ -1,0 +1,19 @@
+<!-- 2024-07-26: this is from a quasi-experiment addition in February 2020  -->
+<!-- at e8977a78cb10f3c86aefc6c44a3017517174e604.  This file can be used    -->
+<!-- to test/refine that new feature.                                       -->
+
+<pretext-biblios>
+
+    <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+    <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+    </biblio>
+
+    <biblio type="raw" xml:id="bar">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+    <note xml:id="note-judson-AATA-bar"><p>Another online, open-source offering.</p></note>
+    </biblio>
+
+    <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+    <biblio type="raw" xml:id="foo">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+</pretext-biblios>
