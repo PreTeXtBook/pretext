@@ -95,6 +95,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Párrafo</localization>
     <localization string-id='commentary'>Comentario</localization>
     <localization string-id='subparagraph'>Subpárrafo</localization>
+    <!-- Adjustments to titles of divisions -->
+    <!-- <localization string-id='group'>Group</localization> -->
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->

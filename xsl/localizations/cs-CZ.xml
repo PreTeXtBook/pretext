@@ -91,6 +91,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Odstavce</localization>
     <localization string-id='commentary'>Komentář</localization>
     <localization string-id='subparagraph'>Pododstavec</localization>
+    <!-- Adjustments to titles of divisions -->
+    <!-- <localization string-id='group'>Group</localization> -->
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Případ</localization>
     <!-- Components of the narrative -->
