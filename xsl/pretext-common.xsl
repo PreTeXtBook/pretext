@@ -2708,7 +2708,15 @@ Book (with parts), "section" at level 3
 <!-- NB: these templates return a property of the title's parent -->
 
 <!-- Normally a default title is the "type-name" of the object. -->
+<!-- But to indicate that a "worksheet" or "exercises" division -->
+<!-- is groupwork, we preface the title.                        -->
 <xsl:template match="*" mode="default-title">
+    <xsl:if test="(@groupwork= 'yes') and (self::worksheet or self::exercises)">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'group'"/>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="type-name"/>
 </xsl:template>
 
