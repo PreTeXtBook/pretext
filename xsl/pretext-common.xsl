@@ -2707,6 +2707,12 @@ Book (with parts), "section" at level 3
 
 <!-- NB: these templates return a property of the title's parent -->
 
+<!-- Normally a default title is the "type-name" of the object. -->
+<xsl:template match="*" mode="default-title">
+    <xsl:apply-templates select="." mode="type-name"/>
+</xsl:template>
+
+
 <!-- This has much of the logic of producing a title, but lacks any  -->
 <!-- additional punctuation, so is useful for titles employed places  -->
 <!-- other than immediately adjacent to the content they describe. -->
@@ -2725,7 +2731,7 @@ Book (with parts), "section" at level 3
             <xsl:apply-templates select="title/node()" />
         </xsl:when>
         <xsl:when test="$default-exists='true'">
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="." mode="default-title"/>
         </xsl:when>
         <!-- otherwise empty -->
         <xsl:otherwise />
@@ -2781,7 +2787,7 @@ Book (with parts), "section" at level 3
             <xsl:apply-templates select="title/*[not(self::fn)]|title/text()" />
         </xsl:when>
         <xsl:when test="$default-exists='true'">
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="." mode="default-title"/>
         </xsl:when>
         <!-- otherwise empty -->
         <xsl:otherwise />
@@ -2876,7 +2882,7 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <!-- We assume the automatic titles are plain -->
         <xsl:when test="$default-exists='true'">
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="." mode="default-title"/>
         </xsl:when>
         <!-- just empty if there is no titles, no default -->
         <xsl:otherwise/>
