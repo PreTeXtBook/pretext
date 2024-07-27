@@ -1187,7 +1187,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="text">
                                 <xsl:call-template name="sanitize-text">
                                     <xsl:with-param name="text" select="program-preamble"/>
-                                    <xsl:with-param name="preserve-end" select="true()"/>
                                 </xsl:call-template>
                             </xsl:with-param>
                             <xsl:with-param name="indent"><xsl:value-of select="program-preamble/@indent"/></xsl:with-param>
@@ -1198,7 +1197,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="text">
                                 <xsl:call-template name="sanitize-text">
                                     <xsl:with-param name="text" select="program-postamble"/>
-                                    <xsl:with-param name="preserve-start" select="true()"/>
                                 </xsl:call-template>
                             </xsl:with-param>
                             <xsl:with-param name="indent"><xsl:value-of select="program-postamble/@indent"/></xsl:with-param>
