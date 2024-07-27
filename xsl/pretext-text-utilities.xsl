@@ -80,16 +80,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://stackoverflow.com/questions/1134318/xslt-xslstrip-space-does-not-work -->
 <!-- Trim all whitespace at end of code hunk -->
 <!-- Append carriage return to mark last line, remove later -->
+<!-- preserve-intentional keeps all whitespace that comes   -->
+<!-- before the last newline                                -->
 <xsl:template name="trim-end">
    <xsl:param name="text"/>
+   <xsl:param name="preserve-intentional" select="false()" />
    <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
    <xsl:choose>
         <xsl:when test="$last-char=''">
             <xsl:text>&#xA;</xsl:text>
         </xsl:when>
+        <xsl:when test="($preserve-intentional = true()) and ($last-char = '&#xA;')">
+            <xsl:value-of select="$text"/>
+        </xsl:when>
         <xsl:when test="contains($whitespaces, $last-char)">
             <xsl:call-template name="trim-end">
                 <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
+                <xsl:with-param name="preserve-intentional" select="$preserve-intentional" />
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -100,9 +107,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Trim all totally whitespace lines from beginning of code hunk -->
+<!-- preserve-intentional removes all whitespace through first     -->
+<!-- newline (inclusive) and preserves the rest.                   -->
 <xsl:template name="trim-start-lines">
    <xsl:param name="text"/>
    <xsl:param name="pad" select="''"/>
+   <xsl:param name="preserve-intentional" select="false()" />
    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
    <xsl:choose>
         <!-- Possibly nothing, return just final carriage return -->
@@ -110,14 +120,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#xA;</xsl:text>
         </xsl:when>
         <xsl:when test="$first-char='&#xA;'">
-            <xsl:call-template name="trim-start-lines">
-                <xsl:with-param name="text" select="substring($text, 2)" />
-            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="$preserve-intentional=true()">
+                    <xsl:value-of select="substring($text, 2)" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="trim-start-lines">
+                        <xsl:with-param name="text" select="substring($text, 2)" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <xsl:when test="contains($whitespaces, $first-char)">
             <xsl:call-template name="trim-start-lines">
                 <xsl:with-param name="text" select="substring($text, 2)" />
                 <xsl:with-param name="pad"  select="concat($pad, $first-char)" />
+                <xsl:with-param name="preserve-intentional" select="$preserve-intentional" />
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -236,13 +254,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="sanitize-text">
     <xsl:param name="text" />
+    <xsl:param name="preserve-end" select="false()" />
+    <xsl:param name="preserve-start" select="false()" />
     <xsl:variable name="trimmed-text">
         <xsl:call-template name="trim-start-lines">
             <xsl:with-param name="text">
                 <xsl:call-template name="trim-end">
                     <xsl:with-param name="text" select="$text" />
+                    <xsl:with-param name="preserve-intentional" select="$preserve-end" />
                 </xsl:call-template>
             </xsl:with-param>
+            <xsl:with-param name="preserve-intentional" select="$preserve-start" />
         </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="left-margin">
