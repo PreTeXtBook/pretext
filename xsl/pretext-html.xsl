@@ -9809,6 +9809,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<xsl:template match="slate[@surface = 'ptx']">
+    <xsl:call-template name="latex-macros"/>
+    <div id="{@label}" class="slate-ptx">
+        <xsl:apply-templates/>
+    </div>
+</xsl:template>
+
 <xsl:template match="slate[@surface='svg']">
     <svg>
         <xsl:attribute name="id">
