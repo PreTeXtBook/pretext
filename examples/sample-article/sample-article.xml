@@ -8024,7 +8024,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </slate>
 
                         <sidebyside width="35%" margins="10%">
-                            <tabular label="ggb_2__17_table1" halign="right">
+                            <slate surface="ptx" label="ggb_2__17_table1">
+                            <tabular halign="right">
                                 <col width="10%" halign="center"/>
                                 <col width="10%" halign="center"/>
                                 <col width="10%" halign="center"/>
@@ -8052,6 +8053,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <cell/>
                                 </row>
                             </tabular>
+                            </slate>
                             <slate surface="html">
                                 <p xmlns="http://www.w3.org/1999/xhtml">
                                     <button id="a_to_b">Show A to B</button>
