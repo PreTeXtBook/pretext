@@ -9813,6 +9813,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<xsl:template match="slate[@surface = 'pretext']">
+    <div class="slate-ptx">
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <!-- Perhaps more children make sense?  A 1-panel "sidebyside" -->
+        <!-- does allow for a wider range of children.                 -->
+        <xsl:apply-templates select="p|tabular|sidebyside|sbsgroup"/>
+    </div>
+</xsl:template>
+
 <xsl:template match="slate[@surface='svg']">
     <svg>
         <xsl:attribute name="id">
