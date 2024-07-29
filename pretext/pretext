@@ -357,7 +357,7 @@ def get_cli_arguments():
         ("braille", "Nemeth Braille (math elements only)"),
         ("braille-emboss", "UEB + Nemeth braille, for print"),
         ("braille-electronic", "UEB + Nemeth Braille, for one-line display"),
-        ("tactile", "Images with braille labels, etc. (latex-image graphics only)"),
+        ("tactile", "Tactile images with braille labels, REMOVED 2024-07-29"),
         ("speech", "Speech (math elements)"),
         ("source", "Standalone source files"),
         ("latex", "LaTeX source file (only, an intermediate format for developers)"),
