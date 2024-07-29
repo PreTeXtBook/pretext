@@ -10845,7 +10845,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:message terminate="yes">PTX:FATAL:    a "commentary" without a @component attribute is a fatal error from 2024-02-16 onward.  Read prior error messages and make the suggested changes.  Quitting...</xsl:message>
     </xsl:if>
     <!--  -->
-    <!-- 20224-07-08  various mis-matches all settled in favor of "qrcode" -->
+    <!-- 2024-07-08  various mis-matches all settled in favor of "qrcode" -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$publication/common/qr-code" />
         <xsl:with-param name="date-string" select="'2024-07-08'" />
