@@ -10852,6 +10852,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the publisher file entry &quot;common/qr-code&quot; is obsolete and is being ignored.  Make a cosmetic change to &quot;common/qrcode&quot;.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2024-07-29  "label" element in "latex-image" is deprecated -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//latex-image/label" />
+        <xsl:with-param name="date-string" select="'2024-07-29'" />
+        <xsl:with-param name="message" select="'ue of a &quot;label&quot; element inside a &quot;latex-image&quot; is deprecated and there is no replacement.  Formulate the appropriate LaTeX code (TikZ) as a replacement.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
