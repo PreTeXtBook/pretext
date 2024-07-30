@@ -4577,13 +4577,19 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Network-Hosted Videos</title>
 
-            <p>If a video is shared openly on the Internet, you can simply provide the full <init>URL</init> for the <attr>source</attr> attribute.  All the other attributes are the same as for the author-provided case, above.  Read <xref ref="topic-url-characters" /> for some considerations when authoring a <init>URL</init>, since there are a few gotchas.</p>
+            <p>If a video is shared openly on the Internet, you can simply provide the full <init>URL</init> in the <attr>href</attr> attribute.  All the other attributes are the same as for the author-provided case, above.  Read <xref ref="topic-url-characters" /> for some considerations when authoring a <init>URL</init>, since there are a few gotchas.</p>
 
             <p>You can frequently discover the <init>URL</init> of a video by first playing it, and then using a context menu (<eg /> via a right-click) to reveal an option to copy the video's location.  However, note that there are various techniques sites use to make such a <init>URL</init> temporary, or otherwise unusable.  So do some research about potential uses and test carefully.  Our example below is provided from a United States government site.</p>
 
+            <p>Also, some video-sharing sites do their best to never make it easy to access the video as a file, so the construction described here will not be successful.  Instead, they have links to <q>Share</q> or to <q>Embed</q> which will run their own (proprietary) player in your web browser.  YouTube and Vimeo are two popular examples, and we provide explicit support, see <xref ref="topic-youtube-video"/> for YouZTube, while Vimeo is similar.  For other sites, you have limited success with the <tag>interactive</tag> element, with a construction such as:
+                <cd>
+                    <cline>&lt;interactive iframe="https://www.dailymotion.com/embed/video/x8mc0pr"/&gt;</cline>
+                </cd>
+            Here is one example of a network-hosted video in MP4 format:</p>
+
             <figure>
-                <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
-                <video xml:id="video-sea-hares" href="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%" preview="sea-hare.jpg" />
+                <caption>Jōren Falls, Kano River, Japan</caption>
+                <video label="joren-falls-video" href="https://tekeye.uk/html/images/Joren_Falls_Izu_Jap.mp4" width="80%" preview="joren-falls.png" />
             </figure>
         </subsection>
 
