@@ -8203,6 +8203,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
 
+                <p>There are some optional control elements that Geogebra provides, such as the presence of the toolbar and the reset button. These can be controlled by adding the following additional attributes to the <c>slate</c> and are automatically included in the initialization for the Geogebra applet.
+                    <ul>
+                        <li><p><c>toolbar="yes"</c>: add the Geogebra toolbar above the material</p></li>
+                        <li><p><c>algebra-input="yes"</c>: add an entry box below the material to add graphical objects using algebra formulas or Geogebra graphical commands</p></li>
+                        <li><p><c>reset-icon="yes"</c>: enable the reset icon</p></li>
+                        <li><p><c>shift-drag-zoom="yes"</c>: enable ability to drag and zoom the viewing context</p></li>
+                        <li><p><c>zoom-buttons="yes"</c>: enable buttons that control zoom</p></li>
+                    </ul>
+                </p>
+
                 <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft" visual="www.geogebra.org/m/D4s2v4ft"/>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>. It is important to use one command per line.</p>
 
                 <figure>
@@ -8577,7 +8587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
 
-                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element. If the width of the original material is anything other than 800 pixels, you should add <attr>material-width</attr> with the actual material width (units are pixels).</p>
+                <p>The shape of the material will be fixed, so determine the dimensions (measure with an on-screen ruler or inspect the underlying definition). Use <attr>material-width</attr> and <attr>material-height</attr> with the actual material width and height (units are pixels). These are treated by Geogebra as internal coordinate dimensions and are separate from the physical layout dimensions that appear in your text. In the absence of these attributes, default values are 800 pixels for the width and a height based on the provied aspect ratio.</p>
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
@@ -8590,6 +8600,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p><c>algebra-input="yes"</c>: add an entry box below the material to add graphical objects using algebra formulas or Geogebra graphical commands</p></li>
                     <li><p><c>reset-icon="yes"</c>: enable the reset icon</p></li>
                     <li><p><c>shift-drag-zoom="yes"</c>: enable ability to drag and zoom the viewing context</p></li>
+                    <li><p><c>zoom-buttons="yes"</c>: enable buttons that control zoom</p></li>
                 </ul>
                 </p>
 
