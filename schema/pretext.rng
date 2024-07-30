@@ -1322,9 +1322,9 @@
       <optional>
         <attribute name="highlight-lines"/>
       </optional>
-	  <optional>
-	   <attribute name="stdin"/>
-	  </optional>
+      <optional>
+        <attribute name="stdin"/>
+      </optional>
       <optional>
         <attribute name="interactive">
           <value>codelens</value>

@@ -500,7 +500,7 @@
                     attribute language {text}?,
                     attribute line-numbers {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
-					attribute stdin {text}?,
+                    attribute stdin {text}?,
                     attribute interactive {"codelens"}?,
                     (
                         (
