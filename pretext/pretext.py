@@ -3445,9 +3445,8 @@ def download_file(url, dest_filename):
     """Write a web asset to a local file"""
     contents = get_web_asset(url)
     try:
-        import pathlib
-        output_file = pathlib.Path(dest_filename)
-        output_file.parent.mkdir(exist_ok=True, parents=True)
+        dest_dir = os.path.dirname(dest_filename)
+        os.makedirs(dest_dir, exist_ok=True)
 
         with open(dest_filename, 'wb') as f:
             f.write(contents)
