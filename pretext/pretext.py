@@ -4114,7 +4114,7 @@ def build_info_message():
 def get_runestone_services_version():
     """Examine Runestone Services file for version number"""
 
-    services_file = os.path.join(get_ptx_path(), "xsl", "support", "runestone-services.xml")
+    services_file = os.path.join(get_ptx_path(), "xsl", "support", "webpack_static_imports.xml")
     services = ET.parse(services_file)
     version_element = services.xpath("/all/version")[0]
     return version_element.text

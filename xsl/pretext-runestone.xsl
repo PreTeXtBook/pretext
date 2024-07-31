@@ -64,8 +64,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
 <!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
-<!-- which we store as "support/runestone-services.xml".  The structure of that  -->
-<!-- file is pretty simple, and should be apparent to the cognescenti.           -->
+<!-- which we store as "support/webpack_static_imports.xml".  The structure of   -->
+<!-- that file is pretty simple, and should be apparent to the cognescenti.      -->
 <!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
 <!-- NB: we may eventually condition on Runestone server/hosting  -->
 <!-- to affect the prefix network location.                       -->
@@ -81,7 +81,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$debug.rs.services.file"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>support/runestone-services.xml</xsl:text>
+            <xsl:text>support/webpack_static_imports.xml</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
