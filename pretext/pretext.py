@@ -3567,6 +3567,8 @@ def html(
             log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
+
+
 def revealjs(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
