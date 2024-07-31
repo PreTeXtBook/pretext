@@ -3410,6 +3410,50 @@ def _runestone_services(params):
     altrs_version = services.xpath("/all/version")[0].text
     return (altrs_js, altrs_css, altrs_cdn_url, altrs_version)
 
+# todo - rewrite other code that does similar things to use this function?
+def get_web_asset(url):
+    """Get the contents of an http request"""
+    try:
+        import requests
+    except ImportError:
+        msg = 'The "requests" module is not available and is necessary for downloading files.'
+        log.debug(msg)
+        raise Exception(msg)
+
+    try:
+        services_response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        msg = '\n'.join(['There was a network problem while trying to download "{}"',
+                            'and the reported problem is:',
+                            '{}'
+                            ])
+        log.debug(msg.format(url, e))
+        raise Exception(msg.format(url, e))
+
+    # Check that an online request was "OK", HTTP response code 200
+    response_status_code = services_response.status_code
+    if response_status_code != 200:
+        msg = '\n'.join(["The file {} was not found",
+                            "the server returned response code {}"
+                            ])
+        log.debug(msg.format(url, response_status_code))
+        raise Exception(msg.format(url, response_status_code))
+
+    return services_response.content
+
+def download_file(url, dest_filename):
+    """Write a web asset to a local file"""
+    contents = get_web_asset(url)
+    try:
+        import pathlib
+        output_file = pathlib.Path(dest_filename)
+        output_file.parent.mkdir(exist_ok=True, parents=True)
+
+        with open(dest_filename, 'wb') as f:
+            f.write(contents)
+    except Exception as e:
+        raise Exception("Failed to save download", dest_filename)
+
 def html(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
