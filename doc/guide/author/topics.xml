@@ -2245,6 +2245,27 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>Formula evaluation and substitution follow a similar pattern. Formula evaluation to compute a number is performed with a <tag>de-evaluate</tag> element, which requires that every variable in the expression is assigned a specific numerical value. Formula substitution is like function composition and allows for any subset of the involved variables to be assigned either number or expression values and uses <tag>de-expression</tag> with <attr>mode="substitution"</attr>. In either event, the element requires a <tag>formula</tag> child element to specify a starting expression using a <tag>eval</tag> element to specify a previously-defined <tag>de-object</tag> or a <tag>de-expression</tag> element to generate a new formula expression. For each variable that will be replaced by a value or another expression, we will include a <tag>variable</tag> with <attr>name</attr> specifying which variable is being replaced. The content of the <tag>variable</tag> element can be an <tag>eval</tag> to reference an existing object or any of the elements that can be used to generate a <tag>de-object</tag>.</p>
 
+                <p>Automatic reduction and simplification can be applied to elements created by <tag>de-number</tag>, <tag>de-evaluate</tag>, and <tag>de-expression</tag> by including the attribute <attr>reduce="yes"</attr>. Reductions include reducing arithmetic involving numerical values and simple algebraic identities. The identities that are applied include the following where <m>u</m> and <m>w</m> represent any expression:
+                <ol>
+                    <li><m>u \pm 0 \rightarrow u</m></li>
+                    <li><m>0 \cdot u \rightarrow 0 \rightarrow u</m></li>
+                    <li><m>0 \div u \rightarrow 0 \rightarrow u</m></li>
+                    <li><m>1 \cdot u \rightarrow u \rightarrow u</m></li>
+                    <li><m>-1 \cdot u \rightarrow -u \rightarrow u</m></li>
+                    <li><m>u \div 1 \rightarrow u \rightarrow u</m></li>
+                    <li><m>u^1 \rightarrow u \rightarrow u</m></li>
+                    <li><m>u^0 \rightarrow 1 \rightarrow u</m></li>
+                    <li><m>1^u \rightarrow 1 \rightarrow u</m></li>
+                    <li><m>u+(-u) \rightarrow 0</m></li>
+                    <li><m>u-u \rightarrow 0</m></li>
+                    <li><m>u+-w \rightarrow u-w</m></li>
+                    <li><m>u-(-w) \rightarrow u+w</m></li>
+                    <li><m>-(-u) \rightarrow u</m></li>
+                    <li><m>u\cdot(-w) \rightarrow -u \cdot w</m></li>
+                    <li><m>u \div (-w) \rightarrow -u \div w</m></li>
+                    <li><m>(-u)+(-w) \rightarrow -(u+w)</m></li>
+                </ol></p>
+
                 <p>For the <tag>evaluation</tag> block, two comparison elements are accessible<mdash/><tag>mathcmp</tag> for testing whether two math objects are equivalent and <tag>logic</tag> for constructing compound tests involving simple Boolean logical operations. The <tag>mathcmp</tag> comparison is performed by numerically evaluating the two expressions being compared over a range of values for each variable present and verifying that they are numerically within a comparison tolerance.</p>
 
                 <p>To compare the reader's submitted response to the provided correct answer with <tag>mathcmp</tag>, use <attr>use-answer="yes"</attr>. To compare the submitted response to any other object, the <tag>mathcmp</tag> element should have a single evaluated math object as content, which could include a newly generated expression using <tag>de-expression</tag> that is based on the submitted responses. To compare two different math objects, the <tag>mathcmp</tag> should have two math objects. For convenience, there are some implicit representations available as well, illustrated in <xref ref="list-mathcmp-expressions-structure"/>.</p>
