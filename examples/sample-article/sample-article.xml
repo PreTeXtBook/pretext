@@ -8793,7 +8793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <de-number>x2+d2</de-number>
                         </de-object>
                         <de-object name="base_cubic" context="formula">
-                            <de-expression>(x-x1)*(x-x2)*(x-x3)</de-expression>
+                            <de-expression reduce="yes">(x-x1)*(x-x2)*(x-x3)</de-expression>
                         </de-object>
                         <de-object name="base_yint" context="number">
                             <de-evaluate>
@@ -8802,10 +8802,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </de-evaluate>                            
                         </de-object>
                         <de-object name="A" context="number">
-                            <de-number>y0/base_yint</de-number>
+                            <de-number reduce="yes">y0/base_yint</de-number>
                         </de-object>
                         <de-object name="cubic" context="formula">
-                            <de-expression>A*(x-x1)*(x-x2)*(x-x3)</de-expression>
+                            <de-expression reduce="yes">A*(x-x1)*(x-x2)*(x-x3)</de-expression>
                         </de-object>
                     </setup>
                     <evaluation>
