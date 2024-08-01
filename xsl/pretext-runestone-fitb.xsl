@@ -959,9 +959,7 @@
         <xsl:with-param name="text" select="."/>
     </xsl:call-template>
     <xsl:text>, "number")</xsl:text>
-    <xsl:if test="@reduce='yes'">
-        <xsl:text>.reduce().simplifyConstants()</xsl:text>
-    </xsl:if>
+    <xsl:text>.reduce().simplifyConstants()</xsl:text>
 </xsl:template>
 
 <xsl:template match="de-evaluate" mode="evaluate">
