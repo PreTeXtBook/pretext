@@ -8865,7 +8865,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <de-expression>x</de-expression>
                         </de-object>
                         <de-object name="composition" context="formula">
-                            <de-expression mode="substitution">
+                            <de-expression mode="substitution" reduce="yes">
                                 <formula><eval obj="outerFormula"/></formula>
                                 <variable name="x"><eval obj="innerFormula"/></variable>
                             </de-expression>

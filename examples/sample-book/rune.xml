@@ -3492,13 +3492,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <de-random distribution="discrete" min="-10" max="10" />
                 </de-object>
                 <de-object name="negB" context="number">
-                    <de-number>-b</de-number>
+                    <de-number reduce="yes">-b</de-number>
                 </de-object>
                 <de-object name="theFunction" context="formula">
-                    <de-expression mode="formula">m*x+b</de-expression>
+                    <de-expression mode="formula" reduce="yes">m*x+b</de-expression>
                 </de-object>
                 <de-object name="theAnswer" context="formula">
-                    <de-expression mode="formula">-b/m</de-expression>
+                    <de-expression mode="formula" reduce="yes">-b/m</de-expression>
                 </de-object>
             </setup>
             <evaluation>
@@ -3531,10 +3531,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <de-random distribution="discrete" min="2" max="5"/>
                 </de-object>
                 <de-object name="nm1" context="number">
-                    <de-number>n-1</de-number>
+                    <de-number reduce="yes">n-1</de-number>
                 </de-object>
                 <de-object name="nm2" context="number">
-                    <de-number>n-2</de-number>
+                    <de-number reduce="yes">n-2</de-number>
                 </de-object>
                 <de-object name="b" context="number">
                     <de-random distribution="discrete" min="-10" max="10" nonzero="yes"/>
@@ -3543,13 +3543,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <de-expression mode="formula">a*x^n+b</de-expression>
                 </de-object>
                 <de-object name="correctD1" context="formula">
-                    <de-expression mode="derivative">
+                    <de-expression mode="derivative" reduce="yes">
                     <formula><eval obj="formula"/></formula>
                     <variable name="x"/>
                     </de-expression>
                 </de-object>
                 <de-object name="correctD2" context="formula">
-                    <de-expression mode="derivative">
+                    <de-expression mode="derivative" reduce="yes">
                         <formula><eval obj="correctD1"/></formula>
                         <variable name="x"/>
                     </de-expression>
@@ -3604,15 +3604,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <de-random distribution="discrete" min="-10" max="10" by="1" nonzero="yes" />
                 </de-object>
                 <de-object name="outerFormula" context="formula">
-                    <de-expression mode="formula">a*x^n+b</de-expression>
+                    <de-expression mode="formula" reduce="yes">a*x^n+b</de-expression>
                 </de-object>
                 <de-object name="innerFormula" context="formula">
-                    <de-expression mode="formula">c*x+d</de-expression>
+                    <de-expression mode="formula" reduce="yes">c*x+d</de-expression>
                 </de-object>
                 <de-object name="identityFunction" context="formula">
                     <de-expression mode="formula">x</de-expression>
                 </de-object>
-                <de-object name="composition" context="formula">
+                <de-object name="composition" context="formula" reduce="yes">
                     <de-expression mode="substitution">
                         <formula><eval obj="outerFormula"/></formula>
                         <variable name="x"><eval obj="innerFormula"/></variable>
