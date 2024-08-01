@@ -959,6 +959,9 @@
         <xsl:with-param name="text" select="."/>
     </xsl:call-template>
     <xsl:text>, "number")</xsl:text>
+    <xsl:if test="@reduce='yes'">
+        <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="de-evaluate" mode="evaluate">
@@ -981,9 +984,10 @@
         <xsl:apply-templates select="variable" mode="evaluation-binding" >
             <xsl:with-param name="setupMode" select="$setupMode" />
         </xsl:apply-templates>
-    <xsl:text>}).reduce(</xsl:text>
-    <xsl:value-of select="$de_env"/>
-    <xsl:text>)</xsl:text>
+    <xsl:text>})</xsl:text>
+    <xsl:if test="@reduce='yes'">
+        <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="de-random[@distribution='discrete']" mode="evaluate">
@@ -1045,9 +1049,10 @@
     <xsl:call-template name="quote-strip-string">
         <xsl:with-param name="text" select="."/>
     </xsl:call-template>
-    <xsl:text>, "formula").reduce(</xsl:text>
-    <xsl:value-of select="$de_env"/>
-    <xsl:text>)</xsl:text>
+    <xsl:text>, "formula")</xsl:text>
+    <xsl:if test="@reduce='yes'">
+        <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="de-expression[@mode='substitution']" mode="evaluate">
@@ -1067,12 +1072,13 @@
         <xsl:with-param name="setupMode" select="$setupMode"/>
     </xsl:apply-templates>
     <xsl:text>, {</xsl:text>
-        <xsl:apply-templates select="variable" mode="evaluation-binding" >
-            <xsl:with-param name="setupMode" select="$setupMode" />
-        </xsl:apply-templates>
-    <xsl:text>}).reduce(</xsl:text>
-    <xsl:value-of select="$de_env"/>
-    <xsl:text>)</xsl:text>
+    <xsl:apply-templates select="variable" mode="evaluation-binding" >
+        <xsl:with-param name="setupMode" select="$setupMode" />
+    </xsl:apply-templates>
+    <xsl:text>})</xsl:text>
+    <xsl:if test="@reduce='yes'">
+        <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="de-expression[@mode='derivative']" mode="evaluate">
@@ -1093,7 +1099,10 @@
     <xsl:call-template name="quote-string">
         <xsl:with-param name="text" select="variable/@name"/>
     </xsl:call-template>
-    <xsl:text>).simplifyConstants()</xsl:text>
+    <xsl:text>)</xsl:text>
+    <xsl:if test="@reduce='yes'">
+        <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 
