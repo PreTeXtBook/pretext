@@ -8005,7 +8005,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
                 <p>You could also use a base64-encoded string of the <c>.ggb</c> file. You might come across such a string somewhere, or you might generate one by opening a <c>.ggb</c> file in a desktop installation of GeoGebra, and pushing ctrl-shift-B (command-shift-B on a Mac) to get the string in your clipboard. If you do this, you could use a <attr>base64</attr> attribute in place of the <attr>source</attr> attribute in the previous example. We don't do that here because such a string is generally over 5000 characters long and we are keeping the sample article source a bit cleaner.</p>
-                <p>The next example shows how you can communicate between a GeoGebra applet and a <tag>slate</tag> contained in the interactive.  The process is mediated by javascript code specified in the <attr>source</attr> attribute of the interactive.  Event listeners in the code update the html when the diagram changes or vice-versa.  MathJax is also notified when it needs to update math. </p>
+
+                <p>The next example shows how you can communicate between a GeoGebra applet and a <tag>slate</tag> contained in the interactive.  The process is mediated by javascript code specified in the <attr>source</attr> attribute of the interactive.  Event listeners in the code update the HTML when the diagram changes or vice-versa.  MathJax is also notified when it needs to update math. </p>
+
+                <p>Note that this example has a <tag>slate</tag> whose <attr>surface</attr> is <c>pretext</c> <em>and</em> a <tag>slate</tag> whose <attr>surface</attr> is <c>html</c>, the latter requiring a namespace declaration.  The former produces HTML according to the <pretext/> templates, which is fairly predictable, but never guaranteed to always be identical over time.  A <pretext/> slate uses familiar syntax, produces results styled consistently, but might break in the future.  While an HTML slate is similar, the results will not be styled, but it does allow for a wider range of HTML elements (a <c>button</c> element here) and will not change over time.</p>
+
+                <p>The indefinite integral in the last row of the table is a gratuitious test that aurhors' macros from <tag>docinfo</tag> are available to MathJax.  Finally, a <pretext/> slate will only recognize <tag>p</tag>, <tag>tabular</tag>, <tag>sidebyside</tag>, and <tag>sbsgroup</tag> as children.  Make a feature request if you have a good case for more.</p>
+
                 <figure xml:id="figure_Interactive-3d-direction-vector">
                     <caption>Geogebra/<pretext/> Communications</caption>
                     <interactive platform="geogebra" aspect="10:8" width="100%" xml:id="ggb_3d-direction-vector_interactive" source="code/haynes/3d-direction-vector.js">
@@ -8024,35 +8030,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </slate>
 
                         <sidebyside width="35%" margins="10%">
-                            <slate surface="ptx" label="ggb_2__17_table1">
-                            <tabular halign="right">
-                                <col width="10%" halign="center"/>
-                                <col width="10%" halign="center"/>
-                                <col width="10%" halign="center"/>
-                                <col width="10%" halign="center"/>
-                                <col width="30%" halign="right"/>
-                                <row bottom="minor">
-                                    <cell> <m>\ </m> </cell>
-                                    <cell> <m>x </m> </cell>
-                                    <cell> <m>y</m> </cell>
-                                    <cell> <m>z </m> </cell>
-                                    <cell/>
-                                </row>
-                                <row>
-                                    <cell> <m>\mathbf{A}</m> </cell>
-                                    <cell/>
-                                    <cell/>
-                                    <cell/>
-                                    <cell/>
-                                </row>
-                                <row>
-                                    <cell> <m>\mathbf{B}</m> </cell>
-                                    <cell/>
-                                    <cell/>
-                                    <cell/>
-                                    <cell/>
-                                </row>
-                            </tabular>
+                            <slate surface="pretext" label="ggb_2__17_table1">
+                                <tabular halign="right">
+                                    <col width="10%" halign="center"/>
+                                    <col width="10%" halign="center"/>
+                                    <col width="10%" halign="center"/>
+                                    <col width="10%" halign="center"/>
+                                    <col width="30%" halign="right"/>
+                                    <row bottom="minor">
+                                        <cell> <m>\ </m> </cell>
+                                        <cell> <m>x </m> </cell>
+                                        <cell> <m>y</m> </cell>
+                                        <cell> <m>z </m> </cell>
+                                        <cell/>
+                                    </row>
+                                    <row>
+                                        <cell> <m>\mathbf{A}</m> </cell>
+                                        <cell/>
+                                        <cell/>
+                                        <cell/>
+                                        <cell/>
+                                    </row>
+                                    <row>
+                                        <cell> <m>\mathbf{B}</m> </cell>
+                                        <cell/>
+                                        <cell/>
+                                        <cell/>
+                                        <cell/>
+                                    </row>
+                                    <row>
+                                        <cell><m>\indefiniteintegral{x^4}{x}</m></cell>
+                                        <cell/>
+                                        <cell/>
+                                        <cell/>
+                                        <cell/>
+                                    </row>
+                                </tabular>
                             </slate>
                             <slate surface="html">
                                 <p xmlns="http://www.w3.org/1999/xhtml">
