@@ -3834,7 +3834,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
                     log.critical(f"* {line.message}")
                 elif "PTX:ERROR" in line.message or "PTX:BUG" in line.message:
                     log.error(f"* {line.message}")
-                elif "PTX:WARNING" in line.message:
+                elif "PTX:WARNING" in line.message or "PTX:DEPRECATE" in line.message:
                     log.warning(f"* {line.message}")
                 elif "PTX:DEBUG" in line.message:
                     log.debug(f"* {line.message}")
