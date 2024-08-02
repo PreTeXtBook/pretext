@@ -9696,6 +9696,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="document-id"/>
                 <!-- React flag -->
                 <xsl:call-template name="react-in-use-flag"/>
+                <!-- Some interactives use slates that are PreTeXt  -->
+                <!-- elements, hence could have math, hence need to -->
+                <!-- know globally available macros from the author -->
+                <xsl:call-template name="latex-macros"/>
                 <div>
                     <!-- the actual interactive bit          -->
                     <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
