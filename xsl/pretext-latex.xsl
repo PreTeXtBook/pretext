@@ -1763,7 +1763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
                 <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
                 <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false, raster after skip=0.7\baselineskip} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont, before upper app={\setparstyle}} }&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
