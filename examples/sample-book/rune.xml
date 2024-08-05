@@ -2640,6 +2640,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
+        <exercise label="parsons-with-executable" language="python" adaptive="yes" indentation="show">
+            <title>Parsons Problem with executable</title>
+            <statement>
+                <p>Parsons problems that have a <c>language</c> specified that corresponds to a valid activecode language can be made runnable.</p>
+                <p>Complete the Python function <c>isolateRed(p)</c> If either the blue or green is higher than the red, average the three color values and set red, green, and blue to be that average. Otherwise, do nothing to <c>p</c>.</p>
+                <p>After you check a correct answer you will be able to Run the code you created - it will be used to modify the image shown below.</p>
+
+                <!-- 300px wide so 300/600 = 50% -->
+                <datafile label="golden-gate2" filename="golden-gate.png">
+                    <image source="datafiles/golden-gate-bridge.png" width="50%"/>
+                </datafile>
+
+            </statement>
+            <blocks>
+                <block order="4">
+                    <cline>def isolateRed(p):</cline>
+                </block>
+                <block order="2">
+                    <cline>    if p.green &gt; p.red or p.blue &gt; p.red:</cline>
+                </block>
+                <block order="3">
+                    <cline>        avg = (p.red + p.blue + p.green) / 3</cline>
+                </block>
+                <block order="1">
+                    <cline>        p.red = avg</cline>
+                    <cline>        p.blue = avg</cline>
+                    <cline>        p.green = avg</cline>
+                </block>
+            </blocks>
+            <!-- note that the blank lines in pre and postabmbles are intentional to -->
+            <!-- separate those from user code, but you might not always want them   -->
+            <program-preamble>
+                print("Using your code to isolate the red in the Golden Gate Bridge image.")
+                import image
+
+            </program-preamble>
+            <!-- the program is empty as its contents will be replaced by student code -->
+            <program datafile="golden-gate.png" codelens="no"/>
+            <program-postamble>
+
+                img = image.Image("golden-gate.png")
+                win = image.ImageWin(img.getWidth(), img.getHeight())
+                img.draw(win)
+
+                # img.setDelay(delay, number of pixels between delay)
+                # setDelay(1, 400) will speed up a lot
+                img.setDelay(1,50)
+
+                for row in range(img.getHeight()):
+                    for col in range(img.getWidth()):
+                        p = img.getPixel(col, row)
+                        isolateRed(p)
+                        img.setPixel(col, row, p)
+            </program-postamble>
+        </exercise>
+
         <exercise label="prime-number-program-indent-no" language="python" adaptive="yes" indentation="show">
             <title>Parsons Problem, Programming</title>
             <idx>prime numbers</idx>

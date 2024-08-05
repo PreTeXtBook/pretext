@@ -1098,6 +1098,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
     <!-- determine this option before context switches -->
     <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <!-- active-language only used if runnable but needed multiple places -->
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
     <div class="ptx-runestone-container">
         <div class="runestone parsons_section" style="max-width: none;">
             <div data-component="parsons" class="parsons">
@@ -1107,6 +1111,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="statement"/>
                 </div>
                 <pre class="parsonsblocks" data-question_label="" style="visibility: hidden;">
+                    <!-- presence of a program implies runnable when completed -->
+                    <xsl:if test="program">
+                        <xsl:choose>
+                            <xsl:when test="$active-language != ''">
+                                <xsl:attribute name="data-runnable">
+                                    <xsl:text>true</xsl:text>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:variable name="id">
+                                    <xsl:apply-templates select="." mode="unique-id"/>
+                                </xsl:variable>
+                                <xsl:message>PTX:WARNING:  Parsons problems need a @langauge that is a valid activecode language to be runnable</xsl:message>
+                                <xsl:message>              id: <xsl:value-of select="$id"></xsl:value-of></xsl:message>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
                     <!-- author opts-in to adaptive problems -->
                     <xsl:attribute name="data-language">
                         <xsl:choose>
@@ -1160,6 +1181,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:apply-templates>
                 </pre>
             </div>
+            <xsl:if test="program">
+                <!-- Parsons is executable when finished -->
+                <div style="display: none">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                        <xsl:text>-runnable</xsl:text>
+                    </xsl:attribute>
+                    <div data-component="parsons-runnable">
+                    <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+                        <xsl:variable name="hosting">
+                            <xsl:apply-templates select="." mode="activecode-host"/>
+                        </xsl:variable>
+                        <!-- loop just to set context. program should be single -->
+                        <xsl:for-each select="program">
+                            <xsl:call-template name="runestone-activecode-editor-attributes">
+                                <xsl:with-param name="active-language" select="$active-language"/>
+                                <xsl:with-param name="hosting" select="$hosting"/>
+                            </xsl:call-template>
+                        </xsl:for-each>
+                        <!-- the content -->
+                        <xsl:text>&#xa;</xsl:text>
+                        <xsl:call-template name="add-indentation">
+                            <xsl:with-param name="text">
+                                <xsl:call-template name="sanitize-text">
+                                    <xsl:with-param name="text" select="program-preamble"/>
+                                    <xsl:with-param name="preserve-end" select="true()"/>
+                                </xsl:call-template>
+                            </xsl:with-param>
+                            <xsl:with-param name="indent"><xsl:value-of select="program-preamble/@indent"/></xsl:with-param>
+                        </xsl:call-template>
+                        <!-- placeholder for user code -->
+                        <xsl:text>==PARSONSCODE==&#xa;</xsl:text>
+                        <xsl:call-template name="add-indentation">
+                            <xsl:with-param name="text">
+                                <xsl:call-template name="sanitize-text">
+                                    <xsl:with-param name="text" select="program-postamble"/>
+                                    <xsl:with-param name="preserve-start" select="true()"/>
+                                </xsl:call-template>
+                            </xsl:with-param>
+                            <xsl:with-param name="indent"><xsl:value-of select="program-postamble/@indent"/></xsl:with-param>
+                        </xsl:call-template>
+                    </textarea>
+                </div></div>
+            </xsl:if>
+
         </div>
     </div>
 </xsl:template>
@@ -1942,82 +2008,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:attribute name="id">
                                 <xsl:value-of select="concat($hid, '_editor')"/>
                             </xsl:attribute>
-                            <xsl:attribute name="data-question_label"/>
-                            <!-- Code Lens only for certain languages -->
-                            <xsl:attribute name="data-codelens">
-                                <xsl:choose>
-                                    <xsl:when test="@codelens = 'no'">
-                                        <xsl:text>false</xsl:text>
-                                    </xsl:when>
-                                    <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
-                                        <xsl:text>true</xsl:text>
-                                    </xsl:when>
-                                    <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
-                                        <xsl:text>true</xsl:text>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>false</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="concat($hid, '_editor')"/>
                             </xsl:attribute>
-                            <!-- allow @datafile attribute on <program> -->
-                            <xsl:if test="@datafile">
-                                <!-- multiple files, coma- or space- separated -->
-                                <xsl:variable name="tokens" select="str:tokenize(@datafile, ', ')"/>
-                                <xsl:attribute name="data-datafile">
-                                    <xsl:for-each select="$tokens">
-                                        <xsl:value-of select="."/>
-                                        <!-- n - 1 separators, required by receiving Javascript -->
-                                        <!-- comma-separated this time                          -->
-                                        <xsl:if test="following-sibling::token">
-                                            <xsl:text>,</xsl:text>
-                                        </xsl:if>
-                                    </xsl:for-each>
-                                </xsl:attribute>
-                            </xsl:if>
-                            <!-- allow @include attribute on <program> -->
-                            <xsl:if test="@include">
-                                <!-- space-separated this time -->
-                                <xsl:attribute name="data-include">
-                                    <xsl:apply-templates select="@include" mode="runestone-targets">
-                                        <xsl:with-param name="separator" select="' '"/>
-                                    </xsl:apply-templates>
-                                </xsl:attribute>
-                            </xsl:if>
-                            <!-- SQL (only) needs an attribute so it can find some code -->
-                            <xsl:if test="$active-language = 'sql'">
-                                <xsl:attribute name="data-wasm">
-                                    <xsl:text>/_static</xsl:text>
-                                </xsl:attribute>
-                                <!-- A SQL database can be provided for automated  -->
-                                <!-- testing of correct answers via unit tests.    -->
-                                <!-- This is a location in the external directory. -->
-                                <xsl:if test="@database">
-                                    <xsl:attribute name="data-dburl">
-                                        <xsl:choose>
-                                            <xsl:when test="$b-managed-directories">
-                                                <xsl:value-of select="$external-directory"/>
-                                                <xsl:value-of select="@database"/>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:value-of select="@database"/>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:attribute>
-                                </xsl:if>
-                            </xsl:if>
-                            <!-- compiler arguments for hosted languages -->
-                            <xsl:if test="@compiler-args and ($hosting = 'jobeserver')">
-                                <xsl:attribute name="data-compileargs">
-                                    <xsl:value-of select="@compiler-args"/>
-                                </xsl:attribute>
-                            </xsl:if>
-                            <!-- linker arguments for hosted languages -->
-                            <xsl:if test="@linker-args and ($hosting = 'jobeserver')">
-                                <xsl:attribute name="data-linkargs">
-                                    <xsl:value-of select="@linker-args"/>
-                                </xsl:attribute>
-                            </xsl:if>
+                            <!-- conditional attributes shared with parsons activecodes -->
+                            <xsl:call-template name="runestone-activecode-editor-attributes">
+                                <xsl:with-param name="active-language" select="$active-language"/>
+                                <xsl:with-param name="hosting" select="$hosting"/>
+                            </xsl:call-template>
                             <!-- the code itself as text -->
                             <xsl:call-template name="sanitize-text">
                                 <xsl:with-param name="text" select="input" />
@@ -2050,6 +2048,88 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
 </xsl:template>
+
+<xsl:template name="runestone-activecode-editor-attributes">
+    <xsl:param name="active-language"/>
+    <xsl:param name="hosting"/>
+    <xsl:attribute name="data-question_label"/>
+    <!-- Code Lens only for certain languages -->
+    <xsl:attribute name="data-codelens">
+        <xsl:choose>
+            <xsl:when test="@codelens = 'no'">
+                <xsl:text>false</xsl:text>
+            </xsl:when>
+            <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>false</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:attribute>
+    <!-- allow @datafile attribute on <program> -->
+    <xsl:if test="@datafile">
+        <!-- multiple files, coma- or space- separated -->
+        <xsl:variable name="tokens" select="str:tokenize(@datafile, ', ')"/>
+        <xsl:attribute name="data-datafile">
+            <xsl:for-each select="$tokens">
+                <xsl:value-of select="."/>
+                <!-- n - 1 separators, required by receiving Javascript -->
+                <!-- comma-separated this time                          -->
+                <xsl:if test="following-sibling::token">
+                    <xsl:text>,</xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- allow @include attribute on <program> -->
+    <xsl:if test="@include">
+        <!-- space-separated this time -->
+        <xsl:attribute name="data-include">
+            <xsl:apply-templates select="@include" mode="runestone-targets">
+                <xsl:with-param name="separator" select="' '"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- SQL (only) needs an attribute so it can find some code -->
+    <xsl:if test="$active-language = 'sql'">
+        <xsl:attribute name="data-wasm">
+            <xsl:text>/_static</xsl:text>
+        </xsl:attribute>
+        <!-- A SQL database can be provided for automated  -->
+        <!-- testing of correct answers via unit tests.    -->
+        <!-- This is a location in the external directory. -->
+        <xsl:if test="@database">
+            <xsl:attribute name="data-dburl">
+                <xsl:choose>
+                    <xsl:when test="$b-managed-directories">
+                        <xsl:value-of select="$external-directory"/>
+                        <xsl:value-of select="@database"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@database"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:if>
+    </xsl:if>
+    <!-- compiler arguments for hosted languages -->
+    <xsl:if test="@compiler-args and ($hosting = 'jobeserver')">
+        <xsl:attribute name="data-compileargs">
+            <xsl:value-of select="@compiler-args"/>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- linker arguments for hosted languages -->
+    <xsl:if test="@linker-args and ($hosting = 'jobeserver')">
+        <xsl:attribute name="data-linkargs">
+            <xsl:value-of select="@linker-args"/>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ######## -->
 <!-- CodeLens -->
@@ -2102,7 +2182,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so can be used as part of Runestone for All, while others     -->
 <!-- require a JOBE server on the Runestone server.  This template -->
 <!-- simply returns the necessary hosting capability.              -->
-<xsl:template match="program" mode="activecode-host">
+<!-- N.B. This match could be simply on "program", but a runnable  -->
+<!-- Parsons problem may have a @language on it as part of being   -->
+<!-- runnable, thus a more liberal match (which could be           -->
+<!-- tightened, most likely).                                      -->
+<xsl:template match="*" mode="activecode-host">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
