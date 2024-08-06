@@ -5498,9 +5498,7 @@ Book (with parts), "section" at level 3
 
     <!-- Number of Panels -->
     <!-- count the elements destined for panels  -->
-    <!-- Metadata banned, roughly 2017-07, now pure container  -->
-    <!-- Retain filter for backward compatibility              -->
-    <xsl:variable name="number-panels" select="count(*[not(&METADATA-FILTER;)])" />
+    <xsl:variable name="number-panels" select="count(*)])" />
     <xsl:if test="$sbsdebug">
         <xsl:message>N:<xsl:value-of select="$number-panels" />:N</xsl:message>
     </xsl:if>
@@ -10856,7 +10854,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//latex-image/label" />
         <xsl:with-param name="date-string" select="'2024-07-29'" />
-        <xsl:with-param name="message" select="'ue of a &quot;label&quot; element inside a &quot;latex-image&quot; is deprecated and there is no replacement.  Formulate the appropriate LaTeX code (TikZ) as a replacement.'"/>
+        <xsl:with-param name="message" select="'use of a &quot;label&quot; element inside a &quot;latex-image&quot; is deprecated and there is no replacement.  Formulate the appropriate LaTeX code (TikZ) as a replacement.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-31 (warning added 2024-08-05) metadata, notably idx, banned as child of sidebyside -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//sidebyside/*[&METADATA-FILTER;]" />
+        <xsl:with-param name="date-string" select="'2017-07-31'" />
+        <xsl:with-param name="message" select="'metadata elements &quot;&METADATA;&quot; in a sidebyside will be ignored'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
