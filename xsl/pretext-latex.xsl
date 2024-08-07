@@ -4683,7 +4683,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\pageref{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
-    <!-- we could try to eliminate this on final row -->
+    <!-- It seems very expensive to test for the last "notation"    -->
+    <!-- globally (not(following::notation)), adding a second or    -->
+    <!-- two to a 12-second run-time for the sample article.        -->
+    <!-- But it would be nice not to have the unnecessary "\\"      -->
+    <!-- on the last row of the table.  See comments in -common for -->
+    <!-- a complicated approach that might be reasonably efficient. -->
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
