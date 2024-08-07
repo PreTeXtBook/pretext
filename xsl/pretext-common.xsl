@@ -7059,6 +7059,71 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Notation List -->
+<!-- ############# -->
+
+<!-- A list/table where each row is a sample usage (as mathematics), -->
+<!-- a short narrative description, and then a cross-reference or    -->
+<!-- locator to the place where the original "notation" element was  -->
+<!-- authored, presumably in the vicinity of a more complete         -->
+<!-- explanation.  These appear in the order of appearance, so no    -->
+<!-- sorting takes place here, document order is what we want.       -->
+
+<!-- Abstract Templates -->
+<!--                                                             -->
+<!-- These require implementation for a new conversion to        -->
+<!-- provide formatting peculiar to an output format.            -->
+<!-- Logic/organization is provided here.                        -->
+<!--                                                             -->
+<!-- "present-notation-list"                                     -->
+<!-- A named template (context is not employed), typically with  -->
+<!-- infrastructure to surround the "content parameter, which is -->
+<!-- the rows of the list/table.  This is applied once.          -->
+<!--                                                             -->
+<!-- "present-notation-item"                                     -->
+<!-- A modal template (since a generic template kills "notation" -->
+<!-- on-sight) for each instance, forming one row of the table.  -->
+
+<!-- The "notation" element can be placed inside a "p" or inside a  -->
+<!-- "definition".  When encountered in document order it is simply -->
+<!-- killed.  We collect them as a group when forming the list.     -->
+<!-- NB: this is overidden in the conversion to LaTeX since a       -->
+<!-- marker needs to be dropped in order for the cross-reference    -->
+<!-- to find its target.                                            -->
+<xsl:template match="notation"/>
+
+<!-- Match the (single?) "notation-list" element, presumably in a     -->
+<!-- back matter division (appendix?).  Provide infrastructure        -->
+<!-- (wrapping) and process global list of individual items in order. -->
+<!-- NB: we tried a "for-each", in hopes of easily determining the    -->
+<!-- last "notation" so the LaTeX table would not have a final        -->
+<!-- unnecessary "\\".  But that context switch was lost in the       -->
+<!-- transition to the LaTeX implementation template.  We might form  -->
+<!-- a boolean parameter here ("$last") to pass along to every        -->
+<!-- implementation, but that seems like a lot of effort for a        -->
+<!-- problem nobody has mentioned in years.                           -->
+<xsl:template match="notation-list">
+    <xsl:call-template name="present-notation-list">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="$document-root//notation" mode="present-notation-item"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Stub abstract template, with warning -->
+<xsl:template name="present-notation-list">
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-notation-list") in order to structure a notation list.</xsl:message>
+</xsl:template>
+
+<!-- Stub abstract template, with warning -->
+<xsl:template match="notation" mode="present-notation-item">
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a modal template ("present-notation-item") in order to structure an explanation of a single "notation" element.</xsl:message>
+</xsl:template>
+
 
 <!-- ############### -->
 <!-- Arbitrary Lists -->
