@@ -4622,11 +4622,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Implementation of abstract templates.       -->
+<!-- See more complete code comments in -common. -->
+
 <!-- Deccription column is "p" to enable word-wrapping  -->
 <!-- The 60% width is arbitrary, could see improvements -->
 <!-- This is not a PreTeXt "table" so we don't let      -->
 <!-- LaTeX number it, nor increment the table counter   -->
-<xsl:template match="notation-list">
+<xsl:template name="present-notation-list">
+    <xsl:param name="content"/>
+
     <xsl:text>\begin{longtable}[l]{lp{0.60\textwidth}r}&#xa;</xsl:text>
     <xsl:text>\addtocounter{table}{-1}&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
@@ -4664,11 +4669,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)}\\&#xa;</xsl:text>
     <xsl:text>\endfoot&#xa;</xsl:text>
     <xsl:text>\endlastfoot&#xa;</xsl:text>
-    <xsl:apply-templates select="$document-root//notation" mode="backmatter" />
+    <!-- the actual body/rows/content -->
+    <xsl:copy-of select="$content"/>
     <xsl:text>\end{longtable}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="notation" mode="backmatter">
+<xsl:template match="notation" mode="present-notation-item">
     <!-- Process *exactly* one "m" element -->
     <xsl:apply-templates select="usage/m[1]"/>
     <xsl:text>&amp;</xsl:text>
@@ -4677,8 +4683,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\pageref{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
+    <!-- we could try to eliminate this on final row -->
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- ####################################### -->
 <!-- Solutions Divisions, Content Generation -->
