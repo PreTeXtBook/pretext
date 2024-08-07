@@ -1127,15 +1127,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Notation List -->
 <!--               -->
 
-<!-- At actual location, we do nothing since  -->
-<!-- the cross-reference will always be a     -->
-<!-- knowl to the containing structure        -->
-<xsl:template match="notation" />
+<!-- Implementation of abstract templates.       -->
+<!-- See more complete code comments in -common. -->
 
-<!-- Build the table infrastructure, then    -->
-<!-- populate with all the notation entries, -->
-<!-- in order of appearance                  -->
-<xsl:template match="notation-list">
+<xsl:template name="present-notation-list">
+    <xsl:param name="content"/>
+
     <table class="notation-list">
         <tr>
             <th>
@@ -1154,14 +1151,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </th>
         </tr>
-        <xsl:apply-templates select="$document-root//notation" mode="backmatter" />
+        <xsl:copy-of select="$content"/>
     </table>
 </xsl:template>
 
 <!-- Process *exactly* one "m" element             -->
 <!-- Duplicate the provided description            -->
 <!-- Create a cross-reference to enclosing content -->
-<xsl:template match="notation" mode="backmatter">
+<xsl:template match="notation" mode="present-notation-item">
     <tr>
         <td>
             <xsl:apply-templates select="usage/m[1]"/>
