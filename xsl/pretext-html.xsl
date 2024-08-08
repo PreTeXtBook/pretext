@@ -1398,15 +1398,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- be the context of this chain of templates, moving   -->
     <!-- later ones away from named templates?               -->
     <xsl:variable name="the-index-list" select="."/>
-    <!-- "idx" as mixed content (replaces "index").          -->
+    <!-- "idx" as mixed content.                             -->
     <!-- Or, "idx" structured with up to three "h"           -->
-    <!-- (replaces index/[main,sub,sub]).                    -->
     <!-- Start attribute is actual end of a "page            -->
     <!-- range", goodies at @finish.                         -->
-    <!-- NB: latter half of @select is deprecated usage      -->
-    <!-- new style is index/index-list for the division,     -->
-    <!-- we don't want that picked up in the deprecated      -->
-    <!-- "index" used for the entries                        -->
 
     <!-- "index-items" is an internal structure, so very     -->
     <!-- predictable.  Looks like:                           -->
@@ -1423,7 +1418,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- sorting, and really only used to be sure a "see"    -->
     <!-- *follows* the page locator.                         -->
     <xsl:variable name="index-items">
-        <xsl:for-each select="$document-root//idx[not(@start)] | //index[not(index-list) and not(@start)]">
+        <xsl:for-each select="$document-root//idx[not(@start)]">
             <index>
                 <!-- identify content of primary sort key      -->
                 <!-- this follows the logic of creating key[1] -->
@@ -1434,15 +1429,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:when test="@sortby">
                             <xsl:value-of select="@sortby" />
                         </xsl:when>
-                        <xsl:when test="not(main) and not(h)">
+                        <xsl:when test="not(h)">
                             <xsl:apply-templates/>
                         </xsl:when>
-                        <xsl:when test="(main or h) and (main/@sortby or h[1]/@sortby)">
-                            <xsl:apply-templates select="main/@sortby|h[1]/@sortby"/>
+                        <xsl:when test="h and h[1]/@sortby">
+                            <xsl:apply-templates select="h[1]/@sortby"/>
                         </xsl:when>
-                        <xsl:when test="main or h">
-                            <xsl:apply-templates select="main|h[1]"/>
+                        <xsl:when test="h">
+                            <xsl:apply-templates select="h[1]"/>
                         </xsl:when>
+                        <xsl:otherwise/>
                     </xsl:choose>
                 </xsl:variable>
                 <!-- lowercase first letter of primary sort key    -->
@@ -1453,8 +1449,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- simple mixed-content first, no structure -->
                     <!-- one text-key pair, two more empty        -->
-                    <!-- "main" as indicator is deprecated        -->
-                    <xsl:when test="not(main) and not(h)">
+                    <xsl:when test="not(h)">
                         <xsl:variable name="content">
                             <xsl:apply-templates/>
                         </xsl:variable>
@@ -1478,9 +1473,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                     <!-- structured index entry, multiple text-key pairs -->
                     <!-- "main" as indicator is deprecated               -->
-                    <xsl:when test="main or h">
+                    <xsl:when test="h">
                         <!-- "h" occur in order, main-sub-sub deprecated -->
-                        <xsl:for-each select="main|sub|h">
+                        <xsl:for-each select="h">
                             <xsl:variable name="content">
                                 <xsl:apply-templates/>
                             </xsl:variable>
@@ -1506,18 +1501,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:if test="count(h) = 1">
                             <text/><key/>
                         </xsl:if>
-                        <xsl:if test="(main and not(sub[1]))">
-                            <text/><key/>
-                        </xsl:if>
-                        <xsl:if test="(main and not(sub[2]))">
-                            <text/><key/>
-                        </xsl:if>
                         <!-- final sort key will prioritize  -->
                         <!-- this mimics LaTeX's ordering    -->
                         <!--   0 - has "see also"            -->
                         <!--   1 - has "see"                 -->
                         <!--   2 - is usual index reference  -->
-                        <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
+                        <xsl:if test="not(following-sibling::*[self::h])">
                             <locator-type>
                                 <xsl:choose>
                                     <xsl:when test="seealso">

@@ -6977,7 +6977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unstructured                       -->
 <!-- simple and quick, minimal features -->
 <!-- Only supports  @sortby  attribute  -->
-<xsl:template match="index[not(main) and not(index-list)] | idx[not(h)]">
+<xsl:template match="idx[not(h)]">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="@sortby" />
     <xsl:apply-templates />
@@ -6990,15 +6990,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Structured                                      -->
-<!--   main - one only, optional @sortby             -->
-<!--   sub - up two, optional, with optional @sortby -->
+<!--   h - one to three                              -->
 <!--   see, seealso - one total                      -->
 <!--   @start, @finish support page ranges for print -->
-<xsl:template match="index[main] | idx[h]">
+<xsl:template match="idx[h]">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="h" />
-    <xsl:apply-templates select="main" />
-    <xsl:apply-templates select="sub" />
     <xsl:apply-templates select="see" />
     <xsl:apply-templates select="seealso" />
     <xsl:apply-templates select="@finish" />
@@ -7017,8 +7014,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="start" select="id(@start)" />
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="$start/h" />
-    <xsl:apply-templates select="$start/main" />
-    <xsl:apply-templates select="$start/sub" />
     <xsl:apply-templates select="$start/see" />
     <xsl:apply-templates select="$start/seealso" />
     <xsl:apply-templates select="@start" />
@@ -7030,20 +7025,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="index/main">
-    <xsl:apply-templates select="@sortby" />
-    <xsl:apply-templates />
-</xsl:template>
-
-<xsl:template match="index/@sortby|main/@sortby|sub/@sortby|idx/@sortby|h/@sortby">
+<xsl:template match="index/@sortby|idx/@sortby|h/@sortby">
     <xsl:value-of select="." />
     <xsl:text>@</xsl:text>
-</xsl:template>
-
-<xsl:template match="index/sub">
-    <xsl:text>!</xsl:text>
-    <xsl:apply-templates select="@sortby" />
-    <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="idx/h">
@@ -7054,13 +7038,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="index/see|idx/see">
+<xsl:template match="idx/see">
     <xsl:text>|see{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="index/seealso|idx/seealso">
+<xsl:template match="idx/seealso">
     <xsl:text>|seealso{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
