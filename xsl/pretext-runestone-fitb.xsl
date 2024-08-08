@@ -177,7 +177,7 @@
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>blank</xsl:text>
-            <xsl:number />
+            <xsl:value-of select="position()" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -185,7 +185,7 @@
 <!-- Creating a list of blank names. -->
 <xsl:template match="fillin" mode="declare-blanks">
     <xsl:variable name="blankNum">
-        <xsl:number />
+        <xsl:value-of select="position()" />
     </xsl:variable>
     <xsl:if test="$blankNum>1">
         <xsl:text>, </xsl:text>
@@ -392,15 +392,34 @@
         <xsl:apply-templates select="." mode="blank-name"/>
     </xsl:variable>
     <xsl:variable name="blankNum">
-        <xsl:number />
+        <xsl:value-of select="position()" />
     </xsl:variable>
     <xsl:variable name="check">
         <xsl:choose>
             <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
                 <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]"/>
             </xsl:when>
-            <xsl:otherwise>
+            <xsl:when test="ancestor::statement/../evaluation/evaluate[position() = $blankNum]">
                 <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[position() = $blankNum]"/>
+            </xsl:when>
+            <!-- No check matches: Make blank default. -->
+            <xsl:otherwise>
+                <evaluate>
+                    <xsl:attribute name="name">
+                        <xsl:value-of select="$fillinName"/>
+                    </xsl:attribute>
+                    <test>
+                        <xsl:attribute name="correct">
+                            <xsl:text>yes</xsl:text>
+                        </xsl:attribute>
+                        <jscmp>
+                            <xsl:text>false</xsl:text>
+                        </jscmp>
+                        <feedback>
+                            <xsl:text>No comparison rule was provided.</xsl:text>
+                        </feedback>
+                    </test>
+                </evaluate>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -1120,8 +1139,8 @@
     </xsl:call-template>
     <xsl:text>: </xsl:text>
     <xsl:choose>
-        <xsl:when test="eval or de-number">
-            <xsl:apply-templates select="eval|de-number" mode="evaluate">
+        <xsl:when test="eval or de-number or de-expression">
+            <xsl:apply-templates select="eval|de-number|de-expression" mode="evaluate">
                 <xsl:with-param name="setupMode" select="$setupMode" />
             </xsl:apply-templates>
         </xsl:when>
