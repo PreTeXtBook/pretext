@@ -1692,57 +1692,96 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:variable name="pattern" select="$heading-group[1]" />
     <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
-    <!-- booleans for analysis of format of heading, xrefs -->
+    <!-- booleans for analysis of format of heading, locators -->
     <xsl:variable name="match1" select="($pred/text[1] = $pattern/text[1]) and $pred" />
     <xsl:variable name="match2" select="($pred/text[2] = $pattern/text[2]) and $pred" />
     <xsl:variable name="match3" select="($pred/text[3] = $pattern/text[3]) and $pred" />
     <xsl:variable name="empty2" select="boolean($pattern/text[2] = '')" />
     <xsl:variable name="empty3" select="boolean($pattern/text[3] = '')" />
-    <!-- write an "indexitem", "subindexitem", "subsubindexitem" as     -->
-    <!-- necessary to identify chnages in headings, without duplicating -->
-    <!-- headings from prior entries. Add locators when texts go blank  -->
-    <!--  -->
-    <!-- first key differs from predecessor, or leads letter group -->
+    <!-- Write headings of a group, indicating the level of -->
+    <!-- each heading (up to 3 levels) and then follow with -->
+    <!-- the associated locators.                           -->
+
+    <!-- First key differs from predecessor, or leads letter group  -->
+    <!-- if $empty2 is true, then headings are complete and time to -->
+    <!-- write locators.  The next conditional will fail so no more -->
+    <!-- output for this heading group. -->
     <xsl:if test="not($match1)">
-        <div class="indexitem">
-            <xsl:copy-of select="$pattern/text[1]/node()" />
-            <!-- next key is blank, hence done, so write xrefs        -->
-            <!-- the next outermost tests will fail so no duplication -->
-            <xsl:if test="$empty2">
-                <xsl:call-template name="knowl-list">
-                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
-                    <xsl:with-param name="heading-group" select="$heading-group" />
-                </xsl:call-template>
-            </xsl:if>
-        </div>
+        <xsl:call-template name="present-index-heading">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="b-write-locators" select="$empty2"/>
+            <xsl:with-param name="heading-level" select="1"/>
+            <xsl:with-param name="content" select="$pattern/text[1]/node()"/>
+        </xsl:call-template>
     </xsl:if>
-    <!-- second key is substantial, and mis-match is in   -->
-    <!-- the second key, or first key (ie to to the left) -->
+
+    <!-- Second key is substantial, and mis-match is in the second key,  -->
+    <!-- or first key (ie to the left).  If $empty3 is true, then        -->
+    <!-- headings are complete and time to write locators.  The next     -->
+    <!-- conditional will fail so no more output for this heading group. -->
     <xsl:if test="not($empty2) and (not($match1) or not($match2))">
-        <div class="subindexitem">
-            <xsl:copy-of select="$pattern/text[2]/node()" />
-            <!-- next key is blank, hence done, so write xrefs       -->
-            <!-- the next outermost test will fail so no duplication -->
-            <xsl:if test="$empty3">
-                <xsl:call-template name="knowl-list">
-                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
-                    <xsl:with-param name="heading-group" select="$heading-group" />
-                </xsl:call-template>
-            </xsl:if>
-        </div>
+        <xsl:call-template name="present-index-heading">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="b-write-locators" select="$empty3"/>
+            <xsl:with-param name="heading-level" select="2"/>
+            <xsl:with-param name="content" select="$pattern/text[2]/node()"/>
+        </xsl:call-template>
     </xsl:if>
-    <!-- third key is substantial, and mis-match is in the first   -->
-    <!-- key, the second key, or the third key (ie to to the left) -->
+
+    <!-- Third key is substantial, and mis-match is in the first key, -->
+    <!-- the second key, or the third key (ie to the left).  Last     -->
+    <!-- chance to write locators, so we pass true.                   -->
     <xsl:if test="not($empty3) and (not($match1) or not($match2) or not($match3))">
-        <div class="subsubindexitem">
-            <xsl:copy-of select="$pattern/text[3]/node()" />
-            <!-- last chance to write xref list -->
+        <xsl:call-template name="present-index-heading">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="b-write-locators" select="true()"/>
+            <xsl:with-param name="heading-level" select="3"/>
+            <xsl:with-param name="content" select="$pattern/text[3]/node()"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Implementation of presentation of index item, sub index item,      -->
+<!-- sub sub index item, in other words, headings at depth 1, 2, and 3. -->
+<!--   $heading-level: is 1, 2 or 3, to be translated to indicators     -->
+<!--                   for styling (such as indentation, newlines, etc) -->
+<!--   $content:       the actual text of the heading                   -->
+
+<xsl:template name="present-index-heading">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="b-write-locators"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="content"/>
+
+    <div class="indexitem">
+        <!-- translate heading-level to a CSS class name -->
+        <xsl:attribute name="class">
+            <xsl:choose>
+                <xsl:when test="$heading-level = 1">
+                    <xsl:text>indexitem</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-level = 2">
+                    <xsl:text>subindexitem</xsl:text>
+                </xsl:when>
+                <xsl:when test="$heading-level = 3">
+                    <xsl:text>subsubindexitem</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- the actual heading content -->
+        <xsl:copy-of select="$content"/>
+        <!-- perhaps time to write locators -->
+        <xsl:if test="$b-write-locators">
             <xsl:call-template name="knowl-list">
                 <xsl:with-param name="the-index-list" select="$the-index-list"/>
                 <xsl:with-param name="heading-group" select="$heading-group" />
             </xsl:call-template>
-        </div>
-    </xsl:if>
+        </xsl:if>
+    </div>
 </xsl:template>
 
 <!-- Place all the locators into the div for -->
