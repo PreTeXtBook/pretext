@@ -1280,6 +1280,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Index deprecations -->
+<!-- The way an index was constructed changed in 2017-07-14.  At 2024-08-08  -->
+<!-- we are using the "repair" phase to move the old style to the new.  The  -->
+<!-- old style looked like a "index-part" division with a mandatory          -->
+<!-- "index-list" child.  Elements sprinkled into the text were an           -->
+<!-- unstructured "index" or an "index" with up to three headings: "main",   -->
+<!-- followed by possibly two "sub".  Now the division is "index" (as it     -->
+<!-- should be!) and the entries are "idx".  A structured "idx" can have     -->
+<!-- one to three "h" elements as the headings.                              -->
+
+<!-- Change the division element -->
+<xsl:template match="index-part" mode="repair">
+    <index>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </index>
+</xsl:template>
+
+<!-- Change tne entry element, but avoid a new division name -->
+<xsl:template match="index[not(index-list)]" mode="repair">
+    <idx>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </idx>
+</xsl:template>
+
+<!-- Change first old style heading -->
+<xsl:template match="index[not(index-list)]/main" mode="repair">
+    <h>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </h>
+</xsl:template>
+
+<!-- Change second and third old style headings -->
+<xsl:template match="index[not(index-list)]/sub" mode="repair">
+    <h>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </h>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
