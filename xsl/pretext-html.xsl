@@ -1815,7 +1815,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- range through node-list, making cross-references -->
     <!-- Use a comma after the heading, then prefix each  -->
     <!-- cross-reference with a space as separators       -->
-    <span class="indexknowl">
+    <xsl:call-template name="present-index-locator">
+        <xsl:with-param name="content">
         <xsl:choose>
             <xsl:when test="$heading-group/see and not($b-has-subentry)">
                 <xsl:text>. </xsl:text>
@@ -1843,12 +1844,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- our construction.  Still, remove them in an eventual   -->
                 <!-- refactor and abstraction of index construction.        -->
                 <xsl:when test="see">
-                    <span class="see">
+                    <xsl:call-template name="present-index-see">
+                        <xsl:with-param name="content">
                         <xsl:if test="position() = 1">
                             <xsl:if test="$b-has-subentry">
                                 <xsl:text>(</xsl:text>
                             </xsl:if>
-                            <em>
+                            <xsl:call-template name="present-index-italics">
+                                <xsl:with-param name="content">
                                 <xsl:choose>
                                     <xsl:when test="$b-has-subentry">
                                         <!-- lower-case "see" -->
@@ -1867,7 +1870,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </xsl:apply-templates>
                                     </xsl:otherwise>
                                 </xsl:choose>
-                            </em>
+                                </xsl:with-param>
+                            </xsl:call-template>
                         </xsl:if>
                         <!-- just a space after "see", before first  -->
                         <!-- semi-colon before second and subsequent -->
@@ -1883,21 +1887,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:if test="$b-has-subentry and (position() = last())">
                             <xsl:text>)</xsl:text>
                         </xsl:if>
-                    </span>
+                    </xsl:with-param>
+                </xsl:call-template>
                 </xsl:when>
                 <!--  -->
                 <xsl:when test="seealso">
                     <xsl:if test="preceding-sibling::index[1]/cross-reference and not($b-has-subentry)">
                         <xsl:text>. </xsl:text>
                     </xsl:if>
-                    <span class="seealso">
+                    <xsl:call-template name="present-index-see-also">
+                        <xsl:with-param name="content">
                         <xsl:choose>
                             <xsl:when test="preceding-sibling::index[1]/cross-reference">
                                 <xsl:choose>
                                     <xsl:when test="$b-has-subentry">
                                         <xsl:text> </xsl:text>
                                         <xsl:text>(</xsl:text>
-                                        <em>
+                                        <xsl:call-template name="present-index-italics">
+                                            <xsl:with-param name="content">
                                             <!-- lower-case "see also" -->
                                             <xsl:variable name="upper">
                                                 <xsl:apply-templates select="$the-index-list" mode="type-name">
@@ -1906,15 +1913,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                             </xsl:variable>
                                             <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
                                             <xsl:value-of select="substring($upper, 2)"/>
-                                        </em>
+                                            </xsl:with-param>
+                                        </xsl:call-template>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <em>
+                                        <xsl:call-template name="present-index-italics">
+                                            <xsl:with-param name="content">
                                             <!-- upper-case "See also" -->
                                             <xsl:apply-templates select="$the-index-list" mode="type-name">
                                                     <xsl:with-param name="string-id" select="'also'"/>
                                             </xsl:apply-templates>
-                                        </em>
+                                            </xsl:with-param>
+                                        </xsl:call-template>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:when>
@@ -1927,12 +1937,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:if test="(position() = last()) and $b-has-subentry">
                             <xsl:text>)</xsl:text>
                         </xsl:if>
-                    </span>
+                    </xsl:with-param>
+                </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="present-index-locator">
+    <xsl:param name="content"/>
+
+    <span class="indexknowl">
+        <xsl:copy-of select="$content"/>
     </span>
 </xsl:template>
+
+<xsl:template name="present-index-see">
+    <xsl:param name="content"/>
+
+    <span class="see">
+        <xsl:copy-of select="$content"/>
+    </span>
+</xsl:template>
+
+<xsl:template name="present-index-see-also">
+    <xsl:param name="content"/>
+
+    <span class="seealso">
+        <xsl:copy-of select="$content"/>
+    </span>
+</xsl:template>
+
+<xsl:template name="present-index-italics">
+    <xsl:param name="content"/>
+
+    <em>
+        <xsl:copy-of select="$content"/>
+    </em>
+</xsl:template>
+
 
 <!-- Climb the tree looking for an enclosing structure of        -->
 <!-- interest.  Create cross-reference.                          -->
