@@ -201,7 +201,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
-    <localization string-id='index-part'>Índex alfabètico</localization>
+    <localization string-id='index'>Índex alfabètico</localization>
     <localization string-id='jump-to'>Passeu a:</localization>
     <!-- Parts of the Index -->
     <localization string-id='index'>Índex alfabètico</localization>

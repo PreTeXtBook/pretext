@@ -197,7 +197,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
-    <localization string-id='index-part'>Rejstřík</localization>
+    <localization string-id='index'>Rejstřík</localization>
     <localization string-id='jump-to'>Skoč na:</localization>
     <!-- Parts of the Index -->
     <localization string-id='index'>Rejstřík</localization>

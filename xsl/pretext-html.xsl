@@ -206,8 +206,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-dynamics-static-seed" select="false()"/>
 <!-- Every page has an index button, with a link to the index -->
 <!-- Here we assume there is at most one                      -->
-<!-- (The old style of specifying an index is deprecated)     -->
-<xsl:variable name="the-index"          select="($document-root//index-part|$document-root//index[index-list])[1]"/>
+<xsl:variable name="the-index"          select="($document-root//index)[1]"/>
 
 <!-- ######## -->
 <!-- WeBWorK  -->
@@ -11229,7 +11228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <xsl:attribute name="title">
                 <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'index-part'"/>
+                    <xsl:with-param name="string-id" select="'index'"/>
                 </xsl:apply-templates>
             </xsl:attribute>
             <xsl:call-template name="insert-symbol">
@@ -11237,7 +11236,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <span class="name">
                 <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'index-part'"/>
+                    <xsl:with-param name="string-id" select="'index'"/>
                 </xsl:apply-templates>
             </span>
         </xsl:element>

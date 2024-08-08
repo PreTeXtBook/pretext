@@ -216,7 +216,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
 <!--
-    <localization string-id='index-part'>Index</localization>
+    <localization string-id='index'>Index</localization>
     <localization string-id='jump-to'>Jump to:</localization>
 -->
     <!-- Parts of the Index -->

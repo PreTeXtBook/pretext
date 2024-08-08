@@ -224,7 +224,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
-    <localization string-id='index-part'>پێرست</localization>
+    <localization string-id='index'>پێرست</localization>
     <localization string-id='jump-to'>بچۆرە سەر</localization>
     <!-- Parts of the Index -->
     <localization string-id='index'>پێرست</localization>

@@ -202,7 +202,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
     <!-- oder auch Index, siehe http://www.d-indexer.org/frag/grundsatz.html#index -->
-    <localization string-id='index-part'>Register</localization>
+    <localization string-id='index'>Register</localization>
 <!--    <localization string-id='jump-to'>Jump to:</localization> -->
     <!-- Parts of the Index -->
     <!-- see https://online.liverpooluniversitypress.co.uk/doi/pdf/10.3828/indexer.2006.21 for lots more info on peculiarities of German indexing we cannot hope to follow -->

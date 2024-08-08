@@ -1647,7 +1647,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\begin{tcbraster}[exgroupcolstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root/backmatter/index-part|$document-root//index-list">
+    <xsl:if test="$document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools-new = 'no'">
@@ -1658,7 +1658,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\usepackage{imakeidx}&#xa;</xsl:text>
             <!-- context for localization is single extant $document-root//index-list -->
             <!-- Restrict to just a single instance, multiple may be unpredictable    -->
-            <xsl:variable name="the-index" select="($document-root/backmatter/index-part|$document-root//index-list)[1]"/>
+            <xsl:variable name="the-index" select="($document-root//index-list)[1]"/>
             <!-- NB: multiple indices will require major adjustments here             -->
             <xsl:text>\makeindex[title=</xsl:text>
             <xsl:apply-templates select="$the-index" mode="type-name">
@@ -4591,12 +4591,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Appendices are handled in the general subdivision template -->
 
 <!-- The index itself needs special handling    -->
-<!-- The "index-part" element signals an index, -->
+<!-- The "index-" element signals an index,     -->
 <!-- and the content is just an optional title  -->
 <!-- and a compulsory "index-list"              -->
 <!-- LaTeX does sectioning via \printindex      -->
 <!-- TODO: multiple indices, with different titles -->
-<xsl:template match="index-part|index[index-list]">
+<xsl:template match="index">
     <xsl:apply-templates />
 </xsl:template>
 

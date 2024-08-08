@@ -31,14 +31,14 @@
 <!ENTITY SIMPLECHAR "concat(&DIGIT;,&ALPHABET;)">
 
 <!-- for match/select -->
-<!ENTITY STRUCTURAL "book|article|slideshow|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter">
+<!ENTITY STRUCTURAL "book|article|slideshow|letter|memo|frontmatter|part|chapter|appendix|index|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter">
 
 <!ENTITY TRADITIONAL-DIVISION "book|article|part|chapter|section|subsection|subsubsection|appendix">
 
 <!ENTITY SPECIALIZED-DIVISION "exercises|worksheet|reading-questions|references|glossary|solutions">
 
 <!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
-<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::slideshow or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::slide or self::exercises or self::worksheet or self::reading-questions or self::solutions or self::references or self::glossary or self::backmatter">
+<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::slideshow or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::slide or self::exercises or self::worksheet or self::reading-questions or self::solutions or self::references or self::glossary or self::backmatter">
 
 <!ENTITY TRADITIONAL-DIVISION-FILTER "self::book or self::article or self::part or self::chapter or self::section or self::subsection or self::subsubsection or self::appendix">
 

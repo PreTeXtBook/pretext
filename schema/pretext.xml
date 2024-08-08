@@ -1290,7 +1290,7 @@
 
         <p>Index entries have two forms, simple and structured.  The <c>start</c> and <c>finish</c> attributes are meant to use <c>xml:id</c> to create an index range that crosses <init>XML</init> boundaries.  (Replace principal tags with <c>idx/h/h</c>.)</p>
 
-        <p>The actual index is generated within the <c>index-part</c> via the <c>index-list</c> element.</p>
+        <p>The actual index is generated within the <tag>index</tag> division via the <c>index-list</c> element.</p>
 
         <p>Note that we might point to another index entry as part of a <q>see also</q> mechanism.</p>
 
