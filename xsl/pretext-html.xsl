@@ -1587,27 +1587,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- criteria.  Each becomes the context node for the remainder.             -->
     <xsl:call-template name="present-index">
         <xsl:with-param name="content">
-    <xsl:for-each select="exsl:node-set($sorted-index)/index[count(.|key('index-entry-by-letter', @letter)[1]) = 1]">
-        <!-- save the key to use again in selecting the group -->
-        <xsl:variable name="current-letter" select="@letter"/>
-        <!-- collect all the "index" with the same initial letter as representative    -->
-        <!-- this key is still perusing the nodes of $sorted-index as context document -->
-        <xsl:variable name="letter-group" select="key('index-entry-by-letter', $current-letter)"/>
-        <!-- Employ abstract template to present/style a letter group -->
-        <xsl:call-template name="present-letter-group">
-            <xsl:with-param name="the-index-list" select="$the-index-list"/>
-            <xsl:with-param name="letter-group" select="$letter-group"/>
-            <xsl:with-param name="current-letter" select="$current-letter"/>
-            <xsl:with-param name="content">
-            <!-- send to group-by-headings, which is vestigal -->
-            <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
-                <xsl:with-param name="the-index-list" select="$the-index-list"/>
-                <xsl:with-param name="heading-group" select="/.." />
-                <xsl:with-param name="letter-group" select="$letter-group" />
-            </xsl:apply-templates>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:for-each>
+            <xsl:for-each select="exsl:node-set($sorted-index)/index[count(.|key('index-entry-by-letter', @letter)[1]) = 1]">
+                <!-- save the key to use again in selecting the group -->
+                <xsl:variable name="current-letter" select="@letter"/>
+                <!-- collect all the "index" with the same initial letter as representative    -->
+                <!-- this key is still perusing the nodes of $sorted-index as context document -->
+                <xsl:variable name="letter-group" select="key('index-entry-by-letter', $current-letter)"/>
+                <!-- Employ abstract template to present/style a letter group -->
+                <xsl:call-template name="present-letter-group">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                    <xsl:with-param name="letter-group" select="$letter-group"/>
+                    <xsl:with-param name="current-letter" select="$current-letter"/>
+                    <xsl:with-param name="content">
+                        <!-- send to group-by-headings, which is vestigal -->
+                        <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
+                            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                            <xsl:with-param name="heading-group" select="/.." />
+                            <xsl:with-param name="letter-group" select="$letter-group" />
+                        </xsl:apply-templates>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
@@ -1817,131 +1817,131 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- cross-reference with a space as separators       -->
     <xsl:call-template name="present-index-locator">
         <xsl:with-param name="content">
-        <xsl:choose>
-            <xsl:when test="$heading-group/see and not($b-has-subentry)">
-                <xsl:text>. </xsl:text>
-            </xsl:when>
-            <!-- no punctuation, will earn parentheses -->
-            <xsl:when test="$heading-group/see and $b-has-subentry">
-                <xsl:text> </xsl:text>
-            </xsl:when>
-            <!-- cross-reference, w/ or w/out see also -->
-            <xsl:otherwise>
-                <xsl:text>,</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- course over the "index" in the group -->
-        <xsl:for-each select="$heading-group">
             <xsl:choose>
-                <!--  -->
-                <xsl:when test="cross-reference">
+                <xsl:when test="$heading-group/see and not($b-has-subentry)">
+                    <xsl:text>. </xsl:text>
+                </xsl:when>
+                <!-- no punctuation, will earn parentheses -->
+                <xsl:when test="$heading-group/see and $b-has-subentry">
                     <xsl:text> </xsl:text>
-                    <xsl:copy-of select="cross-reference/node()"/>
                 </xsl:when>
-                <!--  -->
-                <!-- Various uses of  position()  here are not as dangerous -->
-                <!-- as they seem, since the nodeset comes from an RTF of   -->
-                <!-- our construction.  Still, remove them in an eventual   -->
-                <!-- refactor and abstraction of index construction.        -->
-                <xsl:when test="see">
-                    <xsl:call-template name="present-index-see">
-                        <xsl:with-param name="content">
-                        <xsl:if test="position() = 1">
-                            <xsl:if test="$b-has-subentry">
-                                <xsl:text>(</xsl:text>
-                            </xsl:if>
-                            <xsl:call-template name="present-index-italics">
-                                <xsl:with-param name="content">
-                                <xsl:choose>
-                                    <xsl:when test="$b-has-subentry">
-                                        <!-- lower-case "see" -->
-                                        <xsl:variable name="upper">
-                                            <xsl:apply-templates select="$the-index-list" mode="type-name">
-                                                <xsl:with-param name="string-id" select="'see'"/>
-                                            </xsl:apply-templates>
-                                        </xsl:variable>
-                                        <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
-                                        <xsl:value-of select="substring($upper, 2)"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <!-- upper-case "See" -->
-                                        <xsl:apply-templates select="$the-index-list" mode="type-name">
-                                            <xsl:with-param name="string-id" select="'see'"/>
-                                        </xsl:apply-templates>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                </xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:if>
-                        <!-- just a space after "see", before first  -->
-                        <!-- semi-colon before second and subsequent -->
-                        <xsl:choose>
-                            <xsl:when test="position() = 1">
-                                <xsl:text> </xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>; </xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:copy-of select="see/node()" />
-                        <xsl:if test="$b-has-subentry and (position() = last())">
-                            <xsl:text>)</xsl:text>
-                        </xsl:if>
-                    </xsl:with-param>
-                </xsl:call-template>
-                </xsl:when>
-                <!--  -->
-                <xsl:when test="seealso">
-                    <xsl:if test="preceding-sibling::index[1]/cross-reference and not($b-has-subentry)">
-                        <xsl:text>. </xsl:text>
-                    </xsl:if>
-                    <xsl:call-template name="present-index-see-also">
-                        <xsl:with-param name="content">
-                        <xsl:choose>
-                            <xsl:when test="preceding-sibling::index[1]/cross-reference">
-                                <xsl:choose>
-                                    <xsl:when test="$b-has-subentry">
-                                        <xsl:text> </xsl:text>
-                                        <xsl:text>(</xsl:text>
-                                        <xsl:call-template name="present-index-italics">
-                                            <xsl:with-param name="content">
-                                            <!-- lower-case "see also" -->
+                <!-- cross-reference, w/ or w/out see also -->
+                <xsl:otherwise>
+                    <xsl:text>,</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- course over the "index" in the group -->
+            <xsl:for-each select="$heading-group">
+                <xsl:choose>
+                    <!--  -->
+                    <xsl:when test="cross-reference">
+                        <xsl:text> </xsl:text>
+                        <xsl:copy-of select="cross-reference/node()"/>
+                    </xsl:when>
+                    <!--  -->
+                    <!-- Various uses of  position()  here are not as dangerous -->
+                    <!-- as they seem, since the nodeset comes from an RTF of   -->
+                    <!-- our construction.  Still, remove them in an eventual   -->
+                    <!-- refactor and abstraction of index construction.        -->
+                    <xsl:when test="see">
+                        <xsl:call-template name="present-index-see">
+                            <xsl:with-param name="content">
+                            <xsl:if test="position() = 1">
+                                <xsl:if test="$b-has-subentry">
+                                    <xsl:text>(</xsl:text>
+                                </xsl:if>
+                                <xsl:call-template name="present-index-italics">
+                                    <xsl:with-param name="content">
+                                    <xsl:choose>
+                                        <xsl:when test="$b-has-subentry">
+                                            <!-- lower-case "see" -->
                                             <xsl:variable name="upper">
                                                 <xsl:apply-templates select="$the-index-list" mode="type-name">
-                                                        <xsl:with-param name="string-id" select="'also'"/>
+                                                    <xsl:with-param name="string-id" select="'see'"/>
                                                 </xsl:apply-templates>
                                             </xsl:variable>
                                             <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
                                             <xsl:value-of select="substring($upper, 2)"/>
-                                            </xsl:with-param>
-                                        </xsl:call-template>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:call-template name="present-index-italics">
-                                            <xsl:with-param name="content">
-                                            <!-- upper-case "See also" -->
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <!-- upper-case "See" -->
                                             <xsl:apply-templates select="$the-index-list" mode="type-name">
-                                                    <xsl:with-param name="string-id" select="'also'"/>
+                                                <xsl:with-param name="string-id" select="'see'"/>
                                             </xsl:apply-templates>
-                                            </xsl:with-param>
-                                        </xsl:call-template>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>;</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:text> </xsl:text>
-                        <xsl:copy-of select="seealso/node()"/>
-                        <xsl:if test="(position() = last()) and $b-has-subentry">
-                            <xsl:text>)</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:if>
+                            <!-- just a space after "see", before first  -->
+                            <!-- semi-colon before second and subsequent -->
+                            <xsl:choose>
+                                <xsl:when test="position() = 1">
+                                    <xsl:text> </xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>; </xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:copy-of select="see/node()" />
+                            <xsl:if test="$b-has-subentry and (position() = last())">
+                                <xsl:text>)</xsl:text>
+                            </xsl:if>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:when test="seealso">
+                        <xsl:if test="preceding-sibling::index[1]/cross-reference and not($b-has-subentry)">
+                            <xsl:text>. </xsl:text>
                         </xsl:if>
-                    </xsl:with-param>
-                </xsl:call-template>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:for-each>
+                        <xsl:call-template name="present-index-see-also">
+                            <xsl:with-param name="content">
+                            <xsl:choose>
+                                <xsl:when test="preceding-sibling::index[1]/cross-reference">
+                                    <xsl:choose>
+                                        <xsl:when test="$b-has-subentry">
+                                            <xsl:text> </xsl:text>
+                                            <xsl:text>(</xsl:text>
+                                            <xsl:call-template name="present-index-italics">
+                                                <xsl:with-param name="content">
+                                                <!-- lower-case "see also" -->
+                                                <xsl:variable name="upper">
+                                                    <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                            <xsl:with-param name="string-id" select="'also'"/>
+                                                    </xsl:apply-templates>
+                                                </xsl:variable>
+                                                <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+                                                <xsl:value-of select="substring($upper, 2)"/>
+                                                </xsl:with-param>
+                                            </xsl:call-template>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:call-template name="present-index-italics">
+                                                <xsl:with-param name="content">
+                                                <!-- upper-case "See also" -->
+                                                <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                        <xsl:with-param name="string-id" select="'also'"/>
+                                                </xsl:apply-templates>
+                                                </xsl:with-param>
+                                            </xsl:call-template>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>;</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:text> </xsl:text>
+                            <xsl:copy-of select="seealso/node()"/>
+                            <xsl:if test="(position() = last()) and $b-has-subentry">
+                                <xsl:text>)</xsl:text>
+                            </xsl:if>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
