@@ -1585,22 +1585,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Initial "for-each" sieves out a single (the first) representative of    -->
     <!-- each group of "index" that have a common initial letter for their sort  -->
     <!-- criteria.  Each becomes the context node for the remainder.             -->
+    <xsl:call-template name="present-index">
+        <xsl:with-param name="content">
     <xsl:for-each select="exsl:node-set($sorted-index)/index[count(.|key('index-entry-by-letter', @letter)[1]) = 1]">
         <!-- save the key to use again in selecting the group -->
         <xsl:variable name="current-letter" select="@letter"/>
         <!-- collect all the "index" with the same initial letter as representative    -->
         <!-- this key is still perusing the nodes of $sorted-index as context document -->
         <xsl:variable name="letter-group" select="key('index-entry-by-letter', $current-letter)"/>
-        <!-- wrap the group in a div, which will be used for presentation -->
-        <div class="indexletter" id="indexletter-{$current-letter}">
+        <!-- Employ abstract template to present/style a letter group -->
+        <xsl:call-template name="present-letter-group">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="letter-group" select="$letter-group"/>
+            <xsl:with-param name="current-letter" select="$current-letter"/>
+            <xsl:with-param name="content">
             <!-- send to group-by-headings, which is vestigal -->
             <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
                 <xsl:with-param name="the-index-list" select="$the-index-list"/>
                 <xsl:with-param name="heading-group" select="/.." />
                 <xsl:with-param name="letter-group" select="$letter-group" />
             </xsl:apply-templates>
-        </div>
+            </xsl:with-param>
+        </xsl:call-template>
     </xsl:for-each>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="present-index">
+    <xsl:param name="content"/>
+
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+
+<!-- Implementation of abstract letter group template        -->
+<!-- wrap the group in a div, which will be used for styling -->
+<xsl:template name="present-letter-group">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="letter-group"/>
+    <xsl:param name="current-letter"/>
+    <xsl:param name="content"/>
+
+    <div class="indexletter" id="indexletter-{$current-letter}">
+        <xsl:copy-of select="$content"/>
+    </div>
 </xsl:template>
 
 <!-- Accumulate index entries with identical headings - their    -->
