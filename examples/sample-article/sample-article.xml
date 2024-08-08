@@ -8768,11 +8768,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Fill-In Formula (Dynamic)</title>
                     <statement>
                         <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
-                        <p><m>f(x)=</m> <fillin name="st_cubic" mode="math-formula" ansobj="x3"/></p>
+                        <p><m>f(x)=</m> <fillin name="st_cubic" mode="math" ansobj="cubic"/></p>
                     </statement>
                     <solution>
                         <p>
-                            Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form, 
+                            Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form,
                             <me>f(x) = A <eval obj="base_cubic"/></me>
                             with an unknown scaling multiple <m>A</m>.
                         </p>
@@ -8814,7 +8814,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <de-evaluate>
                                 <formula><eval obj="base_cubic"/></formula>
                                 <variable name="x">0</variable>
-                            </de-evaluate>                            
+                            </de-evaluate>
                         </de-object>
                         <de-object name="A" context="number">
                             <de-number>y0/base_yint</de-number>
@@ -8839,8 +8839,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
                         </p>
                         <p>
-                        <m>f(x) = </m> <fillin width="15" mode="math-formula" ansobj="outerFormula" name="fGiven"/> 
-                        and <m>g(x)=</m> <fillin width="15" mode="math-formula" ansobj="innerFormula" name="gGiven"/>
+                        <m>f(x) = </m> <fillin width="15" mode="math" ansobj="outerFormula" name="fGiven"/>
+                        and <m>g(x)=</m> <fillin width="15" mode="math" ansobj="innerFormula" name="gGiven"/>
                         </p>
                     </statement>
                     <solution>
