@@ -957,8 +957,69 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
-    # Build list of id's into a scratch directory/file
+
     tmp_dir = get_temporary_directory()
+
+    # Copy in external resources (e.g., js code)
+    # Decide which Runestone Services to use
+    if "debug.rs.dev" not in stringparams:
+        # See if we can get the very latest Runestone Services from the Runestone
+        # CDN.  A non-empty version (fourth parameter) indicates success
+        #  "altrs" = alternate Runestone
+        altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
+        online_success = (altrs_version != '')
+        # report repository version always, supersede if newer found
+        msg = 'Runestone Services (via PreTeXt repository): version {}'
+        log.info(msg.format(get_runestone_services_version()))
+        if online_success:
+            msg = 'Runestone Services (using newer, via online CDN query): version {}'
+            log.info(msg.format(altrs_version))
+            # with a successful online query, we load up some string parameters
+            # the receiving stylesheet has the parameters default to empty strings
+            # which translates to consulting the services file in the repository,
+            # so we do nothing when the online query fails
+            stringparams["altrs-js"] = altrs_js
+            stringparams["altrs-css"] = altrs_css
+            stringparams["altrs-cdn-url"] = altrs_cdn_url
+            stringparams["altrs-version"] = altrs_version
+
+            # get all the runestone files and place in tmp dir
+            services_file_name = "dist-{}.tgz".format(altrs_version)
+            output_dir = os.path.join(tmp_dir, "_static")
+            services_full_path = os.path.join(output_dir, services_file_name)
+            try:
+                msg = 'Downloading Runestone Services, version {}'
+                log.info(msg.format(altrs_version))
+                download_file(altrs_cdn_url + services_file_name, services_full_path)
+                log.info("Extracting Runestone Services from archive file")
+                import tarfile
+                file = tarfile.open(services_full_path)
+                file.extractall(output_dir)
+                file.close()
+                stringparams["rs-local-files"] = "yes"
+            except Exception as e:
+                log.warning(e)
+                log.warning("Failed to download all Runestone Services files - will rely on links to web resources")
+    else:
+        if "debug.rs.dev.folder" in stringparams:
+            rs_src = os.path.join(stringparams["debug.rs.dev.folder"])
+            rs_dest = os.path.join(tmp_dir, "_static")
+            shutil.copytree(rs_src, rs_dest)
+
+        log.info("Building for local developmental Runestone Services. Make sure to provide link to _static source in debug.rs.dev.folder.")
+        stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+        stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
+        stringparams["altrs-cdn-url"] = ""
+        stringparams["altrs-version"] = "dev"
+        stringparams["rs-local-files"] = "yes"
+
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+    if external_abs:
+        external_dir = os.path.join(tmp_dir, "external")
+        shutil.copytree(external_abs, external_dir)
+    copy_html_css_js(tmp_dir)
+
+    # Build list of id's into a scratch directory/file
     id_filename = os.path.join(tmp_dir, "dynamic-ids.txt")
     log.debug("Dynamic exercise id list temporarily in {}".format(id_filename))
     log.debug("Dynamic exercise html files temporarily in {}".format(tmp_dir))
@@ -968,13 +1029,6 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     # read the list of exercise identifiers just generated
     id_file = open(id_filename, "r")
     dynamic_exercises = [f.strip() for f in id_file.readlines() if not f.isspace()]
-
-    # Copy in external resources (e.g., js code)
-    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
-    if external_abs:
-        external_dir = os.path.join(tmp_dir, "external")
-        shutil.copytree(external_abs, external_dir)
-    copy_html_css_js(tmp_dir)
 
     # Spawn a new process running a local html.server
     import subprocess
