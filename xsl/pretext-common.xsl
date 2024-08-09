@@ -7125,6 +7125,526 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 
+<!-- ################ -->
+<!-- Index Production -->
+<!-- ################ -->
+
+<!-- Used at the end of the next template to group index       -->
+<!-- entries by letter for eventual output organized by letter -->
+<xsl:key name="index-entry-by-letter" match="index" use="@letter"/>
+
+<!-- "index-list":                                           -->
+<!--     build a sorted list of every "index" in text        -->
+<!--     use Muenchian Method to group by letter and process -->
+<!-- "group-by-heading":                                     -->
+<!--     consolidate/accumulate entries with common heading  -->
+<!-- "knowl-list":                                           -->
+<!--     output the locators, see, see also                  -->
+<xsl:template match="index-list">
+    <!-- Save-off the "index-list" as context for placement  -->
+    <!-- of eventual xref/cross-references, since we use a   -->
+    <!-- for-each and context changes.  Not strictly         -->
+    <!-- necessary, but correct.                             -->
+    <!-- We also pass this node down into the construction   -->
+    <!-- of headings, to provide context for the             -->
+    <!-- localization of words like "see" and "see also" in  -->
+    <!-- the index.  (So it is an @xml:lang on the           -->
+    <!-- "index-list" generator which dictates this,         -->
+    <!-- allowing for indices in two different languages.)   -->
+    <!-- TODO: perhaps the originating "index-list" should   -->
+    <!-- be the context of this chain of templates, moving   -->
+    <!-- later ones away from named templates?               -->
+    <xsl:variable name="the-index-list" select="."/>
+    <!-- "idx" as mixed content.                             -->
+    <!-- Or, "idx" structured with up to three "h"           -->
+    <!-- Start attribute is actual end of a "page            -->
+    <!-- range", goodies at @finish.                         -->
+
+    <!-- "index-items" is an internal structure, so very     -->
+    <!-- predictable.  Looks like:                           -->
+    <!--                                                     -->
+    <!-- text/key: always three pairs, some may be empty.    -->
+    <!-- "text" is author's heading and will be output at    -->
+    <!-- the end, "key" is a sanitized version for sorting,  -->
+    <!-- and could be an entire replacement if the @sortby   -->
+    <!-- attribute is used.                                  -->
+    <!--                                                     -->
+    <!-- locator-type: used to identify a "traditional" page -->
+    <!-- locator which points back to a place in the text,   -->
+    <!-- versus a "see" or "see also" entry.  Only used for  -->
+    <!-- sorting, and really only used to be sure a "see"    -->
+    <!-- *follows* the page locator.                         -->
+    <xsl:variable name="index-items">
+        <xsl:for-each select="$document-root//idx[not(@start)]">
+            <index>
+                <!-- identify content of primary sort key      -->
+                <!-- this follows the logic of creating key[1] -->
+                <!-- TODO: this may be too ad-hoc, study       -->
+                <!--       closely on a refactor               -->
+                <xsl:variable name="letter-content">
+                    <xsl:choose>
+                        <xsl:when test="@sortby">
+                            <xsl:value-of select="@sortby" />
+                        </xsl:when>
+                        <xsl:when test="not(h)">
+                            <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="h and h[1]/@sortby">
+                            <xsl:apply-templates select="h[1]/@sortby"/>
+                        </xsl:when>
+                        <xsl:when test="h">
+                            <xsl:apply-templates select="h[1]"/>
+                        </xsl:when>
+                        <xsl:otherwise/>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- lowercase first letter of primary sort key    -->
+                <!-- used later to group items by letter in output -->
+                <xsl:attribute name="letter">
+                    <xsl:value-of select="translate(substring($letter-content,1,1), &UPPERCASE;, &LOWERCASE;)"/>
+                </xsl:attribute>
+                <xsl:choose>
+                    <!-- simple mixed-content first, no structure -->
+                    <!-- one text-key pair, two more empty        -->
+                    <xsl:when test="not(h)">
+                        <xsl:variable name="content">
+                            <xsl:apply-templates/>
+                        </xsl:variable>
+                        <!-- text, key-value for single index heading -->
+                        <text>
+                            <xsl:copy-of select="$content" />
+                        </text>
+                        <key>
+                            <xsl:choose>
+                                <xsl:when test="@sortby">
+                                    <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </key>
+                        <!-- plus two more empty text, key pairs -->
+                        <text/><key/>
+                        <text/><key/>
+                    </xsl:when>
+                    <!-- structured index entry, multiple text-key pairs -->
+                    <!-- "main" as indicator is deprecated               -->
+                    <xsl:when test="h">
+                        <!-- "h" occur in order, main-sub-sub deprecated -->
+                        <xsl:for-each select="h">
+                            <xsl:variable name="content">
+                                <xsl:apply-templates/>
+                            </xsl:variable>
+                            <text>
+                                <xsl:copy-of select="$content" />
+                            </text>
+                            <key>
+                                <xsl:choose>
+                                    <xsl:when test="@sortby">
+                                        <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </key>
+                        </xsl:for-each>
+                        <!-- add additional empty text, key pairs -->
+                        <!-- so there are always three            -->
+                        <xsl:if test="(count(h) = 1) or (count(h) = 2)">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="count(h) = 1">
+                            <text/><key/>
+                        </xsl:if>
+                        <!-- final sort key will prioritize  -->
+                        <!-- this mimics LaTeX's ordering    -->
+                        <!--   0 - has "see also"            -->
+                        <!--   1 - has "see"                 -->
+                        <!--   2 - is usual index reference  -->
+                        <xsl:if test="not(following-sibling::*[self::h])">
+                            <locator-type>
+                                <xsl:choose>
+                                    <xsl:when test="seealso">
+                                        <xsl:text>2</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="see">
+                                        <xsl:text>1</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>0</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </locator-type>
+                        </xsl:if>
+                    </xsl:when>
+                </xsl:choose>
+                <!-- Create the full locator and save now, since context will -->
+                <!-- be lost later.  Save a page locator in "cross-reference" -->
+                <!-- element.  We use the context of the index itself as the  -->
+                <!-- location where the cross-reference is placed.  The       -->
+                <!-- location of the "idx" is the start of a search for the   -->
+                <!-- enclosing element.  See and "see also" take precedence.  -->
+                <xsl:choose>
+                    <xsl:when test="see">
+                        <see>
+                            <xsl:apply-templates select="see"/>
+                        </see>
+                    </xsl:when>
+                    <xsl:when test="seealso">
+                        <seealso>
+                            <xsl:apply-templates select="seealso"/>
+                        </seealso>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <cross-reference>
+                            <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                                <xsl:with-param name="enclosure" select="."/>
+                            </xsl:apply-templates>
+                        </cross-reference>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </index>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- Sort, now that info from document tree ordering is recorded     -->
+    <!-- Keys, normalized to lowercase, or @sortby attributes, are the   -->
+    <!-- primary key for sorting, but if we have index entries that just -->
+    <!-- differ by upper- or lower-case distinctions, we need to have    -->
+    <!-- identical variants sort next to each other so they get grouped  -->
+    <!-- as one entry with multiple cross-references, so we sort         -->
+    <!-- secondarily on the actual text as well.  The page locators were -->
+    <!-- built in document order and so should remain that way after the -->
+    <!-- sort and so be output in order of appearance.                   -->
+    <xsl:variable name="sorted-index">
+        <xsl:for-each select="exsl:node-set($index-items)/*">
+            <xsl:sort select="./key[1]" />
+            <xsl:sort select="./text[1]"/>
+            <xsl:sort select="./key[2]" />
+            <xsl:sort select="./text[2]"/>
+            <xsl:sort select="./key[3]" />
+            <xsl:sort select="./text[3]"/>
+            <xsl:sort select="./locator-type" />
+            <xsl:sort select="./see"/>
+            <xsl:sort select="./seealso"/>
+            <xsl:copy-of select="." />
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- Group by Letter -->
+    <!-- A careful exposition of the Muenchian Method, named after Steve Muench  -->
+    <!-- of Oracle.  This is an well-known, but complicated, XSLT 1.0 technique. -->
+    <!-- (This is much easier in XSLT 2.0 with certain instructions).  We follow -->
+    <!-- the XSLT Cookbook 2.0, Recipe 6.2, modulo one critical typo, and also   -->
+    <!-- Jeni Tennison's instructive  "Grouping Using the Muenchian Method" at   -->
+    <!-- http://www.jenitennison.com/xslt/grouping/muenchian.html.               -->
+    <!--                                                                         -->
+    <!-- Initial "for-each" sieves out a single (the first) representative of    -->
+    <!-- each group of "index" that have a common initial letter for their sort  -->
+    <!-- criteria.  Each becomes the context node for the remainder.             -->
+    <xsl:call-template name="present-index">
+        <xsl:with-param name="content">
+            <xsl:for-each select="exsl:node-set($sorted-index)/index[count(.|key('index-entry-by-letter', @letter)[1]) = 1]">
+                <!-- save the key to use again in selecting the group -->
+                <xsl:variable name="current-letter" select="@letter"/>
+                <!-- collect all the "index" with the same initial letter as representative    -->
+                <!-- this key is still perusing the nodes of $sorted-index as context document -->
+                <xsl:variable name="letter-group" select="key('index-entry-by-letter', $current-letter)"/>
+                <!-- Employ abstract template to present/style a letter group -->
+                <xsl:call-template name="present-letter-group">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                    <xsl:with-param name="letter-group" select="$letter-group"/>
+                    <xsl:with-param name="current-letter" select="$current-letter"/>
+                    <xsl:with-param name="content">
+                        <!-- send to group-by-headings, which is vestigal -->
+                        <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
+                            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                            <xsl:with-param name="heading-group" select="/.." />
+                            <xsl:with-param name="letter-group" select="$letter-group" />
+                        </xsl:apply-templates>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Accumulate index entries with identical headings - their    -->
+<!-- exact text, not anything related to the keys.  Quit         -->
+<!-- accumulating when look-ahead shows next entry differs.      -->
+<!-- Output the (3-part) heading and locators before restarting. -->
+<!-- TODO: investigate reworking this via Muenchian Method       -->
+<xsl:template match="index" mode="group-by-heading">
+    <xsl:param name="the-index-list"/>
+    <!-- Empty node list from parent of root node -->
+    <xsl:param name="heading-group"/>
+    <xsl:param name="letter-group"/>
+
+    <!-- look ahead at next index entry -->
+    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
+    <!-- check if context node is still in the letter-group -->
+    <xsl:if test="count(.|$letter-group) = count($letter-group)">
+        <xsl:variable name="new-heading-group" select="$heading-group|."/>
+        <xsl:choose>
+            <!-- same heading, accumulate and iterate -->
+            <xsl:when test="($next-index/text[1] = ./text[1]) and ($next-index/text[2] = ./text[2]) and ($next-index/text[3] = ./text[3])">
+                <xsl:apply-templates select="$next-index" mode="group-by-heading">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                    <xsl:with-param name="heading-group" select="$new-heading-group" />
+                    <xsl:with-param name="letter-group" select="$letter-group"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <!-- some text differs in next index entry, -->
+            <!-- write and restart heading accumulation -->
+            <xsl:otherwise>
+                <xsl:call-template name="output-one-heading-group">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                    <xsl:with-param name="heading-group" select="$new-heading-group" />
+                </xsl:call-template>
+                <!-- restart grouping by heading, pass through letter-group -->
+                <xsl:apply-templates select="$next-index" mode="group-by-heading">
+                    <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                    <xsl:with-param name="heading-group" select="/.." />
+                    <xsl:with-param name="letter-group" select="$letter-group"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- Place the (possibly three) components of -->
+<!-- the heading(s) into their proper divs.   -->
+<!-- Do not duplicate prior components that   -->
+<!-- match, do not write an empty heading.    -->
+<xsl:template name="output-one-heading-group">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group" />
+
+    <xsl:if test="$heading-group/see and $heading-group/cross-reference">
+        <xsl:message>PTX:WARNING: an index entry should not have both a locator and a "see" reference.  Results may be unpredictable.  Perhaps you meant to employ a "seealso" reference?  Heading is: "<xsl:value-of select="text[1]"/>; <xsl:value-of select="text[2]"/>; <xsl:value-of select="text[3]"/>"</xsl:message>
+    </xsl:if>
+    <xsl:if test="$heading-group/seealso and not($heading-group/cross-reference)">
+        <xsl:message>PTX:WARNING: an index entry should not have a "seealso" reference without also having a locator.  Results may be unpredictable.  Perhaps you meant to employ a "see" reference?  Heading is: "<xsl:value-of select="text[1]"/>; <xsl:value-of select="text[2]"/>; <xsl:value-of select="text[3]"/>"</xsl:message>
+    </xsl:if>
+
+    <xsl:variable name="pattern" select="$heading-group[1]" />
+    <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
+    <!-- booleans for analysis of format of heading, locators -->
+    <xsl:variable name="match1" select="($pred/text[1] = $pattern/text[1]) and $pred" />
+    <xsl:variable name="match2" select="($pred/text[2] = $pattern/text[2]) and $pred" />
+    <xsl:variable name="match3" select="($pred/text[3] = $pattern/text[3]) and $pred" />
+    <xsl:variable name="empty2" select="boolean($pattern/text[2] = '')" />
+    <xsl:variable name="empty3" select="boolean($pattern/text[3] = '')" />
+    <!-- Write headings of a group, indicating the level of -->
+    <!-- each heading (up to 3 levels) and then follow with -->
+    <!-- the associated locators.                           -->
+
+    <!-- First key differs from predecessor, or leads letter group  -->
+    <!-- if $empty2 is true, then headings are complete and time to -->
+    <!-- write locators.  The next conditional will fail so no more -->
+    <!-- output for this heading group. -->
+    <xsl:if test="not($match1)">
+        <xsl:call-template name="present-index-heading">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="b-write-locators" select="$empty2"/>
+            <xsl:with-param name="heading-level" select="1"/>
+            <xsl:with-param name="content" select="$pattern/text[1]/node()"/>
+        </xsl:call-template>
+    </xsl:if>
+
+    <!-- Second key is substantial, and mis-match is in the second key,  -->
+    <!-- or first key (ie to the left).  If $empty3 is true, then        -->
+    <!-- headings are complete and time to write locators.  The next     -->
+    <!-- conditional will fail so no more output for this heading group. -->
+    <xsl:if test="not($empty2) and (not($match1) or not($match2))">
+        <xsl:call-template name="present-index-heading">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="b-write-locators" select="$empty3"/>
+            <xsl:with-param name="heading-level" select="2"/>
+            <xsl:with-param name="content" select="$pattern/text[2]/node()"/>
+        </xsl:call-template>
+    </xsl:if>
+
+    <!-- Third key is substantial, and mis-match is in the first key, -->
+    <!-- the second key, or the third key (ie to the left).  Last     -->
+    <!-- chance to write locators, so we pass true.                   -->
+    <xsl:if test="not($empty3) and (not($match1) or not($match2) or not($match3))">
+        <xsl:call-template name="present-index-heading">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="b-write-locators" select="true()"/>
+            <xsl:with-param name="heading-level" select="3"/>
+            <xsl:with-param name="content" select="$pattern/text[3]/node()"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Place all the locators into the div for -->
+<!-- the final (sub)item in its own span.    -->
+
+<!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22  -->
+<!-- "see", following main entry, 18.16                    -->
+<!--    Period after entry                                 -->
+<!--    "See" capitalized (assumed from localization file) -->
+<!--     multiple: alphabetical order, semicolon separator -->
+<!-- "see", following a subentry, 18.17                    -->
+<!--    Space after entry                                  -->
+<!--    "see" lower case                                   -->
+<!--    wrapped in parentheses                             -->
+<!-- "see also", following main entry, 18.19               -->
+<!--    Period after entry                                 -->
+<!--    "See" capitalized (assumed from localization file) -->
+<!--     multiple: alphabetical order, semicolon separator -->
+<!-- "see", following a subentry, 18.19                    -->
+<!--    Space after entry                                  -->
+<!--    "see" lower case                                   -->
+<!--    wrapped in parentheses                             -->
+<!-- generic references, 18.22                             -->
+<!--   TODO: use content of "see" and "seealso"            -->
+<xsl:template name="locator-list">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group" />
+
+    <!-- Some formatting depends on presence of subentries -->
+    <xsl:variable name="b-has-subentry" select="not(text[2] = '')"/>
+    <!-- range through node-list, making cross-references -->
+    <!-- Use a comma after the heading, then prefix each  -->
+    <!-- cross-reference with a space as separators       -->
+    <xsl:call-template name="present-index-locator">
+        <xsl:with-param name="content">
+            <xsl:choose>
+                <xsl:when test="$heading-group/see and not($b-has-subentry)">
+                    <xsl:text>. </xsl:text>
+                </xsl:when>
+                <!-- no punctuation, will earn parentheses -->
+                <xsl:when test="$heading-group/see and $b-has-subentry">
+                    <xsl:text> </xsl:text>
+                </xsl:when>
+                <!-- cross-reference, w/ or w/out see also -->
+                <xsl:otherwise>
+                    <xsl:text>,</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- course over the "index" in the group -->
+            <xsl:for-each select="$heading-group">
+                <xsl:choose>
+                    <!--  -->
+                    <xsl:when test="cross-reference">
+                        <xsl:text> </xsl:text>
+                        <xsl:copy-of select="cross-reference/node()"/>
+                    </xsl:when>
+                    <!--  -->
+                    <!-- Various uses of  position()  here are not as dangerous -->
+                    <!-- as they seem, since the nodeset comes from an RTF of   -->
+                    <!-- our construction.  Still, remove them in an eventual   -->
+                    <!-- refactor and abstraction of index construction.        -->
+                    <xsl:when test="see">
+                        <xsl:call-template name="present-index-see">
+                            <xsl:with-param name="content">
+                            <xsl:if test="position() = 1">
+                                <xsl:if test="$b-has-subentry">
+                                    <xsl:text>(</xsl:text>
+                                </xsl:if>
+                                <xsl:call-template name="present-index-italics">
+                                    <xsl:with-param name="content">
+                                    <xsl:choose>
+                                        <xsl:when test="$b-has-subentry">
+                                            <!-- lower-case "see" -->
+                                            <xsl:variable name="upper">
+                                                <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                    <xsl:with-param name="string-id" select="'see'"/>
+                                                </xsl:apply-templates>
+                                            </xsl:variable>
+                                            <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+                                            <xsl:value-of select="substring($upper, 2)"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <!-- upper-case "See" -->
+                                            <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                <xsl:with-param name="string-id" select="'see'"/>
+                                            </xsl:apply-templates>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:if>
+                            <!-- just a space after "see", before first  -->
+                            <!-- semi-colon before second and subsequent -->
+                            <xsl:choose>
+                                <xsl:when test="position() = 1">
+                                    <xsl:text> </xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>; </xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:copy-of select="see/node()" />
+                            <xsl:if test="$b-has-subentry and (position() = last())">
+                                <xsl:text>)</xsl:text>
+                            </xsl:if>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                    </xsl:when>
+                    <!--  -->
+                    <xsl:when test="seealso">
+                        <xsl:if test="preceding-sibling::index[1]/cross-reference and not($b-has-subentry)">
+                            <xsl:text>. </xsl:text>
+                        </xsl:if>
+                        <xsl:call-template name="present-index-see-also">
+                            <xsl:with-param name="content">
+                            <xsl:choose>
+                                <xsl:when test="preceding-sibling::index[1]/cross-reference">
+                                    <xsl:choose>
+                                        <xsl:when test="$b-has-subentry">
+                                            <xsl:text> </xsl:text>
+                                            <xsl:text>(</xsl:text>
+                                            <xsl:call-template name="present-index-italics">
+                                                <xsl:with-param name="content">
+                                                <!-- lower-case "see also" -->
+                                                <xsl:variable name="upper">
+                                                    <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                            <xsl:with-param name="string-id" select="'also'"/>
+                                                    </xsl:apply-templates>
+                                                </xsl:variable>
+                                                <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+                                                <xsl:value-of select="substring($upper, 2)"/>
+                                                </xsl:with-param>
+                                            </xsl:call-template>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:call-template name="present-index-italics">
+                                                <xsl:with-param name="content">
+                                                <!-- upper-case "See also" -->
+                                                <xsl:apply-templates select="$the-index-list" mode="type-name">
+                                                        <xsl:with-param name="string-id" select="'also'"/>
+                                                </xsl:apply-templates>
+                                                </xsl:with-param>
+                                            </xsl:call-template>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>;</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:text> </xsl:text>
+                            <xsl:copy-of select="seealso/node()"/>
+                            <xsl:if test="(position() = last()) and $b-has-subentry">
+                                <xsl:text>)</xsl:text>
+                            </xsl:if>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+
 <!-- ############### -->
 <!-- Arbitrary Lists -->
 <!-- ############### -->
