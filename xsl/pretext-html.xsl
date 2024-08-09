@@ -1612,12 +1612,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- Implementation of abstract index template -->
+<!-- No wrapper in HTML output                 -->
 <xsl:template name="present-index">
     <xsl:param name="content"/>
 
     <xsl:copy-of select="$content"/>
 </xsl:template>
-
 
 <!-- Implementation of abstract letter group template        -->
 <!-- wrap the group in a div, which will be used for styling -->
@@ -1660,7 +1661,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- some text differs in next index entry, -->
             <!-- write and restart heading accumulation -->
             <xsl:otherwise>
-                <xsl:call-template name="output-one-heading">
+                <xsl:call-template name="output-one-heading-group">
                     <xsl:with-param name="the-index-list" select="$the-index-list"/>
                     <xsl:with-param name="heading-group" select="$new-heading-group" />
                 </xsl:call-template>
@@ -1679,7 +1680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the heading(s) into their proper divs.   -->
 <!-- Do not duplicate prior components that   -->
 <!-- match, do not write an empty heading.    -->
-<xsl:template name="output-one-heading">
+<xsl:template name="output-one-heading-group">
     <xsl:param name="the-index-list"/>
     <xsl:param name="heading-group" />
 
@@ -1776,7 +1777,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:copy-of select="$content"/>
         <!-- perhaps time to write locators -->
         <xsl:if test="$b-write-locators">
-            <xsl:call-template name="knowl-list">
+            <xsl:call-template name="locator-list">
                 <xsl:with-param name="the-index-list" select="$the-index-list"/>
                 <xsl:with-param name="heading-group" select="$heading-group" />
             </xsl:call-template>
@@ -1806,7 +1807,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--    wrapped in parentheses                             -->
 <!-- generic references, 18.22                             -->
 <!--   TODO: use content of "see" and "seealso"            -->
-<xsl:template name="knowl-list">
+<xsl:template name="locator-list">
     <xsl:param name="the-index-list"/>
     <xsl:param name="heading-group" />
 
@@ -1945,6 +1946,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
+
+<!-- Implementation of abstract templates for presentation of locators -->
 
 <xsl:template name="present-index-locator">
     <xsl:param name="content"/>
