@@ -852,7 +852,15 @@
             <xsl:choose>
                 <!-- An equal element must have two expression children. -->
                 <xsl:when test="name($curTest)='mathcmp' and $curTest/@use-answer='yes'">
-                    <xsl:value-of select="$fillin/@ansobj"/>
+                    <xsl:choose>
+                        <xsl:when test="not($fillin/@ansobj)">
+                            <xsl:message>PTX:WARNING: Feedback for "<xsl:value-of select="$the-id"/>" says to use given math answer, but @ansobj not defined. </xsl:message>
+                            <xsl:text>UNDEFINED</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$fillin/@ansobj"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:text>, ans</xsl:text>
                 </xsl:when>
                 <xsl:when test="name($curTest)='mathcmp' and $curTest/@obj">
@@ -1161,7 +1169,7 @@
         </xsl:if>
     </xsl:variable>
     <xsl:value-of select="$prefix"/>
-    <xsl:value-of select="./@obj"/>
+    <xsl:value-of select="@obj"/>
 </xsl:template>
 
 <!-- Nothing else is defined for evaluation during setup  -->
