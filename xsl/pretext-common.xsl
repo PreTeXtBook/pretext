@@ -7129,6 +7129,38 @@ Book (with parts), "section" at level 3
 <!-- Index Production -->
 <!-- ################ -->
 
+<!-- We have templates here that produce an index, provoked      -->
+<!-- by the "index-list" element.  They contain the logic of     -->
+<!-- collecting, analyzing, sorting, and grouping the index      -->
+<!-- entries found in the "idx" elements.  They rely on abstract -->
+<!-- templates found in conversion stylesheets which handle the  -->
+<!-- peculiarities of the relevant output format. We describe    -->
+<!-- these here, along with stub templates in the vicinity.      -->
+
+<!-- Abstract templates -->
+
+<!-- "present-index" -->
+<!-- A named template (context is not employed), typically with -->
+<!-- infrastructure to surround the "content" parameter, which  -->
+<!-- the entire body of the index.  This is applied once.       -->
+
+<!-- "present-letter-group" -->
+<!-- A named template (context is not employed), to present -->
+<!-- several entries, all leading with the same letter.     -->
+
+<!-- "present-index-heading" -->
+<!-- A named template (context is not employed), to format -->
+<!-- a single heading of an index entry (there may be up   -->
+<!-- to three of these).                                   -->
+
+<!-- "present-index-locator"  -->
+<!-- "present-index-see"      -->
+<!-- "present-index-see-also" -->
+<!-- "present-index-italics"  -->
+<!-- Named templates (context is not employed) for the  -->
+<!-- format of individual pieces of the locators at the -->
+<!-- end of an index entry.                             -->
+
 <!-- Used at the end of the next template to group index       -->
 <!-- entries by letter for eventual output organized by letter -->
 <xsl:key name="index-entry-by-letter" match="index" use="@letter"/>
@@ -7369,6 +7401,22 @@ Book (with parts), "section" at level 3
     </xsl:call-template>
 </xsl:template>
 
+
+<xsl:template name="present-index">
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-index") in order to structure the overall index.</xsl:message>
+</xsl:template>
+
+<xsl:template name="present-letter-group">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="letter-group"/>
+    <xsl:param name="current-letter"/>
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-letter-group") in order to structure a group of entries all leading with the same letter.</xsl:message>
+</xsl:template>
+
 <!-- Accumulate index entries with identical headings - their    -->
 <!-- exact text, not anything related to the keys.  Quit         -->
 <!-- accumulating when look-ahead shows next entry differs.      -->
@@ -7481,6 +7529,17 @@ Book (with parts), "section" at level 3
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
+
+<xsl:template name="present-index-heading">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="b-write-locators"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-index-heading") in order to format a single heading of an index entry.</xsl:message>
+</xsl:template>
+
 
 <!-- Place all the locators into the div for -->
 <!-- the final (sub)item in its own span.    -->
@@ -7643,6 +7702,32 @@ Book (with parts), "section" at level 3
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
+
+
+<xsl:template name="present-index-locator">
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-index-locator") in order to format a locator at the end of an index entry.</xsl:message>
+</xsl:template>
+
+<xsl:template name="present-index-see">
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-index-see") in order to format a "see" cross-reference at the end of an index entry.</xsl:message>
+</xsl:template>
+
+<xsl:template name="present-index-see-also">
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-index-see-also") in order to format a "see also" coross-reference at the end of an index entry.</xsl:message>
+</xsl:template>
+
+<xsl:template name="present-index-italics">
+    <xsl:param name="content"/>
+
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("present-index-italics") in order to format italic text at the end of an index entry.</xsl:message>
+</xsl:template>
+
 
 
 <!-- ############### -->
