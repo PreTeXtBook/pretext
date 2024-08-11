@@ -4600,13 +4600,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- TEMPORARY (2024-08-11) (migrate to publisher)  -->
+<!-- We parameterize creation of the index with     -->
+<!-- a switch that determines "who" does the work.  -->
+<!-- 'latex'                                        -->
+<!--     The usual default semi-automatic procedure -->
+<!-- 'pretext'                                      -->
+<!--     Logic, organization, and content via the   -->
+<!--     same routines that create an HTML index,   -->
+<!--     with presentation details handled here     -->
+<!--     (Not implemented yet!)                     -->
+<xsl:param name="index-maker" select="'latex'"/>
+
 <xsl:template match="index-list">
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>%% The index is here, setup is all in preamble&#xa;</xsl:text>
-    <xsl:text>%% Index locators are cross-references, so same font here&#xa;</xsl:text>
-    <xsl:text>{\xreffont\printindex}&#xa;</xsl:text>
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:choose>
+        <!-- Reach down into -common for shared code that   -->
+        <!-- relies on abstract templates for presentation. -->
+        <xsl:when test="$index-maker = 'pretext'">
+            <xsl:apply-imports/>
+        </xsl:when>
+        <!-- Have LaTeX do all the work. -->
+        <xsl:when test="$index-maker = 'latex'">
+            <xsl:text>%&#xa;</xsl:text>
+            <xsl:text>%% The index is here, setup is all in preamble&#xa;</xsl:text>
+            <xsl:text>%% Index locators are cross-references, so same font here&#xa;</xsl:text>
+            <xsl:text>{\xreffont\printindex}&#xa;</xsl:text>
+            <xsl:text>%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
+
 
 <!--               -->
 <!-- Notation List -->
