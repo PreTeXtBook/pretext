@@ -3535,7 +3535,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Fill-In, Dynamic Math with Simple Numerical Answer</title>
             <statement>
                 <p>Solve the equation <me><eval obj="theFunction"/>=0</me> to get the value of <m>x</m>.</p>
-                <p><m>x = </m> <fillin width="5" ansobj="theAnswer"/></p>
+                <p><m>x = </m> <fillin width="5" mode="math" ansobj="theAnswer"/></p>
             </statement>
             <solution>
                 <p>We want to isolate the <m>x</m> in the equation <m><eval obj="theFunction"/>=0</m>. Because addition of <m><eval obj="b"/></m> is the last operation, we apply the inverse by adding <m><eval obj="negB"/></m> to both sides. The new, but equivalent equation is now <m><eval obj="m"/>x = <eval obj="negB"/></m>. Dividing both sides of the equation by <m><eval obj="m"/></m>, we obtain the solution <m>x=<eval obj="theAnswer"/></m>.</p>
