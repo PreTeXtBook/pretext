@@ -57,7 +57,7 @@ class SlideRevealer {
       this.triggerElement.setAttribute("open","");
       this.contentElement.style.display = '';
       // Trigger the animation to expand or collapse the knowl.
-      // We delay the MathJax typesetting until the knowl is visible to ensure proper measurements
+      // Delay the MathJax typesetting until the knowl is visible to ensure proper measurements
       // are taken, but before the unrolling begins. This helps avoid layout shifts and ensures
       // smooth animation with correctly sized content.
       MathJax.typesetPromise().then(() => window.requestAnimationFrame(() => this.toggle(true)));
