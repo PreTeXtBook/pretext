@@ -1338,6 +1338,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so eliminated in this phase             -->
 <xsl:template match="@permid" mode="repair"/>
 
+<!-- 2024-08-05: remove metadata elements from a sidebyside, -->
+<!-- which have not been schema-compliant since circa 2017   -->
+<xsl:template match="sidebyside/*[&METADATA-FILTER;]" mode="repair"/>
+
 <!-- ########### -->
 <!-- Assembly ID -->
 <!-- ########### -->

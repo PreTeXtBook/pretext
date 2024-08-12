@@ -50,7 +50,7 @@
 <!-- (Include this comment in count!)                                   -->
 
 <!-- typical items in blocks that get special treatment -->
-<!ENTITY METADATA "title|subtitle|caption|index">
+<!ENTITY METADATA "title|subtitle|caption|idx|index">
 <!ENTITY METADATA-FILTER "self::title or self::subtitle or self::caption or self::idx or self::index[not(index-list)]">
 
 <!-- Subdivisions and runs of paragraphs (like in a proof)  -->
