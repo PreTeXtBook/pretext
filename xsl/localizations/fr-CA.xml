@@ -165,7 +165,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <localization string-id='inlineexercise'>Mise au point</localization>
-    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
+    <localization string-id='worksheetexercise'>Activité</localization> <!-- base upon en-US, a worksheet is a bunch of activities -->
     <localization string-id='readingquestion'>Question de compréhension</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Indice</localization>  <!-- Knowingly differs from fr-FR, which uses "Indication" instead -->
@@ -259,6 +259,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Activer</localization>
     <localization string-id='reset'>Réinitialiser</localization>
     <!-- <localization string-id='array'>array</localization> -->
-    <!-- <localization string-id='print'>Print</localization> -->
-    <!-- <localization string-id='close'>Close</localization> -->
+    <localization string-id='print'>Imprimer</localization>
+    <localization string-id='close'>Fermer</localization>
 </locale>
