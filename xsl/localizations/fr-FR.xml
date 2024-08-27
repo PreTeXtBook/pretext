@@ -84,7 +84,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'>Introduction</localization>
     <localization string-id='conclusion'>Conclusion</localization>
     <localization string-id='exercises'>Exercices</localization>
-    <localization string-id='worksheet'>Feuille de travail</localization> <!-- À défaut d'un meilleur terme -->
+    <localization string-id='worksheet'>Feuille d'activités</localization> <!-- À défaut d'un meilleur terme -->
     <localization string-id='reading-questions'>Questions de compréhension de la lecture</localization> <!-- Peut-être un peu long /might be a bit too long -->
     <localization string-id='solutions'>Solutions</localization>
     <localization string-id='glossary'>Glossaire</localization>
@@ -167,7 +167,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <localization string-id='inlineexercise'>Mise au point</localization>
-    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
+    <localization string-id='worksheetexercise'>Activité</localization>
     <localization string-id='readingquestion'>Question de compréhension</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Indication</localization>
@@ -261,6 +261,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Activer</localization>
     <localization string-id='reset'>Réinitialiser</localization>
     <!-- <localization string-id='array'>array</localization> -->
-    <!-- <localization string-id='print'>Print</localization> -->
-    <!-- <localization string-id='close'>Close</localization> -->
+    <localization string-id='print'>Imprimer</localization>
+    <localization string-id='close'>Fermer</localization>
 </locale>
