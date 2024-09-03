@@ -7779,12 +7779,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Left (Double) Quote -->
 <xsl:template name="lq-character">
-    <xsl:text>``</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$document-language = 'fr-CA' or $document-language = 'fr-FR'"> <!-- If french, double quotation marks are << rather than " -->
+            <xsl:text>{}\guillemotleft~ </xsl:text> <!-- guillemet preceded by space followed by non breaking space -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>``</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
 <xsl:template name="rq-character">
-    <xsl:text>''</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$document-language = 'fr-CA' or $document-language = 'fr-FR'"> <!-- If french, double quotation marks are >> rather than " -->
+            <xsl:text>~\guillemotright{} </xsl:text> <!-- guillemet preceded by non breaking space and followed by a space -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>''</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Left Double Bracket -->
@@ -8042,11 +8056,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- right thing.  Double quotes are unmolested since     -->
 <!-- they will work fine even in consecutive runs         -->
 <!-- We have to override the RTF routines here.           -->
-
 <xsl:template match="q">
-    <xsl:text>``</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$document-language = 'fr-CA' or $document-language = 'fr-FR'"> <!-- If french, double quotation marks are << rather than " -->
+            <xsl:text>{}\guillemotleft~ </xsl:text> <!-- guillemet followed by non breaking space -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>``</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates />
-    <xsl:text>''</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$document-language = 'fr-CA' or $document-language = 'fr-FR'"> <!-- If french, double quotation marks are >> rather than " -->
+            <xsl:text>~\guillemotright{} </xsl:text> <!-- guillemet preceded by non breaking space followed by space -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>''</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- We look left (up the tree) and right   -->

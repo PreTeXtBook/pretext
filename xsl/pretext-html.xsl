@@ -8314,12 +8314,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Left (Double) Quote -->
 <xsl:template name="lq-character">
-    <xsl:text>&#x201c;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$document-language = 'fr-CA' or $document-language = 'fr-FR'"> <!-- If french, double quotation marks are << rather than " -->
+            <xsl:text>&#x00AB;&#xa0;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#x201c;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
 <xsl:template name="rq-character">
-    <xsl:text>&#x201d;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$document-language = 'fr-CA' or $document-language = 'fr-FR'"> <!-- If french, double quotation marks are >> rather than " -->
+            <xsl:text>&#xa0;&#x00BB;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#x201d;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Left Double Bracket -->
