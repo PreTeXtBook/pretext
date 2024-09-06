@@ -121,7 +121,6 @@
                     <cell><c>pyMuPDF</c></cell>
                     <cell><p>Convert images to SVG and PNG</p></cell>
                 </row>
-                </init>
             </tabular>
         </table>
     </section>
