@@ -1254,7 +1254,7 @@ def webwork_to_xml(
             course_password=course_password,
             outputformat='raw'
         )
-        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination).json()
+        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination, timeout=10).json()
         ww_version = ""
         if "ww_version" in version_determination_json:
             ww_version = version_determination_json["ww_version"]
@@ -1269,7 +1269,7 @@ def webwork_to_xml(
     # Now if that failed, try to infer the version from what is printed on the landing page.
     if ww_version == "":
         try:
-            landing_page = requests.get(ww_domain_ww2)
+            landing_page = requests.get(ww_domain_ww2, timeout=10)
         except Exception as e:
             root_cause = str(e)
             msg = (
@@ -2002,7 +2002,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         log.info("downloading {} as {}...".format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
-        r = requests.get(url, stream=True)
+        r = requests.get(url, stream=True, timeout=10)
         if r.status_code == 200:
             with open(path, "wb") as f:
                 r.raw.decode_content = True
@@ -2487,7 +2487,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         log.info("downloading MOM #{} to {}...".format(problem, path))
 
         # download question xml
-        r = requests.get(url)
+        r = requests.get(url, timeout=10)
         with open(path, "w", encoding="utf-8") as f:
             # f.write(__xml_header.encode("utf-8"))
             f.write('<?xml version="1.0" encoding="utf-8"?>\n')
@@ -2504,7 +2504,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                     image_path = os.path.join(images_dir, image_filename)
                     # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
                     # removed some settings wrapper from around the URL, otherwise verbatim
-                    imageresp = requests.get(image_url, stream=True)
+                    imageresp = requests.get(image_url, stream=True, timeout=10)
                     with open(image_path, "wb") as imagefile:
                         imageresp.raw.decode_content = True
                         shutil.copyfileobj(imageresp.raw, imagefile)
@@ -3409,7 +3409,7 @@ def _runestone_services(params):
     # Make a request with requests, which could fail if offline
     if online_success:
         try:
-            services_response = requests.get(services_url)
+            services_response = requests.get(services_url, timeout=10)
         except requests.exceptions.RequestException as e:
             msg = '\n'.join(['there was a network problem while trying to retrieve "{}"',
                              'from the Runestone CDN and the reported problem is:',
@@ -3475,7 +3475,7 @@ def get_web_asset(url):
         raise Exception(msg)
 
     try:
-        services_response = requests.get(url)
+        services_response = requests.get(url, timeout=10)
     except requests.exceptions.RequestException as e:
         msg = '\n'.join(['There was a network problem while trying to download "{}"',
                             'and the reported problem is:',
@@ -4252,7 +4252,7 @@ def sanitize_url(url):
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
     try:
-        requests.get(url)
+        requests.get(url, timeout=10)
     except requests.exceptions.RequestException as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem with the server URL, {}\n".format(url)
