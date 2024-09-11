@@ -243,6 +243,10 @@ dfn {
     float: left;
     padding-right:2em;
 }
+
+div[style*="display:table-cell"] img[src$=".svg"] {
+    width: 100%;
+}
           </style>
 
         </head>
