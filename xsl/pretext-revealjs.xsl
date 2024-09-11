@@ -243,6 +243,12 @@ dfn {
     float: left;
     padding-right:2em;
 }
+
+/* make small images full-width in #sidebyside */
+/* could improve with a .sidebyside class */
+div[style*="display:table-cell"] img {
+    width: 100%;
+}
           </style>
 
         </head>
