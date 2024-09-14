@@ -521,7 +521,10 @@ div[style*="display:table-cell"] img {
     <xsl:variable name="right-margin" select="$layout/right-margin" />
 
     <div style="display: table;">
-        <xsl:attribute name="style">
+       <xsl:attribute name="class">
+            <xsl:text>sidebyside</xsl:text>
+       </xsl:attribute>
+       <xsl:attribute name="style">
             <xsl:text>display:table;</xsl:text>
             <xsl:text>margin-left:</xsl:text>
             <xsl:value-of select="$left-margin" />
