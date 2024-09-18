@@ -540,14 +540,14 @@
         <title>MyOpenMath Exercises</title>
         <idx>myopenmath exercise</idx>
 
-        <p>MyOpenMath is a hosted online homework system with tens of thousands
+        <p>MyOpenMath is a hosted online homework system with hundreds of thousands
         of prebuilt questions. These questions can be embedded in PreTeXt using the
         <tag>myopenmath</tag> tag. See <xref ref="topic-myopenmath"/> for details.</p>
 
         <p>In the web output, the MyOpenMath question will be embedded and
-        interactive.  In static output, the a static version of the question will
-        be included.  Note that while all questions will display in web output,
-        some MyOpenMath questions may not convert to static format correctly</p>
+        interactive though not tied to any student or faculty account.  In static output,
+        a static version of the question will be included.  Note that there are some
+        limitations on which problems will display correctly in web and static output. See <xref ref="topic-myopenmath"/> for best practices.</p>
     </section>
 
     <section xml:id="overview-url">

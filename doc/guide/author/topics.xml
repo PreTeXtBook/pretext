@@ -4386,13 +4386,13 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <title>MyOpenMath Exercises</title>
         <idx>myopenmath exercise</idx>
 
-        <p>MyOpenMath is a hosted online homework system with tens of thousands
+        <p>MyOpenMath is a hosted online homework system with hundreds of thousands
         of prebuilt questions.</p>
 
         <p>In the web output, the MyOpenMath question will be embedded and
-        interactive.  In static output, the a static version of the question will
-        be included.  Note that while all questions will display in web output,
-        some MyOpenMath questions may not convert to static format correctly</p>
+        interactive though not tied to any student or faculty account.  In static output,
+        a static version of the question will be included.  Note that there are some
+        limitations on which problems will display correctly in web and static output. Best practices are below.</p>
 
         <p>To include a MyOpenMath question, you'll first need an account on
         <url href="https://myopenmath.com/" visual="myopenmath.com">MyOpenMath.com</url>
@@ -4441,6 +4441,15 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 specific version of the question to display</p>
             </li>
         </dl>
+        </p>
+
+        <p>While almost all problems will display correctly in web output and many will display correctly in static output, it is recommended that you avoid using problems with the following features. Note, you can usually make a copy of the problem, edit out the offending feature, and use your substitute.
+            <ul>
+                <li>Scaffolded problems</li>
+                <li>Problems with extensive formatting (e.g., use of an html table to control display)</li>
+                <li>Lists containing images or line breaks (&lt;br/&gt;)</li>
+            </ul>
+        If you really love a MyOpenMath problem that does not display correctly, you might contact <pretext/> support; likely someone knows how to produce a conforming version.
         </p>
     </section>
 
