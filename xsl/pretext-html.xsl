@@ -5354,9 +5354,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
     </xsl:apply-templates>
     <xsl:text>}&#xa;</xsl:text>
-    <p class="intertext">
+    <div class="para intertext">
         <xsl:apply-templates />
-    </p>
+    </div>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="parent::*" mode="displaymath-alignment">
