@@ -13506,7 +13506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <introduction>
                     <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previously.</p>
                 </introduction>
-                <myopenmath problem="2572" />
+                <myopenmath problem="2572" params="maxtries=2"/>
             </exercise>
 
             <exercise>
