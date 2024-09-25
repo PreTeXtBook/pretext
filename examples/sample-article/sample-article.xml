@@ -122,6 +122,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png,       -->
             <!-- possibly in external images directory, when specified in publisher file -->
             <favicon/>
+            <!-- If provided, the default programming-language will be used for -->
+            <!-- any programsor runestone interactives that lack @language      -->
+            <!-- <defaults programming-language="python"/> -->
         </html>
 
         <!--
