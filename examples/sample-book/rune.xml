@@ -147,9 +147,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output.</p>
 
+        <p>If you examine the source, you will also notice the <tag>program</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/html/defaults/@programming-language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.</p>
+
         <listing xml:id="listing-python-included">
             <caption>A Python program that defines some statistics</caption>
-            <program xml:id="python-statistics" interactive='activecode' language="python" label="statistics">
+            <program xml:id="python-statistics" interactive='activecode' label="statistics">
                 <input>
                 loan_amount = [1250.0, 500.0, 1450.0, 200.0, 700.0, 100.0, 250.0, 225.0, 1200.0, 150.0, 600.0, 300.0, 700.0, 125.0, 650.0, 175.0, 1800.0, 1525.0, 575.0, 700.0, 1450.0, 400.0, 200.0, 1000.0, 350.0]
 

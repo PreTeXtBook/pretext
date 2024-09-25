@@ -72,5 +72,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     \usetikzlibrary{arrows,matrix}
     \usetikzlibrary{snakes}
     </latex-image-preamble>
+    
+    <html>
+      <!-- Any program or Runestone interactive without a @language will -->
+      <!-- assumed to be python                                          -->
+      <defaults programming-language="python"/>
+    </html>
 
 </docinfo>
