@@ -244,6 +244,39 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 #
 ##############################################
 
+def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+    """Extract PreFigure code for diagrams and convert to graphics formats"""
+    # stringparams is a dictionary, best for lxml parsing
+    import glob
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    msg = 'converting PreFigure diagrams from {} to {} graphics for placement in {}'
+    log.info(msg.format(xml_source, outformat.upper(), dest_dir))
+
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-prefigure.xsl")
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # no output (argument 3), stylesheet writes out per-image file
+    # outputs a list of ids, but we just loop over created files
+    log.info("extracting Asymptote diagrams from {}".format(xml_source))
+    log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+
+    # Resulting *.asy files are in tmp_dir, switch there to work
+    with working_directory(tmp_dir):
+        if outformat == "source":
+            for pfdiagram in os.listdir(tmp_dir):
+                log.info("copying source file {}".format(pfdiagram))
+                shutil.copy2(pfdiagram, dest_dir)
+
 
 def asymptote_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
