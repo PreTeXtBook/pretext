@@ -2973,6 +2973,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
 
             <subsection>
+                <title>PreFigure</title>
+                <idx>PreFigure image</idx>
+                <idx><h>image</h><h>PreFigure image</h></idx>
+
+                <p>There is nothing useful here just yet, testing preparations for integration of PreFigure images.</p>
+
+                <image>
+                    <prefigure label="one">
+                        <foo/>
+                    </prefigure>
+                </image>
+
+                <image>
+                    <prefigure label="two">
+                        <bar/>
+                    </prefigure>
+                </image>
+            </subsection>
+
+            <subsection>
                 <title><latex/> images</title>
                 <idx><latex/> image</idx>
                 <idx><h>image</h><h><latex/> image</h></idx>
