@@ -3038,6 +3038,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <cline>        <area>y = i</area></cline>
                 <cline>        <area correct="no">if y > 2:</area></cline>
                 <cline>            print(y)</cline>
+                <cline>    # pointless lines to test that quotes in clickable</cline>
+                <cline>    # are not transformed <area correct="no">"don't" click me</area></cline>
             </areas>
 
             <feedback>

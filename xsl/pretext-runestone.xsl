@@ -1630,7 +1630,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Avoid falling into low-level manipulations to remain verbatim -->
-<xsl:template match="areas/cline/text()" mode="clickable-html">
+<!-- non-modal so as to match after area template below triggers   -->
+<!-- apply-templates                                               -->
+<xsl:template match="areas/cline//text()">
     <xsl:value-of select="."/>
 </xsl:template>
 
