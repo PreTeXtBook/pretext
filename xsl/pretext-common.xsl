@@ -3666,6 +3666,26 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- PreFigure images debuted after the switch to preferring a @label on -->
+<!-- the "prefigure" element, and not on the enclosing image, so we can  -->
+<!-- employ an improved version of the "image-source-basename" template. -->
+<xsl:template match="prefigure" mode="image-source-basename">
+    <xsl:choose>
+        <!-- Determine if @label is authored or generated for backwrd compatibility -->
+        <xsl:when test="not(@authored-label)">
+            <xsl:apply-templates select="." mode="visible-id"/>
+            <xsl:message>PTX:WARNING:  you are encouraged to place a @label attribute on every "prefigure" element.  Otherwise, associated image files will have unreliable filenames.</xsl:message>
+        </xsl:when>
+        <!-- this @label is now guaranteed to be authored -->
+        <xsl:when test="@label">
+           <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:  a "prefigure" element is confused about where its @label came from</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
 <!-- database across courses ("base course") and semesters ("time").      -->
 <!-- And the HTML representation of an interactive exercise, when powered -->
