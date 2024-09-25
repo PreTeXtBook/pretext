@@ -4399,12 +4399,17 @@ def get_managed_directories(xml_source, pub_file):
     return (generated, external)
 
 
-# 2024-01-19: not being used (built, and then not needed)
 def get_platform_host(pub_file):
     '''Reports the html/platform/@host value from the publication file'''
 
     # "web": the default
     # "runestone": electing to host on a Runestone server
+
+    # NB: this interrogates the publisher file as authored, and provides
+    # a default value if not explicitly set otherwise. Thus, very different
+    # from  get_publisher_variable()  and a bit dangerous if the publisher
+    # file computations change.  In use by the PreTeXt-CLI to ascertain a
+    # Runestone build. (2024-09-25)
 
     if not(pub_file):
         return "web"
@@ -4528,6 +4533,10 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
     # XSL in the "utilities/report-publisher-variable.xsl" stylesheet must
     # include the report of a value, which will be captured in a temporary
     # file to be read by the Python routine "get_publisher_variable()".
+
+    # NB: this will always be consistent with what *is computed* from
+    # the publisher file.  An eception is given by the  get_platform_host()
+    # routine, which directly examines the authored file. (2024-09-25)
 
     log.debug("determining value of publisher variable '{}'".format(variable))
 
