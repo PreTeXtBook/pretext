@@ -270,12 +270,23 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
+    prefigure_executable_cmd = get_executable_cmd("prefigure")
     # Resulting *.asy files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
         if outformat == "source":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("copying source file {}".format(pfdiagram))
-                shutil.copy2(pfdiagram, dest_dir)
+                subprocess.run(
+                    prefigure_executable_cmd + [
+                        'build',
+                        pfdiagram
+                    ]
+                )
+            shutil.copytree(
+                'output',
+                dest_dir,
+                dirs_exist_ok=True
+            )
 
 
 def asymptote_conversion(

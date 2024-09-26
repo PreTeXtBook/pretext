@@ -2980,15 +2980,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>There is nothing useful here just yet, testing preparations for integration of PreFigure images.</p>
 
                 <image>
-                    <prefigure label="one">
-                        <foo/>
-                    </prefigure>
+                  <prefigure label="one">
+		    <diagram dimensions="(300,300)" margins="5">
+		      <definition>f(t,y) = (y[1], -pi*y[0])</definition>
+		      <coordinates bbox="[-1,-3,6,3]">
+			<grid-axes xlabel="t"/>
+			<de-solve function="f" t0="0" t1="bbox[2]"
+				  y0="(0,2)" name="oscillator"
+				  N="200"/>
+			<plot-de-solution at="x" solution="oscillator"
+					  axes="(t,y0)" />
+			<plot-de-solution at="xprime" solution="oscillator"
+					  axes="(t,y1)" stroke="red"
+					  tactile-dash="9 9"/>
+			<legend at="legend" anchor="(bbox[2], bbox[3])"
+				alignment="sw" scale="0.9" opacity="0.5">
+			  <item ref="x"><m>x(t)</m></item>
+			  <item ref="xprime"><m>x'(t)</m></item>
+			</legend>
+		      </coordinates>
+		    </diagram>
+                  </prefigure>
                 </image>
 
                 <image>
-                    <prefigure label="two">
-                        <bar/>
-                    </prefigure>
+                  <prefigure label="two">
+		    <diagram dimensions="(300,180)" margins="5">
+		      <coordinates bbox="(0,0,10,6)">
+			<define-shapes>
+			  <circle at="A" center="(4,3)" radius="2"/>
+			  <circle at="B" center="(6,3)" radius="2"/>
+			</define-shapes>
+
+			<shape shapes="A,B" operation="difference"
+			       fill="magenta" stroke="black"/>
+			<shape shape="A" stroke="black"/>
+			<shape shape="B" stroke="black"/>
+			<rectangle lower-left="(0,0)"
+				   dimensions="(10,6)"
+				   stroke="black"/>
+
+			<label anchor="(2,3)" alignment="nw"><m>A</m></label>
+			<label anchor="(8,3)" alignment="ne"><m>B</m></label>
+			<label anchor="(5,0.5)"><m>A\setminus B</m></label>
+		      </coordinates>
+		      <annotations>
+			<annotation ref="figure"
+				    text="Two sets A and B and the difference A minus B">
+			  <annotation ref="set_A"
+				      text="The set A"/>
+			  <annotation ref="set_B"
+				      text="The set B"/>
+			  <annotation ref="diff"
+				      text="The difference A minus B"/>
+			</annotation>
+		      </annotations>
+
+		    </diagram>
+                  </prefigure>
                 </image>
             </subsection>
 
