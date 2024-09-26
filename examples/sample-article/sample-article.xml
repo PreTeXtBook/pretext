@@ -3005,34 +3005,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <image>
                   <prefigure label="two">
-		    <diagram dimensions="(300,180)" margins="5">
-		      <coordinates bbox="(0,0,10,6)">
-			<define-shapes>
-			  <circle at="A" center="(4,3)" radius="2"/>
-			  <circle at="B" center="(6,3)" radius="2"/>
-			</define-shapes>
-
-			<shape shapes="A,B" operation="difference"
-			       fill="magenta" stroke="black"/>
-			<shape shape="A" stroke="black"/>
-			<shape shape="B" stroke="black"/>
-			<rectangle lower-left="(0,0)"
-				   dimensions="(10,6)"
-				   stroke="black"/>
-
-			<label anchor="(2,3)" alignment="nw"><m>A</m></label>
-			<label anchor="(8,3)" alignment="ne"><m>B</m></label>
-			<label anchor="(5,0.5)"><m>A\setminus B</m></label>
+		    <diagram dimensions="(300,300)" margins="5">
+		      <definition>a=1</definition>
+		      <definition>g(x) = exp(x/3)*cos(x)</definition>
+		      <definition>f(x) = g(x) - g(a) + 1</definition>
+		      <coordinates bbox="[-4,-4,4,4]">
+			<grid-axes xlabel="x" ylabel="y"/>
+			<graph at="graph" function='f' />
+			<tangent-line at="tangent" function="f" point="a"/>
+			<point at="point" p="(a, f(a))">
+			  <m>(a,f(a))</m>
+			</point>
 		      </coordinates>
+
 		      <annotations>
 			<annotation ref="figure"
-				    text="Two sets A and B and the difference A minus B">
-			  <annotation ref="set_A"
-				      text="The set A"/>
-			  <annotation ref="set_B"
-				      text="The set B"/>
-			  <annotation ref="diff"
-				      text="The difference A minus B"/>
+				    text="The graph of a function and its tangent line at the point a equals 1">
+			  <annotation ref="graph-tangent"
+				      text="The graph and its tangent line">
+			    <annotation ref="graph"
+					text="The graph of the function f" sonify="yes"/>
+			    <annotation ref="point"
+					text="The point a comma f of a"/>
+			    <annotation ref="tangent"
+					text="The tangent line to the graph of f at the point"/>
+			  </annotation>
 			</annotation>
 		      </annotations>
 
