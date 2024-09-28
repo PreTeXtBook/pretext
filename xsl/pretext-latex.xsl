@@ -5336,7 +5336,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simple containier for blocks with structured contents -->
 <!-- Consumers are responsible for surrounding breaks      -->
 <xsl:template match="statement">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- Prelude, Interlude, Postlude -->
