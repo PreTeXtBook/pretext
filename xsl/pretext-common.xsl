@@ -128,7 +128,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="sidebyside" />
 <xsl:strip-space elements="tabular col row" />
 <xsl:strip-space elements="webwork setup" />
-<xsl:strip-space elements="notation image"/>
+<xsl:strip-space elements="image"/>
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->
