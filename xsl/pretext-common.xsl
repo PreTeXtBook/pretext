@@ -126,7 +126,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn quantity" />
 <xsl:strip-space elements="sidebyside" />
-<xsl:strip-space elements="tabular col row" />
 <xsl:strip-space elements="webwork setup" />
 
 <!-- A few basic elements are explicitly mixed-content -->
