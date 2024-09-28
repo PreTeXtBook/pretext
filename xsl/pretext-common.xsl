@@ -120,7 +120,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="exercise hint answer solution" />
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
-<xsl:strip-space elements="sage program console task" />
+<xsl:strip-space elements="sage task" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="webwork setup" />
 
