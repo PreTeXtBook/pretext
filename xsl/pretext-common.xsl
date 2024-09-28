@@ -118,8 +118,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2024-09-28: only element of ASIDE-LIKE -->
 <xsl:strip-space elements="aside" />
 <xsl:strip-space elements="exercise hint answer solution" />
-<!-- The next three are containers -->
-<xsl:strip-space elements="prelude interlude postlude" />
 <xsl:strip-space elements="task" />
 <xsl:strip-space elements="webwork setup" />
 
