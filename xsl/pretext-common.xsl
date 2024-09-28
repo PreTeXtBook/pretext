@@ -109,14 +109,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in EXAMPLE-LIKE entity -->
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
-<!-- List is elements in PROJECT-LIKE entity -->
-<!-- project|activity|exploration|investigation -->
-<xsl:strip-space elements="project activity exploration investigation" />
 <!-- List is elements in FIGURE-LIKE -->
 <!-- figure|table|listing|list -->
 <!-- 2024-09-28: only element of ASIDE-LIKE -->
 <xsl:strip-space elements="aside" />
-<xsl:strip-space elements="exercise" />
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->
