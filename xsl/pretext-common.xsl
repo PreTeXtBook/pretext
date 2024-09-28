@@ -117,7 +117,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2024-09-28: only element of ASIDE-LIKE -->
 <xsl:strip-space elements="aside" />
 <xsl:strip-space elements="exercise" />
-<xsl:strip-space elements="webwork setup" />
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->
