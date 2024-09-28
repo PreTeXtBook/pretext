@@ -5312,7 +5312,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of a page, but not for the last page.     -->
 
 <xsl:template match="worksheet/page">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:if test="following-sibling::page and $b-latex-worksheet-formatted">
         <xsl:text>\clearpage&#xa;</xsl:text>
     </xsl:if>

@@ -12843,7 +12843,7 @@ TODO:
 <xsl:template match="worksheet/page">
     <section class="onepage">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="*"/>
     </section>
 </xsl:template>
 
