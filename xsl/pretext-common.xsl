@@ -121,16 +121,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
 <xsl:strip-space elements="aside blockquote assemblage" />
-<xsl:strip-space elements="list" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup page" />
 <xsl:strip-space elements="ul ol dl gi" />
 <xsl:strip-space elements="md mdn quantity" />
-<xsl:strip-space elements="sage figure table listing index" />
-<xsl:strip-space elements="sidebyside paragraphs" />
+<xsl:strip-space elements="sidebyside" />
 <xsl:strip-space elements="tabular col row" />
 <xsl:strip-space elements="webwork setup" />
-<xsl:strip-space elements="notation image tabular row"/>
+<xsl:strip-space elements="notation image"/>
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->
