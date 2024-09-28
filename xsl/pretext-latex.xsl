@@ -1991,6 +1991,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% AMS "proof" environment is no longer used, but we leave previously&#xa;</xsl:text>
     <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
+    <!-- 2024-09-28: this device has been harmed, search here -->
+    <!-- by date, and in the sample article for more.         -->
     <xsl:text>\newcommand{\qedhere}{\relax}&#xa;</xsl:text>
     <!--  -->
     <xsl:text>%%&#xa;</xsl:text>
@@ -6915,6 +6917,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- QED Here -->
+<!-- 2024-09-28: this device has been harmed, search here by date, -->
+<!-- and in the sample article for more.  This was a result of     -->
+<!-- removing an "xsl:strip-space" declaration for PROOF-LIKE      -->
+<!-- (and "case") and being more careful about applying templates. -->
+<!-- Likely some small change in whitespace has impacted the tail  -->
+<!-- end of this gauntlet.                                         -->
+<!--                                                               -->
 <!-- 2018-11-20: we have abandoned the amsthm "proof"              -->
 <!-- environment, in favor of tcolorbox.  But this is              -->
 <!--   (a) some fancy XSL                                          -->

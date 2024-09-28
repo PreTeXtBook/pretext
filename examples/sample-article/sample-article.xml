@@ -653,6 +653,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <justification>
                         <p>A justification, which is one of the variants of a proof.</p>
                     </justification>
+                    <!-- 2024-09-28: this device has been harmed, search here -->
+                    <!-- by date, and in the sample article for more.  Proof  -->
+                    <!-- below once earned a \qedhere, but no more.  Likely   -->
+                    <!-- caused by commit just preceding this one.            -->
+                    <!-- (perhaps 203c4b660eb27fb9ee43ffa0d6c5ab1aae110747)   -->
                     <proof>
                         <title>Alternate Proof</title>
                         <p>You can have multiple proofs, and they can have titles which replace the word <q>Proof</q> as a heading.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.<md>
