@@ -119,7 +119,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2024-09-28: only element of ASIDE-LIKE -->
 <xsl:strip-space elements="aside" />
 <xsl:strip-space elements="exercise hint answer solution" />
-<xsl:strip-space elements="objectives outcomes"/>
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
 <xsl:strip-space elements="sage program console task" />
