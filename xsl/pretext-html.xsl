@@ -4430,7 +4430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@ref">
         <xsl:apply-templates select="." mode="proof-xref-theorem"/>
     </xsl:if>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -4471,7 +4471,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="case" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>

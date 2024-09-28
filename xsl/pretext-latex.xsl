@@ -5460,7 +5460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>)\space</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5479,7 +5479,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5521,7 +5521,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 

@@ -97,7 +97,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact identity" />
 <xsl:strip-space elements="statement" />
-<xsl:strip-space elements="proof argument justification reasoning explanation case" />
 <!-- List is elements in AXIOM-LIKE entity                  -->
 <!-- axiom|conjecture|principle|heuristic|hypothesis|assumption -->
 <xsl:strip-space elements="axiom conjecture principle heuristic hypothesis assumption" />
