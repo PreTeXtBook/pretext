@@ -10766,7 +10766,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{glossaryitem}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>

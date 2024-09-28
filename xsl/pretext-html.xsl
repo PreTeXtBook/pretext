@@ -4634,7 +4634,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
-                <xsl:apply-templates>
+                <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </article>
@@ -4648,7 +4648,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </dt>
             <dd>
-                <xsl:apply-templates>
+                <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </dd>

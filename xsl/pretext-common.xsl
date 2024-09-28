@@ -123,7 +123,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="aside blockquote assemblage" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup page" />
-<xsl:strip-space elements="ul ol dl gi" />
+<xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn quantity" />
 <xsl:strip-space elements="sidebyside" />
 <xsl:strip-space elements="tabular col row" />
