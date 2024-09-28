@@ -115,7 +115,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="project activity exploration investigation" />
 <!-- List is elements in FIGURE-LIKE -->
 <!-- figure|table|listing|list -->
-<xsl:strip-space elements="figure table listing list"/>
 <!-- 2024-09-28: only element of ASIDE-LIKE -->
 <xsl:strip-space elements="aside" />
 <xsl:strip-space elements="exercise hint answer solution" />
