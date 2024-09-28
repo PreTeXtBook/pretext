@@ -116,11 +116,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in FIGURE-LIKE -->
 <!-- figure|table|listing|list -->
 <xsl:strip-space elements="figure table listing list"/>
+<!-- 2024-09-28: only element of ASIDE-LIKE -->
+<xsl:strip-space elements="aside" />
 <xsl:strip-space elements="exercise hint answer solution" />
 <xsl:strip-space elements="objectives outcomes"/>
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
-<xsl:strip-space elements="aside blockquote assemblage" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup page" />
 <xsl:strip-space elements="md mdn quantity" />
