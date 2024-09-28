@@ -5301,12 +5301,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{conclusion}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercisegroup/introduction">
-    <xsl:apply-templates/>
+<!-- "exercisegroup" and "task" have structured -->
+<!-- "introduction" and "conclusion"            -->
+
+<xsl:template match="exercisegroup/introduction|task/introduction">
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
-<xsl:template match="exercisegroup/conclusion">
-    <xsl:apply-templates/>
+<xsl:template match="exercisegroup/conclusion|task/conclusion">
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- Pages in a Worksheet -->
@@ -6427,7 +6430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates>
+                <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
@@ -6457,7 +6460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
     </xsl:apply-templates>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
     <!-- separate hints after all but final one -->
@@ -6477,7 +6480,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
     </xsl:apply-templates>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
     <!-- separate answers after all but final one -->
@@ -6496,7 +6499,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="purpose" select="$purpose" />
         <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
     </xsl:apply-templates>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
     <!-- separate solutions after all but final one -->

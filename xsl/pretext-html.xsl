@@ -4231,7 +4231,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <!-- the "dry-run" templates should prevent an empty shell  -->
-            <xsl:if test="$b-has-statement">
+            <xsl:if test="$b-has-statement" select="*">
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
