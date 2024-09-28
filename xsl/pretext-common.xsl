@@ -121,7 +121,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
 <xsl:strip-space elements="task" />
-<xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="webwork setup" />
 
 <!-- A few basic elements are explicitly mixed-content -->
