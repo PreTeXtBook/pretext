@@ -124,7 +124,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="prelude interlude postlude" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup page" />
-<xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="webwork setup" />
 
 <!-- A few basic elements are explicitly mixed-content -->
