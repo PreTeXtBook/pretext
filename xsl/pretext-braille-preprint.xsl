@@ -1693,7 +1693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="visible-text">
         <xsl:choose>
             <xsl:when test="node()">
-                <xsl:apply-templates />
+                <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
                 <code class="code-inline tex2jax_ignore">

@@ -105,7 +105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&STRUCTURAL;|paragraphs|introduction[parent::*[&STRUCTURAL-FILTER;]]|conclusion[parent::*[&STRUCTURAL-FILTER;]]">
     <!-- <xsl:message>S:<xsl:value-of select="local-name(.)" />:S</xsl:message> -->
     <xsl:apply-templates select="." mode="pretext-heading" />
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <!-- A worksheet is always a leaf of the gross document structure, as -->
     <!-- a specialized division, but we would always like to have them as -->
     <!-- standalone worksheets, not matter the chunking level in effect.  -->
@@ -119,7 +119,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title(s) for an article are forced by a frontmatter/titlepage -->
 <!-- TODO: incorporate in above by implementing null heading template? -->
 <xsl:template match="article|frontmatter">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- We have entire cells for division headings. -->

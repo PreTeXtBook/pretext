@@ -1260,7 +1260,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:choose>
                 <xsl:when test="$b-natural">
-                    <xsl:apply-templates />
+                    <xsl:apply-templates/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:for-each select="cline">

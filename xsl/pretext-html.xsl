@@ -974,7 +974,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The time element has content that is "human readable" time -->
 <xsl:template match="titlepage/date">
     <div class="date">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </div>
 </xsl:template>
 
@@ -1016,7 +1016,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Departments and Institutions are free-form, or sequences of lines -->
 <xsl:template match="department|institution">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="department[line]|institution[line]">
@@ -1044,7 +1044,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="type-name" />
         </b>
         <xsl:text> </xsl:text>
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </p>
 </xsl:template>
 
@@ -5355,7 +5355,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
     <xsl:text>}&#xa;</xsl:text>
     <div class="para intertext">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </div>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
@@ -7932,7 +7932,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="line" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates />
+                <xsl:apply-templates/>
             </xsl:otherwise>
         </xsl:choose>
     </cite>
@@ -7941,7 +7941,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Defined terms (bold, typically) -->
 <xsl:template match="term">
     <dfn class="terminology">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </dfn>
 </xsl:template>
 
@@ -7953,33 +7953,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Would a screen reader know the difference?                     -->
 <xsl:template match="abbr">
     <abbr class="abbreviation">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </abbr>
 </xsl:template>
 
 <xsl:template match="acro">
     <abbr class="acronym">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </abbr>
 </xsl:template>
 
 <xsl:template match="init">
     <abbr class="initialism">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </abbr>
 </xsl:template>
 
 <!-- Emphasis -->
 <xsl:template match="em">
     <em class="emphasis">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </em>
 </xsl:template>
 
 <!-- Alert -->
 <xsl:template match="alert">
     <em class="alert">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </em>
 </xsl:template>
 
@@ -7990,21 +7990,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Insert (an edit) -->
 <xsl:template match="insert">
     <ins class="insert">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </ins>
 </xsl:template>
 
 <!-- Delete (an edit) -->
 <xsl:template match="delete">
     <del class="delete">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </del>
 </xsl:template>
 
 <!-- Stale (no longer relevant) -->
 <xsl:template match="stale">
     <s class="stale">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </s>
 </xsl:template>
 
@@ -8181,7 +8181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="visible-text">
         <xsl:choose>
             <xsl:when test="node()">
-                <xsl:apply-templates />
+                <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
                 <code class="code-inline tex2jax_ignore">
@@ -8442,7 +8442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="@xml:lang" />
             </xsl:attribute>
         </xsl:if>
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </i>
 </xsl:template>
 
@@ -8575,7 +8575,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are set in roman and enclosed in quotation marks.   -->
 <xsl:template match="pubtitle|booktitle">
     <span class="booktitle">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </span>
 </xsl:template>
 
@@ -12652,7 +12652,7 @@ TODO:
         <xsl:if test="not(normalize-space(@mathjax-name)) = ''">
             <xsl:text>\require{</xsl:text>
             <xsl:value-of select="@mathjax-name"/>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
             <xsl:text>}</xsl:text>
             <!-- all on one line, not very readable, but historical -->
         </xsl:if>

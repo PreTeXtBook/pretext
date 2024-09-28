@@ -8154,7 +8154,7 @@ Book (with parts), "section" at level 3
 
 <!-- Explicitly assumes a sequence of "line" -->
 <xsl:template match="line">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <!-- is there a next line to separate? -->
     <xsl:if test="following-sibling::line">
         <xsl:call-template name="line-separator"/>
@@ -8626,7 +8626,7 @@ Book (with parts), "section" at level 3
                     <xsl:with-param name="text-style" select="$text-style" />
                     <!-- pass content as an RTF, test vs. empty string, use copy-of -->
                     <xsl:with-param name="custom-text">
-                        <xsl:apply-templates />
+                        <xsl:apply-templates/>
                     </xsl:with-param>
                 </xsl:apply-templates>
                 <!-- a bibliography citation (only) may have extra @detail          -->
@@ -8745,7 +8745,7 @@ Book (with parts), "section" at level 3
                     <xsl:with-param name="text-style" select="$text-style-one" />
                     <!-- pass content as an RTF, test vs. empty string, use copy-of -->
                     <xsl:with-param name="custom-text">
-                        <xsl:apply-templates />
+                        <xsl:apply-templates/>
                     </xsl:with-param>
                 </xsl:apply-templates>
                 <xsl:call-template name="ndash-character"/>
@@ -10308,25 +10308,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template match="q">
     <xsl:call-template name="lq-character"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <xsl:template match="sq">
     <xsl:call-template name="lsq-character"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:call-template name="rsq-character"/>
 </xsl:template>
 
 <xsl:template match="dblbrackets">
     <xsl:call-template name="ldblbracket-character"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:call-template name="rdblbracket-character"/>
 </xsl:template>
 
 <xsl:template match="angles">
     <xsl:call-template name="langle-character"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:call-template name="rangle-character"/>
 </xsl:template>
 
@@ -10343,7 +10343,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:variable name="the-element">
         <c>
             <xsl:text>&lt;</xsl:text>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
             <xsl:text>&gt;</xsl:text>
         </c>
     </xsl:variable>
@@ -10355,7 +10355,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:variable name="the-element">
         <c>
             <xsl:text>&lt;</xsl:text>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
             <xsl:text>/&gt;</xsl:text>
         </c>
     </xsl:variable>
@@ -10367,7 +10367,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:variable name="the-attribute">
         <c>
             <xsl:text>@</xsl:text>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
         </c>
     </xsl:variable>
     <xsl:apply-templates select="exsl:node-set($the-attribute)/*" />
@@ -10409,7 +10409,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- No treatment for journal -->
 <xsl:template match="biblio[@type='raw']/journal">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Volume in bold -->
@@ -10424,7 +10424,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Year in parentheses -->
 <xsl:template match="biblio[@type='raw']/year">
     <xsl:text>(</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>)</xsl:text>
 </xsl:template>
 
@@ -10433,7 +10433,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:text>no</xsl:text>
     <xsl:call-template name="biblio-period"/>
     <xsl:call-template name="thin-space-character"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Ibid, nee ibidem, empty element -->

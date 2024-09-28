@@ -596,7 +596,7 @@
         <xsl:text>#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;BEGIN_PGML_HINT&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>&#xa;END_PGML_HINT&#xa;</xsl:text>
 </xsl:template>
 
@@ -1896,7 +1896,7 @@
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
@@ -1998,7 +1998,7 @@
 <!-- Magnitude                                      -->
 <xsl:template match="mag">
     <xsl:variable name="mag">
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     </xsl:variable>
     <xsl:value-of select="str:replace($mag,'\pi','[`\pi`]')"/>
 </xsl:template>
@@ -2072,7 +2072,7 @@
             <xsl:value-of select="@href" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>","TARGET='_blank'")@]*</xsl:text>
@@ -2085,7 +2085,7 @@
     <!-- This leads to lines of PG code that would ideally be indented     -->
     <!-- for human readability, but it cannot be avoided because the       -->
     <!-- cell is fed to PGML::Format(), and would act on the indentation.  -->
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>  &#xa;</xsl:text>
 </xsl:template>
 
@@ -2093,21 +2093,21 @@
 <!-- Foreign:  for phrases                -->
 <xsl:template match="em|foreign">
     <xsl:text>_</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>_</xsl:text>
 </xsl:template>
 
 <!-- Booktitle: slanted normally, we italic here-->
 <xsl:template match="booktitle">
     <xsl:text>_</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>_</xsl:text>
 </xsl:template>
 
 <!-- Alert: asterik-underscore produces bold-italic -->
 <xsl:template match="alert">
     <xsl:text>*</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>*</xsl:text>
 </xsl:template>
 

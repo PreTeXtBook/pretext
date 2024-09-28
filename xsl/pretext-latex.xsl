@@ -294,7 +294,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;</xsl:text>
         <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:call-template name="back-cover"/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -323,7 +323,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- since we do not number the page (main role -->
     <!-- of \frontmatter is to use Roman numerals)  -->
     <xsl:call-template name="front-cover"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:call-template name="back-cover"/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -346,7 +346,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -368,7 +368,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -1823,7 +1823,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="not(normalize-space(@latex-name)) = ''">
                 <xsl:text>\usepackage{</xsl:text>
                 <xsl:value-of select="@latex-name"/>
-                <xsl:apply-templates />
+                <xsl:apply-templates/>
                 <xsl:text>}</xsl:text>
                 <!-- one per line for readability -->
                 <xsl:text>&#xa;</xsl:text>
@@ -3981,7 +3981,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="date" mode="title-page">
     <xsl:text>[3\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\Large </xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}\\</xsl:text>
 </xsl:template>
 
@@ -4142,7 +4142,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Line breaks are inserted above, due to \and, etc,                 -->
 <!-- so do not end last line here                                      -->
 <xsl:template match="department|institution">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="department[line]|institution[line]">
@@ -4190,7 +4190,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
 
@@ -4334,7 +4334,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hence we use the priority mechanism (>0.5)  -->
 <xsl:template match="dedication/p|dedication/p[1]" priority="1">
     <xsl:text>\begin{center}\Large%&#xa;</xsl:text>
-        <xsl:apply-templates />
+        <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\end{center}&#xa;</xsl:text>
 </xsl:template>
@@ -4395,7 +4395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Final lines of from/to address get treated carefully above -->
 <!-- Differentiate from memo versions                           -->
 <xsl:template match="letter/frontmatter/from/line|letter/frontmatter/to/line">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <!-- is there a following line to separate? -->
     <xsl:if test="following-sibling::*">
         <xsl:text>\\&#xa;</xsl:text>
@@ -4460,7 +4460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Differentiate from letter versions -->
 <xsl:template match="memo/frontmatter/from/line|memo/frontmatter/to/line">
     <xsl:text>&amp;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <!-- part of a big block, use newline everywhere -->
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
@@ -4606,7 +4606,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX does sectioning via \printindex      -->
 <!-- TODO: multiple indices, with different titles -->
 <xsl:template match="index">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- TEMPORARY (2024-08-11) (migrate to publisher)  -->
@@ -4976,7 +4976,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Final line of signature get treated carefully above -->
 <xsl:template match="signature/line">
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <!-- is there a following line to separate? -->
     <xsl:if test="following-sibling::*">
         <xsl:text>\\&#xa;</xsl:text>
@@ -6835,7 +6835,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@xml:id">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
@@ -6846,7 +6846,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\noindent{}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
@@ -6996,7 +6996,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- implementation in the -common scheme     -->
 <xsl:template match="intertext">
     <xsl:text>\intertext{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -7013,7 +7013,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="idx[not(h)]">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="@sortby" />
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
     <!-- do not introduce anymore whitespace into a "p" than there   -->
     <!-- already is, but do format these one-per-line outside of "p" -->
@@ -7068,18 +7068,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>!</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="@sortby" />
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="idx/see">
     <xsl:text>|see{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="idx/seealso">
     <xsl:text>|seealso{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7192,7 +7192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-     <xsl:apply-templates />
+     <xsl:apply-templates/>
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
     <xsl:if test="not($ncols = 1)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
@@ -7224,7 +7224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{itemize}[label=</xsl:text>
     <xsl:apply-templates select="." mode="latex-list-label" />
     <xsl:text>]&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>\end{itemize}&#xa;</xsl:text>
     <xsl:if test="not($ncols = 1)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
@@ -7267,7 +7267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}\par%&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
@@ -7284,7 +7284,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}\par%&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
@@ -7312,7 +7312,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$item-environment"/>
     <xsl:text>}%&#xa;</xsl:text>
@@ -7397,7 +7397,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{quote}</xsl:text>
     <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>\end{quote}&#xa;</xsl:text>
 </xsl:template>
 
@@ -7432,7 +7432,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="line" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
@@ -7447,7 +7447,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Emphasis -->
 <xsl:template match="em">
     <xsl:text>\emph{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7455,7 +7455,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \alert{} defined in preamble as semantic macro -->
 <xsl:template match="alert">
     <xsl:text>\alert{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7463,13 +7463,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \inserted{} defined in preamble as semantic macro -->
 <xsl:template match="insert">
     <xsl:text>\inserted{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
 <xsl:template match="title//insert|shortitle//insert">
     <xsl:text>\protect\inserted{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7477,13 +7477,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \deleted{} defined in preamble as semantic macro -->
 <xsl:template match="delete">
     <xsl:text>\deleted{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
 <xsl:template match="title//delete|shortitle//delete">
     <xsl:text>\protect\deleted{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7491,13 +7491,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \stale{} defined in preamble as semantic macro -->
 <xsl:template match="stale">
     <xsl:text>\stale{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
 <xsl:template match="title//stale|shorttitle//stale">
     <xsl:text>\protect\stale{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7505,7 +7505,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \terminology{} defined in preamble as semantic macro -->
 <xsl:template match="term">
     <xsl:text>\terminology{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7520,19 +7520,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- BUT if new sentence, then just leave the period alone    -->
 <xsl:template match="abbr">
     <xsl:text>\abbreviation{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="acro">
     <xsl:text>\acronym{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="init">
     <xsl:text>\initialism{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -7540,19 +7540,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- differently, even if we haven't quite figured out how       -->
 <xsl:template match="title//abbr|shortitle//abbr">
     <xsl:text>\abbreviationintitle{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="title//acro|shortitle//acro">
     <xsl:text>\acronymintitle{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="title//init|shortitle//acro">
     <xsl:text>\initialismintitle{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -8028,7 +8028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="foreign">
     <xsl:apply-templates select="." mode="begin-language" />
     <xsl:text>\textit{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="end-language" />
 </xsl:template>
@@ -8045,7 +8045,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="q">
     <xsl:text>``</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>''</xsl:text>
 </xsl:template>
 
@@ -8065,7 +8065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- content -->
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <!-- right quote, possibly protected in a group -->
     <xsl:choose>
         <xsl:when test="(parent::q or parent::sq) and not(following-sibling::*) and not(following-sibling::text())">
@@ -8167,7 +8167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="taxon[not(genus) and not(species)]">
     <xsl:text>\textit{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -8201,7 +8201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- deprecation is removed.                             -->
 <xsl:template match="pubtitle|booktitle">
     <xsl:text>\pubtitle{</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -10743,7 +10743,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10873,7 +10873,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
     <xsl:text>&#xa;</xsl:text>
     <!-- end the list after last item -->
     <xsl:if test="not(following-sibling::biblio)">
@@ -10911,7 +10911,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par</xsl:text>
     <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- ############### -->
