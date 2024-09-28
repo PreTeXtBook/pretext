@@ -7192,7 +7192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-     <xsl:apply-templates/>
+     <xsl:apply-templates select="li"/>
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
     <xsl:if test="not($ncols = 1)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
@@ -7224,7 +7224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{itemize}[label=</xsl:text>
     <xsl:apply-templates select="." mode="latex-list-label" />
     <xsl:text>]&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="li"/>
     <xsl:text>\end{itemize}&#xa;</xsl:text>
     <xsl:if test="not($ncols = 1)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
