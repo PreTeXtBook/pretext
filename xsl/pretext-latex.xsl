@@ -294,7 +294,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;</xsl:text>
         <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:call-template name="back-cover"/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -323,7 +323,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- since we do not number the page (main role -->
     <!-- of \frontmatter is to use Roman numerals)  -->
     <xsl:call-template name="front-cover"/>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:call-template name="back-cover"/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -346,7 +346,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -368,7 +368,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -4578,7 +4578,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{backcolophon}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
@@ -4594,7 +4594,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{backcolophon}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
@@ -4608,7 +4608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX does sectioning via \printindex      -->
 <!-- TODO: multiple indices, with different titles -->
 <xsl:template match="index">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- TEMPORARY (2024-08-11) (migrate to publisher)  -->
@@ -5062,7 +5062,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="latex-division-footing" />
@@ -5287,7 +5287,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
 </xsl:template>
 
@@ -5297,7 +5297,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{conclusion}%&#xa;</xsl:text>
 </xsl:template>
 
@@ -5359,7 +5359,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{paragraphs}%&#xa;</xsl:text>
 </xsl:template>
 

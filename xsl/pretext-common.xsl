@@ -80,15 +80,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
-<!-- Describes source expectations, DO NOT override in subsequent conversions -->
-<!-- Strip whitespace text nodes from container elements                      -->
-<!-- Improve source readability with whitespace control in text output mode   -->
-<!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
-<!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
-<xsl:strip-space elements="mathbook pretext book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index section subsection subsubsection exercises worksheet reading-questions solutions references glossary introduction conclusion paragraphs subparagraph backmatter" />
-<xsl:strip-space elements="preface acknowledgement biography foreword dedication colophon" />
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->
