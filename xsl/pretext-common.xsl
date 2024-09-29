@@ -88,8 +88,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook pretext book article memo letter" />
 <xsl:strip-space elements="frontmatter chapter appendix index section subsection subsubsection exercises worksheet reading-questions solutions references glossary introduction conclusion paragraphs subparagraph backmatter" />
-<xsl:strip-space elements="docinfo author abstract" />
-<xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
+<xsl:strip-space elements="preface acknowledgement biography foreword dedication colophon" />
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->

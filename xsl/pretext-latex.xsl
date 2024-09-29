@@ -4192,7 +4192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
 

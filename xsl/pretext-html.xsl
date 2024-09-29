@@ -822,7 +822,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="title">
             <xsl:apply-templates select="." mode="title-full"/>
         </span>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="*"/>
     </div>
 </xsl:template>
 
