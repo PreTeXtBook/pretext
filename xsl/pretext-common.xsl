@@ -90,28 +90,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="frontmatter chapter appendix index section subsection subsubsection exercises worksheet reading-questions solutions references glossary introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
-<!-- List is elements in DEFINITION-LIKE entity -->
-<!-- definition -->
-<xsl:strip-space elements="definition" />
-<!-- List is elements in THEOREM-LIKE entity                           -->
-<!-- theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
-<xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact identity" />
-<!-- List is elements in AXIOM-LIKE entity                  -->
-<!-- axiom|conjecture|principle|heuristic|hypothesis|assumption -->
-<xsl:strip-space elements="axiom conjecture principle heuristic hypothesis assumption" />
-<!-- List is elements in REMARK-LIKE entity             -->
-<!-- remark|convention|note|observation|warning|insight -->
-<xsl:strip-space elements="remark convention note observation warning insight" />
-<!-- List is elements in COMPUTATION-LIKE entity -->
-<!-- computation|technology|data                 -->
-<xsl:strip-space elements="computation technology data" />
-<!-- List is elements in EXAMPLE-LIKE entity -->
-<!-- example|question|problem                -->
-<xsl:strip-space elements="example question problem" />
-<!-- List is elements in FIGURE-LIKE -->
-<!-- figure|table|listing|list -->
-<!-- 2024-09-28: only element of ASIDE-LIKE -->
-<xsl:strip-space elements="aside" />
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->

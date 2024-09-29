@@ -6640,7 +6640,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- unstructured, just a bare statement          -->
         <!-- no need to avoid dangerous misunderstandings -->
         <xsl:otherwise>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\end{</xsl:text>
