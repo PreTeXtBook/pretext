@@ -807,7 +807,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:apply-templates select="." mode="block-title"/>
         </segment>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="*"/>
     </block>
 </xsl:template>
 
