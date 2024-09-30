@@ -96,7 +96,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;</xsl:text>
     <!-- metadata-ish, eg "title", should be killed by default -->
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- ################ -->
@@ -261,7 +261,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="&PROOF-LIKE;"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -323,7 +323,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="serial-number" />
     </xsl:if>
     <xsl:text>. </xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <!-- not needed if structured -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
