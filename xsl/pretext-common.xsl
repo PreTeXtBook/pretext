@@ -81,16 +81,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
 
-<!-- A few basic elements are explicitly mixed-content -->
-<!-- So we must preserve whitespace-only text nodes    -->
-<!-- Example: a space between two marked-up words      -->
-<!--                                                   -->
-<!--         <em>two</em> <alert>ducks</alert>         -->
-<!--                                                   -->
-<!-- Describes source expectations, DO NOT             -->
-<!-- override in subsequent stylesheets                -->
-<xsl:preserve-space elements="p li" />
-
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
