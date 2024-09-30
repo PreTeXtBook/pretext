@@ -556,7 +556,7 @@
             <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
@@ -565,7 +565,7 @@
 <xsl:template match="task/statement">
     <xsl:param name="b-human-readable" />
     <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
@@ -579,7 +579,7 @@
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>&#xa;BEGIN_PGML_SOLUTION&#xa;</xsl:text>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param  name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:text>&#xa;END_PGML_SOLUTION&#xa;</xsl:text>
@@ -596,13 +596,13 @@
         <xsl:text>#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;BEGIN_PGML_HINT&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>&#xa;END_PGML_HINT&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="introduction|conclusion">
     <xsl:param name="b-human-readable" />
-    <xsl:apply-templates>
+    <xsl:apply-templates select="*">
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
     </xsl:apply-templates>
 </xsl:template>
@@ -2405,7 +2405,7 @@
     <xsl:if test="preceding-sibling::text()[normalize-space()] or preceding-sibling::*">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates>
+    <xsl:apply-templates select="li">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <!-- When a list ends, there may be more content before the p ends. This  -->
