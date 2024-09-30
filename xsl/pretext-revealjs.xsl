@@ -420,7 +420,7 @@ div[style*="display:table-cell"] img {
     <section>
           <h3>Abstract</h3>
           <div align="left">
-              <xsl:apply-templates/>
+              <xsl:apply-templates select="*"/>
           </div>
     </section>
 </xsl:template>
@@ -431,14 +431,14 @@ div[style*="display:table-cell"] img {
               <xsl:apply-templates select="." mode="title-full" />
           </h3>
           <div align="left">
-              <xsl:apply-templates/>
+              <xsl:apply-templates select="*"/>
           </div>
       </section>
 </xsl:template>
 
 <xsl:template match="subslide">
   <div class="fragment">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
   </div>
 </xsl:template>
 
