@@ -4090,7 +4090,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}\space\space</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <!-- drop a par, for next bio, or for big vspace -->
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
@@ -4302,7 +4302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- Dedication page is very plain, with a blank obverse     -->
@@ -10764,7 +10764,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="glossary/headnote">
     <xsl:text>%% this should be a new (isomorphic) "headnote" environment&#xa;</xsl:text>
     <xsl:text>\begin{introduction}{}%&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
 </xsl:template>
 
