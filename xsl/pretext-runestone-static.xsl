@@ -552,7 +552,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- responses re-orered according to match/@order -->
-<xsl:template match="exercise/matches/match" mode="matching-statement">
+<xsl:template match="matches/match" mode="matching-statement">
     <xsl:variable name="premise-number" select="count(preceding-sibling::match) + 1"/>
     <xsl:variable name="all-matches" select="parent::matches/match"/>
     <row>
@@ -570,7 +570,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </row>
 </xsl:template>
 
-<xsl:template match="exercise/matches/match" mode="matching-solution">
+<xsl:template match="matches/match" mode="matching-solution">
     <row>
         <xsl:if test="following-sibling::match">
             <xsl:attribute name="bottom">
