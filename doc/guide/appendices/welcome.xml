@@ -49,6 +49,9 @@
         <p>As you gain more experience, you will identify bugs, obsolete instructions, typos, <etc/>  Search the issues to see if there is something relevant you can add.  For example, your particular version of a bug might provide the key insight into identifying the cause.  When you are certain something is wrong, and there is no need to discuss it in the groups, feel free to go straight to making an issue.  For something like a list of typos, make a single issue and just keep editing your initial post.</p>
 
         <p>If you have some structural problem, see if you can reproduce it by adding into the minimal example, and post that <em>entire</em> source file.  If the rendering in <init>HTML</init> is a bit off or you think it exhibits a bug, be sure to post a link to a <em>live</em> example, not just a verbal description and <em>definitely not</em> a screenshot.  If you need an easy, quick, free, temporary location to host one file or your whole project as <init>HTML</init>, try <url href="https://app.netlify.com/drop" visual="app.netlify.com/drop">Netlify Drop</url>.</p>
+
+        <!-- Sean Fitzpatrick suggestion, 2024-10-02 -->
+        <p>If you are posting code snippets, and copying out of an editor using Dark Mode, try <c>ctrl-shift-V</c> when you paste and perhaps the Dark Mode color scheme will go away<mdash/>making it easier for some to read.</p>
     </section>
 
 
