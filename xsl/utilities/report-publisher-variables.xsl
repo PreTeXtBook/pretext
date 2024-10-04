@@ -83,6 +83,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$qrcode-image"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2024-10-04 LaTeX style xsl -->
+    <xsl:text>latex-style</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$latex-style"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--

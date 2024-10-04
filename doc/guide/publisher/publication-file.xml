@@ -208,6 +208,17 @@
             See <xref ref="pdf-print"/> for a more general overview of this conversion with more details.  This includes some existing options that will eventually migrate to the publication file.</p>
         </introduction>
 
+        <subsection xml:id="latex-style-options">
+            <title><latex/> Style Option</title>
+            <idx><h>style option</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>style option</h></idx>
+            <idx><h>PDF</h><h>style option</h></idx>
+
+            <p>A limited number of custom <latex /> styles are available and more are in development (see <xref ref="latex-styles"/>). The<cd>
+                    <cline>/publication/latex/@latex-style</cline>
+                </cd>attribute can be set to one of the provided styles to build the <latex /> or <init>PDF</init> output with that style.  As of 2024-10-04, the supported styles (and values of this attribute) are <c>AIM</c>, <c>chaos</c>, <c>CLP</c>, <c>dyslexic-font</c>, and <c>guide</c>.  (Note that some of these are meant as demos and not intended for production.)</p>
+        </subsection>
+
         <subsection xml:id="latex-print-options">
             <title><latex/> Print Option</title>
             <idx><h>print option</h><h>LaTeX, PDF</h></idx>

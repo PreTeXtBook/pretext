@@ -3750,9 +3750,17 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # support publisher file, not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
+        # Get extra XSL from publication file, if specified
+        latex_style = get_publisher_variable(xml_source=xml, pub_file=pub_file, params=stringparams, variable="latex-style")
+
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
         extraction_xslt = extra_xsl
+        if latex_style:
+            log.warning("Ignoring the publisher file's latex-style in favor of the extra XSL specified.")
+    elif latex_style:
+        log.debug("Using LaTeX style: {}".format(latex_style))
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), "latex", f"pretext-latex-{latex_style}.xsl")
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-latex.xsl")
     # form output filename based on source filename,
