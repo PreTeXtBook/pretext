@@ -2694,6 +2694,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='open-odd']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Used to determine which xsl file to processess with.  Current options are based on what is present in xsl/latex.   -->
+<!-- To build with `pretext-latex-styleName.xsl` variable should have valuse `stylename`. Default of empty string means -->
+<!-- build with the default `pretext-latex.xsl` -->
+<xsl:variable name="latex-style">
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='latex-style']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- LaTeX/Page -->
 
 <!-- Right Alignment -->
@@ -3158,6 +3165,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="pageref" options="yes no" legacy-stringparam="latex.pageref"/>
         <pi:pub-attribute name="draft" default="no" options="yes" legacy-stringparam="latex.draft"/>
         <pi:pub-attribute name="open-odd" default="no" options="add-blanks skip-pages"/>
+        <pi:pub-attribute name="latex-style" default="" options="AIM chaos CLP dyslexic-font guide"/>
         <page>
             <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
         </page>
