@@ -438,11 +438,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
     <xsl:text>%% Always loaded, for: add/delete text, author tools&#xa;</xsl:text>
     <xsl:text>%% Here, since tcolorbox loads tikz, and tikz loads xcolor&#xa;</xsl:text>
-    <!-- Avoid option conflicts causing errors: -->
+    <!-- Avoid option conflicts causing errors:                                       -->
     <!-- http://tex.stackexchange.com/questions/57364/option-clash-for-package-xcolor -->
     <!-- svg later will clobber dvips?  See starred versions in xcolor documentation  -->
-    <!-- TODO: usenames may be obsolete? -->
-    <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
+    <!-- v3.02, 2024-09-29 package documentation says                                 -->
+    <!--   * "usenames" option is obsolete                                            -->
+    <!--   * "table" option loads the "colortbl" package                              -->
+    <!--   * Section 2.15.1 discusses "Name clashs between dvipsnames and svgnames"   -->
+    <xsl:text>\PassOptionsToPackage{dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
     <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
     <!-- This tempalte for defining colors is provisional, and subject to change -->
     <xsl:text>%% begin: defined colors, via xcolor package, for styling&#xa;</xsl:text>
