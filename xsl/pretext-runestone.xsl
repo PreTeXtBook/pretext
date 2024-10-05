@@ -412,6 +412,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A convenience for attaching a Runestone id -->
+<!-- NB: we attempt to only use this template in this stylesheet. -->
+<!-- To enforce this, we *could* make a no-op, plus warning,      -->
+<!-- template in the "pretext-html" stylesheet, with this         -->
+<!-- implementation doing an overide.                             -->
 <xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
     <xsl:attribute name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
@@ -954,27 +958,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- True/False -->
 
 <xsl:template match="*[@exercise-interactive = 'truefalse']" mode="runestone-to-interactive">
-    <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:variable>
     <div class="ptx-runestone-container">
         <div class="runestone multiplechoice_section">
             <!-- ul can have multiple answer attribute -->
             <ul data-component="multiplechoice" data-multipleanswers="false">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$the-id"/>
-                </xsl:attribute>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <!-- Q: the statement is not a list item, but appears *inside* the list? -->
                 <!-- overall statement, not per-choice -->
                 <xsl:apply-templates select="statement"/>
                 <!-- radio button for True -->
-                <xsl:variable name="true-choice-id">
-                    <xsl:value-of select="$the-id"/>
-                    <xsl:text>_opt_t</xsl:text>
-                </xsl:variable>
                 <li data-component="answer">
                     <xsl:attribute name="id">
-                        <xsl:value-of select="$true-choice-id"/>
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                        <xsl:text>_opt_t</xsl:text>
                     </xsl:attribute>
                     <!-- Correct answer if problem statement is correct/True -->
                     <xsl:if test="statement/@correct = 'yes'">
@@ -984,19 +980,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </li>
                 <li data-component="feedback">
                     <xsl:attribute name="id">
-                        <xsl:value-of select="$true-choice-id"/>
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                        <xsl:text>_opt_t</xsl:text>
                     </xsl:attribute>
                     <!-- identical feedback for each reader responses -->
                     <xsl:apply-templates select="feedback"/>
                 </li>
                 <!-- radio button for False -->
-                <xsl:variable name="false-choice-id">
-                    <xsl:value-of select="$the-id"/>
-                    <xsl:text>_opt_f</xsl:text>
-                </xsl:variable>
                 <li data-component="answer">
                     <xsl:attribute name="id">
-                        <xsl:value-of select="$false-choice-id"/>
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                        <xsl:text>_opt_f</xsl:text>
                     </xsl:attribute>
                     <!-- Correct answer if problem statement is incorrect/False -->
                     <xsl:if test="statement/@correct = 'no'">
@@ -1006,7 +1000,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </li>
                 <li data-component="feedback">
                     <xsl:attribute name="id">
-                        <xsl:value-of select="$false-choice-id"/>
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                        <xsl:text>_opt_f</xsl:text>
                     </xsl:attribute>
                     <!-- identical feedback for each reader responses -->
                     <xsl:apply-templates select="feedback"/>
@@ -1019,16 +1014,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Multiple Choice -->
 
 <xsl:template match="*[@exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
-    <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:variable>
     <div class="ptx-runestone-container">
         <div class="runestone multiplechoice_section">
             <!-- ul can have multiple answer attribute -->
             <ul data-component="multiplechoice">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$the-id"/>
-                </xsl:attribute>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
                 <xsl:attribute name="data-multipleanswers">
                     <xsl:choose>
@@ -1054,7 +1044,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- overall statement, not per-choice -->
                 <xsl:apply-templates select="statement"/>
                 <xsl:apply-templates select="choices/choice">
-                    <xsl:with-param name="the-id" select="$the-id"/>
+                    <xsl:with-param name="the-id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                    </xsl:with-param>
                 </xsl:apply-templates>
             </ul>
         </div>
@@ -1537,15 +1529,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Matching Problem -->
 
 <xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
-    <xsl:variable name="html-id">
-        <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:variable>
     <div class="ptx-runestone-container">
         <div class="runestone matching_section">
             <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$html-id"/>
-                </xsl:attribute>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <span data-subcomponent="question">
                     <xsl:apply-templates select="statement"/>
                 </span>
@@ -1554,23 +1541,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="feedback"/>
                     </span>
                 </xsl:if>
+                <!-- NB: need to compute Runestone ID in current context -->
+                <!-- and save off before changing context with for-each  -->
+                <xsl:variable name="rsid">
+                    <xsl:apply-templates select="." mode="runestone-id"/>
+                </xsl:variable>
                 <xsl:for-each select="matches/match">
-                    <xsl:variable name="sub-id">
-                        <xsl:value-of select="$html-id"/>
-                        <xsl:text>_drag</xsl:text>
-                        <xsl:number />
-                    </xsl:variable>
                     <!-- PTX premise = RS draggable -->
                     <li data-subcomponent="draggable">
                         <xsl:attribute name="id">
-                            <xsl:value-of select="$sub-id"/>
+                            <xsl:value-of select="$rsid"/>
+                            <xsl:text>_drag</xsl:text>
+                            <xsl:number />
                         </xsl:attribute>
                         <xsl:apply-templates select="premise"/>
                     </li>
                     <!-- PTX response = RS dropzone -->
                     <li data-subcomponent="dropzone">
                         <xsl:attribute name="for">
-                            <xsl:value-of select="$sub-id"/>
+                            <xsl:value-of select="$rsid"/>
+                            <xsl:text>_drag</xsl:text>
+                            <xsl:number />
                         </xsl:attribute>
                         <xsl:apply-templates select="response"/>
                     </li>
@@ -1583,15 +1574,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clickable Area Problem -->
 
 <xsl:template match="*[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
-    <xsl:variable name="html-id">
-        <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:variable>
     <div class="ptx-runestone-container">
         <div class="runestone clickablearea_section">
             <div data-component="clickablearea" data-question_label="" style="visibility: hidden;">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$html-id"/>
-                </xsl:attribute>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <span data-question="">
                     <xsl:apply-templates select="statement"/>
                 </span>
@@ -1668,9 +1654,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-interactive">
     <div class="runestone sqcontainer selectquestion_section">
         <div data-component="selectquestion" data-points="1" data-limit-basecourse="false">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="runestone-id"/>
-            </xsl:attribute>
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
             <!-- condition on an attribute of the "select" element -->
             <xsl:choose>
                 <xsl:when test="select/@questions">
@@ -1918,16 +1902,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="width"/>
     <xsl:param name="height"/>
 
-    <xsl:variable name="hid">
-        <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:variable>
-
     <div class="ptx-runestone-container">
         <div class="runestone yt_section">
-            <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
+            <div data-component="youtube" class="align-left youtube-video"
                  data-video-height="{$height}" data-video-width="{$width}"
                  data-video-videoid="{@youtube}" data-video-divid="{$hid}"
                  data-video-start="0" data-video-end="-1"/>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
         </div>
     </div>
 </xsl:template>
@@ -1966,7 +1947,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Use an id from the "program" element, unless employed -->
     <!-- inside an exercise/project-like, which is up a level  -->
     <!-- (and could be many different types of project-like).  -->
-    <xsl:variable name="hid">
+    <xsl:variable name="rsid">
         <xsl:choose>
             <xsl:when test="$exercise-statement">
                 <xsl:apply-templates select="parent::*" mode="runestone-id"/>
@@ -1993,23 +1974,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="runestone explainer ac_section ">
                     <div data-component="activecode">
                         <xsl:attribute name="id">
-                            <xsl:value-of select="$hid"/>
+                            <xsl:value-of select="$rsid"/>
                         </xsl:attribute>
                         <!-- add some lead-in text to the window -->
                         <xsl:if test="$exercise-statement">
                             <div class="ac_question">
                                 <xsl:attribute name="id">
-                                    <xsl:value-of select="concat($hid, '_question')"/>
+                                    <xsl:value-of select="$rsid"/>
+                                    <xsl:text>_question</xsl:text>
                                 </xsl:attribute>
                                 <xsl:apply-templates select="$exercise-statement"/>
                             </div>
                         </xsl:if>
                         <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
                             <xsl:attribute name="id">
-                                <xsl:value-of select="concat($hid, '_editor')"/>
-                            </xsl:attribute>
-                            <xsl:attribute name="id">
-                                <xsl:value-of select="concat($hid, '_editor')"/>
+                                <xsl:value-of select="$rsid"/>
+                                <xsl:text>_editor</xsl:text>
                             </xsl:attribute>
                             <!-- conditional attributes shared with parsons activecodes -->
                             <xsl:call-template name="runestone-activecode-editor-attributes">

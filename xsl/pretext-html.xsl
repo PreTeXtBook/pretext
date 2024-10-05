@@ -9018,7 +9018,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="(@platform = 'doenetml') and $b-host-runestone">
             <div class="ptx-runestone-container">
                 <div data-component="doenet">
-                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                    </xsl:attribute>
                     <xsl:apply-templates select="." mode="iframe-interactive"/>
                 </div>
             </div>
