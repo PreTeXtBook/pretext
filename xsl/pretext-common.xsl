@@ -3678,15 +3678,23 @@ Book (with parts), "section" at level 3
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
     </xsl:choose>
-    <!-- Prefix just for RS server builds, in order that the database -->
+    <!-- Prefix just for RS-server builds, in order that the database -->
     <!-- of exercises gets a globally unique identifier.              -->
-    <xsl:if test="$b-host-runestone">
-        <!-- global variables defined in this stylesheet -->
-        <xsl:value-of select="$document-id"/>
-        <xsl:text>_</xsl:text>
-        <xsl:value-of select="$edition"/>
-        <xsl:text>_</xsl:text>
-    </xsl:if>
+    <!-- And for a non-RS-server build, we add a prefix in order to   -->
+    <!-- differentiate from nearby (wrappers) uses of @label for      -->
+    <!-- PreTeXt functions.                                           -->
+    <xsl:choose>
+        <xsl:when test="$b-host-runestone">
+            <!-- global variables defined in this stylesheet -->
+            <xsl:value-of select="$document-id"/>
+            <xsl:text>_</xsl:text>
+            <xsl:value-of select="$edition"/>
+            <xsl:text>_</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>rs-</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- We require a @label attribute, but allow it to be -->
     <!-- the result of an automatic copy from an @xml:id.  -->
     <xsl:value-of select="@label"/>
