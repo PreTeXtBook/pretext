@@ -2333,6 +2333,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> contains-wide</xsl:text>
                 </xsl:if>
             </xsl:attribute>
+            <!-- @data-component="tab" do not need an HTML @id for any -->
+            <!-- purpose in Runestone (such as, say, tracking activity -->
+            <!-- as a reader clicks from tab to tab)                   -->
             <div data-component="tabbedStuff">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:if test="introduction">
