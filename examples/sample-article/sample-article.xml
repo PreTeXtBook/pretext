@@ -7923,9 +7923,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Numerical integrals using the midpoint rule</caption>
 
                     <interactive xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="4:5">
-                      <!-- Changes: gave 3 input boxes widths -->
-		      <!-- Changes: Escaped \ inside LaTeX -->
-		      <!-- Changes: Added figsize=5 to show -->
+                        <!-- Changes: gave 3 input boxes widths -->
+                        <!-- Changes: Escaped \ inside LaTeX -->
+                        <!-- Changes: Added figsize=5 to show -->
                         <slate surface="sage">
                         var('x')
                         @interact
