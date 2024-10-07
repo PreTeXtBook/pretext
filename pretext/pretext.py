@@ -249,6 +249,11 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # stringparams is a dictionary, best for lxml parsing
     import glob
 
+    try:
+        import prefig
+    except ImportError:
+        raise ImportError(__module_warning.format("prefig"))
+
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
@@ -266,17 +271,42 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         stringparams["subtree"] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
     # outputs a list of ids, but we just loop over created files
-    log.info("extracting Asymptote diagrams from {}".format(xml_source))
+    log.info("extracting PreFigure diagrams from {}".format(xml_source))
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
     # Resulting *.asy files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
         if outformat == "source":
-            for pfdiagram in os.listdir(tmp_dir):
-                log.info("copying source file {}".format(pfdiagram))
-                shutil.copy2(pfdiagram, dest_dir)
+            log.info("copying PreFigure source files into {}".format(dest_dir))
+            shutil.copytree(
+                tmp_dir,
+                dest_dir,
+                dirs_exist_ok=True
+            )
+            return
 
+        if outformat == "svg":
+            for pfdiagram in os.listdir(tmp_dir):
+                log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
+                prefig.engine.build('svg', pfdiagram)
+
+        elif outformat == "pdf":
+            for pfdiagram in os.listdir(tmp_dir):
+                log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
+                prefig.engine.pdf('svg', pfdiagram, dpi=100)
+
+        elif outformat == "braille":
+            for pfdiagram in os.listdir(tmp_dir):
+                log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
+                prefig.engine.pdf('tactile', pfdiagram)
+
+        log.info("copying PreFigure output to {}".format(dest_dir))
+        shutil.copytree(
+            'output',
+            dest_dir,
+            dirs_exist_ok=True
+        )
 
 def asymptote_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method

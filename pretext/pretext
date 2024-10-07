@@ -608,7 +608,7 @@ def main():
         ptx.validate(xml_source, out_file, dest_dir)
     elif args.component == "prefigure":
         # if args.format in ["pdf", "svg", "png", "html", "all"]:
-        if args.format in ["source"]:
+        if args.format in ["source", "svg", "pdf", "braille"]:
             ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Prefigure graphics in "{}" format'.format(args.format) )
