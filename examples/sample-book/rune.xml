@@ -3003,6 +3003,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>For openers, a basis for a subspace must be a <em>subset</em> of the subspace.</p>
             </hint>
         </exercise>
+
+<exercise label="matching-function-types">
+    <title>Matching Problem, Function Types</title>
+    <idx>matching function types</idx>
+    <statement>
+      <p>
+        Sort the following functions into their correct categories. [Ed. As of 2024-10-07 the following problem is not expected to render and function properly.  It is here to aid development work.  Nothing to see here.]
+      </p>
+    </statement>
+    <feedback>
+      <p>
+        Review
+        <url href="https://activecalculus.org/prelude/sec-changing-linear.html" visual="A precalculus textbook that could help"> Active Prelude to Calculus</url>
+        url.
+      </p>
+    </feedback>
+    <matches>
+    <match>
+      <response>Linear</response>
+      <premise order="4"><m>y=5x+3</m></premise>
+      <premise order="5"><m>\pi x - 6y = \sqrt{2}</m></premise>
+      <premise order="6"><m>y=\frac{-1}{2}x+e</m></premise>
+    </match>
+    <match>
+      <response>Quadratic</response>
+    </match>
+    <match>
+      <premise order="7"><m>y=x^3-x</m></premise>
+    </match>
+    <match>
+      <response>Exponential</response>
+      <premise order="1"><m>y=2^x</m></premise>
+    </match>
+    <match>
+      <response>Power</response>
+      <premise order="2"><m>y=x^2</m></premise>
+      <premise order="3"><m>y=\sqrt{x}</m></premise>
+    </match>
+    </matches>
+  </exercise>
+
+
     </exercises>
 
     <exercises xml:id="clickable-area-exercises">
