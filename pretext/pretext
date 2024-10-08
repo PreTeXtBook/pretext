@@ -120,8 +120,8 @@ def get_destination_directory(directory, xml_source, pub_file, component):
 
     # directory names presumed within "generated" directory of
     # the managed directories scheme, indexed by the "component",
-    # simply listed here in alphabetical order
     component_dirs = {
+        "prefigure": "prefigure",
         "asy": "asymptote",
         "dynamic": "dynamic_subs",
         "latex-image": "latex-image",
