@@ -3319,6 +3319,7 @@
         <xs:element name="pretext">
           <xs:complexType/>
         </xs:element>
+        <xs:element ref="prefigure"/>
         <xs:element name="webwork">
           <xs:complexType/>
         </xs:element>
@@ -3356,6 +3357,9 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="xelatex">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="prefigure">
     <xs:complexType/>
   </xs:element>
   <xs:element name="ad">

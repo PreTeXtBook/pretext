@@ -1513,6 +1513,7 @@
                 element xetex {empty} |
                 element xelatex {empty} |
                 element pretext {empty} |
+                element prefigure {empty} |
                 element webwork {empty} |
                 element ad {empty} |
                 element am {empty} |

@@ -3785,6 +3785,9 @@
       <element name="pretext">
         <empty/>
       </element>
+      <element name="prefigure">
+        <empty/>
+      </element>
       <element name="webwork">
         <empty/>
       </element>
