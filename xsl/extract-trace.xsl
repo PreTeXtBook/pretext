@@ -51,7 +51,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>,</xsl:text>
-    <xsl:apply-templates select="@language"/>
+    <xsl:apply-templates select="." mode="active-language"/>
     <xsl:text>,</xsl:text>
     <xsl:variable name="code-with-newlines">
         <xsl:call-template name="sanitize-text">
