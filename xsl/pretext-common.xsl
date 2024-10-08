@@ -9715,6 +9715,7 @@ Book (with parts), "section" at level 3
 <!-- #################### -->
 
 <!-- With no special formatting, "PreTeXt" can be in -common -->
+<!-- Ditto PreFigure, a great companion project.             -->
 <!-- Use of "pretext" as a root container should get higher  -->
 <!-- priority when used with /, or as a variable             -->
 <!-- NB: there is a \XeTeX macro which renders the first "E" -->
@@ -9729,6 +9730,9 @@ Book (with parts), "section" at level 3
 <!-- conversion.                                             -->
 <xsl:template match="pretext">
     <xsl:text>PreTeXt</xsl:text>
+</xsl:template>
+<xsl:template match="prefigure">
+    <xsl:text>PreFigure</xsl:text>
 </xsl:template>
 <xsl:template match="xetex">
     <xsl:text>XeTeX</xsl:text>
