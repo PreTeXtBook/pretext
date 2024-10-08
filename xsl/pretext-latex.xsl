@@ -8921,6 +8921,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="image[prefigure]" mode="image-inclusion">
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$generated-directory"/>
+    <xsl:if test="$b-managed-directories">
+        <xsl:text>prefigure/</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="prefigure" mode="image-source-basename"/>
+    <xsl:text>.pdf</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
 <!-- LaTeX Image Code (tikz, pgfplots, pstricks, etc) -->
 <!-- Clean indentation, drop into LaTeX               -->
 <!-- See "latex-image-preamble" for critical parts    -->
