@@ -2984,7 +2984,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>There is nothing useful here just yet, testing preparations for integration of PreFigure images.  The two samples are valid, but there is not yet a full implementation placing them into the output.</p>
 
-                <image>
+                <image width="90%">
                   <prefigure label="prefigure-diffeq">
             <diagram dimensions="(300,300)" margins="5">
               <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
@@ -3008,7 +3008,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                   </prefigure>
                 </image>
 
-                <image>
+                <image width="50%">
                   <prefigure label="prefigure-tangent">
             <diagram dimensions="(300,300)" margins="5">
               <definition>a=1</definition>
