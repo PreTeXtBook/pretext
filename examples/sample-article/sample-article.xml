@@ -2977,13 +2977,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </remark>
             </subsection>
 
-            <subsection>
-                <title>PreFigure</title>
-                <idx>PreFigure image</idx>
-                <idx><h>image</h><h>PreFigure image</h></idx>
+            <subsection xml:id="prefigure-diagrams" label="prefigure-diagrams">
+                <title><prefigure/></title>
+                <idx><prefigure/> image</idx>
+                <idx><h>image</h><h><prefigure/> image</h></idx>
 
-                <p>There is nothing useful here just yet, testing preparations for integration of PreFigure images.  The two samples are valid, but there is not yet a full implementation placing them into the output.</p>
+                <p><prefigure/> is a standalone project for authoring mathematical diagrams (see <url href="https://prefigure.org/" visual="prefigure.org"/>).  Its philosophy and approach are much like that of <pretext/>, and <prefigure/> will be tightly integrated into <pretext/>.  One key feature is excellent support for the creation of accessible output formats.</p>
 
+                <p>As of 2024-10-08 development continues for <prefigure/> itself, and its integration within <pretext/>.<ul>
+                    <li>You can author PreFigure diagrams, generate <init>SVG</init> and <init>PDF</init> output versions with the <c>pretext/pretext</c> script (see the <pretext/> Guide), and expect them to render in <init>HTML</init> and <init>PDF</init> output formats.</li>
+                    <li><init>PNG</init> formats are needed before images will be embedded in <init>EPUB</init> output.</li>
+                    <li><prefigure/> has excellent support for annotations within an SVG diagram, supporting their use by screenreaders, for example.  This capability will come to the <pretext/> embeddings soon.</li>
+                    <li>Production of tactile versions, perhaps available via archive links, will be another addition.</li>
+                </ul></p>
+
+                <!-- Indentation needs to be cleaned up by a knowledgeable PreFigure author -->
                 <image width="90%">
                   <prefigure label="prefigure-diffeq">
             <diagram dimensions="(300,300)" margins="5">
