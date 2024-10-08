@@ -5772,19 +5772,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- SVG's produced by mbx script                     -->
-<!--   Asymptote graphics language                    -->
-<!--   LaTeX source code images                       -->
-<!--   Sage graphics plots, w/ PNG fallback for 3D    -->
-<!--   Match style is duplicated in pretext-epub.xsl  -->
-<xsl:template match="image[latex-image]" mode="image-inclusion">
+<!-- SVG's produced by pretext/pretext script -->
+<!-- Minor variations to be dual-purpose      -->
+<!--   LaTeX source code images               -->
+<!--   PreFigure source code images           -->
+<xsl:template match="image[latex-image]|image[prefigure]" mode="image-inclusion">
     <!-- $base-pathname needed later for archive links -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
         <xsl:if test="$b-managed-directories">
-            <xsl:text>latex-image/</xsl:text>
+            <xsl:choose>
+                <xsl:when test="latex-image">
+                    <xsl:text>latex-image/</xsl:text>
+                </xsl:when>
+                <xsl:when test="prefigure">
+                    <xsl:text>prefigure/</xsl:text>
+                </xsl:when>
+            </xsl:choose>
         </xsl:if>
-        <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
+        <!-- NB: node-set in @select will have exactly -->
+        <!-- one (child) node, given @match above      -->
+        <xsl:apply-templates select="latex-image|prefigure" mode="image-source-basename"/>
     </xsl:variable>
     <xsl:apply-templates select="." mode="svg-png-wrapper">
         <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
