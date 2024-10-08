@@ -8921,6 +8921,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- PreFigure diagrams always produced as PDF for LaTeX -->
 <xsl:template match="image[prefigure]" mode="image-inclusion">
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
