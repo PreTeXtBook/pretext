@@ -9731,7 +9731,9 @@ Book (with parts), "section" at level 3
 <xsl:template match="pretext">
     <xsl:text>PreTeXt</xsl:text>
 </xsl:template>
-<xsl:template match="prefigure">
+<!-- NB: when PreFigure has a namespace then the empty  -->
+<!-- element text generator can be a simpler match here -->
+<xsl:template match="prefigure[not(node())]">
     <xsl:text>PreFigure</xsl:text>
 </xsl:template>
 <xsl:template match="xetex">

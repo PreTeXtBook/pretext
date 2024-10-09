@@ -41,8 +41,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output PreFigure XML -->
 <xsl:output method="xml" encoding="UTF-8"/>
 
-<!-- PreFigure graphics to standalone file           -->
-<xsl:template match="prefigure" mode="extraction">
+<!-- PreFigure graphics to standalone file            -->
+<!-- NB: don't match the empty element that is a text -->
+<!-- generator.  Once PreFigure has a namespace, then -->
+<!-- it should be used here instead.                  -->
+<xsl:template match="prefigure[node()]" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="image-source-basename"/>
     </xsl:variable>
