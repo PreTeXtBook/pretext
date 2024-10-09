@@ -1096,12 +1096,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parsons Problem -->
 
 <xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-interactive">
-    <!-- determine this option before context switches -->
-    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
     <!-- active-language only used if runnable but needed multiple places -->
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
+    <!-- determine this option before context switches -->
+    <xsl:variable name="b-natural" select="($active-language = '') or ($active-language = 'natural')"/>
     <div class="ptx-runestone-container">
         <div class="runestone parsons_section" style="max-width: none;">
             <div data-component="parsons" class="parsons">
@@ -1135,8 +1135,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:text>natural</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>
-                                <!-- must now have @language -->
-                                <xsl:value-of select="@language"/>
+                                <!-- must now have a language -->
+                                <xsl:value-of select="$active-language"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
@@ -1316,7 +1316,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template  match="exercise[@exercise-interactive = 'parson-horizontal']" mode="runestone-to-interactive">
     <!-- determine these options before context switches -->
-    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <xsl:variable name="active-language">
+      <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:variable name="b-natural" select="($active-language = '') or ($active-language = 'natural')"/>
     <!-- randomize by default, so must explicitly turn off -->
     <xsl:variable name="b-randomize" select="not(blocks/@randomize = 'no')"/>
     <!-- A @ref is automatic indicator, else reuse has been requested on blocks -->
@@ -1359,7 +1362,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- for natural language, just skip attribute -->
                     <xsl:if test="not($b-natural)">
                         <xsl:attribute name="data-language">
-                            <xsl:value-of select="@language"/>
+                            <xsl:value-of select="$active-language"/>
                         </xsl:attribute>
                     </xsl:if>
                     <!-- default is to randomize, so only set -->
@@ -2136,12 +2139,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <xsl:variable name="active-language">
+      <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
     <!-- as a variable so it does not look like an AVT -->
     <xsl:variable name="parameter-dictionary">
         <xsl:text>{</xsl:text>
         <xsl:text>"embeddedMode": true, </xsl:text>
         <xsl:text>"lang": "</xsl:text>
-        <xsl:value-of select="@language"/>
+        <xsl:value-of select="$active-language"/>
         <xsl:text>", </xsl:text>
         <xsl:text>"jumpToEnd": false</xsl:text>
         <xsl:text>}</xsl:text>
