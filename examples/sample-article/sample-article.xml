@@ -202,9 +202,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             but here as an article they are handled more compactly
              -->
 
-            <titlepage>
-
-               <!-- There can be several authors here -->
+             <bibinfo>
+             <!-- There can be several authors here -->
                 <author>
                     <personname>Robert Beezer</personname>
                     <!-- department here is one line, so unstructured -->
@@ -219,7 +218,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <!-- Can set date manually or use the "today" element -->
                 <date><today /></date>
+            </bibinfo>
 
+            <titlepage>
+                <titlepage-items/>
             </titlepage>
 
             <abstract>

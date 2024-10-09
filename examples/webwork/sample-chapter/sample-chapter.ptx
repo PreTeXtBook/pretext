@@ -87,7 +87,7 @@
 
         <frontmatter xml:id="frontmatter">
 
-            <titlepage>
+            <bibinfo>
                 <!-- There can be several authors here -->
                 <author>
                     <personname>Robert Beezer</personname>
@@ -112,6 +112,10 @@
                 <!-- Can set date manually or use the "today" element -->
                 <date><today /></date>
 
+            </bibinfo>
+
+            <titlepage>
+                <titlepage-items/>
             </titlepage>
 
             <preface>

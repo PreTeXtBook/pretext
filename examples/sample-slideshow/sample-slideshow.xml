@@ -35,13 +35,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <subtitle>A Slideshow</subtitle>
 
         <frontmatter>
-            <titlepage>
+            <bibinfo>
                 <author>
                     <personname>Robert A. Beezer</personname>
                     <institution>University of Puget Sound</institution>
                 </author>
                 <event>At a Test Conference</event>
                 <date><today/></date>
+            </bibinfo>
+            <titlepage>
+                <titlepage-items/>
             </titlepage>
 
             <abstract>
