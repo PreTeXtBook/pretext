@@ -380,15 +380,15 @@ div[style*="display:table-cell"] img {
         <!-- we assume at least one author, these are in a table -->
         <xsl:apply-templates select="titlepage" mode="author-list"/>
         <!-- optional "event" -->
-        <xsl:if test="titlepage/event">
+        <xsl:if test="bibinfo/event">
             <h4>
-                <xsl:apply-templates select="titlepage/event"/>
+                <xsl:apply-templates select="bibinfo/event"/>
             </h4>
         </xsl:if>
         <!-- optional "date" -->
-        <xsl:if test="titlepage/date">
+        <xsl:if test="bibinfo/date">
             <h4>
-                <xsl:apply-templates select="titlepage/date"/>
+                <xsl:apply-templates select="bibinfo/date"/>
             </h4>
         </xsl:if>
     </section>
@@ -399,17 +399,17 @@ div[style*="display:table-cell"] img {
 <xsl:template match="titlepage" mode="author-list">
   <table>
   <tr>
-  <xsl:for-each select="author">
+  <xsl:for-each select="$bibinfo/author">
     <th align="center" style="border-bottom: 0px;"><xsl:value-of select="personname"/></th>
   </xsl:for-each>
 </tr>
   <tr>
-  <xsl:for-each select="author">
+  <xsl:for-each select="$bibinfo/author">
     <td align="center" style="border-bottom: 0px;"><xsl:value-of select="affiliation|institution"/></td>
   </xsl:for-each>
 </tr>
 <tr>
-  <xsl:for-each select="author">
+  <xsl:for-each select="$bibinfo/author">
     <td align="center"><xsl:apply-templates select="logo" /></td>
   </xsl:for-each>
   </tr>
