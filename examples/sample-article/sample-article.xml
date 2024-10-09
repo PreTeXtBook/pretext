@@ -2992,31 +2992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </ul></p>
 
                 <!-- Indentation needs to be cleaned up by a knowledgeable PreFigure author -->
-                <image width="90%">
-                  <prefigure label="prefigure-diffeq">
-            <diagram dimensions="(300,300)" margins="5">
-              <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
-              <coordinates bbox="[-1,-3,6,3]">
-            <grid-axes xlabel="t"/>
-            <de-solve function="f" t0="0" t1="bbox[2]"
-                  y0="(0,2)" name="oscillator"
-                  N="200"/>
-            <plot-de-solution at="x" solution="oscillator"
-                      axes="(t,y0)" />
-            <plot-de-solution at="xprime" solution="oscillator"
-                      axes="(t,y1)" stroke="red"
-                      tactile-dash="9 9"/>
-            <legend at="legend" anchor="(bbox[2], bbox[3])"
-                alignment="sw" scale="0.9" opacity="0.5">
-              <item ref="x"><m>x(t)</m></item>
-              <item ref="xprime"><m>x'(t)</m></item>
-            </legend>
-              </coordinates>
-            </diagram>
-                  </prefigure>
-                </image>
-
-                <image width="50%">
+                <image width="70%">
                   <prefigure label="prefigure-tangent">
             <diagram dimensions="(300,300)" margins="5">
               <definition>a=1</definition>
@@ -3045,6 +3021,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </annotation>
               </annotations>
 
+            </diagram>
+                  </prefigure>
+                </image>
+
+                <image width="70%">
+                  <prefigure label="prefigure-diffeq">
+            <diagram dimensions="(300,300)" margins="5">
+              <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
+              <coordinates bbox="[-1,-3,6,3]">
+            <grid-axes xlabel="t"/>
+            <de-solve function="f" t0="0" t1="bbox[2]"
+                  y0="(0,2)" name="oscillator"
+                  N="200"/>
+            <plot-de-solution at="x" solution="oscillator"
+                      axes="(t,y0)" />
+            <plot-de-solution at="xprime" solution="oscillator"
+                      axes="(t,y1)" stroke="red"
+                      tactile-dash="9 9"/>
+            <legend at="legend" anchor="(bbox[2], bbox[3])"
+                alignment="sw" scale="0.9" opacity="0.5">
+              <item ref="x"><m>x(t)</m></item>
+              <item ref="xprime"><m>x'(t)</m></item>
+            </legend>
+              </coordinates>
             </diagram>
                   </prefigure>
                 </image>
