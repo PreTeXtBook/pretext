@@ -163,7 +163,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
     <!-- default for @language is "natural" -->
-    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <xsl:variable name="language">
+      <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:variable name="b-natural" select="($language = '') or ($language = 'natural')"/>
     <!-- default for @indentation is "show", regards presentation -->
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
@@ -384,7 +387,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- structure, reconstruct as a program/input      -->
                 <program>
                     <xsl:attribute name="language">
-                        <xsl:value-of select="@language"/>
+                      <xsl:apply-templates select="." mode="active-language"/>
                     </xsl:attribute>
                     <input>
                         <xsl:for-each select="blocks/block">
