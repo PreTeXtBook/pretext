@@ -180,11 +180,13 @@
             ArticleFrontMatter =
                 element frontmatter {
                     MetaDataTitleOptional,
+                    Bibinfo,
                     TitlePage,
                     Abstract?
                 }
             BookFrontMatter = element frontmatter {
                     MetaDataTitleOptional,
+                    Bibinfo,
                     TitlePage,
                     ColophonFront?,
                     Biography*,
@@ -192,15 +194,28 @@
                     Acknowledgement?,
                     Preface*
                 }
-            TitlePage =
-                element titlepage {
+            Bibinfo =
+                element bibinfo {
                     (
                         (Author, Author*, Editor*)
                         |
                         (Editor, Editor*)
                     ),
                     Credit*,
-                    Date?
+                    Date?,
+                    ColophonCredit*,
+                    element edition {text}?,
+                    Website?,
+                    element copyright {
+                        element year {TextShort},
+                        element holder {text},
+                        element minilicense {TextShort}?,
+                        ShortLicense?
+                    }?
+                }
+            TitlePage =
+                element titlepage {
+                    element titlepage-items {empty}
                 }
             Email = element email {text}
             PersonName = element personname {TextSimple}
@@ -243,15 +258,7 @@
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
-                    ColophonCredit*,
-                    element edition {text}?,
-                    Website?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        ShortLicense?
-                    }?
+                    element colophon-items {empty}
                 }
             Biography =
                 element biography {

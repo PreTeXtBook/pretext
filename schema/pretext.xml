@@ -16,7 +16,7 @@
 
         <!-- necessary to get title to appear -->
         <frontmatter>
-            <titlepage>
+            <bibinfo>
 
                <!-- There can be several authors here -->
                 <author>
@@ -34,6 +34,10 @@
                 <!-- Can set date manually or use the "today" element -->
                 <date><today/></date>
 
+            </bibinfo>
+
+            <titlepage>
+                <titlepage-items/>
             </titlepage>
         </frontmatter>
 
@@ -2909,7 +2913,7 @@
     <section>
         <title>Front Matter</title>
 
-        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg/> <init>URL</init>s).  <c>titlepage</c> is like a very small database<mdash/>for HTML it migrates to the top of the page for the <c>frontmatter</c>, and for <latex/> it migrates to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
+        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg/> <init>URL</init>s).  <c>bibinfo</c> is like a very small database whose content migrates to a titlepage and colophon if <c>titlepage/titlepage-items</c> or <c>colophon/colophon-items</c> are present. For HTML, titlepage means the page for the <c>frontmatter</c> , and for <latex/> these items migrate to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
 
         <fragment xml:id="frontmatter">
             <title>Front matter</title>
@@ -2917,11 +2921,13 @@
             ArticleFrontMatter =
                 element frontmatter {
                     MetaDataTitleOptional,
+                    Bibinfo,
                     TitlePage,
                     Abstract?
                 }
             BookFrontMatter = element frontmatter {
                     MetaDataTitleOptional,
+                    Bibinfo,
                     TitlePage,
                     ColophonFront?,
                     Biography*,
@@ -2929,15 +2935,28 @@
                     Acknowledgement?,
                     Preface*
                 }
-            TitlePage =
-                element titlepage {
+            Bibinfo =
+                element bibinfo {
                     (
                         (Author, Author*, Editor*)
                         |
                         (Editor, Editor*)
                     ),
                     Credit*,
-                    Date?
+                    Date?,
+                    ColophonCredit*,
+                    element edition {text}?,
+                    Website?,
+                    element copyright {
+                        element year {TextShort},
+                        element holder {text},
+                        element minilicense {TextShort}?,
+                        ShortLicense?
+                    }?
+                }
+            TitlePage =
+                element titlepage {
+                    element titlepage-items {empty}
                 }
             Email = element email {text}
             PersonName = element personname {TextSimple}
@@ -2980,15 +2999,7 @@
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
-                    ColophonCredit*,
-                    element edition {text}?,
-                    Website?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        ShortLicense?
-                    }?
+                    element colophon-items {empty}
                 }
             Biography =
                 element biography {

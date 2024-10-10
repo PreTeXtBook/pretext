@@ -3810,13 +3810,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="frontmatter/titlepage/author or frontmatter/titlepage/editor">
+    <xsl:if test="frontmatter/bibinfo/author or frontmatter/bibinfo/editor">
         <xsl:text>\author{</xsl:text>
-        <xsl:apply-templates select="frontmatter/titlepage/author" mode="article-info"/>
-        <xsl:apply-templates select="frontmatter/titlepage/editor" mode="article-info"/>
+        <xsl:apply-templates select="frontmatter/bibinfo/author" mode="article-info"/>
+        <xsl:apply-templates select="frontmatter/bibinfo/editor" mode="article-info"/>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/bibinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "half-title" is leading page with -->
@@ -3935,13 +3935,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="subtitle" />
         <xsl:text>}\\</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="frontmatter/titlepage/author" mode="title-page"/>
-    <xsl:apply-templates select="frontmatter/titlepage/editor" mode="title-page" />
-    <xsl:apply-templates select="frontmatter/titlepage/credit" mode="title-page" />
-    <xsl:apply-templates select="frontmatter/titlepage/date"   mode="title-page" />
+    <xsl:apply-templates select="frontmatter/titlepage/titlepage-items" />
     <xsl:text>}&#xa;</xsl:text> <!-- finish centering, titlepage font -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   title page&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="titlepage-items">
+    <xsl:apply-templates select="$bibinfo/author" mode="title-page"/>
+    <xsl:apply-templates select="$bibinfo/editor" mode="title-page" />
+    <xsl:apply-templates select="$bibinfo/credit[title]" mode="title-page" />
+    <xsl:apply-templates select="$bibinfo/date"   mode="title-page" />
 </xsl:template>
 
 <xsl:template match="author|editor" mode="title-page">
@@ -4012,11 +4016,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 
-    <xsl:if test="frontmatter/colophon/credit">
+    <xsl:if test="frontmatter/bibinfo/credit[role]">
         <xsl:text>\par\noindent&#xa;</xsl:text>
     </xsl:if>
     <!-- We accomodate multiple "credit" with a context shift -->
-    <xsl:for-each select="frontmatter/colophon/credit">
+    <xsl:for-each select="frontmatter/bibinfo/credit[role]">
         <xsl:text>\textbf{</xsl:text>
         <xsl:apply-templates select="role" />
         <xsl:text>}:\ \ </xsl:text>
@@ -4026,28 +4030,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>&#xa;</xsl:text>
     </xsl:for-each>
-    <xsl:if test="frontmatter/colophon/credit">
+    <xsl:if test="frontmatter/bibinfo/credit[role]">
         <xsl:text>\par\vspace*{\stretch{2}}&#xa;</xsl:text>
     </xsl:if>
 
     <!-- A book cannot be multiple editions, and if -->
     <!-- attempted this will produce a mish-mash.   -->
-    <xsl:if test="frontmatter/colophon/edition" >
+    <xsl:if test="frontmatter/bibinfo/edition" >
         <xsl:text>\noindent{\bfseries </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name"/>
+        <xsl:apply-templates select="frontmatter/bibinfo/edition" mode="type-name"/>
         <xsl:text>}: </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/edition" />
+        <xsl:apply-templates select="frontmatter/bibinfo/edition" />
         <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
 
     <!-- We accomodate zero to many "website". -->
-    <xsl:apply-templates select="frontmatter/colophon/website"/>
+    <xsl:apply-templates select="frontmatter/bibinfo/website"/>
 
     <!-- There may be multiple copyrights (a fork under the GFDL -->
     <!-- requires as much).  This accomodates zero to many.  The -->
     <!-- "for-each" enacts a context shift so we know we are     -->
     <!-- mining one "copyright" element at a time.               -->
-    <xsl:for-each select="frontmatter/colophon/copyright">
+    <xsl:for-each select="frontmatter/bibinfo/copyright">
         <xsl:text>\noindent</xsl:text>
         <xsl:call-template name="copyright-character"/>
         <xsl:apply-templates select="year" />
@@ -4067,7 +4071,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- URL for canonical project website -->
-<xsl:template match="frontmatter/colophon/website">
+<xsl:template match="frontmatter/bibinfo/website">
     <xsl:text>\noindent{\bfseries </xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}: </xsl:text>

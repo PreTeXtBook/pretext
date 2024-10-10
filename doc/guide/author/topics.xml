@@ -413,7 +413,7 @@
 
                 <paragraphs>
                     <title><tage>copyright</tage>, <copyright />, copyright</title>
-                    <p>The symbol used in publishing, legal, or business contexts.  For a <pretext /> project, copyright information can be specified within the <tag>colophon</tag> portion of the <tag>frontmatter</tag>.</p>
+                    <p>The symbol used in publishing, legal, or business contexts.  For a <pretext /> project, copyright information can be specified within the <tag>bibinfo</tag> portion of the <tag>frontmatter</tag>.</p>
                 </paragraphs>
 
                 <paragraphs>
@@ -4011,7 +4011,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <title>Front Matter</title>
 
          <introduction>
-            <p>A single <tag>frontmatter</tag> element can be placed early in your <tag>book</tag> or <tag>article</tag>, after some metadata, such as the overall <tag>title</tag>.  It is optional, but likely highly desirable.  The following subsections describe the items that may be employed within the <tag>frontmatter</tag>.  Most are optional, and some may be repeated.  An <tag>article</tag> differs in that it must contain a <tag>titlepage</tag> and then may <em>only</em> contain an <tag>abstract</tag>.  Generally, these will get default titles, localized in the language of your document, but these defaults may also be replaced by giving a <tag>title</tag> element.  None of these divisions themselves is numbered, precluding any content within that is numbered.  So, for example, no <tag>figure</tag> may be included.  But you could choose to include an <tag>image</tag>, perhaps within a <tag>biography</tag>.</p>
+            <p>A single <tag>frontmatter</tag> element can be placed early in your <tag>book</tag> or <tag>article</tag>, after some metadata, such as the overall <tag>title</tag>.  It is optional, but likely highly desirable.  The following subsections describe the items that may be employed within the <tag>frontmatter</tag>.  Most are optional, and some may be repeated.  An <tag>article</tag> differs in that it must contain a <tag>bibinfo</tag> and <tag>titlepage</tag> and then may <em>only</em> contain an <tag>abstract</tag>.  Generally, these will get default titles, localized in the language of your document, but these defaults may also be replaced by giving a <tag>title</tag> element.  None of these divisions themselves is numbered, precluding any content within that is numbered.  So, for example, no <tag>figure</tag> may be included.  But you could choose to include an <tag>image</tag>, perhaps within a <tag>biography</tag>.</p>
 
             <p>If a component of the front matter cannot be numbered, how best to subdivide something like a <tag>preface</tag>?  This is a good use of the <tag>paragraphs</tag> element.  It allows for a (minimal) title, but cannot be subdivided further.  See the later part of <xref ref="topic-divisions"/> for more about this exceptional element.</p>
 
@@ -4021,9 +4021,15 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </introduction>
 
         <subsection>
-            <title>(*) Title Page</title>
+            <title>Bibliographic Information</title>
 
-            <p>Required.  Since the entire <tag>frontmatter</tag> is optional, we assume that the front matter at least includes the appearance of the document's overall <tag>title</tag>.</p>
+            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliogrphic information are planned.
+        </subsection>
+
+        <subsection>
+            <title>Title Page</title>
+
+            <p>Optional.  When present, the <tag>titlepage</tag> should contain a single empty element <tage>titlepage-items</tage>, that will collect the appropriate elements from <tag>bibinfo</tag> to generate a titlepage.</p>
         </subsection>
 
         <subsection>
@@ -4033,9 +4039,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
 
         <subsection xml:id="topic-front-colophon">
-            <title>(*) Colophon</title>
+            <title>Colophon</title>
 
-            <p>The <em>front</em> colophon. (There is also a <em>back</em> colophon, see <xref ref="topic-back-colophon"/>).  Sometimes this is also called the <term>copyright page</term>.</p>
+            <p>Optional; only available within a <tag>book</tag>.  The <em>front</em> colophon. (There is also a <em>back</em> colophon, see <xref ref="topic-back-colophon"/>).  Sometimes this is also called the <term>copyright page</term>.  The <tag>colophon</tag> element can be given a <attr>label</attr> to produce a specific file name in HTML builds.  The only allowable (and required) child of the <tag>colophon</tag> is the empty element <tage>colophon-items</tage>, which will automatically bring in appropriate elements from <tag>bibinfo</tag>.</p>
         </subsection>
 
         <subsection>

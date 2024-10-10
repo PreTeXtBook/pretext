@@ -393,7 +393,7 @@
 <xsl:template name="package-metadata">
     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.idpf.org/2007/opf">
         <!-- Optional in EPUB 3.0.1 spec -->
-        <xsl:for-each select="$document-root//frontmatter/titlepage/author|$document-root//frontmatter/titlepage/editor">
+        <xsl:for-each select="$bibinfo/author|$bibinfo/editor">
             <xsl:element name="dc:creator">
                 <xsl:apply-templates select="personname"/>
             </xsl:element>
@@ -696,7 +696,7 @@
             <xsl:apply-templates select="$document-root" mode="subtitle"/>
         </subtitle>
         <author>
-            <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
+            <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
         </author>
         <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
         <!-- Decide what to do with preview images, etc. -->
@@ -874,7 +874,7 @@ width: 100%
                             </h1>
                             <div class="author">
                                 <div class="author-name">
-                                    <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
+                                    <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
                                 </div>
                             </div>
                         </section>
