@@ -8,12 +8,15 @@
     <book xml:id="hia">
         <title>Humanities in Action</title>
         <frontmatter xml:id="index">
-            <titlepage>
+            <bibinfo>
                 <author>
                     <personname>Jahrme Risner</personname>
                     <institution>University of Puget Sound</institution>
                 </author>
                 <date><today/></date>
+            </bibinfo>
+            <titlepage>
+                <titlepage-items/>
             </titlepage>
             <preface>
                 <p>A collection of demonstrations leveraging the increased support for writing in the humanities.</p>

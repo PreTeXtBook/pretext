@@ -27,10 +27,13 @@
   <article xml:id="webwork-mini">
     <title><webwork /> Minimal Example</title>
     <frontmatter>
-      <titlepage>
+      <bibinfo>
         <author>
           <personname>Jane Doe</personname>
         </author>
+      </bibinfo>
+      <titlepage>
+        <titlepage-items/>
       </titlepage>
     </frontmatter>
     <section>
