@@ -7016,6 +7016,28 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- ##################-->
+<!-- Frontmatter Items -->
+<!-- ##################-->
+
+<!-- Bibliographic information for a document is contained in the     -->
+<!-- frontmatter/bibinfo element.  Items then move to either a        -->
+<!-- titlepage or colophon that contain then empty titlepage-items    -->
+<!-- or colophon-items.  These are implemented by each template.      -->
+ <!--Here we define these abstract templates with warnings to do this.-->
+<xsl:template match="titlepage-items">
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("titlepage-items") in order to specify which bibliographic information to include in the titlepage.</xsl:message>
+</xsl:template>
+
+<xsl:template match="colophon-items">
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("colophon-items") in order to specify which bibliographic information to include in the front colophon.</xsl:message>
+</xsl:template>
+
+<!-- No conversion will create content directly from bibinfo -->
+<xsl:template match="bibinfo"/>
+
+
+
 <!-- ############# -->
 <!-- Notation List -->
 <!-- ############# -->
@@ -11491,6 +11513,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//sidebyside/*[&METADATA-FILTER;]" />
         <xsl:with-param name="date-string" select="'2017-07-31'" />
         <xsl:with-param name="message" select="'metadata elements &quot;&METADATA;&quot; in a sidebyside will be ignored'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2024-10-08 titlepage no longer required for holding author|editor|credit|date in frontmatter -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root/frontmatter/titlepage[author or editor or credit or date or event]" />
+        <xsl:with-param name="date-string" select="'2024-10-08'" />
+        <xsl:with-param name="message" select="'elements previously included in a &quot;titlepage&quot; element inside the &quot;frontmatter&quot; (author, editor, credit, date, and event) should now be placed in &quot;frontmatter/bibinfo&quot;.  To ensure a title page is created, put only the empty element &quot;titlepage-items&quot; inside &quot;titlepage&quot;.  Until you move these elements, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2024-10-08 colophon no longer required for holding copyright|credit|edition|website in frontmatter -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root/frontmatter/colophon[credit or copyright or edition or website]" />
+        <xsl:with-param name="date-string" select="'2024-10-08'" />
+        <xsl:with-param name="message" select="'elements previously included in a &quot;colophon&quot; element inside the &quot;frontmatter&quot; (credit, copyright, edition, and website) should now be placed in &quot;frontmatter/bibinfo&quot;. To produce a &quot;colophon&quot;, include only the empty element &quot;colophon-items&quot; inside &quot;colophon&quot; Until you move these elements, we will try to honor your intent.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
