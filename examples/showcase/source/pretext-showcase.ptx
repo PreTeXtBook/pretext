@@ -43,7 +43,7 @@
     <title><pretext/> Showcase</title>
 
     <frontmatter xml:id="frontmatter">
-      <titlepage>
+      <bibinfo>
         <author>
           <personname>Many Contributors</personname>
           <department>Some From Academic Departments</department>
@@ -55,6 +55,10 @@
         </author>
 
         <date><today /></date>
+      </bibinfo>
+
+      <titlepage>
+        <titlepage-items/>
       </titlepage>
 
       <abstract>

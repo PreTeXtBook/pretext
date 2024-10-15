@@ -65,13 +65,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <frontmatter>
 
-            <titlepage>
+            <bibinfo>
                 <author>
                     <personname>Robert A. Beezer</personname>
                     <institution>University of Puget Sound</institution>
                 </author>
                 <date><today /></date>
-            </titlepage>
+            </bibinfo>
 
             <abstract>
                 <p>This is a very short article, but it still exercises some advanced features of MathBook XML.</p>
