@@ -561,6 +561,7 @@
   <define name="ArticleFrontMatter">
     <element name="frontmatter">
       <ref name="MetaDataTitleOptional"/>
+      <ref name="Bibinfo"/>
       <ref name="TitlePage"/>
       <optional>
         <ref name="Abstract"/>
@@ -570,6 +571,7 @@
   <define name="BookFrontMatter">
     <element name="frontmatter">
       <ref name="MetaDataTitleOptional"/>
+      <ref name="Bibinfo"/>
       <ref name="TitlePage"/>
       <optional>
         <ref name="ColophonFront"/>
@@ -588,8 +590,8 @@
       </zeroOrMore>
     </element>
   </define>
-  <define name="TitlePage">
-    <element name="titlepage">
+  <define name="Bibinfo">
+    <element name="bibinfo">
       <choice>
         <group>
           <ref name="Author"/>
@@ -613,6 +615,42 @@
       <optional>
         <ref name="Date"/>
       </optional>
+      <zeroOrMore>
+        <ref name="ColophonCredit"/>
+      </zeroOrMore>
+      <optional>
+        <element name="edition">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <ref name="Website"/>
+      </optional>
+      <optional>
+        <element name="copyright">
+          <element name="year">
+            <ref name="TextShort"/>
+          </element>
+          <element name="holder">
+            <text/>
+          </element>
+          <optional>
+            <element name="minilicense">
+              <ref name="TextShort"/>
+            </element>
+          </optional>
+          <optional>
+            <ref name="ShortLicense"/>
+          </optional>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="TitlePage">
+    <element name="titlepage">
+      <element name="titlepage-items">
+        <empty/>
+      </element>
     </element>
   </define>
   <define name="Email">
@@ -724,35 +762,9 @@
   <define name="ColophonFront">
     <element name="colophon">
       <ref name="MetaDataTarget"/>
-      <zeroOrMore>
-        <ref name="ColophonCredit"/>
-      </zeroOrMore>
-      <optional>
-        <element name="edition">
-          <text/>
-        </element>
-      </optional>
-      <optional>
-        <ref name="Website"/>
-      </optional>
-      <optional>
-        <element name="copyright">
-          <element name="year">
-            <ref name="TextShort"/>
-          </element>
-          <element name="holder">
-            <text/>
-          </element>
-          <optional>
-            <element name="minilicense">
-              <ref name="TextShort"/>
-            </element>
-          </optional>
-          <optional>
-            <ref name="ShortLicense"/>
-          </optional>
-        </element>
-      </optional>
+      <element name="colophon-items">
+        <empty/>
+      </element>
     </element>
   </define>
   <define name="Biography">
