@@ -2523,7 +2523,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercises xml:id="parsons-exercises">
         <title>Parsons Exercises</title>
 
-        <exercise label="number-theory-proof" adaptive="yes">
+        <exercise label="number-theory-proof" adaptive="yes" language="natural">
             <title>Parsons Problem, Mathematical Proof</title>
             <idx>even numbers</idx>
             <statement>
@@ -2560,11 +2560,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint><p>Dorothy will not be much help with this proof.</p></hint>
         </exercise>
 
-        <exercise label="parsons-with-partial-order" language="python" adaptive="yes" indentation="hide">
+        <exercise label="parsons-with-partial-order" adaptive="yes" indentation="hide">
             <title>Parsons Problem, Partial Ordering</title>
             <statement>
                 <p>Parsons problems can specify a partial ordering that allows for multiple valid solutions.</p>
                 <p>Try putting the blocks in a valid order to calculate and print<c>c</c> Only use the required blocks. There are many valid orderings.</p>
+                <p>[Ed. If you examine the source, you will also notice the <tag>exercise</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/html/defaults/@programming-language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.]</p>
             </statement>
             <blocks>
                 <block order="5" name="math">
@@ -2744,7 +2745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </blocks>
         </exercise>
 
-        <exercise label="number-theory-proof-numbered-left" adaptive="yes">
+        <exercise label="number-theory-proof-numbered-left" adaptive="yes" language="natural">
             <title>Parsons Problem, Mathematical Proof, Numbered Blocks</title>
             <idx>even numbers</idx>
             <statement>
@@ -2836,7 +2837,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <block order="3"><c>test</c></block>
             </blocks>
         </exercise>
-
+        <exercise label="horizontal-parson-python-test">
+          <title>Parsons Problem, Python import</title>
+          <statement>
+              <p>This is testing that horizontal parsons get the default programming language from <c>docinfo/html/defaults/@programming-language</c>.</p>
+          </statement>
+          <blocks layout="horizontal" randomize="yes">
+              <block order="2"><c>from</c></block>
+              <block order="1"><c>math</c></block>
+              <block order="4"><c>import</c></block>
+              <block order="3"><c>pi</c></block>
+          </blocks>
+        </exercise>
         <exercise label="horizontal-parson-sql-statement-no-randomize" language="sql">
             <title>Parsons Problem, SQL statement, no randomization</title>
             <statement>
