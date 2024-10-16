@@ -162,8 +162,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
-    <!-- default for @language is "natural" -->
-    <xsl:variable name="b-natural" select="not(@language) or (@language = 'natural')"/>
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="get-programming-language"/>
+    </xsl:variable>
+    <xsl:variable name="b-natural" select="($language = '') or ($language = 'natural')"/>
+    <xsl:attribute name="language">
+        <xsl:value-of select="$language"/>
+    </xsl:attribute>
     <!-- default for @indentation is "show", regards presentation -->
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
@@ -384,7 +389,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- structure, reconstruct as a program/input      -->
                 <program>
                     <xsl:attribute name="language">
-                        <xsl:value-of select="@language"/>
+                        <xsl:value-of select="$language"/>
                     </xsl:attribute>
                     <input>
                         <xsl:for-each select="blocks/block">
@@ -461,6 +466,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parson (Horizontal) -->
 
 <xsl:template match="*[@exercise-interactive = 'parson-horizontal']" mode="runestone-to-static">
+    <xsl:attribute name="language">
+        <xsl:apply-templates select="." mode="get-programming-language"/>
+    </xsl:attribute>
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
@@ -653,7 +661,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="cline">
             <!-- code, so make a "program" structure -->
             <program>
-                <xsl:copy-of select="@language"/>
+                <xsl:attribute name="language">
+                    <xsl:apply-templates select="." mode="get-programming-language"/>
+                </xsl:attribute>
                 <input>
                     <xsl:apply-templates select="cline" mode="static-areas"/>
                 </input>
