@@ -4517,7 +4517,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Worksheets allow for material interleaved with the <tag>exercise</tag> throughout.</p>
 
-        <exercise label="groupwork-number-theory" adaptive="yes">
+        <exercise label="groupwork-number-theory" adaptive="yes" language="natural">
             <title>Parsons Problem, Group Work</title>
             <idx>even numbers</idx>
             <idx>groupwork</idx>
