@@ -33,7 +33,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
     extension-element-prefixes="exsl date str"
-    exclude-result-prefixes="pi"
+    xmlns:mb="https://pretextbook.org/"
+    exclude-result-prefixes="pi mb"
 >
 
 <!-- This is the once-mythical pre-processor, though we prefer     -->
@@ -2993,5 +2994,139 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Programming Language Names -->
+<!-- Packages for listing and syntax highlighting             -->
+<!-- have their own ideas about the names of languages        -->
+<!-- We use keys to perform the translation                   -->
+<!-- See: https://gist.github.com/frabad/4189876              -->
+<!-- for motivation and document() syntax for standalone file -->
+<!-- Also: see contributors in FCLA work                      -->
+
+<!-- The data: attribute is our usage, elements belong to     -->
+<!-- other packages. Blank means not explicitly supported.    -->
+<!-- Alphabetical by type.                                    -->
+
+<!-- Prism: -->
+<!-- Last reviewed 2020-10-21                        -->
+<!-- 2020-10-21: Cutover from Google Code Prettifier -->
+
+<!-- Listings: -->
+<!-- Last reviewed carefully: 2014/06/28           -->
+<!-- Exact matches, or best guesses, some          -->
+<!-- unimplemented.  [] notation is for variants.  -->
+<!-- 2019-09-23: minor review, v 1.7 (2018-09-02)  -->
+
+<!-- ActiveCode (Runestone) -->
+<!-- Languages supported by Runestone ActiveCode and  -->
+<!-- CodeLens interactive elements, added 2020-08-13. -->
+<!-- "python3" is just on Runestone servers where     -->
+<!-- additional popular packages (e.g. numpy, pandas) -->
+<!-- are available.                                   -->
+
+<!-- Our strings (@ptx) are always all-lowercase, no symbols, no punctuation -->
+<mb:programming>
+    <!-- Procedural -->
+    <language ptx="basic"       active=""            listings="Basic"            prism="basic"/>
+    <language ptx="c"           active="c"           listings="C"                prism="c"/>
+    <language ptx="cpp"         active="cpp"         listings="C++"              prism="cpp"/>
+    <language ptx="go"          active=""            listings="C"                prism="go"/>
+    <language ptx="java"        active="java"        listings="Java"             prism="java"/>
+    <language ptx="javascript"  active="javascript"  listings=""                 prism="javascript"/>
+    <language ptx="lua"         active=""            listings="Lua"              prism="lua"/>
+    <language ptx="pascal"      active=""            listings="Pascal"           prism="pascal"/>
+    <language ptx="perl"        active=""            listings="Perl"             prism="perl"/>
+    <language ptx="python"      active="python"      listings="Python"           prism="py"/>
+    <language ptx="python3"     active="python3"     listings="Python"           prism="py"/>
+    <language ptx="r"           active=""            listings="R"                prism="r"/>
+    <language ptx="s"           active=""            listings="S"                prism="s"/>
+    <language ptx="sas"         active=""            listings="SAS"              prism="s"/>
+    <language ptx="sage"        active=""            listings="Python"           prism="py"/>
+    <language ptx="splus"       active=""            listings="[Plus]S"          prism="s"/>
+    <language ptx="vbasic"      active=""            listings="[Visual]Basic"    prism="visual-basic"/>
+    <language ptx="vbscript"    active=""            listings="VBscript"         prism="visual-basic"/>
+    <!-- Others (esp. functional)  -->
+    <language ptx="clojure"     active=""            listings="Lisp"             prism="clojure"/>
+    <language ptx="lisp"        active=""            listings="Lisp"             prism="lisp"/>
+    <language ptx="clisp"       active=""            listings="Lisp"             prism="lisp"/>
+    <language ptx="elisp"       active=""            listings="Lisp"             prism="elisp"/>
+    <language ptx="scheme"      active=""            listings="Lisp"             prism="scheme"/>
+    <language ptx="racket"      active=""            listings="Lisp"             prism="racket"/>
+    <language ptx="sql"         active="sql"         listings="SQL"              prism="sql"/>
+    <language ptx="llvm"        active=""            listings="LLVM"             prism="llvm"/>
+    <language ptx="matlab"      active=""            listings="Matlab"           prism="matlab"/>
+    <language ptx="octave"      active="octave"      listings="Octave"           prism="matlab"/>
+    <language ptx="ml"          active=""            listings="ML"               prism=""/>
+    <language ptx="ocaml"       active=""            listings="[Objective]Caml"  prism="ocaml"/>
+    <language ptx="fsharp"      active=""            listings="ML"               prism="fsharp"/>
+    <!-- Text Manipulation -->
+    <language ptx="css"         active=""            listings=""                 prism="css"/>
+    <language ptx="latex"       active=""            listings="[LaTeX]TeX"       prism="latex"/>
+    <language ptx="html"        active="html"        listings="HTML"             prism="html"/>
+    <language ptx="tex"         active=""            listings="[plain]TeX"       prism="tex"/>
+    <language ptx="xml"         active=""            listings="XML"              prism="xml"/>
+    <language ptx="xslt"        active=""            listings="XSLT"             prism="xml"/>
+</mb:programming>
+
+<!-- Define the key for indexing into the data list -->
+<xsl:key name="proglang" match="language" use="@ptx" />
+
+<!-- Determine programming language to use. First choice is @language     -->
+<!-- on current element. If that is not available, check docinfo default. -->
+<!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
+<xsl:template match="program|exercise|areas" mode="get-programming-language">
+  <!-- without this get weird recusion errors -->
+  <xsl:variable name="docinfo" select="/pretext/docinfo"/>
+  <xsl:choose>
+      <xsl:when test="@language">
+          <xsl:value-of select="@language" />
+      </xsl:when>
+      <xsl:when test="$docinfo/html/defaults/@programming-language">
+          <xsl:value-of select="$docinfo/html/defaults/@programming-language" />
+      </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<!-- A whole <program> node comes in,  -->
+<!-- text of ActiveCode name comes out -->
+<xsl:template match="*" mode="active-language">
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="get-programming-language"/>
+    </xsl:variable>
+    <xsl:for-each select="document('')/*/mb:programming">
+        <xsl:value-of select="key('proglang', $language)/@active" />
+    </xsl:for-each>
+</xsl:template>
+
+<!-- A whole <program> node comes in,  -->
+<!-- text of listings name comes out -->
+<xsl:template match="*" mode="listings-language">
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="get-programming-language"/>
+    </xsl:variable>
+    <xsl:for-each select="document('')/*/mb:programming">
+        <xsl:value-of select="key('proglang', $language)/@listings" />
+    </xsl:for-each>
+</xsl:template>
+
+<!-- A whole <program> node comes in,  -->
+<!-- text of prism name comes out -->
+<xsl:template match="*" mode="prism-language">
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="get-programming-language"/>
+    </xsl:variable>
+    <xsl:for-each select="document('')/*/mb:programming">
+        <xsl:value-of select="key('proglang', $language)/@prism" />
+    </xsl:for-each>
+</xsl:template>
+
+<!-- This works, without keys, and could be adapted to range over actual data in text -->
+<!-- For example, this approach is used for contributors to FCLA                      -->
+<!--
+<xsl:template match="*" mode="listings-language">
+    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
+    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
+</xsl:template>
+-->
 
 </xsl:stylesheet>
