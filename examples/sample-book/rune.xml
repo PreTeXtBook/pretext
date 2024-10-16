@@ -35,11 +35,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="activecode">
         <title>ActiveCode</title>
 
-        <p>Python programs are made interactive in HTML, on request.</p>
+        <p>Programs in supported languages are made interactive in HTML, on request.</p>
 
         <listing xml:id="program-activecode-python">
             <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
             <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world">
+                <input>
+                print("Hello, World!")
+                </input>
+            </program>
+        </listing>
+
+        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/html/defaults/@programming-language</c> will be checked to determine what language to assume the code is written in.
+        </p>
+
+        <listing xml:id="program-activecode-python2">
+            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="python-hello-world2" label="hello-world2">
                 <input>
                 print("Hello, World!")
                 </input>
