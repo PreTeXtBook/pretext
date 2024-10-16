@@ -1030,6 +1030,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Add input element around text in program when missing -->
+<xsl:template match="&REMARK-LIKE;[not(p)]" mode="repair">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="repair"/>
+      <xsl:apply-templates select="node()[self::title]" mode="repair"/>
+      <p>
+          <xsl:apply-templates select="node()[not(self::title)]" mode="repair"/>
+      </p>
+  </xsl:copy>
+</xsl:template>
+
 <!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
 <xsl:template match="program/@interactive" mode="repair">
     <xsl:choose>
