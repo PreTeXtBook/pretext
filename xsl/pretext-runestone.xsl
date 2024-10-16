@@ -2122,12 +2122,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <xsl:variable name="active-language">
+      <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
     <!-- as a variable so it does not look like an AVT -->
     <xsl:variable name="parameter-dictionary">
         <xsl:text>{</xsl:text>
         <xsl:text>"embeddedMode": true, </xsl:text>
         <xsl:text>"lang": "</xsl:text>
-        <xsl:value-of select="@language"/>
+        <xsl:value-of select="$active-language"/>
         <xsl:text>", </xsl:text>
         <xsl:text>"jumpToEnd": false</xsl:text>
         <xsl:text>}</xsl:text>
