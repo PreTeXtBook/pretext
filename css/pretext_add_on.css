@@ -1517,20 +1517,6 @@ from Jiří Lebl */
 }
 
 
-/* if hints and solutions are in .posterior, then
- * some of the above styling does not apply */
-
-.ptx-content article.exercise-like + .posterior {
-    margin-top: -0.75em;
-}
-
-
-.ptx-content article.example-like .hint {
-    display: block;
-    margin-top: -0.75em;
-}
-
-
 .ptx-content .exercisegroup .exercisegroup-exercises.cols2, .ptx-content .exercisegroup .exercisegroup-exercises.cols3, .ptx-content .exercisegroup .exercisegroup-exercises.cols4, .ptx-content .exercisegroup .exercisegroup-exercises.cols5, .ptx-content .exercisegroup .exercisegroup-exercises.cols6 {
     width: 100%;
     display:inline-flex;
