@@ -3073,8 +3073,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Determine programming language to use. First choice is @language     -->
 <!-- on current element. If that is not available, check docinfo default. -->
-<!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
-<xsl:template match="program|exercise|areas" mode="get-programming-language">
+<xsl:template match="*" mode="get-programming-language">
   <!-- without this get weird recusion errors -->
   <xsl:variable name="docinfo" select="/pretext/docinfo"/>
   <xsl:choose>

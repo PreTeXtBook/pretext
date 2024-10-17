@@ -533,6 +533,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$runestone-version"/>
                 </xsl:attribute>
             </runestone-services>
+            <!-- default programming language for book as specified in docinfo -->
+            <!-- if not specified, assume python                               -->
+            <xsl:variable name="default-language">
+                <xsl:apply-templates select="$document-root" mode="active-language"/>
+            </xsl:variable>
+            <default-language>
+                <xsl:choose>
+                    <xsl:when test="$default-language != ''">
+                        <xsl:value-of select="$default-language"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>python</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </default-language>
             <!-- mine various bits and pieces of the source for RS metadata  -->
             <!-- collection, which is technically a "conf.py" file, per-book -->
             <library-metadata publisher="pretext">
