@@ -1945,18 +1945,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </span>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:call-template name="space-styled"/>
+        <!-- When a listing has an activecode, the caption will be picked -->
+        <!-- up by the activecode, so we don't want to duplicate it.      -->
+        <xsl:variable name="has-valid-activecode">
+            <!-- must be @interactive="activecode" and have a valid language -->
+            <!-- to be rendered as activecode                                -->
+            <xsl:if test="program[@interactive = 'activecode']">
+                <xsl:for-each select="program">
+                    <xsl:variable name="active-language">
+                        <xsl:apply-templates select="." mode="active-language"/>
+                    </xsl:variable>
+                    <xsl:if test="$active-language != ''">yes</xsl:if>
+                </xsl:for-each>
+            </xsl:if>
+        </xsl:variable>
         <xsl:choose>
             <!-- a caption can have a footnote, hence a -->
             <!-- knowl, hence original or duplicate     -->
-            <!-- activecode captions will be included in RS element -->
-            <xsl:when test="self::figure or self::listing[not(program[@interactive = 'activecode'])]">
+            <xsl:when test="self::figure or (self::listing and $has-valid-activecode != 'yes')">
+                <xsl:call-template name="space-styled"/>
                 <xsl:apply-templates select="." mode="caption-full">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
             </xsl:when>
-            <xsl:when test="self::table or self::list">
-                <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:when test="self::table or self::list or (self::listing and $has-valid-activecode = 'yes')">
+                <xsl:call-template name="space-styled"/>
+                <span class="figcaption__title">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </span>
             </xsl:when>
         </xsl:choose>
     </figcaption>
