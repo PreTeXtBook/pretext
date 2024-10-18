@@ -11527,6 +11527,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'metadata elements &quot;&METADATA;&quot; in a sidebyside will be ignored'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2024-10-08 titlepage no longer required for holding author|editor|credit|date in frontmatter -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root/frontmatter/titlepage[author or editor or credit or date or event]" />
+        <xsl:with-param name="date-string" select="'2024-10-08'" />
+        <xsl:with-param name="message" select="'elements previously included in a &quot;titlepage&quot; element inside the &quot;frontmatter&quot; (author, editor, credit, date, and event) should now be placed in &quot;frontmatter/bibinfo&quot;.  To ensure a title page is created, put only the empty element &quot;titlepage-items&quot; inside &quot;titlepage&quot;.  Until you move these elements, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2024-10-08 colophon no longer required for holding copyright|credit|edition|website in frontmatter -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root/frontmatter/colophon[credit or copyright or edition or website]" />
+        <xsl:with-param name="date-string" select="'2024-10-08'" />
+        <xsl:with-param name="message" select="'elements previously included in a &quot;colophon&quot; element inside the &quot;frontmatter&quot; (credit, copyright, edition, and website) should now be placed in &quot;frontmatter/bibinfo&quot;. To produce a &quot;colophon&quot;, include only the empty element &quot;colophon-items&quot; inside &quot;colophon&quot; Until you move these elements, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
