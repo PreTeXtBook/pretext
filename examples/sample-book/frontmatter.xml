@@ -27,7 +27,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <frontmatter xml:id="frontmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
 
-    <titlepage>
+    <bibinfo>
 
         <author>
             <personname>Thomas W. Judson</personname>
@@ -53,10 +53,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <date><today /></date>
 
-    </titlepage>
-
-    <colophon xml:id="front-colophon">
-
         <credit>
             <role>Cover Design</role>
             <entity>Covers 4 U</entity>
@@ -78,7 +74,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <minilicense>GFDL License</minilicense>
             <shortlicense>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license is included in the appendix entitled <q>GNU Free Documentation License.</q>  All trademarks<trademark /> are the registered<registered /> marks of their respective owners. An <url href="https://example.com" visual="example.com">external link</url> is included<fn>A second footnote, as well.</fn> to test its footnote.</shortlicense>
         </copyright>
+    </bibinfo>
 
+    <titlepage>
+        <titlepage-items/>
+    </titlepage>
+
+    <colophon xml:id="front-colophon">
+        <colophon-items/>
     </colophon>
 
     <!-- A section of its own in HTML, migrates to copyright-page in LaTeX -->

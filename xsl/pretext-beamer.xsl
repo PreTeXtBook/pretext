@@ -519,18 +519,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:text>}&#xa;</xsl:text>
   </xsl:if>
   <xsl:text>\author{</xsl:text>
-    <xsl:apply-templates select="author|frontmatter/titlepage/author" mode="article-info"/>
+    <xsl:apply-templates select="author|frontmatter/bibinfo/author" mode="article-info"/>
   <xsl:text>}&#xa;</xsl:text>
   <xsl:text>\date[</xsl:text>
-  <xsl:if test="frontmatter/titlepage/date">
-    <xsl:apply-templates select="frontmatter/titlepage/date"/>
+  <xsl:if test="frontmatter/bibinfo/date">
+    <xsl:apply-templates select="frontmatter/bibinfo/date"/>
   </xsl:if>
   <xsl:if test="date">
     <xsl:apply-templates select="date"/>
   </xsl:if>
   <xsl:text>]{</xsl:text>
-  <xsl:if test="frontmatter/titlepage/event">
-    <xsl:apply-templates select="frontmatter/titlepage/event"/>
+  <xsl:if test="frontmatter/bibinfo/event">
+    <xsl:apply-templates select="frontmatter/bibinfo/event"/>
   </xsl:if>
   <xsl:if test="event">
     <xsl:apply-templates select="event"/>
