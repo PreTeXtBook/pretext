@@ -7024,6 +7024,28 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- ##################-->
+<!-- Frontmatter Items -->
+<!-- ##################-->
+
+<!-- Bibliographic information for a document is contained in the     -->
+<!-- frontmatter/bibinfo element.  Items then move to either a        -->
+<!-- titlepage or colophon that contain then empty titlepage-items    -->
+<!-- or colophon-items.  These are implemented by each template.      -->
+ <!--Here we define these abstract templates with warnings to do this.-->
+<xsl:template match="titlepage-items">
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("titlepage-items") in order to specify which bibliographic information to include in the titlepage.</xsl:message>
+</xsl:template>
+
+<xsl:template match="colophon-items">
+    <xsl:message>PTX:BUG:    a conversion to a new output format requires implementation of a named template ("colophon-items") in order to specify which bibliographic information to include in the front colophon.</xsl:message>
+</xsl:template>
+
+<!-- No conversion will create content directly from bibinfo -->
+<xsl:template match="bibinfo"/>
+
+
+
 <!-- ############# -->
 <!-- Notation List -->
 <!-- ############# -->

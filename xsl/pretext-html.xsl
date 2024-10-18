@@ -482,6 +482,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="heading-level" select="2"/>
                 </xsl:apply-templates>
                 <xsl:apply-templates select="." mode="author-byline"/>
+                <!-- Special case when building page for frontmatter without a titlepage -->
+                <xsl:if test="self::frontmatter[not(titlepage)]">
+                    <xsl:call-template name="frontmatter-title" />
+                </xsl:if>
                 <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
                 <!-- Links to subsidiary divisions, as a group of button/hyperlinks -->
                 <nav class="summary-links">
@@ -585,6 +589,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
+        <!-- Special case when building page for frontmatter without a titlepage -->
+        <xsl:if test="self::frontmatter[not(titlepage)]">
+            <xsl:call-template name="frontmatter-title"/>
+        </xsl:if>
         <xsl:apply-templates select="." mode="author-byline"/>
         <!-- If there is watermark text, we print it here in an assistive p -->
         <!-- so that it is the first thing read by a screen-reader user.    -->
@@ -953,16 +961,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </span>
         </xsl:if>
     </h2>
-    <!-- We list authors and editors in document order -->
-    <xsl:apply-templates select="author|editor" mode="full-info"/>
-    <!-- A credit is subsidiary, so follows -->
-    <xsl:apply-templates select="credit" />
-    <xsl:apply-templates select="date" />
+    <xsl:apply-templates select="$document-root/frontmatter/titlepage/titlepage-items" />
+</xsl:template>
+
+<xsl:template match="titlepage-items">
+    <!-- Put authors and editors first, in document order -->
+    <xsl:apply-templates select="$bibinfo/author|$bibinfo/editor" mode="full-info"/>
+    <!-- Followed by "contributors" authored as credit (which have titles) -->
+    <xsl:apply-templates select="$bibinfo/credit[title]" />
+    <!-- and finally date -->
+    <xsl:apply-templates select="$bibinfo/date" />
+</xsl:template>
+
+<!-- Title to put on frontmatter page when titlepage is absent -->
+<!-- This is called by the templates that generate the frontmatter page -->
+<!-- but only if frontmatter does not have a titlepage element          -->
+<xsl:template name="frontmatter-title">
+    <xsl:variable name="b-has-subtitle" select="$document-root/subtitle"/>
+    <h2 class="heading">
+        <span class="title">
+            <xsl:apply-templates select="$document-root" mode="title-full" />
+            <xsl:if test="$b-has-subtitle">
+                <xsl:text>:</xsl:text>
+            </xsl:if>
+        </span>
+        <xsl:if test="$b-has-subtitle">
+            <xsl:text> </xsl:text>
+            <span class="subtitle">
+                <xsl:apply-templates select="$document-root" mode="subtitle" />
+            </span>
+        </xsl:if>
+    </h2>
 </xsl:template>
 
 <!-- A "credit" required "title" followed by an author (or several)    -->
 <!-- CSS should give lesser prominence to these (versus "full" author) -->
-<xsl:template match="titlepage/credit">
+<xsl:template match="bibinfo/credit[title]">
     <div class="credit">
         <div class="title">
             <xsl:apply-templates select="." mode="title-full"/>
@@ -972,7 +1006,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The time element has content that is "human readable" time -->
-<xsl:template match="titlepage/date">
+<xsl:template match="bibinfo/date">
     <div class="date">
         <xsl:apply-templates/>
     </div>
@@ -1028,7 +1062,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We process pieces, in document order -->
 <!-- TODO: edition, publisher, production notes, cover design, etc -->
 <!-- TODO: revision control commit hash -->
-<xsl:template match="frontmatter/colophon/credit">
+<xsl:template match="frontmatter/colophon" mode="structural-division-inner-content">
+    <xsl:param name="heading-level"/>
+    <!-- Include publication data from titlepage appropriate for colophon -->
+    <xsl:apply-templates select="colophon-items"/>
+</xsl:template>
+
+<xsl:template match="colophon-items">
+     <xsl:apply-templates select="$bibinfo/credit[role]" />
+     <xsl:apply-templates select="$bibinfo/edition" />
+     <xsl:apply-templates select="$bibinfo/website" />
+     <xsl:apply-templates select="$bibinfo/copyright" />
+</xsl:template>
+
+<xsl:template match="bibinfo/credit[role]">
     <p class="credit">
         <b class="title">
             <xsl:apply-templates select="role" />
@@ -1038,7 +1085,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </p>
 </xsl:template>
 
-<xsl:template match="frontmatter/colophon/edition">
+<xsl:template match="bibinfo/edition">
     <p class="credit">
         <b class="title">
             <xsl:apply-templates select="." mode="type-name" />
@@ -1049,7 +1096,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- website for the book -->
-<xsl:template match="frontmatter/colophon/website">
+<xsl:template match="bibinfo/website">
     <p class="credit">
         <b class="title">
             <xsl:apply-templates select="." mode="type-name" />
@@ -1063,7 +1110,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </p>
 </xsl:template>
 
-<xsl:template match="frontmatter/colophon/copyright">
+<xsl:template match="bibinfo/copyright">
     <p class="copyright">
         <xsl:call-template name="copyright-character"/>
         <xsl:apply-templates select="year" />
@@ -6484,8 +6531,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </h1>
                             <!-- Serial list of authors/editors -->
                             <p class="byline">
-                                <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
-                                <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
+                                <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
+                                <xsl:apply-templates select="$bibinfo/editor" mode="name-list"/>
                             </p>
                         </div>  <!-- title-container -->
                     </div> <!-- banner -->
@@ -10314,8 +10361,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </h1>
                         <!-- Serial list of authors/editors -->
                         <p class="byline">
-                            <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
-                            <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
+                            <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
+                            <xsl:apply-templates select="$bibinfo/editor" mode="name-list"/>
                         </p>
                     </div>  <!-- title-container -->
                 </div>  <!-- banner -->
@@ -10528,7 +10575,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <!-- book:author (allow for multiple) -->
     <xsl:if test="$b-is-book">
-        <xsl:for-each select="$document-root/frontmatter/titlepage/author">
+        <xsl:for-each select="$bibinfo/author">
             <xsl:call-template name="open-graph-meta-element">
                 <xsl:with-param name="namespace" select="'book'"/>
                 <xsl:with-param name="property" select="'author'"/>

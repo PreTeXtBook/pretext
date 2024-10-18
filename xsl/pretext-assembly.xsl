@@ -418,6 +418,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="root" select="$augment/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
+<xsl:variable name="bibinfo" select="$document-root/frontmatter/bibinfo"/>
 
 
 <!-- ######################## -->
