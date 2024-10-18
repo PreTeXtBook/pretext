@@ -1318,6 +1318,62 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </h>
 </xsl:template>
 
+<!-- Frontmatter repairs -->
+<!-- 2024-10-10: we will no longer require an author to decide  -->
+<!-- which frontmatter elements belong on a titlepage or in the -->
+<!-- front colophon.  All the elements from both titlepage and  -->
+<!-- colophon should now go in bibinfo.  -->
+<!--We run repair whenever the author has an existing titlepage or -->
+<!--colophon without the new titlepage-items or colophon-items children-->
+<xsl:template match="frontmatter[titlepage[not(titlepage-items)] or colophon[not(colophon-items)]]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <bibinfo>
+            <!-- Include deprecated children of titlepage and colophon -->
+            <xsl:apply-templates select="titlepage/author" mode="repair"/>
+            <xsl:apply-templates select="titlepage/editor" mode="repair"/>
+            <xsl:apply-templates select="titlepage/credit" mode="repair"/>
+            <xsl:apply-templates select="titlepage/date" mode="repair"/>
+            <!-- for slides, we allowed an "event" -->
+            <xsl:apply-templates select="titlepage/event" mode="repair"/>
+            <xsl:apply-templates select="colophon/credit" mode="repair"/>
+            <xsl:apply-templates select="colophon/edition" mode="repair"/>
+            <xsl:apply-templates select="colophon/website" mode="repair"/>
+            <xsl:apply-templates select="colophon/copyright" mode="repair"/>
+        </bibinfo>
+        <!-- insert a titlepage if author provided one -->
+        <xsl:if test="titlepage">
+            <titlepage>
+                <xsl:apply-templates select="titlepage/@*" mode="repair"/>
+                <titlepage-items/>
+            </titlepage>
+        </xsl:if>
+        <!-- Include a colophon only if in a book with an authored colophon -->
+        <xsl:if test="parent::book and colophon">
+            <colophon>
+                <xsl:choose>
+                    <!-- Keep authored xml:id or label -->
+                    <xsl:when test="colophon/@xml:id|colophon/@label">
+                        <xsl:apply-templates select="colophon/@xml:id|colophon/@label" mode="repair"/>
+                    </xsl:when>
+                    <!-- Otherwise, use the label "front-colophon" -->
+                    <xsl:otherwise>
+                        <xsl:attribute name="label">
+                            <xsl:text>front-colophon</xsl:text>
+                        </xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- Include the colophon-items generator -->
+                <colophon-items />
+            </colophon>
+        </xsl:if>
+        <xsl:apply-templates select="*[not(self::bibinfo or self::titlepage or self::colophon)]" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+<!-- But we don't want anything left over in the author's (deprecated) titlepage or colophon. -->
+<xsl:template match="frontmatter/titlepage[not(titlepage-items)]" mode="repair"/>
+<xsl:template match="frontmatter/colophon[not(colophon-items)]" mode="repair"/>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
