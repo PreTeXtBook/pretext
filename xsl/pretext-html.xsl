@@ -1949,7 +1949,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <!-- a caption can have a footnote, hence a -->
             <!-- knowl, hence original or duplicate     -->
-            <xsl:when test="self::figure or self::listing">
+            <!-- activecode captions will be included in RS element -->
+            <xsl:when test="self::figure or self::listing[not(program[@interactive = 'activecode'])]">
                 <xsl:apply-templates select="." mode="caption-full">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
