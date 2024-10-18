@@ -1323,9 +1323,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2024-10-10: we will no longer require an author to decide  -->
 <!-- which frontmatter elements belong on a titlepage or in the -->
 <!-- front colophon.  All the elements from both titlepage and  -->
-<!-- colophon should now go in bibinfo.  -->
-<!--We run repair whenever the author has an existing titlepage or -->
-<!--colophon without the new titlepage-items or colophon-items children-->
+<!-- colophon should now go in bibinfo. We run repair whenever  -->
+<!-- the author has an existing titlepage or colophon without   -->
+<!-- the new titlepage-items or colophon-items children.        -->
 <xsl:template match="frontmatter[titlepage[not(titlepage-items)] or colophon[not(colophon-items)]]" mode="repair">
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="repair"/>
@@ -1342,38 +1342,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="colophon/website" mode="repair"/>
             <xsl:apply-templates select="colophon/copyright" mode="repair"/>
         </bibinfo>
-        <!-- insert a titlepage if author provided one -->
-        <xsl:if test="titlepage">
-            <titlepage>
-                <xsl:apply-templates select="titlepage/@*" mode="repair"/>
-                <titlepage-items/>
-            </titlepage>
-        </xsl:if>
-        <!-- Include a colophon only if in a book with an authored colophon -->
-        <xsl:if test="parent::book and colophon">
-            <colophon>
-                <xsl:choose>
-                    <!-- Keep authored xml:id or label -->
-                    <xsl:when test="colophon/@xml:id|colophon/@label">
-                        <xsl:apply-templates select="colophon/@xml:id|colophon/@label" mode="repair"/>
-                    </xsl:when>
-                    <!-- Otherwise, use the label "front-colophon" -->
-                    <xsl:otherwise>
-                        <xsl:attribute name="label">
-                            <xsl:text>front-colophon</xsl:text>
-                        </xsl:attribute>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <!-- Include the colophon-items generator -->
-                <colophon-items />
-            </colophon>
-        </xsl:if>
-        <xsl:apply-templates select="*[not(self::bibinfo or self::titlepage or self::colophon)]" mode="repair"/>
+        <!-- We (pretty much) duplicate everything, except two templates -->
+        <!-- below hollow-out old-style "titlepage" and "colophon" to    -->
+        <!-- match the new style with generators.                        -->
+        <xsl:apply-templates select="node()" mode="repair"/>
     </xsl:copy>
 </xsl:template>
-<!-- But we don't want anything left over in the author's (deprecated) titlepage or colophon. -->
-<xsl:template match="frontmatter/titlepage[not(titlepage-items)]" mode="repair"/>
-<xsl:template match="frontmatter/colophon[not(colophon-items)]" mode="repair"/>
+
+<!-- We repair a "titlepage" that is not in the new style using a text   -->
+<!-- generator.  The "titlepage" is structural and the empty text        -->
+<!-- generator will be implemented in conversions to do the right thing. -->
+<xsl:template match="titlepage[not(titlepage-items)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="titlepage/@*" mode="repair"/>
+        <titlepage-items/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We repair a front "colophon" that is not in the new style using a   -->
+<!-- text generator.  The "colophon" is structural and the empty text    -->
+<!-- generator will be implemented in conversions to do the right thing. -->
+<!-- NB: "frontmatter" is necessary so we don't clobber a BACK colophon! -->
+<xsl:template match="frontmatter/colophon[not(colophon-items)]" mode="repair">
+    <xsl:copy>
+        <xsl:choose>
+            <!-- Keep authored xml:id or label -->
+            <xsl:when test="colophon/@xml:id|colophon/@label">
+                <xsl:apply-templates select="colophon/@xml:id|colophon/@label" mode="repair"/>
+            </xsl:when>
+            <!-- Otherwise, use the label "front-colophon" -->
+            <xsl:otherwise>
+                <xsl:attribute name="label">
+                    <xsl:text>front-colophon</xsl:text>
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- Include the colophon-items generator -->
+        <colophon-items/>
+    </xsl:copy>
+</xsl:template>
 
 
 <!-- ############################## -->
