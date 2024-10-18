@@ -90,7 +90,7 @@
           <target
             name="print"
             format="pdf"
-            pdf-method="xelatex"
+            latex-engine="xelatex"
             source="source/main.ptx"
             publication="publication/publication.ptx"
             output-dir="output/print"
