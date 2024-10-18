@@ -3150,6 +3150,7 @@
             <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
             <fragref ref="numbering" />
+            <fragref ref="html-doc-opts" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -3278,6 +3279,20 @@
                 element numbering {
                     element division {
                         attribute part {"decorative" | "structural"}
+                    }?
+                }
+            </code>
+        </fragment>
+
+        <p>Some global defaults can be set for HTML builds.</p>
+
+        <fragment xml:id="html-doc-opts">
+            <title>HTML options</title>
+            <code>
+            Configuration |=
+                element html {
+                    element defaults {
+                        attribute programming-language {text}?
                     }?
                 }
             </code>
