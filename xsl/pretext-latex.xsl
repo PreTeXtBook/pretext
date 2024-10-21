@@ -3810,13 +3810,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="frontmatter/bibinfo/author or frontmatter/bibinfo/editor">
+    <xsl:if test="$bibinfo/author or $bibinfo/editor">
         <xsl:text>\author{</xsl:text>
-        <xsl:apply-templates select="frontmatter/bibinfo/author" mode="article-info"/>
-        <xsl:apply-templates select="frontmatter/bibinfo/editor" mode="article-info"/>
+        <xsl:apply-templates select="$bibinfo/author" mode="article-info"/>
+        <xsl:apply-templates select="$bibinfo/editor" mode="article-info"/>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/bibinfo/date" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text><xsl:apply-templates select="$bibinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "half-title" is leading page with -->
@@ -4016,11 +4016,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 
-    <xsl:if test="frontmatter/bibinfo/credit[role]">
+    <xsl:if test="$bibinfo/credit[role]">
         <xsl:text>\par\noindent&#xa;</xsl:text>
     </xsl:if>
     <!-- We accomodate multiple "credit" with a context shift -->
-    <xsl:for-each select="frontmatter/bibinfo/credit[role]">
+    <xsl:for-each select="$bibinfo/credit[role]">
         <xsl:text>\textbf{</xsl:text>
         <xsl:apply-templates select="role" />
         <xsl:text>}:\ \ </xsl:text>
@@ -4030,28 +4030,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>&#xa;</xsl:text>
     </xsl:for-each>
-    <xsl:if test="frontmatter/bibinfo/credit[role]">
+    <xsl:if test="$bibinfo/credit[role]">
         <xsl:text>\par\vspace*{\stretch{2}}&#xa;</xsl:text>
     </xsl:if>
 
     <!-- A book cannot be multiple editions, and if -->
     <!-- attempted this will produce a mish-mash.   -->
-    <xsl:if test="frontmatter/bibinfo/edition" >
+    <xsl:if test="$bibinfo/edition" >
         <xsl:text>\noindent{\bfseries </xsl:text>
-        <xsl:apply-templates select="frontmatter/bibinfo/edition" mode="type-name"/>
+        <xsl:apply-templates select="$bibinfo/edition" mode="type-name"/>
         <xsl:text>}: </xsl:text>
-        <xsl:apply-templates select="frontmatter/bibinfo/edition" />
+        <xsl:apply-templates select="$bibinfo/edition" />
         <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
 
     <!-- We accomodate zero to many "website". -->
-    <xsl:apply-templates select="frontmatter/bibinfo/website"/>
+    <xsl:apply-templates select="$bibinfo/website"/>
 
     <!-- There may be multiple copyrights (a fork under the GFDL -->
     <!-- requires as much).  This accomodates zero to many.  The -->
     <!-- "for-each" enacts a context shift so we know we are     -->
     <!-- mining one "copyright" element at a time.               -->
-    <xsl:for-each select="frontmatter/bibinfo/copyright">
+    <xsl:for-each select="$bibinfo/copyright">
         <xsl:text>\noindent</xsl:text>
         <xsl:call-template name="copyright-character"/>
         <xsl:apply-templates select="year" />
