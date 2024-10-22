@@ -3282,7 +3282,8 @@
                 element programs {
                     attribute language {text}?,
                     attribute compiler-args {text}?,
-                    attribute linker-args {text}?
+                    attribute linker-args {text}?,
+                    attribute download {text}?
                 }
             </code>
         </fragment>

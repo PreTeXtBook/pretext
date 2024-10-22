@@ -2147,6 +2147,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$linker-args"/>
         </xsl:attribute>
     </xsl:if>
+    <!-- download code option -->
+    <xsl:variable name="download-enabled">
+        <xsl:choose>
+            <xsl:when test="@download">
+                <xsl:value-of select="@download"/>
+            </xsl:when>
+            <xsl:when test="$docinfo/programs[@download]">
+                <xsl:value-of select="$docinfo/programs/@download"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$download-enabled = 'yes'">
+        <xsl:attribute name="data-enabledownload">true</xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 
