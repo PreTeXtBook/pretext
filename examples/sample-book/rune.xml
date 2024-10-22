@@ -46,7 +46,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/html/defaults/@programming-language</c> will be checked to determine what language to assume the code is written in.
+        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/programs/@language</c> will be checked to determine what language to assume the code is written in.
         </p>
 
         <listing xml:id="program-activecode-python2">
@@ -159,7 +159,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output.</p>
 
-        <p>If you examine the source, you will also notice the <tag>program</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/html/defaults/@programming-language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.</p>
+        <p>If you examine the source, you will also notice the <tag>program</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/programs/@language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.</p>
 
         <listing xml:id="listing-python-included">
             <caption>A Python program that defines some statistics</caption>
@@ -2577,7 +2577,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Parsons problems can specify a partial ordering that allows for multiple valid solutions.</p>
                 <p>Try putting the blocks in a valid order to calculate and print<c>c</c> Only use the required blocks. There are many valid orderings.</p>
-                <p>[Ed. If you examine the source, you will also notice the <tag>exercise</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/html/defaults/@programming-language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.]</p>
+                <p>[Ed. If you examine the source, you will also notice the <tag>exercise</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/programs/@language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.]</p>
             </statement>
             <blocks>
                 <block order="5" name="math">
@@ -2852,7 +2852,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <exercise label="horizontal-parson-python-test">
           <title>Parsons Problem, Python import</title>
           <statement>
-              <p>This is testing that horizontal parsons get the default programming language from <c>docinfo/html/defaults/@programming-language</c>.</p>
+              <p>This is testing that horizontal parsons get the default programming language from <c>docinfo/programs/@language</c>.</p>
           </statement>
           <blocks layout="horizontal" randomize="yes">
               <block order="2"><c>from</c></block>
