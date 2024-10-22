@@ -3280,7 +3280,9 @@
             <code>
             Configuration |=
                 element programs {
-                    attribute language {text}?
+                    attribute language {text}?,
+                    attribute compiler-args {text}?,
+                    attribute linker-args {text}?
                 }
             </code>
         </fragment>
