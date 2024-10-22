@@ -2074,6 +2074,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:attribute>
     </xsl:if>
+    <!-- allow @stdin attribute on <program> -->
+    <xsl:if test="@stdin">
+        <!-- space-separated this time -->
+        <xsl:attribute name="data-stdin">
+            <xsl:value-of select="@stdin"/>
+        </xsl:attribute>
+    </xsl:if>
     <!-- SQL (only) needs an attribute so it can find some code -->
     <xsl:if test="$active-language = 'sql'">
         <xsl:attribute name="data-wasm">
