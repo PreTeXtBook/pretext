@@ -1964,9 +1964,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- knowl, hence original or duplicate     -->
             <xsl:when test="self::figure or (self::listing and $has-valid-activecode != 'yes')">
                 <xsl:call-template name="space-styled"/>
-                <xsl:apply-templates select="." mode="caption-full">
-                    <xsl:with-param name="b-original" select="$b-original"/>
-                </xsl:apply-templates>
+                <span class="figcaption__caption">
+                    <xsl:apply-templates select="." mode="caption-full">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                    </xsl:apply-templates>
+                </span>
             </xsl:when>
             <xsl:when test="self::table or self::list or (self::listing and $has-valid-activecode = 'yes')">
                 <xsl:call-template name="space-styled"/>
@@ -2956,12 +2958,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-place-title-below" select="($fig-placement = 'subnumber') or ($fig-placement = 'panel')"/>
     <xsl:choose>
         <!-- caption at the bottom, always -->
-        <xsl:when test="self::figure|self::listing">
+        <xsl:when test="self::figure">
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="figure-caption">
                 <xsl:with-param name="b-original" select="$b-original"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- caption at the top as per CMoS -->
+        <xsl:when test="self::listing">
+            <xsl:apply-templates select="." mode="figure-caption">
+                <xsl:with-param name="b-original" select="$b-original"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="*">
+                <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- table only contains a tabular; if not subnumbered  -->
