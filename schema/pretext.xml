@@ -1726,6 +1726,7 @@
                 element listing {
                     MetaDataCaption,
                     Landscape?,
+                    attribute filename {"yes" | "no"}?,
                     (
                         Program |
                         Console

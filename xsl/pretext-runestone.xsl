@@ -1977,13 +1977,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$rsid"/>
                         </xsl:attribute>
                         <!-- add some lead-in text to the window -->
-                        <xsl:if test="$exercise-statement">
+                        <xsl:if test="$exercise-statement or parent::listing/caption">
                             <div class="ac_question">
                                 <xsl:attribute name="id">
                                     <xsl:value-of select="$rsid"/>
                                     <xsl:text>_question</xsl:text>
                                 </xsl:attribute>
-                                <xsl:apply-templates select="$exercise-statement"/>
+                                <xsl:choose>
+                                  <xsl:when test="$exercise-statement">
+                                    <xsl:apply-templates select="$exercise-statement"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <!-- if in a listing we steal the caption from there -->
+                                    <xsl:apply-templates select="parent::listing/caption/node()"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
                             </div>
                         </xsl:if>
                         <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
