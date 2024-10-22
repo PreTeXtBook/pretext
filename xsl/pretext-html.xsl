@@ -1945,6 +1945,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </span>
             </xsl:otherwise>
         </xsl:choose>
+        <!-- listings may have an @filename that should be displayed-->
+        <xsl:if test="self::listing[@filename]">
+            <xsl:call-template name="space-styled"/>
+            <span class="filename">
+                <xsl:value-of select="@filename"/>
+            </span>
+        </xsl:if>
         <!-- When a listing has an activecode, the caption will be picked -->
         <!-- up by the activecode, so we don't want to duplicate it.      -->
         <xsl:variable name="has-valid-activecode">

@@ -10015,7 +10015,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
 
-            <listing xml:id="listing-c-hello">
+            <p>If a <attr>filename</attr> is supplied for the listing, it will be rendered as part of the listing caption. Filenames do not have to be unique - thus a particular filename can "evolve" throughout a work.</p>
+
+            <listing xml:id="listing-c-hello" filename="helloworld.c">
                 <caption>C Version of <q>Hello, World!</q></caption>
                 <program language="c">
                     <input>

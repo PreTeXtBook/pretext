@@ -8610,6 +8610,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}{</xsl:text>
+    <xsl:if test="self::listing[@filename]">
+        <xsl:value-of select="@filename"/>
+        <xsl:text>\space</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="caption-full"/>
     <xsl:apply-templates select="." mode="caption-full"/>
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id"/>
