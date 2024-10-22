@@ -3080,8 +3080,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:when test="@language">
           <xsl:value-of select="@language" />
       </xsl:when>
-      <xsl:when test="$docinfo/html/defaults/@programming-language">
-          <xsl:value-of select="$docinfo/html/defaults/@programming-language" />
+      <xsl:when test="$docinfo/programs/@language">
+          <xsl:value-of select="$docinfo/programs/@language" />
       </xsl:when>
   </xsl:choose>
 </xsl:template>

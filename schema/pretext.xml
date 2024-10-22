@@ -3139,7 +3139,7 @@
             <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
             <fragref ref="numbering" />
-            <fragref ref="html-doc-opts" />
+            <fragref ref="programs" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -3273,16 +3273,14 @@
             </code>
         </fragment>
 
-        <p>Some global defaults can be set for HTML builds.</p>
+        <p>Some global defaults can be set for programs.</p>
 
-        <fragment xml:id="html-doc-opts">
-            <title>HTML options</title>
+        <fragment xml:id="programs">
+            <title>Program options</title>
             <code>
             Configuration |=
-                element html {
-                    element defaults {
-                        attribute programming-language {text}?
-                    }?
+                element programs {
+                    attribute language {text}?
                 }
             </code>
         </fragment>
