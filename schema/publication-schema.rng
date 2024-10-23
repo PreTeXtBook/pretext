@@ -1,0 +1,1030 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <ref name="Publication"/>
+  </start>
+  <define name="Publication">
+    <element name="publication">
+      <interleave>
+        <optional>
+          <ref name="Common"/>
+        </optional>
+        <optional>
+          <ref name="Source"/>
+        </optional>
+        <optional>
+          <ref name="Numbering"/>
+        </optional>
+        <optional>
+          <ref name="Latex"/>
+        </optional>
+        <optional>
+          <ref name="Html"/>
+        </optional>
+        <optional>
+          <ref name="Revealjs"/>
+        </optional>
+        <optional>
+          <ref name="Epub"/>
+        </optional>
+        <optional>
+          <ref name="Webwork"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Common">
+    <element name="common">
+      <interleave>
+        <optional>
+          <element name="chunking">
+            <attribute name="level">
+              <choice>
+                <value>0</value>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+                <value>4</value>
+                <value>5</value>
+                <value>6</value>
+              </choice>
+            </attribute>
+          </element>
+        </optional>
+        <optional>
+          <element name="tableofcontents">
+            <attribute name="level">
+              <choice>
+                <value>0</value>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+                <value>4</value>
+                <value>5</value>
+                <value>6</value>
+              </choice>
+            </attribute>
+          </element>
+        </optional>
+        <optional>
+          <element name="exercise-inline">
+            <ref name="ExerciseAttributes"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="exercise-dividional">
+            <ref name="ExerciseAttributes"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="exercise-worksheet">
+            <ref name="ExerciseAttributes"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="exercise-reading">
+            <ref name="ExerciseAttributes"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="exercise-project">
+            <ref name="ExerciseAttributes"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="fillin">
+            <optional>
+              <attribute name="textstyle">
+                <choice>
+                  <value>underline</value>
+                  <value>box</value>
+                  <value>shade</value>
+                </choice>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="mathstyle">
+                <choice>
+                  <value>underline</value>
+                  <value>box</value>
+                  <value>shade</value>
+                </choice>
+              </attribute>
+            </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="watermark">
+            <attribute name="scale">
+              <data type="decimal"/>
+            </attribute>
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="mermaid">
+            <attribute name="theme"/>
+          </element>
+        </optional>
+        <element name="qrcode">
+          <attribute name="image"/>
+        </element>
+      </interleave>
+    </element>
+  </define>
+  <define name="ExerciseAttributes">
+    <optional>
+      <attribute name="statement">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="hint">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="answer">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="solution">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="Source">
+    <element name="source">
+      <optional>
+        <attribute name="customizations"/>
+      </optional>
+      <optional>
+        <attribute name="private-solutions"/>
+      </optional>
+      <optional>
+        <attribute name="webwork-solutions"/>
+      </optional>
+      <interleave>
+        <optional>
+          <ref name="Directories"/>
+        </optional>
+        <optional>
+          <ref name="Version"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Directories">
+    <element name="directories">
+      <attribute name="external"/>
+      <attribute name="generated"/>
+    </element>
+  </define>
+  <define name="Version">
+    <element name="version">
+      <attribute name="include"/>
+    </element>
+  </define>
+  <define name="Numbering">
+    <element name="numbering">
+      <interleave>
+        <optional>
+          <ref name="Divisions"/>
+        </optional>
+        <optional>
+          <ref name="Blocks"/>
+        </optional>
+        <optional>
+          <ref name="Projects"/>
+        </optional>
+        <optional>
+          <ref name="Equations"/>
+        </optional>
+        <optional>
+          <ref name="Footnotes"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Divisions">
+    <element name="divisions">
+      <optional>
+        <attribute name="level">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="chapter-start">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="parts-structure">
+          <choice>
+            <value>decorative</value>
+            <value>structural</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Blocks">
+    <element name="blocks">
+      <attribute name="level">
+        <choice>
+          <value>0</value>
+          <value>1</value>
+          <value>2</value>
+          <value>3</value>
+          <value>4</value>
+          <value>5</value>
+          <value>6</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Projects">
+    <element name="projects">
+      <attribute name="level">
+        <choice>
+          <value>0</value>
+          <value>1</value>
+          <value>2</value>
+          <value>3</value>
+          <value>4</value>
+          <value>5</value>
+          <value>6</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Equations">
+    <element name="equations">
+      <attribute name="level">
+        <choice>
+          <value>0</value>
+          <value>1</value>
+          <value>2</value>
+          <value>3</value>
+          <value>4</value>
+          <value>5</value>
+          <value>6</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Footnotes">
+    <element name="footnotes">
+      <optional>
+        <attribute name="level">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Latex">
+    <element name="latex">
+      <optional>
+        <attribute name="latex-style"/>
+      </optional>
+      <optional>
+        <attribute name="print">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="sides">
+          <choice>
+            <value>one</value>
+            <value>two</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="open-odd">
+          <choice>
+            <value>add-blanks</value>
+            <value>skip-pages</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="font-size">
+          <choice>
+            <value>9</value>
+            <value>10</value>
+            <value>11</value>
+            <value>12</value>
+            <value>14</value>
+            <value>17</value>
+            <value>20</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="page-ref">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="draft">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="snapshow">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <interleave>
+        <optional>
+          <ref name="Page"/>
+        </optional>
+        <optional>
+          <ref name="Worksheet"/>
+        </optional>
+        <optional>
+          <ref name="Cover"/>
+        </optional>
+        <optional>
+          <ref name="Asymptote"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Page">
+    <element name="page">
+      <optional>
+        <attribute name="right-alignment">
+          <choice>
+            <value>flush</value>
+            <value>ragged</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="bottom-alignment">
+          <choice>
+            <value>flush</value>
+            <value>ragged</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="crop-marks">
+          <choice>
+            <value>none</value>
+            <value>a0</value>
+            <value>a1</value>
+            <value>a2</value>
+            <value>a3</value>
+            <value>a4</value>
+            <value>a5</value>
+            <value>a6</value>
+            <value>b0</value>
+            <value>b1</value>
+            <value>b2</value>
+            <value>b3</value>
+            <value>b4</value>
+            <value>b5</value>
+            <value>b6</value>
+            <value>letter</value>
+            <value>legal</value>
+            <value>executive</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <element name="geometry">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="Worksheet">
+    <element name="worksheet">
+      <optional>
+        <attribute name="formatted">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Cover">
+    <element name="cover">
+      <optional>
+        <attribute name="front"/>
+      </optional>
+      <optional>
+        <attribute name="back"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Asymptote">
+    <element name="asymptote">
+      <optional>
+        <attribute name="links">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Html">
+    <element name="html">
+      <optional>
+        <attribute name="platform">
+          <choice>
+            <value>web</value>
+            <value>runestone</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="short-answer-responses">
+          <choice>
+            <value>graded</value>
+            <value>always</value>
+          </choice>
+        </attribute>
+      </optional>
+      <interleave>
+        <optional>
+          <ref name="Analytics"/>
+        </optional>
+        <optional>
+          <ref name="Baseurl"/>
+        </optional>
+        <optional>
+          <ref name="Calculator"/>
+        </optional>
+        <optional>
+          <ref name="WebworkDynamism"/>
+        </optional>
+        <optional>
+          <ref name="Indexpage"/>
+        </optional>
+        <optional>
+          <ref name="Knowls"/>
+        </optional>
+        <optional>
+          <ref name="Exercises"/>
+        </optional>
+        <optional>
+          <ref name="Css"/>
+        </optional>
+        <optional>
+          <ref name="Search"/>
+        </optional>
+        <optional>
+          <ref name="Video"/>
+        </optional>
+        <optional>
+          <ref name="Asymptote"/>
+        </optional>
+        <optional>
+          <ref name="Feedback"/>
+        </optional>
+        <optional>
+          <ref name="NavigationHTML"/>
+        </optional>
+        <optional>
+          <ref name="Tableofcontents"/>
+        </optional>
+        <optional>
+          <ref name="Crossreferences"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Analytics">
+    <element name="analytics">
+      <optional>
+        <attribute name="google-gst"/>
+      </optional>
+      <optional>
+        <attribute name="statcounter-project"/>
+      </optional>
+      <optional>
+        <attribute name="statcounter-security"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Baseurl">
+    <element name="baseurl">
+      <attribute name="href"/>
+    </element>
+  </define>
+  <define name="Calculator">
+    <element name="calculator">
+      <optional>
+        <attribute name="model">
+          <choice>
+            <value>geogebra-classic</value>
+            <value>geogebra-graphing</value>
+            <value>geogebra-geometry</value>
+            <value>geogebra-3d</value>
+            <value>none </value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="activecode">
+          <choice>
+            <value>python</value>
+            <value>javascript</value>
+            <value>html</value>
+            <value>sql</value>
+            <value>c</value>
+            <value>cpp</value>
+            <value>java</value>
+            <value>python3</value>
+            <value>octave</value>
+            <value>none</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Crossreferences">
+    <element name="cross-references">
+      <attribute name="knowled">
+        <choice>
+          <value>maximum</value>
+          <value>never</value>
+          <value>cross-page</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Css">
+    <element name="css">
+      <optional>
+        <attribute name="colors"/>
+      </optional>
+      <optional>
+        <attribute name="style"/>
+      </optional>
+      <optional>
+        <attribute name="knowls"/>
+      </optional>
+      <optional>
+        <attribute name="toc"/>
+      </optional>
+      <optional>
+        <attribute name="banner"/>
+      </optional>
+      <optional>
+        <attribute name="navbar"/>
+      </optional>
+      <optional>
+        <attribute name="shell"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Exercises">
+    <element name="exercises">
+      <attribute name="tabbed-tasks">
+        <choice>
+          <value>divisional</value>
+          <value>inline</value>
+          <value>reading</value>
+          <value>project</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Feedback">
+    <element name="feedback">
+      <attribute name="href"/>
+    </element>
+  </define>
+  <define name="Indexpage">
+    <element name="index-page">
+      <attribute name="ref"/>
+    </element>
+  </define>
+  <define name="Knowls">
+    <element name="knowl">
+      <optional>
+        <attribute name="theorem">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="proof">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="definition">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="example">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="example-solution">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="project">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="task">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="remark">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="objectives">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="outcomes">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="figure">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="table">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="listing">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="list">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="exercise-inline">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="exercise-divisional">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="exercise-worksheet">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="exercise-readingquestion">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="NavigationHTML">
+    <element name="navigation">
+      <optional>
+        <attribute name="logic">
+          <choice>
+            <value>linear</value>
+            <value>tree</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="upbutton">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Search">
+    <element name="search">
+      <optional>
+        <attribute name="variant">
+          <choice>
+            <value>textbook</value>
+            <value>reference</value>
+            <value>none</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="google-cx"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Tableofcontents">
+    <element name="table-of-contents">
+      <optional>
+        <attribute name="focused">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="preexpanded-levels">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Video">
+    <element name="video">
+      <attribute name="privacy">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="WebworkDynamism">
+    <element name="webwork">
+      <optional>
+        <attribute name="inline">
+          <choice>
+            <value>dynamic</value>
+            <value>static</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="divisional">
+          <choice>
+            <value>dynamic</value>
+            <value>static</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="reading">
+          <choice>
+            <value>dynamic</value>
+            <value>static</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="worksheet">
+          <choice>
+            <value>dynamic</value>
+            <value>static</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="project">
+          <choice>
+            <value>dynamic</value>
+            <value>static</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Revealjs">
+    <element name="revealjs">
+      <interleave>
+        <optional>
+          <ref name="Appearance"/>
+        </optional>
+        <optional>
+          <ref name="Controls"/>
+        </optional>
+        <optional>
+          <ref name="NavigationReveal"/>
+        </optional>
+        <optional>
+          <ref name="Resources"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Appearance">
+    <element name="appearance">
+      <attribute name="theme"/>
+    </element>
+  </define>
+  <define name="Controls">
+    <element name="controls">
+      <optional>
+        <attribute name="backarrow">
+          <choice>
+            <value>faded</value>
+            <value>hidden</value>
+            <value>visible</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="display">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="layout">
+          <choice>
+            <value>edges</value>
+            <value>bottom-right</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="tutorial">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="NavigationReveal">
+    <element name="navigation">
+      <attribute name="mode">
+        <choice>
+          <value>default</value>
+          <value>linear</value>
+          <value>grid</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Resources">
+    <element name="resources">
+      <attribute name="host">
+        <choice>
+          <value>local</value>
+          <value>cdn</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Epub">
+    <element name="epub">
+      <element name="cover">
+        <attribute name="front"/>
+      </element>
+    </element>
+  </define>
+  <define name="Webwork">
+    <element name="webwork">
+      <attribute name="server"/>
+      <optional>
+        <attribute name="course"/>
+      </optional>
+      <optional>
+        <attribute name="coursepassord"/>
+      </optional>
+      <optional>
+        <attribute name="user"/>
+      </optional>
+      <optional>
+        <attribute name="userpassword"/>
+      </optional>
+      <optional>
+        <attribute name="task-reveal">
+          <choice>
+            <value>preceding-correct</value>
+            <value>all</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+</grammar>

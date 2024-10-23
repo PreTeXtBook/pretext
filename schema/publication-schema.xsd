@@ -1,0 +1,954 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="publication">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="common"/>
+        <xs:element ref="source"/>
+        <xs:element ref="numbering"/>
+        <xs:element ref="latex"/>
+        <xs:element ref="html"/>
+        <xs:element ref="revealjs"/>
+        <xs:element ref="epub"/>
+        <xs:group ref="Webwork"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="common">
+    <xs:complexType>
+      <xs:all>
+        <xs:element minOccurs="0" ref="chunking"/>
+        <xs:element minOccurs="0" ref="tableofcontents"/>
+        <xs:element minOccurs="0" ref="exercise-inline"/>
+        <xs:element minOccurs="0" ref="exercise-dividional"/>
+        <xs:element minOccurs="0" ref="exercise-worksheet"/>
+        <xs:element minOccurs="0" ref="exercise-reading"/>
+        <xs:element minOccurs="0" ref="exercise-project"/>
+        <xs:element minOccurs="0" ref="fillin"/>
+        <xs:element minOccurs="0" ref="watermark"/>
+        <xs:element minOccurs="0" ref="mermaid"/>
+        <xs:element ref="qrcode"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="chunking">
+    <xs:complexType>
+      <xs:attribute name="level" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tableofcontents">
+    <xs:complexType>
+      <xs:attribute name="level" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercise-inline">
+    <xs:complexType>
+      <xs:attributeGroup ref="ExerciseAttributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercise-dividional">
+    <xs:complexType>
+      <xs:attributeGroup ref="ExerciseAttributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercise-worksheet">
+    <xs:complexType>
+      <xs:attributeGroup ref="ExerciseAttributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercise-reading">
+    <xs:complexType>
+      <xs:attributeGroup ref="ExerciseAttributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercise-project">
+    <xs:complexType>
+      <xs:attributeGroup ref="ExerciseAttributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fillin">
+    <xs:complexType>
+      <xs:attribute name="textstyle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="underline"/>
+            <xs:enumeration value="box"/>
+            <xs:enumeration value="shade"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="mathstyle">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="underline"/>
+            <xs:enumeration value="box"/>
+            <xs:enumeration value="shade"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="watermark">
+    <xs:complexType mixed="true">
+      <xs:attribute name="scale" use="required" type="xs:decimal"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mermaid">
+    <xs:complexType>
+      <xs:attribute name="theme" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="qrcode">
+    <xs:complexType>
+      <xs:attribute name="image" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="ExerciseAttributes">
+    <xs:attribute name="statement">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="hint">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="answer">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="solution">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="source">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="directories"/>
+        <xs:element ref="version"/>
+      </xs:choice>
+      <xs:attribute name="customizations"/>
+      <xs:attribute name="private-solutions"/>
+      <xs:attribute name="webwork-solutions"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="directories">
+    <xs:complexType>
+      <xs:attribute name="external" use="required"/>
+      <xs:attribute name="generated" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="version">
+    <xs:complexType>
+      <xs:attribute name="include" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="numbering">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="divisions"/>
+        <xs:element ref="blocks"/>
+        <xs:element ref="projects"/>
+        <xs:element ref="equations"/>
+        <xs:element ref="footnotes"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="divisions">
+    <xs:complexType>
+      <xs:attribute name="level">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chapter-start" type="xs:integer"/>
+      <xs:attribute name="parts-structure">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="decorative"/>
+            <xs:enumeration value="structural"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="blocks">
+    <xs:complexType>
+      <xs:attribute name="level" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="projects">
+    <xs:complexType>
+      <xs:attribute name="level" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="equations">
+    <xs:complexType>
+      <xs:attribute name="level" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="footnotes">
+    <xs:complexType>
+      <xs:attribute name="level">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="latex">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="page"/>
+        <xs:element ref="worksheet"/>
+        <xs:element ref="cover"/>
+        <xs:element ref="asymptote"/>
+      </xs:choice>
+      <xs:attribute name="latex-style"/>
+      <xs:attribute name="print">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="sides">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="one"/>
+            <xs:enumeration value="two"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="open-odd">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="add-blanks"/>
+            <xs:enumeration value="skip-pages"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="font-size">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="9"/>
+            <xs:enumeration value="10"/>
+            <xs:enumeration value="11"/>
+            <xs:enumeration value="12"/>
+            <xs:enumeration value="14"/>
+            <xs:enumeration value="17"/>
+            <xs:enumeration value="20"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="page-ref">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="draft">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="snapshow">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="page">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="geometry"/>
+      </xs:sequence>
+      <xs:attribute name="right-alignment">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="flush"/>
+            <xs:enumeration value="ragged"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bottom-alignment">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="flush"/>
+            <xs:enumeration value="ragged"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="crop-marks">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="a0"/>
+            <xs:enumeration value="a1"/>
+            <xs:enumeration value="a2"/>
+            <xs:enumeration value="a3"/>
+            <xs:enumeration value="a4"/>
+            <xs:enumeration value="a5"/>
+            <xs:enumeration value="a6"/>
+            <xs:enumeration value="b0"/>
+            <xs:enumeration value="b1"/>
+            <xs:enumeration value="b2"/>
+            <xs:enumeration value="b3"/>
+            <xs:enumeration value="b4"/>
+            <xs:enumeration value="b5"/>
+            <xs:enumeration value="b6"/>
+            <xs:enumeration value="letter"/>
+            <xs:enumeration value="legal"/>
+            <xs:enumeration value="executive"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="geometry" type="xs:string"/>
+  <xs:element name="worksheet">
+    <xs:complexType>
+      <xs:attribute name="formatted">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cover">
+    <xs:complexType>
+      <xs:attribute name="front"/>
+      <xs:attribute name="back"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="asymptote">
+    <xs:complexType>
+      <xs:attribute name="links">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="html">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="analytics"/>
+        <xs:element ref="baseurl"/>
+        <xs:element ref="calculator"/>
+        <xs:group ref="WebworkDynamism"/>
+        <xs:element ref="index-page"/>
+        <xs:element ref="knowl"/>
+        <xs:element ref="exercises"/>
+        <xs:element ref="css"/>
+        <xs:element ref="search"/>
+        <xs:element ref="video"/>
+        <xs:element ref="asymptote"/>
+        <xs:element ref="feedback"/>
+        <xs:group ref="NavigationHTML"/>
+        <xs:element ref="table-of-contents"/>
+        <xs:element ref="cross-references"/>
+      </xs:choice>
+      <xs:attribute name="platform">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="web"/>
+            <xs:enumeration value="runestone"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="short-answer-responses">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="graded"/>
+            <xs:enumeration value="always"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="analytics">
+    <xs:complexType>
+      <xs:attribute name="google-gst"/>
+      <xs:attribute name="statcounter-project"/>
+      <xs:attribute name="statcounter-security"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="baseurl">
+    <xs:complexType>
+      <xs:attribute name="href" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calculator">
+    <xs:complexType>
+      <xs:attribute name="model">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="geogebra-classic"/>
+            <xs:enumeration value="geogebra-graphing"/>
+            <xs:enumeration value="geogebra-geometry"/>
+            <xs:enumeration value="geogebra-3d"/>
+            <xs:enumeration value="none "/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="activecode">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="python"/>
+            <xs:enumeration value="javascript"/>
+            <xs:enumeration value="html"/>
+            <xs:enumeration value="sql"/>
+            <xs:enumeration value="c"/>
+            <xs:enumeration value="cpp"/>
+            <xs:enumeration value="java"/>
+            <xs:enumeration value="python3"/>
+            <xs:enumeration value="octave"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cross-references">
+    <xs:complexType>
+      <xs:attribute name="knowled" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="maximum"/>
+            <xs:enumeration value="never"/>
+            <xs:enumeration value="cross-page"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="css">
+    <xs:complexType>
+      <xs:attribute name="colors"/>
+      <xs:attribute name="style"/>
+      <xs:attribute name="knowls"/>
+      <xs:attribute name="toc"/>
+      <xs:attribute name="banner"/>
+      <xs:attribute name="navbar"/>
+      <xs:attribute name="shell"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercises">
+    <xs:complexType>
+      <xs:attribute name="tabbed-tasks" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="divisional"/>
+            <xs:enumeration value="inline"/>
+            <xs:enumeration value="reading"/>
+            <xs:enumeration value="project"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="feedback">
+    <xs:complexType>
+      <xs:attribute name="href" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="index-page">
+    <xs:complexType>
+      <xs:attribute name="ref" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="knowl">
+    <xs:complexType>
+      <xs:attribute name="theorem">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="proof">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="definition">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="example">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="example-solution">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="project">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="task">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="remark">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="objectives">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outcomes">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="figure">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="table">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="listing">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="list">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="exercise-inline">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="exercise-divisional">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="exercise-worksheet">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="exercise-readingquestion">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="NavigationHTML">
+    <xs:sequence>
+      <xs:element name="navigation">
+        <xs:complexType>
+          <xs:attribute name="logic">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="linear"/>
+                <xs:enumeration value="tree"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="upbutton">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="search">
+    <xs:complexType>
+      <xs:attribute name="variant">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="textbook"/>
+            <xs:enumeration value="reference"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="google-cx"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="table-of-contents">
+    <xs:complexType>
+      <xs:attribute name="focused">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="preexpanded-levels">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="video">
+    <xs:complexType>
+      <xs:attribute name="privacy" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="WebworkDynamism">
+    <xs:sequence>
+      <xs:element name="webwork">
+        <xs:complexType>
+          <xs:attribute name="inline">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="dynamic"/>
+                <xs:enumeration value="static"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="divisional">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="dynamic"/>
+                <xs:enumeration value="static"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="reading">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="dynamic"/>
+                <xs:enumeration value="static"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="worksheet">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="dynamic"/>
+                <xs:enumeration value="static"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="project">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="dynamic"/>
+                <xs:enumeration value="static"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="revealjs">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="appearance"/>
+        <xs:element ref="controls"/>
+        <xs:group ref="NavigationReveal"/>
+        <xs:element ref="resources"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="appearance">
+    <xs:complexType>
+      <xs:attribute name="theme" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="controls">
+    <xs:complexType>
+      <xs:attribute name="backarrow">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="faded"/>
+            <xs:enumeration value="hidden"/>
+            <xs:enumeration value="visible"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="display">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="layout">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="edges"/>
+            <xs:enumeration value="bottom-right"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="tutorial">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="NavigationReveal">
+    <xs:sequence>
+      <xs:element name="navigation">
+        <xs:complexType>
+          <xs:attribute name="mode" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="default"/>
+                <xs:enumeration value="linear"/>
+                <xs:enumeration value="grid"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="resources">
+    <xs:complexType>
+      <xs:attribute name="host" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="cdn"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="epub">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="cover">
+          <xs:complexType>
+            <xs:attribute name="front" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Webwork">
+    <xs:sequence>
+      <xs:element name="webwork">
+        <xs:complexType>
+          <xs:attribute name="server" use="required"/>
+          <xs:attribute name="course"/>
+          <xs:attribute name="coursepassord"/>
+          <xs:attribute name="user"/>
+          <xs:attribute name="userpassword"/>
+          <xs:attribute name="task-reveal">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="preceding-correct"/>
+                <xs:enumeration value="all"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>
