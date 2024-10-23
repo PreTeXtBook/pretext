@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--   = one, mandatory -->
+<!-- ? = one, optional  -->
+<!-- * = zero or more   -->
+<!-- + = one or more    -->
+
+<pretext>
+
+    <docinfo>
+        <cross-references text="type-global" />
+    </docinfo>
+
+    <article xml:id="publication">
+        <title>PreTeXt Publication File RELAX-NG Schema</title>
+
+        <frontmatter>
+            <bibinfo>
+
+               <!-- There can be several authors here -->
+               <author>
+                    <personname>Robert A.<nbsp/>Beezer</personname>
+                    <!-- department here is one line, so unstructured -->
+                    <department>Department of Mathematics and Computer Science</department>
+                    <!-- institution uses two lines, so structured as such -->
+                    <institution>
+                        <line>University of Puget Sound</line>
+                        <line>Tacoma, Washington, USA</line>
+                    </institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <author>
+                    <personname>Oscar Levin</personname>
+                    <!-- department here is one line, so unstructured -->
+                    <department>Mathematical Sciences</department>
+                    <!-- institution uses two lines, so structured as such -->
+                    <institution>
+                        <line>University of Northern Colorado</line>
+                        <line>Greeley, Co 80639</line>
+                    </institution>
+                    <email>oscar.levin@unco.edu</email>
+                </author>
+
+                <!-- Can set date manually or use the "today" element -->
+                <date><today/></date>
+            </bibinfo>
+
+            <titlepage>
+                <titlepage-items />
+            </titlepage>
+        </frontmatter>
+
+    <introduction>
+        <p>
+            This is a literate programming version of the <init>RELAX-NG</init> schema for <pretext/>'s Pulbication Files.  It is based on the corresponding version for <pretext/>'s <init>RELAX-NG</init> schema written by Rob Beezer.  It is used to generate the <init>RELAX-NG</init> compact syntax version (<c>pretext.rnc</c>) and other versions are derived from the compact version with standard tools.
+        </p>
+
+        <p>
+            The main use for this schema currently is to let <em>publishers</em> more easily write publication files for <pretext/> projects since the <c>pretext-tools</c> extension for VS Code uses (the derived version) of this schema to provide completions and (eventually) validation.
+        </p>
+
+        <p>
+            Comments in this file are kept to a minimum.  Full documentation of publisher options are presented in the <url href="https://pretextbook.org/doc/guide/html/publication-file-reference.html"><pretext/> guide</url>.
+        </p>
+
+        <p>
+            More information about how <init>RELAX-NG</init> schemas work, as well as how the literate programming version of this schema works, can be found in the <pretext /> schema.
+        </p>
+    </introduction>
+
+    <section>
+        <title>Start Element</title>
+
+        <p>
+            The only <c>start</c> element for a publication file is <tag>publication</tag>.
+        </p>
+
+        <fragment xml:id="start-element">
+            <title>Start element</title>
+            <code>
+            start = Publication
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Gross Structure</title>
+
+        <p>
+            A publication file always has the root element <tag>publication</tag>.  After that, all elements are optional.  Those elements include common options, and options for numbering, latex, html, reveal.js, epub, source, and <webwork/>.  These can come in any order.
+        </p>
+
+        <fragment xml:id="gross-structure">
+            <title>Gross structure</title>
+            <code>
+            Publication =
+                element publication {
+                    Common? &amp;
+                    Source? &amp;
+                    Numbering? &amp;
+                    Latex? &amp;
+                    Html? &amp;
+                    Revealjs? &amp;
+                    Epub? &amp;
+                    Webwork?
+                }
+            </code>
+        </fragment>
+    </section>
+
+
+    <section>
+        <title>Common Options</title>
+
+        <p>
+            These options will affect more than one output format.
+        </p>
+
+        <fragment xml:id="common">
+            <title>Common Options</title>
+            <code>
+            Common =
+                element common {
+                    element chunking {
+                        attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                    }? &amp;
+                    element tableofcontents {
+                        attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                    }? &amp;
+                    element exercise-inline {
+                        ExerciseAttributes
+                    }? &amp;
+                    element exercise-divisional {
+                        ExerciseAttributes
+                    }? &amp;
+                    element exercise-worksheet {
+                        ExerciseAttributes
+                    }? &amp;
+                    element exercise-reading {
+                        ExerciseAttributes
+                    }? &amp;
+                    element exercise-project {
+                        ExerciseAttributes
+                    }? &amp;
+                    element fillin {
+                        attribute textstyle { "underline" | "box" | "shade" }?,
+                        attribute mathstyle { "underline" | "box" | "shade" }?
+                    }? &amp;
+                    element watermark {
+                        attribute scale { xsd:decimal },
+                        text
+                    }? &amp;
+                    element mermaid {
+                        attribute theme { text }
+                    }? &amp;
+                    element qrcode {
+                        attribute image { text }
+                    }
+                }
+
+            ExerciseAttributes =
+                attribute statement { "yes" | "no" }?,
+                attribute hint { "yes" | "no" }?,
+                attribute answer { "yes" | "no" }?,
+                attribute solution { "yes" | "no" }?
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Source Options</title>
+
+        <p>
+            These options relate to how the source files are interpreted and organized.
+        </p>
+
+        <fragment xml:id="source">
+            <title>Source Options</title>
+            <code>
+            Source =
+                element source {
+                    attribute customizations { text }?,
+                    attribute private-solutions { text }?,
+                    attribute webwork-solutions { text }?,
+                    (Directories? &amp; Version?)
+                }
+
+            Directories =
+                element directories {
+                    attribute external { text },
+                    attribute generated { text }
+                }
+
+            Version =
+                element version {
+                    attribute include { text }
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Numbering Options</title>
+
+        <p>
+            These options will affect multiplt output formats, all related to numbering.
+        </p>
+
+        <fragment xml:id="numbering">
+            <title>Numbering Options</title>
+            <code>
+            Numbering =
+                element numbering {
+                    Divisions? &amp;
+                    Blocks? &amp;
+                    Projects? &amp;
+                    Equations? &amp;
+                    Footnotes?
+                }
+
+            Divisions =
+                element divisions {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute chapter-start { xsd:integer }?,
+                    attribute parts-structure { "decorative" | "structural" }?
+                }
+
+            Blocks =
+                element blocks {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                }
+
+            Projects =
+                element projects {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                }
+
+            Equations =
+                element equations {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                }
+
+            Footnotes =
+                element footnotes {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>LaTeX Options</title>
+
+        <p>
+            These options are specific to the PDF/LaTeX output formats.
+        </p>
+
+        <fragment xml:id="latex">
+            <title>LaTeX Options</title>
+            <code>
+            Latex =
+                element latex {
+                    attribute latex-style {text}?,
+                    attribute print { "yes" | "no" }?,
+                    attribute sides { "one" | "two" }?,
+                    attribute open-odd { "add-blanks" | "skip-pages" | "no" }?,
+                    attribute font-size { "9" | "10" | "11" | "12" | "14" | "17" | "20" }?,
+                    attribute page-ref { "yes" | "no" }?,
+                    attribute draft { "yes" | "no" }?,
+                    attribute snapshow { "yes" | "no" }?,
+                    ( Page? &amp; Worksheet? &amp; Cover? &amp; Asymptote?)
+                }
+
+            Page =
+                element page {
+                    attribute right-alignment { "flush" | "ragged" }?,
+                    attribute bottom-alignment { "flush" | "ragged" }?,
+                    attribute crop-marks { "none" | "a0" | "a1" | "a2" | "a3" | "a4" | "a5" | "a6" | "b0" | "b1" | "b2" | "b3" | "b4" | "b5" | "b6" | "letter" | "legal" | "executive" }?,
+                    element geometry { text }?
+                }
+
+            Worksheet =
+                element worksheet {
+                    attribute formatted { "yes" | "no" }?
+                }
+
+            Cover =
+                element cover {
+                    attribute front { text }?,
+                    attribute back { text }?
+                }
+
+            Asymptote =
+                element asymptote {
+                    attribute links { "yes" | "no" }?
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>HTML Options</title>
+
+        <p>
+            These options control the Online/HTML output's presentation.
+        </p>
+
+        <p>
+            Note that the named pattern for Asymptote is defined in the <latex /> section above.
+        </p>
+
+        <fragment xml:id="html">
+            <title>HTML Options</title>
+            <code>
+            Html =
+                element html {
+                    attribute platform { "web" | "runestone" }?,
+                    attribute short-answer-responses { "graded" | "always" }?,
+                    (Analytics? &amp; Baseurl? &amp; Calculator? &amp; WebworkDynamism? &amp; Indexpage? &amp; Knowls? &amp; Exercises? &amp; Css? &amp; Search? &amp; Video? &amp; Asymptote? &amp; Feedback? &amp; NavigationHTML? &amp; Tableofcontents? &amp; Crossreferences?)
+                }
+
+            Analytics =
+                element analytics {
+                    attribute google-gst { text }?,
+                    attribute statcounter-project { text }?,
+                    attribute statcounter-security { text }?
+                }
+
+            Baseurl =
+                element baseurl {
+                    attribute href { text }
+                }
+
+            Calculator =
+                element calculator {
+                    attribute model { "geogebra-classic" | "geogebra-graphing" | "geogebra-geometry" | "geogebra-3d" | "none "}?,
+                    attribute activecode { "python" | "javascript" | "html" | "sql" | "c" | "cpp" | "java" | "python3" | "octave" | "none"}?
+                }
+
+            Crossreferences =
+                element cross-references {
+                    attribute knowled { "maximum" | "never" | "cross-page" }
+                }
+
+            Css =
+                element css {
+                    attribute colors { text }?,
+                    attribute style { text }?,
+                    attribute knowls { text }?,
+                    attribute toc { text }?,
+                    attribute banner { text }?,
+                    attribute navbar { text }?,
+                    attribute shell { text }?
+                }
+
+            Exercises =
+                element exercises {
+                    attribute tabbed-tasks { "divisional" | "inline" | "reading" | "project" }
+                }
+
+            Feedback =
+                element feedback {
+                    attribute href { text }
+                }
+
+            Indexpage =
+                element index-page {
+                    attribute ref { text }
+                }
+
+            Knowls =
+                element knowl {
+                    attribute theorem { "yes" | "no" }?,
+                    attribute proof { "yes" | "no" }?,
+                    attribute definition { "yes" | "no" }?,
+                    attribute example { "yes" | "no" }?,
+                    attribute example-solution { "yes" | "no" }?,
+                    attribute project { "yes" | "no" }?,
+                    attribute task { "yes" | "no" }?,
+                    attribute remark { "yes" | "no" }?,
+                    attribute objectives { "yes" | "no" }?,
+                    attribute outcomes { "yes" | "no" }?,
+                    attribute figure { "yes" | "no" }?,
+                    attribute table { "yes" | "no" }?,
+                    attribute listing { "yes" | "no" }?,
+                    attribute list { "yes" | "no" }?,
+                    attribute exercise-inline { "yes" | "no" }?,
+                    attribute exercise-divisional { "yes" | "no" }?,
+                    attribute exercise-worksheet { "yes" | "no" }?,
+                    attribute exercise-readingquestion { "yes" | "no" }?
+                }
+
+            NavigationHTML =
+                element navigation {
+                    attribute logic { "linear" | "tree" }?,
+                    attribute upbutton { "yes" | "no" }?
+                }
+            Search =
+                element search {
+                    attribute variant { "textbook" | "reference" | "none" }?,
+                    attribute google-cx { text }?
+                }
+
+            Tableofcontents =
+                element table-of-contents {
+                    attribute focused { "yes" | "no" }?,
+                    attribute preexpanded-levels { "0" | "1" | "2" | "3" | "4" | "5" | "6"}?
+                }
+
+            Video =
+                element video {
+                    attribute privacy { "yes" | "no" }
+                }
+
+            WebworkDynamism =
+                element webwork {
+                    attribute inline { "dynamic" | "static" }?,
+                    attribute divisional { "dynamic" | "static" }?,
+                    attribute reading { "dynamic" | "static" }?,
+                    attribute worksheet { "dynamic" | "static" }?,
+                    attribute project { "dynamic" | "static" }?
+                }
+
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Reveal.js Options</title>
+
+        <p>
+            These options control the Reveal.js slides presentation.
+        </p>
+
+        <fragment xml:id="revealjs">
+            <title>Reveal.js Options</title>
+            <code>
+            Revealjs =
+                element revealjs {
+                    Appearance? &amp;
+                    Controls? &amp;
+                    NavigationReveal? &amp;
+                    Resources?
+                }
+
+            Appearance =
+                element appearance {
+                    attribute theme { text }
+                }
+
+            Controls =
+                element controls {
+                    attribute backarrow { "faded" | "hidden" | "visible" }?,
+                    attribute display { "yes" | "no" }?,
+                    attribute layout { "edges" | "bottom-right" }?,
+                    attribute tutorial { "yes" | "no" }?
+                }
+
+            NavigationReveal =
+                element navigation {
+                    attribute mode { "default" | "linear" | "grid" }
+                }
+
+            Resources =
+                element resources {
+                    attribute host { "local" | "cdn" }
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>EPUB Options</title>
+
+        <p>
+            These option(s) control the EPUB output.
+        </p>
+
+        <fragment xml:id="epub">
+            <title>EPUB Options</title>
+            <code>
+            Epub =
+                element epub {
+                    element cover {
+                        attribute front { text }
+                    }
+                }
+            </code>
+        </fragment>
+    </section>
+
+
+    <section>
+        <title><webwork/> Options</title>
+
+        <p>
+            These options are for when an author wants to pull out <webwork/> problems for use on a <webwork /> server.
+        </p>
+
+        <fragment xml:id="webwork">
+            <title><webwork /> Options</title>
+            <code>
+            Webwork =
+                element webwork {
+                    attribute server { text },
+                    attribute course { text }?,
+                    attribute coursepassord { text }?,
+                    attribute user { text }?,
+                    attribute userpassword { text }?,
+                    attribute task-reveal { "preceding-correct" | "all" }?
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Hierarchical Structure</title>
+
+        <p>
+            We collect all the specifications, roughly in a top-down order, so the generated schema files have a rational ordering to them, even if the order presented here is different.
+        </p>
+
+        <fragment filename="publication-schema.rnc">
+            <title>Hierarchical Structure</title>
+            <code>
+            grammar {
+            </code>
+            <fragref ref="start-element" />
+            <fragref ref="gross-structure" />
+            <fragref ref="common" />
+            <fragref ref="source" />
+            <fragref ref="numbering" />
+            <fragref ref="latex" />
+            <fragref ref="html" />
+            <fragref ref="revealjs" />
+            <fragref ref="epub" />
+            <fragref ref="webwork" />
+            <code>
+            }
+            </code>
+            </fragment>
+    </section>
+
+    <backmatter>
+        <appendix xml:id="fragment-list">
+            <title>
+                    Fragments</title>
+
+            <list-of elements="fragment"/>
+        </appendix>
+    </backmatter>
+
+    </article>
+</pretext>

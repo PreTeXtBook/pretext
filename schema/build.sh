@@ -75,6 +75,11 @@ trang -I rnc -O rng pretext-dev.rnc pretext-dev.rng
 # "abstract groups" make schema browser too obtuse
 trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
 
+# And the same steps for the publication-schema
+xsltproc ${MBXSL}/pretext-litprog.xsl publication-schema.xml
+trang -I rnc -O rng publication-schema.rnc publication-schema.rng
+trang -o disable-abstract-elements -I rnc -O xsd publication-schema.rnc publication-schema.xsd
+
 # ************************
 # Documentation Generation
 # ************************
