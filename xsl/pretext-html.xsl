@@ -1101,16 +1101,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="bibinfo/copyright">
-    <p class="copyright">
+    <div class="para copyright">
         <xsl:call-template name="copyright-character"/>
         <xsl:apply-templates select="year" />
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="holder" />
-    </p>
+    </div>
     <xsl:if test="shortlicense">
-        <p class="license">
+        <div class="para license">
             <xsl:apply-templates select="shortlicense" />
-        </p>
+        </div>
     </xsl:if>
 </xsl:template>
 
