@@ -396,6 +396,7 @@
         <xs:complexType>
           <xs:sequence>
             <xs:group ref="MetaDataTitleOptional"/>
+            <xs:element ref="bibinfo"/>
             <xs:element ref="titlepage"/>
             <xs:element minOccurs="0" ref="abstract"/>
           </xs:sequence>
@@ -410,6 +411,7 @@
         <xs:complexType>
           <xs:sequence>
             <xs:group ref="MetaDataTitleOptional"/>
+            <xs:element ref="bibinfo"/>
             <xs:element ref="titlepage"/>
             <xs:group minOccurs="0" ref="ColophonFront"/>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="biography"/>
@@ -422,7 +424,7 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="titlepage">
+  <xs:element name="bibinfo">
     <xs:complexType>
       <xs:sequence>
         <xs:choice>
@@ -438,8 +440,42 @@
         </xs:choice>
         <xs:group minOccurs="0" maxOccurs="unbounded" ref="Credit"/>
         <xs:element minOccurs="0" ref="date"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="ColophonCredit"/>
+        <xs:element minOccurs="0" ref="edition"/>
+        <xs:element minOccurs="0" ref="website"/>
+        <xs:element minOccurs="0" name="copyright">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="year">
+                <xs:complexType mixed="true">
+                  <xs:group ref="TextShort"/>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="holder"/>
+              <xs:element minOccurs="0" ref="minilicense"/>
+              <xs:element minOccurs="0" ref="shortlicense"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
+  </xs:element>
+  <xs:element name="edition" type="xs:string"/>
+  <xs:element name="holder" type="xs:string"/>
+  <xs:element name="minilicense">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="titlepage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="titlepage-items"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="titlepage-items">
+    <xs:complexType/>
   </xs:element>
   <xs:element name="email" type="xs:string"/>
   <xs:element name="personname">
@@ -558,35 +594,15 @@
         <xs:complexType>
           <xs:sequence>
             <xs:group ref="MetaDataTarget"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="ColophonCredit"/>
-            <xs:element minOccurs="0" ref="edition"/>
-            <xs:element minOccurs="0" ref="website"/>
-            <xs:element minOccurs="0" name="copyright">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="year">
-                    <xs:complexType mixed="true">
-                      <xs:group ref="TextShort"/>
-                    </xs:complexType>
-                  </xs:element>
-                  <xs:element ref="holder"/>
-                  <xs:element minOccurs="0" ref="minilicense"/>
-                  <xs:element minOccurs="0" ref="shortlicense"/>
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
+            <xs:element ref="colophon-items"/>
           </xs:sequence>
           <xs:attributeGroup ref="MetaDataTarget"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="edition" type="xs:string"/>
-  <xs:element name="holder" type="xs:string"/>
-  <xs:element name="minilicense">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextShort"/>
-    </xs:complexType>
+  <xs:element name="colophon-items">
+    <xs:complexType/>
   </xs:element>
   <xs:element name="biography">
     <xs:complexType>
