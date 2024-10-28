@@ -277,7 +277,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
 
     # Resulting *.asy files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
-        if outformat == "source":
+        if outformat == "source" or outformat == "all":
             log.info("copying PreFigure source files into {}".format(dest_dir))
             shutil.copytree(
                 tmp_dir,
@@ -296,10 +296,24 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
                 prefig.engine.pdf('svg', pfdiagram, dpi=100)
 
-        elif outformat == "braille":
+        elif outformat == "png":
+            for pfdiagram in os.listdir(tmp_dir):
+                log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
+                prefig.engine.png('svg', pfdiagram)
+
+        elif outformat == "tactile":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
                 prefig.engine.pdf('tactile', pfdiagram)
+
+        # Some formats leave "extra" SVG versions, and XML
+        # annotation files, in the temporary directory, so we
+        # remove them before copying to the real destination.
+        if outformat in ["pdf", "png", "tactile"]:
+            for file in glob.glob(tmp_dir + '/output/*.svg'):
+                os.remove(file)
+            for file in glob.glob(tmp_dir + '/output/*-annotations.xml'):
+                os.remove(file)
 
         log.info("copying PreFigure output to {}".format(dest_dir))
         shutil.copytree(

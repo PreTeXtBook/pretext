@@ -358,7 +358,7 @@ def get_cli_arguments():
         ("braille", "Nemeth Braille (math elements only)"),
         ("braille-emboss", "UEB + Nemeth braille, for print"),
         ("braille-electronic", "UEB + Nemeth Braille, for one-line display"),
-        ("tactile", "Tactile images with braille labels, REMOVED 2024-07-29"),
+        ("tactile", "Tactile PreFigure diagrams with braille labels"),
         ("speech", "Speech (math elements)"),
         ("source", "Standalone source files"),
         ("latex", "LaTeX source file (only, an intermediate format for developers)"),
@@ -607,8 +607,7 @@ def main():
     if args.validate:
         ptx.validate(xml_source, out_file, dest_dir)
     elif args.component == "prefigure":
-        # if args.format in ["pdf", "svg", "png", "html", "all"]:
-        if args.format in ["source", "svg", "pdf", "braille"]:
+        if args.format in ["source", "svg", "pdf", "png", "tactile"]:
             ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Prefigure graphics in "{}" format'.format(args.format) )
