@@ -2996,62 +2996,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li>Production of tactile versions, perhaps available via archive links, will be another addition.</li>
                 </ul></p>
 
-                <!-- Indentation needs to be cleaned up by a knowledgeable PreFigure author -->
-                <image width="70%">
-                  <prefigure label="prefigure-tangent">
-            <diagram dimensions="(300,300)" margins="5">
-              <definition>a=1</definition>
-              <definition>f(x) = exp(x/3)*cos(x)</definition>
-              <coordinates bbox="[-4,-4,4,4]">
-            <grid-axes xlabel="x" ylabel="y"/>
-            <graph at="graph" function='f' />
-            <tangent-line at="tangent" function="f" point="a"/>
-            <point at="point" p="(a, f(a))">
-              <m>(a,f(a))</m>
-            </point>
-              </coordinates>
+                <image width="60%">
+                    <prefigure label="prefigure-tangent"
+                               xmlns="https://prefigure.org">
+                        <diagram dimensions="(300,300)" margins="5">
+                            <definition>a=1</definition>
+                            <definition>f(x) = exp(x/3)*cos(x)</definition>
+                            <coordinates bbox="[-4,-4,4,4]">
+                                <grid-axes xlabel="x" ylabel="y"/>
+                                <graph at="graph" function='f' />
+                                <tangent-line at="tangent" function="f" point="a"/>
+                                <point at="point" p="(a, f(a))">
+                                    <m>(a,f(a))</m>
+                                </point>
+                            </coordinates>
 
-              <annotations>
-            <annotation ref="figure"
-                    text="The graph of a function and its tangent line at the point a equals 1">
-              <annotation ref="graph-tangent"
-                      text="The graph and its tangent line">
-                <annotation ref="graph"
-                    text="The graph of the function f" sonify="yes"/>
-                <annotation ref="point"
-                    text="The point a comma f of a"/>
-                <annotation ref="tangent"
-                    text="The tangent line to the graph of f at the point"/>
-              </annotation>
-            </annotation>
-              </annotations>
+                            <annotations>
+                                <annotation ref="figure"
+                                            text="The graph of a function and its tangent line at the point a equals 1">
+                                    <annotation ref="graph-tangent"
+                                                text="The graph and its tangent line">
+                                        <annotation ref="graph"
+                                                    text="The graph of the function f" sonify="yes"/>
+                                        <annotation ref="point"
+                                                    text="The point a comma f of a"/>
+                                        <annotation ref="tangent"
+                                                    text="The tangent line to the graph of f at the point"/>
+                                    </annotation>
+                                </annotation>
+                            </annotations>
 
-            </diagram>
-                  </prefigure>
+                        </diagram>
+                    </prefigure>
                 </image>
 
-                <image width="70%">
-                  <prefigure label="prefigure-diffeq">
-            <diagram dimensions="(300,300)" margins="5">
-              <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
-              <coordinates bbox="[-1,-3,6,3]">
-            <grid-axes xlabel="t"/>
-            <de-solve function="f" t0="0" t1="bbox[2]"
-                  y0="(0,2)" name="oscillator"
-                  N="200"/>
-            <plot-de-solution at="x" solution="oscillator"
-                      axes="(t,y0)" />
-            <plot-de-solution at="xprime" solution="oscillator"
-                      axes="(t,y1)" stroke="red"
-                      tactile-dash="9 9"/>
-            <legend at="legend" anchor="(bbox[2], bbox[3])"
-                alignment="sw" scale="0.9" opacity="0.5">
-              <item ref="x"><m>x(t)</m></item>
-              <item ref="xprime"><m>x'(t)</m></item>
-            </legend>
-              </coordinates>
-            </diagram>
-                  </prefigure>
+                <image width="60%">
+                    <prefigure label="prefigure-diffeq"
+                               xmlns="https://prefigure.org">
+                        <diagram dimensions="(300,300)" margins="5">
+                            <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
+                            <coordinates bbox="[-1,-3,6,3]">
+                                <grid-axes xlabel="t"/>
+                                <de-solve function="f" t0="0" t1="bbox[2]"
+                                          y0="(0,2)" name="oscillator"
+                                          N="200"/>
+                                <plot-de-solution at="x" solution="oscillator"
+                                                  axes="(t,y0)" />
+                                <plot-de-solution at="xprime" solution="oscillator"
+                                                  axes="(t,y1)" stroke="red"
+                                                  tactile-dash="9 9"/>
+                                <legend at="legend" anchor="(bbox[2], bbox[3])"
+                                        alignment="sw" scale="0.9" opacity="0.5">
+                                    <item ref="x"><m>x(t)</m></item>
+                                    <item ref="xprime"><m>x'(t)</m></item>
+                                </legend>
+                            </coordinates>
+                        </diagram>
+                    </prefigure>
                 </image>
 
                 <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.</p>
