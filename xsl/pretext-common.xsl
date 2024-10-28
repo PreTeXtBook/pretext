@@ -35,6 +35,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="pi exsl date str"
     xmlns:mb="https://pretextbook.org/"
     exclude-result-prefixes="mb"
+    xmlns:pf="https://prefigure.org"
 >
 
 <!-- PreTeXt common templates                             -->
@@ -3608,7 +3609,7 @@ Book (with parts), "section" at level 3
 <!-- PreFigure images debuted after the switch to preferring a @label on -->
 <!-- the "prefigure" element, and not on the enclosing image, so we can  -->
 <!-- employ an improved version of the "image-source-basename" template. -->
-<xsl:template match="prefigure" mode="image-source-basename">
+<xsl:template match="pf:prefigure" mode="image-source-basename">
     <xsl:choose>
         <!-- Determine if @label is authored or generated for backwrd compatibility -->
         <xsl:when test="not(@authored-label)">

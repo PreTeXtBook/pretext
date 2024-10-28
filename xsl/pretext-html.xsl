@@ -52,6 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     exclude-result-prefixes="svg pi fn"
     extension-element-prefixes="exsl date str"
+    xmlns:pf="https://prefigure.org"
 >
 
 <!-- Allow writing of JSON from structured HTML -->
@@ -5813,7 +5814,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Minor variations to be dual-purpose      -->
 <!--   LaTeX source code images               -->
 <!--   PreFigure source code images           -->
-<xsl:template match="image[latex-image]|image[prefigure]" mode="image-inclusion">
+<xsl:template match="image[latex-image]|image[pf:prefigure]" mode="image-inclusion">
     <!-- $base-pathname needed later for archive links -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
@@ -5822,14 +5823,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="latex-image">
                     <xsl:text>latex-image/</xsl:text>
                 </xsl:when>
-                <xsl:when test="prefigure">
+                <xsl:when test="pf:prefigure">
                     <xsl:text>prefigure/</xsl:text>
                 </xsl:when>
             </xsl:choose>
         </xsl:if>
         <!-- NB: node-set in @select will have exactly -->
         <!-- one (child) node, given @match above      -->
-        <xsl:apply-templates select="latex-image|prefigure" mode="image-source-basename"/>
+        <xsl:apply-templates select="latex-image|pf:prefigure" mode="image-source-basename"/>
     </xsl:variable>
     <xsl:apply-templates select="." mode="svg-png-wrapper">
         <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />

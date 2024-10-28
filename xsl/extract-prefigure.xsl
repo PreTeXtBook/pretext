@@ -25,6 +25,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
+    xmlns:pf="https://prefigure.org"
 >
 
 <!-- Get internal ID's for filenames, etc -->
@@ -45,7 +46,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: don't match the empty element that is a text -->
 <!-- generator.  Once PreFigure has a namespace, then -->
 <!-- it should be used here instead.                  -->
-<xsl:template match="prefigure[node()]" mode="extraction">
+<xsl:template match="pf:prefigure[node()]" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="image-source-basename"/>
     </xsl:variable>

@@ -33,6 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:str="http://exslt.org/strings"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     extension-element-prefixes="exsl date str"
+    xmlns:pf="https://prefigure.org"
 >
 
 <!-- Standard conversion groundwork -->
@@ -8926,14 +8927,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- PreFigure diagrams always produced as PDF for LaTeX -->
-<xsl:template match="image[prefigure]" mode="image-inclusion">
+<xsl:template match="image[pf:prefigure]" mode="image-inclusion">
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$generated-directory"/>
     <xsl:if test="$b-managed-directories">
         <xsl:text>prefigure/</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="prefigure" mode="image-source-basename"/>
+    <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
     <xsl:text>.pdf</xsl:text>
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
