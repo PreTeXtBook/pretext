@@ -277,7 +277,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
 
     # Resulting *.asy files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
-        if outformat == "source":
+        if outformat == "source" or outformat == "all":
             log.info("copying PreFigure source files into {}".format(dest_dir))
             shutil.copytree(
                 tmp_dir,
@@ -286,17 +286,22 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             )
             return
 
-        if outformat == "svg":
+        if outformat == "svg" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
                 prefig.engine.build('svg', pfdiagram)
 
-        elif outformat == "pdf":
+        elif outformat == "pdf" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
                 prefig.engine.pdf('svg', pfdiagram, dpi=100)
 
-        elif outformat == "braille":
+        elif outformat == "png" or outformat == "all":
+            for pfdiagram in os.listdir(tmp_dir):
+                log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
+                prefig.engine.png('svg', pfdiagram, dpi=100)
+
+        elif outformat == "tactile" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
                 prefig.engine.pdf('tactile', pfdiagram)
