@@ -2096,7 +2096,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  Use locations computed here, remove elsewhere                  -->
 <!-- 4.  Recognize new, modern fill-in problems                         -->
 
-<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="exercise">
+<xsl:template match="exercise|activity|&PROJECT-LIKE;|task" mode="exercise">
     <xsl:param name="division"/>
 
     <xsl:copy>
