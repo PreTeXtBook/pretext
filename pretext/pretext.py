@@ -4625,6 +4625,9 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
 
     log.debug("determining value of publisher variable '{}'".format(variable))
 
+    # to ensure provided stringparams aren't mutated unintentionally
+    params = params.copy()
+
     if pub_file:
         params["publisher"] = pub_file
 
