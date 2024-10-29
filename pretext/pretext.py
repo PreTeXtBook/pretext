@@ -3794,8 +3794,9 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # support publisher file, not subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
-        # Get extra XSL from publication file, if specified
-        latex_style = get_publisher_variable(xml_source=xml, pub_file=pub_file, params=stringparams, variable="latex-style")
+
+    # Get potential extra XSL for LaTeX style from publication file
+    latex_style = get_publisher_variable(xml_source=xml, pub_file=pub_file, params=stringparams, variable="latex-style")
 
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
@@ -4622,6 +4623,9 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
     # NB: this will always be consistent with what *is computed* from
     # the publisher file.  An eception is given by the  get_platform_host()
     # routine, which directly examines the authored file. (2024-09-25)
+
+    # NB: there may not be a publication file (pub_file = None)
+    # Variables are still computed and should have reasonable default values
 
     log.debug("determining value of publisher variable '{}'".format(variable))
 
