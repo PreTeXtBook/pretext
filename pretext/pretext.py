@@ -284,29 +284,57 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 dest_dir,
                 dirs_exist_ok=True
             )
-            return
+
+        # get a list of all the source files and remove the publication file
+        pf_source_files = os.listdir(tmp_dir)
+        try:
+            pf_source_files.remove('pf_publication.xml')
+        except ValueError:
+            pass
 
         if outformat == "svg":
-            for pfdiagram in os.listdir(tmp_dir):
+            for pfdiagram in pf_source_files:
                 log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
                 prefig.engine.build('svg', pfdiagram)
 
         elif outformat == "pdf":
-            for pfdiagram in os.listdir(tmp_dir):
+            for pfdiagram in pf_source_files:
                 log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
                 prefig.engine.pdf('svg', pfdiagram, dpi=100)
 
         elif outformat == "png":
-            for pfdiagram in os.listdir(tmp_dir):
+            for pfdiagram in pf_source_files:
                 log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
                 prefig.engine.png('svg', pfdiagram)
 
         elif outformat == "tactile":
-            for pfdiagram in os.listdir(tmp_dir):
+            for pfdiagram in pf_source_files:
                 log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
                 prefig.engine.pdf('tactile', pfdiagram)
 
-        # Check to see if we made any diagrams before copying
+        elif outformat == "all":
+            # make directories for the resulting diagrams
+            # PreFigure makes 'output' but we also want to create 'output/tactile'
+            os.mkdir('output')
+            os.mkdir('output/tactile')
+
+            # iterate through the diagrams making each format
+            for pfdiagram in pf_source_files:
+                log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
+                prefig.engine.pdf('tactile', pfdiagram)
+                pdf_name = pfdiagram[:-4] + '.pdf'
+                shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
+
+                log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
+                prefig.engine.png('svg', pfdiagram)
+
+                log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
+                prefig.engine.pdf('svg', pfdiagram, dpi=100)
+
+                log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
+                prefig.engine.build('svg', pfdiagram)
+
+        # Check to see if we made some diagrams before copying the tree
         if os.path.exists('output'):
             log.info("copying PreFigure output to {}".format(dest_dir))
             shutil.copytree(
