@@ -284,43 +284,35 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 dest_dir,
                 dirs_exist_ok=True
             )
-            return
 
-        if outformat == "svg":
+        if outformat == "svg" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
                 prefig.engine.build('svg', pfdiagram)
 
-        elif outformat == "pdf":
+        if outformat == "pdf" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
                 prefig.engine.pdf('svg', pfdiagram, dpi=100)
 
-        elif outformat == "png":
+        if outformat == "png" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
                 prefig.engine.png('svg', pfdiagram)
 
-        elif outformat == "tactile":
+        if outformat == "tactile" or outformat == "all":
             for pfdiagram in os.listdir(tmp_dir):
                 log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
                 prefig.engine.pdf('tactile', pfdiagram)
 
-        # Some formats leave "extra" SVG versions, and XML
-        # annotation files, in the temporary directory, so we
-        # remove them before copying to the real destination.
-        if outformat in ["pdf", "png", "tactile"]:
-            for file in glob.glob(tmp_dir + '/output/*.svg'):
-                os.remove(file)
-            for file in glob.glob(tmp_dir + '/output/*-annotations.xml'):
-                os.remove(file)
-
-        log.info("copying PreFigure output to {}".format(dest_dir))
-        shutil.copytree(
-            'output',
-            dest_dir,
-            dirs_exist_ok=True
-        )
+        # Check to see if we made any diagrams before copying
+        if os.path.exists('output'):
+            log.info("copying PreFigure output to {}".format(dest_dir))
+            shutil.copytree(
+                'output',
+                dest_dir,
+                dirs_exist_ok=True
+            )
 
 def asymptote_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method

@@ -67,7 +67,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         % comments anywhere get stripped, with or without faux % comment \% characters
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         \newcommand{\testingescapedpercent}{ \% } % just testing
+        \newcommand{\bvec}{{\mathbf b}}
+        \newcommand{\vvec}{{\mathbf v}}
         </macros>
+        <prefigure-preamble>
+            <line stroke="blue"/>
+        </prefigure-preamble>
         <!-- We control the appearance of the text of cross-references here           -->
         <!-- (these are the "xref" elements).  Because this changes the words         -->
         <!-- that appear in your output, it is a decision with stays with the source. -->
@@ -3050,6 +3055,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <item ref="x"><m>x(t)</m></item>
                                     <item ref="xprime"><m>x'(t)</m></item>
                                 </legend>
+                            </coordinates>
+                        </diagram>
+                    </prefigure>
+                </image>
+
+                <image width="60%">
+                    <prefigure label="prefigure-projection"
+                               xmlns="https://prefigure.org">
+                        <diagram dimensions="(300,300)" margins="5">
+                            <definition>v=(2,1)</definition>
+                            <definition>b=(2,4)</definition>
+                            <definition>bhat=dot(v,b)/dot(v,v) * v</definition>
+                            <definition>bperp = b - bhat</definition>
+                            <coordinates bbox="[-1,-1,5,5]">
+                                <grid-axes/>
+                                <line endpoints="((0,0),v)"
+                                      infinite="yes"/>
+                                <label anchor="(4.4,2.5)">
+                                    <m>L</m>
+                                </label>
+
+                                <vector v="bperp" tail="bhat" stroke="gray"/>
+                                <label anchor="midpoint(b,bhat)"
+                                       alignment="ne">
+                                    <m>\bvec^\perp</m>
+                                </label>
+
+                                <vector v="b"/>
+                                <label anchor="b" alignment="nw">
+                                    <m>\bvec</m>
+                                </label>
+
+                                <vector v="bhat" stroke="red"/>
+                                <label anchor="bhat" alignment="se">
+                                    <m>\widehat{\bvec}</m>
+                                </label>
+
+                                <vector v="v"/>
+                                <label anchor="v" alignment="se">
+                                    <m>\vvec</m>
+                                </label>
                             </coordinates>
                         </diagram>
                     </prefigure>
