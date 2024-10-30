@@ -306,21 +306,14 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
                 prefig.engine.pdf('tactile', pfdiagram)
 
-        # Some formats leave "extra" SVG versions, and XML
-        # annotation files, in the temporary directory, so we
-        # remove them before copying to the real destination.
-        if outformat in ["pdf", "png", "tactile"]:
-            for file in glob.glob(tmp_dir + '/output/*.svg'):
-                os.remove(file)
-            for file in glob.glob(tmp_dir + '/output/*-annotations.xml'):
-                os.remove(file)
-
-        log.info("copying PreFigure output to {}".format(dest_dir))
-        shutil.copytree(
-            'output',
-            dest_dir,
-            dirs_exist_ok=True
-        )
+        # Check to see if we made any diagrams before copying
+        if os.path.exists('output'):
+            log.info("copying PreFigure output to {}".format(dest_dir))
+            shutil.copytree(
+                'output',
+                dest_dir,
+                dirs_exist_ok=True
+            )
 
 def asymptote_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method
