@@ -35,7 +35,9 @@ function scrollTocToActive() {
     //  Don't use scrollIntoView because it changes users tab position in Chrome
     //  and messes up keyboard navigation
     tocEntry.closest("li").classList.add("active");
-    document.querySelector("#ptx-toc").scrollTop = tocEntry.offsetTop;
+    // Scroll only if the tocEntry is below the bottom third of the window,
+    // scrolling to that position.
+    document.querySelector("#ptx-toc").scrollTop = tocEntry.offsetTop - 0.66 * self.innerHeight;
 }
 
 function toggletoc() {
