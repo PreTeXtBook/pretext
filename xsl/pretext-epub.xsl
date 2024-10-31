@@ -21,6 +21,7 @@
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:date="http://exslt.org/dates-and-times"
+                xmlns:pf="https://prefigure.org"
                 exclude-result-prefixes="pi svg math epub"
                 extension-element-prefixes="exsl date">
 
@@ -1020,7 +1021,7 @@ width: 100%
                 </xsl:choose>
             </xsl:if>
         </xsl:when>
-        <xsl:when test="latex-image|sageplot|asymptote">
+        <xsl:when test="latex-image|sageplot|asymptote|pf:prefigure">
             <xsl:choose>
                 <xsl:when test="$purpose = 'read'">
                     <xsl:value-of select="$generated-directory-source"/>
@@ -1041,6 +1042,10 @@ width: 100%
                 <xsl:when test="asymptote">
                     <xsl:text>asymptote/</xsl:text>
                     <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
+                </xsl:when>
+                <xsl:when test="pf:prefigure">
+                    <xsl:text>prefigure/</xsl:text>
+                    <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
                 </xsl:when>
             </xsl:choose>
             <xsl:choose>
@@ -1095,7 +1100,7 @@ width: 100%
                 <xsl:when test="@source and ($extension='svg' or $extension='')">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
-                <xsl:when test="latex-image|sageplot|asymptote">
+                <xsl:when test="latex-image|sageplot|asymptote|pf:prefigure">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
