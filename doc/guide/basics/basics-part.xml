@@ -505,10 +505,8 @@
           <idx><h sortby="example"><tag>example</tag></h><h>structured</h></idx>
       Note that for <init>HTML</init> output,
       if your <tag>example</tag> has a <tag>solution</tag>,
-      the solution will be hidden in a knowl,
-      and the publisher does not
-      (as of summer 2021)
-      have the option of not knowling the solution.
+      the solution will be hidden in a knowl by default. See <xref ref="knowled-content"
+      text="type-global" /> for information on changing this behavior.
     </p>
     <aside>
         <title>Author vs. publisher</title>
