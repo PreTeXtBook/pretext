@@ -293,6 +293,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- efficient backward-compatible indentification -->
 <xsl:variable name="all-webwork" select="$commentaried//webwork"/>
 
+<!-- Support for versions mean there may be multiple instances of  -->
+<!-- the same structure in authored source, and conceivably they   -->
+<!-- might all be absent once a version has been selected.  We are -->
+<!-- especially thinking of "docinfo" here since some defaults     -->
+<!-- expressed there can influence the creation of static          -->
+<!-- representations later in this sequence of passes.             -->
+<xsl:variable name="version-root" select="$version/pretext"/>
+<xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
+<xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
+
 <xsl:variable name="webwork-rtf">
     <xsl:apply-templates select="$commentaried" mode="webwork"/>
 </xsl:variable>
