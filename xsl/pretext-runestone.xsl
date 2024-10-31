@@ -1902,13 +1902,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="width"/>
     <xsl:param name="height"/>
 
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="runestone-id"/>
+    </xsl:variable>
+
     <div class="ptx-runestone-container">
         <div class="runestone yt_section">
             <div data-component="youtube" class="align-left youtube-video"
                  data-video-height="{$height}" data-video-width="{$width}"
                  data-video-videoid="{@youtube}" data-video-divid="{$hid}"
                  data-video-start="0" data-video-end="-1"/>
-                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
         </div>
     </div>
 </xsl:template>
