@@ -163,17 +163,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
     <xsl:variable name="language">
-        <!-- need to know langage to decide if b-natural                                  -->
-        <!-- can't use get-programming-language template as $docinfo is not available yet -->
-        <!-- so need to reproduce logic here                                              -->
-        <xsl:choose>
-            <xsl:when test="@language">
-                <xsl:value-of select="@language" />
-            </xsl:when>
-            <xsl:when test="/docinfo/programs/@language">
-                <xsl:value-of select="/docinfo/programs/@language" />
-            </xsl:when>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
     <xsl:variable name="b-natural" select="($language = '') or ($language = 'natural')"/>
     <xsl:attribute name="language">

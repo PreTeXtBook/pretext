@@ -7981,8 +7981,8 @@ Book (with parts), "section" at level 3
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
         </xsl:when>
-        <xsl:when test="$docinfo/programs/@language">
-            <xsl:value-of select="$docinfo/programs/@language" />
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language" />
         </xsl:when>
     </xsl:choose>
 </xsl:template>
