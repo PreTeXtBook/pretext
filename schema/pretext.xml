@@ -3284,13 +3284,20 @@
             </code>
         </fragment>
 
-        <p>Some global defaults can be set for programs.</p>
+        <p>Some global defaults can be set for programs and Parsons problems.</p>
 
         <fragment xml:id="programs">
             <title>Program options</title>
             <code>
             Configuration |=
                 element programs {
+                    attribute language {text}?
+                }
+            </code>
+            <title>Parsons options</title>
+            <code>
+            Configuration |=
+                element parsons {
                     attribute language {text}?
                 }
             </code>

@@ -7987,6 +7987,23 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- For a parsons, use @language, default parsons language, or default -->
+<!-- programming language in that order of preference.                  -->
+<xsl:template match="*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
+    <xsl:choose>
+        <xsl:when test="@language">
+            <xsl:value-of select="@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/parsons/@language">
+            <xsl:value-of select="$version-docinfo/parsons/@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- A whole <program> node comes in,  -->
 <!-- text of ActiveCode name comes out -->
 <xsl:template match="*" mode="active-language">

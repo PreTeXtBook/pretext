@@ -76,5 +76,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Any program or Runestone interactive without a @language will -->
     <!-- assumed to be python                                          -->
     <programs language="python"/>
+    <!-- Any parsons problems will be assumed to be natural language   -->
+    <!-- If not set, this would default to programs@language           -->
+    <parsons language="python"/>
 
 </docinfo>

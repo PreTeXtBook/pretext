@@ -128,9 +128,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- possibly in external images directory, when specified in publisher file -->
             <favicon/>
         </html>
-        <!-- If provided, the programs @language will be used for -->
-        <!-- any programsor runestone interactives that lack @language      -->
+        <!-- If provided, the programs @language will be used for           -->
+        <!-- any programs or runestone interactives that lack @language     -->
         <!-- <programs language="python"/> -->
+        <!-- If provided, the parsons @language will be used for           -->
+        <!-- parsons problems that lack @language. If not provided,        -->
+        <!-- programs@language will be used.                               -->
+        <!-- <parsons language="natural"/> -->
 
         <!--
         "Names" for various parts of a document are determined exactly
