@@ -225,6 +225,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </description>
                     </image>
                 </figure>
+
+                <p>A Scalable Vector Graphics (SVG) image produced from <prefigure/> source with the <c>pretext</c> script.</p>
+                <figure xml:id="figure-prefigure-tangent">
+                    <caption>The graph of a function and a tangent line</caption>
+                    <image width="60%">
+                        <prefigure label="prefigure-tangent"
+                                   xmlns="https://prefigure.org">
+                            <diagram dimensions="(300,300)" margins="5">
+                                <definition>a=1</definition>
+                                <definition>f(x) = exp(x/3)*cos(x)</definition>
+                                <coordinates bbox="[-4,-4,4,4]">
+                                    <grid-axes xlabel="x" ylabel="y"/>
+                                    <graph at="graph" function='f' />
+                                    <tangent-line at="tangent" function="f" point="a"/>
+                                    <point at="point" p="(a, f(a))">
+                                        <m>(a,f(a))</m>
+                                    </point>
+                                </coordinates>
+
+                                <annotations>
+                                    <annotation ref="figure"
+                                                text="The graph of a function and its tangent line at the point a equals 1">
+                                        <annotation ref="graph-tangent" text="The graph and its tangent line">
+                                            <annotation ref="graph" text="The graph of the function f" sonify="yes"/>
+                                            <annotation ref="point" text="The point a comma f of a"/>
+                                            <annotation ref="tangent" text="The tangent line to the graph of f at the point"/>
+                                        </annotation>
+                                    </annotation>
+                                </annotations>
+                            </diagram>
+                        </prefigure>
+                    </image>
+                </figure>
+
                 <p>Here we drop a small reference to an equation
                 earlier, notably <xref ref="zeta-2" />.</p>
                 <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
