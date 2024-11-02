@@ -27,34 +27,34 @@
   </defs>
   <g id="grid-axes">
     <g id="grid" stroke="#ccc" stroke-width="1">
-      <line id="line-0" x1="5.0" y1="305.0" x2="5.0" y2="5.0" type="vertical grid"/>
-      <line id="line-1" x1="55.0" y1="305.0" x2="55.0" y2="5.0" type="vertical grid"/>
-      <line id="line-2" x1="105.0" y1="305.0" x2="105.0" y2="5.0" type="vertical grid"/>
-      <line id="line-3" x1="155.0" y1="305.0" x2="155.0" y2="5.0" type="vertical grid"/>
-      <line id="line-4" x1="205.0" y1="305.0" x2="205.0" y2="5.0" type="vertical grid"/>
-      <line id="line-5" x1="255.0" y1="305.0" x2="255.0" y2="5.0" type="vertical grid"/>
-      <line id="line-6" x1="305.0" y1="305.0" x2="305.0" y2="5.0" type="vertical grid"/>
-      <line id="line-7" x1="5.0" y1="305.0" x2="305.0" y2="305.0" type="horizontal grid"/>
-      <line id="line-8" x1="5.0" y1="255.0" x2="305.0" y2="255.0" type="horizontal grid"/>
-      <line id="line-9" x1="5.0" y1="205.0" x2="305.0" y2="205.0" type="horizontal grid"/>
-      <line id="line-10" x1="5.0" y1="155.0" x2="305.0" y2="155.0" type="horizontal grid"/>
-      <line id="line-11" x1="5.0" y1="105.0" x2="305.0" y2="105.0" type="horizontal grid"/>
-      <line id="line-12" x1="5.0" y1="55.0" x2="305.0" y2="55.0" type="horizontal grid"/>
-      <line id="line-13" x1="5.0" y1="5.0" x2="305.0" y2="5.0" type="horizontal grid"/>
+      <line id="line-0" x1="5.0" y1="305.0" x2="5.0" y2="5.0"/>
+      <line id="line-1" x1="55.0" y1="305.0" x2="55.0" y2="5.0"/>
+      <line id="line-2" x1="105.0" y1="305.0" x2="105.0" y2="5.0"/>
+      <line id="line-3" x1="155.0" y1="305.0" x2="155.0" y2="5.0"/>
+      <line id="line-4" x1="205.0" y1="305.0" x2="205.0" y2="5.0"/>
+      <line id="line-5" x1="255.0" y1="305.0" x2="255.0" y2="5.0"/>
+      <line id="line-6" x1="305.0" y1="305.0" x2="305.0" y2="5.0"/>
+      <line id="line-7" x1="5.0" y1="305.0" x2="305.0" y2="305.0"/>
+      <line id="line-8" x1="5.0" y1="255.0" x2="305.0" y2="255.0"/>
+      <line id="line-9" x1="5.0" y1="205.0" x2="305.0" y2="205.0"/>
+      <line id="line-10" x1="5.0" y1="155.0" x2="305.0" y2="155.0"/>
+      <line id="line-11" x1="5.0" y1="105.0" x2="305.0" y2="105.0"/>
+      <line id="line-12" x1="5.0" y1="55.0" x2="305.0" y2="55.0"/>
+      <line id="line-13" x1="5.0" y1="5.0" x2="305.0" y2="5.0"/>
     </g>
     <g id="axes" stroke="black" stroke-width="2">
-      <line id="line-14" x1="5.0" y1="255.0" x2="305.0" y2="255.0" stroke="black" type="horizontal axis" stroke-width="2"/>
-      <line id="line-15" x1="55.0" y1="305.0" x2="55.0" y2="5.0" stroke="black" type="vertical axis" stroke-width="2"/>
-      <g type="horizontal ticks" id="g-0">
-        <line id="line-16" x1="155.0" y1="258.0" x2="155.0" y2="252.0" type="tick on horizontal axis"/>
-        <line id="line-17" x1="255.0" y1="258.0" x2="255.0" y2="252.0" type="tick on horizontal axis"/>
+      <line id="line-14" x1="5.0" y1="255.0" x2="305.0" y2="255.0" stroke="black" stroke-width="2"/>
+      <line id="line-15" x1="55.0" y1="305.0" x2="55.0" y2="5.0" stroke="black" stroke-width="2"/>
+      <g id="g-0">
+        <line id="line-16" x1="155.0" y1="258.0" x2="155.0" y2="252.0"/>
+        <line id="line-17" x1="255.0" y1="258.0" x2="255.0" y2="252.0"/>
       </g>
-      <g type="vertical ticks" id="g-1">
-        <line id="line-18" x1="52.0" y1="155.0" x2="58.0" y2="155.0" type="tick on vertical axis"/>
-        <line id="line-19" x1="52.0" y1="55.0" x2="58.0" y2="55.0" type="tick on vertical axis"/>
+      <g id="g-1">
+        <line id="line-18" x1="52.0" y1="155.0" x2="58.0" y2="155.0"/>
+        <line id="line-19" x1="52.0" y1="55.0" x2="58.0" y2="55.0"/>
       </g>
     </g>
-    <g id="label-0" transform="translate(155.0,266.0) translate(-4.5,-0.0)" type="label">
+    <g id="label-0" transform="translate(155.0,266.0) translate(-4.5,-0.0)">
       <g id="g-2">
         <svg style="vertical-align: 0.000px" width="9.048px" height="12.056px" role="img" focusable="false" viewBox="0 -666 500 666" x="0.0" y="0.0">
           <defs>
@@ -70,7 +70,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-1" transform="translate(255.0,266.0) translate(-4.5,-0.0)" type="label">
+    <g id="label-1" transform="translate(255.0,266.0) translate(-4.5,-0.0)">
       <g id="g-3">
         <svg style="vertical-align: 0.000px" width="9.048px" height="12.256px" role="img" focusable="false" viewBox="0 -677 500 677" x="0.0" y="0.0">
           <defs>
@@ -86,7 +86,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-2" transform="translate(44.0,155.0) translate(-9.0,-6.0)" type="label">
+    <g id="label-2" transform="translate(44.0,155.0) translate(-9.0,-6.0)">
       <g id="g-4">
         <svg style="vertical-align: 0.000px" width="9.048px" height="12.056px" role="img" focusable="false" viewBox="0 -666 500 666" x="0.0" y="0.0">
           <defs>
@@ -102,7 +102,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-3" transform="translate(44.0,55.0) translate(-9.0,-6.1)" type="label">
+    <g id="label-3" transform="translate(44.0,55.0) translate(-9.0,-6.1)">
       <g id="g-5">
         <svg style="vertical-align: 0.000px" width="9.048px" height="12.256px" role="img" focusable="false" viewBox="0 -677 500 677" x="0.0" y="0.0">
           <defs>
@@ -119,8 +119,8 @@
       </g>
     </g>
   </g>
-  <line id="line-20" x1="5.0" y1="280.0" x2="305.0" y2="130.0" stroke="blue" stroke-width="2" fill="none" type="line"/>
-  <g id="label-4" transform="translate(275.0,130.0) translate(-6.2,-6.2)" type="label">
+  <line id="line-20" x1="5.0" y1="280.0" x2="305.0" y2="130.0" stroke="blue" stroke-width="2" fill="none"/>
+  <g id="label-4" transform="translate(275.0,130.0) translate(-6.2,-6.2)">
     <g id="g-6">
       <svg style="vertical-align: 0.000px" width="12.328px" height="12.360px" role="img" focusable="false" viewBox="0 -683 681 683" x="0.0" y="0.0">
         <defs>
@@ -136,8 +136,8 @@
       </svg>
     </g>
   </g>
-  <path id="path-0" stroke="#777" stroke-width="4" fill="none" d="M 215.0 175.0 L 155.0 55.0" marker-end="url(#arrow-head-end-4_None_24_60-#777)" type="vector"/>
-  <g id="label-5" transform="translate(189.0,111.0) translate(0.0,-15.2)" type="label">
+  <path id="path-0" stroke="#777" stroke-width="4" fill="none" d="M 215.0 175.0 L 155.0 55.0" marker-end="url(#arrow-head-end-4_None_24_60-#777)"/>
+  <g id="label-5" transform="translate(189.0,111.0) translate(0.0,-15.2)">
     <g id="g-7">
       <svg style="vertical-align: -0.112px" width="23.024px" height="15.232px" role="img" focusable="false" viewBox="0 -835.3 1272.1 841.3" x="0.0" y="0.0">
         <defs>
@@ -163,8 +163,8 @@
       </svg>
     </g>
   </g>
-  <path id="path-1" stroke="black" stroke-width="4" fill="none" d="M 55.0 255.0 L 155.0 55.0" marker-end="url(#arrow-head-end-4_None_24_60-black)" type="vector"/>
-  <g id="label-6" transform="translate(151.0,51.0) translate(-11.6,-12.7)" type="label">
+  <path id="path-1" stroke="black" stroke-width="4" fill="none" d="M 55.0 255.0 L 155.0 55.0" marker-end="url(#arrow-head-end-4_None_24_60-black)"/>
+  <g id="label-6" transform="translate(151.0,51.0) translate(-11.6,-12.7)">
     <g id="g-8">
       <svg style="vertical-align: -0.112px" width="11.568px" height="12.672px" role="img" focusable="false" viewBox="0 -694 639 700" x="0.0" y="0.0">
         <defs>
@@ -184,8 +184,8 @@
       </svg>
     </g>
   </g>
-  <path id="path-2" stroke="red" stroke-width="4" fill="none" d="M 55.0 255.0 L 215.0 175.0" marker-end="url(#arrow-head-end-4_None_24_60-red)" type="vector"/>
-  <g id="label-7" transform="translate(219.0,179.0) translate(0.0,-0.0)" type="label">
+  <path id="path-2" stroke="red" stroke-width="4" fill="none" d="M 55.0 255.0 L 215.0 175.0" marker-end="url(#arrow-head-end-4_None_24_60-red)"/>
+  <g id="label-7" transform="translate(219.0,179.0) translate(0.0,-0.0)">
     <g id="g-9">
       <svg style="vertical-align: -0.112px" width="11.568px" height="19.872px" role="img" focusable="false" viewBox="0 -1092 639 1098" x="0.0" y="0.0">
         <defs>
@@ -213,8 +213,8 @@
       </svg>
     </g>
   </g>
-  <path id="path-3" stroke="black" stroke-width="4" fill="none" d="M 55.0 255.0 L 155.0 205.0" marker-end="url(#arrow-head-end-4_None_24_60-black)" type="vector"/>
-  <g id="label-8" transform="translate(159.0,209.0) translate(0.0,-0.0)" type="label">
+  <path id="path-3" stroke="black" stroke-width="4" fill="none" d="M 55.0 255.0 L 155.0 205.0" marker-end="url(#arrow-head-end-4_None_24_60-black)"/>
+  <g id="label-8" transform="translate(159.0,209.0) translate(0.0,-0.0)">
     <g id="g-10">
       <svg style="vertical-align: 0.000px" width="10.984px" height="8.040px" role="img" focusable="false" viewBox="0 -444 607 444" x="0.0" y="0.0">
         <defs>

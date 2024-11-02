@@ -9,38 +9,38 @@
   </defs>
   <g id="grid-axes">
     <g id="grid" stroke="#ccc" stroke-width="1">
-      <line id="line-0" x1="5.0" y1="305.0" x2="5.0" y2="5.0" type="vertical grid"/>
-      <line id="line-1" x1="42.5" y1="305.0" x2="42.5" y2="5.0" type="vertical grid"/>
-      <line id="line-2" x1="80.0" y1="305.0" x2="80.0" y2="5.0" type="vertical grid"/>
-      <line id="line-3" x1="117.5" y1="305.0" x2="117.5" y2="5.0" type="vertical grid"/>
-      <line id="line-4" x1="155.0" y1="305.0" x2="155.0" y2="5.0" type="vertical grid"/>
-      <line id="line-5" x1="192.5" y1="305.0" x2="192.5" y2="5.0" type="vertical grid"/>
-      <line id="line-6" x1="230.0" y1="305.0" x2="230.0" y2="5.0" type="vertical grid"/>
-      <line id="line-7" x1="267.5" y1="305.0" x2="267.5" y2="5.0" type="vertical grid"/>
-      <line id="line-8" x1="305.0" y1="305.0" x2="305.0" y2="5.0" type="vertical grid"/>
-      <line id="line-9" x1="5.0" y1="305.0" x2="305.0" y2="305.0" type="horizontal grid"/>
-      <line id="line-10" x1="5.0" y1="267.5" x2="305.0" y2="267.5" type="horizontal grid"/>
-      <line id="line-11" x1="5.0" y1="230.0" x2="305.0" y2="230.0" type="horizontal grid"/>
-      <line id="line-12" x1="5.0" y1="192.5" x2="305.0" y2="192.5" type="horizontal grid"/>
-      <line id="line-13" x1="5.0" y1="155.0" x2="305.0" y2="155.0" type="horizontal grid"/>
-      <line id="line-14" x1="5.0" y1="117.5" x2="305.0" y2="117.5" type="horizontal grid"/>
-      <line id="line-15" x1="5.0" y1="80.0" x2="305.0" y2="80.0" type="horizontal grid"/>
-      <line id="line-16" x1="5.0" y1="42.5" x2="305.0" y2="42.5" type="horizontal grid"/>
-      <line id="line-17" x1="5.0" y1="5.0" x2="305.0" y2="5.0" type="horizontal grid"/>
+      <line id="line-0" x1="5.0" y1="305.0" x2="5.0" y2="5.0"/>
+      <line id="line-1" x1="42.5" y1="305.0" x2="42.5" y2="5.0"/>
+      <line id="line-2" x1="80.0" y1="305.0" x2="80.0" y2="5.0"/>
+      <line id="line-3" x1="117.5" y1="305.0" x2="117.5" y2="5.0"/>
+      <line id="line-4" x1="155.0" y1="305.0" x2="155.0" y2="5.0"/>
+      <line id="line-5" x1="192.5" y1="305.0" x2="192.5" y2="5.0"/>
+      <line id="line-6" x1="230.0" y1="305.0" x2="230.0" y2="5.0"/>
+      <line id="line-7" x1="267.5" y1="305.0" x2="267.5" y2="5.0"/>
+      <line id="line-8" x1="305.0" y1="305.0" x2="305.0" y2="5.0"/>
+      <line id="line-9" x1="5.0" y1="305.0" x2="305.0" y2="305.0"/>
+      <line id="line-10" x1="5.0" y1="267.5" x2="305.0" y2="267.5"/>
+      <line id="line-11" x1="5.0" y1="230.0" x2="305.0" y2="230.0"/>
+      <line id="line-12" x1="5.0" y1="192.5" x2="305.0" y2="192.5"/>
+      <line id="line-13" x1="5.0" y1="155.0" x2="305.0" y2="155.0"/>
+      <line id="line-14" x1="5.0" y1="117.5" x2="305.0" y2="117.5"/>
+      <line id="line-15" x1="5.0" y1="80.0" x2="305.0" y2="80.0"/>
+      <line id="line-16" x1="5.0" y1="42.5" x2="305.0" y2="42.5"/>
+      <line id="line-17" x1="5.0" y1="5.0" x2="305.0" y2="5.0"/>
     </g>
     <g id="axes" stroke="black" stroke-width="2">
-      <line id="line-18" x1="5.0" y1="155.0" x2="305.0" y2="155.0" stroke="black" type="horizontal axis" stroke-width="2"/>
-      <line id="line-19" x1="155.0" y1="305.0" x2="155.0" y2="5.0" stroke="black" type="vertical axis" stroke-width="2"/>
-      <g type="horizontal ticks" id="g-0">
-        <line id="line-20" x1="80.0" y1="158.0" x2="80.0" y2="152.0" type="tick on horizontal axis"/>
-        <line id="line-21" x1="230.0" y1="158.0" x2="230.0" y2="152.0" type="tick on horizontal axis"/>
+      <line id="line-18" x1="5.0" y1="155.0" x2="305.0" y2="155.0" stroke="black" stroke-width="2"/>
+      <line id="line-19" x1="155.0" y1="305.0" x2="155.0" y2="5.0" stroke="black" stroke-width="2"/>
+      <g id="g-0">
+        <line id="line-20" x1="80.0" y1="158.0" x2="80.0" y2="152.0"/>
+        <line id="line-21" x1="230.0" y1="158.0" x2="230.0" y2="152.0"/>
       </g>
-      <g type="vertical ticks" id="g-1">
-        <line id="line-22" x1="152.0" y1="230.0" x2="158.0" y2="230.0" type="tick on vertical axis"/>
-        <line id="line-23" x1="152.0" y1="80.0" x2="158.0" y2="80.0" type="tick on vertical axis"/>
+      <g id="g-1">
+        <line id="line-22" x1="152.0" y1="230.0" x2="158.0" y2="230.0"/>
+        <line id="line-23" x1="152.0" y1="80.0" x2="158.0" y2="80.0"/>
       </g>
     </g>
-    <g id="label-0" transform="translate(80.0,166.0) translate(-7.5,-0.0)" type="label">
+    <g id="label-0" transform="translate(80.0,166.0) translate(-7.5,-0.0)">
       <g id="g-2">
         <svg style="vertical-align: 0.000px" width="15.080px" height="12.056px" role="img" focusable="false" viewBox="0 -666 833 666" x="0.0" y="0.0">
           <defs>
@@ -58,7 +58,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-1" transform="translate(230.0,166.0) translate(-4.5,-0.0)" type="label">
+    <g id="label-1" transform="translate(230.0,166.0) translate(-4.5,-0.0)">
       <g id="g-3">
         <svg style="vertical-align: 0.000px" width="9.048px" height="12.056px" role="img" focusable="false" viewBox="0 -666 500 666" x="0.0" y="0.0">
           <defs>
@@ -74,7 +74,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-2" transform="translate(144.0,230.0) translate(-15.1,-6.0)" type="label">
+    <g id="label-2" transform="translate(144.0,230.0) translate(-15.1,-6.0)">
       <g id="g-4">
         <svg style="vertical-align: 0.000px" width="15.080px" height="12.056px" role="img" focusable="false" viewBox="0 -666 833 666" x="0.0" y="0.0">
           <defs>
@@ -92,7 +92,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-3" transform="translate(144.0,80.0) translate(-9.0,-6.0)" type="label">
+    <g id="label-3" transform="translate(144.0,80.0) translate(-9.0,-6.0)">
       <g id="g-5">
         <svg style="vertical-align: 0.000px" width="9.048px" height="12.056px" role="img" focusable="false" viewBox="0 -666 500 666" x="0.0" y="0.0">
           <defs>
@@ -108,7 +108,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-4" transform="translate(301.0,151.0) translate(-10.4,-8.2)" type="label">
+    <g id="label-4" transform="translate(301.0,151.0) translate(-10.4,-8.2)">
       <g id="g-6">
         <svg style="vertical-align: -0.200px" width="10.352px" height="8.200px" role="img" focusable="false" viewBox="0 -442 572 453" x="0.0" y="0.0">
           <defs>
@@ -124,7 +124,7 @@
         </svg>
       </g>
     </g>
-    <g id="label-5" transform="translate(159.0,9.0) translate(0.0,-0.0)" type="label">
+    <g id="label-5" transform="translate(159.0,9.0) translate(0.0,-0.0)">
       <g id="g-7">
         <svg style="vertical-align: -3.712px" width="8.872px" height="11.712px" role="img" focusable="false" viewBox="0 -442 490 647" x="0.0" y="0.0">
           <defs>
@@ -141,10 +141,10 @@
       </g>
     </g>
   </g>
-  <path id="graph" stroke="blue" stroke-width="2" fill="none" d="M 5.0 161.5 L 8.0 162.2 L 11.0 163.0 L 14.0 163.7 L 17.0 164.4 L 20.0 165.1 L 23.0 165.8 L 26.0 166.4 L 29.0 166.9 L 32.0 167.4 L 35.0 167.9 L 38.0 168.3 L 41.0 168.5 L 44.0 168.8 L 47.0 168.9 L 50.0 168.9 L 53.0 168.8 L 56.0 168.6 L 59.0 168.3 L 62.0 167.9 L 65.0 167.4 L 68.0 166.8 L 71.0 166.0 L 74.0 165.1 L 77.0 164.1 L 80.0 163.0 L 83.0 161.8 L 86.0 160.4 L 89.0 158.9 L 92.0 157.3 L 95.0 155.6 L 98.0 153.9 L 101.0 152.0 L 104.0 150.0 L 107.0 148.0 L 110.0 145.9 L 113.0 143.8 L 116.0 141.6 L 119.0 139.4 L 122.0 137.2 L 125.0 135.0 L 128.0 132.8 L 131.0 130.7 L 134.0 128.6 L 137.0 126.7 L 140.0 124.8 L 143.0 123.0 L 146.0 121.4 L 149.0 119.9 L 152.0 118.6 L 155.0 117.5 L 158.0 116.6 L 161.0 116.0 L 164.0 115.5 L 167.0 115.4 L 170.0 115.5 L 173.0 116.0 L 176.0 116.7 L 179.0 117.8 L 182.0 119.2 L 185.0 120.9 L 188.0 123.0 L 191.0 125.4 L 194.0 128.2 L 197.0 131.3 L 200.0 134.7 L 203.0 138.5 L 206.0 142.7 L 209.0 147.1 L 212.0 151.8 L 215.0 156.9 L 218.0 162.2 L 221.0 167.7 L 224.0 173.4 L 227.0 179.3 L 230.0 185.4 L 233.0 191.6 L 236.0 197.8 L 239.0 204.1 L 242.0 210.3 L 245.0 216.5 L 248.0 222.6 L 251.0 228.6 L 254.0 234.3 L 257.0 239.7 L 260.0 244.9 L 263.0 249.6 L 266.0 253.9 L 269.0 257.8 L 272.0 261.1 L 275.0 263.8 L 278.0 265.8 L 281.0 267.2 L 284.0 267.8 L 287.0 267.7 L 290.0 266.7 L 293.0 264.8 L 296.0 262.0 L 299.0 258.3 L 302.0 253.6 L 305.0 248.0" type="function-graph" clip-path="url(#clipPath-1)"/>
-  <line id="tangent" x1="60.6" y1="5.0" x2="305.0" y2="230.6" stroke="red" stroke-width="2" fill="none" type="tangent line" clip-path="url(#clipPath-1)"/>
-  <g id="point" type="labeled-point">
-    <g id="point" transform="translate(197.5,121.7) translate(0.0,-18.1)" type="label">
+  <path id="graph" stroke="blue" stroke-width="2" fill="none" d="M 5.0 161.5 L 8.0 162.2 L 11.0 163.0 L 14.0 163.7 L 17.0 164.4 L 20.0 165.1 L 23.0 165.8 L 26.0 166.4 L 29.0 166.9 L 32.0 167.4 L 35.0 167.9 L 38.0 168.3 L 41.0 168.5 L 44.0 168.8 L 47.0 168.9 L 50.0 168.9 L 53.0 168.8 L 56.0 168.6 L 59.0 168.3 L 62.0 167.9 L 65.0 167.4 L 68.0 166.8 L 71.0 166.0 L 74.0 165.1 L 77.0 164.1 L 80.0 163.0 L 83.0 161.8 L 86.0 160.4 L 89.0 158.9 L 92.0 157.3 L 95.0 155.6 L 98.0 153.9 L 101.0 152.0 L 104.0 150.0 L 107.0 148.0 L 110.0 145.9 L 113.0 143.8 L 116.0 141.6 L 119.0 139.4 L 122.0 137.2 L 125.0 135.0 L 128.0 132.8 L 131.0 130.7 L 134.0 128.6 L 137.0 126.7 L 140.0 124.8 L 143.0 123.0 L 146.0 121.4 L 149.0 119.9 L 152.0 118.6 L 155.0 117.5 L 158.0 116.6 L 161.0 116.0 L 164.0 115.5 L 167.0 115.4 L 170.0 115.5 L 173.0 116.0 L 176.0 116.7 L 179.0 117.8 L 182.0 119.2 L 185.0 120.9 L 188.0 123.0 L 191.0 125.4 L 194.0 128.2 L 197.0 131.3 L 200.0 134.7 L 203.0 138.5 L 206.0 142.7 L 209.0 147.1 L 212.0 151.8 L 215.0 156.9 L 218.0 162.2 L 221.0 167.7 L 224.0 173.4 L 227.0 179.3 L 230.0 185.4 L 233.0 191.6 L 236.0 197.8 L 239.0 204.1 L 242.0 210.3 L 245.0 216.5 L 248.0 222.6 L 251.0 228.6 L 254.0 234.3 L 257.0 239.7 L 260.0 244.9 L 263.0 249.6 L 266.0 253.9 L 269.0 257.8 L 272.0 261.1 L 275.0 263.8 L 278.0 265.8 L 281.0 267.2 L 284.0 267.8 L 287.0 267.7 L 290.0 266.7 L 293.0 264.8 L 296.0 262.0 L 299.0 258.3 L 302.0 253.6 L 305.0 248.0" clip-path="url(#clipPath-1)"/>
+  <line id="tangent" x1="60.6" y1="5.0" x2="305.0" y2="230.6" stroke="red" stroke-width="2" fill="none" clip-path="url(#clipPath-1)"/>
+  <g id="point">
+    <g transform="translate(197.5,121.7) translate(0.0,-18.1)">
       <g id="g-8">
         <svg style="vertical-align: -4.528px" width="65.312px" height="18.096px" role="img" focusable="false" viewBox="0 -750 3608.7 1000" x="0.0" y="0.0">
           <defs>
@@ -195,6 +195,6 @@
         </svg>
       </g>
     </g>
-    <circle id="point" cx="192.5" cy="126.7" r="4" stroke="black" stroke-width="2" fill="red" type="point"/>
+    <circle cx="192.5" cy="126.7" r="4" stroke="black" stroke-width="2" fill="red"/>
   </g>
 </svg>
