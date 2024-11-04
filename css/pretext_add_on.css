@@ -78,13 +78,8 @@
     font-size: inherit;
 }
 
-.ptx-content figcaption .codenumber:after {
-    content: "\2002";
-}
-.ptx-content figcaption .type:last-of-type::after {
-   /* so, not followed by a span.codenumber */
-   /* not sure where this is used */
-    content: "\2002";
+.ptx-content figcaption .figcaption__caption {
+    margin-left: 0.2em;
 }
 
 .ptx-content figcaption code.code-inline {
@@ -98,6 +93,19 @@
 .ptx-content figure.listing > figcaption + * {
     margin-top: 1em;
 }
+
+.ptx-content .listing > figcaption > .filename {
+    margin-left: 0.2em;
+    font-family: "Inconsolata", monospace;
+    font-weight: 700;
+}
+.ptx-content .listing > figcaption > .filename::before {
+    content: "(";
+}
+.ptx-content .listing > figcaption > .filename::after {
+    content: ")";
+}
+
 
 .ptx-content figcaption + .named-list-content {
     margin-top: 0.6em;
