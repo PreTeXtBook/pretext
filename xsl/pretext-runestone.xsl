@@ -1908,7 +1908,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <div class="ptx-runestone-container">
         <div class="runestone yt_section">
-            <div data-component="youtube" class="align-left youtube-video"
+            <div id="{$hid}" data-component="youtube" class="align-left youtube-video"
                  data-video-height="{$height}" data-video-width="{$width}"
                  data-video-videoid="{@youtube}" data-video-divid="{$hid}"
                  data-video-start="0" data-video-end="-1"/>
