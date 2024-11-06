@@ -1,0 +1,86 @@
+<diagram>
+  <annotations>
+    <annotation id="figure" speech2="The graph of a function and its tangent line at the point a equals 1">
+      <grouped>figure</grouped>
+      <position>1</position>
+      <children>
+        <active>grid-axes</active>
+        <active>graph-tangent</active>
+      </children>
+      <components>
+        <active>grid-axes</active>
+        <active>graph-tangent</active>
+      </components>
+    </annotation>
+    <annotation id="grid-axes" speech2="The coordinate grid and axes">
+      <grouped>grid-axes</grouped>
+      <position>1</position>
+      <children>
+        <active>grid</active>
+        <active>axes</active>
+      </children>
+      <components>
+        <active>grid</active>
+        <active>axes</active>
+      </components>
+      <parents>
+        <grouped>figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="grid" speech2="The coordinate grid">
+      <active>grid</active>
+      <position>1</position>
+      <parents>
+        <grouped>grid-axes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="axes" speech2="The coordinate axes">
+      <active>axes</active>
+      <position>2</position>
+      <parents>
+        <grouped>grid-axes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="graph-tangent" speech2="The graph and its tangent line">
+      <grouped>graph-tangent</grouped>
+      <position>2</position>
+      <children>
+        <active>graph</active>
+        <active>point</active>
+        <active>tangent</active>
+      </children>
+      <components>
+        <active>graph</active>
+        <active>point</active>
+        <active>tangent</active>
+      </components>
+      <parents>
+        <grouped>figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="graph" speech2="The graph of the function f" sonify="yes">
+      <active>graph</active>
+      <position>1</position>
+      <parents>
+        <grouped>graph-tangent</grouped>
+      </parents>
+      <sonification>
+        <ACTIVE>graph</ACTIVE>
+      </sonification>
+    </annotation>
+    <annotation id="point" speech2="The point a comma f of a">
+      <active>point</active>
+      <position>2</position>
+      <parents>
+        <grouped>graph-tangent</grouped>
+      </parents>
+    </annotation>
+    <annotation id="tangent" speech2="The tangent line to the graph of f at the point">
+      <active>tangent</active>
+      <position>3</position>
+      <parents>
+        <grouped>graph-tangent</grouped>
+      </parents>
+    </annotation>
+  </annotations>
+</diagram>
