@@ -204,6 +204,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-mermaid"      select="boolean($document-root//image[mermaid]|/image[mermaid])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
+<!-- Plural "annotations" is a child of "diagram" -->
+<xsl:variable name="b-has-prefigure-annotations" select="boolean($document-root//pf:prefigure/pf:diagram/pf:annotations)"/>
 <xsl:variable name="b-dynamics-static-seed" select="false()"/>
 <!-- Every page has an index button, with a link to the index -->
 <!-- Here we assume there is at most one                      -->
@@ -6470,6 +6472,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="font-awesome" />
+                <xsl:call-template name="diagcess-header" />
                 <xsl:call-template name="css" />
                 <xsl:call-template name="runestone-header"/>
                 <xsl:call-template name="font-awesome" />
@@ -6548,6 +6551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="google-classic"/>
                 <xsl:call-template name="google-universal"/>
                 <xsl:call-template name="google-gst"/>
+                <xsl:call-template name="diagcess-footer"/>
                 <xsl:call-template name="extra-js-footer"/>
             </body>
         </html>
@@ -10295,6 +10299,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
+            <xsl:call-template name="diagcess-header" />
             <xsl:call-template name="css" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
@@ -10405,6 +10410,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
+            <xsl:call-template name="diagcess-footer"/>
             <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
@@ -10448,6 +10454,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
+            <xsl:call-template name="diagcess-header" />
             <xsl:call-template name="css" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
@@ -10465,6 +10472,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
+            <xsl:call-template name="diagcess-footer"/>
             <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
@@ -12605,6 +12613,20 @@ TODO:
                 theme: '<xsl:value-of select="$publication/common/mermaid/@theme"/>',
             });
         </script>
+    </xsl:if>
+</xsl:template>
+
+<!-- Diagcess header library -->
+<xsl:template name="diagcess-header">
+    <xsl:if test="$b-has-prefigure-annotations">
+        <script src="_static/pretext/js/diagcess/diagcess.js"></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- Diagcess footer initialization -->
+<xsl:template name="diagcess-footer">
+    <xsl:if test="$b-has-prefigure-annotations">
+        <script>diagcess.Base.init()</script>
     </xsl:if>
 </xsl:template>
 
