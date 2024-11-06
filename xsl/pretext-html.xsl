@@ -5834,9 +5834,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- one (child) node, given @match above      -->
         <xsl:apply-templates select="latex-image|pf:prefigure" mode="image-source-basename"/>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="svg-png-wrapper">
-        <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
-    </xsl:apply-templates>
+    <!-- Normally the "svg-png-wrapper" will create a "standard" HTML      -->
+    <!-- object to hold the image.  For an annotated PreFigure diagram     -->
+    <!-- we need a custom embedding for the diagcess JS to act on.  The    -->
+    <!-- two files (SVG image, XML annotations) are products of PreFigure. -->
+    <xsl:choose>
+        <xsl:when test="latex-image|pf:prefigure[not(pf:diagram/pf:annotations)]">
+            <xsl:apply-templates select="." mode="svg-png-wrapper">
+                <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="pf:prefigure[pf:diagram/pf:annotations]">
+            <div class="ChemAccess-element">
+                <xsl:attribute name="data-src">
+                    <xsl:value-of select="$base-pathname"/>
+                    <xsl:text>.svg</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="data-cml">
+                    <xsl:value-of select="$base-pathname"/>
+                    <xsl:text>-annotations.xml</xsl:text>
+                </xsl:attribute>
+            </div>
+        </xsl:when>
+        <!-- cases should be exhaustive, given match and tests-->
+        <xsl:otherwise/>
+    </xsl:choose>
     <!-- possibly annotate with archive links -->
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
