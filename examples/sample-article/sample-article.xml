@@ -67,10 +67,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         % comments anywhere get stripped, with or without faux % comment \% characters
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         \newcommand{\testingescapedpercent}{ \% } % just testing
+        % employed in a PreFigure linear algebra diagram
         \newcommand{\bvec}{{\mathbf b}}
         \newcommand{\vvec}{{\mathbf v}}
         </macros>
         <prefigure-preamble xmlns="https://prefigure.org">
+            <!-- employed in a PreFigure linear algebra diagram -->
             <line stroke="blue"/>
         </prefigure-preamble>
         <!-- We control the appearance of the text of cross-references here           -->
@@ -2994,12 +2996,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><prefigure/> is a standalone project for authoring mathematical diagrams (see <url href="https://prefigure.org/" visual="prefigure.org"/>).  Its philosophy and approach are much like that of <pretext/>, and <prefigure/> is tightly integrated into <pretext/>.  One key feature is excellent support for the creation of accessible output formats.</p>
 
-                <p>As of 2024-11-02 development continues for <prefigure/> itself, and fine-tuning of its integration within <pretext/>.<ul>
-                    <li>You can author PreFigure diagrams, and then generate <init>SVG</init>, <init>PDF</init>, and <init>PNG</init> output versions with the <c>pretext/pretext</c> script (see the <pretext/> Guide), and expect them to render in <init>HTML</init>, <init>PDF</init>, and <init>EPUB</init> output formats.</li>
+                <p>As of 2024-11-06 development continues for <prefigure/> itself, and fine-tuning of its integration within <pretext/>.  But it is usable now for projects that want to use it.<ul>
+                    <li>You can author <prefigure/> diagrams, and then generate <init>SVG</init>, <init>PDF</init>, and <init>PNG</init> output versions with the <c>pretext/pretext</c> script (see the <pretext/> Guide), and expect them to render in <init>HTML</init>, <init>PDF</init>, and <init>EPUB</init> output formats.</li>
                     <li>Look for automatic generation to come to the <pretext/>-CLI sometime very soon.</li>
-                    <li><prefigure/> has excellent support for annotations within an <init>SVG</init> diagram, supporting their use by screenreaders, for example.  This capability will come to the <pretext/> <init>HTML</init> embedding soon.</li>
+                    <li><prefigure/> has excellent support for annotations within an <init>SVG</init> diagram, supporting their use by screenreaders, for example.  See an example below.</li>
                     <li>Production of tactile versions is now possible, though they are not incorporated explicitly into any of the output formats.  Perhaps they will become available via archive links or as a zip archive.</li>
                 </ul></p>
+
+                <p>This is a basic <prefigure/> diagram, in the sense that it does not use all the features of <prefigure/> or <pretext/>.</p>
 
                 <image width="60%">
                     <prefigure label="prefigure-diffeq"
@@ -3025,6 +3029,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </diagram>
                     </prefigure>
                 </image>
+
+                <p>This next diagram employs some <latex/> macros that are defined in the usual way in <tag>docinfo</tag> and are employed to produce the names of some vectors in the labels.  The blue line is colored blue by a global <prefigure/> declaration, also in <tag>docinfo</tag>.</p>
 
                 <image width="60%">
                     <prefigure label="prefigure-projection"
@@ -3067,6 +3073,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
+                <p>The next <prefigure/> diagram is authored with annotations, artranged in a hierarchy of increasing refinement and detail.  Each identified graphical component will read its annotation and show it on the screen below the diagram.  Click on the image and use the arrow keys to navigate the hierarchy vertically and laterally.  We will provide better instructions soon.</p>
+
                 <image width="60%">
                     <prefigure label="prefigure-tangent"
                                xmlns="https://prefigure.org">
@@ -3101,11 +3109,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
-
-                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.</p>
+                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  Tis image is an <init>SVG</init> for <init>HTML</init> output and a <init>PDF</init> for <latex/> output.  It may be missing for <init>EPUB</init> output.</p>
 
                 <image source="tactile/prefigure-diffeq" width="70%"/>
-
             </subsection>
 
             <subsection>
