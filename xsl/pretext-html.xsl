@@ -6497,7 +6497,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="diagcess-header" />
                 <xsl:call-template name="css" />
                 <xsl:call-template name="runestone-header"/>
-                <xsl:call-template name="font-awesome" />
             </head>
             <body>
                 <!-- potential document-id per-page -->
@@ -12687,14 +12686,6 @@ TODO:
         <xsl:comment> for testing purposes, and the developer who chose to use it </xsl:comment>
         <xsl:comment> must supply it.                                             </xsl:comment>
         <link href="developer.css" rel="stylesheet" type="text/css" />
-    </xsl:if>
-</xsl:template>
-
-<!-- Treated as characters, these could show up often, -->
-<!-- so load into every possible HTML page instance    -->
-<xsl:template name="sybol-font-setup">
-    <xsl:if test="$b-has-icon">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
     </xsl:if>
 </xsl:template>
 
