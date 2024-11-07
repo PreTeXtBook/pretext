@@ -3111,7 +3111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  Tis image is an <init>SVG</init> for <init>HTML</init> output and a <init>PDF</init> for <latex/> output.  It may be missing for <init>EPUB</init> output.</p>
 
-                <image source="tactile/prefigure-diffeq" width="70%"/>
+                <image source="tactile/prefigure-diffeq.png" width="70%"/>
             </subsection>
 
             <subsection>
