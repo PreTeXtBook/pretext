@@ -8558,6 +8558,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <!-- for-each is just one node, but sets context for key() -->
+    <xsl:variable name="fa-family">
+        <xsl:for-each select="$icon-table">
+            <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome-family"/>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <!-- for-each is just one node, but sets context for key() -->
     <xsl:variable name="fa-name">
         <xsl:for-each select="$icon-table">
             <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome"/>
@@ -8567,8 +8574,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Element could be "i", but seems non-semantic for screenreaders -->
     <xsl:element name="span">
         <xsl:attribute name="class">
-            <!-- "solid", may become "fa-solid" in v6" -->
-            <xsl:text>fas</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$fa-family = 'classic'">
+                    <!-- "solid", may become "fa-solid" in v6" -->
+                    <xsl:text>fas</xsl:text>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
             <xsl:text> </xsl:text>
             <xsl:text>fa-</xsl:text>
             <xsl:value-of select="$fa-name"/>
