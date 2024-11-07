@@ -8564,7 +8564,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:variable>
 
-    <span class ="fas fa-{$fa-name}"/>
+    <!-- Element could be "i", but seems non-semantic for screenreaders -->
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <!-- "solid", may become "fa-solid" in v6" -->
+            <xsl:text>fas</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:text>fa-</xsl:text>
+            <xsl:value-of select="$fa-name"/>
+        </xsl:attribute>
+    </xsl:element>
 </xsl:template>
 
 
@@ -12693,7 +12702,8 @@ TODO:
 <!-- so load into every possible HTML page instance    -->
 <xsl:template name="font-awesome">
     <xsl:if test="$b-has-icon">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
+        <!-- CDNJS is an alternative for obtaining this CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous"/>
     </xsl:if>
 </xsl:template>
 
