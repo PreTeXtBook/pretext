@@ -2570,17 +2570,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Nominations of new icons must<ul>
                     <li>Have a Unicode character representation.</li>
-                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome catalog.</li>
-                    <li>Be in the <latex/> <c>fontawesome</c> package.</li>
+                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome 5 catalog.</li>
+                    <li>Be in the <latex/> <c>fontawesome5</c> package.</li>
                     <li>Have a reasonably semantic <pretext/> name.</li>
                 </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
 
                 <warning>
                     <title>Icons, <c>xelatex</c>, and Fonts</title>
 
-                    <p>When processing a <latex/> file with <c>xelatex</c> the FontAwesome icons are expected to be in a <em>system</em> font whose name is <c>FontAwesome</c>.  This is not a filename, and installing the <latex/> <c>fontawesome</c> package into your <latex/> installation does not mean you have made this font available as a <em>system</em> font.</p>
+                    <p>When processing a <latex/> file with <c>xelatex</c> the Font Awesome 5 icons are expected to be in a <em>system</em> font whose name is <c>Font Awesome 5 Free</c>.  This is not a filename, and installing the <latex/> <c>fontawesome5</c> package into your <latex/> installation does not always guarantee that this font will automatically be available as a <em>system</em> font.</p>
 
-                    <p>The Publisher's Guide contains some discussion about installing fonts into a system, as part of the documentation of creating a <latex/> style, and has particular warnings about only using the <latex/> <c>fontawesome</c> package as a vehicle for installing and accessing these fonts.</p>
+                    <p>The Publisher's Guide contains some discussion about installing fonts into a system, as part of the documentation of creating a <latex/> style, and has particular warnings about only using the <latex/> <c>fontawesome5</c> package as a vehicle for installing and accessing these fonts.</p>
                 </warning>
             </subsection>
 
