@@ -3444,6 +3444,32 @@ Book (with parts), "section" at level 3
               font-awesome-family="classic"
               font-awesome="fast-backward"
               unicode="&#x23EE;"/> <!-- BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR -->
+    <!-- Creative Commons, Font Awesome Brands family -->
+    <!-- https://creativecommons.org/2020/03/18/the-unicode-standard-now-includes-cc-license-symbols/ -->
+    <iconinfo name="cc"
+              font-awesome-family="brands"
+              font-awesome="creative-commons"
+              unicode="&#x1F16D;"/> <!-- CIRCLED CC -->
+    <iconinfo name="cc-by"
+              font-awesome-family="brands"
+              font-awesome="creative-commons-by"
+              unicode="&#x1F16F;"/> <!-- CIRCLED HUMAN FIGURE -->
+    <iconinfo name="cc-sa"
+              font-awesome-family="brands"
+              font-awesome="creative-commons-sa"
+              unicode="&#x1F10E;"/> <!-- CIRCLED ANTICLOCKWISE ARROW -->
+    <iconinfo name="cc-nc"
+              font-awesome-family="brands"
+              font-awesome="creative-commons-nc"
+              unicode="&#x1F10F;"/> <!-- CIRCLED DOLLAR SIGN WITH OVERLAID BACKSLASH -->
+    <iconinfo name="cc-pd"
+              font-awesome-family="brands"
+              font-awesome="creative-commons-pd"
+              unicode="&#x1F16E;"/> <!-- CIRCLED C WITH OVERLAID BACKSLASH -->
+    <iconinfo name="cc-zero"
+              font-awesome-family="brands"
+              font-awesome="creative-commons-zero"
+              unicode="&#x1F16D;"/> <!-- CIRCLED ZERO WITH BACKSLASH -->
 </xsl:variable>
 
 <!-- If read from a file via "document()" then   -->
