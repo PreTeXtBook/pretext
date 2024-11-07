@@ -8112,18 +8112,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:variable name="fa-name">
-        <xsl:choose>
-            <!-- @latex (in FA style) is override for lagging package -->
-            <xsl:when test="@latex">
-                <xsl:value-of select="@latex"/>
-            </xsl:when>
-            <xsl:otherwise>
-            <!-- for-each is just one node, but sets context for key() -->
-                <xsl:for-each select="$icon-table">
-                    <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome"/>
-                </xsl:for-each>
-            </xsl:otherwise>
-        </xsl:choose>
+        <!-- for-each is just one node, but sets context for key() -->
+        <xsl:for-each select="$icon-table">
+            <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome"/>
+        </xsl:for-each>
     </xsl:variable>
     <xsl:text>\fa</xsl:text>
     <xsl:call-template name="camel-case-font-name">
