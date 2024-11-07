@@ -180,7 +180,7 @@
     <section xml:id="latex-icons">
         <title>Icons</title>
 
-        <p>The <tag>icon</tag> element is built around the <term>Font Awesome</term> font collection.  The <latex/> <c>fontawesome</c> package contains all the necessary font files (for use with both <c>pdflatex</c> and <c>xelatex</c>), and a style file that interfaces, in a semi-elaborate way, with the font files.  If you have installed this <latex/> package, and the fonts still seem unavailable, figure out how to adjust your <latex/> setup or your system configuration.  Simply installing a font file, such as the more recent <term>Font Awesome 5</term> is not going to work.  See <xref ref="latex-fonts"/> for more about fonts in <latex/>.</p>
+        <p>The <tag>icon</tag> element is built around the <term>Font Awesome 5</term> font collection.  The <latex/> <c>fontawesome5</c> package contains all the necessary font files (for use with both <c>pdflatex</c> and <c>xelatex</c>), and a style file that interfaces, in a semi-elaborate way, with the font files.  If you have installed this <latex/> package, and the fonts still seem unavailable, figure out how to adjust your <latex/> setup or your system configuration.  Simply installing a font file, such as the more recent <term>Font Awesome 5</term> is not going to work.  See <xref ref="latex-fonts"/> for more about fonts in <latex/>.</p>
     </section>
 
     <section xml:id="latex-index-style">
