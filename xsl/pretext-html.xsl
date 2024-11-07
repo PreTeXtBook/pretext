@@ -8579,6 +8579,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- "solid", may become "fa-solid" in v6" -->
                     <xsl:text>fas</xsl:text>
                 </xsl:when>
+                <xsl:when test="$fa-family = 'brands'">
+                    <!-- "brands", may become "fa-brand" in v6" -->
+                    <xsl:text>fab</xsl:text>
+                </xsl:when>
                 <xsl:otherwise/>
             </xsl:choose>
             <xsl:text> </xsl:text>
