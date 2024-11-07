@@ -2568,6 +2568,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </tabular>
                 </table>
 
+                <table>
+                    <title>Creative Commons License Icons</title>
+
+                    <tabular>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center"/>
+                        <row bottom="medium">
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                        </row>
+                        <row>
+                            <cell><c>cc</c></cell><cell><icon name="cc"/></cell>
+                            <cell><c>cc-by</c></cell><cell><icon name="cc-by"/></cell>
+                            <cell><c>cc-sa</c></cell><cell><icon name="cc-sa"/></cell>
+                        </row>
+                        <row>
+                            <cell><c>cc-nc</c></cell><cell><icon name="cc-nc"/></cell>
+                            <cell><c>cc-pd</c></cell><cell><icon name="cc-pd"/></cell>
+                            <cell><c>cc-zero</c></cell><cell><icon name="cc-zero"/></cell>
+                            <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+                        </row>
+                        <!-- Keep rows full (w/ empty cells) to please HTML validator -->
+                    </tabular>
+                </table>
+
                 <p>Nominations of new icons must<ul>
                     <li>Have a Unicode character representation.</li>
                     <li>Be in the <init>HTML/CSS/JS</init> Font Awesome 5 catalog.</li>
