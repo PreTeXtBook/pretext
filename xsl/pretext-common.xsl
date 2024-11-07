@@ -3368,61 +3368,80 @@ Book (with parts), "section" at level 3
 <!-- Icons -->
 <!-- ##### -->
 
-<!-- Comments are Unicode names, from fileformat.info -->
-<!-- @latex takes priority for LaTeX output when the  -->
-<!-- Font Awesome name has changed, but the LaTeX     -->
-<!-- package is lagging.  This needs to be in the     -->
-<!-- Font Awesome style, with dashes and no CamelCase -->
+<!-- Information about icons -->
+<!--     @name: PreTeXt name, what authors know/use              -->
+<!--     @font-awesome-family: Font Awesome family,              -->
+<!--                           "classic" or "brands"             -->
+<!--     @font-awesome: the font-awesome name, which becomes     -->
+<!--                    CamelCase for use with the LaTeX package -->
+<!--     @unicode: for use in less-capable formats               -->
+<!--                                                             -->
 <xsl:variable name="icon-rtf">
     <!-- see Unicode Character 'LEFTWARDS HEAVY ARROW' (U+1F844) -->
     <!-- for bulkier arrows (in "Supplemental Arrows-C Block")   -->
     <iconinfo name="arrow-left"
+              font-awesome-family="classic"
               font-awesome="arrow-left"
               unicode="&#x2190;"/> <!-- LEFTWARDS ARROW -->
     <iconinfo name="arrow-up"
+              font-awesome-family="classic"
               font-awesome="arrow-up"
               unicode="&#x2191;"/> <!-- UPWARDS ARROW -->
     <iconinfo name="arrow-right"
+              font-awesome-family="classic"
               font-awesome="arrow-right"
               unicode="&#x2192;"/> <!-- RIGHTWARDS ARROW -->
     <iconinfo name="arrow-down"
+              font-awesome-family="classic"
               font-awesome="arrow-down"
               unicode="&#x2193;"/> <!-- DOWNWARDS ARROW -->
     <iconinfo name="file-save"
+              font-awesome-family="classic"
               font-awesome="save"
               unicode="&#x1f4be;"/> <!-- FLOPPY DISK -->
     <iconinfo name="gear"
+              font-awesome-family="classic"
               font-awesome="cog"
               unicode="&#x2699;" /> <!-- GEAR -->
     <iconinfo name="menu"
+              font-awesome-family="classic"
               latex="favicon"
               font-awesome="bars"
               unicode="&#x2630;" /> <!-- TRIGRAM FOR HEAVEN -->
     <iconinfo name="wrench"
+              font-awesome-family="classic"
               font-awesome="wrench"
               unicode="&#x1f527;"/> <!-- WRENCH -->
     <iconinfo name="power"
+              font-awesome-family="classic"
               font-awesome="power-off"
               unicode="&#x23FB;"/> <!-- POWER SYMBOL -->
     <iconinfo name="media-play"
+              font-awesome-family="classic"
               font-awesome="play"
               unicode="&#x25B6;"/> <!--BLACK RIGHT-POINTING TRIANGLE-->
     <iconinfo name="media-pause"
+              font-awesome-family="classic"
               font-awesome="pause"
               unicode="&#x23F8;"/> <!-- DOUBLE VERTICAL BAR -->
     <iconinfo name="media-stop"
+              font-awesome-family="classic"
               font-awesome="stop"
               unicode="&#x23F9;"/> <!-- BLACK SQUARE FOR STOP-->
     <iconinfo name="media-fast-forward"
+              font-awesome-family="classic"
               font-awesome="forward"
               unicode="&#x23E9;"/> <!-- BLACK RIGHT-POINTING DOUBLE TRIANGLE -->
     <iconinfo name="media-rewind"
+              font-awesome-family="classic"
               font-awesome="backward"
               unicode="&#x23EA;"/> <!-- BLACK LEFT-POINTING DOUBLE TRIANGLE -->
     <iconinfo name="media-skip-to-end"
+              font-awesome-family="classic"
               font-awesome="fast-forward"
               unicode="&#x23ED;"/> <!-- BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR -->
     <iconinfo name="media-skip-to-start"
+              font-awesome-family="classic"
               font-awesome="fast-backward"
               unicode="&#x23EE;"/> <!-- BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR -->
 </xsl:variable>
