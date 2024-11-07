@@ -664,7 +664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
         <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
         <xsl:call-template name="xelatex-font-check">
-            <xsl:with-param name="font-name" select="'FontAwesome'"/>
+            <xsl:with-param name="font-name" select="'Font Awesome 5 Free'"/>
         </xsl:call-template>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
@@ -1313,8 +1313,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:if>
     <xsl:if test="$b-has-icon">
-        <xsl:text>%% Font Awesome icons in a LaTeX package&#xa;</xsl:text>
-        <xsl:text>\usepackage{fontawesome}&#xa;</xsl:text>
+        <xsl:text>%% Font Awesome 5 icons in a LaTeX package&#xa;</xsl:text>
+        <xsl:text>%% https://ctan.org/pkg/fontawesome5 (v5.15.4) &#xa;</xsl:text>
+        <xsl:text>\usepackage{fontawesome5}&#xa;</xsl:text>
     </xsl:if>
     <!-- Poetry -->
     <xsl:if test="$document-root//poem">
