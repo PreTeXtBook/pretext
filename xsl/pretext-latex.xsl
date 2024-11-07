@@ -666,6 +666,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="xelatex-font-check">
             <xsl:with-param name="font-name" select="'Font Awesome 5 Free'"/>
         </xsl:call-template>
+        <xsl:call-template name="xelatex-font-check">
+            <xsl:with-param name="font-name" select="'Font Awesome 5 Brands'"/>
+        </xsl:call-template>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
     <!-- language tags appear in docinfo in renames, so be careful -->
