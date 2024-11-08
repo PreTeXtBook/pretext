@@ -3103,7 +3103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
-                <p>The next <prefigure/> diagram is authored with annotations, artranged in a hierarchy of increasing refinement and detail.  Each identified graphical component will read its annotation and show it on the screen below the diagram.  Click on the image and use the arrow keys to navigate the hierarchy vertically and laterally.  We will provide better instructions soon.</p>
+                <p>The next <prefigure/> diagram is authored with annotations, arranged in a hierarchy of increasing refinement and detail.  Each identified graphical component will read its annotation and show it on the screen below the diagram.  When a reader clicks on the image, a high-level summary will be read using the author-provided annotation.  The down and up arrow keys enable a reader to explore the diagram in more or less detail while the right and left arrow keys reveal features at the same level of detail.  When the focus is on the graph, pressing "O" will produce a sonification of the graph.</p>
 
                 <image width="60%">
                     <prefigure label="prefigure-tangent"
@@ -3139,9 +3139,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
-                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  Tis image is an <init>SVG</init> for <init>HTML</init> output and a <init>PDF</init> for <latex/> output.  It may be missing for <init>EPUB</init> output.</p>
+                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  This image is a <init>PNG</init> produced specifically for this document.  Typically, a tactile diagram produced by <prefigure/> will be a <init>PDF</init> ready to be sent to an appropriate embosser.</p>
 
-                <image source="tactile/prefigure-diffeq.png" width="100%"/>
+                <image source="tactile/prefigure-diffeq.png" width="70%"/>
             </subsection>
 
             <subsection>
