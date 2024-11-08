@@ -960,8 +960,17 @@
         </p>
 
         <p>
-            Finally, having this quick local web server might be useful for other purposes. You can use the <c>-d</c> option to specify a path to any directory to serve any files, not just those created in <pretext />.
+            Having this quick local web server might be useful for other purposes. You can use the <c>-d</c> option to specify a path to any directory to serve any files, not just those created in <pretext />.
         </p>
+
+        <p>Another option, in the case where you know where your output lives (such as when you use the <c>pretext/pretext</c> script) is to use Python itself to start a simple web server.  Ideally, first set your working directory to the location of your <init>HTML</init> output.  Then in a console, at a command-line:</p>
+
+        <console>
+            <input prompt="$ ">python3 -m http.server</input>
+            <output>Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...</output>
+        </console>
+
+        <p>Which tells you to open your browser using the address <c>http://0.0.0.0:8000/</c>.  <c>Ctrl-C</c> in the terminal will kill the server when you are done.  See the <url href="https://docs.python.org/3/library/http.server.html">Python documentation</url> for more options.</p>
     </section>
 
     <section xml:id="processing-testing-html-globally">
