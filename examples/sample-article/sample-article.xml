@@ -765,6 +765,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>A case may also have a <c>title</c>, whose formatting and structure is entirely up to the author.  This then becomes the text of a cross-reference, as well.</p>
                         </case>
 
+                        <case xml:id="questioning-case">
+                            <title>Why Not Try This?</title>
+
+                            <p>A <tag>case</tag> (or any other element with a default title) did not always handle title-ending punctuation correctly.  So we try an example title with a question mark.</p>
+                        </case>
+
                         <case direction="forward" xml:id="forward">
                             <title>Necessity</title>
 
