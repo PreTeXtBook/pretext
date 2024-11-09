@@ -2605,6 +2605,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-host-web"       select="$host-platform = 'web'"/>
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
 
+<!--                            -->
+<!-- HTML Favicon Specification -->
+<!--                            -->
+
+<xsl:variable name="favicon-scheme">
+    <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='favicon']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 
 <!-- ##################### -->
 <!-- EPUB-Specific Options -->
@@ -3109,6 +3117,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
+        <pi:pub-attribute name="favicon" default="none" options="simple"/>
         <calculator>
             <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
         </calculator>
