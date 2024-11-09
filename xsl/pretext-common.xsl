@@ -11611,6 +11611,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'elements previously included in a &quot;colophon&quot; element inside the &quot;frontmatter&quot; (credit, copyright, edition, and website) should now be placed in &quot;frontmatter/bibinfo&quot;. To produce a &quot;colophon&quot;, include only the empty element &quot;colophon-items&quot; inside &quot;colophon&quot; Until you move these elements, we will try to honor your intent.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2024-11-09 docinfo "favicon" now is a publisher file option -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/html/favicon"/>
+        <xsl:with-param name="date-string" select="'2024-11-09'" />
+        <xsl:with-param name="message" select="'use of a favicon in HTML output is no longer accomplished with a &quot;favicon&quot; element inside &quot;docinfo&quot;.  Instead use the publication file and put a &quot;@favicon&quot; attribute on the &quot;html&quot; element.  Set its value to &quot;simple&quot; for equivalent behavior.  Until you remove the element in &quot;docinfo&quot;, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
