@@ -64,7 +64,7 @@ import traceback  # format_exc()
 # * For standard libraries used infrequently (in three or fewer functions?),
 #   include imports in the functions
 
-# primarily directory manipulations (creating, switching)
+# primarily directory manipulations (creating, switching, deleting)
 import os
 
 # primarily joining paths, but sometimes splitting
@@ -1094,6 +1094,8 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
                 file = tarfile.open(services_full_path)
                 file.extractall(output_dir)
                 file.close()
+                # we don't bother to delete archive after extraction since
+                # the temporary directory is never copied out anywhere
                 stringparams["rs-local-files"] = "yes"
             except Exception as e:
                 log.warning(e)
@@ -3661,6 +3663,9 @@ def html(
                     file = tarfile.open(services_full_path)
                     file.extractall(output_dir)
                     file.close()
+                    # once unpacked, archive no longer necessary and we
+                    # don't want to copy it out into produced "_static"
+                    os.remove(services_full_path)
                     stringparams["rs-local-files"] = "yes"
                 except Exception as e:
                     log.warning(e)
