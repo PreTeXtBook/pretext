@@ -3408,7 +3408,6 @@ Book (with parts), "section" at level 3
               unicode="&#x2699;" /> <!-- GEAR -->
     <iconinfo name="menu"
               font-awesome-family="classic"
-              latex="favicon"
               font-awesome="bars"
               unicode="&#x2630;" /> <!-- TRIGRAM FOR HEAVEN -->
     <iconinfo name="wrench"
