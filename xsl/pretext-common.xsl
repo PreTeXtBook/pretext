@@ -2701,10 +2701,13 @@ Book (with parts), "section" at level 3
     <xsl:variable name="default-exists">
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
+    <xsl:variable name="default-in-use">
+        <xsl:value-of select="not(title) and $default-exists = 'true'"/>
+    </xsl:variable>
     <xsl:variable name="wants-period">
         <xsl:apply-templates select="." mode="title-wants-punctuation"/>
     </xsl:variable>
-    <xsl:if test="(($has-punctuation = 'false') or ($default-exists = 'true')) and ($wants-period = 'true')">
+    <xsl:if test="(($has-punctuation = 'false') or ($default-in-use = 'true')) and ($wants-period = 'true')">
         <xsl:text>.</xsl:text>
     </xsl:if>
 </xsl:template>
