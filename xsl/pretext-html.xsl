@@ -12551,9 +12551,21 @@ TODO:
 </xsl:template>
 
 <!-- Header information for favicon -->
-<!-- Needs two image files in root of HTML output -->
+<!-- Presently: needs two image files placeed in  HTML output     -->
+<!-- Publisher file could be extended to allow for other schemes. -->
+<!--      See: https://realfavicongenerator.net/faq               -->
+<!-- for one such option and ideas for others.                    -->
 <xsl:template name="favicon">
-    <xsl:if test="$docinfo/html/favicon">
+    <!-- $docinfo/html/favicon indicator is legacy code.  We do -->
+    <!-- not rewrite the publisher file as part of the assembly -->
+    <!-- (pre-processor) phase, so we leave this in.  Removal   -->
+    <!-- will require a sterner deprecation message that the    -->
+    <!-- current, gentle, reminder.                             -->
+    <xsl:if test="($favicon-scheme = 'simple') or $docinfo/html/favicon">
+        <!-- Expects publisher to provide both -->
+        <!--     favicon/favicon-32x32.png     -->
+        <!--     favicon/favicon-16x16.png     -->
+        <!-- in the external images directory  -->
         <xsl:variable name="res32">
             <!-- empty when not using managed directories -->
             <xsl:value-of select="$external-directory"/>
