@@ -45,6 +45,24 @@
               <url href="https://www.geogebra.org/" visual="www.geogebra.org">GeoGebra Project</url>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
         </subsection>
 
+        <subsection xml:id="online-favicon-configuration">
+            <title>HTML Favicon Configuration</title>
+            <idx>favicon</idx>
+
+            <p>A <term>favicon</term> is a graphical element (<q>icon</q>) that identifies a website.  Perhaps its most recognizable use is its appearance in every browser tab open at that site.  As publisher, you can associate an icon for your project to the <init>HTML</init> output of your project.</p>
+
+            <p>See <xref ref="online-favicon"/> for details on this specification.  When the attribute value is <c>none</c> (the default), then your pages will not have a favicon.</p>
+
+            <!-- commit 96c5886dc27dc47d55fa6b7aec18cfd28ec5ee13 -->
+            <!-- Date:   Wed Jul 18 13:01:02 2018 -0700          -->
+            <!-- Support for HTML favicon                        -->
+
+            <p>If you set the attribute to <c>simple</c> then you <em>must</em> provide two versions of your icon, in <init>PNG</init> format, in pixel sizes 16<times/>16 and 32<times/>32, with exactly the two filenames below (respectively), in the directory of provided external files (<xref ref="processing-directory-management"/>).<cd>
+                <cline>favicon/favicon-16x16.png</cline>
+                <cline>favicon/favicon-32x32.png</cline>
+            </cd>There are other ways to specify a favicon and some browsers expect different files.  Try this scheme first, as it appears to have been sufficient since 2018.  But if a new scheme needs implementation, we can consider a feature request.</p>
+        </subsection>
+
         <subsection xml:id="online-scratch-activecode">
             <title>ActiveCode Programming Windows</title>
             <idx><h>ActiveCode</h><h>window in <init>HTML</init></h></idx>

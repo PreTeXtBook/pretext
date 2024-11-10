@@ -412,6 +412,22 @@
             </ul>The default is <c>none</c>.  See <xref ref="online-embedded-calculator"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-favicon">
+            <title>HTML Favicon</title>
+            <idx>favicon</idx>
+
+            <p>The<cd>
+                <cline>/publication/html/</cline>
+            </cd>element has the following attribute:<ul>
+                <li>
+                    <p><attr>favicon</attr>: used to control how icon files for a favicon are embedded into each <init>HTML</init> page:<ul>
+                        <li><c>none</c></li>
+                        <li><c>simple</c></li>
+                    </ul></p>
+                </li>
+            </ul>The default is <c>none</c>.  See <xref ref="online-favicon-configuration"/> for more, including an explanation of what a favicon is.</p>
+        </subsection>
+
         <subsection xml:id="online-webwork-dynamism">
             <title>HTML <webwork/> Dynamism</title>
             <idx><h>WeBWorK</h><h><init>HTML</init>dynamism</h></idx>
