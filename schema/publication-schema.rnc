@@ -155,6 +155,7 @@
             Html =
                 element html {
                     attribute platform { "web" | "runestone" }?,
+                    attribute favicon { "none" | "simple" }?,
                     attribute short-answer-responses { "graded" | "always" }?,
                     (Analytics? & Baseurl? & Calculator? & WebworkDynamism? & Indexpage? & Knowls? & Exercises? & Css? & Search? & Video? & Asymptote? & Feedback? & NavigationHTML? & Tableofcontents? & Crossreferences?)
                 }

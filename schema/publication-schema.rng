@@ -488,6 +488,14 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="favicon">
+          <choice>
+            <value>none</value>
+            <value>simple</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="short-answer-responses">
           <choice>
             <value>graded</value>

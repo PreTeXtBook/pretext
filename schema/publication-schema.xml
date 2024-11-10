@@ -316,6 +316,7 @@
             Html =
                 element html {
                     attribute platform { "web" | "runestone" }?,
+                    attribute favicon { "none" | "simple" }?,
                     attribute short-answer-responses { "graded" | "always" }?,
                     (Analytics? &amp; Baseurl? &amp; Calculator? &amp; WebworkDynamism? &amp; Indexpage? &amp; Knowls? &amp; Exercises? &amp; Css? &amp; Search? &amp; Video? &amp; Asymptote? &amp; Feedback? &amp; NavigationHTML? &amp; Tableofcontents? &amp; Crossreferences?)
                 }
