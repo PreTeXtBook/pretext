@@ -7973,6 +7973,16 @@ Book (with parts), "section" at level 3
 <!-- Define the key for indexing into the data list -->
 <xsl:key name="proglang" match="language" use="@ptx" />
 
+<!-- Define variables for default active language - will be picked up by -->
+<!-- RS manifest and can be a different string than the raw language. -->
+<xsl:variable name="default-active-programming-language">
+    <xsl:if test="$version-docinfo/programs/@language">
+        <xsl:for-each select="document('')/*/mb:programming">
+            <xsl:value-of select="key('proglang', $version-docinfo/programs/@language)/@active" />
+        </xsl:for-each>
+    </xsl:if>
+</xsl:variable>
+
 <!-- Determine programming language to use. First choice is @language     -->
 <!-- on current element. If that is not available, check docinfo default. -->
 <!-- "exercise" might be a Runestone interactive (programming) exercise.  -->

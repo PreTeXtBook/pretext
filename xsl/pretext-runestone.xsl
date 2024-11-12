@@ -535,13 +535,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </runestone-services>
             <!-- default programming language for book as specified in docinfo -->
             <!-- if not specified, assume python                               -->
-            <xsl:variable name="default-language">
-                <xsl:apply-templates select="$document-root" mode="active-language"/>
-            </xsl:variable>
             <default-language>
                 <xsl:choose>
-                    <xsl:when test="$default-language != ''">
-                        <xsl:value-of select="$default-language"/>
+                    <xsl:when test="$default-active-programming-language != ''">
+                        <xsl:value-of select="$default-active-programming-language"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:text>python</xsl:text>
