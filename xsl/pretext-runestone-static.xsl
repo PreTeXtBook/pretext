@@ -163,6 +163,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[@exercise-interactive = 'parson']" mode="runestone-to-static">
     <!-- determine these options before context switches -->
     <xsl:variable name="language">
+        <!-- we just need the "raw" programming language, not active-language translation -->
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
     <xsl:variable name="b-natural" select="($language = '') or ($language = 'natural')"/>

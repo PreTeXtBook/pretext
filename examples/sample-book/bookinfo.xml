@@ -78,6 +78,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <programs language="python"/>
     <!-- Any parsons problems will be assumed to be natural language   -->
     <!-- If not set, this would default to programs@language           -->
-    <parsons language="python"/>
+    <!-- If neither is set, parsons will default to "natural" language -->
+    <parsons language="natural"/>
 
 </docinfo>
