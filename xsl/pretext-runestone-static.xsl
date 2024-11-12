@@ -564,6 +564,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <cell>
             <xsl:copy-of select="premise/node()"/>
         </cell>
+        <!-- Add an empty column between premises and responses: -->
+        <cell bottom="none"><nbsp/><nbsp/></cell>
         <cell>
             <xsl:copy-of select="$all-matches[@order = $premise-number]/response/node()"/>
         </cell>
