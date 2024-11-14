@@ -8062,7 +8062,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of ActiveCode name comes out -->
-<xsl:template match="*" mode="active-language">
+<xsl:template match="program|*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="active-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
@@ -8073,7 +8073,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of listings name comes out -->
-<xsl:template match="*" mode="listings-language">
+<xsl:template match="program" mode="listings-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
@@ -8084,7 +8084,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of prism name comes out -->
-<xsl:template match="*" mode="prism-language">
+<xsl:template match="program" mode="prism-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
