@@ -5855,6 +5855,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>-annotations.xml</xsl:text>
                 </xsl:attribute>
             </div>
+            <!-- a named template provides keyboard shortcuts for  -->
+            <!-- the library powering exploration of the PreFigure -->
+            <!-- diagram authored with annotations                 -->
+            <xsl:call-template name="diagacess-instructions"/>
         </xsl:when>
         <!-- cases should be exhaustive, given match and tests-->
         <xsl:otherwise/>
@@ -6071,6 +6075,110 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image" mode="describedby-id">
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>-description</xsl:text>
+</xsl:template>
+
+<!-- Diagacess Instructions -->
+
+<xsl:template name="diagacess-instructions">
+    <details>
+        <summary>Diagram Exploration Keyboard Controls</summary>
+        <div class="diagcess-navigation-controls">
+            <table>
+            <thead>
+            <tr>
+            <th>Key</th>
+            <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>Enter, A</td>
+            <td>Activate keyboard driven exploration</td>
+            </tr>
+            <tr>
+            <td>B</td>
+            <td>Activate menu driven exploration</td>
+            </tr>
+            <tr>
+            <td>Escape</td>
+            <td>Leave exploration mode</td>
+            </tr>
+            <tr>
+            <td>Cursor down</td>
+            <td>Explore next lower level</td>
+            </tr>
+            <tr>
+            <td>Cursor up</td>
+            <td>Explore next upper level</td>
+            </tr>
+            <tr>
+            <td>Cursor right</td>
+            <td>Explore next element on level</td>
+            </tr>
+            <tr>
+            <td>Cursor left</td>
+            <td>Explore previous element on level</td>
+            </tr>
+            <tr>
+            <td>X</td>
+            <td>Toggle expert mode</td>
+            </tr>
+            <tr>
+            <td>W</td>
+            <td>Extra details if available</td>
+            </tr>
+            <tr>
+            <td>Space</td>
+            <td>Repeat speech</td>
+            </tr>
+            <tr>
+            <td>M</td>
+            <td>Activate step magnification</td>
+            </tr>
+            <tr>
+            <td>Comma</td>
+            <td>Activate direct magnification</td>
+            </tr>
+            <tr>
+            <td>N</td>
+            <td>Deactivate magnification</td>
+            </tr>
+            <tr>
+            <td>Z</td>
+            <td>Toggle subtitles</td>
+            </tr>
+            <tr>
+            <td>C</td>
+            <td>Cycle contrast settings</td>
+            </tr>
+            <tr>
+            <td>T</td>
+            <td>Monochrome colours</td>
+            </tr>
+            <tr>
+            <td>L</td>
+            <td>Toggle language (if available)</td>
+            </tr>
+            <tr>
+            <td>K</td>
+            <td>Kill current sound</td>
+            </tr>
+            <tr>
+            <td>Y</td>
+            <td>Stop sound output</td>
+            </tr>
+            <tr>
+            <td>O</td>
+            <td>Start and stop sonification</td>
+            </tr>
+            <tr>
+            <td>P</td>
+            <td>Repeat sonification output</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+    </details>
 </xsl:template>
 
 
