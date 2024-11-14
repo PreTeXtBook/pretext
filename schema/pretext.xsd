@@ -3782,6 +3782,8 @@
       <xs:element ref="images"/>
       <xs:element ref="author-biographies"/>
       <xs:element ref="numbering"/>
+      <xs:element ref="programs"/>
+      <xs:element ref="parsons"/>
     </xs:choice>
   </xs:group>
   <xs:element name="brandlogo">
@@ -3853,6 +3855,16 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="programs">
+    <xs:complexType>
+      <xs:attribute name="language"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="parsons">
+    <xs:complexType>
+      <xs:attribute name="language"/>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="FeedbackUrl">

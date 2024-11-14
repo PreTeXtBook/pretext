@@ -1723,5 +1723,15 @@
                     }?
                 }
             
+            Configuration |=
+                element programs {
+                    attribute language {text}?
+                }
+            
+            Configuration |=
+                element parsons {
+                    attribute language {text}?
+                }
+            
                     }
                 
