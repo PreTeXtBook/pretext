@@ -45,4 +45,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pretext-latex.xsl, but this will change in the future.     -->
 
 
+<xsl:template match="/">
+    <xsl:call-template name="banner-warning">
+        <xsl:with-param name="warning">You are using (a version of) the pretext-latex-classic conversion, which is still experimental and under development.</xsl:with-param>
+      </xsl:call-template>
+  <xsl:apply-imports />
+</xsl:template>
+
+
 </xsl:stylesheet>
