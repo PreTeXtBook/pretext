@@ -124,12 +124,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "my-book" is a poor choice, "beezer-first-course-linear-algebra"   -->
         <!-- is better.  And maybe something in-between is best: "beezer-FCLA". -->
         <document-id>pretext-SA</document-id>
-        <!-- Items peculiar to an HTML output -->
-        <html>
-            <!-- If provided, the default programming-language will be used for -->
-            <!-- any programsor runestone interactives that lack @language      -->
-            <!-- <defaults programming-language="python"/> -->
-        </html>
+
+        <!-- If provided, the programs @language will be used for           -->
+        <!-- any programs or runestone interactives that lack @language     -->
+        <!-- <programs language="python"/> -->
+        <!-- If provided, the parsons @language will be used for           -->
+        <!-- parsons problems that lack @language. If not provided,        -->
+        <!-- programs@language will be used.                               -->
+        <!-- <parsons language="natural"/> -->
 
         <!--
         "Names" for various parts of a document are determined exactly

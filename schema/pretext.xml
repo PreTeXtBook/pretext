@@ -3150,6 +3150,7 @@
             <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
             <fragref ref="numbering" />
+            <fragref ref="programs" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -3279,6 +3280,25 @@
                     element division {
                         attribute part {"decorative" | "structural"}
                     }?
+                }
+            </code>
+        </fragment>
+
+        <p>Some global defaults can be set for programs and Parsons problems.</p>
+
+        <fragment xml:id="programs">
+            <title>Program options</title>
+            <code>
+            Configuration |=
+                element programs {
+                    attribute language {text}?
+                }
+            </code>
+            <title>Parsons options</title>
+            <code>
+            Configuration |=
+                element parsons {
+                    attribute language {text}?
                 }
             </code>
         </fragment>

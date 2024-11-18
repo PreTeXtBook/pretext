@@ -8020,23 +8020,49 @@ Book (with parts), "section" at level 3
 <!-- Define the key for indexing into the data list -->
 <xsl:key name="proglang" match="language" use="@ptx" />
 
+<!-- Define variables for default active language - will be picked up by -->
+<!-- RS manifest and can be a different string than the raw language. -->
+<xsl:variable name="default-active-programming-language">
+    <xsl:if test="$version-docinfo/programs/@language">
+        <xsl:for-each select="document('')/*/mb:programming">
+            <xsl:value-of select="key('proglang', $version-docinfo/programs/@language)/@active" />
+        </xsl:for-each>
+    </xsl:if>
+</xsl:variable>
+
 <!-- Determine programming language to use. First choice is @language     -->
 <!-- on current element. If that is not available, check docinfo default. -->
 <!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
-<xsl:template match="program|exercise" mode="get-programming-language">
+<xsl:template match="program" mode="get-programming-language">
     <xsl:choose>
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
         </xsl:when>
-        <xsl:when test="$docinfo/html/defaults/@programming-language">
-            <xsl:value-of select="$docinfo/html/defaults/@programming-language" />
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- For a parsons, use @language, default parsons language, or default -->
+<!-- programming language in that order of preference.                  -->
+<xsl:template match="*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
+    <xsl:choose>
+        <xsl:when test="@language">
+            <xsl:value-of select="@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/parsons/@language">
+            <xsl:value-of select="$version-docinfo/parsons/@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language" />
         </xsl:when>
     </xsl:choose>
 </xsl:template>
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of ActiveCode name comes out -->
-<xsl:template match="*" mode="active-language">
+<xsl:template match="program|*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="active-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
@@ -8047,7 +8073,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of listings name comes out -->
-<xsl:template match="*" mode="listings-language">
+<xsl:template match="program" mode="listings-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
@@ -8058,7 +8084,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of prism name comes out -->
-<xsl:template match="*" mode="prism-language">
+<xsl:template match="program" mode="prism-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>

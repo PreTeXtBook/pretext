@@ -4293,4 +4293,18 @@
       </optional>
     </element>
   </define>
+  <define name="Configuration" combine="choice">
+    <element name="programs">
+      <optional>
+        <attribute name="language"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="parsons">
+      <optional>
+        <attribute name="language"/>
+      </optional>
+    </element>
+  </define>
 </grammar>
