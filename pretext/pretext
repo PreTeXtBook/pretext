@@ -549,7 +549,7 @@ def main():
     # The "get" will report 'executables' in configuration file
     ptx.set_executables(get_executables(args.config_file))
 
-    # check and sanitize XML source, presumed to exiast
+    # check and sanitize XML source, presumed to exist
     xml_source = verify_input_file(args.xml_file, "source")
 
     # data directory is optional, so allow for None here
