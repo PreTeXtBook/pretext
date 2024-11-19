@@ -24,97 +24,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Abstract Algebra: Theory and Applications   -->
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
-
 <chapter xml:id="rune" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Runestone Testing</title>
 
     <introduction>
         <p>We collect Runestone interactive items for testing here, in sections of their own.</p>
+        <p>Some of these samples only function if hosted on a Runestone server. To see those in action, visit the copy of the <url href="https://runestone.academy/ns/books/published/PTXSB/sample-book.html">Sample Book hosted on Runestone</url></p>
     </introduction>
+
+    <section xml:id="inactive-code">
+        <title>Programs</title>
+
+        <p>First, some samples of programs that are not interactive. They will be syntax highlighted if a valid <attr>language</attr> is specified. Optionally, lines can be numbered and selected lines highlighted.</p>
+
+        <xi:include href="./rune-examples/static-listing-java.xml"/>
+
+        <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
+
+        <listing>
+            <caption>Python program, relying on default programs language</caption>
+            <program line-numbers="yes" include-source="yes">
+                <code>
+                def say_hello():
+                    print("Hello, World!")
+                
+                say_hello()
+                </code>
+            </program>
+        </listing>
+
+    </section>
 
     <section xml:id="activecode">
         <title>ActiveCode</title>
-
-        <p>Programs in supported languages are made interactive in HTML, on request.</p>
+        
+        <p>Programs in supported languages are made interactive in HTML when <attr>interactive</attr> is set to <c>activecode</c>. Some languages can be made interactive on any server, while others require being served from Runestone servers. See <url href="https://pretextbook.org/doc/guide/html/topic-program-console.html#interactive-program-capabilities">Interactive Programs Capabilities in the PreTeXt Guide</url> for a list of what languages are supported in which environs.</p>
 
         <listing xml:id="program-activecode-python">
             <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world">
-                <input>
+            <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world" include-source="yes">
+                <code>
                 print("Hello, World!")
-                </input>
+                </code>
             </program>
         </listing>
-
-        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/programs/@language</c> will be checked to determine what language to assume the code is written in.
-        </p>
-
-        <listing xml:id="program-activecode-python2">
-            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="python-hello-world2" label="hello-world2">
-                <input>
-                print("Hello, World!")
-                </input>
-            </program>
-        </listing>
-
-        <p>A C program will only be interactive if hosted on a Runestone server.</p>
-
-        <listing xml:id="program-activecode-c">
-            <caption>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
-            <program xml:id="c-hello-world" interactive='activecode' language="c">
-                <input>
-                #include &lt;stdio.h&gt;
-
-                int main(void)
-                {
-                    puts("Hello, world!");
-                }
-                </input>
-            </program>
-        </listing>
-
-        <p>A Java program will only be interactive if hosted on a Runestone server.</p>
-
-        <listing xml:id="program-activecode-java">
-            <title>Informal Java <q>Hello, World</q></title>
-            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
-            <program xml:id="java-hello-world" interactive='activecode' language="java">
-                <title>"hi" in Java</title>
-                <input>
-                import javax.swing.JFrame;  //Importing class JFrame
-                import javax.swing.JLabel;  //Importing class JLabel
-                public class HelloWorld {
-                    public static void main(String[] args) {
-                        JFrame frame = new JFrame();           //Creating frame
-                        frame.setTitle("Hi!");                 //Setting title frame
-                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
-                        frame.pack();                          //Setting size to smallest
-                        frame.setLocationRelativeTo(null);     //Centering frame
-                        frame.setVisible(true);                //Showing frame
-                    }
-                }
-                </input>
-            </program>
-        </listing>
-
-        <p>Javascript programs are made interactive in HTML, on request.</p>
 
         <listing xml:id="program-activecode-javascript">
             <caption>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript">
-                <input>
+            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript" include-source="yes">
+                <code>
                 document.write('Hello, world!');
-                </input>
+                </code>
+            </program>
+        </listing>
+        
+        <p>Some languages, like Java or C++, are only interactive when run on a Runestone server where the code can be compiled and run. Those languages can specify <attr>compiler-args</attr> and <attr>linker-args</attr> or <attr>interpreter-args</attr> as appropriate to the language. Default values for those options can be set in <tag>docinfo/programs</tag> - any defaults set there will be used for any program that lacks the corresponding attribute.</p>
+
+        <listing>
+            <caption>A C++ program with compiler-args and stdin</caption>
+            <p>It may be convenient to set <attr>compiler-args</attr> and <attr>linker-args</attr> at the book level in <tag>docinfo/programs</tag>. Values specified in that location will be used for any <tag>program</tag> that does not override the values by specifying its own attributes.</p>
+            <program interactive="activecode" label="hello-world-cpp" language="cpp" compiler-args="-std=c++17,-Wall,-g" linker-args="-g,-s" include-source="yes">
+                <code>
+                    #include &lt;iostream&gt;
+                    #include &lt;string&gt;
+                    using namespace std;
+                    int main() {
+                        string name;
+                        cin &gt;&gt; name;
+                        cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; endl;
+                        return 0;
+                    }
+                </code>
+                <stdin>Jane</stdin>
             </program>
         </listing>
 
-        <p>A <tag>program</tag> is not interactive, by default, no matter where it is hosted.</p>
-
-        <listing xml:id="program-static-java">
-            <caption>A static Java program</caption>
-            <program xml:id="java-static" interactive='no' language="java">
-                <input>
+        <listing xml:id="program-activecode-java-flags">
+            <caption>Java <q>Hello, World</q>, with flags</caption>
+            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" interpreter-args="-Xrs,-Xss8m,-Xmx128m" include-source="yes">
+                <code>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
                 public class HelloWorld {
@@ -127,44 +115,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         frame.setVisible(true);                //Showing frame
                     }
                 }
-                </input>
+                </code>
             </program>
         </listing>
 
-        <p>An Octave program will only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
+
+        <p>An Octave program will also only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
 
         <listing xml:id="program-activecode-octave">
             <caption>A simple Octave program</caption>
-            <program xml:id="octave-simple" interactive='activecode' language="octave">
-                <input>
+            <program xml:id="octave-simple" interactive='activecode' language="octave" include-source="yes">
+                <code>
                 x = 2 + 2
                 printf("%d\n", x)
-                </input>
+                </code>
             </program>
         </listing>
 
-        <p>A language not supported by Runestone Services will be rendered static.</p>
+        <p>A language not supported by Runestone Services will always be rendered static.</p>
 
         <listing xml:id="program-mistake-pascal">
             <caption>A Pascal program that cannot be interactive on Runestone</caption>
-            <program xml:id="pascal-mistake" interactive='activecode' language="pascal">
-                <input>
+            <program xml:id="pascal-mistake" interactive='activecode' language="pascal" include-source="yes">
+                <code>
                 program HelloWorld;
                 begin
                   WriteLn('Hello, world!');
                 end.
-                </input>
+                </code>
             </program>
         </listing>
 
-        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output.</p>
+        <p>A program can have a <tag>preamble</tag> and/or <tag>postamble</tag> which are added to the code that the user writes before it is run. They are visible by default, but can be made invisible with <attr>visible</attr> set to <c>"no"</c>. When visible, the code editor will prevent those regions from being modified. The indentation for lines in the <c>preamble/code/postamble</c> elements will be calculated relative to each other - make sure to indent them all to a similar extent. (In the source for the sample below, the <c># TODO...</c> is intentially indented one stop extra so that the user's code is part of the <c>add</c> function.</p>
+        <p><tag>tests</tag> are similar to <tag>postamble</tag> in that it represents code that is added to the users submission. However, <tag>tests</tag> is intended specifically for unit testing code (see examples below for unit testing in Python, Java, C++, SQL). Tests are invisble by default and can be made visible with <attr>visible</attr> set to <c>"yes"</c>. For historical reasons, the indentation of the <tag>tests</tag> is treated separately from the rest of the program.</p>
 
-        <p>If you examine the source, you will also notice the <tag>program</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/programs/@language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.</p>
+        <xi:include href="./rune-examples/activecode-ambles.xml"/>
+
+        <p>Here is the same Python program from the previous section, but now with a <tag>preamble</tag> and <tag>postamble</tag> that are invisible.  The user will not see the code that is added to their submission.  Not actually useful in this case, but it might be if you wanted to hide boilerplate setup from the reader.</p>
+
+        <listing>
+            <caption>A Python program with invisible pre/post ambles</caption>
+            <program interactive='activecode' language="python" label="program-activecode-python-ambles-invisible" include-source="yes">
+                <preamble visible="no">
+                def add(a, b):
+                </preamble>
+                <code>
+                    # TODO - complete the add function
+                </code>
+                <postamble visible="no">
+        
+                # Use the function
+                result = add(2, 3)
+                if result == 5:
+                    print("Test passed")
+                else:
+                    print("Test failed")
+                </postamble>
+            </program>
+        </listing>
+
+        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output. Note that it does not have an <attr>language</attr> and is relying on the default one specified in <tag>docinfo/programs</tag></p>
 
         <listing xml:id="listing-python-included">
             <caption>A Python program that defines some statistics</caption>
-            <program xml:id="python-statistics" interactive='activecode' label="statistics">
-                <input>
+            <program xml:id="python-statistics" interactive='activecode' label="statistics" include-source="yes">
+                <code>
                 loan_amount = [1250.0, 500.0, 1450.0, 200.0, 700.0, 100.0, 250.0, 225.0, 1200.0, 150.0, 600.0, 300.0, 700.0, 125.0, 650.0, 175.0, 1800.0, 1525.0, 575.0, 700.0, 1450.0, 400.0, 200.0, 1000.0, 350.0]
 
                 country_name = ['Azerbaijan', 'El Salvador', 'Bolivia', 'Paraguay', 'El Salvador', 'Philippines', 'Philippines', 'Nicaragua', 'Guatemala', 'Philippines', 'Paraguay', 'Philippines', 'Bolivia', 'Philippines', 'Philippines', 'Madagascar', 'Georgia', 'Uganda', 'Kenya', 'Tajikistan', 'Jordan', 'Kenya', 'Philippines', 'Ecuador', 'Kenya']
@@ -172,31 +187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 time_to_raise = [193075.0, 1157108.0, 1552939.0, 244945.0, 238797.0, 1248909.0, 773599.0, 116181.0, 2288095.0, 51668.0, 26717.0, 48030.0, 1839190.0, 71117.0, 580401.0, 800427.0, 1156218.0, 1166045.0, 2924705.0, 470622.0, 24078.0, 260044.0, 445938.0, 201408.0, 2370450.0]
 
                 num_lenders_total = [38, 18, 51, 3, 21, 1, 10, 8, 42, 1, 18, 6, 28, 5, 16, 7, 54, 1, 18, 22, 36, 12, 8, 24, 8]
-                </input>
-            </program>
-        </listing>
-
-        <p>An ActiveCode running on the Runestone server (rather than in a browser) can be provided with attributes that are flags to influence the compiler and linker, as in this <tag>program</tag> recycled from before.</p>
-
-        <listing xml:id="program-activecode-java-flags">
-            <title>Informal Java <q>Hello, World</q>, with flags</title>
-            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</caption>
-            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
-                <title>"hi" in Java</title>
-                <input>
-                import javax.swing.JFrame;  //Importing class JFrame
-                import javax.swing.JLabel;  //Importing class JLabel
-                public class HelloWorld {
-                    public static void main(String[] args) {
-                        JFrame frame = new JFrame();           //Creating frame
-                        frame.setTitle("Hi!");                 //Setting title frame
-                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
-                        frame.pack();                          //Setting size to smallest
-                        frame.setLocationRelativeTo(null);     //Centering frame
-                        frame.setVisible(true);                //Showing frame
-                    }
-                }
-                </input>
+                </code>
             </program>
         </listing>
 
@@ -204,18 +195,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>You'll see nothing that tells the reader that the one chunk of code is prefacing the other.  And in static formats it might be even less obvious.  So you will want to say <em>something</em> to alert the reader.  Here it is easy: <xref ref="exercise-python-including"/> includes all the code from <xref ref="listing-python-included"/>.</p>
 
-        <exercise xml:id="exercise-python-including">
+        <p>This program also makes use of <attr>autorun</attr> to execute on page load and the <attr>codelens</attr>to disable the codelens feature.</p>
+
+        <exercise xml:id="exercise-python-including" include-source="yes">
             <title>A Python program, including another</title>
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
             </statement>
-            <program xml:id="python-summation" interactive='activecode' language="python" label="python-sum-total" include="python-statistics">
-                <input>
+            <program autorun="yes" codelens="no" xml:id="python-summation" interactive='activecode' language="python" label="python-sum-total" include="python-statistics">
+                <code>
                 loan_total = 0
                 for loan in loan_amount:
                     loan_total += loan
                 print(loan_total)
-                </input>
+                </code>
                 <tests>
                 from unittest.gui import TestCaseGui
 
@@ -233,18 +226,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Exact same exercise again, but now we include <em>two</em> programs.  We first get the simple <q>Hello, world!</q> program at <xref ref="program-activecode-python"/> and then the same program defining the variables with lists of statistics at <xref ref="listing-python-included"/>.  So the output just includes the extra result from the <c>print()</c> statement.</p>
 
-        <exercise xml:id="exercise-python-including-two">
+        <p>This program also makes use of <attr>hidecode</attr> to initially keep the code hidden and <attr>download</attr> to enable a file download of the program (that includes all the included code).</p>
+
+        <exercise xml:id="exercise-python-including-two" include-source="yes">
             <title>A Python program, including two others</title>
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
             </statement>
-            <program xml:id="python-summation-two" interactive='activecode' language="python" label="python-sum-total-two" include=" python-hello-world python-statistics ">
-                <input>
+            <program xml:id="python-summation-two" interactive='activecode' language="python" label="python-sum-total-two" include="python-hello-world python-statistics " hidecode="yes" download="yes">
+                <code>
                 loan_total = 0
                 for loan in loan_amount:
                     loan_total += loan
                 print(loan_total)
-                </input>
+                </code>
                 <tests>
                 from unittest.gui import TestCaseGui
 
@@ -262,15 +257,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Here is an activecode with <attr>language</attr> set to <c>sql</c> uses the <attr>database</attr> to load a SQLite database file.</p>
 
-        <exercise xml:id="exercise-sql-using-db">
+        <exercise xml:id="exercise-sql-using-db" include-source="yes">
             <title>An SQL program that uses an SQLite database file</title>
             <statement>
                 <p>Select all the columns of all the rows in the <c>test</c> database table.</p>
             </statement>
             <program xml:id="sql-using-db" interactive='activecode' language="sql" label="sql-using-db" database="sql/test.db">
-                <input>
+                <code>
                     SELECT * FROM test
-                </input>
+                </code>
                 <tests>
                     assert 1,1 == world
                     assert 0,1 == hello
@@ -290,36 +285,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <listing xml:id="program-codelens-python">
             <caption>A Python program, stepable with CodeLens</caption>
             <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
-                <input>
+                <code>
                 print('Hello, World!')
-                </input>
+                </code>
             </program>
         </listing>
 
         <listing xml:id="program-codelens-c">
             <caption>An C program, stepable with CodeLens</caption>
             <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
-                <input>
+                <code>
                 #include &lt;stdio.h&gt;
 
                 int main(void)
                 {
                     puts("Hello, World!");
                 }
-                </input>
+                </code>
             </program>
         </listing>
 
         <listing xml:id="program-codelens-java">
             <caption>A Java program, stepable with CodeLens</caption>
             <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
-                <input>
+                <code>
                 public class HelloWorld {
                     public static void main(String[] args) {
                         System.out.println("Hello, World!");
                     }
                 }
-                </input>
+                </code>
             </program>
         </listing>
 
@@ -328,7 +323,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <listing xml:id="sieve-python">
             <caption><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</caption>
             <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
-                <input><![CDATA[
+                <code><![CDATA[
                 def SieveOfEratosthenes(n):
                    # array of type boolean with True values in it
                    prime = [True for i in range(n + 1)]
@@ -352,14 +347,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                    print ("The prime numbers smaller than or equal to", n,"is")
                    SieveOfEratosthenes(n)
                 ]]>
-                </input>
+                </code>
             </program>
         </listing>
 
         <listing xml:id="sieve-cpp">
             <caption><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</caption>
             <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
-                <input> <![CDATA[
+                <code> <![CDATA[
                 #include <stdio.h>
                 const int len = 20;
                 int main() {
@@ -375,14 +370,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                    }
                 }
                 ]]>
-                </input>
+                </code>
             </program>
         </listing>
 
         <listing xml:id="sieve-java">
             <caption><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</caption>
             <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
-                <input><![CDATA[
+                <code><![CDATA[
                 public class SievePrimeFactors  {
                    public static void main(String args[]) {
                       int num = 20;
@@ -407,7 +402,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                    }
                 }
                 ]]>
-                </input>
+                </code>
             </program>
         </listing>
     </section>
@@ -417,7 +412,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Program listings can be more that just live demonstrations, they can be exercises.  The first two also occur in the sample article where they just get a static rendering, if at all.</p>
 
-        <exercise label="coding-exercise-blank">
+        <exercise label="coding-exercise-blank" include-source="yes">
             <title>Inline Coding Exercise, No Help</title>
 
             <statement>
@@ -429,42 +424,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <hint><p>We didn't really ask you to do anything.</p></hint>
         </exercise>
 
-        <exercise label="coding-exercise-partial-one">
+        <exercise label="coding-exercise-partial-one" include-source="yes">
             <title>Inline Coding Exercise, Partial</title>
 
             <statement>
                 <p>Similar to above, but we provide a starting point for the exercise.</p>
             </statement>
             <program interactive="activecode" language="c">
-                <input>
+                <code>
                 #include &lt;stdio.h&gt;
 
                 int main(void)
-                </input>
+                </code>
             </program>
             <answer>
                 <p>We're not really sure.  But it would begin as follows:</p>
                 <program language="c">
-                    <input>
+                    <code>
                     #include &lt;stdio.h&gt;
 
                     int main(void)
-                    </input>
+                    </code>
                 </program>
             </answer>
         </exercise>
 
-        <activity xml:id="coding-exercise-partial-two">
+        <activity xml:id="coding-exercise-partial-two" include-source="yes">
             <title>Activity Coding Exercise</title>
 
             <statement>
                 <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.  (There is an empty <tag>tests</tag> element here, designed to test relief for an error this will cause on a Runestone server.)</p>
             </statement>
             <program label="activity-program" interactive="activecode" language="python">
-                <input>
+                <code>
                 for i in range(10):
                     print(i)
-                </input>
+                </code>
                 <tests>
 
                 </tests>
@@ -472,56 +467,165 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <answer><p>We're still not really sure.</p></answer>
         </activity>
 
-        <exercise>
+        <exercise include-source="yes">
             <title>An Exercise with a Static Program</title>
 
             <statement>
                 <p>Similar to above, again, but we place the <tag>program</tag> element <em>inside</em> the <tag>statement</tag>, not after it as a peer.  This signals that this is not a coding exercise and the program will render static, since it is explicitly labeled as not being interactive.</p>
                 <program xml:id="coding-exercise-static" language="c" interactive="no">
-                    <input>
+                    <code>
                     #include &lt;stdio.h&gt;
 
                     int main(void)
-                    </input>
+                    </code>
                 </program>
             </statement>
             <solution><p>We're not really sure. Still.</p></solution>
         </exercise>
 
-        <exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
-            <title>Coding Exercise, with Unit Tests</title>
+        <p>Unit testing can be used to automatically evaluate student work. Unit testing frameworks are available for Python, Java, and C++</p>
 
+        <xi:include href="./rune-examples/activecode-unittest.xml"/>
+
+        <exercise xml:id="unit-test-example-java" label="coding-exercise-java-unit-test" include-source="yes">
+            <title>Java Exercise, with Unit Tests</title>
             <statement>
-                <p>Fix the following code so that it always correctly adds two numbers. [Ed. Unit test support is experimental.]</p>
+                <p>Unit tests for Java can be written using junit.</p>
             </statement>
-            <program interactive="activecode" language="python">
-                <input>
-                def add(a,b):
-                    return 4
-                </input>
+            <program interactive="activecode" language="cpp">
+                <code>
+                    public class StudentCode
+                    {
+                        public static void main(String[] args)
+                        {
+                            for(int count = 2; count $lt;= 10; count++)
+                            {
+                                System.out.println(count);
+                            }
+                        }
+
+                        public int adder(int a, int b) {
+                            return a+b;
+                        }
+                    }
+                </code>
                 <tests>
-                from unittest.gui import TestCaseGui
+                    import static org.junit.Assert.*;
+                    import org.junit.After;
+                    import org.junit.Before;
+                    import org.junit.Test;
+                    import java.io.*;
+                    import java.nio.file.Files;
+                    import java.nio.file.Paths;
 
-                class myTests(TestCaseGui):
+                    public class ForLoopTestTester extends CodeTestHelper
+                    {
+                        /* Example test for main method - should pass */
+                        @Test
+                        public void testMain() throws IOException
+                        {
+                            // I wrote a method to run a method and send back the output - only works       with String[] args for now
+                            String output = getMethodOutput("main");
+                            String expect = "2\n3\n4\n5\n6\n7\n8\n9\n10\n";
+                            assertEquals("Output doesn't match", cleanString(expect), cleanString      (output));
+                        }
 
-                   def testOne(self):
-                       self.assertEqual(add(2,2), 4, "Adding two identical integers")
-                       self.assertEqual(add(7,13), 20, "Adding two different integers")
-                       self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Adding two decimal numbers")
+                        @Test
+                        public void testAdder() throws IOException {
+                            StudentCode s = new StudentCode();
+                            String msg = createMessage("Adding 2+2", ""+4, ""+s.adder(2,2));
+                            System.out.println("testing s.adder(2,2)");
+                            assertEquals(msg, 4, s.adder(2,2));
+                            assertEquals("adding 3+3", 6, s.adder(3,3));
+                        }
 
-                myTests().main()
+                        @Test
+                        public void testContent() throws IOException {
+                            String content = new String ( Files.readAllBytes( Paths.get("StudentCode.      java")));
+                        }
+                    }
                 </tests>
             </program>
-            <answer>
-                <p>We're not really sure.  But it would begin as follows:</p>
-                <program language="c">
-                    <input>
-                    #include &lt;stdio.h&gt;
+        </exercise>
 
-                    int main(void)
-                    </input>
-                </program>
-            </answer>
+        <exercise xml:id="unit-test-example-cpp" label="coding-exercise-cpp-unit-test" include-source="yes">
+            <title>C++ Exercise, with Unit Tests</title>
+            <statement>
+                <p>Unit tests for C++ can be written using doctest or catch. Doctest based tests build substantially faster than catch based ones.</p>
+                <p>In an interactive environment, the tests in this exercise will be made visible, but uneditable, so that in the event of a failed test the student can see exactly what is being tested (Doctest does not report on individual passed tests and the feedback on failed tests generally won't make sense without the test itself).</p>
+            </statement>
+            <program interactive="activecode" language="cpp">
+                <code>
+                // Complete the function to return the sum of two numbers
+                int add(int a, int b) {
+                    
+                }
+                </code>
+                <tests visible="yes">
+<![CDATA[
+
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest.h"
+
+TEST_CASE( "Test the add function" ) {
+    REQUIRE( add(2, 3) == 5 );
+    REQUIRE( add(6, 1) == 7 );
+    REQUIRE( add(-5, 5) == 0 );
+} 
+]]>
+                </tests>
+            </program>
+        </exercise>
+
+        <p>For simple programs, or languages without an available unit testing framework, input-output testing can be done instead. IO testing can only be done on languages that are run on a Runestone server (Java/C/C++/Octave/Python3).</p>
+
+        <exercise xml:id="io-test-example-cpp" label="coding-exercise-cpp-io-tests" include-source="yes">
+            <title>C++ Exercise, with IO Tests</title>
+            <statement>
+                <p>Read in an integer <c>n</c>. Print out a n by n square of asterisks.</p>
+            </statement>
+            <program interactive="activecode" language="cpp">
+                <code><![CDATA[
+                #include <iostream>
+                using namespace std;
+                int main() {
+                    int n;
+                    cin >> n;
+                    for (int i = 0; i < n; i++) {
+                        for (int j = 0; j < n; j++) {
+                            cout << "*";
+                        }
+                        cout << endl;
+                    }
+                } ]]>
+                </code>
+                <tests>
+                    <iotest>
+                        <input>1</input>
+                        <output>
+                            *
+                        </output>
+                    </iotest>
+                    <iotest>
+                        <input>3</input>
+                        <output>
+                            ***
+                            ***
+                            ***
+                        </output>
+                    </iotest>
+                    <iotest>
+                        <input>5</input>
+                        <output>
+                            *****
+                            *****
+                            *****
+                            *****
+                            *****
+                        </output>
+                    </iotest>
+                </tests>
+            </program>
         </exercise>
     </section>
 
@@ -531,8 +635,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
 
         <!-- # Section 11.4 Think Like a Computer Scientist, Runestone 2023-01-23 -->
-        <datafile label="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes">
-
+        <datafile label="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes" include-source="yes">
             <pre>
             1850    -0.37     2.24E-7
             1860    -0.34     3.94E-7
@@ -555,8 +658,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </pre>
         </datafile>
 
-        <program label="python-average-climate" interactive='activecode' language="python">
-            <input>
+        <program label="python-average-climate" interactive='activecode' language="python" include-source="yes">
+            <code>
             ccfile = open("ccdata1.txt", "r")
 
             for aline in ccfile:
@@ -564,7 +667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
 
             ccfile.close()
-            </input>
+            </code>
         </program>
 
         <!-- # Fundamentals of Python Programming, Stack Overflow Developer Survey, Runestone 2023-02-01 -->
@@ -589,18 +692,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li>LanguageWorkedWith</li>
             </ol></p>
 
-            <datafile label="stack-overflow-survey" filename="so_survey.csv" rows="10" cols="65" editable="no">
+            <datafile label="stack-overflow-survey" filename="so_survey.csv" rows="10" cols="65" editable="no" include-source="yes">
                 <pre source="datafiles/stackoverflow.csv"/>
             </datafile>
         </data>
 
         <!-- 400px wide, so 400/600 = 66% -->
-        <datafile label="luther-bell" filename="luther-bell.jpg">
+        <datafile label="luther-bell" filename="luther-bell.jpg" include-source="yes">
             <image source="datafiles/LutherBellPic.jpg" width="66%"/>
         </datafile>
 
-        <program label="python-one-pixel" interactive='activecode' language="python">
-            <input>
+        <program label="python-one-pixel" interactive='activecode' language="python" include-source="yes">
+            <code>
             import image
             img = image.Image("luther-bell.jpg")
 
@@ -609,7 +712,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             p = img.getPixel(45, 55)
             print(p.getRed(), p.getGreen(), p.getBlue())
-            </input>
+            </code>
         </program>
 
         <computation>
@@ -620,14 +723,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>[Now a data file and a program to process it, all bundled up inside a <tag>computation</tag>, since an <tag>example</tag> gets knowled and the ActiveCode does not fill.]</p>
 
             <!-- 300px wide so 300/600 = 50% -->
-            <datafile label="golden-gate" filename="golden_gate.png">
+            <datafile label="golden-gate" filename="golden_gate.png" include-source="yes">
                 <image source="datafiles/golden-gate-bridge.png" width="50%"/>
             </datafile>
 
             <p>This program changes every pixel of the image.</p>
 
-            <program label="python-change-pixels" interactive='activecode' language="python">
-                <input>
+            <program label="python-change-pixels" interactive='activecode' language="python" include-source="yes">
+                <code>
                 import image
 
                 img = image.Image("golden_gate.png")
@@ -652,7 +755,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 img.draw(win)
                 win.exitonclick()
-                </input>
+                </code>
             </program>
         </computation>
 
@@ -664,7 +767,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The data file is an abbreviated version of the example above, just to be different.  And is not editable.</p>
 
-        <datafile label="file-global-climate-two" filename="ccdata2.txt" rows="4" cols="40" editable="no">
+        <datafile label="file-global-climate-two" filename="ccdata2.txt" rows="4" cols="40" editable="no" include-source="yes">
             <pre>
             1900    -0.2      2.38
             1910    -0.49     3.34
@@ -684,8 +787,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The program is identical to the above, but we specify <c>python3</c> as the language, and use the smaller file.  So this example is only active when this content is hosted on a Runestone Academy server.</p>
 
-        <program label="python-average-climate-two" interactive='activecode' language="python3" datafile="ccdata2.txt">
-            <input>
+        <program label="python-average-climate-two" interactive='activecode' language="python3" datafile="ccdata2.txt" include-source="yes">
+            <code>
             ccfile = open("ccdata2.txt", "r")
 
             for aline in ccfile:
@@ -693,7 +796,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
 
             ccfile.close()
-            </input>
+            </code>
         </program>
 
         <p>[2023-02-24 Testing Java with multiple data files]</p>
@@ -705,18 +808,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- Images are 100 x 100.  So width are 100/600 = 17% -->
 
-            <datafile label="flower1-datafile" filename="flower1.jpg">
+            <datafile label="flower1-datafile" filename="flower1.jpg" include-source="yes">
                 <image source="datafiles/flower-one.jpeg" width="17%"/>
             </datafile>
 
-            <datafile label="flower2-datafile" filename="flower2.jpg">
+            <datafile label="flower2-datafile" filename="flower2.jpg" include-source="yes">
                 <image source="datafiles/flower-two.jpeg" width="17%"/>
             </datafile>
         </data>
 
-        <program label="java-flower-collage" interactive='activecode' language="java" datafile="flower1.jpg, flower2.jpg">
+        <program label="java-flower-collage" interactive='activecode' language="java" datafile="flower1.jpg, flower2.jpg" include-source="yes">
             <!-- About 10 XML characters, hence CDATA -->
-            <input><![CDATA[
+            <code><![CDATA[
             import java.awt.*;
             import java.awt.font.*;
             import java.awt.geom.*;
@@ -893,7 +996,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               }
             }
             ]]>
-            </input>
+            </code>
         </program>
 
         <!-- Multi-file, Java -->
@@ -904,11 +1007,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- https://runestone.academy/ns/books/published/csawesome/Unit8-2DArray/pictureLabA5.html -->
         <!-- https://github.com/bhoffman0/CSAwesome/blob/master/_sources/Unit8-2DArray/pictureLabA5.rst -->
 
-        <datafile label="beach-datafile" filename="beach.jpg">
+        <datafile label="beach-datafile" filename="beach.jpg" include-source="yes">
             <image source="datafiles/beach.jpg" width="17%"/>
         </datafile>
 
-        <datafile label="file-picture-classes-jar" filename="pictureClasses1.jar" editable="no" hide="yes">
+        <datafile label="file-picture-classes-jar" filename="pictureClasses1.jar" editable="no" hide="yes" include-source="yes">
             <pre>
             <![CDATA[
             import java.awt.Image;
@@ -2013,8 +2116,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- <pre source="datafiles/picture-classes-library.jar"/> -->
         </datafile>
 
-        <program label="java-only-blue" interactive='activecode' language="java" datafile="pictureClasses1.jar, beach.jpg">
-            <input>
+        <program label="java-only-blue" interactive='activecode' language="java" datafile="pictureClasses1.jar, beach.jpg" include-source="yes">
+            <code>
                 <![CDATA[
                 import java.awt.*;
                 import java.awt.font.*;
@@ -2136,7 +2239,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                   }
                 }
                 ]]>
-            </input>
+            </code>
             <tests>
                 <![CDATA[
                 import static org.junit.Assert.*;
@@ -2233,11 +2336,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>We would suggest you do something here.</p>
                 </statement>
                 <program xml:id="coding-exercise-partial-three" interactive="activecode" language="c">
-                    <input>
+                    <code>
                     #include &lt;stdio.h&gt;
 
                     int main(void)
-                    </input>
+                    </code>
                 </program>
             </activity>
 
@@ -2266,10 +2369,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>We would suggest now that you explore something here.  In this case we simply provide a CodeLens, which would be graded as an <q>interaction</q>.</p>
                 </statement>
                 <program xml:id="python-count-10" interactive="codelens" language="python">
-                    <input>
+                    <code>
                     for i in range(10):
                         print(i)
-                    </input>
+                    </code>
                 </program>
             </exploration>
 
@@ -4078,10 +4181,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Run the following program and observe the information provided at each step.</p>
                     </statement>
                     <program label="python-active-code-first" interactive="activecode" language="python">
-                        <input>
+                        <code>
                         for i in range(10):
                             print(i)
-                        </input>
+                        </code>
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </task>
@@ -4097,12 +4200,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>What color is a stop sign?</p>
                         <p>We include a spurious Python <tag>program</tag> element in the <tag>statement</tag> which should never convert this from a multiple-choice question into a programming exercise (on any host), but should still get syntax highlighting as part of rendering the exercise.</p>
                         <program xml:id="python-in-statement" language="python">
-                            <input>
+                            <code>
                             sum = 0
                             sum += 6
                             for i in range(sum):
                                 print("Hello, World!")
-                            </input>
+                            </code>
                         </program>
                     </statement>
                     <choices>
@@ -4145,10 +4248,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Run the following program and observe the information provided at each step.</p>
                     </statement>
                     <program label="python-active-code-second" interactive="activecode" language="python">
-                        <input>
+                        <code>
                         for i in range(10):
                             print(i)
-                        </input>
+                        </code>
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </task>
