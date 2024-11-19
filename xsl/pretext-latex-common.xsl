@@ -390,11 +390,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX preamble is common for both books, articles, memos and letters -->
 <!-- Except: title info allows an "event" for an article (presentation)   -->
 <xsl:template name="latex-preamble">
+    <xsl:call-template name="preamble-early"/>
+    <xsl:call-template name="cleardoublepage"/>
+    <xsl:call-template name="standard-packages"/>
+    <xsl:call-template name="tcolorbox-init"/>
+    <xsl:call-template name="page-setup"/>
+    <xsl:call-template name="latex-engine-support"/>
+    <xsl:call-template name="font-support"/>
+    <xsl:call-template name="math-packages"/>
+    <xsl:call-template name="pdfpages-package"/>
+    <xsl:call-template name="division-titles"/>
+    <xsl:call-template name="semantic-macros"/>
+    <xsl:call-template name="exercises-and-solutions"/>
+    <xsl:call-template name="chapter-start-number"/>
+    <xsl:call-template name="equation-numbering"/>
+    <xsl:call-template name="image-tcolorbox"/>
+    <xsl:call-template name="tables"/>
+    <xsl:call-template name="footnote-numbering"/>
+    <xsl:call-template name="font-awesome"/>
+    <xsl:call-template name="poetry-support"/>
+    <xsl:call-template name="music-support"/>
+    <xsl:call-template name="code-support"/>
+    <xsl:call-template name="list-layout"/>
+    <!-- This is the place to add part numbers to the numbering, which   -->
+    <!-- is *not* the default LaTeX behavior.  The \p@section scheme     -->
+    <!-- is complicated, leading to about ten constructions like         -->
+    <!--                                                                 -->
+    <!-- \ifdefined\p@namedlist\renewcommand{\p@namedlist}{\thepart.}\fi -->
+    <!--                                                                 -->
+    <!-- Advice is to redefine these *before* loading hyperref           -->
+    <!-- https://tex.stackexchange.com/questions/172962                  -->
+    <!-- (hyperref-include-part-number-for-cross-references-to-chapters) -->
+    <!-- Easier is to just adjust the chapter number, which filters down -->
+    <!-- into anything that uses the chapter, though perhaps per-part    -->
+    <!-- numbering will still need something?                            -->
+    <!--                                                                 -->
+    <!-- \renewcommand{\thechapter}{\thepart.\arabic{chapter}}           -->
+    <!--                                                                 -->
+    <xsl:call-template name="load-configure-hyperref"/>
+    <!-- We create counters and numbered  tcolorbox  environments -->
+    <!-- *after* loading the  hyperref  package, so as to avoid a -->
+    <!-- pdfTeX warning about duplicate identifiers.              -->
+    <xsl:call-template name="create-numbered-tcolorbox"/>
+    <!-- The "xwatermark" package has way more options, including the -->
+    <!-- possibility of putting the watermark onto the foreground     -->
+    <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
+    <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
+    <!-- was at v1.2, 2015-02-19.                                     -->
+
+    <xsl:call-template name="watermark-and-showkeys"/>
+    <xsl:call-template name="latex-image-support"/>
+    <xsl:call-template name="sidebyside-environment"/>
+    <xsl:call-template name="kbd-keys"/>
+    <xsl:call-template name="late-preamble-adjustments"/>
+
+</xsl:template>
+
+
+<!--####################-->
+<!-- Preamble Templates -->
+<!--####################-->
+
+<!-- As of 2021-02-28 we have begun modularizing the components of the -->
+<!-- preamble, into topical, similar/related groups of commands and    -->
+<!-- definitions.  This was prompted by the necessity of  tcolorbox's  -->
+<!-- numbering scheme needing to *follow* the introduction of the      -->
+<!-- hyperref  package, contrary to the usual advice.  Routines here   -->
+<!-- should mimic the order of their use in the real template.         -->
+
+<!-- Preamble early -->
+<xsl:template name="preamble-early">
     <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.early != ''">
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Redefine "cleardoublepage" -->
+<xsl:template name="cleardoublepage">
     <xsl:choose>
         <xsl:when test="($b-latex-two-sides) or ($latex-open-odd = 'add-blanks')">
             <!-- Redefines \cleardoublepage as suggested, plus empty page style on blanks: -->
@@ -422,6 +496,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatother%&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
+</xsl:template>
+
+<!-- Standard packages -->
+<xsl:template name="standard-packages">
     <!-- Following need to be mature, robust, powerful, flexible, well-maintained -->
     <xsl:text>%% Default LaTeX packages&#xa;</xsl:text>
     <xsl:text>%%   1.  always employed (or nearly so) for some purpose, or&#xa;</xsl:text>
@@ -452,6 +530,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% begin: defined colors, via xcolor package, for styling&#xa;</xsl:text>
     <xsl:call-template name="xcolor-style"/>
     <xsl:text>%% end: defined colors, via xcolor package, for styling&#xa;</xsl:text>
+</xsl:template>
+
+<!-- tcolorbox initial setup -->
+<xsl:template name="tcolorbox-init">
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
     <xsl:text>%% skins library provides "enhanced" skin, employing tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
@@ -484,6 +566,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usetikzlibrary{calc}&#xa;</xsl:text>
     <xsl:text>%% We use some more exotic tcolorbox keys to restore indentation to parboxes&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{hooks}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- paragraph and page setup -->
+<xsl:template name="page-setup">
     <!-- This should save-off the indentation used for the first line of  -->
     <!-- a paragraph, in effect for the chosen document class.  Then the  -->
     <!-- "parbox" used by "tcolorbox" can restore indentation rather than -->
@@ -567,10 +653,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% better handing of text alignment&#xa;</xsl:text>
         <xsl:text>\usepackage{ragged2e}&#xa;</xsl:text>
     </xsl:if>
-    <!--                                  -->
-    <!-- Conditional LaTeX engine support -->
-    <!-- (exclusive of fonts)             -->
-    <!--                                  -->
+</xsl:template>
+
+<!-- Conditional LaTeX engine support (exclusive of fonts) -->
+<xsl:template name="latex-engine-support">
     <xsl:text>%% This LaTeX file may be compiled with pdflatex, xelatex, or lualatex executables&#xa;</xsl:text>
     <xsl:text>%% LuaTeX is not explicitly supported, but we do accept additions from knowledgeable users&#xa;</xsl:text>
     <xsl:text>%% The conditional below provides  pdflatex  specific configuration last&#xa;</xsl:text>
@@ -594,10 +680,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>%% end:   engine-specific capabilities&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
-    <!--                         -->
-    <!-- Font support            -->
-    <!-- (conditional on engine) -->
-    <!--                         -->
+</xsl:template>
+
+<!-- Font support (conditional on engine) -->
+<xsl:template name="font-support">
     <xsl:text>%% Fonts.  Conditional on LaTex engine employed.&#xa;</xsl:text>
     <xsl:text>%% Default Text Font: The Latin Modern fonts are&#xa;</xsl:text>
     <xsl:text>%% "enhanced versions of the [original TeX] Computer Modern fonts."&#xa;</xsl:text>
@@ -788,8 +874,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This template supplies [] w options iff there really are options -->
     <xsl:call-template name="microtype-option-argument"/>
     <xsl:text>{microtype}&#xa;</xsl:text>
-    <!--  -->
-    <!--  -->
+</xsl:template>
+
+<!-- Additional packages for math -->
+<xsl:template name="math-packages">
     <xsl:text>%% Symbols, align environment, commutative diagrams, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amscd}&#xa;</xsl:text>
@@ -804,6 +892,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- pdfpages package for covers -->
+<xsl:template name="pdfpages-package">
     <xsl:if test="$b-has-latex-front-cover or $b-has-latex-back-cover">
         <xsl:text>%% pdfpages package for front and back covers as PDFs&#xa;</xsl:text>
         <xsl:text>\usepackage[</xsl:text>
@@ -818,6 +910,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]{pdfpages}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Division titles and headers/footers for styling -->
+<xsl:template name="division-titles">
     <xsl:text>%% Division Titles, and Page Headers/Footers&#xa;</xsl:text>
     <!-- The final mandatory argument of the titlesec \titleformat  -->
     <!-- command is the "before-code", meaning before the text of   -->
@@ -940,9 +1036,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="titletoc-subsection-style"/>
     <xsl:call-template name="titletoc-subsubsection-style"/>
     <xsl:text>%%&#xa;</xsl:text>
-    <!-- ############### -->
-    <!-- Semantic Macros -->
-    <!-- ############### -->
+</xsl:template>
+
+<!-- Semantic Macros -->
+<xsl:template name="semantic-macros">
     <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
@@ -1075,6 +1172,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Exercises and solutions setup -->
+<xsl:template name="exercises-and-solutions">
     <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
         <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
         <!-- Solutions present, check for exercise types     -->
@@ -1205,6 +1306,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
+</xsl:template>
+
+<!-- Chapter start number -->
+<xsl:template name="chapter-start-number">
     <!-- Publishers can start chapter numbering at will.  Chapter 0 for -->
     <!-- the computer scientists, and perhaps a certain chapter number  -->
     <!-- for a book spread across multiple physical valumes.            -->
@@ -1214,6 +1319,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$chapter-start - 1" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Equation numbering -->
+<xsl:template name="equation-numbering">
     <!-- Numbering Equations -->
     <!-- See numbering-equations variable being set in pretext-common.xsl         -->
     <!-- With number="yes|no" on mrow, we must allow for the possibility of an md  -->
@@ -1233,6 +1342,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+</xsl:template>
+
+<!-- tcolorbox for images -->
+<xsl:template name="image-tcolorbox">
     <xsl:if test="$document-root//image">
         <xsl:text>%% "tcolorbox" environment for a single image, occupying entire \linewidth&#xa;</xsl:text>
         <xsl:text>%% arguments are left-margin, width, right-margin, as multiples of&#xa;</xsl:text>
@@ -1245,8 +1358,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Intended use is for alignment with a list marker&#xa;</xsl:text>
         <xsl:text>\NewDocumentEnvironment{image}{mmmm}{\notblank{#4}{\leavevmode\nopagebreak\vspace{#4}}{}\begin{tcbimage}{#1}{#2}{#3}}{\end{tcbimage}%&#xa;}</xsl:text>
     </xsl:if>
+</xsl:template>
 
-    <!-- Tables -->
+<!-- Tables -->
+<xsl:template name="tables">
     <xsl:if test="$document-root//tabular">
         <xsl:text>%% For improved tables&#xa;</xsl:text>
         <xsl:text>\usepackage{array}&#xa;</xsl:text>
@@ -1294,7 +1409,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
         <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
     </xsl:if>
-    <!-- Numbering Footnotes -->
+</xsl:template>
+
+<!-- Numbering Footnotes -->
+<xsl:template name="footnote-numbering">
     <xsl:if test="$document-root//fn">
         <xsl:text>%% Footnote Numbering&#xa;</xsl:text>
         <xsl:text>%% Specified by numbering.footnotes.level&#xa;</xsl:text>
@@ -1315,12 +1433,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
+</xsl:template>
+
+<!-- Font Awesome package -->
+<xsl:template name="font-awesome">
     <xsl:if test="$b-has-icon">
         <xsl:text>%% Font Awesome 5 icons in a LaTeX package&#xa;</xsl:text>
         <xsl:text>%% https://ctan.org/pkg/fontawesome5 (v5.15.4) &#xa;</xsl:text>
         <xsl:text>\usepackage{fontawesome5}&#xa;</xsl:text>
     </xsl:if>
-    <!-- Poetry -->
+</xsl:template>
+
+<!-- Poetry -->
+<xsl:template name="poetry-support">
     <xsl:if test="$document-root//poem">
         <xsl:text>%% Poetry Support&#xa;</xsl:text>
         <xsl:text>\newenvironment{poem}{\setlength{\parindent}{0em}}{}&#xa;</xsl:text>
@@ -1335,7 +1460,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\poemlinecenter}[1]{{\centering{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
-    <!-- Music -->
+</xsl:template>
+
+<!-- Music -->
+<xsl:template name="music-support">
     <xsl:if test="$document-root//flat | $document-root//doubleflat | $document-root//sharp | $document-root//doublesharp | $document-root//natural | $document-root//n | $document-root//scaledeg | $document-root//chord">
         <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
         <xsl:text>%% The musicography package builds on the "musix" fonts and&#xa;</xsl:text>
@@ -1350,6 +1478,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\renewcommand{\natural}{\musNatural}&#xa;</xsl:text>
         <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Code support -->
+<xsl:template name="code-support">
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
     <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
     <!-- "Fonts for Displaying Program Code in LaTeX":  http://nepsweb.co.uk/docs%/progfonts.pdf        -->
@@ -1585,6 +1717,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\DefineVerbatimEnvironment{codedisplayleft}{Verbatim}{}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+</xsl:template>
+
+<!-- Lists and related layouts -->
+<xsl:template name="list-layout">
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
      <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
@@ -1711,204 +1847,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for tables (potentially) spanning multiple pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
-    <!-- This is the place to add part numbers to the numbering, which   -->
-    <!-- is *not* the default LaTeX behavior.  The \p@section scheme     -->
-    <!-- is complicated, leading to about ten constructions like         -->
-    <!--                                                                 -->
-    <!-- \ifdefined\p@namedlist\renewcommand{\p@namedlist}{\thepart.}\fi -->
-    <!--                                                                 -->
-    <!-- Advice is to redefine these *before* loading hyperref           -->
-    <!-- https://tex.stackexchange.com/questions/172962                  -->
-    <!-- (hyperref-include-part-number-for-cross-references-to-chapters) -->
-    <!-- Easier is to just adjust the chapter number, which filters down -->
-    <!-- into anything that uses the chapter, though perhaps per-part    -->
-    <!-- numbering will still need something?                            -->
-    <!--                                                                 -->
-    <!-- \renewcommand{\thechapter}{\thepart.\arabic{chapter}}           -->
-    <!--                                                                 -->
-    <xsl:call-template name="load-configure-hyperref"/>
-    <!-- We create counters and numbered  tcolorbox  environments -->
-    <!-- *after* loading the  hyperref  package, so as to avoid a -->
-    <!-- pdfTeX warning about duplicate identifiers.              -->
-    <xsl:call-template name="create-numbered-tcolorbox"/>
-    <!-- The "xwatermark" package has way more options, including the -->
-    <!-- possibility of putting the watermark onto the foreground     -->
-    <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
-    <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
-    <!-- was at v1.2, 2015-02-19.                                     -->
-    <xsl:if test="$b-watermark or $b-latex-watermark">
-        <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
-        <xsl:text>\SetWatermarkText{</xsl:text>
-        <xsl:value-of select="$watermark-text" />
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\SetWatermarkScale{</xsl:text>
-        <xsl:value-of select="$watermark-scale" />
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$author-tools-new = 'yes'" >
-        <xsl:text>%% Collected author tools options (author-tools='yes')&#xa;</xsl:text>
-        <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
-        <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$latex-image-preamble">
-        <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-        <xsl:value-of select="$latex-image-preamble"/>
-    </xsl:if>
-    <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
-    <xsl:if test="$document-root//latex-image">
-        <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
-        <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
-        <xsl:text>\fi&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//sidebyside">
-        <!-- "minimal" is no border or spacing at all -->
-        <!-- set on $sbsdebug to "tight" with some background    -->
-        <!-- From the tcolorbox manual, "center" vs. "flush center":      -->
-        <!-- "The differences between the flush and non-flush version     -->
-        <!-- are explained in detail in the TikZ manual. The short story  -->
-        <!-- is that the non-flush versions will often look more balanced -->
-        <!-- but with more hyphenations."                                 -->
-        <xsl:choose>
-            <xsl:when test="$sbsdebug">
-                <xsl:text>%% tcolorbox styles for *DEBUGGING* sidebyside layout&#xa;</xsl:text>
-                <xsl:text>%% "tight" -> 0.4pt border, pink background&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbspanelstyle/.style={size=tight,colback=pink} }&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
-                <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
-                <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
-                <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false, raster after skip=0.7\baselineskip} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont, before upper app={\setparstyle}} }&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
-        <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
-        <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
-        <!-- Main side-by-side environment, given by xparse            -->
-        <!-- raster equal height: boxes of same *row* have same height -->
-        <!-- raster force size: false lets us control width            -->
-        <!-- We do not try here to keep captions attached (when not    -->
-        <!-- in a "figure"), unfortunately, this is an un-semantic     -->
-        <!-- command inbetween the list of panels and the captions     -->
-        <xsl:text>%% "xparse" environment for entire sidebyside&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
-        <xsl:text>  {\begin{tcbraster}&#xa;</xsl:text>
-        <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
-        <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
-        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
-        <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//kbd">
-        <!-- https://github.com/tweh/menukeys/issues/41 -->
-        <xsl:text>%% menukeys package says:&#xa;</xsl:text>
-        <xsl:text>%%   Since menukeys uses catoptions, which does some heavy&#xa;</xsl:text>
-        <xsl:text>%%   changes on key-value options, it is recommended to load&#xa;</xsl:text>
-        <xsl:text>%%   menukeys as the last package (even after hyperref)!&#xa;</xsl:text>
-        <xsl:text>\usepackage{menukeys}&#xa;</xsl:text>
-        <!-- https://tex.stackexchange.com/questions/96300/how-to-change-the-style-of-menukeys -->
-        <xsl:text>\renewmenumacro{\keys}{shadowedroundedkeys}&#xa;</xsl:text>
-        <!-- Seemingly extra braces protect comma that kbdkeys package uses -->
-        <xsl:text>\newcommand{\kbd}[1]{\keys{{#1}}}&#xa;</xsl:text>
-    </xsl:if>
-
-    <!-- N.B. Author-supplied LaTeX macros come *after* the -->
-    <!-- late-preamble stringparam in order that an author  -->
-    <!-- cannot attempt a conversion-specific redefinition  -->
-    <!-- of a macro that has been used used in a less       -->
-    <!-- capable conversion, i.e. HTML/MathJax              -->
-    <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
-    <xsl:if test="$latex.preamble.late != ''">
-        <xsl:value-of select="$latex.preamble.late" />
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <!-- "extra" packages specified by the author -->
-    <xsl:variable name="latex-packages">
-        <xsl:for-each select="$docinfo/math-package">
-            <!-- must be specified, but can be empty/null -->
-            <xsl:if test="not(normalize-space(@latex-name)) = ''">
-                <xsl:text>\usepackage{</xsl:text>
-                <xsl:value-of select="@latex-name"/>
-                <xsl:apply-templates/>
-                <xsl:text>}</xsl:text>
-                <!-- one per line for readability -->
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:variable>
-    <!-- We could use contains() on the 5 types of arrows  -->
-    <!-- to really defend against this problematic package -->
-    <!-- 2023-10-19: this test is buggy, there is no consideration -->
-    <!-- of "men", while "md" and "mrow" are duplicative           -->
-    <xsl:if test="$document-root//m|$document-root//md|$document-root//mrow">
-        <xsl:choose>
-            <xsl:when test="contains($latex-packages, '\usepackage{extpfeil}')">
-                <xsl:text>%% You have elected to load the LaTeX "extpfeil" package&#xa;</xsl:text>
-                <xsl:text>%% for certain extensible arrows, and it should appear just below.&#xa;</xsl:text>
-                <xsl:text>%% This package has numerous shortcomings leading to conflicts with&#xa;</xsl:text>
-                <xsl:text>%% packages like "stmaryrd" and our manipulations of lengths to support&#xa;</xsl:text>
-                <xsl:text>%% variable thickness of rules in tables.  It should appear late&#xa;</xsl:text>
-                <xsl:text>%% in the preamble in an effort to mitigate these shortcomings.&#xa;</xsl:text>
-            </xsl:when>
-            <!-- 2023-10-19: at the first hint of trouble with automatic loading of this package,     -->
-            <!-- feel free to jettison the "otherwise" clause.  Then move the warning (in the "when") -->
-            <!-- to simply condition on the appearance in the list of packages being included.        -->
-            <!-- Following preserves backward-compatible behavior.                                    -->
-            <xsl:otherwise>
-                <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
-                <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
-                <xsl:text>%% NB: this package loads mtools, which loads calc, which redefines&#xa;</xsl:text>
-                <xsl:text>%%     \setlength, so it can be removed if it seems to be in the &#xa;</xsl:text>
-                <xsl:text>%%     way and your math does not use:&#xa;</xsl:text>
-                <xsl:text>%%     &#xa;</xsl:text>
-                <xsl:text>%%     \xtwoheadrightarrow, \xtwoheadleftarrow, \xmapsto, \xlongequal, \xtofrom&#xa;</xsl:text>
-                <xsl:text>%%     &#xa;</xsl:text>
-                <xsl:text>%%     we have had to be extra careful with variable thickness&#xa;</xsl:text>
-                <xsl:text>%%     lines in tables, and so also load this package late&#xa;</xsl:text>
-                <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
-    <xsl:if test="not($latex-packages = '')">
-        <xsl:text>%% Begin: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
-        <xsl:text>%% (From  docinfo/math-package  elements)&#xa;</xsl:text>
-        <xsl:value-of select="$latex-packages"/>
-        <xsl:text>%% End: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
-    </xsl:if>
-    <!-- "extra" macros specified by the author -->
-    <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
-    <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
-    <xsl:text>%% Plus three from PTX for XML characters&#xa;</xsl:text>
-    <xsl:value-of select="$latex-macros" />
-    <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
-    <!-- 2023-10-18: source has \sfrac{}{} macro, but now author needs     -->
-    <!-- to specify the LaTeX "xfrac" package in a docinfo/math-package    -->
-    <!-- element to continue support.  This is the fallback subpar macro,  -->
-    <!-- just like we use in HTML, when author has not loaded the package. -->
-    <!-- Perhaps relevant: http://tex.stackexchange.com/questions/3372/    -->
-    <xsl:if test="$b-has-sfrac and not(contains($latex-packages, '\usepackage{xfrac}'))">
-        <xsl:text>%% Historical (subpar) support for \sfrac macro&#xa;</xsl:text>
-        <xsl:text>%% to achieve pleasing slanted (beveled) fractions.&#xa;</xsl:text>
-        <xsl:text>%% Add "xfrac" package with a  docinfo/math-package  element&#xa;</xsl:text>
-        <xsl:text>%% to achieve superior typesetting in LaTeX/PDF output&#xa;</xsl:text>
-        <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//contributors">
-        <xsl:text>%% Semantic macros for contributor list&#xa;</xsl:text>
-        <xsl:text>\newcommand{\contributor}[1]{\parbox{\linewidth}{#1}\par\bigskip}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\contributorname}[1]{\textsc{#1}\\[0.25\baselineskip]}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\contributorinfo}[1]{\hspace*{0.05\linewidth}\parbox{0.95\linewidth}{\textsl{#1}}}&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
-<!-- As of 2021-02-28 we have begun modularizing the components of the -->
-<!-- preamble, into topical, similar/related groups of commands and    -->
-<!-- definitions.  This was prompted by the necessity of  tcolorbox's  -->
-<!-- numbering scheme needing to *follow* the introduction of the      -->
-<!-- hyperref  package, contrary to the usual advice.  Routines here   -->
-<!-- should mimic the order of their use in the real template.         -->
 
 <!-- http://tex.stackexchange.com/questions/106159/why-i-shouldnt-load-pdftex-option-with-hyperref -->
 <xsl:template name="load-configure-hyperref">
@@ -2348,6 +2288,194 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<!-- Watermark and author tools -->
+<xsl:template name="watermark-and-showkeys">
+    <xsl:if test="$b-watermark or $b-latex-watermark">
+        <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
+        <xsl:text>\SetWatermarkText{</xsl:text>
+        <xsl:value-of select="$watermark-text" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\SetWatermarkScale{</xsl:text>
+        <xsl:value-of select="$watermark-scale" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$author-tools-new = 'yes'" >
+        <xsl:text>%% Collected author tools options (author-tools='yes')&#xa;</xsl:text>
+        <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
+        <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- latex-image support -->
+<xsl:template name="latex-image-support">
+    <xsl:if test="$latex-image-preamble">
+        <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
+        <xsl:value-of select="$latex-image-preamble"/>
+    </xsl:if>
+    <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
+    <xsl:if test="$document-root//latex-image">
+        <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
+        <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
+        <xsl:text>\fi&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Side-by-side environmnet -->
+<xsl:template name="sidebyside-environment">
+    <xsl:if test="$document-root//sidebyside">
+        <!-- "minimal" is no border or spacing at all -->
+        <!-- set on $sbsdebug to "tight" with some background    -->
+        <!-- From the tcolorbox manual, "center" vs. "flush center":      -->
+        <!-- "The differences between the flush and non-flush version     -->
+        <!-- are explained in detail in the TikZ manual. The short story  -->
+        <!-- is that the non-flush versions will often look more balanced -->
+        <!-- but with more hyphenations."                                 -->
+        <xsl:choose>
+            <xsl:when test="$sbsdebug">
+                <xsl:text>%% tcolorbox styles for *DEBUGGING* sidebyside layout&#xa;</xsl:text>
+                <xsl:text>%% "tight" -> 0.4pt border, pink background&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={size=tight,colback=pink} }&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
+                <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
+                <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
+                <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false, raster after skip=0.7\baselineskip} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont, before upper app={\setparstyle}} }&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
+        <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
+        <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
+        <!-- Main side-by-side environment, given by xparse            -->
+        <!-- raster equal height: boxes of same *row* have same height -->
+        <!-- raster force size: false lets us control width            -->
+        <!-- We do not try here to keep captions attached (when not    -->
+        <!-- in a "figure"), unfortunately, this is an un-semantic     -->
+        <!-- command inbetween the list of panels and the captions     -->
+        <xsl:text>%% "xparse" environment for entire sidebyside&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
+        <xsl:text>  {\begin{tcbraster}&#xa;</xsl:text>
+        <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
+        <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
+        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- kbd keys -->
+<xsl:template name="kbd-keys">
+    <xsl:if test="$document-root//kbd">
+        <!-- https://github.com/tweh/menukeys/issues/41 -->
+        <xsl:text>%% menukeys package says:&#xa;</xsl:text>
+        <xsl:text>%%   Since menukeys uses catoptions, which does some heavy&#xa;</xsl:text>
+        <xsl:text>%%   changes on key-value options, it is recommended to load&#xa;</xsl:text>
+        <xsl:text>%%   menukeys as the last package (even after hyperref)!&#xa;</xsl:text>
+        <xsl:text>\usepackage{menukeys}&#xa;</xsl:text>
+        <!-- https://tex.stackexchange.com/questions/96300/how-to-change-the-style-of-menukeys -->
+        <xsl:text>\renewmenumacro{\keys}{shadowedroundedkeys}&#xa;</xsl:text>
+        <!-- Seemingly extra braces protect comma that kbdkeys package uses -->
+        <xsl:text>\newcommand{\kbd}[1]{\keys{{#1}}}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Late preamble, misc. adjustments           -->
+<!-- NB: This could be split up more if needed. -->
+<xsl:template name="late-preamble-adjustments">
+    <!-- N.B. Author-supplied LaTeX macros come *after* the -->
+    <!-- late-preamble stringparam in order that an author  -->
+    <!-- cannot attempt a conversion-specific redefinition  -->
+    <!-- of a macro that has been used used in a less       -->
+    <!-- capable conversion, i.e. HTML/MathJax              -->
+    <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
+    <xsl:if test="$latex.preamble.late != ''">
+        <xsl:value-of select="$latex.preamble.late" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <!-- "extra" packages specified by the author -->
+    <xsl:variable name="latex-packages">
+        <xsl:for-each select="$docinfo/math-package">
+            <!-- must be specified, but can be empty/null -->
+            <xsl:if test="not(normalize-space(@latex-name)) = ''">
+                <xsl:text>\usepackage{</xsl:text>
+                <xsl:value-of select="@latex-name"/>
+                <xsl:apply-templates/>
+                <xsl:text>}</xsl:text>
+                <!-- one per line for readability -->
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- We could use contains() on the 5 types of arrows  -->
+    <!-- to really defend against this problematic package -->
+    <!-- 2023-10-19: this test is buggy, there is no consideration -->
+    <!-- of "men", while "md" and "mrow" are duplicative           -->
+    <xsl:if test="$document-root//m|$document-root//md|$document-root//mrow">
+        <xsl:choose>
+            <xsl:when test="contains($latex-packages, '\usepackage{extpfeil}')">
+                <xsl:text>%% You have elected to load the LaTeX "extpfeil" package&#xa;</xsl:text>
+                <xsl:text>%% for certain extensible arrows, and it should appear just below.&#xa;</xsl:text>
+                <xsl:text>%% This package has numerous shortcomings leading to conflicts with&#xa;</xsl:text>
+                <xsl:text>%% packages like "stmaryrd" and our manipulations of lengths to support&#xa;</xsl:text>
+                <xsl:text>%% variable thickness of rules in tables.  It should appear late&#xa;</xsl:text>
+                <xsl:text>%% in the preamble in an effort to mitigate these shortcomings.&#xa;</xsl:text>
+            </xsl:when>
+            <!-- 2023-10-19: at the first hint of trouble with automatic loading of this package,     -->
+            <!-- feel free to jettison the "otherwise" clause.  Then move the warning (in the "when") -->
+            <!-- to simply condition on the appearance in the list of packages being included.        -->
+            <!-- Following preserves backward-compatible behavior.                                    -->
+            <xsl:otherwise>
+                <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
+                <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
+                <xsl:text>%% NB: this package loads mtools, which loads calc, which redefines&#xa;</xsl:text>
+                <xsl:text>%%     \setlength, so it can be removed if it seems to be in the &#xa;</xsl:text>
+                <xsl:text>%%     way and your math does not use:&#xa;</xsl:text>
+                <xsl:text>%%     &#xa;</xsl:text>
+                <xsl:text>%%     \xtwoheadrightarrow, \xtwoheadleftarrow, \xmapsto, \xlongequal, \xtofrom&#xa;</xsl:text>
+                <xsl:text>%%     &#xa;</xsl:text>
+                <xsl:text>%%     we have had to be extra careful with variable thickness&#xa;</xsl:text>
+                <xsl:text>%%     lines in tables, and so also load this package late&#xa;</xsl:text>
+                <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <xsl:if test="not($latex-packages = '')">
+        <xsl:text>%% Begin: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
+        <xsl:text>%% (From  docinfo/math-package  elements)&#xa;</xsl:text>
+        <xsl:value-of select="$latex-packages"/>
+        <xsl:text>%% End: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
+    </xsl:if>
+    <!-- "extra" macros specified by the author -->
+    <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
+    <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
+    <xsl:text>%% Plus three from PTX for XML characters&#xa;</xsl:text>
+    <xsl:value-of select="$latex-macros" />
+    <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
+    <!-- 2023-10-18: source has \sfrac{}{} macro, but now author needs     -->
+    <!-- to specify the LaTeX "xfrac" package in a docinfo/math-package    -->
+    <!-- element to continue support.  This is the fallback subpar macro,  -->
+    <!-- just like we use in HTML, when author has not loaded the package. -->
+    <!-- Perhaps relevant: http://tex.stackexchange.com/questions/3372/    -->
+    <xsl:if test="$b-has-sfrac and not(contains($latex-packages, '\usepackage{xfrac}'))">
+        <xsl:text>%% Historical (subpar) support for \sfrac macro&#xa;</xsl:text>
+        <xsl:text>%% to achieve pleasing slanted (beveled) fractions.&#xa;</xsl:text>
+        <xsl:text>%% Add "xfrac" package with a  docinfo/math-package  element&#xa;</xsl:text>
+        <xsl:text>%% to achieve superior typesetting in LaTeX/PDF output&#xa;</xsl:text>
+        <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//contributors">
+        <xsl:text>%% Semantic macros for contributor list&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributor}[1]{\parbox{\linewidth}{#1}\par\bigskip}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributorname}[1]{\textsc{#1}\\[0.25\baselineskip]}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributorinfo}[1]{\hspace*{0.05\linewidth}\parbox{0.95\linewidth}{\textsl{#1}}}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- End of Preamble Templates -->
+
+
 <!-- Text Alignment, Right and Bottom -->
 <!-- \RaggedRight is from the "ragged2e" package, and  -->
 <!-- will allow for some hypenation (vs. \raggedright) -->
@@ -2455,7 +2583,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+
+
+
+<!--##################################-->
 <!-- PTX Divisions to LaTeX Divisions -->
+<!--##################################-->
+
 
 <!-- PTX has a variety of divisions not native to LaTeX, so normally -->
 <!-- an author would have to engineer/design these themselves.  We   -->
