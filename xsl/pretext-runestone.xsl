@@ -2400,6 +2400,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Data Files -->
 <xsl:template match="datafile" mode="runestone-to-interactive">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
     <!-- Some templates and variables are defined in -common for consistency -->
 
     <!-- If there is a child "pre" element, then we build an un-editable  -->

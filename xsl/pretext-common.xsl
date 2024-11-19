@@ -1856,13 +1856,16 @@ Book (with parts), "section" at level 3
 <xsl:template match="@*" mode="serialize">
     <xsl:param name="as-authored-source"/>
 
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="name()"/>
-    <xsl:text>="</xsl:text>
-    <xsl:apply-templates mode="serialize-content">
-        <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
-    </xsl:apply-templates>
-    <xsl:text>"</xsl:text>
+    <!-- never render the @include-source attr -->
+    <xsl:if test="name() != 'include-source'">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="name()"/>
+        <xsl:text>="</xsl:text>
+        <xsl:apply-templates mode="serialize-content">
+            <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
+        </xsl:apply-templates>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- A namespace "attribute" is not really an attribute, and not captured by @* above.   -->
