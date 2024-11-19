@@ -508,18 +508,66 @@
                         ConsoleOutput?
                     )+
                 }
-            ProgramInput = element input {text}
+            ProgramPreamble =
+                element preamble {
+                    attribute visible {"yes"|"no"}?,
+                    text
+                }
+            ProgramCode = element code {text}
+            ProgramPostamble =
+                element postamble {
+                    attribute visible {"yes"|"no"}?,
+                    text
+                }
+            ProgramTests =
+                element tests {
+                    attribute visible {"yes"|"no"}?,
+                    (
+                        text
+                    |
+                        element iotest {
+                            element input {text},
+                            element output {text}
+                        }+
+                    )
+                }
+            ProgramStdin =
+                element stdin {
+                    text
+                }
             Program =
                 element program {
                     Component?,
+                    LabelID?,
+                    UniqueID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute autorun {"yes"|"no"}?,
+                    attribute chatcodes {"yes"|"no"}?,
+                    attribute codelens {"yes"|"no"}?,
+                    attribute compiler-args {text}?,
+                    attribute database {text}?,
+                    attribute datafile {text}?,
+                    attribute download {"yes"|"no"}?,
+                    attribute hidecode {"yes"|"no"}?,
+                    attribute highlight-lines {text}?,
+                    attribute include {text}?,
+                    attribute interactive {"codelens"}?,
+                    attribute interpreter-args {text}?,
                     attribute language {text}?,
                     attribute line-numbers {"yes"|"no"}?,
-                    attribute highlight-lines {text}?,
-                    attribute interactive {"codelens"}?,
+                    attribute linker-args {text}?,
+                    attribute timelimit {text}?,
                     (
-                        ProgramInput | text
+                        text
+                    |
+                        (
+                            ProgramPreamble?,
+                            ProgramCode,
+                            ProgramPostamble?,
+                            ProgramTests?,
+                            ProgramStdin?
+                        )
                     )
                 }
             
@@ -1725,7 +1773,13 @@
             
             Configuration |=
                 element programs {
-                    attribute language {text}?
+                    attribute language {text}?,
+                    attribute compiler-args {text}?,
+                    attribute download {"yes"|"no"}?,
+                    attribute linenumbers {"yes"|"no"}?,
+                    attribute linker-args {text}?,
+                    attribute interpreter-args {text}?,
+                    attribute timeout {text}?
                 }
             
             Configuration |=
