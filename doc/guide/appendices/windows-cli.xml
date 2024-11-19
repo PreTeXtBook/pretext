@@ -262,7 +262,7 @@
             </p>
 
             <program>
-              <input>
+              <code>
                 # Start SSH Agent
                 #----------------------------
 
@@ -291,7 +291,7 @@
                 else
                   start_ssh_agent;
                 fi
-              </input>
+              </code>
             </program>
           </li>
         </ol>

@@ -9144,18 +9144,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing xml:id="program-activecode-python">
                     <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
                     <program xml:id="python-hello-world" label="python-hello-world" interactive='activecode' language="python">
-                        <input>
+                        <code>
                         print("Hello, World!")
-                        </input>
+                        </code>
                     </program>
                 </listing>
 
                 <listing xml:id="program-activecode-python-no-codelens">
                     <caption>An interactive Python program without codelens.</caption>
                     <program xml:id="python-hello-world-no-codelens" label="python-hello-world-no-codelens" interactive='activecode' language="python" codelens="no">
-                        <input>
+                        <code>
                         print("Hello, World!")
-                        </input>
+                        </code>
                     </program>
                 </listing>
             </exercises>
@@ -9170,9 +9170,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing xml:id="program-codelens-python">
                     <caption>A Python program, stepable with CodeLens</caption>
                     <program xml:id="python-hello-world-code-lens" label="python-hello-world-code-lens" interactive="codelens" language="python">
-                        <input>
+                        <code>
                         print('Hello, World!')
-                        </input>
+                        </code>
                     </program>
                 </listing>
             </exercises>
@@ -9191,10 +9191,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
                     </statement>
                     <program label="partial-program-two" interactive="activecode" language="python">
-                        <input>
+                        <code>
                         for i in range(10):
                             print(i)
-                        </input>
+                        </code>
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </activity>
@@ -10041,7 +10041,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Comments edited for length                                                         -->
             <!-- http://connectmv.com/tutorials/r-tutorial/programming-in-r-loops-and-flow-control/ -->
             <program language="r">
-                <input>
+                <code>
                 <![CDATA[n_loops <- 10
                 x.means <- numeric(n_loops)  # create a vector of zeros for results
                 for (i in 1:n_loops){
@@ -10049,7 +10049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     x.means[i] <- mean(x)
                 }
                 x.means]]>
-                </input>
+                </code>
             </program>
 
             <p>And some self-referential XSL:</p>
@@ -10067,7 +10067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- Example 45: 50 Basic Examples for Matlab -->
             <program language="matlab">
-                <input>
+                <code>
                 a = [0:0.5:5]; % A Matlab comment here
                 b = 2*a.^2 + 3*a -5;
                 c = 1.2*a.^2+4*a-3;
@@ -10077,13 +10077,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 subplot(1,2,2)
                 plot(a,c,'--ok','MarkerFaceColor','c','LineWidth',2)
                 xlabel('X'); ylabel('Y'); legend('Curve 2','Location','NorthWest')
-                </input>
+                </code>
             </program>
 
             <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the three less-than symbols.</p>
 
             <program margins="5%">
-                <input>
+                <code>
                 input m, n and A
                 r := 0
                 for j := 1 to n
@@ -10097,7 +10097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                        for k := 1 to m, k &lt;> r
                            make A[k,j] zero (row op 3, employing row r)
                 output r and A
-                </input>
+                </code>
             </program>
 
             <p>Look in the <c>pretext-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
@@ -10109,7 +10109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing xml:id="listing-c-hello">
                 <caption>C Version of <q>Hello, World!</q></caption>
                 <program language="c">
-                    <input>
+                    <code>
                     /* Hello World program */
 
                     #include&lt;stdio.h&gt;
@@ -10118,7 +10118,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     {
                         printf("Hello, World!");
                     }
-                    </input>
+                    </code>
                 </program>
             </listing>
 
@@ -10127,7 +10127,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing xml:id="program-line-numbers">
                 <caption>A static Java program with line numbers</caption>
                 <program interactive='no' language="java" line-numbers="yes">
-                    <input>
+                    <code>
                     import javax.swing.JFrame;  //Importing class JFrame
                     import javax.swing.JLabel;  //Importing class JLabel
                     public class HelloWorld {
@@ -10140,7 +10140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             frame.setVisible(true);                //Showing frame
                         }
                     }
-                    </input>
+                    </code>
                 </program>
             </listing>
 
@@ -10149,7 +10149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing xml:id="program-highlight-lines">
                 <caption>A static Java program with line numbers</caption>
                 <program interactive='no' language="java" line-numbers="yes" highlight-lines="1,3-5">
-                    <input>
+                    <code>
                     import javax.swing.JFrame;  //Importing class JFrame
                     import javax.swing.JLabel;  //Importing class JLabel
                     public class HelloWorld {
@@ -10162,7 +10162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             frame.setVisible(true);                //Showing frame
                         }
                     }
-                    </input>
+                    </code>
                 </program>
             </listing>
 
@@ -10286,7 +10286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing>
                 <caption>A longer program listing</caption>
                 <program>
-                    <input>
+                    <code>
                     @ structPass2.s
                     @ Allocates two structs and assigns a value to each field
                     @ in each struct, then displays the values.
@@ -10392,7 +10392,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             .word   dispAnInt
                     dispOtherCharAddr:
                             .word   dispOtherChar
-                    </input>
+                    </code>
                 </program>
             </listing>
         </section>
@@ -11866,7 +11866,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <caption>A <tag>program</tag> and a <tag>console</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <program language="r">
-                        <input>
+                        <code>
                         n_loops &lt;- 10
                         x.means &lt;- numeric(n_loops)
                         for (i in 1:n_loops){
@@ -11874,7 +11874,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             x.means[i] &lt;- mean(x)
                         }
                         x.means
-                        </input>
+                        </code>
                     </program>
                     <console>
                         <input prompt="pi@rpi ~$ ">gcc -o intAndFloat intAndFloat.c</input>
@@ -11994,7 +11994,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <listing>
                         <caption>A statistical computation</caption>
                         <program language="r">
-                            <input>
+                            <code>
                             n_loops &lt;- 10
                             x.means &lt;- numeric(n_loops)
                             for (i in 1:n_loops){
@@ -12002,7 +12002,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 x.means[i] &lt;- mean(x)
                             }
                             x.means
-                            </input>
+                            </code>
                         </program>
                     </listing>
                     <list>
@@ -12411,7 +12411,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
                 <program language="r">
-                    <input>
+                    <code>
                     n_loops &lt;- 10
                     x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                     for (i in 1:n_loops){
@@ -12419,13 +12419,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         x.means[i] &lt;- mean(x)
                     }
                     x.means
-                    </input>
+                    </code>
                 </program>
 
                 <p>Now a program with shorter lines, with no layout control.</p>
 
                 <program language="c">
-                    <input>
+                    <code>
                     /* Hello World program */
 
                     #include&lt;stdio.h&gt;
@@ -12434,7 +12434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     {
                         printf("Hello, World!");
                     }
-                    </input>
+                    </code>
                 </program>
 
                 <p>And a <tag>console</tag> element, also with no layout control.</p>
@@ -12453,7 +12453,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A <tag>program</tag> with a <attr>width</attr> attribute, so centered and with equal margins.  Note how the lines word wrap due to the smaller width.</p>
 
                 <program language="r" width="60%">
-                    <input>
+                    <code>
                     n_loops &lt;- 10
                     x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                     for (i in 1:n_loops){
@@ -12461,13 +12461,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         x.means[i] &lt;- mean(x)
                     }
                     x.means
-                    </input>
+                    </code>
                 </program>
 
                 <p>A <tag>program</tag> with short lines, so significant, and asymmetric margins, which experimentally do not induce any word-wrapping.</p>
 
                 <program language="c" margins="15% 20%">
-                    <input>
+                    <code>
                     /* Hello World program */
 
                     #include&lt;stdio.h&gt;
@@ -12476,7 +12476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     {
                         printf("Hello, World!");
                     }
-                    </input>
+                    </code>
                 </program>
 
                 <p>A longer <tag>console</tag>, with margins so significant the appearance is ill-advised.</p>
@@ -12495,7 +12495,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>Hello, World! in C</caption>
                         <program language="c">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12504,7 +12504,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                 </listing>
 
@@ -12525,7 +12525,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>Hello, World! in C</caption>
                         <program language="c" margins="40% 20%" width="40%">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12534,7 +12534,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                 </listing>
 
@@ -12554,7 +12554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <sidebyside width="30%">
                     <program language="c">
-                        <input>
+                        <code>
                         /* Hello World program */
 
                         #include&lt;stdio.h&gt;
@@ -12563,7 +12563,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         {
                             printf("Hello, World!");
                         }
-                        </input>
+                        </code>
                     </program>
                     <console>
                         <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
@@ -12574,7 +12574,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                     </console>
                     <program language="r">
-                        <input>
+                        <code>
                         n_loops &lt;- 10
                         x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                         for (i in 1:n_loops){
@@ -12582,7 +12582,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             x.means[i] &lt;- mean(x)
                         }
                         x.means
-                        </input>
+                        </code>
                     </program>
                 </sidebyside>
 
@@ -12592,7 +12592,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Some Code Samples</caption>
                     <sidebyside width="30%">
                         <program language="c">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12601,7 +12601,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                         <console>
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
@@ -12612,7 +12612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                         <program language="r">
-                            <input>
+                            <code>
                             n_loops &lt;- 10
                             x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                             for (i in 1:n_loops){
@@ -12620,7 +12620,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 x.means[i] &lt;- mean(x)
                             }
                             x.means
-                            </input>
+                            </code>
                         </program>
                     </sidebyside>
                 </figure>
@@ -12633,7 +12633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <listing>
                         <caption>Hello!</caption>
                         <program language="c">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12642,7 +12642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                     </listing>
                     <listing>
@@ -12667,7 +12667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <listing>
                             <caption>Hello!</caption>
                             <program language="c">
-                                <input>
+                                <code>
                                 /* Hello World program */
 
                                 #include&lt;stdio.h&gt;
@@ -12676,7 +12676,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 {
                                     printf("Hello, World!");
                                 }
-                                </input>
+                                </code>
                             </program>
                         </listing>
                         <listing>
