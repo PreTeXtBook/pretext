@@ -666,7 +666,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="cline">
             <!-- code, so make a "program" structure -->
             <program>
-                <xsl:copy-of select="@language"/>
+                <xsl:attribute name="language">
+                    <xsl:apply-templates select="." mode="get-programming-language"/>
+                </xsl:attribute>
                 <input>
                     <xsl:apply-templates select="cline" mode="static-areas"/>
                 </input>
