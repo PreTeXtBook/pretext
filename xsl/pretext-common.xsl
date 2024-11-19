@@ -8034,14 +8034,9 @@ Book (with parts), "section" at level 3
 <!-- on current element. If that is not available, check docinfo default. -->
 <!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
 <xsl:template match="program" mode="get-programming-language">
-    <xsl:choose>
-        <xsl:when test="@language">
-            <xsl:value-of select="@language" />
-        </xsl:when>
-        <xsl:when test="$version-docinfo/programs/@language">
-            <xsl:value-of select="$version-docinfo/programs/@language" />
-        </xsl:when>
-    </xsl:choose>
+    <xsl:call-template name="get-program-attr-or-default">
+        <xsl:with-param name="attr" select="'language'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- For a parsons, use @language, default parsons language, or default -->
@@ -8091,6 +8086,24 @@ Book (with parts), "section" at level 3
     <xsl:for-each select="document('')/*/mb:programming">
         <xsl:value-of select="key('proglang', $language)/@prism" />
     </xsl:for-each>
+</xsl:template>
+
+<!-- Try an attribute, and if it does not exist, try to get it from docinfo -->
+<!-- if that fails, use the optional default passed in                      -->
+<xsl:template name="get-program-attr-or-default">
+    <xsl:param name="attr"/>
+    <xsl:param name="default" select="''"/>
+    <xsl:choose>
+        <xsl:when test="@*[name() = $attr]">
+            <xsl:value-of select="@*[name() = $attr]" />
+        </xsl:when>
+        <xsl:when test="$docinfo/programs/@*[name() = $attr]">
+            <xsl:value-of select="$docinfo/programs/@*[name() = $attr]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- This works, without keys, and could be adapted to range over actual data in text -->
