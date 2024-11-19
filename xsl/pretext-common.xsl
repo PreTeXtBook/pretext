@@ -11629,7 +11629,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'use of a &quot;label&quot; element inside a &quot;latex-image&quot; is deprecated and there is no replacement.  Formulate the appropriate LaTeX code (TikZ) as a replacement.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2017-07-31 (warning added 2024-08-05) metadata, notably idx, banned as child of sidebyside -->
+    <!-- 2024-07-31 (warning added 2024-08-05) metadata, notably idx, banned as child of sidebyside -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//sidebyside/*[&METADATA-FILTER;]" />
         <xsl:with-param name="date-string" select="'2017-07-31'" />
@@ -11655,6 +11655,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo/html/favicon"/>
         <xsl:with-param name="date-string" select="'2024-11-09'" />
         <xsl:with-param name="message" select="'use of a favicon in HTML output is no longer accomplished with a &quot;favicon&quot; element inside &quot;docinfo&quot;.  Instead use the publication file and put a &quot;@favicon&quot; attribute on the &quot;html&quot; element.  Set its value to &quot;simple&quot; for equivalent behavior.  Until you remove the element in &quot;docinfo&quot;, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2024-11-19 (warning added 2024-11-19) program/input renamed program/code and input repurposed -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//program/input" />
+        <xsl:with-param name="date-string" select="'2024-11-19'" />
+        <xsl:with-param name="message" select="'program/input now should be program/code. An automatic correction will be attempted.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
