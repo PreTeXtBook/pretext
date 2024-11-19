@@ -55,7 +55,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:variable name="code-with-newlines">
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="input" />
+            <xsl:with-param name="text" select="code" />
         </xsl:call-template>
     </xsl:variable>
     <xsl:value-of select="str:replace($code-with-newlines, '&#xa;', '\n')"/>
