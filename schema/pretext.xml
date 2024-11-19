@@ -1383,7 +1383,7 @@
     <section>
         <title>Verbatim Text</title>
 
-        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.  A <tag>program</tag> maybe structured with an <tag>input</tag> element, or simply text.</p>
+        <p>Large blocks of verbatim material, rather than just little bits in a sentence.  A code display, <c>cd</c>, is an analog of a math display, and meant to be used <em>within</em> a paragraph, either as a single line of text, or optionally structured as several lines by using code lines, <c>cline</c>.   <c>pre</c> is a block, which preserves line breaks and sanitizes whitespace to the left.  It can be optionally structured as code lines.  It should be thought of as a monospace analogue of a <q>regular</q> paragraph, minus indentation and automatic line-breaking.  A <tag>program</tag> maybe structured with a <tag>code</tag> element, or simply text.</p>
 
         <fragment xml:id="verbatimdisplay">
             <title>Verbatim displays</title>
@@ -1417,18 +1417,66 @@
                         ConsoleOutput?
                     )+
                 }
-            ProgramInput = element input {text}
+            ProgramPreamble =
+                element preamble {
+                    attribute visible {"yes"|"no"}?,
+                    text
+                }
+            ProgramCode = element code {text}
+            ProgramPostamble =
+                element postamble {
+                    attribute visible {"yes"|"no"}?,
+                    text
+                }
+            ProgramTests =
+                element tests {
+                    attribute visible {"yes"|"no"}?,
+                    (
+                        text
+                    |
+                        element iotest {
+                            element input {text},
+                            element output {text}
+                        }+
+                    )
+                }
+            ProgramStdin =
+                element stdin {
+                    text
+                }
             Program =
                 element program {
                     Component?,
+                    LabelID?,
+                    UniqueID?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    attribute autorun {"yes"|"no"}?,
+                    attribute chatcodes {"yes"|"no"}?,
+                    attribute codelens {"yes"|"no"}?,
+                    attribute compiler-args {text}?,
+                    attribute database {text}?,
+                    attribute datafile {text}?,
+                    attribute download {"yes"|"no"}?,
+                    attribute hidecode {"yes"|"no"}?,
+                    attribute highlight-lines {text}?,
+                    attribute include {text}?,
+                    attribute interactive {"codelens"}?,
+                    attribute interpreter-args {text}?,
                     attribute language {text}?,
                     attribute line-numbers {"yes"|"no"}?,
-                    attribute highlight-lines {text}?,
-                    attribute interactive {"codelens"}?,
+                    attribute linker-args {text}?,
+                    attribute timelimit {text}?,
                     (
-                        ProgramInput | text
+                        text
+                    |
+                        (
+                            ProgramPreamble?,
+                            ProgramCode,
+                            ProgramPostamble?,
+                            ProgramTests?,
+                            ProgramStdin?
+                        )
                     )
                 }
             </code>
@@ -3291,7 +3339,13 @@
             <code>
             Configuration |=
                 element programs {
-                    attribute language {text}?
+                    attribute language {text}?,
+                    attribute compiler-args {text}?,
+                    attribute download {"yes"|"no"}?,
+                    attribute linenumbers {"yes"|"no"}?,
+                    attribute linker-args {text}?,
+                    attribute interpreter-args {text}?,
+                    attribute timeout {text}?
                 }
             </code>
             <title>Parsons options</title>
