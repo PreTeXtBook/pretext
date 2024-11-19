@@ -315,6 +315,9 @@ class LinkKnowl {
           MathJax.typesetPromise([this.outputElement]);
           addKnowls(this.outputElement);
 
+          // try prism highlighting
+          Prism.highlightAllUnder(this.outputElement);
+
           // force any scripts (e.g. sagecell) to execute by evaling them
           [...this.outputElement.getElementsByTagName("script")].forEach((s) => {
             if (

@@ -607,11 +607,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </p>
         </xsl:if>
         <!-- After the heading, and before the actual guts, we      -->
-        <!-- sometimes annotate with a knowl showing the source     -->
+        <!-- sometimes annotate with the source                     -->
         <!-- of the current element.  This calls a stub, unless     -->
         <!-- a separate stylesheet is used to define the template,  -->
         <!-- and the method is defined there.                       -->
-        <xsl:apply-templates select="." mode="view-source-knowl"/>
+        <xsl:apply-templates select="." mode="view-source-widget"/>
 
         <!-- This is usually recurrence, so increment heading-level,  -->
         <!-- but "book" and "article" have an h1  masthead, so if     -->
@@ -4893,15 +4893,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="heading-xref-knowl" />
         </xsl:if>
         <!-- After the heading, and before the actual guts, we      -->
-        <!-- sometimes annotate with a knowl showing the source     -->
+        <!-- sometimes annotate with the source                     -->
         <!-- of the current element.  This calls a stub, unless     -->
         <!-- a separate stylesheet is used to define the template,  -->
         <!-- and the method is defined there.  An "fn" necessarily  -->
-        <!-- comes through here since it is realized as a knowl,    -->
-        <!-- but it is a silly thing to annotate.  We skip it       -->
-        <!-- promptly on the receiving end, instead of adding       -->
-        <!-- clutter here.                                          -->
-        <xsl:apply-templates select="." mode="view-source-knowl"/>
+        <!-- comes through here, but it is a silly thing to         -->
+        <!-- annotate.  We skip it promptly on the receiving end,   -->
+        <!-- instead of adding clutter here.                        -->
+        <xsl:apply-templates select="." mode="view-source-widget"/>
         <!-- Then actual content, respecting b-original flag  -->
         <!-- Pass $block-type for Sage cells to know environs -->
         <xsl:apply-templates select="." mode="wrapped-content">
@@ -9056,6 +9055,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See common file for more on language handlers, and "language-prism" template    -->
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
     <xsl:choose>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
@@ -9094,6 +9095,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
     <xsl:choose>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
