@@ -53,13 +53,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Do not use directories here, as Windows paths will get mangled -->
     <!-- Instead, set working directory before applying stylesheet      -->
     <exsl:document href="{$filebase}.xml" method="xml">
-        <!-- Adjust how root "prefigure" element is handled if we        -->
-        <!-- want to insert some preamble material or some LaTeX macros. -->
-        <!-- <xsl:value-of select="$latex-macros" />                     -->
-        <!-- NB: maybe we want to xerox contents from "assembly" and trash supefluous id's? -->
-        <xsl:copy-of select="."/>
+        <!-- xerox the "prefigure" element, but with modifications -->
+        <xsl:apply-templates select="." mode="prefigure-edit"/>
     </exsl:document>
  </xsl:template>
+
+<!-- Identity template, with a mode, so we can edit a diagram -->
+<!-- NB: it does not seem the "pf:" is necessary here         -->
+<xsl:template match="node()|@*" mode="prefigure-edit">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="prefigure-edit"/>
+    </xsl:copy>
+</xsl:template>
 
 <!-- PreFigure publication file -->
 <!-- We need a one-off generation of a PreFigure publication    -->
