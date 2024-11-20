@@ -62,10 +62,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
  </xsl:template>
 
 <!-- PreFigure publication file -->
-<!-- We need a one-off generation of a PreFigure publication -->
+<!-- We need a one-off generation of a PreFigure publication    -->
 <!-- file, dumped in the same directory as the extracted source -->
-<!-- diagrams.  So we match the *only* guranteed node and let it  -->
-<!-- do its thing, and then create the necessary file. -->
+<!-- diagrams.  So we match the *only* guaranteed node and let  -->
+<!-- it do its thing, and then create the necessary file.       -->
  <xsl:template match="/">
     <xsl:apply-imports/>
     <exsl:document href="pf_publication.xml" method="xml">
