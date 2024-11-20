@@ -65,7 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <edition>Annual Edition 2015</edition>
 
         <website>
-            <url href="http://abstract.pugetsound.edu" visual="abstract.pugetsound.edu"/>
+            <url href="http://abstract.pugetsound.edu" visual="abstract.pugetsound.edu">Some text to test bug report</url>
         </website>
 
         <copyright>
