@@ -1006,7 +1006,7 @@ xxxxxx[data-ruler="sunriseunderline"] .onelineX:hover + .onelineX {
 }
 
 .ptx-footnote {
-    display: inline;
+    display: inline-block;
 }
 
 .ptx-footnote[open] {
