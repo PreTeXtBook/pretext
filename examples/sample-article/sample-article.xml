@@ -3040,30 +3040,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>This is a basic <prefigure/> diagram, in the sense that it does not use all the features of <prefigure/> or <pretext/>.</p>
 
-                <image width="60%">
-                    <prefigure label="prefigure-diffeq"
-                               xmlns="https://prefigure.org">
-                        <diagram dimensions="(300,300)" margins="5">
-                            <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
-                            <coordinates bbox="[-1,-3,6,3]">
-                                <grid-axes xlabel="t"/>
-                                <de-solve function="f" t0="0" t1="bbox[2]"
-                                          y0="(0,2)" name="oscillator"
-                                          N="200"/>
-                                <plot-de-solution at="x" solution="oscillator"
-                                                  axes="(t,y0)" />
-                                <plot-de-solution at="xprime" solution="oscillator"
-                                                  axes="(t,y1)" stroke="red"
-                                                  tactile-dash="9 9"/>
-                                <legend at="legend" anchor="(bbox[2], bbox[3])"
-                                        alignment="sw" scale="0.9" opacity="0.5">
-                                    <item ref="x"><m>x(t)</m></item>
-                                    <item ref="xprime"><m>x'(t)</m></item>
-                                </legend>
-                            </coordinates>
-                        </diagram>
-                    </prefigure>
-                </image>
+                <figure>
+                    <caption>Solution to a differential equation</caption>
+                    <image width="60%">
+                        <prefigure label="prefigure-diffeq"
+                                   xmlns="https://prefigure.org">
+                            <diagram dimensions="(300,300)" margins="5">
+                                <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
+                                <coordinates bbox="[-1,-3,6,3]">
+                                    <grid-axes xlabel="t"/>
+                                    <de-solve function="f" t0="0" t1="bbox[2]"
+                                              y0="(0,2)" name="oscillator"
+                                              N="200"/>
+                                    <plot-de-solution at="x" solution="oscillator"
+                                                      axes="(t,y0)" />
+                                    <plot-de-solution at="xprime" solution="oscillator"
+                                                      axes="(t,y1)" stroke="red"
+                                                      tactile-dash="9 9"/>
+                                    <legend at="legend" anchor="(bbox[2], bbox[3])"
+                                            alignment="sw" scale="0.9" opacity="0.5">
+                                        <item ref="x"><m>x(t)</m></item>
+                                        <item ref="xprime"><m>x'(t)</m></item>
+                                    </legend>
+                                </coordinates>
+                            </diagram>
+                        </prefigure>
+                    </image>
+                </figure>
 
                 <p>This next diagram employs some <latex/> macros that are defined in the usual way in <tag>docinfo</tag> and are employed to produce the names of some vectors in the labels.  The blue line is colored blue by a global <prefigure/> declaration, also in <tag>docinfo</tag>.</p>
 
