@@ -66,6 +66,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Raison d'etre for "prefigure-edit": insert a PF "caption" -->
+<!-- with a figure number when it is correct to do so          -->
+<xsl:template match="pf:diagram" mode="prefigure-edit">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="prefigure-edit"/>
+        <!-- insert a PF "caption", if rational to do so                -->
+        <!-- NB: explicit hierarchy is necessary, as "ancestor::figure" -->
+        <!-- will be fooled by an anonymous panel/image/diagram inside  -->
+        <!-- a "sidebyside" inside a #figure                            -->
+        <xsl:variable name="containing-figure" select="parent::pf:prefigure/parent::image/parent::figure"/>
+        <xsl:if test="$containing-figure">
+            <!-- duplicate indentation of first child of "diagram" -->
+            <!-- to make insertion of a new first child look good  -->
+            <xsl:value-of select="text()[1]"/>
+            <xsl:comment>Reference to containing Figure comes from PreTeXt context</xsl:comment>
+            <xsl:value-of select="text()[1]"/>
+            <xsl:element name="caption" namespace="https://prefigure.org">
+                <xsl:apply-templates select="$containing-figure" mode="type-name" />
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="$containing-figure" mode="number"/>
+            </xsl:element>
+        </xsl:if>
+        <xsl:apply-templates select="node()" mode="prefigure-edit"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- PreFigure publication file -->
 <!-- We need a one-off generation of a PreFigure publication    -->
 <!-- file, dumped in the same directory as the extracted source -->
