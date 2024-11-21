@@ -38,7 +38,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Programs in supported languages are made interactive in HTML, on request.</p>
 
         <listing xml:id="program-activecode-python">
-            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+            <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
             <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world">
                 <input>
                 print("Hello, World!")
@@ -50,7 +50,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </p>
 
         <listing xml:id="program-activecode-python2">
-            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+            <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
             <program xml:id="python-hello-world2" label="hello-world2">
                 <input>
                 print("Hello, World!")
@@ -61,7 +61,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A C program will only be interactive if hosted on a Runestone server.</p>
 
         <listing xml:id="program-activecode-c">
-            <caption>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
+            <title>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
             <program xml:id="c-hello-world" interactive='activecode' language="c">
                 <input>
                 #include &lt;stdio.h&gt;
@@ -78,7 +78,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-java">
             <title>Informal Java <q>Hello, World</q></title>
-            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</caption>
+            <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
             <program xml:id="java-hello-world" interactive='activecode' language="java">
                 <title>"hi" in Java</title>
                 <input>
@@ -101,7 +101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Javascript programs are made interactive in HTML, on request.</p>
 
         <listing xml:id="program-activecode-javascript">
-            <caption>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></caption>
+            <title>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></title>
             <program xml:id="javascript-hello-world" interactive='activecode' language="javascript">
                 <input>
                 document.write('Hello, world!');
@@ -112,7 +112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A <tag>program</tag> is not interactive, by default, no matter where it is hosted.</p>
 
         <listing xml:id="program-static-java">
-            <caption>A static Java program</caption>
+            <title>A static Java program</title>
             <program xml:id="java-static" interactive='no' language="java">
                 <input>
                 import javax.swing.JFrame;  //Importing class JFrame
@@ -134,7 +134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>An Octave program will only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
 
         <listing xml:id="program-activecode-octave">
-            <caption>A simple Octave program</caption>
+            <title>A simple Octave program</title>
             <program xml:id="octave-simple" interactive='activecode' language="octave">
                 <input>
                 x = 2 + 2
@@ -146,7 +146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A language not supported by Runestone Services will be rendered static.</p>
 
         <listing xml:id="program-mistake-pascal">
-            <caption>A Pascal program that cannot be interactive on Runestone</caption>
+            <title>A Pascal program that cannot be interactive on Runestone</title>
             <program xml:id="pascal-mistake" interactive='activecode' language="pascal">
                 <input>
                 program HelloWorld;
@@ -162,7 +162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>If you examine the source, you will also notice the <tag>program</tag> lacks a <attr>language</attr> attribute. It is relying on the <c>docinfo/programs/@language</c> value that is in bookinfo.xml. If present, that attribute will be used for any programs or Runestone interactives that lack a <attr>language</attr>.</p>
 
         <listing xml:id="listing-python-included">
-            <caption>A Python program that defines some statistics</caption>
+            <title>A Python program that defines some statistics</title>
             <program xml:id="python-statistics" interactive='activecode' label="statistics">
                 <input>
                 loan_amount = [1250.0, 500.0, 1450.0, 200.0, 700.0, 100.0, 250.0, 225.0, 1200.0, 150.0, 600.0, 300.0, 700.0, 125.0, 650.0, 175.0, 1800.0, 1525.0, 575.0, 700.0, 1450.0, 400.0, 200.0, 1000.0, 350.0]
@@ -180,7 +180,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-java-flags">
             <title>Informal Java <q>Hello, World</q>, with flags</title>
-            <caption>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</caption>
+            <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</title>
             <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
                 <title>"hi" in Java</title>
                 <input>
@@ -288,7 +288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>CodeLens is an interactive tool for following program execution, much like a debugger, without the ability to influence flow control or variable values.  For use without a server, traces must be computed beforehand.  First, we have some trivial programs, to provide minimal testing.</p>
 
         <listing xml:id="program-codelens-python">
-            <caption>A Python program, stepable with CodeLens</caption>
+            <title>A Python program, stepable with CodeLens</title>
             <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
                 <input>
                 print('Hello, World!')
@@ -297,7 +297,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="program-codelens-c">
-            <caption>An C program, stepable with CodeLens</caption>
+            <title>An C program, stepable with CodeLens</title>
             <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
                 <input>
                 #include &lt;stdio.h&gt;
@@ -311,7 +311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="program-codelens-java">
-            <caption>A Java program, stepable with CodeLens</caption>
+            <title>A Java program, stepable with CodeLens</title>
             <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
                 <input>
                 public class HelloWorld {
@@ -326,7 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
 
         <listing xml:id="sieve-python">
-            <caption><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</caption>
+            <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</title>
             <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
                 <input><![CDATA[
                 def SieveOfEratosthenes(n):
@@ -357,7 +357,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="sieve-cpp">
-            <caption><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</caption>
+            <title><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</title>
             <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
                 <input> <![CDATA[
                 #include <stdio.h>
@@ -380,7 +380,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="sieve-java">
-            <caption><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</caption>
+            <title><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</title>
             <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
                 <input><![CDATA[
                 public class SievePrimeFactors  {
