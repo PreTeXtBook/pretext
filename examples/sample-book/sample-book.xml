@@ -44,33 +44,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="fr-FR"> -->
 
     <xi:include href="./bookinfo.xml" /> <!-- ISBN, website, other metadata -->
-    
-    <book xml:id="sample-book">
-        <title><pretext/> Sample Book</title>
-        <subtitle>Abstract Algebra (SAMPLE ONLY)</subtitle>
 
-        <xi:include href="./frontmatter.xml" />                 <!-- Title Page, Preface, etc. -->
+    <!-- We *include* two versions of "book" so we can use the same  -->
+    <!-- xml:id value on both.  When both reside in this file, the   -->
+    <!-- XSL processor detects the duplicate before we can apply     -->
+    <!-- version control.  (And preserving the value will help avoid -->
+    <!-- some bugs as we transition to using versions to support the -->
+    <!-- with-part/no-parts dichotomy for testing purposes.)         -->
 
-        <!-- Parts are optional, included here for testing            -->
-        <!-- In "bookinfo.xml" set to "structural" for maximum effect -->
+    <!-- In the "with-parts" component -->
+    <xi:include href="./sample-book-with-parts.xml"/>
 
-        <part xml:id="part-basics">
-            <title>Basics</title>
-            <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
-            <xi:include href="./integers.xml" />                <!-- Integers -->
-        </part>
-
-        <part xml:id="part-algebra">
-            <title>Algebra</title>
-            <xi:include href="./groups.xml" />                  <!-- Groups -->
-            <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
-            <xi:include href="./rune.xml" />                    <!-- Runestone -->
-        </part>
-
-        <!-- Many chapters removed from original AATA, here -->
-
-        <xi:include href="./backmatter.xml" />                  <!-- GFDL, Hints, Notation -->
-
-    </book>
+    <!-- In the "no-parts" component -->
+    <xi:include href="./sample-book-no-parts.xml"/>
 
 </pretext>

@@ -40,6 +40,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note the use of the "xinclude" namespace in order to use multiple files -->
 <!-- Each included file must contain exactly one top-level element, -->
 <!-- such as a chapter or section -->
+
+
+<!-- ################################################### -->
+<!-- ################################################### -->
+<!--                                                     -->
+<!-- 2024-11-21: THIS MAIN FILE FOR THE SAMPLE BOOK IS   -->
+<!-- OBSOLETE AND WILL BE REMOVED ENTIRELY SOMETIME SOON -->
+<!--                                                     -->
+<!-- ################################################### -->
+<!-- ################################################### -->
+
+
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
 <!-- <pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="fr-FR"> -->
 
