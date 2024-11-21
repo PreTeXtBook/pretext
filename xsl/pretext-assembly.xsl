@@ -1574,6 +1574,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()" mode="repair"/>
 </xsl:template>
 
+<!-- Change listing captions to titles if there is not already a title -->
+<xsl:template match="listing/caption" mode="repair">
+    <xsl:if test="not(parent::listing/title)">
+        <title>
+            <xsl:apply-templates select="node()|@*" mode="repair"/>
+        </title>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->

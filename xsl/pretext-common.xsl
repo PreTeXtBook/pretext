@@ -11823,6 +11823,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2024-11-19 listing no longer has caption, uses title only -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//listing/caption"/>
+        <xsl:with-param name="date-string" select="'2024-11-19'" />
+        <xsl:with-param name="message" select="'Use of caption in listings is no longer supported. Listings should only have a title. We will try to honor your intent.'"/>
+    </xsl:call-template>
+  <!--  -->
     <!-- 2025-04-18 -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$document-root//matches&quot;"/>
