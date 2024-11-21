@@ -25,7 +25,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<!-- The preface omits cross-references to parts, which exist in other versions. -->
+<!-- ############################################### -->
+<!-- The preface in the "no-parts" version           -->
+<!-- omits cross-references to parts, which          -->
+<!-- exist in other versions.  Please keep           -->
+<!--                                                 -->
+<!--     frontmatter.xsl and frontmatter-noparts.xsl -->
+<!--                                                 -->
+<!-- in sync as much as possible.                    -->
+<!-- NB: this difference should move to versions?    -->
+<!-- ############################################### -->
 
 <frontmatter xml:id="frontmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
 
