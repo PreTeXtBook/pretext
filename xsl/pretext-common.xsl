@@ -11644,6 +11644,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'use of a favicon in HTML output is no longer accomplished with a &quot;favicon&quot; element inside &quot;docinfo&quot;.  Instead use the publication file and put a &quot;@favicon&quot; attribute on the &quot;html&quot; element.  Set its value to &quot;simple&quot; for equivalent behavior.  Until you remove the element in &quot;docinfo&quot;, we will try to honor your intent.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2024-11-19 listing no longer has caption, uses title only -->
+    <xsl:call-template name="deprecation-message">
+      <xsl:with-param name="occurrences" select="$document-root//listing/caption"/>
+      <xsl:with-param name="date-string" select="'2024-11-19'" />
+      <xsl:with-param name="message" select="'Use of caption in listings is no longer supported. Listings should only have a title. We will try to honor your intent.'"/>
+  </xsl:call-template>
+  <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
