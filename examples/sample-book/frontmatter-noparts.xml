@@ -78,6 +78,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <url href="http://abstract.pugetsound.edu" visual="abstract.pugetsound.edu"/>
         </website>
 
+        <website>
+            <url href="http://abstract.pugetsound.edu" visual="abstract.pugetsound.edu">Some text to test bug report</url>
+        </website>
+
         <copyright>
             <year>1997<ndash />2015</year>
             <holder>Thomas W. Judson, Robert A. Beezer</holder>
