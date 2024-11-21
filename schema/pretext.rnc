@@ -765,7 +765,7 @@
                     Tabular
                 } |
                 element listing {
-                    MetaDataCaption,
+                    MetaDataAltTitle,
                     Landscape?,
                     (
                         Program |
