@@ -679,6 +679,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     white-space: pre;
 }
 
+.ptx-content .colophon .credit {
+  margin-top: 1em;
+}
+
 button {
    font: inherit;
 }

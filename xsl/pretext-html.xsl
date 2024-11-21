@@ -1069,28 +1069,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="bibinfo/credit[role]">
-    <p class="credit">
+    <div class="credit">
         <b class="title">
             <xsl:apply-templates select="role" />
         </b>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="entity"/>
-    </p>
+    </div>
 </xsl:template>
 
 <xsl:template match="bibinfo/edition">
-    <p class="credit">
+    <div class="credit">
         <b class="title">
             <xsl:apply-templates select="." mode="type-name" />
         </b>
         <xsl:text> </xsl:text>
         <xsl:apply-templates/>
-    </p>
+    </div>
 </xsl:template>
 
 <!-- website for the book -->
 <xsl:template match="bibinfo/website">
-    <p class="credit">
+    <div class="credit">
         <b class="title">
             <xsl:apply-templates select="." mode="type-name" />
         </b>
@@ -1100,7 +1100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- source, but the pre-processor adds a footnote    -->
         <!-- Only one presumed, and thus enforced here        -->
         <xsl:apply-templates select="url[1]|fn[1]" />
-    </p>
+    </div>
 </xsl:template>
 
 <xsl:template match="bibinfo/copyright">
