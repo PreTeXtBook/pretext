@@ -3504,6 +3504,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
 
+            <p>Finally, when authoring programs, it may be helpful to keep the source code as plain text in separate files. This can avoid the need to manually escape characters that have special meaning in XML and can facilitate testing and updating the code samples. See <xref ref="topic-xinclude"/> for how to do so.</p>
+
             <subsubsection xml:id="program-default-values">
                 <title>Default attributes for programs</title>
                 <p>Book-level default values for some program attributes can be set in <c>docinfo/programs</c>. If a value for an attribute is set in that location, it will be used for any <tag>program</tag> that lacks the corresponding attribute.</p>
@@ -4929,19 +4931,19 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <p>The <c>xinclude</c> mechanism automatically introduces a <attr>xml:base</attr> attribute, which we need to account for in the RELAX-NG schema (<xref ref="schema" />).  So we limit which <pretext /> elements may be the root element of an included file.  The rough, general rule is that if an element <em>can</em> have a title, then it can be the root element of an included file.  So in particular each of the divisions (<tag>chapter</tag>, <tag>section</tag>, <etc />) is a candidate.</p>
 
-        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>input</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
+        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>code</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
 
         <p>In both cases you can put the text content of these elements in a separate file, use the <attr>href</attr> attribute of <tag>xi:include</tag> to point to the file, and then the twist is to set the <attr>parse</attr> attribute to the value <c>text</c>.  This has two general benefits.  First, you now <em>cannot</em> have any <init>XML</init> in the file, so you do not have to have a single root element for the file (and so the schema imposes no restrictions).  Second, you do not need to escape any problematic characters like ampersands and angle brackets (<xref ref="topic-verbatim-literal" />), nor use the misunderstood <init>CDATA</init> mechanism.</p>
 
         <p>Additionally, in the case of <tag>latex-image</tag> you can park unsightly code away in files so you do not have to look at it, or you can create a small driver <latex /> program to test each one, or even better, you may want to use the same image more than once (maybe in different figures?) and can just include it repeatedly, while only ever editing the single copy.</p>
 
-        <p>Finally, the <tag>input</tag> and <tag>output</tag> children of <tag>program</tag>, <tag>sage</tag>, and <tag>console</tag> are also candidates for this device.  In particular, you may want to have the code for a program in its own file where you can test it easily with an interpreter or compiler.  There is one gotcha.  If you were to put a newline between <tag>input</tag> and <tag>xi:include</tag> there is the very real potential of unwanted whitespace bleeding into your <pretext /> output.  Our suggested remedy uses an example from Bob Plantz.  Convert</p>
+        <p>Finally, the <tag>input</tag> and <tag>output</tag> children of <tag>sage</tag>, and <tag>console</tag> as well as the <tag>code</tag> of <tag>program</tag> are also candidates for this device.  In particular, you may want to have the code for a program in its own file where you can test it easily with an interpreter or compiler.  There is one gotcha.  If you were to put a newline between <tag>code</tag> and <tag>xi:include</tag> there is the very real potential of unwanted whitespace bleeding into your <pretext /> output.  Our suggested remedy uses an example from Bob Plantz.  Convert</p>
 
         <pre>
         &lt;program language="c">
-            &lt;input>
+            &lt;code>
                 &lt;xi:include parse="text" href="intAndFloat.c"/>
-            &lt;/input>
+            &lt;/code>
         &lt;/program>
         </pre>
 
@@ -4949,7 +4951,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <pre>
         &lt;program language="c">
-            &lt;input>&lt;xi:include parse="text" href="intAndFloat.c"/>&lt;/input>
+            &lt;code>&lt;xi:include parse="text" href="intAndFloat.c"/>&lt;/code>
         &lt;/program>
         </pre>
 
