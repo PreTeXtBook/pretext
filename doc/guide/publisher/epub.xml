@@ -40,7 +40,7 @@
                     </p>
                 </li>
             </ul>
-            If you use the <c>pretext/pretext</c> script, you will need to generate any source-defined images in <init>SVG</init> format for standard <init>EPUB</init>, and <init>PNG</init> format for Kindle.
+            If you use the <c>pretext/pretext</c> script, you will need to generate any source-defined images in <init>SVG</init> format for standard <init>EPUB</init>, and <init>PNG</init> format for Kindle.  Furthermore, Kindle processing requires <init>PNG</init> resolution to be at least 200 <init>DPI</init>, and 300 <init>DPI</init> is a good recommendation (from Mitch Keller).  See <url href="https://kdp.amazon.com/en_US/help/topic/G202169030">Kindle Help topic <c>G202169030</c></url> for more.
         </p>
 
         <p>
