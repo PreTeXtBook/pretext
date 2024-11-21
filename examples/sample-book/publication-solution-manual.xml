@@ -26,6 +26,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <!-- managed directories, standard directory names in source  -->
+    <!-- Separate main file, no version support needed, parts are -->
+    <!-- not used, and a separate preface is used.  Only chapter  -->
+    <!-- contents get recycled.                                   -->
     <source>
         <directories external="ext" generated="gen"/>
     </source>

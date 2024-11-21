@@ -28,6 +28,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- managed directories, standard directory names in source  -->
     <source>
         <directories external="ext" generated="gen"/>
+        <version include="with-parts"/>
     </source>
 
     <!-- EPUB-Specific Options -->
