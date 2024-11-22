@@ -1562,24 +1562,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="runestone-id"/>
                 </xsl:variable>
                 <xsl:for-each select="matches/match">
+
                     <!-- PTX premise = RS draggable -->
-                    <li data-subcomponent="draggable">
-                        <xsl:attribute name="id">
-                            <xsl:value-of select="$rsid"/>
-                            <xsl:text>_drag</xsl:text>
-                            <xsl:number />
-                        </xsl:attribute>
-                        <xsl:apply-templates select="premise"/>
-                    </li>
+                    <!-- may be multiple premise or none -->
+                    <xsl:for-each select="premise">
+                        <li data-subcomponent="draggable">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="$rsid"/>
+                                <xsl:text>_drag</xsl:text>
+                                <xsl:number count="premise" from="matches" level="any"/>
+                            </xsl:attribute>
+                            <xsl:apply-templates select="."/>
+                        </li>
+                    </xsl:for-each>
                     <!-- PTX response = RS dropzone -->
-                    <li data-subcomponent="dropzone">
-                        <xsl:attribute name="for">
-                            <xsl:value-of select="$rsid"/>
-                            <xsl:text>_drag</xsl:text>
-                            <xsl:number />
-                        </xsl:attribute>
-                        <xsl:apply-templates select="response"/>
-                    </li>
+                    <!-- one response, or none -->
+                    <xsl:for-each select="response">
+                        <li data-subcomponent="dropzone">
+                            <xsl:attribute name="for">
+                                <xsl:value-of select="$rsid"/>
+                                <xsl:text>_drag</xsl:text>
+                                <xsl:number count="response" from="matches" level="any"/>
+                            </xsl:attribute>
+                            <xsl:apply-templates select="."/>
+                        </li>
+                    </xsl:for-each>
                 </xsl:for-each>
             </ul>
         </div>
