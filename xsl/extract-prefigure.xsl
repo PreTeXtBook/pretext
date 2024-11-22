@@ -126,7 +126,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- mission accomplished, no more recursion -->
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>Recurse from <xsl:value-of select="local-name(.)"/> w/ number <xsl:value-of select="$the-number"/></xsl:message>
+            <!-- step-up (recurse) to the parent -->
             <xsl:apply-templates select="parent::*" mode="prefigure-container"/>
         </xsl:otherwise>
     </xsl:choose>
