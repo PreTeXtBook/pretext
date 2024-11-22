@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--********************************************************************
+Copyright 2024 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<worksheet label="worksheet-networks" top="3cm" bottom="100pt">
+  <title>Networks Worksheet</title>
+  <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
+
+  <introduction>
+      <title>Basic laws for electrical circuits</title>
+
+      <p>This two-page worksheet was generously donated to the sample article by Virgil Pierce at a CuratedCourses workshop in August<nbsp/>2018.  It has default (skinny) left and right margins, but we have specified longer top and bottom margins, with the top being the larger of the two.</p>
+
+      <theorem>
+          <title> Ohms Law </title>
+          <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
+              <me> I = \frac{V}{R} </me>
+              Or for our purposes
+              <me> I R = V </me>
+          </p>
+      </theorem>
+
+      <theorem>
+          <title>Kirchoffs Current Law</title>
+          <p> The sum of the currents in a network meeting at a point is zero.
+              <me> \sum_{k=1}^n I_k = 0 </me>
+          </p>
+      </theorem>
+
+      <example>
+          <title> Kirchoff's Current Law </title>
+          <p> For the circuit below <m> I_1 + I_2 = I_3 </m>.</p>
+          <image xml:id="worksheet-kirchoff-law" width="40%">
+              <latex-image>
+              \begin{circuitikz}
+              \draw (0,0)
+              to[R, i=$I_1$, *-o](2,2);
+              \draw (0,0)
+              to[R, i=$I_2$, *-o](2,-2);
+              \draw (-3, 0)
+              to[R, i=$I_3$, o-*](0,0);
+              \end{circuitikz}
+              </latex-image>
+          </image>
+      </example>
+
+      <theorem>
+          <title> Kirchoffs Voltage Law </title>
+          <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
+              <me> \sum_{k=1}^n V_k = 0 </me>
+          </p>
+      </theorem>
+
+      <p> Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
+      </p>
+  </introduction>
+
+
+  <page>
+  </page>
+
+  <page>
+      <sidebyside width="45%" margins="0%">
+          <exercise workspace="1.5in">
+              <statement>
+              <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+              <image xml:id="worksheet-simple-network">
+                  <latex-image>
+                  \begin{circuitikz}
+                  \draw (0,0)
+                  to[V, v=$11\quad \mbox{volt}$](0, 3)
+                  to[short](2,3)
+                  to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                  to[short](4,3)
+                  to[R, R=$3\quad \mbox{ohm}$](4,0)
+                  to[short](3,0)
+                  to[R, R=$3\quad \mbox{ohm}$](2,0)
+                  to[short](0,0);
+                  \end{circuitikz}
+                  </latex-image>
+              </image>
+             </statement>
+          </exercise>
+
+          <exercise workspace="2in">
+              <statement>
+              <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+              <image xml:id="worksheet-parallel-circuit">
+                  <latex-image>
+                  \begin{circuitikz}
+                  \draw(0,0)
+                  to[V, v=$11\quad \mbox{volt}$](0, 3)
+                  to[short](5,3)
+                  to[R, R=$4\quad \mbox{ohm}$](6,3)
+                  to[short](7,3)
+                  to[R, R=$3\quad \mbox{ohm}$](7,0)
+                  to[short](6,0)
+                  to[R, R=$3\quad \mbox{ohm}$](5,0)
+                  to[short](0,0);
+                  \draw(4,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,3);
+                  \end{circuitikz}
+                  </latex-image>
+              </image>
+              </statement>
+          </exercise>
+      </sidebyside>
+
+      <exercise workspace="1in">
+          <statement>
+          <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+          <image xml:id="worksheet-complicated-network">
+              <latex-image>
+              \begin{circuitikz}
+              \draw(0,0)
+              to[V, v=$11 \quad \mbox{volt}$](0, 3)
+              to[short](5,3)
+              to[R, R=$4 \quad \mbox{ohm}$](6,3)
+              to[short](9,3)
+              to[R, R=$4 \quad \mbox{ohm}$](10,3)
+              to[short](11,3)
+              to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+              to[short](10,0)
+              to[R, R=$2\quad \mbox{ohm}$](9,0)
+              to[short](6,0)
+              to[R, R=$2\quad \mbox{ohm}$](5,0)
+              to[short](0,0);
+              \draw(4,0)
+              to[R, R=$3\quad \mbox{ohm}$](4,3);
+              \draw(8,0)
+              to[R, R=$1\quad \mbox{ohm}$](8,3);
+              \end{circuitikz}
+              </latex-image>
+          </image>
+          </statement>
+      </exercise>
+  </page>
+
+  <page>
+      <exercise workspace="3in">
+          <statement>
+              <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
+
+              <image xml:id="worksheet-street-network" width="65%">
+                  <latex-image>
+                  <![CDATA[
+                  \begin{tikzpicture}[>=stealth]
+                  \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                  \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                      \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                      \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                      \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                      \end{tikzpicture}
+                  ]]>
+                  </latex-image>
+              </image>
+
+              <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
+
+              <table>
+                  <title>Estimated hourly traffic flow for the road network</title>
+                  <tabular row-headers="yes" halign="center">
+                      <row header="yes">
+                          <cell>
+                          </cell>
+                          <cell>
+                              EB Winooski
+                          </cell>
+                          <cell>
+                              WB Winooski
+                          </cell>
+                          <cell>
+                              Shelburne St
+                          </cell>
+                          <cell>
+                              Willow
+                          </cell>
+                          <cell>
+                              Jay
+                          </cell>
+                      </row>
+                      <row>
+                          <cell halign="left">
+                              into
+                          </cell>
+                          <cell>
+                              50
+                          </cell>
+                          <cell>
+                              400
+                          </cell>
+                          <cell>
+                              0
+                          </cell>
+                          <cell>
+                              10
+                          </cell>
+                          <cell>
+                              50
+                          </cell>
+                      </row>
+                      <row>
+                          <cell halign="left">
+                              out of
+                          </cell>
+                          <cell>
+                              55
+                          </cell>
+                          <cell>
+                              390
+                          </cell>
+                          <cell>
+                              20
+                          </cell>
+                          <cell>
+                              15
+                          </cell>
+                          <cell>
+                              30
+                          </cell>
+                      </row>
+                  </tabular>
+              </table>
+
+              <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
+          </statement>
+      </exercise>
+  </page>
+</worksheet>

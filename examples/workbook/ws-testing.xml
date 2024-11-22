@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--********************************************************************
+Copyright 2024 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<worksheet label="worksheet-testing" margin="1cm">
+  <introduction>
+      <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
+  </introduction>
+
+  <page>
+      <sidebyside width="45%" margins="0%">
+          <exercise workspace="1in">
+              <statement>
+                  <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+              </statement>
+          </exercise>
+
+          <exercise workspace="1in">
+              <statement>
+                  <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+              </statement>
+          </exercise>
+      </sidebyside>
+
+      <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+      <exercise workspace="1.5in">
+          <title>A full-width exercise</title>
+          <statement>
+              <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+              <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+          </statement>
+      </exercise>
+
+      <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+      <sidebyside width="30%" margins="0%">
+          <exercise>
+              <statement>
+                  <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+              </statement>
+          </exercise>
+
+          <exercise workspace="0.5in">
+              <!-- <title>The Tallest</title> -->
+              <statement>
+                  <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+              </statement>
+          </exercise>
+
+          <exercise workspace="1in">
+              <statement>
+                  <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+              </statement>
+          </exercise>
+      </sidebyside>
+
+      <activity>
+          <title>A Mock Activity</title>
+
+          <statement>
+              <p>The problem, as we see it.</p>
+          </statement>
+          <hint>
+              <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
+          </hint>
+      </activity>
+
+      <sidebyside widths="25% 40% 25%" margins="0%">
+          <exercise workspace="0.5in">
+              <statement>
+                  <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+              </statement>
+          </exercise>
+
+          <exercise workspace="0.5in">
+              <!-- <title>Balanced Heights</title> -->
+              <statement>
+                  <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+              </statement>
+          </exercise>
+
+          <exercise workspace="0.5in">
+              <statement>
+                  <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+              </statement>
+          </exercise>
+      </sidebyside>
+  </page>
+</worksheet>
