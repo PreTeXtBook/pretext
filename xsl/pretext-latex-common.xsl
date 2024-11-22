@@ -8668,21 +8668,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <!-- Prompt first, assumes does not exceed one line -->
-    <xsl:call-template name="escape-console-prompt-output">
-        <xsl:with-param name="text">
-            <xsl:apply-templates select="." mode="determine-console-prompt"/>
-        </xsl:with-param>
-    </xsl:call-template>
-    <!-- sanitize left-margin, etc                    -->
-    <!-- then employ \consoleinput macro on each line -->
-    <xsl:call-template name="wrap-console-input">
-        <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="."/>
-            </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:variable name="prompt">
+        <xsl:apply-templates select="." mode="determine-console-prompt"/>
+    </xsl:variable>
+    <xsl:variable name="continuation">
+        <xsl:apply-templates select="." mode="determine-console-continuation"/>
+    </xsl:variable>
+    <!-- We first sanitize left-margin, etc -->
+    <xsl:variable name="sanitized-text">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- Special case where input is empty/whitespace, in which -->
+    <!-- case the for loop finds no tokens -->
+    <xsl:if test="not(normalize-space($sanitized-text))">
+        <xsl:call-template name="wrap-console-input-line">
+            <xsl:with-param name="text" select="normalize-space($sanitized-text)" />
+            <xsl:with-param name="prefix" select="$prompt" />
+        </xsl:call-template>
+        <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+    <!-- Other cases are caught by the loop -->
+    <xsl:for-each select="str:tokenize($sanitized-text, '&#10;')">
+        <xsl:choose>
+            <xsl:when test="preceding-sibling::token">
+                <xsl:call-template name="wrap-console-input-line">
+                    <xsl:with-param name="text" select="." />
+                    <xsl:with-param name="prefix" select="$continuation" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="wrap-console-input-line">
+                    <xsl:with-param name="text" select="." />
+                    <xsl:with-param name="prefix" select="$prompt" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>&#10;</xsl:text>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- Input helper to prepare one line of console input -->
+<!-- Including any needed "prefix" prompt/continuation -->
+<xsl:template name="wrap-console-input-line">
+    <xsl:param name="text" />
+    <xsl:param name="prefix" />
+    <!-- Prefix first, assumes does not exceed one line -->
+    <xsl:if test="not($prefix = '')">
+        <xsl:call-template name="escape-console-prefix-output">
+            <xsl:with-param name="text" select="$prefix" />
+        </xsl:call-template>
+    </xsl:if>
+    <!-- Then employ \consoleinput macro on the line -->
+    <xsl:text>(*\consoleinput{</xsl:text>
+        <xsl:call-template name="escape-console-input-to-latex">
+            <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+    <xsl:text>}*)</xsl:text>
 </xsl:template>
 
 <!-- Output code gets massaged to remove a left margin, -->
@@ -8692,7 +8735,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text">
-                    <xsl:call-template name="escape-console-prompt-output">
+                    <xsl:call-template name="escape-console-prefix-output">
                         <xsl:with-param name="text"  select="."/>
                     </xsl:call-template>
                 </xsl:with-param>
@@ -8702,27 +8745,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- TODO: consolidate/generalize next two templates -->
-
-<!-- Line-by-line, apply \consoleinput macro defined in preamble -->
-<xsl:template name="wrap-console-input">
-    <xsl:param name="text" />
-    <xsl:choose>
-        <xsl:when test="$text=''" />
-        <xsl:otherwise>
-            <xsl:text>(*\consoleinput{</xsl:text>
-                <xsl:call-template name="escape-console-input-to-latex">
-                    <xsl:with-param name="text">
-                        <xsl:value-of select="substring-before($text, '&#xa;')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            <xsl:text>}*)</xsl:text>
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template name="wrap-console-input">
-                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 <!-- Line-by-line  -->
 <xsl:template name="wrap-console-output">
@@ -11358,14 +11380,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Escape Console Text -->
-<!-- The prompt and output for a "console" are handled capably by the   -->
+<!-- The prefix and output for a "console" are handled capably by the   -->
 <!-- "listings" package.  Except we need to break the escape characters -->
 <!-- we use to accomodate bold text for the input.  So...we escape into -->
 <!-- LaTeX mode, duplicate the desired sequence, and break it with an   -->
 <!-- empty group.  Presumably no additional empty groups are necessary. -->
 <!-- The usual three-step in necessary to not clobber earlier edits,    -->
 <!-- we did not figure out a clever way to avoid a "unique" string.     -->
-<xsl:template name="escape-console-prompt-output">
+<xsl:template name="escape-console-prefix-output">
     <xsl:param name="text" />
 
     <xsl:variable name="left-escape-temp"  select="str:replace($text, '(*', 'XXvVY4DtfemxHkcXX' )"/>
