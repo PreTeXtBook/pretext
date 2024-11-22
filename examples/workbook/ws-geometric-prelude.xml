@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--********************************************************************
+Copyright 2024 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<worksheet label="worksheet-geometric-prelude">
+  <title>A Geometric Prelude</title>
+  <!-- <author>Dave Rosoff</author> -->
+  <objectives xml:id="objectives">
+    <ul>
+      <li>Practice visualizing vector addition</li>
+      <li>Use vectors without explicit coordinates</li>
+    </ul>
+  </objectives>
+  <introduction>
+    <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
+
+    <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
+    <sidebyside width="30%">
+      <figure xml:id="figure-midpoints-of-quadrilateral">
+        <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
+        <image xml:id="worksheet-midpoints-of-quadrilateral">
+          <latex-image>
+            \begin{tikzpicture}[xscale=0.8, yscale=0.8]
+             \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
+             \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
+            \end{tikzpicture}
+          </latex-image>
+        </image>
+      </figure>
+      <figure xml:id="figure-triangle-cyclic-vectors">
+        <caption>The sides of a triangle presented as vectors.</caption>
+        <image xml:id="worksheet-triangle-cyclic-vectors">
+          <latex-image>
+            \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+              \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+              \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+              \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+              % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+              %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
+              %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+              %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
+              %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+              %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
+              %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+              %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+              % \node {$P$} (1.3333,0.6667);
+            \end{tikzpicture}
+          </latex-image>
+        </image>
+      </figure>
+      <figure xml:id="figure-triangle-cyclic-medians">
+        <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+        <image xml:id="worksheet-triangle-cyclic-medians" width="50%">
+          <latex-image>
+            \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+              \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+              \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+              \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+              \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+              \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+               {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+              \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+               {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+              \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+              \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+              % \node {$P$} (1.3333,0.6667);
+            \end{tikzpicture}
+          </latex-image>
+        </image>
+      </figure>
+    </sidebyside>
+    <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
+  </introduction>
+
+  <page>
+    <exercise xml:id="ex-cyclic" workspace="4in">
+      <statement>
+        <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+      </statement>
+    </exercise>
+  </page>
+
+  <page>
+  <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
+  <figure xml:id="figure-triangle-cyclic-medians-copy">
+    <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+    <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
+      <latex-image>
+        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+          \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+            {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+          \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+           {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+          \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+           {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+          \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+          \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+          % \node {$P$} (1.3333,0.6667);
+        \end{tikzpicture}
+      </latex-image>
+    </image>
+  </figure>
+  <sidebyside margins="0%" widths="30% 60%" valign="top">
+    <exercise xml:id="exercise-vector-addition" workspace="3.5in">
+      <statement>
+        <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
+      </statement>
+      <hint>
+        <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
+      </hint>
+    </exercise>
+    <exercise workspace="2in">
+      <statement>
+        <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+          \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
+        </me>.</p>
+      </statement>
+    </exercise>
+  </sidebyside>
+  <exercise workspace="2.54cm">
+    <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
+  </exercise>
+  </page>
+
+  <conclusion>
+    <title>Wrap-up</title>
+    <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
+  </conclusion>
+</worksheet>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--********************************************************************
+Copyright 2024 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<worksheet label="worksheet-dot-products" courseid="MAT-150" series="Activity" seriescode="13">
+  <title>Dot products and projection</title>
+    <page>
+        <sidebyside width="45%" margins="0%">
+            <exercise>
+                <introduction>
+                    <p>Let
+                    <m>{\vec v}_1 = (-4,1)</m>,
+                    <m>{\vec v}_2 = (2,2)</m>,
+                    <m>{\vec v}_3 = (1,2,3)</m>,
+                    <m>{\vec v}_4 = (-2,1,0)</m>.
+                    Find the values of the following expressions:</p>
+                </introduction>
+                <task workspace="1in">
+                  <p><m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m></p>
+                </task>
+                <task workspace="1.0in">
+                  <p><m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m></p>
+                </task>
+                <task workspace="1in">
+                  <p><m>\lVert{\vec v}_1\rVert = <fillin/></m></p>
+                </task>
+                <task workspace="1in">
+                  <p><m>\lVert{\vec v}_4\rVert = <fillin/></m></p>
+                </task>
+                <task workspace="1in">
+                  <p>Are any of these vectors perpendicular to each other? <fillin/></p>
+              </task>
+            </exercise>
+
+            <exercise workspace="3in">
+                <statement>
+                    <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                    <image width="100%" source="images/projection1.png">
+                        <shortdescription>two vectors in a Cartesian plane</shortdescription>
+                    </image>
+                </statement>
+            </exercise>
+        </sidebyside>
+    </page>
+
+    <page>
+        <sidebyside width="48%" margins="0%">
+            <exercise workspace="1.25in">
+                <introduction>
+                    <p>Consider the vector equation
+                    <me>
+                    m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
+                    </me>.</p>
+                </introduction>
+                <task>
+                    <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
+                </task>
+
+                <task>
+                    <p>Use projection to find the best approximation <m>\hat m</m>.</p>
+                </task>
+
+                <task>
+                    <p>Compute <m>\hat m \begin{bmatrix}2 \\ 5\end{bmatrix} </m>.</p>
+                </task>
+
+                <task>
+                    <p>Compute the residual vector.</p>
+                </task>
+
+                <task>
+                    <p>Compute the length of the residual vector and explain what it means.</p>
+                </task>
+            </exercise>
+
+            <exercise>
+                <introduction>
+                    <p>Consider the system of equations
+                    <md>
+                        <mrow>3t \amp =5</mrow>
+                        <mrow> 2t \amp = 9 </mrow>
+                    </md>.</p>
+                </introduction>
+                <task workspace="2in">
+                    <p>Write the system in vector form.</p>
+                </task>
+                <task workspace="3.9in">
+                    <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
+                </task>
+                <task workspace="2in">
+                    <p>Compute the length of the residual vector.</p>
+                </task>
+            </exercise>
+        </sidebyside>
+    </page>
+</worksheet>
