@@ -66,30 +66,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Raison d'etre for "prefigure-edit": insert a PF "caption" -->
-<!-- with a figure number when it is correct to do so          -->
+<!-- Raison d'etre for "prefigure-edit": insert a PF "caption" with -->
+<!-- a type-name/number pair and a document-wide serial number      -->
 <xsl:template match="pf:diagram" mode="prefigure-edit">
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="prefigure-edit"/>
-        <!-- insert a PF "caption", if rational to do so                -->
-        <!-- NB: explicit hierarchy is necessary, as "ancestor::figure" -->
-        <!-- will be fooled by an anonymous panel/image/diagram inside  -->
-        <!-- a "sidebyside" inside a #figure                            -->
-        <xsl:variable name="containing-figure" select="parent::pf:prefigure/parent::image/parent::figure"/>
-        <xsl:if test="$containing-figure">
-            <!-- duplicate indentation of first child of "diagram" -->
-            <!-- to make insertion of a new first child look good  -->
-            <xsl:value-of select="text()[1]"/>
-            <xsl:comment>Reference to containing Figure comes from PreTeXt context</xsl:comment>
-            <xsl:value-of select="text()[1]"/>
-            <xsl:element name="caption" namespace="https://prefigure.org">
-                <xsl:apply-templates select="$containing-figure" mode="type-name" />
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="$containing-figure" mode="number"/>
-            </xsl:element>
-        </xsl:if>
+        <!-- insert a PF "caption", hopefully with helpful content -->
+        <!-- duplicate indentation of first child of "diagram" to  -->
+        <!-- make insertion of the first new children look good    -->
+        <xsl:value-of select="text()[1]"/>
+        <xsl:comment> Reference to containing ancestor comes from PreTeXt context     </xsl:comment>
+        <xsl:value-of select="text()[1]"/>
+        <xsl:comment> Serial number is from document-wide count of PreFigure diagrams </xsl:comment>
+        <xsl:value-of select="text()[1]"/>
+        <xsl:element name="caption" namespace="https://prefigure.org">
+            <!-- pf:diagram, pf:prefigure, and "image" all lack meaningful  -->
+            <!-- numbers, so start searching for a [location with a number] -->
+            <!-- from the parent of the "image"                             -->
+            <xsl:apply-templates select="parent::pf:prefigure/parent::image/parent::*" mode="prefigure-container"/>
+            <!-- previous template supplies a space, if it provides a type/number pair -->
+            <!-- Serial number, just document-wide for pf:prefigure -->
+            <!-- NB: implement this as part of the overall numbering -->
+            <!-- scheme, so it comes through as an attribute.        -->
+            <xsl:text>(</xsl:text>
+            <!-- pf:diagram is current context, no danger that an empty "pretext" -->
+            <!-- generator will be mistakenly used for the @from pattern          -->
+            <xsl:number count="pf:prefigure" from="pretext" level="any"/>
+            <xsl:text>)</xsl:text>
+        </xsl:element>
+        <!-- xerox remaining elements -->
         <xsl:apply-templates select="node()" mode="prefigure-edit"/>
     </xsl:copy>
+</xsl:template>
+
+<!-- Recurse up the tree, looking for the first element with a -->
+<!-- non-empty number.  Produce type-name and a serial number. -->
+<xsl:template match="*" mode="prefigure-container">
+    <!-- Will test on non-empty number strings.  This can be -->
+    <!-- fooled by elements with un-implemented numbers such -->
+    <!-- as a pure container like a "sidebyside".            -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- this is the safety-valve halting condition -->
+        <xsl:when test="self::pretext"/>
+        <!-- Test here for useless containers that have better parents. -->
+        <!-- Examples might be a "case" in a "proof" or a "task" in an  -->
+        <!-- "exercise" or an "li" in an "ol".                          -->
+        <!-- Then recurse with the parent, as below.                    -->
+        <xsl:when test="not($the-number = '')">
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+            <!-- will always follow with a serial number, -->
+            <!-- so add a space here, since conditional   -->
+            <xsl:text> </xsl:text>
+            <!-- mission accomplished, no more recursion -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>Recurse from <xsl:value-of select="local-name(.)"/> w/ number <xsl:value-of select="$the-number"/></xsl:message>
+            <xsl:apply-templates select="parent::*" mode="prefigure-container"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- PreFigure publication file -->
