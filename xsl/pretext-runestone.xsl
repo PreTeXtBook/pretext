@@ -1572,6 +1572,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:text>_drag</xsl:text>
                                 <xsl:number count="premise" from="matches" level="any"/>
                             </xsl:attribute>
+                            <xsl:apply-templates select="parent::match" mode="category-attribute"/>
                             <xsl:apply-templates select="."/>
                         </li>
                     </xsl:for-each>
@@ -1584,6 +1585,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:text>_drag</xsl:text>
                                 <xsl:number count="response" from="matches" level="any"/>
                             </xsl:attribute>
+                            <xsl:apply-templates select="parent::match" mode="category-attribute"/>
                             <xsl:apply-templates select="."/>
                         </li>
                     </xsl:for-each>
@@ -1591,6 +1593,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </ul>
         </div>
     </div>
+</xsl:template>
+
+<!-- A "category" is simply the sequence number of an     -->
+<!-- enclosing "match" element, which serves to group     -->
+<!-- any number of "premise" with zero or one "response", -->
+<!-- indicating they have a relationship (they match!).   -->
+<xsl:template match="match" mode="category-attribute">
+    <xsl:attribute name="data-category">
+        <!-- no @count, then implies count="match" (peers),   -->
+        <!-- from="matches", while @level="single" is default -->
+        <xsl:number/>
+    </xsl:attribute>
 </xsl:template>
 
 <!-- Clickable Area Problem -->
