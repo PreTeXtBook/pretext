@@ -3064,7 +3064,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </match>
     <match>
       <response>Power</response>
-      <premise order="2"><m>y=x^2</m></premise>
+      <premise order="2"><m>y=x^3</m></premise>
       <premise order="3"><m>y=\sqrt{x}</m></premise>
     </match>
     </matches>
