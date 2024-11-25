@@ -51,6 +51,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- matches here are fine with a *[@exercise-interactive='foo'], -->
 <!-- as a convenience.                                            -->
 
+<!-- These get-programming-language templates duplicate logic from pretext-common  -->
+<!-- as the contents of that file are not available yet.                           -->
+<xsl:template match="program" mode="get-programming-language">
+    <xsl:choose>
+        <xsl:when test="@language">
+            <xsl:value-of select="@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
+    <xsl:choose>
+        <xsl:when test="@language">
+            <xsl:value-of select="@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/parsons/@language">
+            <xsl:value-of select="$version-docinfo/parsons/@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- True/False -->
 
 <xsl:template match="*[@exercise-interactive = 'truefalse']" mode="runestone-to-static">
