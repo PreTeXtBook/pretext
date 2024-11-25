@@ -164,7 +164,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xi:include href="ws-geometric-prelude.xml" />
         <xi:include href="ws-networks.xml" />
         <xi:include href="ws-testing.xml" />
-        <title>Two Worksheet Chapter</title>
         <xi:include href="ws-dot-products.xml" />
         <xi:include href="ws-activity-with-task.xml" />
       </article>
