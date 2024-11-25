@@ -151,10 +151,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <titlepage>
                 <titlepage-items/>
             </titlepage>
-
-            <abstract>
-                <p>This is a sample of many of the things you can do with <pretext />.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
-            </abstract>
             <!--
             Acknowledgements, dedications, colophon (ISBN, copyright, etc)
             are supported in the book document type.  Such a diverse range
