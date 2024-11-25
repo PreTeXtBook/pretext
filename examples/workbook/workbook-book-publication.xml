@@ -24,8 +24,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Common Options -->
     <common>
         <!-- How deep to go for separate files, in HTML the -->
-        <!-- default for an article with sections is 1      -->
-        <chunking level="1"/>
+        <!-- This puts each worksheet in its own HTML file  -->
+        <chunking level="2"/>
         <!-- How deep to nest a Table of Contents, for an article   -->
         <!-- with subsections in HTML, the default is 2, but in the -->
         <!-- LateX conversion the default is no ToC at all.  So we  -->
