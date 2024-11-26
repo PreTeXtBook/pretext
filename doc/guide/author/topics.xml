@@ -2277,32 +2277,32 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <code><![CDATA[
                             <!-- Compare submitted response with fillin answer -->
                             <mathcmp use-answer="yes"/>
-        
+
                             <!-- Compare submitted response with pre-computed object -->
                             <mathcmp obj="objName"/>
-        
+
                             <!-- Compare submitted response with pre-computed object (alternate) -->
                             <mathcmp>
                               <eval obj="objName"/>
                             </mathcmp
-        
+
                             <!-- Implicit mathcmp with submitted response (alternate) -->
                             <eval obj="objName"/>
-        
+
                             <!-- Compare submitted response with newly generated object -->
                             <mathcmp>
                               <de-expression/>
                             </mathcmp>
-        
+
                             <!-- Implicit mathcmp with submitted response (alternate) -->
                             <de-expression/>
-        
+
                             <!-- Compare with newly generated object with pre-computed object -->
                             <mathcmp>
                               <de-expression/>
                               <eval obj="objName"/>
                             </mathcmp>
-        
+
                             <!-- Compare two newly generated objects -->
                             <mathcmp>
                               <de-expression/>
