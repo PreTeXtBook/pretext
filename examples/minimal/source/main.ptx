@@ -114,6 +114,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 [ 0  0  0  0  0]
                 </output>
             </sage>
+            <console>
+                <input prompt=">>> ">
+                for x in range(0:20):
+                   print(x)
+                   print("Excellent!")
+                </input>
+                <input prompt=">>> " continuation="... ">
+                for x in range(0:20):
+                   print(x)
+                   print("Excellent!")
+                </input>
+                <!-- Test for empty input. Should create an empty entry. -->
+                <input />
+                <!-- Test for only whitespace input. Should create an empty entry. -->
+                <input> </input>
+                <!-- Test for only whitespace input with newlines. Should create an empty entry. -->
+                <input>
+                    
+                </input>
+            </console>
         </section>
 
     </article>
