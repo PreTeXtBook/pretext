@@ -3147,6 +3147,246 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
+                <p>Including annotations enables a new type of interactive diagram within a <pretext/> document offering potential benefits for all readers.  In particular, annotations allow an author to call the reader's attention to specific details in a diagram and how they are related to one another so that the diagram and surrounding text are more tightly integrated.  The annotated diagram below introduces Fibonacci tilings, which are one-dimensional analogs of Penrose tilings, and offers an explanation of their aperiodicity.  Of course, surrounding text would usually provide a richer context for a diagram like this.</p>
+
+                <figure xml:id="figure-fibonnaci-tiling-annotated">
+                  <caption>Fibonacci tilings are one-dimensional analogs of Penrose tilings.  The diagram on the left introduces the process of deflation that is used to produce tilings while the diagram on the right explains why they are aperiodic.</caption>
+                  <sidebyside widths="30% 50%" valign="bottom" margins="0% 15%">
+                      <image>
+                          <prefigure xmlns="https://prefigure.org"
+                                     label="prefigure-fibonacci-a">
+
+                              <diagram dimensions="(200, 200)">
+                                  <definition>phi=(sqrt(5)+1)/2</definition>
+                                  <definition>height=0.25</definition>
+                                  <definition>top=1</definition>
+                                  <definition>bottom=0</definition>
+                                  <definition>left=0</definition>
+                                  <definition>right=2</definition>
+                                  <definition>colors={0:'blue', 1:'red'}</definition>
+                                  <definition>widths={0:phi, 1:1}</definition>
+                                  <coordinates bbox="(-0.5,-1,3.5,2)">
+                                      <transform>
+                                          <!-- Define the upper row of tiles-->
+                                          <translate by="(0,top)"/>
+                                          <!-- We put tiles and their labels into a group for annotating-->
+                                          <group at="top-L">
+                                              <rectangle lower-left="(0,0)" dimensions="(widths[0], height)"
+                                                         fill="${colors[0]}" stroke="black"/>
+                                              <label anchor="(widths[0]/2,height)" alignment="n">
+                                                  <m>L</m>
+                                              </label>
+                                          </group>
+                                          <translate by="(right,0)"/>
+                                          <group at="top-S">
+                                              <rectangle lower-left="(0,0)" dimensions="(widths[1],height)"
+                                                         fill="${colors[1]}" stroke="black"/>
+                                              <label anchor="(widths[1]/2, height)" alignment="n">
+                                                  <m>S</m>
+                                              </label>
+                                          </group>
+                                      </transform>
+
+                                      <transform>
+                                          <translate by="(0,bottom)"/>
+                                          <transform>
+                                              <scale by="(1/phi, 1)"/>
+                                              <group at="bottom-L">
+                                                  <group at="bottom-LL">
+                                                      <rectangle lower-left="(0,0)" dimensions="(widths[0], height)"
+                                                                 fill="${colors[0]}" stroke="black"/>
+                                                      <label anchor="(widths[0]/2,0)" alignment="south">
+                                                          <m>L</m>
+                                                      </label>
+                                                  </group>
+                                                  <translate by="(widths[0],0)"/>
+                                                  <group at="bottom-LS">
+                                                      <rectangle lower-left="(0,0)" dimensions="(widths[1], height)"
+                                                                 fill="${colors[1]}" stroke="black"/>
+                                                      <label anchor="(widths[1]/2,0)" alignment="south">
+                                                          <m>S</m>
+                                                      </label>
+                                                  </group>
+                                              </group>
+                                          </transform>
+
+                                          <translate by="(right, 0)"/>
+                                          <scale by="(1/phi,1)"/>
+                                          <group at="bottom-S">
+                                              <group at="bottom-SL">
+                                                  <rectangle lower-left="(0,0)" dimensions="(widths[0], height)"
+                                                             fill="${colors[0]}" stroke="black"/>
+                                                  <label anchor="(widths[0]/2,0)" alignment="south">
+                                                      <m>L</m>
+                                                  </label>
+                                              </group>
+                                          </group>
+                                      </transform>
+
+                                      <line at="left-arrow"
+                                            endpoints="((left+phi/2, top), (left+phi/2, bottom+height))"
+                                            endpoint-offsets="(3,-5)"
+                                            arrows="1" stroke="black"/>
+
+                                      <line at="right-arrow"
+                                            endpoints="((right+1/2, top), (right+1/2, bottom+height))"
+                                            endpoint-offsets="(3,-5)"
+                                            arrows="1" stroke="black"/>
+                                  </coordinates>
+
+                                  <annotations>
+                                      <annotation ref="figure"
+                                                  text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
+                                          <annotation ref="top"
+                                                      text="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
+                                              <annotation ref="top-L"
+                                                          text="The long tile L"/>
+                                              <annotation ref="top-S"
+                                                          text="The short tile S"/>
+                                          </annotation>
+                                          <annotation ref="arrows"
+                                                      text="A process called deflation replaces each tile by a new set of tiles">
+                                              <annotation ref="left-deflate"
+                                                          text="A long tile is replaced by a long and a short tile">
+                                                  <annotation ref="left-arrow"/>
+                                                  <annotation ref="top-L"/>
+                                                  <annotation ref="bottom-L"
+                                                              text="The length of the new tiles is scaled by the reciprocal of the golden ratio">
+                                                      <annotation ref="bottom-LL"
+                                                                  text="The new long tile is on the left"/>
+                                                      <annotation ref="bottom-LS"
+                                                                  text="The new short tile is on the right"/>
+                                                  </annotation>
+                                              </annotation>
+                                              <annotation ref="right-deflate"
+                                                          text="A short tile is replaced by a single long tile">
+                                                  <annotation ref="right-arrow"/>
+                                                  <annotation ref="top-S"/>
+                                                  <annotation ref="bottom-S"
+                                                              text="The length of the new tile is again scaled by the reciprocal of the golden ratio"/>
+                                              </annotation>
+                                          </annotation>
+                                      </annotation>
+                                  </annotations>
+                              </diagram>
+
+                          </prefigure>
+                      </image>
+                      <image>
+                          <prefigure xmlns="https://prefigure.org"
+                                     label="prefigure-fibonacci-b">
+
+                              <diagram dimensions="(300, 200)" margins="(30,0,30,0)">
+                                  <definition>phi=(sqrt(5)+1)/2</definition>
+                                  <definition>height=0.25</definition>
+                                  <definition>width=5+8*phi</definition>
+                                  <definition>colors={0:'blue', 1:'red'}</definition>
+                                  <definition>widths={0:phi, 1:1}</definition>
+                                  <definition>tiling2=[0,1,0,0,1]</definition>
+                                  <definition>tiling1=[0,1,0,0,1,0,1,0]</definition>
+                                  <definition>tiling0=[0,1,0,0,1,0,1,0,0,1,0,0,1]</definition>
+                                  <definition>tilings={0:tiling0, 1:tiling1, 2:tiling2}</definition>
+                                  <definition>lengths=[13, 8, 5]</definition>
+                                  <definition>types={0:'long', 1:'short'}</definition>
+                                  <definition>num_rows=2</definition>
+                                  <coordinates bbox="(0,-0.5,width,3.5)">
+                                      <transform>
+                                          <repeat parameter="row=0..num_rows">
+                                              <label at="left-dots" anchor="(0,height/2)" alignment="w">
+                                                  <m>\ldots</m>
+                                              </label>
+                                              <transform>
+                                                  <repeat at="tiling" parameter="tile=0..lengths[row]-1">
+                                                      <definition>type=tilings[row][tile]</definition>
+                                                      <rectangle at="tile"
+                                                                 lower-left="(0,0)"
+                                                                 dimensions="(widths[type], height)"
+                                                                 fill="${colors[type]}" stroke="black"/>
+                                                      <translate by="(widths[type],0)"/>
+                                                  </repeat>
+                                                  <label at="right-dots" anchor="(0,height/2)" alignment="e">
+                                                      <m>\ldots</m>
+                                                  </label>
+                                              </transform>
+                                              <scale by="(phi, 1)"/>
+                                              <translate by="(0,1)"/>
+                                          </repeat>
+                                      </transform>
+
+                                      <transform>
+                                          <repeat at="down-arrows" parameter="row=0..num_rows">
+                                              <line at="down-arrow" endpoints="((width/2, 1), (width/2,height))"
+                                                    endpoint-offsets="(3,-5)"
+                                                    arrows="1" stroke="black"/>
+                                              <translate by="(0,1)"/>
+                                          </repeat>
+                                      </transform>
+                                      <transform>
+                                          <repeat at="right-arrows" parameter="row=0..num_rows">
+                                              <line at="right-arrow"
+                                                    endpoints="((15,-0.15), (17,-0.15))"
+                                                    arrows="1" stroke="black" thickness="2"/>
+                                              <translate by="(0,1)"/>
+                                          </repeat>
+                                      </transform>
+                                  </coordinates>
+
+                                  <annotations>
+                                      <annotation ref="figure"
+                                                  text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
+                                          <annotation ref="down-arrows"/>
+                                          <annotation ref="top-down-arrow"/>
+
+                                          <annotation ref="tiling-row=0"
+                                                      text="We begin with this Fibonacci tiling"/>
+
+                                          <annotation ref="tiling-row=1"
+                                                      text="Our first Fibonacci tiling is obtained by deflating this second tiling">
+                                              <annotation ref="down-arrow-row=0"/>
+                                          </annotation>
+
+                                          <annotation ref="tiling-row=2"
+                                                      text="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
+                                              <annotation ref="down-arrow-row=1"/>
+                                          </annotation>
+
+                                          <annotation ref="bottom-tilings"
+                                                      text="Beginning with one tiling, the tiling above is uniquely determined.">
+                                              <annotation ref="tiling-row=0"
+                                                          text="Consider this Fibonacci tiling."/>
+                                              <annotation ref="tiling-row=1"
+                                                          text="By inverting the deflation rules, we can uniquely determine the tiling above."/>
+                                          </annotation>
+                                          <annotation ref="periodic-0"
+                                                      text="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
+                                              <annotation ref="tiling-row=0"
+                                                          text="For example, suppose this Fibonacci tiling is periodic."/>
+                                              <annotation ref="right-arrow-row=0"
+                                                          text="And that this horizontal translation leaves the tiling unchanged."/>
+                                          </annotation>
+                                          <annotation ref="periodic-1"
+                                                      text="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
+                                              <annotation ref="tiling-row=1"
+                                                          text="This Fibonacci tiling is also periodic."/>
+                                              <annotation ref="right-arrow-row=1"
+                                                          text="The same horizontal translation leaves the tiling unchanged."/>
+                                          </annotation>
+                                          <annotation ref="periodic-2"
+                                                      text="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
+                                              <annotation ref="tiling-row=2"
+                                                          text="The size of the tiles grows exponentially as we move up in the hierarchy."/>
+                                              <annotation ref="right-arrow-row=2"
+                                                          text="Eventually the tiles are longer than the translation."/>
+                                          </annotation>
+                                      </annotation>
+                                  </annotations>
+                              </diagram>
+
+                          </prefigure>
+                      </image>
+                    </sidebyside>
+                </figure>
+
                 <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  This image is a <init>PNG</init> produced specifically for this document.  Typically, a tactile diagram produced by <prefigure/> will be a <init>PDF</init> ready to be sent to an appropriate embosser.</p>
 
                 <image source="tactile/prefigure-diffeq.png" width="70%"/>
