@@ -961,6 +961,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$bibinfo/author|$bibinfo/editor" mode="full-info"/>
     <!-- Followed by "contributors" authored as credit (which have titles) -->
     <xsl:apply-templates select="$bibinfo/credit[title]" />
+    <!-- Display keywords -->
+    <xsl:apply-templates select="$bibinfo/keywords" />
     <!-- and finally date -->
     <xsl:apply-templates select="$bibinfo/date" />
 </xsl:template>
@@ -1048,6 +1050,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="department[line]|institution[line]">
     <xsl:apply-templates select="line" />
+</xsl:template>
+
+<!-- Keywords -->
+<xsl:template match="bibinfo/keywords">
+    <div class="keywords">
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </span>
+        <xsl:apply-templates select="keyword" />
+    </div>
+</xsl:template>
+
+<xsl:template match="keyword">
+    <xsl:choose>
+        <xsl:when test="position() != last()">
+            <xsl:value-of select="."/>
+            <xsl:text>, </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="."/>
+            <xsl:text>.</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Front Colophon -->
