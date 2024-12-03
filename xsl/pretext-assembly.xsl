@@ -271,6 +271,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anything has been added or subtracted. The tree it builds is used  -->
 <!-- for constructing "View Source" knowls in HTML output as a form of  -->
 <!-- always-accurate documentation.                                     -->
+<!-- Update 2024-12-03: we needed to switch to using the $version-root  -->
+<!-- tree (a few trees later/further) since at this point versions have -->
+<!-- not been considered.  The "original-id" should still be            -->
+<!-- useful/valid after any version support has removed some elements.  -->
 <xsl:variable name="original-labeled-rtf">
     <xsl:apply-templates select="/" mode="id-attribute">
         <!-- $parent-id defaults to 'root' in template -->
