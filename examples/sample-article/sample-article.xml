@@ -3147,7 +3147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
-                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  This image is a <init>PNG</init> produced specifically for this document.  Typically, a tactile diagram produced by <prefigure/> will be a <init>PDF</init> ready to be sent to an appropriate embosser.</p>
+                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  This image is a <init>PNG</init> produced specifically for this document.  Typically, a tactile diagram produced by <prefigure/> will be a <init>PDF</init> ready to be sent to an appropriate embosser.  Notice that <pretext/> adds a caption indicating the diagram's location in the document along the top of the diagram.</p>
 
                 <image source="tactile/prefigure-diffeq.png" width="70%"/>
             </subsection>
