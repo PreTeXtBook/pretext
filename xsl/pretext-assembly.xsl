@@ -984,6 +984,95 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- ######################################## -->
+<!-- Enrichment of Geogebra interactives      -->
+<!-- ######################################## -->
+
+<!-- Expand reference to Geogebra by material-id to use -->
+<!-- an implicit applet approach with a slate to better -->
+<!-- facilitate all of the applet control parameters.   -->
+<xsl:template match="interactive[@geogebra]" mode="enrichment">
+    <xsl:param name="default-aspect" select="'1:1'" />
+    <xsl:variable name="ggbMaterialWidth">
+        <xsl:choose>
+            <xsl:when test="@material-width">
+                <xsl:value-of select="@material-width"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>800</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="$default-aspect" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="ggbMaterialHeight">
+        <xsl:choose>
+            <xsl:when test="@material-height">
+                <xsl:value-of select="@material-height"/>
+            </xsl:when>
+            <xsl:when test="$aspect-ratio=''"/>
+            <xsl:otherwise>
+                <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="slate-copy-attr" select="'toolbar algebra-input reset-icon shift-drag-zoom zoom-buttons'"/>
+    <xsl:variable name="interactive-drop-attr" select="concat($slate-copy-attr, ' geogebra material-width material-height')"/>
+    <interactive>
+        <xsl:attribute name="platform">
+            <xsl:text>geogebra</xsl:text>
+        </xsl:attribute>
+        <xsl:if test="not(@aspect)">
+            <xsl:attribute name="aspect">
+                <xsl:value-of select="$aspect-ratio"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- Restore all of the original attributes not processed separately -->
+        <xsl:copy-of select="@*[not(contains($interactive-drop-attr, local-name()))]"/>
+        <slate>
+            <xsl:attribute name="xml:id">
+                <xsl:value-of select="@assembly-id"/>
+                <xsl:text>-ggb-slate</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="surface">
+                <xsl:text>geogebra</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="material">
+                <xsl:value-of select="@geogebra"/>
+            </xsl:attribute>
+            <xsl:attribute name="material-width">
+                <xsl:value-of select="$ggbMaterialWidth"/>
+            </xsl:attribute>
+            <xsl:if test="$ggbMaterialHeight != ''">
+                <xsl:attribute name="material-height">
+                    <xsl:value-of select="$ggbMaterialHeight"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:copy-of select="@*[contains($slate-copy-attr, local-name())]"/>
+        </slate>
+    </interactive>
+</xsl:template>
+
+<!-- The following attributes are transferred from the #interactive  -->
+<!-- to the corresponding generated #slate when material-id is given -->
+<!-- Cut them from the interactive parent.                           -->
+<xsl:template match="interative/@geogebra
+                    | interactive[@geogebra]/@toolbar
+                    | interactive[@geogebra]/@algebra-input
+                    | interactive[@geogebra]/@reset-icon
+                    | interactive[@geogebra]/@shift-drag-zoom
+                    | interactive[@geogebra]/@material-width
+                    | interactive[@geogebra]/@material-height" mode="enrichment" />
+
+<xsl:template match="@toolbar|@algebra-input|@reset-icon|@shift-drag-zoom|@material-width|@material-height" mode="geogebra-slate-attributes">
+    <xsl:copy-of select="node()"/>
+</xsl:template>
+<!-- No other attributes are transferred to the slate. -->
+<xsl:template match="*" mode="geogebra-slate-attributes"/>
+
 
 <!-- ############# -->
 <!-- Source Repair -->
