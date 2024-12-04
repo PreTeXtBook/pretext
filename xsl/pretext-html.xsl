@@ -5858,7 +5858,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- a named template provides keyboard shortcuts for  -->
             <!-- the library powering exploration of the PreFigure -->
             <!-- diagram authored with annotations                 -->
-            <xsl:call-template name="diagacess-instructions"/>
+            <!-- We defer if we are inside a setting where we      -->
+            <!-- might get multiple instances of instructions      -->
+            <!-- right next to each other.  This test will include -->
+            <!-- being inside a "subsgroup" as well.               -->
+            <xsl:if test="not(ancestor::sidebyside)">
+                <xsl:call-template name="diagacess-instructions"/>
+            </xsl:if>
         </xsl:when>
         <!-- cases should be exhaustive, given match and tests-->
         <xsl:otherwise/>
@@ -6306,8 +6312,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%</xsl:text>
 </xsl:template>
 
-
-
 <!-- generic "panel-panel" template            -->
 <!-- makes a "sbspanel" div of specified width -->
 <!-- calls modal "panel-html-box" for contents -->
@@ -6415,6 +6419,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:element>
 
     </xsl:element>
+</xsl:template>
+
+<!-- We do not want a proliferation of instructions for keyboard        -->
+<!-- shortciuts for exploring PreFigure diagrams with the diagacess     -->
+<!-- library.  See hooks for "sidebyside" and "sbsgroup" explained      -->
+<!-- in pretext-common.xsl.  Logic here is to follow a "sidebyside"     -->
+<!-- with any one panel holding an explorable diagram, unless it is     -->
+<!-- a constituent of a "sbsgroup".  Once at the conclusion of a        -->
+<!-- "sbsgroup" it is time to present instructions.  Note that these    -->
+<!-- instructions are routinely held up right after a diagram in        -->
+<!-- these scenarios.                                                   -->
+<!-- NB: we tried to add these instructions after an "apply-imports"    -->
+<!-- in new templates overriding those in -common, but it appears we    -->
+<!-- cannot pass parameters in, so duplicate content inside             -->
+<!-- "sidebyside" (such as formulated for xref knowls) ended up getting -->
+<!-- duplicate HTML id.  So we had to resort to specialty hooks.        -->
+
+<xsl:template match="sidebyside" mode="post-sidebyside">
+    <xsl:if test=".//pf:annotations and not(parent::sbsgroup)">
+        <xsl:call-template name="diagacess-instructions"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="sbsgroup" mode="post-sbsgroup">
+    <xsl:if test=".//pf:annotations">
+        <xsl:call-template name="diagacess-instructions"/>
+    </xsl:if>
 </xsl:template>
 
 
