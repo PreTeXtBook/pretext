@@ -194,30 +194,59 @@
         <title>Styling</title>
         <idx><h>style</h><h>HTML</h></idx>
 
-        <p>The <pretext/> conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).  This section describes ways that a publisher can influence the style by using the publication file to specify the use of alternate CSS files. See <xref ref="online-style-options"/> for exact syntax for the following options.</p>
+        <p>The <pretext/> conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).</p>
+
+        <p>This <init>HTML</init> is styled with <init>CSS</init> to create the output that a reader sees. There are multiple <q>themes</q> that a publisher can choose from to render the pages in different styles. Below are samples of available themes. See <xref ref="online-style-options"/> for the syntax for specifying a theme and options like the color palette to use.</p>
 
         <paragraphs>
-            <title>Colors</title>
+            <title>Themes</title>
 
-            <p>The default file, <c>colors_default.css</c> contains documentation on how to design a color theme.</p>
-        </paragraphs>
+            <p>There are multiple themes that define different appearances for HTML output. Currently available themes include:</p>
 
-        <paragraphs>
-            <title>Style</title>
-
-            <p>A file may be used to control the look of content, such as consistently putting a colored box with a border around certain blocks.  As of 2022-12-15, the two options are <c>default</c> and <c>oscarlevin</c>.</p>
-        </paragraphs>
-
-        <paragraphs>
-            <title>Table of Contents, Knowls, Banner, Navigation Bar, and Shell</title>
-
-            <p>These user-interface (<init>UI</init>) elements can be styled with their own CSS.</p>
+            <sbsgroup>
+                <sidebyside widths="40% 40%" margins="auto" valign="middle">
+                    <figure>
+                      <image source="theme-default-modern.jpg" width="100%">
+                          <description>Screenshot of the default-modern theme</description>
+                      </image>
+                      <caption><term>default-modern</term> An updated version of the traditional PreTeXt theme.</caption>
+                    </figure>
+                    <figure>
+                      <image source="theme-tacoma.png" width="100%">
+                          <description>Screenshot of the tacoma theme</description>
+                      </image>
+                      <caption><term>tacoma</term> A theme with minimal decorations and colors. A minimalistic presentation of the contents.</caption>
+                    </figure>
+                </sidebyside>
+                <sidebyside widths="40% 40%" margins="auto" valign="middle">
+                    <figure>
+                      <image source="theme-denver.png" width="100%">
+                          <description>Screenshot of the denver theme</description>
+                      </image>
+                      <caption><term>denver</term> A theme that uses bolder structural elements and colors.</caption>
+                    </figure>
+                    <figure>
+                      <image source="theme-greeley.png" width="100%">
+                          <description>Screenshot of the greeley theme</description>
+                      </image>
+                      <caption><term>greeley</term> A theme designed for short documents like academic papers.</caption>
+                    </figure>
+                </sidebyside>
+                <sidebyside widths="40%" margins="5% 55%" valign="middle">
+                    <figure>
+                      <image source="theme-salem.jpg" width="100%">
+                          <description>Screenshot of the salem theme</description>
+                      </image>
+                      <caption><term>salem</term> A theme that is optimized for displaying wide interactive elements (such as Active Code and Parsons).</caption>
+                    </figure>
+                </sidebyside>
+            </sbsgroup>
         </paragraphs>
 
         <paragraphs>
             <title>Development</title>
 
-            <p>Please join us on the <c>pretext-dev</c> discussion group if you want to create alternate styles.</p>
+            <p>Please join us on the <c>pretext-dev</c> discussion group if you want to create alternate themes.</p>
         </paragraphs>
     </section>
 
