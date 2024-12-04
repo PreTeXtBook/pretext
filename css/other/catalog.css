@@ -1,3 +1,4 @@
+/* Used by the PreTeXt catalog website */
 
 .projects a {
     text-decoration: none;
@@ -5,7 +6,7 @@
 .projects p {
     margin: 0;
 }
-.projects p + p {
+.projects p + p {  
     margin-top: 0.75em;
 }
 
