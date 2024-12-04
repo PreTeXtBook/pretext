@@ -3285,19 +3285,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                   <definition>tiling2=[0,1,0,0,1]</definition>
                                   <definition>tiling1=[0,1,0,0,1,0,1,0]</definition>
                                   <definition>tiling0=[0,1,0,0,1,0,1,0,0,1,0,0,1]</definition>
-                                  <definition>tilings={0:tiling0, 1:tiling1, 2:tiling2}</definition>
-                                  <definition>lengths=[13, 8, 5]</definition>
-                                  <definition>types={0:'long', 1:'short'}</definition>
-                                  <definition>num_rows=2</definition>
+                                  <definition>tilings=[tiling0, tiling1, tiling2]</definition>
                                   <coordinates bbox="(0,-0.5,width,3.5)">
                                       <transform>
-                                          <repeat parameter="row=0..num_rows">
+                                          <repeat parameter="row in tilings">
                                               <label at="left-dots" anchor="(0,height/2)" alignment="w">
                                                   <m>\ldots</m>
                                               </label>
                                               <transform>
-                                                  <repeat at="tiling" parameter="tile=0..lengths[row]-1">
-                                                      <definition>type=tilings[row][tile]</definition>
+                                                  <repeat at="tiling" parameter="type in row">
                                                       <rectangle at="tile"
                                                                  lower-left="(0,0)"
                                                                  dimensions="(widths[type], height)"
@@ -3314,7 +3310,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                       </transform>
 
                                       <transform>
-                                          <repeat at="down-arrows" parameter="row=0..num_rows">
+                                          <repeat at="down-arrows" parameter="row in tilings">
                                               <line at="down-arrow" endpoints="((width/2, 1), (width/2,height))"
                                                     endpoint-offsets="(3,-5)"
                                                     arrows="1" stroke="black"/>
@@ -3322,7 +3318,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                           </repeat>
                                       </transform>
                                       <transform>
-                                          <repeat at="right-arrows" parameter="row=0..num_rows">
+                                          <repeat at="right-arrows" parameter="row in tilings">
                                               <line at="right-arrow"
                                                     endpoints="((15,-0.15), (17,-0.15))"
                                                     arrows="1" stroke="black" thickness="2"/>

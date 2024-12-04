@@ -1,0 +1,154 @@
+<diagram>
+  <annotations>
+    <annotation id="figure" speech2="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
+      <grouped>figure</grouped>
+      <position>1</position>
+      <children>
+        <active>top</active>
+        <active>arrows</active>
+      </children>
+      <components>
+        <active>top</active>
+        <active>arrows</active>
+      </components>
+    </annotation>
+    <annotation id="top" speech2="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
+      <grouped>top</grouped>
+      <position>1</position>
+      <children>
+        <active>top-L</active>
+        <active>top-S</active>
+      </children>
+      <components>
+        <active>top-L</active>
+        <active>top-S</active>
+      </components>
+      <parents>
+        <grouped>figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="top-L" speech2="The long tile L">
+      <active>top-L</active>
+      <position>1</position>
+      <parents>
+        <grouped>top</grouped>
+      </parents>
+    </annotation>
+    <annotation id="top-S" speech2="The short tile S">
+      <active>top-S</active>
+      <position>2</position>
+      <parents>
+        <grouped>top</grouped>
+      </parents>
+    </annotation>
+    <annotation id="arrows" speech2="A process called deflation replaces each tile by a new set of tiles">
+      <grouped>arrows</grouped>
+      <position>2</position>
+      <children>
+        <active>left-deflate</active>
+        <active>right-deflate</active>
+      </children>
+      <components>
+        <active>left-deflate</active>
+        <active>right-deflate</active>
+      </components>
+      <parents>
+        <grouped>figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="left-deflate" speech2="A long tile is replaced by a long and a short tile">
+      <grouped>left-deflate</grouped>
+      <position>1</position>
+      <components>
+        <passive>left-arrow</passive>
+        <passive>top-L</passive>
+        <active>bottom-L</active>
+      </components>
+      <children>
+        <active>bottom-L</active>
+      </children>
+      <parents>
+        <grouped>arrows</grouped>
+      </parents>
+    </annotation>
+    <annotation id="left-arrow">
+      <passive>left-arrow</passive>
+      <position>0</position>
+      <parents>
+        <grouped>left-deflate</grouped>
+      </parents>
+    </annotation>
+    <annotation id="top-L">
+      <passive>top-L</passive>
+      <position>0</position>
+      <parents>
+        <grouped>left-deflate</grouped>
+      </parents>
+    </annotation>
+    <annotation id="bottom-L" speech2="The length of the new tiles is scaled by the reciprocal of the golden ratio">
+      <grouped>bottom-L</grouped>
+      <position>1</position>
+      <children>
+        <active>bottom-LL</active>
+        <active>bottom-LS</active>
+      </children>
+      <components>
+        <active>bottom-LL</active>
+        <active>bottom-LS</active>
+      </components>
+      <parents>
+        <grouped>left-deflate</grouped>
+      </parents>
+    </annotation>
+    <annotation id="bottom-LL" speech2="The new long tile is on the left">
+      <active>bottom-LL</active>
+      <position>1</position>
+      <parents>
+        <grouped>bottom-L</grouped>
+      </parents>
+    </annotation>
+    <annotation id="bottom-LS" speech2="The new short tile is on the right">
+      <active>bottom-LS</active>
+      <position>2</position>
+      <parents>
+        <grouped>bottom-L</grouped>
+      </parents>
+    </annotation>
+    <annotation id="right-deflate" speech2="A short tile is replaced by a single long tile">
+      <grouped>right-deflate</grouped>
+      <position>2</position>
+      <components>
+        <passive>right-arrow</passive>
+        <passive>top-S</passive>
+        <active>bottom-S</active>
+      </components>
+      <children>
+        <active>bottom-S</active>
+      </children>
+      <parents>
+        <grouped>arrows</grouped>
+      </parents>
+    </annotation>
+    <annotation id="right-arrow">
+      <passive>right-arrow</passive>
+      <position>0</position>
+      <parents>
+        <grouped>right-deflate</grouped>
+      </parents>
+    </annotation>
+    <annotation id="top-S">
+      <passive>top-S</passive>
+      <position>0</position>
+      <parents>
+        <grouped>right-deflate</grouped>
+      </parents>
+    </annotation>
+    <annotation id="bottom-S" speech2="The length of the new tile is again scaled by the reciprocal of the golden ratio">
+      <active>bottom-S</active>
+      <position>1</position>
+      <parents>
+        <grouped>right-deflate</grouped>
+      </parents>
+    </annotation>
+  </annotations>
+</diagram>

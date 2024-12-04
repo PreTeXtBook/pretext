@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="diagram" width="360" height="200">
+  <defs>
+    <clipPath id="clipPath-0">
+      <rect x="30.0" y="0.0" width="300.0" height="200.0"/>
+    </clipPath>
+    <clipPath id="clipPath-1">
+      <rect x="30.0" y="0.0" width="300.0" height="200.0"/>
+    </clipPath>
+    <marker id="arrow-head-end-2_None_24_60-black" markerWidth="9.0" markerHeight="8.0" markerUnits="userSpaceOnUse" orient="auto-start-reverse" refX="6.5" refY="4.0">
+      <path d="M 9.0 4.0L 0.0 8.0L 1.7 5.0L 1.7 3.0L 0.0 0.0Z" fill="black" stroke="none"/>
+    </marker>
+    <marker id="arrow-head-end-2_None_24_60-black-outline" markerWidth="13.0" markerHeight="12.0" markerUnits="userSpaceOnUse" orient="auto-start-reverse" refX="8.5" refY="6.0">
+      <path d="M 11.8 7.8 L 2.8 11.8 A 2 2 0 0 1 0.0 10.0 L 0.0 2.0 A 2 2 0 0 1 2.8 0.2 L 11.8 4.2 A 2 2 0 0 1 11.8 7.8 Z" fill="white" stroke="none"/>
+    </marker>
+  </defs>
+  <g id="g-0">
+    <g id="left-dots-row=0" transform="translate(26.0,168.8) translate(-21.2,-1.1)">
+      <g id="g-1">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
+          <defs>
+            <path id="MJX-2-TEX-N-2026" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60ZM525 60Q525 84 542 102T585 120Q609 120 627 104T646 61Q646 36 629 18T586 0T543 17T525 60ZM972 60Q972 84 989 102T1032 120Q1056 120 1074 104T1093 61Q1093 36 1076 18T1033 0T990 17T972 60Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mo" data-semantic-type="punctuation" data-semantic-role="ellipsis" data-semantic-id="0" data-semantic-speech="ellipsis">
+                <use data-c="2026" xlink:href="#MJX-2-TEX-N-2026"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="tiling-row=0">
+      <path id="tile-row=0-type=0" d="M 30.0 175.0 L 57.1 175.0 L 57.1 162.5 L 30.0 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=1" d="M 57.1 175.0 L 73.8 175.0 L 73.8 162.5 L 57.1 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=0-type=2" d="M 73.8 175.0 L 100.8 175.0 L 100.8 162.5 L 73.8 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=3" d="M 100.8 175.0 L 127.9 175.0 L 127.9 162.5 L 100.8 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=4" d="M 127.9 175.0 L 144.6 175.0 L 144.6 162.5 L 127.9 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=0-type=5" d="M 144.6 175.0 L 171.6 175.0 L 171.6 162.5 L 144.6 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=6" d="M 171.6 175.0 L 188.4 175.0 L 188.4 162.5 L 171.6 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=0-type=7" d="M 188.4 175.0 L 215.4 175.0 L 215.4 162.5 L 188.4 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=8" d="M 215.4 175.0 L 242.5 175.0 L 242.5 162.5 L 215.4 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=9" d="M 242.5 175.0 L 259.2 175.0 L 259.2 162.5 L 242.5 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=0-type=10" d="M 259.2 175.0 L 286.2 175.0 L 286.2 162.5 L 259.2 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=11" d="M 286.2 175.0 L 313.3 175.0 L 313.3 162.5 L 286.2 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=0-type=12" d="M 313.3 175.0 L 330.0 175.0 L 330.0 162.5 L 313.3 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+    </g>
+    <g id="right-dots-row=0" transform="translate(334.0,168.8) translate(0.0,-1.1)">
+      <g id="g-2">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
+          <defs>
+            <path id="MJX-3-TEX-N-2026" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60ZM525 60Q525 84 542 102T585 120Q609 120 627 104T646 61Q646 36 629 18T586 0T543 17T525 60ZM972 60Q972 84 989 102T1032 120Q1056 120 1074 104T1093 61Q1093 36 1076 18T1033 0T990 17T972 60Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mo" data-semantic-type="punctuation" data-semantic-role="ellipsis" data-semantic-id="0" data-semantic-speech="ellipsis">
+                <use data-c="2026" xlink:href="#MJX-3-TEX-N-2026"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="left-dots-row=1" transform="translate(26.0,118.8) translate(-21.2,-1.1)">
+      <g id="g-3">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
+          <defs>
+            <path id="MJX-4-TEX-N-2026" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60ZM525 60Q525 84 542 102T585 120Q609 120 627 104T646 61Q646 36 629 18T586 0T543 17T525 60ZM972 60Q972 84 989 102T1032 120Q1056 120 1074 104T1093 61Q1093 36 1076 18T1033 0T990 17T972 60Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mo" data-semantic-type="punctuation" data-semantic-role="ellipsis" data-semantic-id="0" data-semantic-speech="ellipsis">
+                <use data-c="2026" xlink:href="#MJX-4-TEX-N-2026"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="tiling-row=1">
+      <path id="tile-row=1-type=0" d="M 30.0 125.0 L 73.8 125.0 L 73.8 112.5 L 30.0 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=1-type=1" d="M 73.8 125.0 L 100.8 125.0 L 100.8 112.5 L 73.8 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=1-type=2" d="M 100.8 125.0 L 144.6 125.0 L 144.6 112.5 L 100.8 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=1-type=3" d="M 144.6 125.0 L 188.4 125.0 L 188.4 112.5 L 144.6 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=1-type=4" d="M 188.4 125.0 L 215.4 125.0 L 215.4 112.5 L 188.4 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=1-type=5" d="M 215.4 125.0 L 259.2 125.0 L 259.2 112.5 L 215.4 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=1-type=6" d="M 259.2 125.0 L 286.2 125.0 L 286.2 112.5 L 259.2 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=1-type=7" d="M 286.2 125.0 L 330.0 125.0 L 330.0 112.5 L 286.2 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+    </g>
+    <g id="right-dots-row=1" transform="translate(334.0,118.8) translate(0.0,-1.1)">
+      <g id="g-4">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
+          <defs>
+            <path id="MJX-5-TEX-N-2026" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60ZM525 60Q525 84 542 102T585 120Q609 120 627 104T646 61Q646 36 629 18T586 0T543 17T525 60ZM972 60Q972 84 989 102T1032 120Q1056 120 1074 104T1093 61Q1093 36 1076 18T1033 0T990 17T972 60Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mo" data-semantic-type="punctuation" data-semantic-role="ellipsis" data-semantic-id="0" data-semantic-speech="ellipsis">
+                <use data-c="2026" xlink:href="#MJX-5-TEX-N-2026"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="left-dots-row=2" transform="translate(26.0,68.8) translate(-21.2,-1.1)">
+      <g id="g-5">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
+          <defs>
+            <path id="MJX-6-TEX-N-2026" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60ZM525 60Q525 84 542 102T585 120Q609 120 627 104T646 61Q646 36 629 18T586 0T543 17T525 60ZM972 60Q972 84 989 102T1032 120Q1056 120 1074 104T1093 61Q1093 36 1076 18T1033 0T990 17T972 60Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mo" data-semantic-type="punctuation" data-semantic-role="ellipsis" data-semantic-id="0" data-semantic-speech="ellipsis">
+                <use data-c="2026" xlink:href="#MJX-6-TEX-N-2026"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="tiling-row=2">
+      <path id="tile-row=2-type=0" d="M 30.0 75.0 L 100.8 75.0 L 100.8 62.5 L 30.0 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=2-type=1" d="M 100.8 75.0 L 144.6 75.0 L 144.6 62.5 L 100.8 62.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row=2-type=2" d="M 144.6 75.0 L 215.4 75.0 L 215.4 62.5 L 144.6 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=2-type=3" d="M 215.4 75.0 L 286.2 75.0 L 286.2 62.5 L 215.4 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row=2-type=4" d="M 286.2 75.0 L 330.0 75.0 L 330.0 62.5 L 286.2 62.5 Z" stroke="black" stroke-width="2" fill="red"/>
+    </g>
+    <g id="right-dots-row=2" transform="translate(334.0,68.8) translate(0.0,-1.1)">
+      <g id="g-6">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
+          <defs>
+            <path id="MJX-7-TEX-N-2026" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60ZM525 60Q525 84 542 102T585 120Q609 120 627 104T646 61Q646 36 629 18T586 0T543 17T525 60ZM972 60Q972 84 989 102T1032 120Q1056 120 1074 104T1093 61Q1093 36 1076 18T1033 0T990 17T972 60Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mo" data-semantic-type="punctuation" data-semantic-role="ellipsis" data-semantic-id="0" data-semantic-speech="ellipsis">
+                <use data-c="2026" xlink:href="#MJX-7-TEX-N-2026"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+  </g>
+  <g id="down-arrows">
+    <line id="down-arrow-row=0" x1="180.0" y1="128.0" x2="180.0" y2="157.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="down-arrow-row=1" x1="180.0" y1="78.0" x2="180.0" y2="107.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="down-arrow-row=2" x1="180.0" y1="28.0" x2="180.0" y2="57.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+  </g>
+  <g id="right-arrows">
+    <line id="right-arrow-row=0" x1="280.8" y1="182.5" x2="314.2" y2="182.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="right-arrow-row=1" x1="280.8" y1="132.5" x2="314.2" y2="132.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="right-arrow-row=2" x1="280.8" y1="82.5" x2="314.2" y2="82.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+  </g>
+</svg>
