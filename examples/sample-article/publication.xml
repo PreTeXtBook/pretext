@@ -94,10 +94,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- the values are defaults so should make no discernable -->
         <!-- difference.                                           -->
         <knowl example="no" remark="no" proof="no" example-solution="no"/>
-        <!-- specify the style of the html by giving names to      -->
-        <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
-        <!-- put <css style="oscarlevin"/>                         -->
-        <css style="default" colors="blue_red" toc="default" banner="default" navbar="default" shell="default"/>
+        <!-- While testing themes, it can be useful to turn off    -->
+        <!-- all knowls. This next line attempts to do so.         -->
+        <!-- Uncomment it to activate it.                          -->
+        <knowl proof="no" example="no" example-solution="no" exercise-inline="no"/>
+        <!-- Specify the theme for the HTML.                       -->
+        <!-- See the guide for options                             -->
+        <css theme="default-modern" palette="blue-red"/>
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->

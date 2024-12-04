@@ -7938,7 +7938,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-simple-js-script">
                     <caption>A simple embedded script example</caption>
 
-                    <interactive aspect="6:1" xml:id="interactive-simple-js-script" platform="javascript" source="code/roesler/kinematics.js">
+                    <interactive aspect="6:1" xml:id="interactive-simple-js-script" platform="javascript">
                         <slate aspect="6:1" xml:id="simple-js-script" surface="canvas"/>
                         <script>
                             const canvas = document.getElementById("simple-js-script");
@@ -8308,12 +8308,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>This example is by Marshall Hampton, taken from the <url href="https://wiki.sagemath.org/interact/calculus" visual="wiki.sagemath.org/interact/calculus">Sage interact wiki</url>, specifically <url href="https://wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule" visual="wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule">Numerical integrals with the midpoint rule</url>.</p>
 
+                <p>Also notice that when viewed in dark mode, this sample respects the rendering intent. That is due to <attr>dark-mode-enabled</attr> applied to it.</p>
+
                 <!-- It would be better to xi:include this Sage code, but we don't want    -->
                 <!-- newcomers to need to use the "-xinclude" switch while getting started -->
                 <figure xml:id="figure-interactive-numerical-integral">
                     <caption>Numerical integrals using the midpoint rule</caption>
 
-                    <interactive xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="4:5">
+                    <interactive dark-mode-enabled="yes" xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="4:5">
                         <!-- Changes: gave 3 input boxes widths -->
                         <!-- Changes: Escaped \ inside LaTeX -->
                         <!-- Changes: Added figsize=5 to show -->
