@@ -1,0 +1,22 @@
+{
+  "name": "pretext",
+  "version": "1.0.0",
+  "description": "PreTeXt\r =======",
+  "main": "bundleEntry.js",
+  "directories": {
+    "doc": "doc",
+    "example": "examples"
+  },
+  "scripts": {
+    "build": "node ./cssbuilder.mjs",
+    "watch": "node ./cssbuilder.mjs --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "command-line-args": "^6.0.0",
+    "command-line-usage": "^7.0.3",
+    "esbuild": "^0.23.0",
+    "esbuild-sass-plugin": "^3.3.1"
+  }
+}
