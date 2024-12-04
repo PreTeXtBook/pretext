@@ -2236,7 +2236,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Whether or not to tag TOC as focused -->
 <xsl:variable name="html-toc-focused_value">
-    <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='focused']" mode="set-pubfile-variable"/>
+    <xsl:choose>
+        <xsl:when test="contains($html-theme-name, '-legacy')">
+            <!-- legacy themes can pick whether to use a focused toc or not -->
+            <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='focused']" mode="set-pubfile-variable"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- newer ones determined by theme                                -->
+            <xsl:if test="$html-theme/@focused-toc"><xsl:value-of select="$html-theme/@focused-toc"/></xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-html-toc-focused" select="$html-toc-focused_value='yes'"/>
 
@@ -2273,22 +2282,157 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A single JS file for development purposes -->
 <xsl:param name="html.js.extra" select="''" />
 
+<!-- Name of color file possibly used in legacy styling -->
+<xsl:variable name="html.css.colors">
+    <xsl:value-of select="$publication/html/css/@colors"/>
 </xsl:variable>
 
+<!--                              -->
+<!-- HTML Theme Specification     -->
+<!--                              -->
 
+<xsl:variable name="html-theme-name">
     <xsl:choose>
+        <xsl:when test="$publication/html/css/@theme">
+            <xsl:value-of select="$publication/html/css/@theme"/>
         </xsl:when>
         <xsl:otherwise>
+            <!-- legacy style detection -->
+            <xsl:choose>
+                <!-- crc and min are best detected via @shell -->
+                <xsl:when test="contains($publication/html/css/@shell, 'crc')">
+                    <xsl:text>crc-legacy</xsl:text>
+                </xsl:when>
+                <xsl:when test="contains($publication/html/css/@shell, 'min')">
+                    <xsl:text>min-legacy</xsl:text>
+                </xsl:when>
+                <!-- others by @style                         -->
+                <xsl:when test="$publication/html/css/@style">
+                    <xsl:value-of select="$publication/html/css/@style"/>
+                    <xsl:text>-legacy</xsl:text>
+                </xsl:when>
+                <xsl:otherwise><xsl:text>default-modern</xsl:text></xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
 
-    <xsl:choose>
-        </xsl:when>
-    </xsl:choose>
-
+<!-- lookup dict for known theme options -->
+<xsl:variable name="html-theme-option-list">
+    <theme name="default-modern" focused-toc="yes">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="palette" default="default"/>
+        <option name="primary-color" check-contrast="#fff"/>
+        <option name="secondary-color" check-contrast="#fff"/>
+        <option name="primary-color-dark" check-contrast="#23241f"/>
+    </theme>
+    <theme name="denver" focused-toc="yes">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="palette" default="default"/>
+        <option name="color-main" check-contrast="#fff"/>
+        <option name="color-do" check-contrast="#fff"/>
+        <option name="color-fact" check-contrast="#fff"/>
+        <option name="color-meta" check-contrast="#fff"/>
+        <option name="primary-color-dark" check-contrast="#23241f"/>
+    </theme>
+    <theme name="tacoma"  focused-toc="yes">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="primary-color" check-contrast="#fff"/>
+        <option name="primary-color-dark" check-contrast="#23241f"/>
+    </theme>
+    <theme name="salem" focused-toc="yes">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="palette" default="default"/>
+        <option name="color-main" check-contrast="#fff"/>
+        <option name="color-do" check-contrast="#fff"/>
+        <option name="color-fact" check-contrast="#fff"/>
+        <option name="color-meta" check-contrast="#fff"/>
+        <option name="primary-color-dark" check-contrast="#23241f"/>
+    </theme>
+    <theme name="greeley">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="primary-color" check-contrast="#fff"/>
+        <option name="primary-color-dark" check-contrast="#23241f"/>
+    </theme>
+    <theme name="custom">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="entry-point" default="custom-theme.scss"/>
+    </theme>
 </xsl:variable>
 
+<!-- Setup and use key to get the active theme                          -->
+<xsl:key name="html-theme-option-key" match="theme" use="@name"/>
+<xsl:variable name="html-theme-rtf">
+    <xsl:for-each select="exsl:node-set($html-theme-option-list)">
+        <xsl:copy-of select="key('html-theme-option-key', $html-theme-name)"/>
+    </xsl:for-each>
+</xsl:variable>
+
+<!-- Turn tree fragment into a node-set containing the selected theme   -->
+<xsl:variable name="html-theme" select="exsl:node-set($html-theme-rtf)/theme"/>
+
+<!-- Get an option (attr) from pub file css/theme. Available options    -->
+<!-- are constrained by html-theme-option-list above.                   -->
+<xsl:template name="get-theme-option">
+    <xsl:param name="optname"/>
+    <xsl:choose>
+        <!-- Must be an option in the theme -->
+        <xsl:when test="$html-theme/option[@name = $optname]">
+            <xsl:choose>
+                <xsl:when test="$publication/html/css/options/@*[name() = $optname]">
+                    <!-- Exists in pub file, use that -->
+                    <xsl:value-of select="$publication/html/css/options/@*[name() = $optname]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- Use default from theme def -->
+                    <xsl:value-of select="$html-theme/option[@name = $optname]/@default"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- <xsl:otherwise>
+            <xsl:message>PTX:WARNING: HTML theme "<xsl:value-of select="$html-theme-name"/>" does not support option "<xsl:value-of select="$optname"/>".</xsl:message>
+        </xsl:otherwise> -->
+    </xsl:choose>
+</xsl:template>
+
+<!-- Test if current theme supports dark mode                           -->
+<xsl:variable name="theme-has-darkmode">
+    <xsl:call-template name="get-theme-option">
+        <xsl:with-param name="optname" select="'provide-dark-mode'"/>
+    </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="b-theme-has-darkmode" select="$theme-has-darkmode = 'yes'"/>
+
+<!-- Grabs the html theme options element and returns its attr/values   -->
+<!-- in JSON format for use by theme build tools.                       -->
+<xsl:variable name="html-theme-options">
+    <xsl:text>{</xsl:text>
+        <xsl:text>&quot;options&quot;:{</xsl:text>
+        <!-- if inside for-each, so can't use position to selectively add -->
+        <!-- commas. So build a string with a , after each item           -->
+        <xsl:variable name="options-string">
+            <xsl:for-each select="$publication/html/css/@*">
+                <xsl:variable name="optname" select="name(.)"/>
+                <!-- only pass on values that match theme options -->
+                <xsl:if test="$html-theme/option[@name = $optname]">
+                    <xsl:value-of select="concat('&quot;', name(.), '&quot;:')"/>
+                    <xsl:value-of select="concat('&quot;', ., '&quot;')"/>
+                    <xsl:text>,</xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+        <!-- then trim the trailing ,                                     -->
+        <xsl:value-of select="substring($options-string, 1, string-length($options-string) - 1)"/>
+        <xsl:text>}</xsl:text>
+        <xsl:text>,&quot;contrast-checks&quot;:{</xsl:text>
+        <xsl:for-each select="$html-theme/*[@check-contrast]">
+            <xsl:if test="position() > 1"><xsl:text>,</xsl:text></xsl:if>
+            <xsl:value-of select="concat('&quot;', @name, '&quot;:')"/>
+            <xsl:value-of select="concat('&quot;', @check-contrast, '&quot;')"/>
+        </xsl:for-each>
+        <xsl:text>}</xsl:text>
+    <xsl:text>}</xsl:text>
 </xsl:variable>
 
 <!--                              -->
