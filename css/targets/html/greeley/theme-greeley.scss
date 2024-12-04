@@ -1,0 +1,63 @@
+// Theme designed for short articles (i.e., research papers).
+
+// Current maintainer: Oscar Levin
+
+// Variables used by theme. CSSBuilder overrides these by prepending
+// different definitions for these variables to this file before the theme
+// is compiled.
+$color-scheme: 'grays' !default;
+$primary-color: null !default;
+$secondary-color: null !default;
+$primary-color-dark: #829ab1 !default;
+$background-color-dark: #23241f !default;
+
+@use "sass:map";
+
+// Imports in this file can be either relative to this file or 
+// relative to css/ directory
+// Basic components: 
+//@use 'components/pretext';// with ($inline-section-headings: false);
+@use 'components/pretext'; 
+@use '../denver/parts-paper';
+//@use 'shell';
+@use 'customization';
+@use 'chunks-greeley';
+
+//@use 'heading-tweaks';
+
+// fonts and colors
+// $body-font: 'Open Sans' !default;
+// $heading-font: 'Roboto' !default;
+@use 'fonts/fonts-google'; // with ($body: $body-font, $heading: $heading-font);
+
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/palette-single-bold" as palette-single with (
+  $primary-color: $primary-color,
+);
+
+
+// primary/secondary color defined as determined by palette-chunks from
+// color-scheme, primary-color, secondary-color
+$primary-color: map.get(palette-single.$colors, 'primary-color');
+//$secondary-color: map.get(palette-dual.$colors, 'secondary-color');
+
+@use 'colors/palette-dark' as palette-dark with (
+    $primary-color: $primary-color-dark,
+    $background-color: $background-color-dark,
+);
+
+
+
+
+:root {
+    color-scheme: light;
+    &:not(.dark-mode) {  // prevent variable leak through to dark
+      @include colorHelpers.scss-to-css(palette-single.$colors);
+    }
+}
+
+:root.dark-mode {
+    color-scheme: dark;
+
+    @include colorHelpers.scss-to-css(palette-dark.$colors);
+}
