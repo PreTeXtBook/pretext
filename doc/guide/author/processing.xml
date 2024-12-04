@@ -233,7 +233,7 @@
                 Once you build your project, you will get a folder called <q>output</q>.  Do not edit the contents of this folder manually.
             </p>
         </subsection>
-        <subsection>
+        <subsection xml:id="processing-CLI-build">
             <title>Converting: <c>pretext build</c></title>
             <idx><h><c>build</c></h></idx>
             <idx><h><c>pretext build</c></h></idx>
