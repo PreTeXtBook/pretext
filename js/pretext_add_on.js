@@ -351,7 +351,9 @@ console.log("this is e", e);
                 this_permalink_container.setAttribute('data-description', this_permalink_description);
     //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
                 this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
-                this_item.insertAdjacentElement("afterbegin", this_permalink_container)
+                // if permalinks are inserted as first element, they break lots of CSS that uses
+                // first-child or first-of-type selectors (in both old and new styling)
+                this_item.insertAdjacentElement("beforeend", this_permalink_container);
             } else {
 /*
                 console.log("      no permalink, because no id", this_item)
@@ -978,3 +980,59 @@ window.setInterval(function(){
 }, 5000);
 */
 
+
+//-----------------------------------------------------------------
+// Dark/Light mode swiching
+
+function isDarkMode() {
+    if (document.documentElement.dataset.darkmode === 'disabled')
+        return false;
+
+    const currentTheme = localStorage.getItem("theme");
+    if (currentTheme === "dark")
+        return true;
+    else if (currentTheme === "light")
+        return false;
+
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function setDarkMode(isDark) {
+    if(document.documentElement.dataset.darkmode === 'disabled')
+        return;
+
+    if (isDark) {
+      document.documentElement.classList.add("dark-mode");
+
+      // Apply to local iframes that want dark mode
+      const iframes = document.querySelectorAll("iframe[data-dark-mode-enabled]");
+      for (const iframe of iframes) {
+          iframe.contentWindow.document.documentElement.classList.add("dark-mode");
+      }
+  } else {
+      document.documentElement.classList.remove("dark-mode");
+  }
+
+    const modeButton = document.getElementById("light-dark-button");
+    if (modeButton) {
+        modeButton.querySelector('.icon').innerText = isDark ? "light_mode" : "dark_mode";
+        modeButton.querySelector('.name').innerText = isDark ? "Light Mode" : "Dark Mode";
+    }
+}
+
+// Run this as soon as possible to avoid flicker
+setDarkMode(isDarkMode());
+
+// Rest of dark mode setup logic waits until after load
+window.addEventListener("DOMContentLoaded", function(event) {
+    // Rerun setDarkMode now that it can update buttons
+    const isDark = isDarkMode();
+    setDarkMode(isDark);
+
+    const modeButton = document.getElementById("light-dark-button");
+    modeButton.addEventListener("click", function() {
+        const wasDark = isDarkMode();
+        setDarkMode(!wasDark);
+        localStorage.setItem("theme", wasDark ? "light" : "dark");
+    });
+});

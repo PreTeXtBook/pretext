@@ -260,6 +260,17 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
         bullet.appendChild(p);
         resultArea.appendChild(bullet);
     }
+
+    // Auto-close search results when a result is clicked in case result is on
+    // the same page search started from
+    const resultsDiv = document.getElementById('searchresultsplaceholder');
+    const backDiv = document.querySelector('.searchresultsbackground');
+    resultArea.querySelectorAll("a").forEach((link) => {
+        link.addEventListener('click', (e) => {
+            backDiv.style.display = 'none';
+            resultsDiv.style.display = 'none';
+        });
+    });
     //Could print message about how many results are not shown. No way to localize it though...
     // if(numUnshown > 0) {
     //     let bullet = document.createElement("li");
@@ -274,22 +285,18 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
     MathJax.typesetPromise();
 }
 
+window.addEventListener("load", function (event) {
+    const resultsDiv = document.getElementById('searchresultsplaceholder');
 
-function showHelp() {
-    let state = document.getElementById("helpme").style.display;
-    if (state == "none") {
-        document.getElementById("helpme").style.display = "block";
-        document.getElementById("helpbutt").innerHTML = "Hide Help"
-    } else {
-        document.getElementById("helpme").style.display = "none";
-        document.getElementById("helpbutt").innerHTML = "Show Help"
-    }
-}
+    //insert a div to be backgroud behind searchresultsplaceholder
+    const backDiv = document.createElement("div");
+    backDiv.classList.add("searchresultsbackground");
+    backDiv.style.display = 'none';
+    resultsDiv.parentNode.appendChild(backDiv);
 
-
-window.addEventListener("load",function(event) {
     document.getElementById("searchbutton").addEventListener('click', (e) => {
-        document.getElementById('searchresultsplaceholder').style.display = null;
+        resultsDiv.style.display = null;
+        backDiv.style.display = null;
         let searchInput = document.getElementById("ptxsearch");
         searchInput.value = JSON.parse(localStorage.getItem("last-search-terms")).terms;
         searchInput.select();
@@ -301,7 +308,8 @@ window.addEventListener("load",function(event) {
     });
 
     document.getElementById("closesearchresults").addEventListener('click', (e) => {
-        document.getElementById('searchresultsplaceholder').style.display = 'none';
+        resultsDiv.style.display = 'none';
+        backDiv.style.display = 'none';
         document.getElementById('searchbutton').focus();
     });
 });
