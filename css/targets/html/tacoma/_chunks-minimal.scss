@@ -1,0 +1,74 @@
+$border-radius: 8px !default;
+
+// One stop include for default style content blocks
+@use 'components/chunks/asides-floating';
+@use 'components/chunks/codelike';
+@use 'components/chunks/exercises';
+@use 'components/chunks/solutions';
+@use 'components/chunks/sidebyside';
+@use 'components/chunks/discussion-inline';
+@use 'components/chunks/knowls' with ($border-radius: $border-radius);
+@use 'components/chunks/helpers/L-mixin';
+@use 'components/chunks/helpers/box-mixin' with ($border-radius: 0);
+@use 'components/chunks/helpers/heading-box-mixin';
+@use 'components/chunks/helpers/sidebar-mixin';
+@use 'components/chunks/helpers/inline-heading-mixin';
+
+.assemblage-like, .goal-like {
+  @include sidebar-mixin.box(
+    $border-width: 4px,
+    $background-color: var(--goal-body-background),
+  );
+}
+
+
+.theorem-like,
+.definition-like
+{
+  .heading {
+    display: block;
+    font-size: 1.1em;
+  }
+  .para {
+    font-style: italic;
+  }
+}
+
+.example-like,
+.project-like,
+.remark-like,
+.openproblem-like,
+.computation-like
+{
+  > .heading {
+    display: block;
+    font-size: 1.1em;
+  }
+}
+
+
+.proof {
+  padding-bottom: 1.5em;
+  &::after {
+    content: "□";
+    float: right;
+  }
+
+  .heading {
+    font-size: unset;
+    font-weight: bold;
+    font-style: italic;
+  }
+}
+
+.solution-like {
+  .heading {
+    display: inline;
+    font-style: italic;
+    font-size: unset;
+  }
+}
+
+.paragraphs {
+  @include inline-heading-mixin.heading;
+}
