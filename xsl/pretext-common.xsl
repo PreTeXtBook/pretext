@@ -5981,6 +5981,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="layout" select="$layout" />
         <xsl:with-param name="panels" select="$panel-panels" />
     </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="post-sidebyside"/>
 </xsl:template>
 
 <!-- ########################################### -->
@@ -6000,6 +6001,7 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="sbsgroup">
     <xsl:apply-templates select="sidebyside" />
+    <xsl:apply-templates select="." mode="post-sbsgroup"/>
 </xsl:template>
 
 <!-- Since stackable items do not carry titles or captions,   -->
@@ -6017,6 +6019,19 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
 </xsl:template>
+
+<!-- ################# -->
+<!-- Post-Layout Hooks -->
+<!-- ################# -->
+
+<!-- We may wish to add information below a "sidebyside"    -->
+<!-- or a "sbsgroup".  Motivation is keyboard shortcut help -->
+<!-- for interactive accessible diagrams out of PreFigure   -->
+<!-- code with the diagcess JS library.  See invocations    -->
+<!-- above, with no-op stubs here. -->
+
+<xsl:template match="sidebyside" mode="post-sidebyside"/>
+<xsl:template match="sbsgroup" mode="post-sbsgroup"/>
 
 <!-- ############## -->
 <!-- List Utilities -->
