@@ -1,0 +1,76 @@
+/* style for poems */
+.poem {
+  display: table;
+  margin: 1.5em auto 0;
+  width: auto;
+  max-width: 90%;
+}
+
+.poem > .heading {
+  display: block;
+  text-align: center;
+}
+
+section article.poem > .heading::after {
+  content: "";
+}
+
+.poem > .heading > .title {
+  font-weight: bold;
+  font-size: 1.2em;
+  line-height: 1.2em;
+}
+
+.poem .author {
+  font-style: italic;
+  margin-top: 0.75em;
+}
+
+.poem .author.left {
+  text-align: left;
+}
+
+.poem .author.center {
+  text-align: center;
+}
+
+.poem .author.right {
+  text-align: right;
+}
+
+.poem .stanza > .heading {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1em;
+  line-height: 1em;
+}
+
+.poem .stanza + .stanza {
+  margin-top: 1em;
+}
+
+.poem .heading + .stanza {
+  margin-top: 0.2em;
+}
+
+.poem .heading + .line {
+  margin-top: 0.2em;
+}
+
+.poem .line.left {
+  text-align: left;
+  margin-left: 4em;
+  text-indent: -4em;
+}
+
+.poem .line.center {
+  text-align: center;
+}
+
+.poem .line.right {
+  text-align: right;
+}
+
+.poem .tab {
+  margin-left: 2em;
+}

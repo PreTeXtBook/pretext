@@ -1,0 +1,26 @@
+// 
+
+/* stacked headings in the solutions backmatter */
+section.solutions > .heading + .heading {
+  margin-top: 0.5em;
+}
+
+section.solutions > h3.heading,
+section.solutions section > h3.heading {
+  font-size: 1.6em;
+}
+
+section.solutions > h4.heading,
+section.solutions section > h4.heading {
+  font-size: 1.45em;
+}
+
+section.solutions > h5.heading,
+section.solutions section > h5.heading {
+  font-size: 1.35em;
+}
+
+section.solutions > h6.heading,
+section.solutions section > h6.heading {
+  font-size: 1.25em;
+}

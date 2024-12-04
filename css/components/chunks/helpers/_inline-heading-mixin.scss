@@ -1,0 +1,23 @@
+// Generate styles for an inline heading
+@mixin heading {
+  & > .heading:first-child {
+    display: inline;
+    line-height: initial;
+
+    &:after {
+      content: "\2009";
+    }
+
+    & + .para {
+      display: inline;
+    }
+
+    & + .introduction {
+      display: inline;
+    }
+
+    & + .introduction > .para:first-child {
+      display: inline;
+    }
+  }
+}
