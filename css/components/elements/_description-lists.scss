@@ -1,0 +1,138 @@
+/* dl is used for glossaries and descriptions lists.
+   Glossaries are simple:  bold word by itself on a line.
+        Definition indented on the next line.
+        Vertical space before the next term.
+
+   Description lists are more complicated.  The wider version
+   (refering to the horizontal indentation of the definition;
+    this is the default)
+   has the (wrapped) term inline with the definition.
+
+   The narrow version is complicated because the term is inline
+   with its definition if it fits, otherwise it is on the line above.
+   That means the vertical space between entries can't be handled by
+   a top margin on the dt.  Instead we have an ::after on the dd .
+ */
+
+dl:is(.description-list, .glossary) {
+  margin-top: 1em;
+  margin-left: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+
+  dt {
+    font-weight: bold;
+    max-width: 55ex;
+  }
+
+  dd::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+dl.glossary {
+  dt {
+    margin-top: 1.25em;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  dd {
+    margin-left: 5ex;
+  }
+}
+
+dl.description-list {
+
+  dt,
+  dd {
+    margin-top: 1em;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  dt {
+    float: left;
+    clear: both;
+    text-align: right;
+    width: 18ex;
+    margin-right: 1ex;
+  }
+
+  dd {
+    margin-left: 22ex;
+  }
+
+  .narrow {
+    dt {
+      margin-top: 0;
+      width: unset;
+      max-width: 55ex;
+      text-align: left;
+    }
+
+    dd {
+      margin-left: 12ex;
+      margin-left: 0;
+      margin-top: 0;
+      width: 31em;
+      max-width: calc(100% - 12ex);
+      float: right;
+      clear: right;
+    }
+
+    dd::after {
+      content: "";
+      display: block;
+      height: 1em;
+      clear: left;
+    }
+
+    dd:last-child::after {
+      height: 0;
+    }
+  }
+}
+
+dl.description-list dt:first-of-type {
+  clear: none;
+}
+
+.description-list + * {
+  clear: both;
+}
+
+/* where do we have nested dl? */
+dl.description-list dl dt {
+  width: 8ex;
+}
+
+dl.description-list dd dd {
+  margin-left: 18ex;
+}
+
+dl.description-list dl dd {
+  margin-left: 12ex;
+}
+
+
+@media screen and (max-width: 480px) {
+  dl.description-list dt {
+    float: none;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  dl.description-list dd,
+  dl.description-list.narrow dd {
+    margin-top: 0.5em;
+    margin-left: 3em;
+    max-width: calc(100% - 3em);
+  }
+}

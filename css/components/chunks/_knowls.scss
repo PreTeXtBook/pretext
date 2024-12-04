@@ -1,0 +1,78 @@
+/*
+  main knowls styles
+*/
+
+$border-radius: 0px !default;
+$border-width: 3px !default;
+$pad: 12px !default;
+
+.source-view__link,
+.knowl__link {
+  cursor: pointer;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  color: var(--knowl-link-color);
+  border-bottom: 1px dotted var(--knowl-link-color);
+}
+
+.source-view {
+  margin: 0.5em 0;
+}
+
+summary.source-view__link,
+summary.knowl__link {
+  display: list-item inline;
+}
+
+.source-view__link > *,
+.knowl__link > * {
+  display: inline;
+}
+
+.source-view__link:is(:hover, :focus, [open]),
+.knowl__link:is(:hover, :focus, [open]) {
+  background-color: var(--knowl-background);
+  border-bottom-color: transparent;
+}
+
+.source-view__content {
+  margin: 0.2em 0;
+}
+
+.knowl__content {
+  margin: 0.75em 0;  //at least this much space above/below
+  border: $border-width solid var(--knowl-border-color);
+  border-radius: $border-radius;
+  padding: $pad;
+  background-color: var(--knowl-background);
+
+  .incontext {
+    display: block;
+    font-size: 85%;
+    text-align: right;
+  }
+}
+
+/* nested knowl alt colors */
+.knowl__content .knowl__content {
+  background-color: var(--knowl-nested-1-background);
+}
+
+.knowl__content .knowl__content .knowl__content {
+  background-color: var(--knowl-nested-2-background);
+}
+
+.knowl__content .knowl__content .knowl__content .knowl__content {
+  background-color: var(--knowl-nested-3-background);
+}
+
+.knowl__content .knowl__content .knowl__content .knowl__content .knowl__content {
+  background-color: var(--knowl-nested-4-background);
+}
+
+
+/* spacing tweaks inside knowls */
+.knowl__content > figure {
+  margin-left: 0;
+  margin-right: 0;
+}

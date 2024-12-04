@@ -1,0 +1,137 @@
+
+@use 'components/helpers/buttons-default' as buttons;
+
+.searchbox {
+
+  .searchwidget {
+    height: 100%;
+  }
+  
+  .searchresultsplaceholder {
+    position: fixed;
+    top: 5vh;
+    bottom: 5vh;
+    padding: 1em;
+    left: max(10vw, calc(100vw - 800px) / 2);
+    width: 80vw;
+    max-width: 800px;
+    border: 2px solid var(--body-text-color);
+    background: var(--knowl-background, #eaf0f6);
+    z-index: 5000;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .searchresultsplaceholder article {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: sans-serif;
+  }
+
+  .search-results-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 1em;
+    height: 35px;
+  }
+
+  .ptxsearch {
+    flex: 1 1;
+  }
+  
+
+  .closesearchresults {
+    @include buttons.ptx-button;
+  }
+
+  .detailed_result {
+    margin-bottom: 10px;
+  }
+
+  .searchresults a:hover {
+    text-decoration: underline;
+    background: var(--link-active-background);
+  }
+
+
+  .searchresults {
+    padding-left: 10px;
+    margin-top: 0;
+    overflow-y: auto;
+    flex: 1 1;
+    background: var(--content-background, white);
+    border: 1px solid var(--page-border-color, #ccc);
+  }
+
+  .searchresults:empty {
+    display: none;
+  }
+  
+  .search-result-bullet {
+    list-style-type: none;
+  }
+
+  .search-result-score {
+    display: none;
+  }
+
+  //result qualities
+  .no_result {
+    font-size: 90%;
+    font-weight: 200;
+  }
+
+  .low_result {
+    font-weight: 200;
+  }
+
+  .medium_result {
+    font-weight: 500;
+  }
+  .high_result {
+    font-weight: 700;
+  }
+
+  .searchempty {
+    display: none;
+    padding-left: 10px;
+    padding-top: 5px;
+  }
+
+  .search-results-unshown-count {
+    margin-top: 0.6em;
+  }
+
+  .search-result-clip-highlight {
+    background: var(--searchresultshighlight);
+  }
+
+  .searchresultsbackground {
+    position: fixed;
+    top: 0;
+    background: var(--searchresultsbackground, white);
+    width: 100vw;
+    height: 100%;
+    left: 0;
+    z-index: 4999;
+  }
+
+  @media screen and (max-width: 800px) {
+    .searchresultsplaceholder {
+      bottom: 10vh;
+    }
+  }
+}
+
+:root {
+  --searchresultsbackground: #fff8;
+  --searchresultshighlight: rgba(255, 255, 0, 50%);
+}
+
+:root.dark-mode {
+  --searchresultsbackground: #0008;
+  --searchresultshighlight: rgba(255, 255, 0, 15%);
+}

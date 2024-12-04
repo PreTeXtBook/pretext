@@ -1,0 +1,24 @@
+@use './helpers/inline-heading-mixin';
+
+.discussion-like {
+  @include inline-heading-mixin.heading;
+  & > .heading {
+    ::after {
+      content: "\2009";
+    }
+
+    & + .para {
+      display: inline;
+    }
+
+    .space,
+    .codenumber,
+    .period {
+      display: none;
+    }
+
+    .type::after {
+      content: ". ";
+    }
+  }
+}

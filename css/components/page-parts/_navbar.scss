@@ -1,0 +1,163 @@
+$max-width: 1200px !default;  // 0 == no max width
+// applied to the contents of the navbar
+
+$nav-height: 36px !default;
+$border-width: 1px !default;
+$navbar-breakpoint: 800px !default;
+$center-content: true !default;
+
+@use 'components/helpers/buttons-default' as buttons;
+
+@use 'components/page-parts/extras/navbar-btn-borders';
+
+.ptx-navbar {
+  position: sticky;
+  top: 0;
+  height: $nav-height;
+  width: 100%;
+  background: var(--navbar-background);
+  border: 0;
+  border-top: 1px solid var(--page-border-color);
+  border-bottom: 1px solid var(--page-border-color);
+  margin: 0;
+  z-index: 500;
+  overflow: visible;
+  display: flex;
+
+  .ptx-navbar-contents {
+    position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    max-width: $max-width;
+    @if $center-content {
+      margin: 0 auto;
+    }
+  }
+
+  .button {
+    @include buttons.ptx-button;
+
+    & {
+      height: 100%; //always fill container
+      // Disable normal borders - top/bottom provided by container
+      // Use extras/_navbar-btn-borders.scss for side borders if desired
+      border-width: 0;
+
+    }
+  }
+
+  .toc-toggle {
+    width: 240px;
+    gap: 0.4em;
+    margin-left: 0; //assumes is first button
+  }
+
+  :is(.treebuttons, .nav-runestone-controls, .nav-other-controls) {
+    display: flex;
+  }
+
+  .treebuttons {
+    flex: 1 1 210px;
+    justify-content: end;
+  }
+
+  .nav-runestone-controls {
+    flex: 1 1 70px;
+    justify-content: end;
+  }
+
+  .pretext .navbar .dropdown {
+    height: 34px;
+  }
+
+  .treebuttons > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 75px;
+  }
+
+  .treebuttons .icon {
+    margin: 0 -7px; // chevrons have lots of horizontal padding
+  }
+
+  :is(.index-button) .icon {
+    display: none;
+  }
+
+  :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button) .name {
+    display: none;
+  }
+
+  .index-button {
+    width: 70px;
+  }
+
+  .runestone-profile {
+    @include buttons.ptx-dropdown-button;
+  }
+}
+
+
+@if $max-width > 0 {
+  @media screen and (min-width: $max-width) {
+    body.pretext .ptx-navbar {
+      //forces navbar to line up cleanly with sidebar
+      // need padding because there is no container around the items in navbar
+      // padding: 0 calc((100% - $max-width) / 2);
+      // border-left-width: 1px;
+
+      // //tug contents of first button to left
+      // & .ptx-navbar-contents > *:first-child {
+      //   justify-content: start;
+      // }
+    }
+  }
+}
+
+@media screen and (max-width: $navbar-breakpoint) {
+  @include navbar-btn-borders.navbar-btn-borders();
+
+  .ptx-navbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    background: var(--button-border-color);
+
+    .nav-runestone-controls {
+      flex: 0;
+    }
+
+    .toc-toggle {
+      flex: 2 1 100px;
+    }
+
+    .treebuttons {
+      flex: 3 1 150px;
+      /* 3:2 ratio with toc-toggle */
+    }
+
+    .treebuttons > * {
+      flex: 1 1;
+      min-width: 35px
+    }
+
+    .index-button {
+      display: none;
+    }
+
+    .dropdown-content {
+      top: unset;
+      bottom: $nav-height;
+    }
+
+    :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,34 @@
+// These values can be set on @use to avoid repeating values in each @import
+$pad: 10px !default;   //all sides
+$padside: 15px !default;   //on side with border
+$border-radius: 0px !default;   //on side with border
+$border-color: var(--block-border-color) !default;
+$background-color: var(--content-background) !default;
+$side: left !default;
+$border-width: 2px !default;
+
+// Generate styles for a sidebar down left or right of content
+@mixin box($border-width: $border-width,
+  $style: solid,
+  $border-color: $border-color,
+  $background-color: $background-color,
+  $padding: $pad,
+  $padside: $padside,
+  $side: $side,
+  $border-radius: $border-radius) 
+{
+  &:not(.knowl__content, .born-hidden-knowl) {
+    padding: $padding;
+    padding-#{$side}: $padside;
+    border-#{$side}: $border-width $style $border-color;
+    background-color: $background-color;
+
+    @if $border-radius > 0 {
+      border-radius: $border-radius;
+    }
+
+    > .heading:first-child {
+      margin-top: 0;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+@mixin code-text {
+  font-family: var(--font-monospace);
+  font-size: .93rem;
+  line-height: 1.2;
+}
+
+// wide programs need to be scrollable
+.code-box {
+  overflow-x: auto;
+}
+
+.console,
+.program {
+  border: 1px solid var(--page-border-color);
+  padding: 5px 15px;
+  @include code-text();
+}
+
+.code-inline {
+  font-family: var(--font-monospace);
+  white-space: pre;
+  color: var(--body-text-color);
+  background: var(--code-inline);
+  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  padding: 0.0625em 0.125em;
+  border-radius: 0.2em;
+}
+
+
+.prompt.unselectable {
+  user-select: none;
+}
+
+// code blocks are preformatted text that is not a program
+.code-block {
+  border-left: 1px solid #aaa;
+  padding: 0 15px 5px;
+  @include code-text();
+}
+
+.code-block::before {
+  content:' ';
+  font-size: 50%;
+  border-top: 1px solid #aaa;
+  display: block;
+  margin-right: auto;
+  margin-left: -15px;
+  width: 3.0em;
+}
+
+
+

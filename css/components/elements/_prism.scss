@@ -1,0 +1,280 @@
+// Prism stylesheets built locally as default ones don't support light/dark switching
+// this is a merged version of the default and dark themes
+
+// Default prism styling
+// Blocks
+pre[class*="language-"] {
+  margin: .5em 0;
+  overflow: auto;
+  border: 1px solid #e1e1e1;
+}
+
+// Inline code
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: black;
+  background: #fdfdfd;
+  text-shadow: none;
+  font-family: var(--font-monospace, Consolas);
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.2;
+  tab-size: 4;
+  hyphens: none;
+  
+  &::selection,
+  & ::selection {
+    background: #b3d4fc;
+  }
+  
+  .token {
+    
+    &:is(.comment,
+    .prolog,
+    .doctype,
+    .cdata) {
+      color: #2a9716;
+    }
+    
+    &.punctuation {
+      color: #000;
+    }
+    
+    &.namespace {
+      opacity: .9;
+    }
+    
+    &:is(.property,
+    .tag,
+    .boolean,
+    .number,
+    .constant,
+    .symbol,
+    .deleted) {
+      color: rgb(41, 120, 15);
+    }
+    
+    &:is(.selector,
+    .attr-name,
+    .string,
+    .char,
+    .builtin,
+    .regex,
+    .inserted) {
+      color: #a11;
+    }
+    
+    &:is(.operator,
+    .entity,
+    .url) {
+      color: #000;
+      background: none;
+    }
+    
+    &:is(.atrule,
+    .attr-value,
+    .keyword) {
+      color: rgb(18, 137, 201);
+    }
+    
+    &.function,
+    &.class-name {
+      color: #30a;
+    }
+    
+    &.important,
+    &.variable {
+      color: rgb(0, 0, 0);
+    }
+    
+    
+    &.important,
+    &.bold {
+      font-weight: bold;
+    }
+    
+    &.italic {
+      font-style: italic;
+    }
+    
+    &.entity {
+      cursor: help;
+    }
+  }
+  
+  // -------------------------------------------
+  // Line numbers
+  &.line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+    overflow: auto;
+    
+    > code {
+      position: relative;
+      white-space: inherit
+    }
+    
+    .line-numbers-rows {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      font-size: 100%;
+      left: -3.8em;
+      width: 3em;
+      letter-spacing: -1px;
+      border-right: 1px solid #999;
+      user-select: none
+    }
+    
+    .line-numbers-rows > span {
+      display: block;
+      counter-increment: linenumber
+    }
+    
+    .line-numbers-rows > span::before {
+      content: counter(linenumber);
+      color: #999;
+      display: block;
+      padding-right: .8em;
+      text-align: right
+    }
+  }
+  
+  
+  // -------------------------------------------
+  // Line highlighting
+  .line-highlight {
+    position: absolute;
+    margin-top: 4px;    // tune to match padding of containing pre
+    left: 0;
+    right: 0;
+    padding: inherit 0;
+    font-size: inherit;
+    background: hsla(24, 20%, 50%, 8%);
+    pointer-events: none;
+    line-height: inherit;
+    white-space: pre
+  }
+}
+
+// -------------------------------------------
+// Dark mode
+:root.dark-mode {
+  
+  /* Code blocks */
+  pre[class*="language-"] {
+    border: 1px solid #3d3d3d;
+  }
+  
+  
+  // Darker styling to match Runesone's code mirror theme
+  code[class*="language-"],
+  pre[class*="language-"] {
+    color: white;
+    background: hsl(0, 0%, 8%);
+    
+    &::selection,
+    & ::selection {
+      background: hsl(200, 4%, 16%);
+    }
+    
+    /* Make the tokens sit above the line highlight so the colours don't look faded. */
+    .token {
+      position: relative;
+      z-index: 1;
+      
+      &:is(.comment,
+      .prolog,
+      .doctype,
+      .cdata) {
+        color: #68a950;
+      }
+      
+      &.punctuation {
+        color: white;
+        opacity: 1;
+      }
+      
+      &.namespace {
+        opacity: .9;
+      }
+      
+      &:is(.property,
+      .tag,
+      .boolean,
+      .number,
+      .constant,
+      .symbol,
+      .deleted) {
+        color: #abc792;
+      }
+      
+      &:is(.selector,
+      .attr-name,
+      .string,
+      .char,
+      .builtin,
+      .regex,
+      .inserted) {
+        color: #ca9147;
+      }
+      
+      &:is(.operator,
+      .entity,
+      .url) {
+        color: white;
+      }
+      
+      &:is(.atrule,
+      .attr-value,
+      .keyword) {
+        color: #2d94fb;
+      }
+      
+      &.function,
+      &.class-name {
+        color: #e3e1c2;
+      }
+      
+      &.important,
+      &.bold {
+        font-weight: bold;
+      }
+      
+      &.italic {
+        font-style: italic;
+      }
+      
+      &.entity {
+        cursor: help;
+      }
+      
+    }
+  }
+  
+  .line-highlight {
+    background: hsla(0, 0%, 33%, 10%);
+    border-bottom: 1px dashed hsl(0, 0%, 33%);
+    border-top: 1px dashed hsl(0, 0%, 33%);
+    z-index: 0;
+  }
+}
+
+@media print {
+  code[class*="language-"],
+  pre[class*="language-"] {
+    .line-highlight {
+      color-adjust: exact
+    }
+  }
+}

@@ -1,0 +1,69 @@
+@use "sass:map";
+
+// Fonts to use
+$body: 'Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif' !default;
+$heading: 'PT Serif, Times New Roman, Times, serif' !default;
+$monospace: 'Inconsolata, Consolas, Monaco, monospace;' !default;
+
+
+@import url("https://fonts.googleapis.com/css?family=#{$body}:wdth,wght@75..100,300..800&amp;display=swap");
+:root {
+  --font-body: #{$body};
+}
+
+@import url("https://fonts.googleapis.com/css?family=#{$heading}:wdth,wght@75..100,300..800&amp;display=swap");
+:root {
+  --font-headings: #{$heading};
+}
+
+@import url("https://fonts.googleapis.com/css?family=#{$monospace}:wdth,wght@75..100,300..800&amp;display=swap");
+:root {
+  --font-monospace: #{$monospace};
+}
+
+
+// 9/5/24 ... TODO controlled list of fonts ... wait and explore later
+// // Available fonts
+// $serif-options: ('Alegreya', 'Merriweather', 'Noto Serif', 'PT Serif', 'Source Serif 4');
+// $sans-options: ('Alegreya Sans', 'Barlow', 'Lato', 'Open Sans', 'Roboto', 'Source Sans 3');
+// $code-options: ('Inconsolata');
+
+// // Backup lists
+// $sans-backups: ', Helvetica Neue, Helvetica, Arial, sans-serif';
+// $serif-backups: ', Times New Roman, Times, serif';
+
+// // ---------------------------------------------------------
+
+
+// @function add-fonts($list, $backups, $fonts: ()) {
+//   @each $font in $list {
+//     $fonts: map.set($fonts, $font, (
+//       url: '"https://fonts.googleapis.com/css?family=#{$font}:wdth,wght@75..100,300..800&amp;display=swap"',
+//       fontlist: $font + $backups,
+//     ));
+//   }
+//   @return $fonts;
+// }
+
+// $fonts: add-fonts($sans-options, $sans-backups);
+// $fonts: add-fonts($serif-options, $sans-backups, $fonts);
+
+// $bodyfont: map.get($fonts, $body);
+// @if not $bodyfont {
+//   @error "Unknown body font: #{$body}";
+// } @else {
+//   @import url(#{map.get($bodyfont, "url")});
+//   :root {
+//     --font-body: #{map.get($bodyfont, "fontlist")};
+//   }
+// }
+
+// $headingfont: map.get($fonts, $heading);
+// @if not $headingfont {
+//   @error "Unknown heading font: #{$heading}";
+// } @else {
+//   @import url(#{map.get($headingfont, "url")});
+//   :root {
+//     --font-headings: #{map.get($headingfont, "fontlist")};
+//   }
+// }

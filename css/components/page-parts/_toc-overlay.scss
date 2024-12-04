@@ -1,0 +1,61 @@
+$sidebar-width: 240px !default;
+$nav-height: 36px !default;
+$navbar-breakpoint: 800px !default;
+$border-width: 1px !default;
+$initially-visible: false !default;
+
+@use 'toc-basics' with (
+  $sidebar-width: 0,
+  $nav-height: $nav-height
+);
+
+.ptx-sidebar {
+  position: sticky;
+  width: 0;
+  @if $initially-visible {
+    display: block;
+  }
+  @else {
+    display: none;
+  }
+  z-index: 200;
+  height: 0;
+  top: 35px;
+}
+
+.ptx-toc {
+  border-right: $border-width solid var(--toc-border-color);
+  border-bottom: $border-width solid var(--toc-border-color);
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  background: var(--page-color);
+  width: $sidebar-width;
+
+  // need space to disappear behind footer - pretext logo fills that space
+  @include toc-basics.ptx-logo;
+
+
+  // border under the last item before the pretext icon
+  & > .toc-item-list:first-child > .toc-item:last-child {
+    border-bottom: 3px solid var(--toc-border-color);
+  }
+}
+
+// flip sidebar to bottom one navbar moves
+@media screen and (max-width: $navbar-breakpoint) {
+  .ptx-sidebar {
+    position: fixed;
+    top: unset;
+    height: auto;
+    max-height: 80vh;
+    max-width: 80vw;
+    bottom: $nav-height;
+    border-right: 2px solid var(--toc-border-color);
+    border-top: 2px solid var(--toc-border-color);
+  }
+  .ptx-toc {
+    border-top: 2px solid var(--toc-border-color);
+    border-bottom: 0;
+    max-height: 80vh;
+  }
+}

@@ -1,0 +1,132 @@
+$max-width: 1200px !default;  // 0 == no max width
+$navbar-breakpoint: 800px !default;
+$centered-content: false !default;
+
+.ptx-masthead {
+  position: relative;
+  background: var(--banner-background);
+  width: 100%;
+  display:flex;
+  justify-content: center;
+
+  .ptx-banner {
+    border-top: 1px solid transparent;
+    overflow: hidden;
+    padding: 10px 10px;
+    border-bottom: none;
+    display:flex;
+    width: 100%;
+    align-items: center;
+    @if $max-width > 0 {
+      max-width: $max-width;
+    }
+    @if $centered-content  {
+      justify-content: center;
+    }
+  }
+
+  a {
+    color: var(--doc-title-color, #2a5ea4);
+  }
+
+  a:active {
+    color: var(--link-active-text-color);
+  }
+
+  .title-container {
+    font-family: var(--font-headings);
+    font-size: 2em;
+    padding-left: 9.68px;
+    overflow: hidden;
+    flex: 1;
+  
+    .heading {
+      font-weight: 700;
+      font-size: 100%;
+      line-height: 1.25em;
+    }
+
+    .subtitle {
+      font-weight: normal;
+    }
+  }
+
+  .logo-link {
+    height: 5em;
+    display: flex;
+  }
+
+  // // Insert a placeholder icon if the logo-link is empty
+  // .logo-link:empty::before {
+  //   display: flex;
+  //   font-family: var(--font-body);
+  //   font-size: 4rem;
+  //   margin-top: -0.7rem;
+  //   content: "\2211"; //sigma symbol
+  //   color: var(--page-border-color)
+  // }
+
+  .byline {
+    color: var(--byline-color);
+    font-weight: normal;
+    margin: 0;
+    font-size: 62.5%;
+    min-height: inherit;
+  }
+}
+
+@media screen and (max-width: $navbar-breakpoint) {
+  .ptx-masthead {
+    border-bottom: 1px solid var(--page-border-color);
+
+    .ptx-banner {
+      padding: 10px 28px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo-link::before {
+      font-size: 1rem;
+      margin-top: 0;
+    }
+
+    .title-container {
+      width: fit-content;
+      flex: unset;
+      .heading {
+        line-height: 1em;
+        
+        .subtitle {
+          /* Force the subtitle onto a separate line */
+          display: block;
+          font-size: 80%;
+          line-height: 1em;
+        }
+      }
+    }
+
+    .byline {
+      font-size: 50%;
+    }
+  }
+}
+
+
+@media screen and (width <= 480px) {
+  .ptx-masthead {
+
+    .title-container {
+      padding: 0;
+      text-align: center;
+      font-size: 1em;
+    }
+
+    .logo-link {
+      display: none;
+    }
+
+    .byline {
+      display: none;
+    }
+  }
+}

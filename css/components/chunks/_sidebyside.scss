@@ -1,0 +1,52 @@
+.sidebyside {
+  width: 100%;
+
+  .sbsgroup {
+    width: 100%;
+  }
+
+  .sbsrow {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* containers of desired width for actual content */
+  .sbspanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    // &.top is default
+
+    &.middle {
+      justify-content: center;
+      /* should that be space-between? */
+    }
+  
+    &.bottom {
+      justify-content: flex-end;
+    }
+
+    /* fixed-width items are centered horizontally in their panel */
+    &.fixed-width {
+      align-items: center;
+    }
+
+    // no top-margin for first items inside the panel
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    table {
+      /* see Sec 23.12 of sample article */
+      overflow-x: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    // make sure programs don't break containment while in sbs
+    .program {
+      max-width: 100%;
+    }
+  }
+}
