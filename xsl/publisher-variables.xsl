@@ -2266,9 +2266,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML CSS Style Specification -->
 <!--                              -->
 
-<!-- Remain for testing purposes -->
-<xsl:param name="html.css.colorfile" select="''" />
-<xsl:param name="html.css.stylefile" select="''" />
 <!-- A temporary variable for testing -->
 <xsl:param name="debug.colors" select="''"/>
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
@@ -2276,132 +2273,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A single JS file for development purposes -->
 <xsl:param name="html.js.extra" select="''" />
 
-<xsl:variable name="html-css-colorfile">
+</xsl:variable>
+
+
     <xsl:choose>
-        <!-- 2019-05-29: override with new files, no error-checking    -->
-        <!-- if not used, then previous scheme is employed identically -->
-        <!-- 2019-08-12: this is current scheme, so used first. -->
-        <!-- To be replaced with publisher file option.         -->
-        <xsl:when test="not($debug.colors = '')">
-            <xsl:text>colors_</xsl:text>
-            <xsl:value-of select="$debug.colors"/>
-            <xsl:text>.css</xsl:text>
         </xsl:when>
-        <!-- 2019-12-5: use stringparam specified colorfile is present -->
-        <xsl:when test="not($html.css.colorfile = '')">
-            <xsl:value-of select="$html.css.colorfile"/>
-        </xsl:when>
-        <!-- 2019-12-5: if publisher.xml file has colors value, use it -->
-        <xsl:when test="$publication/html/css/@colors">
-            <xsl:text>colors_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@colors"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- Otherwise use the new default.  -->
         <xsl:otherwise>
-            <xsl:text>colors_default.css</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
 
-<!-- 2019-11-24: this selects the style_default            -->
-<!-- unless there is a style specified in a publisher.xml  -->
-<!-- file or as a string-param. (OL)                       -->
-<xsl:variable name="html-css-stylefile">
     <xsl:choose>
-        <!-- if string-param is set, use it (highest priority) -->
-        <xsl:when test="not($html.css.stylefile = '')">
-            <xsl:value-of select="$html.css.stylefile"/>
         </xsl:when>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@style">
-            <xsl:text>style_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@style"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>style_default.css</xsl:text>
-        </xsl:otherwise>
     </xsl:choose>
+
 </xsl:variable>
 
-<!-- 2019-12-5: Select pub-file specified css for knowls, -->
-<!-- TOC, and banner, or defaults                         -->
-
-<xsl:variable name="html-css-knowlfile">
-    <xsl:choose>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@knowls">
-            <xsl:text>knowls_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@knowls"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>knowls_default.css</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="html-css-tocfile">
-    <xsl:choose>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@toc">
-            <xsl:text>toc_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@toc"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>toc_default.css</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="html-css-bannerfile">
-    <xsl:choose>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@banner">
-            <xsl:text>banner_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@banner"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>banner_default.css</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="html-css-navbarfile">
-    <xsl:choose>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@navbar">
-            <xsl:text>navbar_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@navbar"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>navbar_default.css</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="html-css-shellfile">
-    <xsl:choose>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@shell">
-            <xsl:text>shell_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@shell"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>shell_default.css</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:variable>
 
 <!--                              -->
