@@ -72,13 +72,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- etc would not render correctly, so we turn off their  -->
         <!-- default knowlization.                                 -->
         <knowl exercise-inline="no"/>
-        <!-- specify the style of the html by giving names to      -->
-        <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
-        <!-- put <css style="oscarlevin"/>                         -->
-        <!-- @colors now implemented                               -->
-        <!-- also @knowls, @toc, and @banner, although no          -->
-        <!-- alternative styles exist yet for those.               -->
-        <css style="default" colors="blue_red"/>
+        <!-- Specify the theme for the HTML.                       -->
+        <!-- See the guide for options                             -->
+        <css theme="salem"/>
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->
