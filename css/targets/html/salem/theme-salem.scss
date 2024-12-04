@@ -1,0 +1,101 @@
+// A theme focused on displaying wide content gracefully
+
+// Current maintainer: Andrew Scholer
+
+// Variables used by theme. CSSBuilder overrides these by prepending
+// different definitions for these variables to this file before the theme
+// is compiled.
+
+// light colors
+$color-scheme: 'ice-fire' !default; 
+$color-main: null !default;
+$color-do: null !default;
+$color-fact: null !default;
+$color-meta: null !default;
+
+// dark colors
+$primary-color-dark: #9db9d3 !default;
+$background-color-dark: #23241f !default;
+
+@use "sass:map";
+@use 'sass:color';
+@use "colors/color-helpers" as colorHelpers;
+
+// ---------------------------------------------
+// components
+@use './_parts-salem' with (
+  $content-width: 725px,
+);
+@use 'chunks-salem';
+@use 'components/pretext' with (
+  $navbar-breakpoint: parts-salem.$navbar-breakpoint,
+);
+
+// ---------------------------------------------
+// fonts and colors
+$heading-font: 'Noto Sans, Helvetica Neue, Helvetica, Arial, sans-serif' !default;
+@use 'fonts/fonts-google' with ($heading: $heading-font);
+
+// fancy colors for chunks
+@use 'colors/palette-quad-chunks' as palette-chunks with (
+  $color-scheme: $color-scheme,
+  $color-main: $color-main,
+  $color-do: $color-do,
+  $color-fact: $color-fact,
+  $color-meta: $color-meta,
+  $heading-text-color: black,
+);
+
+// primary color defined by color-main as determined by palette-chunks
+$primary-color: map.get(palette-chunks.$colors, 'color-main');
+
+@use 'colors/palette-single-bold' as palette-light with (
+  $primary-color: $primary-color, 
+);
+  
+$light-colors: map.merge(palette-light.$colors, palette-chunks.$colors);
+
+
+@use 'colors/palette-dark' as palette-dark with (
+  $primary-color: $primary-color-dark,
+  $background-color: $background-color-dark,
+);
+
+$palette-dark: map.merge(palette-dark.$colors, (
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--background-color-gray-20),
+  "toclevel1-background": var(--content-background),
+));
+
+palette-dark.$colors: map.merge(palette-dark.$colors, ());
+
+
+// ---------------------------------------------
+// customizations
+
+@use 'rs-widen' with (
+  $content-width: 725px,
+);
+@use 'heading-tweaks';
+
+
+// bump up font size to avoid long lines in wider body
+body.pretext {
+  font-size: var(--content-font-size);
+}
+
+:root {
+  --content-font-size: 1.1rem;
+}
+
+@media screen and (width < #{parts-salem.$navbar-breakpoint}) {
+  body.pretext {
+    font-size: 1rem;
+  }
+}
+
+// ---------------------------------------------
+// concrete rules / includes that generate CSS
+
+// render the actual colors
+@include colorHelpers.set-root-colors($light-colors, palette-dark.$colors);

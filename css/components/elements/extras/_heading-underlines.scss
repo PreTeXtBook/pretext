@@ -1,0 +1,24 @@
+$color-light: var(--primary-color-white-30) !default;
+$color-dark: var(--primary-color-black-30) !default;
+$thickness: 2px !default;
+$padding: 3px !default;
+$thickness-h2: 4px !default;
+$thickness-h3: 3px !default;
+
+
+section > .heading {
+  padding-bottom: $padding;
+  border-bottom: $thickness solid $color-light;
+}
+section > h2.heading {
+  border-bottom-width: $thickness-h2;
+}
+section > h3.heading {
+  border-bottom-width: $thickness-h3;
+}
+
+:root.dark-mode {
+  section > .heading {
+    border-bottom-color: $color-dark;
+  }
+}
