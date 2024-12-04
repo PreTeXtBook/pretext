@@ -4185,6 +4185,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="incorrect-use" select="($commentary != '')" />
     </xsl:call-template>
     <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2024-07-12'" />
+        <xsl:with-param name="message" select="'the html/css/@style publication file entry has been deprecated for replacement by @theme. See the Guide for theme options.'" />
+        <xsl:with-param name="incorrect-use" select="($publication/html/css/@style != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2024-07-12'" />
+        <xsl:with-param name="message" select="'the html/css/@toc, @navbar, @shell, @knowls, and @banner publication entries have been deprecated. Use @theme to control html appearance. See the Guide for theme options.'" />
+        <xsl:with-param name="incorrect-use" select="($publication/html/css/@toc != '' or $publication/html/css/@navbar != '' or $publication/html/css/@shell != '' or $publication/html/css/@knowls != '' or $publication/html/css/@banner != '')" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 </xsl:stylesheet>
