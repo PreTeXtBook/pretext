@@ -1,0 +1,84 @@
+// These values can be set on @use to avoid repeating values in each @import
+$padding: 20px !default;
+$padding-top: $padding !default;
+$padding-bottom: $padding !default;
+$padding-left: $padding !default;
+$padding-right: $padding !default;
+$border-radius: 0px !default;
+$border-width: 3px !default;
+$font-style: 'normal' !default;
+$box-padding: 5px !default;
+$background-color: var(--content-background-background) !default;
+$border-color: var(--block-border-color) !default;
+$heading-background: var(--block-border-color) !default;
+$heading-color: var(--block-head-color) !default;
+
+// Block title and left/bottom wrapper
+@mixin box($border-width: $border-width,
+  $background-color: $background-color,
+  $border-color: $border-color,
+  $heading-background: $heading-background,
+  $heading-color: $heading-color,
+  $padding: $padding,
+  $padding-top: $padding-top,
+  $padding-bottom: $padding-bottom,
+  $padding-right: $padding-right,
+  $padding-left: $padding-left,
+  $font-style: $font-style,
+  $border-radius: $border-radius,
+  $box-padding: $box-padding,
+  $hide-number: false)
+{
+  
+  &:not(.knowl__content, .born-hidden-knowl) {
+    border-left: $border-width solid $border-color;
+    border-bottom: $border-width solid $border-color;
+    background-color: $background-color;
+    //top padding turns into margin below header
+    padding: 0 $padding-right $padding-bottom $padding-left;
+
+
+    @if $border-radius > 0 {
+      border-bottom-left-radius: $border-radius;
+    }
+
+    & > .heading:first-child {
+      background-color: $heading-background;
+      display: inline-block;
+      color: $heading-color;
+      padding: $box-padding (2 * $box-padding);
+      margin-left: -$padding-left;
+      margin-top: 0;
+
+      @if $font-style != 'normal' {
+        font-style: $font-style;
+      }
+
+      @if $hide-number {
+        .codenumber {
+          display: none;
+        }
+      }
+
+      @if $border-radius > 0 {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+      }
+
+      &:after {
+        //disable any extra junk
+        display: none;
+      }
+
+      // fake padding under the heading
+      & {  //turn off sass warning
+        margin-bottom: $padding-bottom;
+      }
+      //prevent child from adding space
+      & + * {
+        margin-top: 0;
+      }
+
+    }
+  }
+}

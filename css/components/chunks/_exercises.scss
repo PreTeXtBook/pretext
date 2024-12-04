@@ -1,0 +1,102 @@
+@use '../helpers/cols';
+
+// generate multi column rules for exercises
+@include cols.allow-cols('.exercise-like');
+
+.exercise-like > .heading {
+  // exercise heading/numbers regular size
+  font-size: inherit;
+}
+
+.exercisegroup {
+
+  .exercise-like {
+    margin-top: 1em;
+  }
+
+  > .heading {
+    font-size: 1.10em;
+    line-height: 1.05em;
+    margin-top: 0.75em;
+    display: inline;
+
+    & + .introduction {
+      display: inline;
+
+      & > .para:first-child {
+        display: inline;
+      }
+    }
+  }
+
+  // push the actual exercises down from any possible heading/intro
+  .exercisegroup-exercises {
+    margin-top: 1em;
+  
+    //indent items with padding so cols works correctly on them
+    padding-left: 40px;
+  }
+
+  .conclusion {
+    margin-left: 40px;  // match the padding of the exercisegroup-exercises
+  
+    .heading {
+      // exercise heading/numbers regular size
+      font-size: inherit;
+    } 
+  }
+}
+
+
+
+
+
+// ---------------------------------------------------------
+// exercise-wrapper is used for WW problems
+// these rules need testing/refactoring
+
+.exercise-wrapper form button:hover {
+  cursor: pointer;
+  background-color: #e0e0ff;
+  border: 1px solid #000;
+}
+.exercise-wrapper form button:active {
+  background-color: #f0f0f0;
+}
+.exercise-wrapper form button + button {
+  margin-left: 0.8em;
+}
+
+.exercise-wrapper,
+.exercise-wrapper form,
+.exercise-wrapper form > div:first-child {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%; /* for live ww to open at 100% wide */
+}
+
+.knowl .exercise-wrapper,
+.knowl .exercise-wrapper form,
+.knowl .exercise-wrapper form > div:first-child {
+  width: 100%;
+}
+
+.exercise-wrapper > .para:first-child,
+.exercisegroup .exercise-wrapper > .para:first-child {
+  margin-top: 0;
+  display: inline;
+}
+
+/* next is related to having exercises start in-line with their exercise number,
+ including when a static WW problem is made interactive */
+/* not sure this was the right way to do it */
+/* see https://opentext.uleth.ca/apex-calculus/sec_antider.html#exercise-722 */
+.heading + .exercise-wrapper {
+  display: inline-block;
+  max-width: 95%;
+  width: 100%;
+}
+
+.cols2 .heading + .exercise-wrapper {
+  width: auto;
+}

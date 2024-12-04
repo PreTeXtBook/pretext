@@ -1,0 +1,115 @@
+// Implements a palette with two main colors, --primary-color and --secondary-color
+
+@use "sass:meta";
+@use "sass:color";
+@use "sass:map";
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/color-vars" as color-vars;
+
+$schemes: (
+  "blue-red": (
+    "primary-color": #195684,
+    "secondary-color": #932c1c,
+  ),
+  "blue-green": (
+    "primary-color": #195684,
+    "secondary-color": #28803f,
+  ),
+  "green-blue": (
+    "primary-color": #1a602d,
+    "secondary-color": #2a5ea4,
+  ),
+  "greens": (
+    "primary-color": #193e1c,
+    "secondary-color": #347a3a,
+  ),
+  "blues": (
+    "primary-color": hsl(217, 70%, 20%),
+    "secondary-color": hsl(216, 42%, 47%),
+  ),
+);
+
+$color-scheme: 'red-blue' !default;
+
+@if not map.has-key($schemes, $color-scheme) {
+  @error "Unknown color scheme #{$color-scheme} for theme. Valid schemes are: #{map.keys($schemes)}";
+}
+
+// if primary-color or secondary-color are not set, use the scheme colors
+$primary-color: null !default;
+$secondary-color: null !default;
+
+@if $primary-color == null {
+  $scheme-primary-color: map.get(map.get($schemes, $color-scheme), "primary-color");
+  $primary-color: $scheme-primary-color;
+}
+@if $secondary-color == null {
+  $scheme-secondary-color: map.get(map.get($schemes, $color-scheme), "secondary-color");
+  $secondary-color: $scheme-secondary-color;
+}
+
+// Start with values from color-vars
+$colors: map.merge(
+  color-vars.$colors, ()
+);
+
+// Compute color blends and add them as variables
+$blends: colorHelpers.get-blends('primary-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);
+$blends: colorHelpers.get-blends('secondary-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);
+
+// Override some colors
+$colors: map.merge(
+  $colors,
+  (
+    "primary-color": $primary-color,
+    "secondary-color": $secondary-color,
+
+    "link-text-color": var(--primary-color),
+    "link-active-text-color": var(--primary-color-black-20),
+    "link-background": var(--primary-color-white-97),
+
+    "link-alt-text-color": var(--secondary-color-black-10),
+    "link-alt-active-background": var(--secondary-color),
+    "link-alt-background": var(--secondary-color-white-97),
+
+    "toc-border-color": var(--primary-color-white-30),
+
+    "toclevel1-background": var(--primary-color),
+    "toclevel1-text-color": white,
+    "toclevel2-background": var(--primary-color-white-10),
+    "toclevel2-text-color": var(--toclevel1-text-color),
+
+    "tocitem-highlight-background": var(--secondary-color-white-10),
+    "tocitem-highlight-text-color": white,
+    
+    "tocitem-active-background": var(--secondary-color),
+    "tocitem-active-text-color": white,
+
+    "doc-title-color": var(--primary-color),
+
+    "aside-like-body-background": var(--knowl-background),
+    "aside-like-border-color": var(--knowl-border-color),
+
+    "assemblage-like-body-background": var(--knowl-background),
+    "assemblage-like-border-color": var(--knowl-border-color),
+
+    "activated-content-bg": color.scale($secondary-color, $lightness: 90%),
+
+    "goal-like-border-color": var(--secondary-color-white-20),
+
+    "knowl-background": var(--primary-color-white-97),
+    "knowl-border-color": var(--primary-color-white-30),
+    "knowl-nested-1-background": var(--secondary-color-white-97),
+    "knowl-nested-2-background": var(--primary-color-white-97),
+    "knowl-nested-3-background": var(--secondary-color-white-97),
+    "knowl-nested-4-background": var(--primary-color-white-97),
+  )
+);

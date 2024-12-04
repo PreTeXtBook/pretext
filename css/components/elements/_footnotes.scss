@@ -1,0 +1,46 @@
+$border-radius: 0px !default;
+
+.ptx-footnote {
+  display: inline-block;
+  position: relative;
+}
+
+.ptx-footnote[open] {
+  display: contents;
+}
+
+
+.ptx-footnote[open] .ptx-footnote__number::before {
+  font-size: smaller;
+  content: "[x]";
+  visibility: visible;
+  vertical-align: super;
+}
+
+.ptx-footnote[open] .ptx-footnote__number sup {
+  display: none;
+}
+
+.ptx-footnote__number {
+  display: inline-block;
+  cursor: pointer;
+  min-width: 1em; //hopefully enough space...
+}
+
+.ptx-footnote__number::marker {
+  content: "";
+}
+
+.ptx-footnote__contents {
+  display: block;
+  font-style: italic;
+  background: var(--knowl-background);
+  border-radius: $border-radius;
+  padding: 8px;
+  margin: 4px auto;
+  width: fit-content;
+  max-width: calc(100% - 60px);
+  border: 2px solid var(--knowl-border-color);
+  // position: absolute;
+  // z-index: 10;
+}

@@ -1,0 +1,45 @@
+// TODO - refactor
+// Make conditional on use of google search???
+
+.pretext .searchwrapper {
+  max-width: 900px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-bottom: 39px;
+}
+
+.pretext .searchwrapper .cse .gsc-control-cse,
+.pretext .searchwrapper .cse .gsc-control-cse input,
+.searchwrapper .gsc-control-cse {
+  padding: 5px;
+}
+
+// .pretext .searchwrapper .cse .gsc-search-button input.gsc-search-button-v2,
+// .searchwrapper input.gsc-search-button-v2 {
+//   padding: 2px 2px;
+// }
+
+// .pretext .searchwrapper form.gsc-search-box {
+//   margin: 0;
+// }
+
+// .pretext .searchwrapper table.gsc-search-box {
+//   margin: 0;
+// }
+
+// .pretext .searchwrapper .gsc-search-box-tools .gsc-search-box .gsc-input {
+//   padding: 0;
+// }
+
+// .pretext .searchwrapper .gsib_a {
+//   padding: 0 0 0 5px;
+// }
+
+// .pretext .searchwrapper .gsc-input-box {
+//   height: 3.0ex;
+// }
+
+// .pretext .searchwrapper form.gsc-search-box {
+//   font-size: 12px;
+// }

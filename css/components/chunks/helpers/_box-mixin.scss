@@ -1,0 +1,34 @@
+// These values can be set on @use to avoid repeating values in each @import
+$pad: 10px !default;
+$border-radius: 0px !default;
+
+// Generate styles for a surrounding box
+@mixin box($border-width: 2px,
+  $style: solid,
+  $background-color: var(--block-body-background),
+  $border-color: var(--block-border-color),
+  $head-color: var(--block-head-color),
+  $padding: $pad,
+  $border-radius: $border-radius)
+{
+
+  &:not(.knowl__content, .born-hidden-knowl) {
+    border: $border-width $style $border-color;
+    background-color: $background-color;
+    padding: $padding;
+
+    @if $border-radius > 0 {
+      border-radius: $border-radius;
+    }
+
+    & > .heading:first-child {
+      display: block;
+      color: $head-color;
+      margin-bottom: 0.5em;
+    }
+
+    & > *:first-child {
+      margin-top: 0;
+    }
+  }
+}
