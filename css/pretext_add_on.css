@@ -91,8 +91,12 @@
     white-space: pre;
 }
 
-.ptx-content figure > figcaption:first-child {
-    margin-top: 1.5em;
+.ptx-content figure.figure > figcaption{
+    margin-top: 1em;
+}
+
+.ptx-content figure.listing > figcaption + * {
+    margin-top: 0.5em;
 }
 
 .ptx-content figcaption + .named-list-content {
@@ -1846,6 +1850,9 @@ from Jiří Lebl */
 
 .ptx-content figure, .ptx-content .image-box {
     margin-top: 0.5em;
+}
+.ptx-content figure.listing {
+    margin-top: 1em;
 }
 .ptx-content figure .image-box {
     margin-top: 0;
