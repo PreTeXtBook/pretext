@@ -1,0 +1,90 @@
+// Standard collection of chunks. This file should only be modified
+// to fix bugs or improve the default-modern theme. If you want to
+// make changes for use in some other theme, create a _chunks-XXX file
+// in that theme's directory.
+
+$border-radius: 8px !default;
+
+// One stop include for default style content blocks
+@use 'components/chunks/asides-floating';
+@use 'components/chunks/codelike';
+@use 'components/chunks/exercises';
+@use 'components/chunks/solutions';
+@use 'components/chunks/sidebyside';
+@use 'components/chunks/discussion-inline';
+@use 'components/chunks/knowls' with ($border-radius: $border-radius);
+
+@use 'components/chunks/helpers/L-mixin';
+@use 'components/chunks/helpers/box-mixin' with ($border-radius: $border-radius);
+@use 'components/chunks/helpers/heading-box-mixin';
+@use 'components/chunks/helpers/sidebar-mixin';
+@use 'components/chunks/helpers/inline-heading-mixin';
+
+// rounded box
+.assemblage-like {
+  @include box-mixin.box($border-color: var(--assemblage-like-border-color), $background-color: var(--assemblage-like-body-background));
+}
+
+// box with title inset on top
+.goal-like {
+  @include heading-box-mixin.box(
+    $background-color: var(--goal-like-body-background),
+    $border-color: var(--goal-like-border-color)
+  );
+}
+
+// L-border
+.theorem-like,
+.definition-like,
+.example-like,
+.project-like,
+.remark-like,
+.openproblem-like,
+.computation-like {
+  @include L-mixin.border;
+}
+
+// projects get a dotted L
+.project-like:not(.knowl__content, .born-hidden-knowl) {
+  @include L-mixin.border($style: dotted);
+}
+
+/* proof gets a backwards facing L */
+.proof {
+  @include L-mixin.border(1px, $L-side: right);
+}
+
+/* No decorations/borders in knowls, to save space */
+.knowl__content {
+  .theorem-like,
+  .definition-like,
+  .example-like,
+  .project-like,
+  .remark-like,
+  .openproblem-like,
+  .computation-like,
+  .project-like {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: none;
+
+    &::after {
+      border-bottom: none;
+      display: none;
+    }
+  }
+}
+
+// wide sidebar on an entire section of solutions
+section.solutions:not(:is(:first-child)) {
+  @include sidebar-mixin.box(
+    $border-width: 10px,
+
+    $border-color: var(--page-border-color),
+  );
+}
+
+.paragraphs,
+article {
+  @include inline-heading-mixin.heading;
+}
