@@ -97,7 +97,7 @@
             <listing xml:id="listing-simple">
                 <caption>Source of a simple <pretext /> book project.</caption>
                 <program language="xml">
-                    <input>
+                    <code>
                     <![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <pretext>
@@ -111,7 +111,7 @@
     </book>
 </pretext>
                         ]]>
-                    </input>
+                    </code>
                 </program>
             </listing>
 

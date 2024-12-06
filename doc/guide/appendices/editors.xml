@@ -270,7 +270,7 @@
             <caption>Aspell Configuration File</caption>
 
             <program>
-                <input>
+                <code>
                 add-filter sgml
 
                 # elements with lots of code
@@ -306,7 +306,7 @@
 
                 # not really content, by and large
                 add-sgml-skip docinfo
-                </input>
+                </code>
             </program>
         </listing>
 
