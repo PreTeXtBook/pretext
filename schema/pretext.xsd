@@ -1157,17 +1157,122 @@
       <xs:attribute name="margins"/>
     </xs:complexType>
   </xs:element>
-  <xs:group name="ProgramInput">
-    <xs:sequence>
-      <xs:element name="input" type="xs:string"/>
-    </xs:sequence>
-  </xs:group>
+  <xs:element name="preamble">
+    <xs:complexType mixed="true">
+      <xs:attribute name="visible">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="code" type="xs:string"/>
+  <xs:element name="postamble">
+    <xs:complexType mixed="true">
+      <xs:attribute name="visible">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tests">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="iotest"/>
+      </xs:sequence>
+      <xs:attribute name="visible">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="iotest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="input" type="xs:string"/>
+        <xs:element ref="output"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="stdin" type="xs:string"/>
   <xs:element name="program">
     <xs:complexType mixed="true">
-      <xs:group minOccurs="0" ref="ProgramInput"/>
+      <xs:sequence minOccurs="0">
+        <xs:element minOccurs="0" ref="preamble"/>
+        <xs:element ref="code"/>
+        <xs:element minOccurs="0" ref="postamble"/>
+        <xs:element minOccurs="0" ref="tests"/>
+        <xs:element minOccurs="0" ref="stdin"/>
+      </xs:sequence>
       <xs:attribute name="component"/>
+      <xs:attribute name="label"/>
+      <xs:attribute ref="xml:id"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
+      <xs:attribute name="autorun">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="chatcodes">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="codelens">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="compiler-args"/>
+      <xs:attribute name="database"/>
+      <xs:attribute name="datafile"/>
+      <xs:attribute name="download">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="hidecode">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="highlight-lines"/>
+      <xs:attribute name="include"/>
+      <xs:attribute name="interactive">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="codelens"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="interpreter-args"/>
       <xs:attribute name="language"/>
       <xs:attribute name="line-numbers">
         <xs:simpleType>
@@ -1177,14 +1282,8 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="highlight-lines"/>
-      <xs:attribute name="interactive">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="codelens"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+      <xs:attribute name="linker-args"/>
+      <xs:attribute name="timelimit"/>
     </xs:complexType>
   </xs:element>
   <xs:group name="ListItem">
@@ -2616,7 +2715,6 @@
       <xs:attribute name="filename"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="code" type="xs:string"/>
   <xs:element name="fragref">
     <xs:complexType>
       <xs:attribute name="ref" use="required"/>
@@ -3860,6 +3958,26 @@
   <xs:element name="programs">
     <xs:complexType>
       <xs:attribute name="language"/>
+      <xs:attribute name="compiler-args"/>
+      <xs:attribute name="download">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="linenumbers">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="linker-args"/>
+      <xs:attribute name="interpreter-args"/>
+      <xs:attribute name="timeout"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="parsons">

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test" include-source="yes">
+  <title>Coding Exercise, with Unit Tests</title>
+
+  <statement>
+      <p>Fix the following code so that it always correctly adds two numbers. [Ed. Unit test support is experimental.]</p>
+  </statement>
+  <program interactive="activecode" language="python">
+      <code>
+      def add(a,b):
+          return 4
+      </code>
+      <tests>
+      from unittest.gui import TestCaseGui
+
+      class myTests(TestCaseGui):
+
+         def testOne(self):
+             self.assertEqual(add(2,2), 4, "Adding two identical integers")
+             self.assertEqual(add(7,13), 20, "Adding two different integers")
+             self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Adding two decimal numbers")
+
+      myTests().main()
+      </tests>
+  </program>
+  <answer>
+      <p>We're not really sure.  But it would begin as follows:</p>
+      <program language="c">
+          <code>
+          #include &lt;stdio.h&gt;
+
+          int main(void)
+          </code>
+      </program>
+  </answer>
+</exercise>

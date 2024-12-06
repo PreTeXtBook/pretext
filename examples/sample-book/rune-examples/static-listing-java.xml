@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<listing>
+  <caption>A static Java program with highlighted lines</caption>
+  <program language="java" line-numbers="yes" highlight-lines="2,6-8" include-source="yes">
+      <title>"hi" in Java</title>
+      <code>
+      import javax.swing.JFrame;  //Importing class JFrame
+      import javax.swing.JLabel;  //Importing class JLabel
+      public class HelloWorld {
+          public static void main(String[] args) {
+              JFrame frame = new JFrame();           //Creating frame
+              frame.setTitle("Hi!");                 //Setting title frame
+              frame.add(new JLabel("Hello, world!"));//Adding text to frame
+              frame.pack();                          //Setting size to smallest
+              frame.setLocationRelativeTo(null);     //Centering frame
+              frame.setVisible(true);                //Showing frame
+          }
+      }
+      </code>
+  </program>
+</listing>
