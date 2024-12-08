@@ -62,7 +62,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- pieces of content, the default is XX.NN, i.e. level 1.     -->
     <!-- Read the PreTeXt Guide for more on numbering and levels.   -->
     <numbering>
-        <divisions level="3"/>
+        <divisions level="1"/>
         <blocks    level="1"/>
         <projects  level="1"/>
         <equations level="1"/>

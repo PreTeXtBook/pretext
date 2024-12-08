@@ -1193,7 +1193,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>-runnable</xsl:text>
                     </xsl:attribute>
                     <div data-component="parsons-runnable">
-                    <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+                    <textarea data-lang="{$active-language}" data-audio="" data-coach="true" style="visibility: hidden;">
                         <xsl:variable name="hosting">
                             <xsl:apply-templates select="." mode="activecode-host"/>
                         </xsl:variable>
@@ -2025,80 +2025,90 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:apply-templates select="$exercise-statement"/>
                             </div>
                         </xsl:if>
-                        <textarea data-lang="{$active-language}" data-timelimit="25000" data-audio="" data-coach="true" style="visibility: hidden;">
+                        <textarea data-lang="{$active-language}" data-audio="" data-coach="true" style="visibility: hidden;">
+                            <xsl:if test="stdin">
+                                <xsl:attribute name="data-stdin">
+                                    <xsl:call-template name="sanitize-text">
+                                        <xsl:with-param name="text" select="stdin" />
+                                    </xsl:call-template>
+                                </xsl:attribute>
+                            </xsl:if>
                             <xsl:attribute name="id">
                                 <xsl:value-of select="$rsid"/>
                                 <xsl:text>_editor</xsl:text>
                             </xsl:attribute>
-                            <xsl:attribute name="data-question_label"/>
-                            <!-- Code Lens only for certain languages -->
-                            <xsl:attribute name="data-codelens">
-                                <xsl:choose>
-                                    <xsl:when test="@codelens = 'no'">
-                                        <xsl:text>false</xsl:text>
-                                    </xsl:when>
-                                    <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
-                                        <xsl:text>true</xsl:text>
-                                    </xsl:when>
-                                    <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
-                                        <xsl:text>true</xsl:text>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>false</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:attribute>
-                            <!-- allow @datafile attribute on <program> -->
-                            <xsl:if test="@datafile">
-                                <!-- multiple files, coma- or space- separated -->
-                                <xsl:variable name="tokens" select="str:tokenize(@datafile, ', ')"/>
-                                <xsl:attribute name="data-datafile">
-                                    <xsl:for-each select="$tokens">
-                                        <xsl:value-of select="."/>
-                                        <!-- n - 1 separators, required by receiving Javascript -->
-                                        <!-- comma-separated this time                          -->
-                                        <xsl:if test="following-sibling::token">
-                                            <xsl:text>,</xsl:text>
-                                        </xsl:if>
-                                    </xsl:for-each>
-                                </xsl:attribute>
-                            </xsl:if>
-                            <!-- allow @include attribute on <program> -->
-                            <xsl:if test="@include">
-                                <!-- space-separated this time -->
-                                <xsl:attribute name="data-include">
-                                    <xsl:apply-templates select="@include" mode="runestone-targets">
-                                        <xsl:with-param name="separator" select="' '"/>
-                                    </xsl:apply-templates>
-                                </xsl:attribute>
-                            </xsl:if>
-                            <!-- SQL (only) needs an attribute so it can find some code -->
-                            <xsl:if test="$active-language = 'sql'">
-                                <xsl:attribute name="data-wasm">
-                                    <xsl:text>/_static</xsl:text>
-                                </xsl:attribute>
-                                <!-- A SQL database can be provided for automated  -->
-                                <!-- testing of correct answers via unit tests.    -->
-                                <!-- This is a location in the external directory. -->
-                                <xsl:if test="@database">
-                                    <xsl:attribute name="data-dburl">
-                                        <xsl:choose>
-                                            <xsl:when test="$b-managed-directories">
-                                                <xsl:value-of select="$external-directory"/>
-                                                <xsl:value-of select="@database"/>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:value-of select="@database"/>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:attribute>
-                                </xsl:if>
-                            </xsl:if>
-                            <!-- the code itself as text -->
-                            <xsl:call-template name="sanitize-text">
-                                <xsl:with-param name="text" select="input" />
+                            <!-- conditional attributes shared with parsons activecodes -->
+                            <xsl:call-template name="runestone-activecode-editor-attributes">
+                                <xsl:with-param name="active-language" select="$active-language"/>
+                                <xsl:with-param name="hosting" select="$hosting"/>
                             </xsl:call-template>
-                            <!-- optional unit testing, with RS markup to keep it hidden -->
+                            <!-- this is a bit awful, but we need to figure out how much margin -->
+                            <!-- to add to runestone dividers. So preassemble program for       -->
+                            <!-- computation and then discard                                   -->
+                            <xsl:variable name="program-left-margin">
+                                <xsl:variable name="raw-program-text">
+                                    <xsl:value-of select="preamble"/>
+                                    <xsl:value-of select="code"/>
+                                    <xsl:value-of select="postamble"/>
+                                </xsl:variable>
+                                <xsl:variable name="trimmed-program-text">
+                                    <xsl:call-template name="trim-start-lines">
+                                        <xsl:with-param name="text">
+                                            <xsl:call-template name="trim-end">
+                                                <xsl:with-param name="text" select="$raw-program-text" />
+                                            </xsl:call-template>
+                                        </xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:call-template name="left-margin">
+                                  <xsl:with-param name="text" select="$trimmed-program-text" />
+                                </xsl:call-template>
+                            </xsl:variable>
+                            <xsl:variable name="left-margin-string">
+                                <xsl:value-of select="str:padding($program-left-margin, ' ')" />
+                            </xsl:variable>
+                            <xsl:variable name="program-text">
+                                <xsl:for-each select="preamble">
+                                    <!-- only expect one, for-each just for binding -->
+                                    <xsl:call-template name="substring-before-last">
+                                        <xsl:with-param name="input" select="." />
+                                        <xsl:with-param name="substr" select="'&#xA;'" />
+                                    </xsl:call-template>
+                                    <xsl:text>&#xa;</xsl:text>
+                                    <xsl:value-of select="$left-margin-string"/>
+                                    <xsl:choose>
+                                        <xsl:when test='@visible = "no"'>
+                                            <xsl:text>^^^^</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>^^^!</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:for-each>
+                                <xsl:call-template name="substring-before-last">
+                                    <xsl:with-param name="input" select="code" />
+                                    <xsl:with-param name="substr" select="'&#xA;'" />
+                                </xsl:call-template>
+                                <xsl:text>&#xA;</xsl:text>
+                                <xsl:for-each select="postamble">
+                                    <!-- only expect one, for-each just for binding -->
+                                    <xsl:value-of select="$left-margin-string"/>
+                                    <xsl:choose>
+                                        <xsl:when test='@visible = "no"'>
+                                            <xsl:text>====&#xa;</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>===!&#xa;</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    <xsl:value-of select="substring-after(.,'&#xA;')" />
+                                </xsl:for-each>
+                            </xsl:variable>
+                            <!-- assembled code as text -->
+                            <xsl:call-template name="sanitize-text">
+                                <xsl:with-param name="text" select="$program-text" />
+                            </xsl:call-template>
+                            <!-- optional unit testing -->
                             <xsl:if test="tests">
                                 <!-- Be wary of empty "test" elements which lead to -->
                                 <!-- empty files, which are possibly not legal      -->
@@ -2108,15 +2118,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- NB: static versions never show "tests" anyway  -->
                                 <xsl:variable name="tests-content">
                                     <xsl:call-template name="sanitize-text">
-                                        <xsl:with-param name="text" select="tests" />
+                                        <xsl:with-param name="text" select="tests/text()" />
                                     </xsl:call-template>
                                 </xsl:variable>
                                 <!-- Even if there is no content, the sanitization -->
                                 <!-- template adds a concluding newline            -->
                                 <xsl:if test="not(normalize-space($tests-content) = '')">
-                                    <xsl:text>====&#xa;</xsl:text>
+                                    <xsl:choose>
+                                        <xsl:when test="tests[@visible = 'yes']">
+                                            <xsl:choose>
+                                                <xsl:when test="postamble[@visible = 'no']">
+                                                    <xsl:message>PTX:WARNING: There is no support for visible tests after an invisible postamble. (Issue in <xsl:value-of select="$rsid"/>).</xsl:message>
+                                                </xsl:when>
+                                                <xsl:when test="not(postamble)">
+                                                    <!-- need to add header -->
+                                                    <xsl:text>===!&#xa;</xsl:text>
+                                                </xsl:when>
+                                                <!-- otherwise header created by postamble -->
+                                            </xsl:choose>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <!-- invisible tests, need header if not after invisible postamble -->
+                                            <xsl:if test="not(postamble[@visible = 'no'])">
+                                                <xsl:text>====&#xa;</xsl:text>
+                                            </xsl:if>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                     <!-- historical behavior is to use sanitized version -->
                                     <xsl:value-of select="$tests-content"/>
+                                </xsl:if>
+                                <xsl:if test="tests/iotest">
+                                    <xsl:choose>
+                                        <xsl:when test="not(normalize-space($tests-content) = '')">
+                                            <xsl:message>WARNING: You can either write text based tests or use iotests, but not both. iotests ignored in <xsl:value-of select="$rsid"/>.</xsl:message>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>===iotests===&#x0a;</xsl:text>
+                                            <xsl:text>[</xsl:text>
+                                            <xsl:for-each select="tests/iotest">
+                                                <xsl:text>{"input":"</xsl:text>
+                                                <xsl:call-template name="escape-json-string">
+                                                    <xsl:with-param name="text">
+                                                        <xsl:call-template name="sanitize-text">
+                                                            <xsl:with-param name="text">
+                                                                <xsl:value-of select="input"/>
+                                                            </xsl:with-param>
+                                                        </xsl:call-template>
+                                                    </xsl:with-param>
+                                                </xsl:call-template>
+                                                <xsl:text>","out":"</xsl:text>
+                                                <xsl:call-template name="escape-json-string">
+                                                    <xsl:with-param name="text">
+                                                        <xsl:call-template name="sanitize-text">
+                                                            <xsl:with-param name="text">
+                                                                <xsl:value-of select="output"/>
+                                                            </xsl:with-param>
+                                                        </xsl:call-template>
+                                                    </xsl:with-param>
+                                                </xsl:call-template>
+                                                <xsl:text>"}</xsl:text>
+                                                <xsl:if test="position() != last()">
+                                                    <xsl:text>,</xsl:text>
+                                                </xsl:if>
+                                            </xsl:for-each>
+                                            <xsl:text>]&#x0a;</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:if>
                             </xsl:if>
                         </textarea>
@@ -2194,16 +2261,82 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
     </xsl:if>
+    <!-- interpreter arguments for hosted languages -->
+    <xsl:variable name="interpreter-args">
+        <xsl:call-template name="get-program-attr-or-default">
+            <xsl:with-param name="attr" select="'interpreter-args'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$interpreter-args != '' and ($hosting = 'jobeserver')">
+        <xsl:attribute name="data-interpreterargs">
+            <xsl:call-template name="comma-list-to-json-array">
+                <xsl:with-param name="list" select="$interpreter-args"/>
+            </xsl:call-template>
+        </xsl:attribute>
+    </xsl:if>
     <!-- compiler arguments for hosted languages -->
-    <xsl:if test="@compiler-args and ($hosting = 'jobeserver')">
+    <xsl:variable name="compiler-args">
+        <xsl:call-template name="get-program-attr-or-default">
+            <xsl:with-param name="attr" select="'compiler-args'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$compiler-args != '' and ($hosting = 'jobeserver')">
         <xsl:attribute name="data-compileargs">
-            <xsl:value-of select="@compiler-args"/>
+            <xsl:call-template name="comma-list-to-json-array">
+                <xsl:with-param name="list" select="$compiler-args"/>
+            </xsl:call-template>
         </xsl:attribute>
     </xsl:if>
     <!-- linker arguments for hosted languages -->
-    <xsl:if test="@linker-args and ($hosting = 'jobeserver')">
+    <xsl:variable name="linker-args">
+        <xsl:call-template name="get-program-attr-or-default">
+            <xsl:with-param name="attr" select="'linker-args'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$linker-args != '' and ($hosting = 'jobeserver')">
         <xsl:attribute name="data-linkargs">
-            <xsl:value-of select="@linker-args"/>
+            <xsl:call-template name="comma-list-to-json-array">
+                <xsl:with-param name="list" select="$linker-args"/>
+            </xsl:call-template>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- timelimit -->
+    <xsl:variable name="timelimit">
+        <xsl:call-template name="get-program-attr-or-default">
+            <xsl:with-param name="attr" select="'timelimit'"/>
+            <xsl:with-param name="default" select="'25000'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$timelimit != ''">
+        <xsl:attribute name="data-timelimit">
+            <xsl:value-of select="$timelimit"/>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- assorted boolean flags -->
+    <xsl:variable name="download">
+      <xsl:call-template name="get-program-attr-or-default">
+          <xsl:with-param name="attr" select="'download'"/>
+          <xsl:with-param name="default" select="''"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$download = 'yes'">
+        <xsl:attribute name="data-enabledownload">
+            <xsl:text>yes</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@autorun = 'yes'">
+        <xsl:attribute name="data-autorun">
+            <xsl:text>yes</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@hidecode = 'yes'">
+        <xsl:attribute name="data-hidecode">
+            <xsl:text>yes</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@chatcodes = 'yes'">
+        <xsl:attribute name="data-chatcodes">
+            <xsl:text>yes</xsl:text>
         </xsl:attribute>
     </xsl:if>
 </xsl:template>
@@ -2288,6 +2421,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Data Files -->
 <xsl:template match="datafile" mode="runestone-to-interactive">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
     <!-- Some templates and variables are defined in -common for consistency -->
 
     <!-- If there is a child "pre" element, then we build an un-editable  -->
@@ -2549,6 +2684,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 <!-- Utilities -->
 <!-- ######### -->
+
+<!-- Interpreter/compiler/linker args all start as comma separated lists "-Wall, -std=c++17" -->
+<!-- and need to end up a JSON array of strings: "['-Wall', '-std=c++17']"                   -->
+<xsl:template name="comma-list-to-json-array">
+    <xsl:param name="list"/>
+    <!-- comma separated in PreTeXt source -->
+    <xsl:variable name="tokens" select="str:tokenize($list, ',')"/>
+    <xsl:text>[</xsl:text>
+    <xsl:for-each select="$tokens">
+        <xsl:text>'</xsl:text>
+        <!-- prune leading/trailing spaces but leave ones in middle -->
+        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:text>'</xsl:text>
+        <xsl:if test="following-sibling::token">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:text>]</xsl:text>
+</xsl:template>
 
 <!-- Runestone components, such as data files and select questions,  -->
 <!-- frequently point to other Runestone components in the database. -->

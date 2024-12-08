@@ -1856,13 +1856,16 @@ Book (with parts), "section" at level 3
 <xsl:template match="@*" mode="serialize">
     <xsl:param name="as-authored-source"/>
 
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="name()"/>
-    <xsl:text>="</xsl:text>
-    <xsl:apply-templates mode="serialize-content">
-        <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
-    </xsl:apply-templates>
-    <xsl:text>"</xsl:text>
+    <!-- never render the @include-source attr -->
+    <xsl:if test="name() != 'include-source'">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="name()"/>
+        <xsl:text>="</xsl:text>
+        <xsl:apply-templates mode="serialize-content">
+            <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
+        </xsl:apply-templates>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- A namespace "attribute" is not really an attribute, and not captured by @* above.   -->
@@ -5981,6 +5984,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="layout" select="$layout" />
         <xsl:with-param name="panels" select="$panel-panels" />
     </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="post-sidebyside"/>
 </xsl:template>
 
 <!-- ########################################### -->
@@ -6000,6 +6004,7 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="sbsgroup">
     <xsl:apply-templates select="sidebyside" />
+    <xsl:apply-templates select="." mode="post-sbsgroup"/>
 </xsl:template>
 
 <!-- Since stackable items do not carry titles or captions,   -->
@@ -6017,6 +6022,19 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
 </xsl:template>
+
+<!-- ################# -->
+<!-- Post-Layout Hooks -->
+<!-- ################# -->
+
+<!-- We may wish to add information below a "sidebyside"    -->
+<!-- or a "sbsgroup".  Motivation is keyboard shortcut help -->
+<!-- for interactive accessible diagrams out of PreFigure   -->
+<!-- code with the diagcess JS library.  See invocations    -->
+<!-- above, with no-op stubs here. -->
+
+<xsl:template match="sidebyside" mode="post-sidebyside"/>
+<xsl:template match="sbsgroup" mode="post-sbsgroup"/>
 
 <!-- ############## -->
 <!-- List Utilities -->
@@ -8034,14 +8052,9 @@ Book (with parts), "section" at level 3
 <!-- on current element. If that is not available, check docinfo default. -->
 <!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
 <xsl:template match="program" mode="get-programming-language">
-    <xsl:choose>
-        <xsl:when test="@language">
-            <xsl:value-of select="@language" />
-        </xsl:when>
-        <xsl:when test="$version-docinfo/programs/@language">
-            <xsl:value-of select="$version-docinfo/programs/@language" />
-        </xsl:when>
-    </xsl:choose>
+    <xsl:call-template name="get-program-attr-or-default">
+        <xsl:with-param name="attr" select="'language'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- For a parsons, use @language, default parsons language, or default -->
@@ -8091,6 +8104,24 @@ Book (with parts), "section" at level 3
     <xsl:for-each select="document('')/*/mb:programming">
         <xsl:value-of select="key('proglang', $language)/@prism" />
     </xsl:for-each>
+</xsl:template>
+
+<!-- Try an attribute, and if it does not exist, try to get it from docinfo -->
+<!-- if that fails, use the optional default passed in                      -->
+<xsl:template name="get-program-attr-or-default">
+    <xsl:param name="attr"/>
+    <xsl:param name="default" select="''"/>
+    <xsl:choose>
+        <xsl:when test="@*[name() = $attr]">
+            <xsl:value-of select="@*[name() = $attr]" />
+        </xsl:when>
+        <xsl:when test="$docinfo/programs/@*[name() = $attr]">
+            <xsl:value-of select="$docinfo/programs/@*[name() = $attr]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- This works, without keys, and could be adapted to range over actual data in text -->
@@ -11616,7 +11647,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'use of a &quot;label&quot; element inside a &quot;latex-image&quot; is deprecated and there is no replacement.  Formulate the appropriate LaTeX code (TikZ) as a replacement.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2017-07-31 (warning added 2024-08-05) metadata, notably idx, banned as child of sidebyside -->
+    <!-- 2024-07-31 (warning added 2024-08-05) metadata, notably idx, banned as child of sidebyside -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//sidebyside/*[&METADATA-FILTER;]" />
         <xsl:with-param name="date-string" select="'2017-07-31'" />
@@ -11642,6 +11673,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo/html/favicon"/>
         <xsl:with-param name="date-string" select="'2024-11-09'" />
         <xsl:with-param name="message" select="'use of a favicon in HTML output is no longer accomplished with a &quot;favicon&quot; element inside &quot;docinfo&quot;.  Instead use the publication file and put a &quot;@favicon&quot; attribute on the &quot;html&quot; element.  Set its value to &quot;simple&quot; for equivalent behavior.  Until you remove the element in &quot;docinfo&quot;, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2024-11-19 (warning added 2024-11-19) program/input renamed program/code and input repurposed -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//program/input" />
+        <xsl:with-param name="date-string" select="'2024-11-19'" />
+        <xsl:with-param name="message" select="'program/input now should be program/code. An automatic correction will be attempted.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

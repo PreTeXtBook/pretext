@@ -607,11 +607,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </p>
         </xsl:if>
         <!-- After the heading, and before the actual guts, we      -->
-        <!-- sometimes annotate with a knowl showing the source     -->
+        <!-- sometimes annotate with the source                     -->
         <!-- of the current element.  This calls a stub, unless     -->
         <!-- a separate stylesheet is used to define the template,  -->
         <!-- and the method is defined there.                       -->
-        <xsl:apply-templates select="." mode="view-source-knowl"/>
+        <xsl:apply-templates select="." mode="view-source-widget"/>
 
         <!-- This is usually recurrence, so increment heading-level,  -->
         <!-- but "book" and "article" have an h1  masthead, so if     -->
@@ -4893,15 +4893,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="heading-xref-knowl" />
         </xsl:if>
         <!-- After the heading, and before the actual guts, we      -->
-        <!-- sometimes annotate with a knowl showing the source     -->
+        <!-- sometimes annotate with the source                     -->
         <!-- of the current element.  This calls a stub, unless     -->
         <!-- a separate stylesheet is used to define the template,  -->
         <!-- and the method is defined there.  An "fn" necessarily  -->
-        <!-- comes through here since it is realized as a knowl,    -->
-        <!-- but it is a silly thing to annotate.  We skip it       -->
-        <!-- promptly on the receiving end, instead of adding       -->
-        <!-- clutter here.                                          -->
-        <xsl:apply-templates select="." mode="view-source-knowl"/>
+        <!-- comes through here, but it is a silly thing to         -->
+        <!-- annotate.  We skip it promptly on the receiving end,   -->
+        <!-- instead of adding clutter here.                        -->
+        <xsl:apply-templates select="." mode="view-source-widget"/>
         <!-- Then actual content, respecting b-original flag  -->
         <!-- Pass $block-type for Sage cells to know environs -->
         <xsl:apply-templates select="." mode="wrapped-content">
@@ -5858,7 +5857,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- a named template provides keyboard shortcuts for  -->
             <!-- the library powering exploration of the PreFigure -->
             <!-- diagram authored with annotations                 -->
-            <xsl:call-template name="diagacess-instructions"/>
+            <!-- We defer if we are inside a setting where we      -->
+            <!-- might get multiple instances of instructions      -->
+            <!-- right next to each other.  This test will include -->
+            <!-- being inside a "subsgroup" as well.               -->
+            <xsl:if test="not(ancestor::sidebyside)">
+                <xsl:call-template name="diagacess-instructions"/>
+            </xsl:if>
         </xsl:when>
         <!-- cases should be exhaustive, given match and tests-->
         <xsl:otherwise/>
@@ -6306,8 +6311,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%</xsl:text>
 </xsl:template>
 
-
-
 <!-- generic "panel-panel" template            -->
 <!-- makes a "sbspanel" div of specified width -->
 <!-- calls modal "panel-html-box" for contents -->
@@ -6415,6 +6418,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:element>
 
     </xsl:element>
+</xsl:template>
+
+<!-- We do not want a proliferation of instructions for keyboard        -->
+<!-- shortciuts for exploring PreFigure diagrams with the diagacess     -->
+<!-- library.  See hooks for "sidebyside" and "sbsgroup" explained      -->
+<!-- in pretext-common.xsl.  Logic here is to follow a "sidebyside"     -->
+<!-- with any one panel holding an explorable diagram, unless it is     -->
+<!-- a constituent of a "sbsgroup".  Once at the conclusion of a        -->
+<!-- "sbsgroup" it is time to present instructions.  Note that these    -->
+<!-- instructions are routinely held up right after a diagram in        -->
+<!-- these scenarios.                                                   -->
+<!-- NB: we tried to add these instructions after an "apply-imports"    -->
+<!-- in new templates overriding those in -common, but it appears we    -->
+<!-- cannot pass parameters in, so duplicate content inside             -->
+<!-- "sidebyside" (such as formulated for xref knowls) ended up getting -->
+<!-- duplicate HTML id.  So we had to resort to specialty hooks.        -->
+
+<xsl:template match="sidebyside" mode="post-sidebyside">
+    <xsl:if test=".//pf:annotations and not(parent::sbsgroup)">
+        <xsl:call-template name="diagacess-instructions"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="sbsgroup" mode="post-sbsgroup">
+    <xsl:if test=".//pf:annotations">
+        <xsl:call-template name="diagacess-instructions"/>
+    </xsl:if>
 </xsl:template>
 
 
@@ -9025,6 +9055,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See common file for more on language handlers, and "language-prism" template    -->
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
     <xsl:choose>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
@@ -9063,6 +9095,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
     <xsl:choose>
         <!-- if  a program is elected as interactive, then     -->
         <!-- let Runestone do the best it can via the template -->
@@ -9092,8 +9126,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- a "program" element may be empty in a coding       -->
     <!-- exercise, and just used to indicate an interactive -->
     <!-- area supporting some language                      -->
-    <xsl:variable name="b-has-input" select="not(normalize-space(input) = '')"/>
-    <xsl:if test="$b-has-input">
+    <xsl:variable name="b-has-code" select="not(normalize-space(code) = '') or preamble[@visible = 'yes'] or postamble[@visible = 'yes']"/>
+    <xsl:if test="$b-has-code">
         <pre>
             <!-- always identify as coming from "program" -->
             <xsl:attribute name="class">
@@ -9125,8 +9159,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
+                <!-- build up full program text so we can apply sanitize-text to entire blob -->
+                <!-- and thus allow relative indentation for preamble/code/postamble         -->
+                <xsl:variable name="program-text">
+                    <xsl:if test="preamble[not(@visible = 'no')]">
+                        <xsl:call-template name="substring-before-last">
+                            <xsl:with-param name="input" select="preamble" />
+                            <xsl:with-param name="substr" select="'&#xA;'" />
+                        </xsl:call-template>
+                    </xsl:if>
+                    <xsl:call-template name="substring-before-last">
+                        <xsl:with-param name="input" select="code" />
+                        <xsl:with-param name="substr" select="'&#xA;'" />
+                    </xsl:call-template>
+                    <xsl:text>&#xA;</xsl:text>
+                    <xsl:if test="postamble[not(@visible = 'no')]">
+                        <xsl:value-of select="substring-after(postamble,'&#xA;')" />
+                    </xsl:if>
+                </xsl:variable>
                 <xsl:call-template name="sanitize-text">
-                    <xsl:with-param name="text" select="input" />
+                    <xsl:with-param name="text" select="$program-text" />
                 </xsl:call-template>
             </code>
         </pre>

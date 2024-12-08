@@ -1820,11 +1820,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "input" portion.                                                    -->
 <!-- "sanitize-text" provides a final newline, always                    -->
 <xsl:template match="program">
+    <!-- build up full program text so we can apply sanitize-text to entire blob -->
+    <!-- and thus allow relative indentation for preamble/code/postamble         -->
+    <xsl:variable name="program-text">
+        <xsl:variable name="program-text">
+            <xsl:if test="preamble[not(@visible = 'no')]">
+                <xsl:call-template name="substring-before-last">
+                    <xsl:with-param name="input" select="preamble" />
+                    <xsl:with-param name="substr" select="'&#xA;'" />
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:call-template name="substring-before-last">
+                <xsl:with-param name="input" select="code" />
+                <xsl:with-param name="substr" select="'&#xA;'" />
+            </xsl:call-template>
+            <xsl:text>&#xA;</xsl:text>
+            <xsl:if test="postamble[not(@visible = 'no')]">
+                <xsl:value-of select="substring-after(postamble,'&#xA;')" />
+            </xsl:if>
+        </xsl:variable>
+    </xsl:variable>
     <block breakable="no">
         <xsl:call-template name="braille-source-code">
             <xsl:with-param name="text">
                 <xsl:call-template name="sanitize-text">
-                    <xsl:with-param name="text" select="input" />
+                    <xsl:with-param name="text" select="$program-text" />
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>

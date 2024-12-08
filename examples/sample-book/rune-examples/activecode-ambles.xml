@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<listing>
+    <caption>A Python program with preamble/postamble</caption>
+    <program interactive='activecode' language="python" label="program-activecode-python-ambles" include-source="yes">
+        <preamble>
+        def add(a, b):
+        </preamble>
+        <code>
+            # TODO - complete the add function
+
+        </code>
+        <postamble>
+        # Use the function
+        result = add(2, 3)
+        if result == 5:
+            print("Test passed")
+        else:
+            print("Test failed")
+        </postamble>
+    </program>
+</listing>

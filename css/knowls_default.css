@@ -2,6 +2,7 @@
   main knowls styles
 */
 
+.source-view__link,
 .knowl__link {
     cursor: pointer;
     margin-left: 0.1em;
@@ -10,15 +11,22 @@
     border-bottom: 1px dotted var(--knowlLinkColor);
 }
 
+.source-view {
+  margin: 0.5em 0;
+}
+
+summary.source-view__link,
 summary.knowl__link {
     display: list-item inline;
 }
 
+.source-view__link > *,
 .knowl__link > * {
     display: inline;
 }
 
 
+.source-view__link:is(:hover, :focus, [open]),
 .knowl__link:is(:hover, :focus, [open]) {
     background-color: var(--knowlbackground);
     border-bottom-color: transparent;
@@ -32,6 +40,9 @@ summary.knowl__link {
     background-color: var(--knowlbackground);
 }
 
+.source-view__content {
+  margin: 0.2em 0;
+}
 
 /* No Greg's L in knowls, to save space */
 .ptx-content .knowl__content > article:is(.theorem-like, .definition-like, .example-like, .project-like, .objectives, .outcomes, .remark-like, .proof)::after {

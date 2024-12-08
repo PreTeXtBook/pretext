@@ -1310,8 +1310,64 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="ProgramInput">
-    <element name="input">
+  <define name="ProgramPreamble">
+    <element name="preamble">
+      <optional>
+        <attribute name="visible">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="ProgramCode">
+    <element name="code">
+      <text/>
+    </element>
+  </define>
+  <define name="ProgramPostamble">
+    <element name="postamble">
+      <optional>
+        <attribute name="visible">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="ProgramTests">
+    <element name="tests">
+      <optional>
+        <attribute name="visible">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <choice>
+        <text/>
+        <oneOrMore>
+          <element name="iotest">
+            <element name="input">
+              <text/>
+            </element>
+            <element name="output">
+              <text/>
+            </element>
+          </element>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="ProgramStdin">
+    <element name="stdin">
       <text/>
     </element>
   </define>
@@ -1321,10 +1377,79 @@
         <ref name="Component"/>
       </optional>
       <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
         <attribute name="width"/>
       </optional>
       <optional>
         <attribute name="margins"/>
+      </optional>
+      <optional>
+        <attribute name="autorun">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="chatcodes">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="codelens">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="compiler-args"/>
+      </optional>
+      <optional>
+        <attribute name="database"/>
+      </optional>
+      <optional>
+        <attribute name="datafile"/>
+      </optional>
+      <optional>
+        <attribute name="download">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="hidecode">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="highlight-lines"/>
+      </optional>
+      <optional>
+        <attribute name="include"/>
+      </optional>
+      <optional>
+        <attribute name="interactive">
+          <value>codelens</value>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="interpreter-args"/>
       </optional>
       <optional>
         <attribute name="language"/>
@@ -1338,16 +1463,28 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="highlight-lines"/>
+        <attribute name="linker-args"/>
       </optional>
       <optional>
-        <attribute name="interactive">
-          <value>codelens</value>
-        </attribute>
+        <attribute name="timelimit"/>
       </optional>
       <choice>
-        <ref name="ProgramInput"/>
         <text/>
+        <group>
+          <optional>
+            <ref name="ProgramPreamble"/>
+          </optional>
+          <ref name="ProgramCode"/>
+          <optional>
+            <ref name="ProgramPostamble"/>
+          </optional>
+          <optional>
+            <ref name="ProgramTests"/>
+          </optional>
+          <optional>
+            <ref name="ProgramStdin"/>
+          </optional>
+        </group>
       </choice>
     </element>
   </define>
@@ -4297,6 +4434,34 @@
     <element name="programs">
       <optional>
         <attribute name="language"/>
+      </optional>
+      <optional>
+        <attribute name="compiler-args"/>
+      </optional>
+      <optional>
+        <attribute name="download">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="linenumbers">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="linker-args"/>
+      </optional>
+      <optional>
+        <attribute name="interpreter-args"/>
+      </optional>
+      <optional>
+        <attribute name="timeout"/>
       </optional>
     </element>
   </define>

@@ -85,7 +85,7 @@
         <idx><h><pretext/> code for</h><h sortby="p"><tag>p</tag></h></idx>
 
 <program>
-<input><xi:include href="p.ptx" parse="text"/></input>
+<code><xi:include href="p.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -117,7 +117,7 @@
       <caption>The general outline of a section as a model division</caption>
       <idx><h sortby="section"><tag>section</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="section"><tag>section</tag></h></idx>
-<program><input><xi:include href="section.ptx" parse="text"/></input> </program>
+<program><code><xi:include href="section.ptx" parse="text"/></code> </program>
     </listing>
 
     <p>
@@ -148,7 +148,7 @@
       <idx><h sortby="conclusion"><tag>conclusion</tag></h><h>of a division</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="conclusion"><tag>conclusion</tag> of a division</h></idx>
 
-<program><input><xi:include href="section-sub.ptx" parse="text"/></input> </program>
+<program><code><xi:include href="section-sub.ptx" parse="text"/></code> </program>
     </listing>
 
     <paragraphs>
@@ -246,7 +246,7 @@
       <idx><h><pretext/> code for</h><h sortby="me"><tag>me</tag></h></idx>
       <idx><h sortby="me"><tag>me</tag></h><h><pretext/> code for</h></idx>
       <program>
-<input><xi:include href="me.ptx" parse="text"/></input>
+<code><xi:include href="me.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -271,7 +271,7 @@
       <idx><h sortby="mrow"><tag>mrow</tag></h><h><pretext/> code for</h></idx>
 
       <program>
-<input><xi:include href="md.ptx" parse="text"/></input>
+<code><xi:include href="md.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -332,7 +332,7 @@
       <idx><h sortby="ol"><tag>ol</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="ol"><tag>ol</tag></h></idx>
 <program>
-<input><xi:include href="ol.ptx" parse="text"/></input>
+<code><xi:include href="ol.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -363,7 +363,7 @@
       <idx><h sortby="ul"><tag>ul</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="ul"><tag>ul</tag></h></idx>
       <program>
-<input><xi:include href="ul.ptx" parse="text"/></input>
+<code><xi:include href="ul.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -418,7 +418,7 @@
           <idx><h sortby="statement"><tag>statement</tag></h><h>of theorem-like elements</h></idx>
 
 <program>
-<input><xi:include href="theorem.ptx" parse="text"/></input>
+<code><xi:include href="theorem.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -462,7 +462,7 @@
       <idx><h><pretext/> code for</h><h sortby="definition"><tag>definition</tag></h></idx>
       <idx><h>notation (to be included in a notation list)</h><h><pretext/> code for</h></idx>
 <program>
-<input><xi:include href="definition.ptx" parse="text"/></input>
+<code><xi:include href="definition.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -525,7 +525,7 @@
       <idx><h><pretext/> code for</h><h>example</h><h>unstructured</h></idx>
       <idx><h><pretext/> code for</h><h>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</h></idx>
       <program>
-<input><xi:include href="example-simple.ptx" parse="text"/></input>
+<code><xi:include href="example-simple.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -550,7 +550,7 @@
       <idx><h><pretext/> code for</h><h>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</h></idx>
       <idx><h>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</h><h>structured</h><h><pretext/> code for</h></idx>
       <program>
-<input><xi:include href="example-structured.ptx" parse="text"/></input>
+<code><xi:include href="example-structured.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -590,7 +590,7 @@
       <idx><h><pretext/> code for</h><h>axiom-like elements (<tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>principle</tag>)</h></idx>
       <idx><h>axiom-like elements (<tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>principle</tag>)</h><h><pretext/> code for</h></idx>
 <program>
-<input><xi:include href="axiom.ptx" parse="text"/></input>
+<code><xi:include href="axiom.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -631,7 +631,7 @@
       <idx><h><pretext/> code for</h><h>remark-like elements (<tag>convention</tag>, <tag>insight</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>remark</tag>, <tag>warning</tag>)</h></idx>
       <idx><h>remark-like elements (<tag>convention</tag>, <tag>insight</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>remark</tag>, <tag>warning</tag>)</h><h><pretext/> code for</h></idx>
 <program>
-<input><xi:include href="remark.ptx" parse="text"/></input>
+<code><xi:include href="remark.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -670,7 +670,7 @@
       <idx><h>project-like elements (<tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>, <tag>project</tag>)</h><h><pretext/> code for</h></idx>
 
 		<program>
-		<input><xi:include href="project.ptx" parse="text"/></input>
+		<code><xi:include href="project.ptx" parse="text"/></code>
 		</program>
     </listing>
 
@@ -714,7 +714,7 @@
         <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h><h>inline</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h></idx>
 	<program>
-<input><xi:include href="exercise.ptx" parse="text"/></input>
+<code><xi:include href="exercise.ptx" parse="text"/></code>
 	</program>
       </listing>
 
@@ -758,7 +758,7 @@
 	sortby="exercise"><tag>exercise</tag></h><h sortby="with
 	task">with <tag>task</tag></h></idx>
 	<program>
-<input><xi:include href="exercise-task.ptx" parse="text"/></input>
+<code><xi:include href="exercise-task.ptx" parse="text"/></code>
 	</program>
       </listing>
 
@@ -848,7 +848,7 @@
         <idx><h sortby="exercisegroup"><tag>exercisegroup</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercisegroup"><tag>exercisegroup</tag></h></idx>
 <program>
-<input><xi:include href="exercisegroup.ptx" parse="text"/></input>
+<code><xi:include href="exercisegroup.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -886,7 +886,7 @@
         <idx><h sortby="reading-questions"><tag>reading-questions</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="reading-questions"><tag>reading-questions</tag></h></idx>
 <program>
-<input><xi:include href="reading-questions.ptx" parse="text"/></input>
+<code><xi:include href="reading-questions.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -948,7 +948,7 @@
         <idx><h sortby="worksheet"><tag>worksheet</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="worksheet"><tag>worksheet</tag></h></idx>
 	<program>
-	  <input><xi:include href="worksheet.ptx" parse="text"/></input>
+	  <code><xi:include href="worksheet.ptx" parse="text"/></code>
 	</program>
     </listing>
     <xi:include href="worksheet.ptx" />
@@ -983,7 +983,7 @@
       <caption>A porism generated using <tag>algorithm</tag> and <tag>rename</tag></caption>
 
 <program>
-<input><xi:include href="porism.ptx" parse="text"/></input>
+<code><xi:include href="porism.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -1066,7 +1066,7 @@
           <idx><h><pretext/> code for</h><h sortby="image"><tag>image</tag></h></idx>
           <idx><h sortby="description"><tag>description</tag></h><h sortby="of image">of <tag>image</tag></h></idx>
 <program>
-<input><xi:include href="image.ptx" parse="text"/></input>
+<code><xi:include href="image.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1116,7 +1116,7 @@
           <idx><h><pretext/> code for</h><h sortby="image (inside figure)"><tag>image</tag> (inside <tag>figure</tag>)</h></idx>
 
 <program>
-<input><xi:include href="figure.ptx" parse="text"/></input>
+<code><xi:include href="figure.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1165,7 +1165,7 @@
         <idx><h sortby="sidebyside"><tag>sidebyside</tag></h><h sortby="containing p">containing <tag>p</tag></h></idx>
 
 <program>
-<input><xi:include href="sidebyside.ptx" parse="text"/></input>
+<code><xi:include href="sidebyside.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1183,7 +1183,7 @@
         <idx><h sortby="sidebyside"><tag>sidebyside</tag></h><h sortby="inside figure">inside <tag>figure</tag></h></idx>
 
 <program>
-<input><xi:include href="sidebyside2.ptx" parse="text"/></input>
+<code><xi:include href="sidebyside2.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1204,7 +1204,7 @@
         <idx><h><pretext/> code for</h><h sortby="sbsgroup"><tag>sbsgroup</tag></h></idx>
 
 <program>
-<input><xi:include href="sbsgroup.ptx" parse="text"/></input>
+<code><xi:include href="sbsgroup.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1276,7 +1276,7 @@
                 <idx><h><pretext/> code for</h><h sortby="latex-image"><tag>latex-image</tag></h></idx>
                 <idx><h>TikZ</h><h sortby="inside latex-image">inside <tag>latex-image</tag></h></idx>
 <program>
-<input><xi:include href="tikz.ptx" parse="text"/></input>
+<code><xi:include href="tikz.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1356,7 +1356,7 @@
       <idx><h>cell</h><h>of a table</h></idx>
       <idx><h>entry of a table</h><see>cell</see></idx>
 <program>
-<input><xi:include href="table.ptx" parse="text"/></input>
+<code><xi:include href="table.ptx" parse="text"/></code>
 </program>
     </listing>
 
@@ -1419,7 +1419,7 @@
         <idx><h sortby="sage"><tag>sage</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sage"><tag>sage</tag></h></idx>
 <program>
-<input><xi:include href="sage.ptx" parse="text"/></input>
+<code><xi:include href="sage.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1452,7 +1452,7 @@
         <idx><h sortby="sageplot"><tag>sageplot</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sageplot"><tag>sageplot</tag></h></idx>
 <program>
-<input><xi:include href="sageplot.ptx" parse="text"/></input>
+<code><xi:include href="sageplot.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1589,7 +1589,7 @@
         <idx><h sortby="aside"><tag>aside</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h><tag>aside</tag></h></idx>
 <program>
-<input><xi:include href="aside.ptx" parse="text"/></input>
+<code><xi:include href="aside.ptx" parse="text"/></code>
 </program>
       </listing>
 
@@ -1681,7 +1681,7 @@
         <idx><h sortby="blockquote"><tag>blockquote</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h><tag>blockquote</tag></h></idx>
 <program>
-<input><xi:include href="blockquote.ptx" parse="text"/></input>
+<code><xi:include href="blockquote.ptx" parse="text"/></code>
 </program>
       </listing>
 

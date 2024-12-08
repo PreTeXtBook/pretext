@@ -3147,7 +3147,243 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </prefigure>
                 </image>
 
-                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  This image is a <init>PNG</init> produced specifically for this document.  Typically, a tactile diagram produced by <prefigure/> will be a <init>PDF</init> ready to be sent to an appropriate embosser.</p>
+                <p>Including annotations enables a new type of interactive diagram within a <pretext/> document offering potential benefits for all readers.  In particular, annotations allow an author to call the reader's attention to specific details in a diagram and how they are related to one another so that the diagram and surrounding text are more tightly integrated.  The annotated diagram below introduces Fibonacci tilings, which are one-dimensional analogs of Penrose tilings, and offers an explanation of their aperiodicity.  Of course, surrounding text would usually provide a richer context for a diagram like this.</p>
+
+                <figure xml:id="figure-fibonnaci-tiling-annotated">
+                  <caption>Fibonacci tilings are one-dimensional analogs of Penrose tilings.  The diagram on the left introduces the process of deflation that is used to produce tilings while the diagram on the right explains why they are aperiodic.</caption>
+                  <sidebyside widths="30% 50%" valign="bottom" margins="0% 15%">
+                      <image>
+                          <prefigure xmlns="https://prefigure.org"
+                                     label="prefigure-fibonacci-a">
+
+                              <diagram dimensions="(200, 200)">
+                                  <definition>phi=(sqrt(5)+1)/2</definition>
+                                  <definition>height=0.25</definition>
+                                  <definition>top=1</definition>
+                                  <definition>bottom=0</definition>
+                                  <definition>left=0</definition>
+                                  <definition>right=2</definition>
+                                  <definition>colors={0:'blue', 1:'red'}</definition>
+                                  <definition>widths={0:phi, 1:1}</definition>
+                                  <coordinates bbox="(-0.5,-1,3.5,2)">
+                                      <transform>
+                                          <!-- Define the upper row of tiles-->
+                                          <translate by="(0,top)"/>
+                                          <!-- We put tiles and their labels into a group for annotating-->
+                                          <group at="top-L">
+                                              <rectangle lower-left="(0,0)" dimensions="(widths[0], height)"
+                                                         fill="${colors[0]}" stroke="black"/>
+                                              <label anchor="(widths[0]/2,height)" alignment="n">
+                                                  <m>L</m>
+                                              </label>
+                                          </group>
+                                          <translate by="(right,0)"/>
+                                          <group at="top-S">
+                                              <rectangle lower-left="(0,0)" dimensions="(widths[1],height)"
+                                                         fill="${colors[1]}" stroke="black"/>
+                                              <label anchor="(widths[1]/2, height)" alignment="n">
+                                                  <m>S</m>
+                                              </label>
+                                          </group>
+                                      </transform>
+
+                                      <transform>
+                                          <translate by="(0,bottom)"/>
+                                          <transform>
+                                              <scale by="(1/phi, 1)"/>
+                                              <group at="bottom-L">
+                                                  <group at="bottom-LL">
+                                                      <rectangle lower-left="(0,0)" dimensions="(widths[0], height)"
+                                                                 fill="${colors[0]}" stroke="black"/>
+                                                      <label anchor="(widths[0]/2,0)" alignment="south">
+                                                          <m>L</m>
+                                                      </label>
+                                                  </group>
+                                                  <translate by="(widths[0],0)"/>
+                                                  <group at="bottom-LS">
+                                                      <rectangle lower-left="(0,0)" dimensions="(widths[1], height)"
+                                                                 fill="${colors[1]}" stroke="black"/>
+                                                      <label anchor="(widths[1]/2,0)" alignment="south">
+                                                          <m>S</m>
+                                                      </label>
+                                                  </group>
+                                              </group>
+                                          </transform>
+
+                                          <translate by="(right, 0)"/>
+                                          <scale by="(1/phi,1)"/>
+                                          <group at="bottom-S">
+                                              <group at="bottom-SL">
+                                                  <rectangle lower-left="(0,0)" dimensions="(widths[0], height)"
+                                                             fill="${colors[0]}" stroke="black"/>
+                                                  <label anchor="(widths[0]/2,0)" alignment="south">
+                                                      <m>L</m>
+                                                  </label>
+                                              </group>
+                                          </group>
+                                      </transform>
+
+                                      <line at="left-arrow"
+                                            endpoints="((left+phi/2, top), (left+phi/2, bottom+height))"
+                                            endpoint-offsets="(3,-5)"
+                                            arrows="1" stroke="black"/>
+
+                                      <line at="right-arrow"
+                                            endpoints="((right+1/2, top), (right+1/2, bottom+height))"
+                                            endpoint-offsets="(3,-5)"
+                                            arrows="1" stroke="black"/>
+                                  </coordinates>
+
+                                  <annotations>
+                                      <annotation ref="figure"
+                                                  text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
+                                          <annotation ref="top"
+                                                      text="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
+                                              <annotation ref="top-L"
+                                                          text="The long tile L"/>
+                                              <annotation ref="top-S"
+                                                          text="The short tile S"/>
+                                          </annotation>
+                                          <annotation ref="arrows"
+                                                      text="A process called deflation replaces each tile by a new set of tiles">
+                                              <annotation ref="left-deflate"
+                                                          text="A long tile is replaced by a long and a short tile">
+                                                  <annotation ref="left-arrow"/>
+                                                  <annotation ref="top-L"/>
+                                                  <annotation ref="bottom-L"
+                                                              text="The length of the new tiles is scaled by the reciprocal of the golden ratio">
+                                                      <annotation ref="bottom-LL"
+                                                                  text="The new long tile is on the left"/>
+                                                      <annotation ref="bottom-LS"
+                                                                  text="The new short tile is on the right"/>
+                                                  </annotation>
+                                              </annotation>
+                                              <annotation ref="right-deflate"
+                                                          text="A short tile is replaced by a single long tile">
+                                                  <annotation ref="right-arrow"/>
+                                                  <annotation ref="top-S"/>
+                                                  <annotation ref="bottom-S"
+                                                              text="The length of the new tile is again scaled by the reciprocal of the golden ratio"/>
+                                              </annotation>
+                                          </annotation>
+                                      </annotation>
+                                  </annotations>
+                              </diagram>
+
+                          </prefigure>
+                      </image>
+                      <image>
+                          <prefigure xmlns="https://prefigure.org"
+                                     label="prefigure-fibonacci-b">
+
+                              <diagram dimensions="(300, 200)" margins="(30,0,30,0)">
+                                  <definition>phi=(sqrt(5)+1)/2</definition>
+                                  <definition>height=0.25</definition>
+                                  <definition>width=5+8*phi</definition>
+                                  <definition>colors={0:'blue', 1:'red'}</definition>
+                                  <definition>widths={0:phi, 1:1}</definition>
+                                  <definition>tiling2=[0,1,0,0,1]</definition>
+                                  <definition>tiling1=[0,1,0,0,1,0,1,0]</definition>
+                                  <definition>tiling0=[0,1,0,0,1,0,1,0,0,1,0,0,1]</definition>
+                                  <definition>tilings=[tiling0, tiling1, tiling2]</definition>
+                                  <coordinates bbox="(0,-0.5,width,3.5)">
+                                      <transform>
+                                          <repeat parameter="row in tilings">
+                                              <label at="left-dots" anchor="(0,height/2)" alignment="w">
+                                                  <m>\ldots</m>
+                                              </label>
+                                              <transform>
+                                                  <repeat at="tiling" parameter="type in row">
+                                                      <rectangle at="tile"
+                                                                 lower-left="(0,0)"
+                                                                 dimensions="(widths[type], height)"
+                                                                 fill="${colors[type]}" stroke="black"/>
+                                                      <translate by="(widths[type],0)"/>
+                                                  </repeat>
+                                                  <label at="right-dots" anchor="(0,height/2)" alignment="e">
+                                                      <m>\ldots</m>
+                                                  </label>
+                                              </transform>
+                                              <scale by="(phi, 1)"/>
+                                              <translate by="(0,1)"/>
+                                          </repeat>
+                                      </transform>
+
+                                      <transform>
+                                          <repeat at="down-arrows" parameter="row in tilings">
+                                              <line at="down-arrow" endpoints="((width/2, 1), (width/2,height))"
+                                                    endpoint-offsets="(3,-5)"
+                                                    arrows="1" stroke="black"/>
+                                              <translate by="(0,1)"/>
+                                          </repeat>
+                                      </transform>
+                                      <transform>
+                                          <repeat at="right-arrows" parameter="row in tilings">
+                                              <line at="right-arrow"
+                                                    endpoints="((15,-0.15), (17,-0.15))"
+                                                    arrows="1" stroke="black" thickness="2"/>
+                                              <translate by="(0,1)"/>
+                                          </repeat>
+                                      </transform>
+                                  </coordinates>
+
+                                  <annotations>
+                                      <annotation ref="figure"
+                                                  text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
+                                          <annotation ref="down-arrows"/>
+                                          <annotation ref="top-down-arrow"/>
+
+                                          <annotation ref="tiling-row=0"
+                                                      text="We begin with this Fibonacci tiling"/>
+
+                                          <annotation ref="tiling-row=1"
+                                                      text="Our first Fibonacci tiling is obtained by deflating this second tiling">
+                                              <annotation ref="down-arrow-row=0"/>
+                                          </annotation>
+
+                                          <annotation ref="tiling-row=2"
+                                                      text="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
+                                              <annotation ref="down-arrow-row=1"/>
+                                          </annotation>
+
+                                          <annotation ref="bottom-tilings"
+                                                      text="Beginning with one tiling, the tiling above is uniquely determined.">
+                                              <annotation ref="tiling-row=0"
+                                                          text="Consider this Fibonacci tiling."/>
+                                              <annotation ref="tiling-row=1"
+                                                          text="By inverting the deflation rules, we can uniquely determine the tiling above."/>
+                                          </annotation>
+                                          <annotation ref="periodic-0"
+                                                      text="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
+                                              <annotation ref="tiling-row=0"
+                                                          text="For example, suppose this Fibonacci tiling is periodic."/>
+                                              <annotation ref="right-arrow-row=0"
+                                                          text="And that this horizontal translation leaves the tiling unchanged."/>
+                                          </annotation>
+                                          <annotation ref="periodic-1"
+                                                      text="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
+                                              <annotation ref="tiling-row=1"
+                                                          text="This Fibonacci tiling is also periodic."/>
+                                              <annotation ref="right-arrow-row=1"
+                                                          text="The same horizontal translation leaves the tiling unchanged."/>
+                                          </annotation>
+                                          <annotation ref="periodic-2"
+                                                      text="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
+                                              <annotation ref="tiling-row=2"
+                                                          text="The size of the tiles grows exponentially as we move up in the hierarchy."/>
+                                              <annotation ref="right-arrow-row=2"
+                                                          text="Eventually the tiles are longer than the translation."/>
+                                          </annotation>
+                                      </annotation>
+                                  </annotations>
+                              </diagram>
+
+                          </prefigure>
+                      </image>
+                    </sidebyside>
+                </figure>
+
+                <p>For sighted readers, here is an example of a tactile version of one of the above diagrams.  It is generated automatically from the same source as the other version.  Imagine this being <q>printed</q> with an embosser so that the parts of the diagram, and the braille labels, are raised up from the paper and can be explored with one's fingertips.  This image is a <init>PNG</init> produced specifically for this document.  Typically, a tactile diagram produced by <prefigure/> will be a <init>PDF</init> ready to be sent to an appropriate embosser.  Notice that <pretext/> adds a caption indicating the diagram's location in the document along the top of the diagram.</p>
 
                 <image source="tactile/prefigure-diffeq.png" width="70%"/>
             </subsection>
@@ -9147,18 +9383,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing xml:id="program-activecode-python">
                     <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
                     <program xml:id="python-hello-world" label="python-hello-world" interactive='activecode' language="python">
-                        <input>
+                        <code>
                         print("Hello, World!")
-                        </input>
+                        </code>
                     </program>
                 </listing>
 
                 <listing xml:id="program-activecode-python-no-codelens">
                     <caption>An interactive Python program without codelens.</caption>
                     <program xml:id="python-hello-world-no-codelens" label="python-hello-world-no-codelens" interactive='activecode' language="python" codelens="no">
-                        <input>
+                        <code>
                         print("Hello, World!")
-                        </input>
+                        </code>
                     </program>
                 </listing>
             </exercises>
@@ -9173,9 +9409,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing xml:id="program-codelens-python">
                     <caption>A Python program, stepable with CodeLens</caption>
                     <program xml:id="python-hello-world-code-lens" label="python-hello-world-code-lens" interactive="codelens" language="python">
-                        <input>
+                        <code>
                         print('Hello, World!')
-                        </input>
+                        </code>
                     </program>
                 </listing>
             </exercises>
@@ -9194,10 +9430,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Similar to above, but now as a complete Python program inside an <tag>activity</tag>.  This demonstrates the possibility to use any <q>project-like</q> block (<tag>project</tag>, <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>), but not in the case when structured with <tag>task</tag>.</p>
                     </statement>
                     <program label="partial-program-two" interactive="activecode" language="python">
-                        <input>
+                        <code>
                         for i in range(10):
                             print(i)
-                        </input>
+                        </code>
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </activity>
@@ -10044,7 +10280,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Comments edited for length                                                         -->
             <!-- http://connectmv.com/tutorials/r-tutorial/programming-in-r-loops-and-flow-control/ -->
             <program language="r">
-                <input>
+                <code>
                 <![CDATA[n_loops <- 10
                 x.means <- numeric(n_loops)  # create a vector of zeros for results
                 for (i in 1:n_loops){
@@ -10052,7 +10288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     x.means[i] <- mean(x)
                 }
                 x.means]]>
-                </input>
+                </code>
             </program>
 
             <p>And some self-referential XSL:</p>
@@ -10070,7 +10306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- Example 45: 50 Basic Examples for Matlab -->
             <program language="matlab">
-                <input>
+                <code>
                 a = [0:0.5:5]; % A Matlab comment here
                 b = 2*a.^2 + 3*a -5;
                 c = 1.2*a.^2+4*a-3;
@@ -10080,13 +10316,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 subplot(1,2,2)
                 plot(a,c,'--ok','MarkerFaceColor','c','LineWidth',2)
                 xlabel('X'); ylabel('Y'); legend('Curve 2','Location','NorthWest')
-                </input>
+                </code>
             </program>
 
             <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the three less-than symbols.</p>
 
             <program margins="5%">
-                <input>
+                <code>
                 input m, n and A
                 r := 0
                 for j := 1 to n
@@ -10100,7 +10336,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                        for k := 1 to m, k &lt;> r
                            make A[k,j] zero (row op 3, employing row r)
                 output r and A
-                </input>
+                </code>
             </program>
 
             <p>Look in the <c>pretext-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
@@ -10112,7 +10348,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing xml:id="listing-c-hello">
                 <caption>C Version of <q>Hello, World!</q></caption>
                 <program language="c">
-                    <input>
+                    <code>
                     /* Hello World program */
 
                     #include&lt;stdio.h&gt;
@@ -10121,7 +10357,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     {
                         printf("Hello, World!");
                     }
-                    </input>
+                    </code>
                 </program>
             </listing>
 
@@ -10130,7 +10366,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing xml:id="program-line-numbers">
                 <caption>A static Java program with line numbers</caption>
                 <program interactive='no' language="java" line-numbers="yes">
-                    <input>
+                    <code>
                     import javax.swing.JFrame;  //Importing class JFrame
                     import javax.swing.JLabel;  //Importing class JLabel
                     public class HelloWorld {
@@ -10143,7 +10379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             frame.setVisible(true);                //Showing frame
                         }
                     }
-                    </input>
+                    </code>
                 </program>
             </listing>
 
@@ -10152,7 +10388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing xml:id="program-highlight-lines">
                 <caption>A static Java program with line numbers</caption>
                 <program interactive='no' language="java" line-numbers="yes" highlight-lines="1,3-5">
-                    <input>
+                    <code>
                     import javax.swing.JFrame;  //Importing class JFrame
                     import javax.swing.JLabel;  //Importing class JLabel
                     public class HelloWorld {
@@ -10165,7 +10401,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             frame.setVisible(true);                //Showing frame
                         }
                     }
-                    </input>
+                    </code>
                 </program>
             </listing>
 
@@ -10289,7 +10525,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <listing>
                 <caption>A longer program listing</caption>
                 <program>
-                    <input>
+                    <code>
                     @ structPass2.s
                     @ Allocates two structs and assigns a value to each field
                     @ in each struct, then displays the values.
@@ -10395,7 +10631,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             .word   dispAnInt
                     dispOtherCharAddr:
                             .word   dispOtherChar
-                    </input>
+                    </code>
                 </program>
             </listing>
         </section>
@@ -11869,7 +12105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <caption>A <tag>program</tag> and a <tag>console</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <program language="r">
-                        <input>
+                        <code>
                         n_loops &lt;- 10
                         x.means &lt;- numeric(n_loops)
                         for (i in 1:n_loops){
@@ -11877,7 +12113,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             x.means[i] &lt;- mean(x)
                         }
                         x.means
-                        </input>
+                        </code>
                     </program>
                     <console>
                         <input prompt="pi@rpi ~$ ">gcc -o intAndFloat intAndFloat.c</input>
@@ -11997,7 +12233,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <listing>
                         <caption>A statistical computation</caption>
                         <program language="r">
-                            <input>
+                            <code>
                             n_loops &lt;- 10
                             x.means &lt;- numeric(n_loops)
                             for (i in 1:n_loops){
@@ -12005,7 +12241,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 x.means[i] &lt;- mean(x)
                             }
                             x.means
-                            </input>
+                            </code>
                         </program>
                     </listing>
                     <list>
@@ -12414,7 +12650,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
                 <program language="r">
-                    <input>
+                    <code>
                     n_loops &lt;- 10
                     x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                     for (i in 1:n_loops){
@@ -12422,13 +12658,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         x.means[i] &lt;- mean(x)
                     }
                     x.means
-                    </input>
+                    </code>
                 </program>
 
                 <p>Now a program with shorter lines, with no layout control.</p>
 
                 <program language="c">
-                    <input>
+                    <code>
                     /* Hello World program */
 
                     #include&lt;stdio.h&gt;
@@ -12437,7 +12673,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     {
                         printf("Hello, World!");
                     }
-                    </input>
+                    </code>
                 </program>
 
                 <p>And a <tag>console</tag> element, also with no layout control.</p>
@@ -12456,7 +12692,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A <tag>program</tag> with a <attr>width</attr> attribute, so centered and with equal margins.  Note how the lines word wrap due to the smaller width.</p>
 
                 <program language="r" width="60%">
-                    <input>
+                    <code>
                     n_loops &lt;- 10
                     x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                     for (i in 1:n_loops){
@@ -12464,13 +12700,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         x.means[i] &lt;- mean(x)
                     }
                     x.means
-                    </input>
+                    </code>
                 </program>
 
                 <p>A <tag>program</tag> with short lines, so significant, and asymmetric margins, which experimentally do not induce any word-wrapping.</p>
 
                 <program language="c" margins="15% 20%">
-                    <input>
+                    <code>
                     /* Hello World program */
 
                     #include&lt;stdio.h&gt;
@@ -12479,7 +12715,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     {
                         printf("Hello, World!");
                     }
-                    </input>
+                    </code>
                 </program>
 
                 <p>A longer <tag>console</tag>, with margins so significant the appearance is ill-advised.</p>
@@ -12498,7 +12734,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>Hello, World! in C</caption>
                         <program language="c">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12507,7 +12743,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                 </listing>
 
@@ -12528,7 +12764,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <listing>
                     <caption>Hello, World! in C</caption>
                         <program language="c" margins="40% 20%" width="40%">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12537,7 +12773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                 </listing>
 
@@ -12557,7 +12793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <sidebyside width="30%">
                     <program language="c">
-                        <input>
+                        <code>
                         /* Hello World program */
 
                         #include&lt;stdio.h&gt;
@@ -12566,7 +12802,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         {
                             printf("Hello, World!");
                         }
-                        </input>
+                        </code>
                     </program>
                     <console>
                         <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
@@ -12577,7 +12813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                     </console>
                     <program language="r">
-                        <input>
+                        <code>
                         n_loops &lt;- 10
                         x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                         for (i in 1:n_loops){
@@ -12585,7 +12821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             x.means[i] &lt;- mean(x)
                         }
                         x.means
-                        </input>
+                        </code>
                     </program>
                 </sidebyside>
 
@@ -12595,7 +12831,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Some Code Samples</caption>
                     <sidebyside width="30%">
                         <program language="c">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12604,7 +12840,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                         <console>
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
@@ -12615,7 +12851,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                         </console>
                         <program language="r">
-                            <input>
+                            <code>
                             n_loops &lt;- 10
                             x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
                             for (i in 1:n_loops){
@@ -12623,7 +12859,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 x.means[i] &lt;- mean(x)
                             }
                             x.means
-                            </input>
+                            </code>
                         </program>
                     </sidebyside>
                 </figure>
@@ -12636,7 +12872,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <listing>
                         <caption>Hello!</caption>
                         <program language="c">
-                            <input>
+                            <code>
                             /* Hello World program */
 
                             #include&lt;stdio.h&gt;
@@ -12645,7 +12881,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             {
                                 printf("Hello, World!");
                             }
-                            </input>
+                            </code>
                         </program>
                     </listing>
                     <listing>
@@ -12670,7 +12906,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <listing>
                             <caption>Hello!</caption>
                             <program language="c">
-                                <input>
+                                <code>
                                 /* Hello World program */
 
                                 #include&lt;stdio.h&gt;
@@ -12679,7 +12915,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 {
                                     printf("Hello, World!");
                                 }
-                                </input>
+                                </code>
                             </program>
                         </listing>
                         <listing>

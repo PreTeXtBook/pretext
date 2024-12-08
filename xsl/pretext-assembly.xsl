@@ -271,6 +271,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anything has been added or subtracted. The tree it builds is used  -->
 <!-- for constructing "View Source" knowls in HTML output as a form of  -->
 <!-- always-accurate documentation.                                     -->
+<!-- Update 2024-12-03: we needed to switch to using the $version-root  -->
+<!-- tree (a few trees later/further) since at this point versions have -->
+<!-- not been considered.  The "original-id" should still be            -->
+<!-- useful/valid after any version support has removed some elements.  -->
 <xsl:variable name="original-labeled-rtf">
     <xsl:apply-templates select="/" mode="id-attribute">
         <!-- $parent-id defaults to 'root' in template -->
@@ -1032,16 +1036,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no more "conclusion", so drop it here; deprecation will warn -->
 <xsl:template match="glossary/conclusion" mode="repair"/>
 
-<!-- Add input element around text in program when missing -->
-<xsl:template match="program[not(input)]" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <input>
-            <xsl:value-of select="."/>
-        </input>
-    </xsl:copy>
-</xsl:template>
-
 <!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
 <xsl:template match="program/@interactive" mode="repair">
     <xsl:choose>
@@ -1289,6 +1283,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="mathjax-name">
             <xsl:value-of select="."/>
         </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+<!-- 2024-10-29: program is reworked -->
+
+<!-- Add code element around text in program when missing -->
+<xsl:template match="program[not(input|code)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <code>
+            <xsl:value-of select="text()"/>
+        </code>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="program[not(code)]/input" mode="repair">
+    <xsl:element name="code">
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
     </xsl:element>
 </xsl:template>
 

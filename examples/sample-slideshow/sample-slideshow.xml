@@ -232,7 +232,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Here is an inline bit of code with surrounding text. <c>print("hello world")</c>. Here is a more text. And some more. And yet more. And a full program... with Prism support.</p>
                 <program language="python" line-numbers="yes">
                     <title>A simple program</title>
-                    <input>
+                    <code>
                         def f(x):
                             return x**2
                         
@@ -249,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         
                         
                         print(f(3))
-                    </input>
+                    </code>
                 </program>
             </slide>
 

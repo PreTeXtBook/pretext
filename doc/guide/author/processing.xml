@@ -379,7 +379,7 @@
             <listing xml:id="cli-project-manifest-example">
                 <caption>Example of a very simple project manifest.</caption>
             <program language="xml">
-                <input>
+                <code>
                 <![CDATA[
                 <?xml version="1.0" encoding="utf-8"?>
                 <project ptx-version="2">
@@ -390,7 +390,7 @@
                 </targets>
                 </project>
                 ]]>
-                </input>
+                </code>
             </program>
             </listing>
 
@@ -517,7 +517,7 @@
                     To illustrate how the relative paths work, with attributes on both <tag>project</tag> and <tag>targets</tag> elements, consider the following manifest:
                 </p>
             <program language="xml">
-                <input>
+                <code>
                 <![CDATA[
                 <?xml version="1.0" encoding="utf-8"?>
                 <project ptx-version="2" source="src" output-dir="out">
@@ -534,7 +534,7 @@
                     </targets>
                 </project>
                 ]]>
-                </input>
+                </code>
             </program>
                 <p>
                     Here, the web target, with format html, will build from the root <pretext/> file "src/main.ptx", using the publication file "publication/publication.ptx", and will place the output in the folder "out/web".
@@ -563,7 +563,7 @@
             <listing xml:id="listing-v2-executables">
                 <caption>Example of version 2 executables file</caption>
                 <program language="xml">
-                  <input>
+                  <code>
                   <![CDATA[
 
                   <?xml version="1.0" encoding="utf-8"?>
@@ -579,7 +579,7 @@
                         liblouis="file2brl" />
 
                   ]]>
-                  </input>
+                  </code>
                 </program>
               </listing>
 

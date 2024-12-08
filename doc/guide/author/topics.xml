@@ -7,7 +7,7 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="topics">
+<chapter xml:id="topics" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Topics</title>
 
     <introduction>
@@ -972,7 +972,7 @@
 
         <introduction>
 
-            <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program-console"/>.</p>
+            <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program"/> and <xref ref="topic-console"/>.</p>
 
             <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on exceptional characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
@@ -1008,7 +1008,7 @@
 
             <p>You can structure the contents with <tag>cline</tag> in exactly the same manner as for <tag>cd</tag>.  But you may find this tedious.  Instead, you can make the content of <tag>pre</tag> a sequence of lines separated by newlines.  So that you can preserve the indentation of your source, the line closest to the left margin is taken to actually be the left margin, and a corresponding amount of leading whitespace will be removed from every line.  This will work well if you recognize two caveats.  First, results will be unpredictable if you mix spaces and tabs for indentation.  Sticking with spaces is best.  Second, if your first characters of content immediately follow the <tag>pre</tag> tag then there is no leading whitespace and it is as if that line is already at the left margin.  Then subsequent indentation may seem too severe to you.</p>
 
-            <p>As previously mentioned, <xref ref="topic-program-console"/> discusses the <tag>console</tag> and <tag>program</tag> tags which are more specific, and hence more capable.  Review the possibilities before you decide between <tag>pre</tag>, <tag>console</tag>, and <tag>program</tag>.</p>
+            <p>As previously mentioned, <xref ref="topic-console"/> and <xref ref="topic-program"/> discuss the <tag>console</tag> and <tag>program</tag> tags which are more specific, and hence more capable.  Review the possibilities before you decide between <tag>pre</tag>, <tag>console</tag>, and <tag>program</tag>.</p>
         </subsection>
     </section>
 
@@ -2102,7 +2102,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Similar to multiple-choice exercises, a <tag>statement</tag> is followed by a <tag>blocks</tag> element containing a sequence of <tag>block</tag> elements.  The <tag>blocks</tag> element is the signal that this is a Parsons problem.  The overall <tag>exercise</tag> element may have several attributes:<ul>
                 <li><attr>numbered</attr> set to <c>left</c> or <c>right</c> indicates the blocks should be numbered, and on which side the numbers go.  The default value is <c>no</c>.</li>
-                <li><attr>language</attr> set to <c>natural</c> indicates the text of the blocks is natural language, while the use of a computer language should be indicated by naming the actual language employed.  A list of languages will soon be added in <xref ref="topic-program-console"/>.  The default is <c>natural</c>.</li>
+                <li><attr>language</attr> set to <c>natural</c> indicates the text of the blocks is natural language, while the use of a computer language should be indicated by naming the actual language employed.  A list of languages will soon be added in <xref ref="topic-program"/>.  The default is <c>natural</c>.</li>
                 <li><attr>indentation</attr> set to <c>hide</c> indicates that a computer code exercise will not include indentation common to each line of a block.  In other words, the problem is slightly harder, as the interactive interface will require the reader to adjust the block horizontally to provide common indentation for the block.  The default is <c>show</c>.</li>
             </ul></p>
 
@@ -2274,7 +2274,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <listing xml:id="list-mathcmp-expressions-structure">
                     <program>
-                        <input><![CDATA[
+                        <code><![CDATA[
                             <!-- Compare submitted response with fillin answer -->
                             <mathcmp use-answer="yes"/>
         
@@ -2309,7 +2309,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                               <de-expression/>
                             </mathcmp>
                         ]]>
-                        </input>
+                        </code>
                     </program>
                     <caption>Possible structures for using <tag>mathcmp</tag> within a <tag>test</tag>. The <tag>de-expression</tag> would be replaced by any valid construction as described for the <tag>setup</tag>.</caption>
                 </listing>
@@ -3430,25 +3430,87 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         </subsection>
     </section>
 
-    <section xml:id="topic-program-console">
-        <title>Programs and Consoles</title>
-        <idx>program</idx>
+    <section xml:id="topic-console">
+        <title>Consoles</title>
         <idx>console</idx>
 
         <subsection>
-            <title>Content and Placement of Programs and Consoles</title>
-
-            <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
+            <title>Content and Placement of Consoles</title>
 
             <p>A <tag>console</tag> is a transcript of an interactive session in a terminal or console at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional.  The content of these two elements is treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  A <attr>prompt</attr> attribute on the <tag>input</tag> can be supplied to provide a system prompt distinct from the actual commands.  The default prompt is a dollar sign followed by a space.  If it is more convenient <attr>prompt</attr> may be supplied on the <tag>console</tag>, to be used in each enclosed <tag>input</tag>.  If you do not want any prompts at all, just use an empty value for <attr>prompt</attr>.</p>
 
-            <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>caption</tag> displayed below, and a number assigned.  So, in particular, if your program or console is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
+            <p>A <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>caption</tag> displayed below, and a number assigned.  So, in particular, if your program is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
+        </subsection>
+    </section>
 
-            <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  We will eventually provide a table of attribute values here.  They are always lowercase, and a good first guess is likely to succeed.</p>
+    <section xml:id="topic-program">
+        <title>Programs</title>
+        <idx>program</idx>
+
+        <subsection>
+            <title>Content and Placement of Programs</title>
+
+            <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
+
+            <p>The text contents of a program can be surrounded with <tag>code</tag>, but that is only necessary if you have other elements inside of the <tag>program</tag> like <tag>preamble</tag> or <tag>tests</tag> used by an interactive program (see <xref ref="interactive-program-activecode"/> below for details).</p>
+
+            <p>Like a console (see <xref ref="topic-console"/>) a <tag>program</tag> may be wrapped in a <tag>listing</tag> (see <xref ref="topic-listing"/>). If you want to assign a visible number, cross reference to the program, or assign it a visible filename a surrounding <tag>listing</tag> element is appropriate.</p>
+
+            <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  The current known languages are:
+                <ul cols="3">
+                    <li><c>basic</c></li>
+                    <li><c>c</c></li>
+                    <li><c>cpp</c></li>
+                    <li><c>go</c></li>
+                    <li><c>java</c></li>
+                    <li><c>javascript</c></li>
+                    <li><c>lua</c></li>
+                    <li><c>pascal</c></li>
+                    <li><c>perl</c></li>
+                    <li><c>python</c></li>
+                    <li><c>python3</c></li>
+                    <li><c>r</c></li>
+                    <li><c>s</c></li>
+                    <li><c>sas</c></li>
+                    <li><c>sage</c></li>
+                    <li><c>splus</c></li>
+                    <li><c>vbasic</c></li>
+                    <li><c>vbscript</c></li>
+                    <li><c>clojure</c></li>
+                    <li><c>lisp</c></li>
+                    <li><c>clisp</c></li>
+                    <li><c>elisp</c></li>
+                    <li><c>scheme</c></li>
+                    <li><c>racket</c></li>
+                    <li><c>sql</c></li>
+                    <li><c>llvm</c></li>
+                    <li><c>matlab</c></li>
+                    <li><c>octave</c></li>
+                    <li><c>ml</c></li>
+                    <li><c>ocaml</c></li>
+                    <li><c>fsharp</c></li>
+                    <li><c>css</c></li>
+                    <li><c>latex</c></li>
+                    <li><c>html</c></li>
+                    <li><c>tex</c></li>
+                    <li><c>xml</c></li>
+                    <li><c>xslt</c></li>
+                </ul>
+            </p>
 
             <p>In some output formats, notably <init>HTML</init>, the syntax highlighter can add lines or highlight individual lines of code. Highlighting lines is not supported for <latex/> output.  To display line numbers, set the <attr>line-numbers</attr> attribute to <c>yes</c>. To highlight particular lines, set <attr>highlight-lines</attr> to a comma-separated list consisting of individual lines and/or ranges indicated with dashes.  Some examples are: <c>5</c>, <c>2,5</c>,  <c>2,5-8,10-15,15</c>.</p>
 
+            <xi:include href="../../../examples/sample-book/rune-examples/static-listing-java.xml"/>
+
             <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
+
+            <p>Finally, when authoring programs, it may be helpful to keep the source code as plain text in separate files. This can avoid the need to manually escape characters that have special meaning in XML and can facilitate testing and updating the code samples. See <xref ref="topic-xinclude"/> for how to do so.</p>
+
+            <subsubsection xml:id="program-default-values">
+                <title>Default attributes for programs</title>
+                <p>Book-level default values for some program attributes can be set in <c>docinfo/programs</c>. If a value for an attribute is set in that location, it will be used for any <tag>program</tag> that lacks the corresponding attribute.</p>
+                <p>The following attributes can be given default values - some only are applicable to interactive programs (see <xref ref="interactive-program-codelens"/> and <xref ref="interactive-program-activecode"/>): <attr>compiler-args</attr>, <attr>linker-args</attr>, <attr>interpreter-args</attr>, <attr>download</attr>, <attr>language</attr>, <attr>linenumbers</attr>, and <attr>timelimit</attr>.</p>
+            </subsubsection>
         </subsection>
 
         <subsection xml:id="interactive-program-codelens">
@@ -3464,21 +3526,130 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Place the <attr>interactive</attr> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
 
-            <p>For languages that support CodeLens, a button will be created that allows the reader to step through the program. For some programs, especially ones using libraries like turtle graphics or image, CodeLens will not function. To prevent showing the CodeLens button on programs for it will not work, authors can set the <attr>codelens</attr> attribute to <c>no</c>.</p>
+            <p>Inside the <tag>program</tag> of an ActiveCode, you can use the following elements:
+                <dl>
+                    <li>
+                        <title>preamble</title>
+                        <p>Code that will be part of the program but not available for editing by the user and precedes the contents of <tag>code</tag>. This code will be visible unless the <attr>visible</attr> is set to <c>no</c>.</p>
+                        <p>Note that the contents of this element will be combined with the <tag>code</tag> before the indentation is adjusted. So any code in this block must be indented to the same baseline as the contents of <tag>code</tag>.</p>
+                    </li>
+                    <li>
+                        <title>code</title>
+                        <p>The body of the program that will be editable by the user.</p>
+                    </li>
+                    <li>
+                        <title>postamble</title>
+                        <p>Code that will be part of the program but not available for editing by the user and follows the contents of <tag>code</tag>. This code will be visible unless the <attr>visible</attr> is set to <c>no</c>.</p>
+                        <p>Note that the contents of this element will be combined with the <tag>code</tag> before the indentation is adjusted. So any code in this block must be indented to the same baseline as the contents of <tag>code</tag>.</p>
+                    </li>
+                    <li>
+                        <title>tests</title>
+                        <p>Tests may take the form of either structured input-output tests (see <xref ref="interactive-program-activecode-tests"/>) or as a block of code that will be added after the <tag>code</tag> (as well as any <tag>postamble</tag>). The assumption is that code in <tag>tests</tag> is doing unit testing that the user should not see, so this code will be hidden unless the <attr>visible</attr> is set to <c>yes</c>.</p>
+                        <p>This code is processed by PreTeXt separately from the <tag>code</tag>, so indentation does not need to be consistent between it <tag>code</tag> and <tag>tests</tag>.</p>
+                        <p>Some languages have support for unit testing frameworks. If you use one of them, the results of the tests will be parsed and displayed to the user as a visual results table. The following languages have support for unit testing frameworks:
+                            <ul>
+                                <li><c>python</c> supports <c>unittest</c></li>
+                                <li><c>java</c> supports <c>junit</c></li>
+                                <li><c>c</c> and <c>cpp</c> support <c>doctest</c> (which tends to build and run significantly faster) and <c>catch</c></li>
+                            </ul>
+                        </p>
+                    </li>
+                    <li>
+                        <title>stdin</title>
+                        <p>If this element is provided, a text box will be created for the user to enter text that will be fed to the program via the <c>stdin</c> stream. If the <tag>stdin</tag> has text content, that will be provided to the user as a default input. Multiple lines of input are permissable. The text will be sanitized in the same way that the <tag>program</tag> itself is.</p>
+                    </li>
+                </dl>
+            </p>
 
-            <p>Note also that a data file may be provided independently for consumption by an ActiveCode program.  See <xref ref="topic-datafile"/>.</p>
+            <p>Here is a sample of a program with preamble and postamble. For more examples, see <url href="https://runestone.academy/ns/books/published/PTXSB/activecode.html">the Activecode section of the Sample Book</url></p>
 
-            <p>ActiveCode elements that are language <c>sql</c> can make use of an SQLite database file. This is different than a <c>datafile</c> (which is expected to be text or an image). To include a database file, use the <attr>database</attr> on the <tag>program</tag> element and specify the file to load as a string relative to the <attr>@external</attr> top-level directory</p>
+            <xi:include href="../../../examples/sample-book/rune-examples/activecode-ambles.xml"/>
 
-            <p>The <tag>program</tag> element can have two attributes, <attr>compiler-args</attr> and <attr>linker-args</attr>, which are strings passed verbatim to the compiler and linker (respectively).  This is only relevant for programs running on a Runestone server (rather than in a browser).</p>
+            <p>
+                There are a wealth of attributes that can be used to control the behavior of ActiveCode. (These are in addition to the standard ones allowed for for <tag>program</tag>. see <xref ref="topic-program"/> for those.) Below is a list of the extra attributes available. Any attribute that lists other elements for inclusion will take a list of <attr>xml:id</attr>s for those elements.
+                <dl>
+                    <li>
+                        <title>autorun</title>
+                        <p>If set to <c>yes</c> the program will run on page load.</p>
+                    </li>
+                    <li>
+                        <title>chatcodes</title>
+                        <p>Set to <c>yes</c> to enable users to talk about this code snippet with others.</p>
+                    </li>
+                    <li>
+                        <title>codelens</title>
+                        <p>In languages that support Codelens (see <xref ref="interactive-program-codelens"/>), there will be a button that allows the user to run the program via Codelens. Set this to <c>no</c> to remove it. This may be desireable if you know the code uses features that are not supported by Codelens (e.g. turtle graphics or image).</p>
+                    </li>
+                    <li>
+                        <title>compiler-args</title>
+                        <p>(C/C++ only) A comma separated list of strings to be passed to the compiler. Ex: <c>-Wall, -std=c++17</c>. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                    <li>
+                        <title>database</title>
+                        <p>(SQL only) SQL based programs can make use of an SQLite database file. Use this attribute to specify the file to load as a string relative to the <attr>external</attr> top-level directory.</p>
+                    </li>
+                    <li>
+                        <title>datafile</title>
+                        <p>A comma separated string identifying one or more <tag>datafile</tag>s that are available for processing in this program. See <xref ref="topic-datafile"/></p>
+                    </li>
+                    <li>
+                        <title>download</title>
+                        <p>Set to <c>yes</c> to enable users a download button that triggers downloading of the user code to a file. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                    <li>
+                        <title>hidecode</title>
+                        <p>Set to <c>yes</c> to initially hide the code.     When code is hidden, the 'Run' button is also disabled. To run the code, a user either presses 'Show Code', then 'Run'.</p>
+                        <p>You might use this if you want to put an ActiveCode block in the page in order to include 
+                            it in another ActiveCode block, but you don't need or want students to see it right away. Or to hide the code of an ActiveCode with <attr>autorun</attr> where you initially want to focus on the output instead of the program.
+                        </p>
+                    </li>
+                    <li>
+                        <title>include</title>
+                        <p>A comma separated string identifying one or more other ActiveCodes that are to be prepended to this program when it is run. See <xref ref="topic-datafile"/></p>
+                        <p>This allows you to write examples that build on each other without having to duplicate all the code in each successive block. For example, if you write a function definition in one ActiveCode, you can include it in a later ActiveCode block that has code to call the function without having to visibly include the definition. </p>
+                    </li>
+                    <li>
+                        <title>interpreter-args</title>
+                        <p>(Python2/3/Java/octave only. Only applies to Python that is run on the server. See <xref ref="table-program-interactive"/>.) A comma separated list of strings to be passed to the compiler. Ex: <c>-Xrs, -Xss8m, -Xmx200m</c>. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                    <li>
+                        <title>language</title>
+                        <p>Same options as <tag>program</tag>. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                    <li>
+                        <title>linker-args</title>
+                        <p>(C/C++ only) A comma separated list of strings to be passed to the compiler. Ex: <c>-lm, -g</c>. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                    <li>
+                        <title>timelimit</title>
+                        <p>A maximum time allowed, in milliseconds, for a program to compile and run. If not provided, the default is <c>25000</c> (25 seconds). A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                </dl>
+            </p>
 
-            <p>If you want to include code from one or more preceding <tag>program</tag> elements, use the <attr>include</attr> attribute whose value is a list (comma-separated or space-separated) of <attr>xml:id</attr>s for the code you want included.</p>
+            <subsubsection xml:id="interactive-program-activecode-tests">
+                <title>Tests for Interactive Programs</title>
+
+                <p>There are currently two ways to make automated tests for ActiveCode programs. The first way is to simply provide code in the <tag>tests</tag> element of the <tag>program</tag> as described in <xref ref="interactive-program-activecode"/>. It will be assumed this code is unit tests and it will be run automatically with the user's submission.</p>
+
+                <p>Below is an example of unit tested Python. For more examples, see <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book</url></p>
+
+                <xi:include href="../../../examples/sample-book/rune-examples/activecode-unittest.xml"/>
+
+                <p>The second way to automatically test code is to provide a set of structured input-output pair tests. For each test, the program will be run and fed the specified input. Then the program output will be compared against the test output to decide if the program handled the test correctly. This mechanism is useful for testing simple programs without functions and for languages that do not have a unit testing framework. A particular program can only have one of these two testing mechanisms.</p>
+
+                <p>IO tests are generally only available for programs that run on a Runestone server. (See <xref ref="table-program-interactive"/> for a list of which languages support IO tests.). To preview them, see <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book hosted on Runestone</url></p>
+
+                <p>Structured IO tests are added as <tag>iotest</tag>s to the <tag>tests</tag> element. Each <tag>iotest</tag> element must have a single <tag>input</tag> and <tag>output</tag> element. The <tag>input</tag> element contains the input that will be fed to the program, and the <tag>match</tag> element contains the expected output of the program. Indentation for both will be normalized in the same way that programs are (so multiple-line sample output can be indented in your source document).</p>
+
+                <p>When evaluated, the program output and test <tag>output</tag> will have leading and trailing spaces removed. Other than that spacing, the two must match exactly to be considered a "passed" test.</p>
+            </subsubsection>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="interactive-program-capabilities">
             <title>Interactive Program Capabilities</title>
 
-            <p>This table lists which types of interactivity are available on various combinations of servers and programming languages.  The entry <q>AC + CL</q> means that both ActiveCode and CodeLens instances are availble, but the ActiveCode instance will have a CodeLens button enabled.</p>
+            <p>This table lists which types of interactivity are available on various combinations of servers and programming languages.  The entry <q>AC + CL</q> means that both ActiveCode and CodeLens instances are available, but the ActiveCode instance will have a CodeLens button enabled. Although <tag>tests</tag> can be used to append code to any program, only in situations listed as <q>UT</q> below will the test output be parsed and interpreted by the server</p>
 
             <p>Note that <c>python</c> is generic Python with the standard libraries (version 3.x).  On the other hand <c>python3</c> is a Runestone server installation (only) with a number of additional popular Python packages available, such as <c>numpy</c> and <c>pandas</c>.</p>
 
@@ -3500,36 +3671,36 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <row>
                         <cell>Python</cell>
                         <cell><c>python</c></cell>
-                        <cell>AC + CL</cell>
-                        <cell>AC + CL</cell>
+                        <cell>AC + CL + UT</cell>
+                        <cell>AC + CL + UT</cell>
                     </row>
                     <row>
                         <cell>Python 3</cell>
                         <cell><c>python3</c></cell>
                         <cell></cell>
-                        <cell>AC</cell>
+                        <cell>AC + IO</cell>
                     </row>
                     <row>
                         <cell>Java</cell>
                         <cell><c>java</c></cell>
                         <cell>CL</cell>
-                        <cell>AC + CL</cell>
+                        <cell>AC + CL + IO + UT</cell>
                     </row>
                     <row>
                         <cell>C</cell>
                         <cell><c>c</c></cell>
                         <cell>CL</cell>
-                        <cell>AC + CL</cell>
+                        <cell>AC + CL + IO + UT</cell>
                     </row>
                     <row>
                         <cell>C++</cell>
                         <cell><c>cpp</c></cell>
                         <cell>CL</cell>
-                        <cell>AC + CL</cell>
+                        <cell>AC + CL + IO + UT</cell>
                     </row>
                     <row>
                         <cell>JavaScript</cell>
-                        <cell>javascript<c></c></cell>
+                        <cell><c>javascript</c></cell>
                         <cell>AC</cell>
                         <cell>AC</cell>
                     </row>
@@ -3549,11 +3720,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <cell>Octave</cell>
                         <cell><c>octave</c></cell>
                         <cell></cell>
-                        <cell>AC</cell>
+                        <cell>AC + IO</cell>
                     </row>
                     <!-- should really be a note, or similar -->
                     <row>
-                        <cell halign="left" colspan="4">AC = ActiveCode, CL = CodeLens</cell>
+                        <cell halign="left" colspan="4">AC = ActiveCode, CL = CodeLens, UT = Unit Tests (parsed), IO = IO Tests</cell>
                     </row>
                 </tabular>
             </table>
@@ -3563,7 +3734,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
     <section xml:id="topic-datafile">
         <title>Data Files</title>
 
-        <p>In concert with interactive programs (see <xref ref="topic-program-console"/>) you can define a file of data that may be employed by those programs.  The necessary element is <tag>datafile</tag>.  It requires a <attr>label</attr> attribute.  The <attr>filename</attr> is also required and is the name the file is known by in an ActiveCode program.  Do not try to impose any sort of directory structure on this name.  Just a filename.  In the case of a text file (see below), the <attr>editable</attr> attribute is optional.  The value <c>no</c> is the default, with <c>yes</c> as the other option.  The attributes <attr>rows</attr> and <attr>cols</attr> are optional for text files, and default to <c>20</c> and <c>60</c> respectively.  Finally, a non-editable text file (only) may have its contents hidden by setting the <attr>hide</attr> attribute to <c>yes</c>, rather than the default value of <c>no</c>.</p>
+        <p>In concert with interactive programs (see <xref ref="topic-program"/>) you can define a file of data that may be employed by those programs.  The necessary element is <tag>datafile</tag>.  It requires a <attr>label</attr> attribute.  The <attr>filename</attr> is also required and is the name the file is known by in an ActiveCode program.  Do not try to impose any sort of directory structure on this name.  Just a filename.  In the case of a text file (see below), the <attr>editable</attr> attribute is optional.  The value <c>no</c> is the default, with <c>yes</c> as the other option.  The attributes <attr>rows</attr> and <attr>cols</attr> are optional for text files, and default to <c>20</c> and <c>60</c> respectively.  Finally, a non-editable text file (only) may have its contents hidden by setting the <attr>hide</attr> attribute to <c>yes</c>, rather than the default value of <c>no</c>.</p>
 
         <p>Where might you place a <tag>datafile</tag>?  Lots of places are possible, such as in an <tag>example</tag> or a programming <tag>exercise</tag>, close to an ActiveCode <tag>program</tag>.  So, in expository material or in activities for readers to work through.  The purpose-built COMPUTATION-LIKE block, <tag>data</tag>, which will get you a heading, number, title, cross-reference target, etc. (see <xref ref="block-summary"/>), is an option if the file itself needs more prominence or dedicated explanation.  Notice that this feature is very powerful, and thus requires a bit of machinery to support.  If you just want to point your reader to a file (and leave them to work with it outside of your project), either globally or locally, the read about the <tag>dataurl</tag> element at <xref ref="topic-datafile"/>.</p>
 
@@ -3921,7 +4092,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
     <section xml:id="topic-listing">
         <title>Program Listings</title>
-        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  Just like a figure, it has a <tag>caption</tag> and <tag>title</tag> which behave identically.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program-console"/>).</p>
+        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  Just like a figure, it has a <tag>caption</tag> and <tag>title</tag> which behave identically.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program"/> and <xref ref="topic-console"/>).</p>
     </section>
 
     <section xml:id="topic-named-list">
@@ -4760,19 +4931,19 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <p>The <c>xinclude</c> mechanism automatically introduces a <attr>xml:base</attr> attribute, which we need to account for in the RELAX-NG schema (<xref ref="schema" />).  So we limit which <pretext /> elements may be the root element of an included file.  The rough, general rule is that if an element <em>can</em> have a title, then it can be the root element of an included file.  So in particular each of the divisions (<tag>chapter</tag>, <tag>section</tag>, <etc />) is a candidate.</p>
 
-        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>input</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
+        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>code</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
 
         <p>In both cases you can put the text content of these elements in a separate file, use the <attr>href</attr> attribute of <tag>xi:include</tag> to point to the file, and then the twist is to set the <attr>parse</attr> attribute to the value <c>text</c>.  This has two general benefits.  First, you now <em>cannot</em> have any <init>XML</init> in the file, so you do not have to have a single root element for the file (and so the schema imposes no restrictions).  Second, you do not need to escape any problematic characters like ampersands and angle brackets (<xref ref="topic-verbatim-literal" />), nor use the misunderstood <init>CDATA</init> mechanism.</p>
 
         <p>Additionally, in the case of <tag>latex-image</tag> you can park unsightly code away in files so you do not have to look at it, or you can create a small driver <latex /> program to test each one, or even better, you may want to use the same image more than once (maybe in different figures?) and can just include it repeatedly, while only ever editing the single copy.</p>
 
-        <p>Finally, the <tag>input</tag> and <tag>output</tag> children of <tag>program</tag>, <tag>sage</tag>, and <tag>console</tag> are also candidates for this device.  In particular, you may want to have the code for a program in its own file where you can test it easily with an interpreter or compiler.  There is one gotcha.  If you were to put a newline between <tag>input</tag> and <tag>xi:include</tag> there is the very real potential of unwanted whitespace bleeding into your <pretext /> output.  Our suggested remedy uses an example from Bob Plantz.  Convert</p>
+        <p>Finally, the <tag>input</tag> and <tag>output</tag> children of <tag>sage</tag>, and <tag>console</tag> as well as the <tag>code</tag> of <tag>program</tag> are also candidates for this device.  In particular, you may want to have the code for a program in its own file where you can test it easily with an interpreter or compiler.  There is one gotcha.  If you were to put a newline between <tag>code</tag> and <tag>xi:include</tag> there is the very real potential of unwanted whitespace bleeding into your <pretext /> output.  Our suggested remedy uses an example from Bob Plantz.  Convert</p>
 
         <pre>
         &lt;program language="c">
-            &lt;input>
+            &lt;code>
                 &lt;xi:include parse="text" href="intAndFloat.c"/>
-            &lt;/input>
+            &lt;/code>
         &lt;/program>
         </pre>
 
@@ -4780,7 +4951,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
         <pre>
         &lt;program language="c">
-            &lt;input>&lt;xi:include parse="text" href="intAndFloat.c"/>&lt;/input>
+            &lt;code>&lt;xi:include parse="text" href="intAndFloat.c"/>&lt;/code>
         &lt;/program>
         </pre>
 

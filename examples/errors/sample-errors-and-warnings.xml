@@ -150,9 +150,9 @@ systems.
             </console>
 
             <program language="r">
-                <input>
+                <code>
                 a = b + c
-                </input>
+                </code>
             </program>
 
 

@@ -39,7 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
         http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
         -->
-        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg" />
+        <brandlogo url="https://pretextbook.org"/>
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
         \newcommand{\myequation}[2]{#1\amp =#2} % testing alignment override
@@ -151,10 +151,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <titlepage>
                 <titlepage-items/>
             </titlepage>
-
-            <abstract>
-                <p>This is a sample of many of the things you can do with <pretext />.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
-            </abstract>
             <!--
             Acknowledgements, dedications, colophon (ISBN, copyright, etc)
             are supported in the book document type.  Such a diverse range
