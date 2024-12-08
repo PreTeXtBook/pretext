@@ -1,0 +1,11 @@
+// Imports in this file should be relative to css root
+@use 'legacy/pretext.css';
+@use 'legacy/pretext_add_on.css';
+@use 'legacy/pretext_search';
+@use 'targets/html/legacy/min/shell_min.css';
+@use 'targets/html/legacy/default/banner_default.css';
+@use 'targets/html/legacy/default/navbar_default.css';
+@use 'targets/html/legacy/min/toc_min.css';
+@use 'targets/html/legacy/default/knowls_default.css';
+@use 'targets/html/legacy/default/style_default.css';
+@use 'legacy/colors/all_colors.scss';

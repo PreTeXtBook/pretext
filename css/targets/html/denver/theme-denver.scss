@@ -1,0 +1,86 @@
+// Theme that uses bold content blocks with a visible centered "page" of content
+
+// Current maintainer: Oscar Levin
+
+// Variables used by theme. CSSBuilder overrides these by prepending
+// different definitions for these variables to this file before the theme
+// is compiled.
+
+$color-scheme: 'bold' !default;
+$color-main: null !default;
+$color-do: null !default;
+$color-fact: null !default;
+$color-meta: null !default;
+$primary-color-dark: #9db9d3 !default;
+$background-color-dark: #23241f !default;
+
+@use "sass:map";
+@use 'sass:color';
+@use "colors/color-helpers" as colorHelpers;
+
+// ---------------------------------------------
+// components
+@use 'parts-paper' with(
+  $scrolling-toc: true,
+);
+
+@use 'chunks-denver';
+
+@use 'components/pretext' with (
+ $navbar-breakpoint: parts-paper.$navbar-breakpoint,
+);
+
+// ---------------------------------------------
+// fonts and colors
+$heading-font: 'Noto Sans, Helvetica Neue, Helvetica, Arial, sans-serif' !default;
+@use 'fonts/fonts-google' with ($heading: $heading-font);
+
+// fancy colors for chunks
+@use 'colors/palette-quad-chunks' as palette-chunks with (
+  $color-scheme: $color-scheme,
+  $color-main: $color-main,
+  $color-do: $color-do,
+  $color-fact: $color-fact,
+  $color-meta: $color-meta,
+);
+
+
+// primary color defined by color-main as determined by palette-chunks
+$primary-color: map.get(palette-chunks.$colors, 'color-main');
+$secondary-color: map.get(palette-chunks.$colors, 'color-meta');
+
+@use 'colors/palette-single' as palette-light with (
+  $primary-color: $primary-color,
+  // $secondary-color: $secondary-color
+);
+
+$palette-chunk-colors: map.merge(palette-chunks.$colors, (
+  "example-like-body-background": var(--content-background),
+  "example-like-border-color": var(--color-main),
+));
+
+$light-colors: map.merge(palette-light.$colors, $palette-chunk-colors);
+
+@use 'colors/palette-dark' as palette-dark with (
+  $primary-color: $primary-color-dark,
+  $background-color: $background-color-dark,
+);
+
+$dark-colors: map.merge(palette-dark.$colors, (
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--background-color-gray-20),
+  "toclevel1-background": var(--content-background),
+));
+
+
+// ---------------------------------------------
+// customizations
+// @use './shell';
+@use './customizations' with ($text-color: colorHelpers.text-contrast($primary-color));
+
+
+// ---------------------------------------------
+// concrete rules / includes that generate CSS
+
+// render the actual colors
+@include colorHelpers.set-root-colors($light-colors, $dark-colors);

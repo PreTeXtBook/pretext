@@ -1,0 +1,46 @@
+// Entry point for common web styling
+
+// Spacing for content
+
+// Breakpoint at which the navbar moves to the bottom of the screen
+$navbar-breakpoint: 800px !default;
+
+// all styling assumes border-box layout measurement
+* {
+  box-sizing: border-box;
+}
+
+// minimal spacing around items in a section or article
+// unspecific selectors - just about anything will override them
+section > *:not(:first-child) {
+  margin-top: 1.5em;
+}
+article > *:not(:first-child):has(.heading) {
+  margin-top: 1.5em;
+}
+article > *:not(:first-child) {
+  margin-top: 1.5em;
+}
+.knowl__content > *:not(:first-child) {
+  margin-top: 1.5em;
+}
+
+// tighten up spacing slightly for adjacent paragraphs in a section
+section > .para + .para {
+  margin-top: 1em;
+}
+
+// base spacing for paras
+.para:not(:first-child) {
+  margin-top: 1em;
+}
+//tighten up things after a paragraph unless something more specific overrides
+.para + *:not(:first-child) {
+  margin-top: 1em;
+}
+
+// make sure first para child of logical paragraphs doesn't get extra space
+.para.logical > .para:first-child {
+  display: inline;
+}
+

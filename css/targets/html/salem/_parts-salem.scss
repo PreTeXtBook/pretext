@@ -1,0 +1,96 @@
+// Produces a centered "page" with borders and centered banner
+// TOC will be an initially hidden overlay
+
+$sidebar-width: 350px !default;
+$nav-height: 36px !default;
+$content-width: 725px !default;
+$content-side-padding: 48px !default;
+$navbar-breakpoint: 800px !default;
+
+$sidebar-breakpoint: $content-width + $sidebar-width + $content-side-padding * 2;
+
+@use 'components/page-parts/body' with (
+  // $max-width: 0,
+  $content-width: $content-width,
+  $content-side-padding: $content-side-padding,
+  $centered-content: true,
+);
+
+@use 'components/page-parts/banner' with (
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'components/page-parts/navbar' with (
+  // $max-width: 0,
+  $nav-height: $nav-height,
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'components/page-parts/toc-overlay' with (
+  $nav-height: $nav-height,
+  $sidebar-width: $sidebar-width,
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'components/page-parts/footer' with (
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+:root {
+  --page-width: 1100px;
+}
+
+@mixin page-block {
+  & {   // quiet sass warnings
+    max-width: var(--page-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @at-root {
+    @media screen and (width > 1100px) {
+      & {
+        border-left: 1px solid var(--page-border-color);
+        border-right: 1px solid var(--page-border-color);
+      }
+    }
+  }
+}
+
+.ptx-masthead {
+  .ptx-banner {
+    justify-content: center;
+  }
+  
+  .title-container {
+    flex: unset;
+  }
+  @include page-block;
+}
+
+
+.ptx-navbar {
+  @include page-block;
+}
+
+.ptx-page {
+  @include page-block;
+}
+
+.ptx-page-footer {
+  border-bottom: 0;
+  @include page-block;
+}
+
+.ptx-content-footer {
+  justify-content: space-evenly;
+}
+
+@container ptx-main (width < #{$navbar-breakpoint}) {
+  .ptx-page > .ptx-main { 
+    .ptx-content {
+      padding-left: 20px;
+      padding-right: 20px;
+      max-width: calc($content-width + 40px);
+    }
+  }
+}

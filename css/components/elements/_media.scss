@@ -1,0 +1,71 @@
+// ---------------------------------------------
+// containers for images, audio, video, and asymptote
+.image-box,
+.audio-box,
+.video-box,
+.asymptote-box {
+    position: relative;
+}
+
+.image-box .asymptote-box iframe.asymptote,
+iframe.asymptote,
+.video-box .video,
+.video-box .video-poster {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+
+// images in containers should grow to fit space
+.image-box img,
+img.contained {
+    width: 100%;
+}
+
+// ---------------------------------------------
+// images
+.ptx-content img {
+  // for body images in dark mode, we want to be able to force a light colored background
+  // as most transparent images will assume that the background is white
+  background: var(--ptx-image-bg);
+}
+
+.image-description {
+  summary {
+    list-style: none; // no marker
+    cursor: pointer;
+  }
+}
+
+// download links after an image
+.image-archive {
+  margin: 0.75em auto 0;
+  font-family: var(--font-monospace);
+}
+
+// TODO - refactor mag_popup JS and CSS
+// was .ptx-content .image-box > img:not(.draw_on_me):not(.mag_popup)
+.image-box > img:not(.mag_popup) {
+  cursor: zoom-in;
+}
+
+img.mag_popup {
+  border: 1px solid #666;
+  box-shadow: 4px 6px 4px #999;
+  cursor: zoom-out;
+}
+
+.mag_popup_container {
+  width:100%;
+  position:absolute;
+  z-index:1001;
+  overflow-x: visible;
+}
+
+// ---------------------------------------------
+// other
+.audio {
+    width: 100%;
+}
+
+.video-poster {
+    cursor: pointer;
+}

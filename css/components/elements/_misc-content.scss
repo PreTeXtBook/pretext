@@ -1,0 +1,164 @@
+
+// Miscellaneous stylized content blocks that are not complex enough
+// to warrant their own file
+
+em.alert {
+  font-weight: bold;
+}
+
+.bib {
+  margin-top: 0.25em;
+
+  .bibitem {
+    display: inline-block;
+    vertical-align: top;
+    width: 7%;
+    margin-right: 0;
+  }
+  
+  .bibitem + .bibentry {
+    display: inline-block;
+    width: 90%;
+  }
+}
+
+
+
+.caption {
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 100%;
+  text-align: center;
+}
+
+
+.contributor {
+  margin-top: 1.5ex;
+
+  &:first-child {
+    margin-top: 0em;
+  }
+
+  & + .para {
+    margin-top: 3ex;
+  }
+
+  .contributor-name {
+    font-variant: small-caps;
+  }
+
+  .contributor-info {
+    font-size: 88%;
+    font-style: italic;
+    margin-left: 3ex;
+  }
+}
+
+
+// Icon font settings
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+
+iframe {
+  margin: 0;
+  border: none;
+}
+
+
+.kbdkey {
+  background: #f1f1f1;
+  color: #333;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  padding: 1px 2px 0 2px;
+  vertical-align: 0.1em;
+  font-size: 110%;
+  line-height: 1;
+  box-shadow: 2px 2px grey;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+
+.unit,
+.quantity {
+    white-space: nowrap;
+    word-spacing: -0.25ex;
+    margin-right: 0.125em;
+
+    sub, sup {
+      word-spacing: normal;
+    }
+}
+
+
+.terminology {
+  font-style: italic;
+  font-weight: bold;
+}
+
+
+
+.times-sign {
+  font-size: larger;
+  vertical-align: -0.15ex;
+}
+
+
+.emphasis {
+  font-style: italic;
+
+  .emphasis {
+      font-weight: bold;
+  }
+}
+
+.definition-like .emphasis {
+  font-weight: 700;
+}
+article.theorem-like .emphasis {
+  font-weight: 700;
+}
+
+.para {
+  line-height: 1.35;
+}
+
+.hidden {
+  display: none;
+}
+
+/* genus and species in italics */
+.taxon {
+  font-style: italic;
+}
+
+.quote {
+    padding-left: 40px;
+    padding-right: 10px;
+    margin-bottom: 1em;
+}
+
+.code-display {
+  overflow-x: auto;
+}
+
+
+
+/* Adapted from William Hammond (attributed to David Carlisle) */
+/* "mathjax-users" Google Group, 2015-12-27 */
+
+.latex-logo {font-family: "PT Serif", "Times New Roman", Times, serif;}
+
+.latex-logo .A {font-size: 75%; text-transform: uppercase; vertical-align: .5ex;
+         margin-left: -.48em; margin-right: -.2em;}
+
+.latex-logo .E {vertical-align:-.5ex; text-transform: uppercase;
+         margin-left: -.18em; margin-right: -.12em; }

@@ -1,0 +1,176 @@
+$border-radius: 0 !default;
+$chunk-heading-font-size: 1.125em !default;
+
+// One stop include for heading-box dominant content blocks
+@use 'components/chunks/asides-floating';
+@use 'components/chunks/codelike';
+@use 'components/chunks/exercises';
+@use 'components/chunks/solutions';
+@use 'components/chunks/sidebyside';
+@use 'components/chunks/knowls' with ($border-radius: $border-radius);
+
+@use 'components/chunks/helpers/box-mixin' with ($border-radius: $border-radius);
+@use 'components/chunks/helpers/heading-box-mixin' with (
+  $border-radius: $border-radius,
+  $margin-top: 2.5em,
+  $heading-color: var(--block-head-color),
+  $heading-background: var(--block-border-color)
+);
+@use 'components/chunks/helpers/sidebar-mixin' with ($border-width: 4px);
+@use 'components/chunks/helpers/C-box-mixin' with ($border-radius: $border-radius);
+@use 'components/chunks/helpers/horizontal-bars-mixin';
+@use 'components/chunks/helpers/inline-heading-mixin';
+
+@mixin chunk-heading {
+  & > .heading {
+    font-size: $chunk-heading-font-size;
+  }
+}
+
+.theorem-like {
+  @include heading-box-mixin.box(
+    $background-color: var(--theorem-like-body-background),
+    $border-color: var(--theorem-like-border-color),
+    $heading-background: var(--theorem-like-border-color),
+  );
+  @include chunk-heading;
+}
+
+.assemblage-like {
+  @include heading-box-mixin.box(
+    $background-color: var(--assemblage-like-body-background),
+    $border-color: var(--assemblage-like-border-color),
+    $heading-background: var(--assemblage-like-border-color),
+  );
+  @include chunk-heading;
+}
+
+.project-like {
+  & > .heading {
+    font-style: italic;
+    font-size: 1.125em;
+  }
+  @include chunk-heading;
+
+  @include heading-box-mixin.box(
+    $background-color: var(--content-background),
+    $border-color: var(--project-like-border-color),
+    $heading-background: var(--content-background),
+    $heading-color: var(--body-text-color),
+  );
+}
+
+
+.proof {
+  padding-bottom: 1.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+
+  &::after {
+    content: "QED";
+    font-size: smaller;
+    font-style: oblique;
+    font-variant: small-caps;
+    float: right;
+  }
+
+  .heading {
+    display: inline;
+    font-size: unset;
+    font-weight: bolder;
+  }
+  @include inline-heading-mixin.heading;
+
+}
+
+.solution-like {
+  .heading {
+    display: inline;
+    font-style: italic;
+    font-size: unset;
+  }
+}
+
+.remark-like {
+  @include sidebar-mixin.box(
+    $border-color: var(--remark-like-border-color),
+    $background-color: var(--remark-like-body-background),
+    $padding: 10px,
+    $border-width: 6px,
+    $border-radius: $border-radius,
+  );
+  @include chunk-heading;
+
+}
+
+.goal-like {
+  @include horizontal-bars-mixin.bars(
+    $border-color: var(--goal-like-border-color),
+    $font-style: italic,
+    $padding: 0.7em
+    );
+  @include chunk-heading;
+
+}
+
+
+.example-like {
+  @include C-box-mixin.box(
+    $border-color: var(--example-like-border-color),
+    $heading-background: var(--example-like-border-color)
+  );
+  @include chunk-heading;
+
+}
+
+
+.exercise-like.born-hidden-knowl {
+  @include C-box-mixin.box(
+    $border-color: var(--exercise-like-border-color),
+    $heading-background: var(--exercise-like-border-color)
+  );
+  @include chunk-heading;
+
+}
+
+
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like) {
+  @include C-box-mixin.box(
+    $border-color: var(--exercise-like-border-color),
+    $heading-background: var(--exercise-like-border-color)
+  );
+  @include chunk-heading;
+
+}
+
+.computation-like {
+  @include C-box-mixin.box(
+    $border-color: var(--computation-like-border-color),
+    $heading-background: var(--computation-like-border-color)
+  );
+  @include chunk-heading;
+
+}
+
+/* No decorations/borders in knowls, to save space */
+.knowl__content {
+  border: none;
+  .theorem-like,
+  .definition-like,
+  .example-like,
+  .project-like,
+  .remark-like,
+  .openproblem-like,
+  .computation-like,
+  .project-like,
+  .commentary {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: none;
+
+    &::after {
+      border-bottom: none;
+      display: none;
+    }
+  }
+}

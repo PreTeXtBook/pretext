@@ -1,0 +1,30 @@
+// Styling for elements in ptx-main that are allowed to expand past normal width
+// of ptx-content.
+
+// Assumes that $content-padding is set to the padding of ptx-content
+// and that element normally takes up 100% of parent width. (Like display-math)
+
+$width-hard-cap: 900px !default;
+$base-content-width: 600px !default;
+$content-padding: 48px !default;
+$always-expand: false !default;
+
+@mixin expandable(
+  $base-content-width: $base-content-width, 
+  $width-hard-cap: $width-hard-cap,
+  $content-padding: $content-padding,
+  $always-expand: $always-expand,
+) {
+  @container ptx-main (width > #{$base-content-width + 2 * $content-padding}) {
+    --max-width: calc(min((100cqw - 2 * #{$content-padding}), #{$width-hard-cap}));
+    min-width: 100%;
+    @if $always-expand {
+      width: var(--max-width);
+    } @else {
+      width: fit-content;      //grow if space needed
+    }
+    max-width: var(--max-width);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+}

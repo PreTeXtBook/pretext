@@ -1,0 +1,121 @@
+// Body level styling
+$max-width: 1200px !default;  // 0 == no max width
+
+$content-width: 600px !default;                 // without padding
+$content-side-padding: 48px !default;
+$centered-content: false !default;
+
+$content-with-padding-width: $content-width + 2 * $content-side-padding;
+
+@use 'components/helpers/buttons-default' as buttons;
+
+// set content width up as a CSS variables so other files can ask
+// "how wide is standard content?"
+:root {
+  --base-content-width: #{$content-width};
+  --content-padding: #{$content-side-padding};
+}
+
+// hits regular pages and generated iframe pages
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  &.pretext {
+    color: var(--body-text-color);
+    font-family: var(--font-body);
+  }
+}
+
+.ptx-page {
+  position: relative;
+  display: flex;
+  flex-grow: 1;  // fill space in body
+  width: 100%;
+}
+
+.ptx-main {
+  flex-grow: 1;
+  position: relative;
+  max-width: 100%;
+  container-name: ptx-main;  // for container queries elsewhere
+  container-type: inline-size;  // for container queries elsewhere
+}
+
+// Base width/padding
+// ptx-main ensures iframe pages don't get these
+.ptx-main .ptx-content {
+  max-width: $content-with-padding-width;
+  padding: 24px $content-side-padding 60px;
+
+  @if $centered-content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+@if $max-width > 0 {
+  .ptx-page {
+    max-width: $max-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+body.pretext,
+body.standalone {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  background: var(--page-color, white);
+}
+
+
+body.pretext > a.assistive {
+  padding:6px;
+  position: absolute;
+  top:-40px;
+  left: 0px;
+  color:white;
+  border-right:1px solid white;
+  border-bottom:1px solid white;
+  border-bottom-right-radius:8px;
+  background:transparent;
+  z-index: 10000;
+
+  &:focus {
+    top:0px;
+    background:#BF1722;
+    outline:0;
+    transition: top .1s ease-in, background .5s linear;
+  }
+}
+
+
+.ptx-content-footer {
+  display: flex;
+  justify-content: space-around;
+  max-width: $content-with-padding-width;
+
+  padding-top: 2em;
+  padding-bottom: 2em;
+  padding-left: $content-side-padding;
+  padding-right: $content-side-padding;
+
+  @if $centered-content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .button {
+    @include buttons.ptx-button;
+    .icon {
+      margin: 0 -7px; // current icons have lots of whitespace
+    }
+  }
+}
