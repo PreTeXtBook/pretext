@@ -2304,6 +2304,255 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
+        <section xml:id="block-samples">
+            <title>Grouping Samples</title>
+
+            <introduction>
+                <p>While building or testing a rendering of PreTeXt, especially in HTML, it can be useful to see all the various elements that potentially create visual blocks in one place. So they are collected here.</p>
+
+                <p>We will omit content specific blocks like figures, images, tables, <etc/> as those elements have significant stress testing of their own elsewhere.</p>
+
+                <p>Please add any similar elements that are created or that you discover are missing from this page.</p>
+
+                <aside>
+                    <title>A title</title>
+                    <p>There are more <tag>aside</tag>es below, but here is a solor one.</p>
+                </aside>
+            </introduction>
+
+            <objectives>
+                <title>Our goals</title>
+                <p>A minimal <tag>objective</tag>.</p>
+                <ul>
+                  <li>Stress test HTML themes</li>
+                  <li>Locally, test objectives</li>
+                </ul>
+            </objectives>
+
+            <subsection xml:id="block-samples-remark-like">
+                <title>Remark-like Blocks</title>
+                <remark>
+                    <title>A title</title>
+                    <p>A minimal <tag>remark</tag>.</p>
+                </remark>
+                <convention>
+                    <title>A title</title>
+                    <p>A minimal <tag>convention</tag>.</p>
+                </convention>
+                <note>
+                    <title>A title</title>
+                    <p>A minimal <tag>note</tag>.</p>
+                </note>
+                <observation>
+                    <title>A title</title>
+                    <p>A minimal <tag>observation</tag>.</p>
+                </observation>
+                <warning>
+                    <title>A title</title>
+                    <p>A minimal <tag>warning</tag>.</p>
+                </warning>
+                <insight>
+                    <title>A title</title>
+                    <p>A minimal <tag>insight</tag>.</p>
+                </insight>
+            </subsection>
+
+            <subsection xml:id="block-samples-example-like">
+                <title>Example-like Blocks</title>
+                <example>
+                    <title>A title</title>
+                    <p>A minimal <tag>example</tag>.</p>
+                </example>
+                <example>
+                    <title>A title</title>
+                    <introduction><p>A structured <tag>example</tag>.</p></introduction>
+                    <task>
+                        <statement>
+                            <p>A structured <tag>example</tag>.</p>
+                        </statement>
+                        <hint><p>A <tag>hint</tag></p></hint>
+                        <answer><p>An <tag>answer</tag></p></answer>
+                        <solution><p>A <tag>solution</tag></p></solution>
+                    </task>
+                    <conclusion><p>The <tag>conclusion</tag>.</p></conclusion>
+                </example>
+                <question>
+                    <title>A title</title>
+                    <p>A minimal <tag>question</tag>.</p>
+                </question>
+                <problem>
+                    <title>A title</title>
+                    <p>A minimal <tag>problem</tag>.</p>
+                </problem>
+                <observation>
+                    <title>A title</title>
+                    <p>A minimal <tag>observation</tag>.</p>
+                </observation>
+                <warning>
+                    <title>A title</title>
+                    <p>A minimal <tag>warning</tag>.</p>
+                </warning>
+                <insight>
+                    <title>A title</title>
+                    <p>A minimal <tag>insight</tag>.</p>
+                </insight>
+            </subsection>
+
+            <subsection xml:id="block-samples-theorem-like">
+                <title>Theorem-like Blocks</title>
+                <theorem>
+                    <title>A title</title>
+                    <p>A minimal <tag>theorem</tag>.</p>
+                </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <p>A theorem with a proof.</p>
+                    <proof>
+                        <p>The proof of the theorem.</p>
+                    </proof>
+                </theorem>
+                <corollary>
+                    <title>A title</title>
+                    <p>A minimal <tag>corollary</tag>.</p>
+                </corollary>
+                <lemma>
+                    <title>A title</title>
+                    <p>A minimal <tag>lemma</tag>.</p>
+                </lemma>
+                <algorithm>
+                    <title>A title</title>
+                    <p>A minimal <tag>algorithm</tag>.</p>
+                </algorithm>
+                <proposition>
+                    <title>A title</title>
+                    <p>A minimal <tag>proposition</tag>.</p>
+                </proposition>
+                <claim>
+                    <title>A title</title>
+                    <p>A minimal <tag>claim</tag>.</p>
+                </claim>
+                <fact>
+                    <title>A title</title>
+                    <p>A minimal <tag>fact</tag>.</p>
+                </fact>
+                <identity>
+                    <title>A title</title>
+                    <p>A minimal <tag>identity</tag>.</p>
+                </identity>
+                <proof>
+                    <title>A title</title>
+                    <p>A stand-alone proof.</p>
+                </proof>
+            </subsection>
+
+            <subsection xml:id="block-samples-axiom-like">
+                <title>Axiom-like Blocks</title>
+                <axiom>
+                    <title>A title</title>
+                    <p>A minimal <tag>axiom</tag>.</p>
+                </axiom>
+                <conjecture>
+                    <title>A title</title>
+                    <p>A minimal <tag>conjecture</tag>.</p>
+                </conjecture>
+                <principle>
+                    <title>A title</title>
+                    <p>A minimal <tag>principle</tag>.</p>
+                </principle>
+                <heuristic>
+                    <title>A title</title>
+                    <p>A minimal <tag>heuristic</tag>.</p>
+                </heuristic>
+                <hypothesis>
+                    <title>A title</title>
+                    <p>A minimal <tag>hypothesis</tag>.</p>
+                </hypothesis>
+                <assumption>
+                    <title>A title</title>
+                    <p>A minimal <tag>assumption</tag>.</p>
+                </assumption>
+            </subsection>
+
+            <subsection xml:id="block-samples-definition-like">
+                <title>Definition-like Blocks</title>
+                <definition>
+                    <title>A title</title>
+                    <p>A minimal <tag>definition</tag>.</p>
+                </definition>
+            </subsection>
+
+            <subsection xml:id="block-samples-aside-like">
+                <title>Aside-like Blocks</title>
+                <p>Three <tag>aside</tag>s are below.</p>
+                <aside>
+                    <title>A title</title>
+                    <p>A minimal <tag>aside</tag>.</p>
+                </aside>
+                <biographical>
+                    <title>A title</title>
+                    <p>A minimal <tag>biographical</tag>.</p>
+                </biographical>
+                <biographical>
+                    <title>A title</title>
+                    <p>A minimal <tag>biographical</tag>.</p>
+                </biographical>
+                <historical>
+                    <title>A title</title>
+                    <p>A minimal <tag>historical</tag>.</p>
+                </historical>
+            </subsection>
+
+            <subsection xml:id="block-samples-computation-like">
+                <title>Computation-like Blocks</title>
+                <computation>
+                    <title>A title</title>
+                    <p>A minimal <tag>computation</tag>.</p>
+                </computation>
+                <technology>
+                    <title>A title</title>
+                    <p>A minimal <tag>technology</tag>.</p>
+                </technology>
+                <data>
+                    <title>A title</title>
+                    <p>A minimal <tag>data</tag>.</p>
+                </data>
+            </subsection>
+
+            <subsection xml:id="block-samples-project-like">
+                <title>Project-like Blocks</title>
+                <project>
+                    <title>A title</title>
+                    <p>A minimal <tag>project</tag>.</p>
+                </project>
+                <activity>
+                    <title>A title</title>
+                    <p>A minimal <tag>activity</tag>.</p>
+                </activity>
+                <exploration>
+                    <title>A title</title>
+                    <p>A minimal <tag>exploration</tag>.</p>
+                </exploration>
+                <investigation>
+                    <title>A title</title>
+                    <p>A minimal <tag>investigation</tag>.</p>
+                </investigation>
+            </subsection>
+
+            <assemblage>
+                <p>A minimal <tag>assemblage</tag>.</p>
+            </assemblage>
+
+            <conclusion>
+                <title>Wrap-up</title>
+                <p>A minimal <tag>conclusion</tag>.</p>
+            </conclusion>
+
+            <aside>
+                <title>A title</title>
+                <p>A final <tag>aside</tag> to test behavior at the end of a page. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </aside>
+        </section>
+
         <section xml:id="text-in-paragraphs" label="section-text-paragraphs">
             <title>Entering Text in Paragraphs, Titles, Captions</title>
             <shorttitle>Text in Paragraphs</shorttitle>
