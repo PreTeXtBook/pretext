@@ -9168,9 +9168,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="substr" select="'&#xA;'" />
                         </xsl:call-template>
                     </xsl:if>
+                    <!-- code section MUST end with newline, which author may or may not have included      -->
+                    <!-- so remove up to one newline and trailing space from end of code then add a newline -->
                     <xsl:call-template name="substring-before-last">
                         <xsl:with-param name="input" select="code" />
                         <xsl:with-param name="substr" select="'&#xA;'" />
+                        <xsl:with-param name="preserve" select="true()" />
                     </xsl:call-template>
                     <xsl:text>&#xA;</xsl:text>
                     <xsl:if test="postamble[not(@visible = 'no')]">
