@@ -5,6 +5,8 @@ $content-width: 600px !default;                 // without padding
 $content-side-padding: 48px !default;
 $centered-content: false !default;
 
+$footer-button-border-radius: 0 !default;
+
 $content-with-padding-width: $content-width + 2 * $content-side-padding;
 
 @use 'components/helpers/buttons-default' as buttons;
@@ -113,7 +115,9 @@ body.pretext > a.assistive {
   }
 
   .button {
-    @include buttons.ptx-button;
+    @include buttons.ptx-button(
+      $border-radius: $footer-button-border-radius
+    );
     .icon {
       margin: 0 -7px; // current icons have lots of whitespace
     }
