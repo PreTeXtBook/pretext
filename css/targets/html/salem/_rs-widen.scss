@@ -27,6 +27,7 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
   .ptx-runestone-container:has(#{$rs-wide-elements})
   {
     width: 100%;
+    min-width: 100%;
     margin-left: auto;
   }
 }
@@ -38,7 +39,7 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
   margin-left: calc(-0.5 * (100cqw - $content-with-padding-width));
 }
 // unless nested in other runestones
-.ptx-runestone-container {
+:is(#{$grouping-elements}):has(#{$rs-wide-elements}) {
   :is(#{$grouping-elements}):has(#{$rs-wide-elements}) {
     width: 100%;
     margin-left: auto;
