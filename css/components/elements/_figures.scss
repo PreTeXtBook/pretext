@@ -1,0 +1,51 @@
+figure {
+  clear: both;
+  position: relative;
+
+  // override browser margins
+  margin-left: 0;
+  margin-right: 0;
+}
+
+figcaption {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2px;
+
+  code.code-inline {
+    white-space: pre;
+  }
+  
+  .codenumber,
+  .type {
+    font-weight: 700;
+  }
+
+  // add n-dashes
+  .codenumber::after,
+  .type:last-of-type::after {
+    content: "\2002";
+  }
+
+  // make sure first para comes right after title
+  .para:first-of-type {
+    display: inline;
+  }
+}
+
+// tables are inset
+figure.table-like {
+  margin-left: 30px;
+  margin-right: 30px;
+
+  // but lists can go full right
+  .list {
+    margin-right: 0;
+  }
+}
+
+@media (max-width <= 943px){
+  .figure-like {
+    overflow-x: auto;
+  }
+}

@@ -1,0 +1,75 @@
+
+/* Start of division toc links */
+// .ptx-content to override _links rules
+.ptx-content .summary-links {
+  font-family: var(--font-headings);
+  display: block;
+  margin-top: 1em;
+
+  a {
+    color: var(--summary-link-text-color);
+    background: var(--summary-link-background);
+    font-size: 1.5em;
+    line-height: 1.25em;
+    padding: 10px 20px;
+    padding-right: 60px;
+    border-radius: 3px;
+    position: relative;
+    display: block;
+
+    .title{
+      font-style: normal;
+    }
+
+    .codenumber {
+      margin-right: 0.41667em;
+    }
+
+    &::after {
+      // triangles
+      right: 0.83333em;
+      content: "";
+      position: absolute;
+      top: 50%;
+      margin-top: -0.4em;
+      width: 0;
+      height: 0;
+      border-top: 0.4em solid transparent;
+      border-bottom: 0.4em solid transparent;
+      border-left: 0.4em solid var(--summary-link-text-color);
+    }
+
+    &:hover {
+      color: var(--summary-link-hover-text-color);
+      background: var(--summary-link-hover-background);
+
+      // need to override work done in _links
+      * {
+        color: var(--summary-link-hover-text-color);
+        background: var(--summary-link-hover-background);
+      }
+
+      &::after {
+        border-left: 0.4em solid var(--summary-link-hover-text-color);
+      } 
+    } 
+  }
+
+  ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 0;
+  }
+
+  li {
+      margin-top: 5px;
+  }
+}
+
+@media screen and (width <= 480px) {
+  .ptx-content .summary-links a {
+    //shrink on mobile
+    font-size: 100%;
+    line-height: 1.25em;
+  }
+}

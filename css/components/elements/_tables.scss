@@ -1,0 +1,321 @@
+// limit these rules to just content area
+.ptx-content {
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+
+    tr {
+      td {
+        padding: 2px 5px;
+        font-size: 90%;
+
+        img {
+          max-width: 200px;
+          margin-right: 30px;
+        }
+
+        span.decimal {
+          float: left;
+          text-align: right;
+        }
+      }
+
+      th {
+        padding-top: 2px 5px;
+      }
+
+      td.l {
+        text-align: left;
+      }
+
+      td.c {
+        text-align: center;
+      }
+
+      td.r {
+        text-align: right;
+      }
+
+      td.j {
+        text-align: justify;
+      }
+
+      td.lines {
+        white-space: nowrap;
+      }
+
+      td.t {
+        vertical-align: top;
+      }
+
+      td.b {
+        vertical-align: bottom;
+      }
+
+      td.m {
+        vertical-align: middle;
+      }
+
+      td.vv {
+        border-left: 2px solid var(--body-text-color);
+        border-right: 2px solid var(--body-text-color);
+      }
+
+      td.vcv {
+        border-left: 2px solid var(--body-text-color);
+        border-right: 2px solid var(--body-text-color);
+        text-align: center;
+      }
+
+      td.vcvv {
+        border-left: 2px solid var(--body-text-color);
+        border-right: 4px solid var(--body-text-color);
+        text-align: center;
+      }
+
+      td.vlv {
+        border-left: 2px solid var(--body-text-color);
+        border-right: 2px solid var(--body-text-color);
+        text-align: left;
+      }
+
+      td.vrv {
+        border-left: 2px solid var(--body-text-color);
+        border-right: 2px solid var(--body-text-color);
+        text-align: right;
+      }
+
+      td.rv {
+        border-right: 2px solid var(--body-text-color);
+        text-align: right;
+      }
+
+      td.vr {
+        border-left: 2px solid var(--body-text-color);
+        text-align: right;
+      }
+
+      td.lv {
+        border-right: 2px solid var(--body-text-color);
+        text-align: left;
+      }
+
+      td.vl {
+        border-left: 2px solid var(--body-text-color);
+        text-align: left;
+      }
+
+      td.cv {
+        border-right: 2px solid var(--body-text-color);
+        text-align: center;
+      }
+
+      td.Xv {
+        border-right: 2px solid var(--body-text-color);
+        text-align: left;
+      }
+
+      td.vc {
+        border-left: 2px solid var(--body-text-color);
+        text-align: center;
+      }
+
+      td.hline {
+        padding: 0;
+
+        hr {
+          margin-top: 0 -1px;
+          border: 1px solid rgb(0, 0, 0);
+        }
+      }
+
+      td.hlinethick {
+        padding-left: 0;
+        padding-right: 0;
+
+        hr {
+          margin-top: 0 -1px;
+          border: 2px solid var(--body-text-color);
+        }
+      }
+
+      th.b1 {
+        border-bottom: 1px solid var(--body-text-color);
+      }
+
+      td.b1 {
+        border-bottom: 1px solid var(--body-text-color);
+      }
+
+      th.b2 {
+        border-bottom: 2px solid var(--body-text-color);
+      }
+
+      td.b2 {
+        border-bottom: 2px solid var(--body-text-color);
+      }
+
+      th.b3 {
+        border-bottom: 3px solid var(--body-text-color);
+      }
+
+      td.b3 {
+        border-bottom: 3px solid var(--body-text-color);
+      }
+
+      th.b0 {
+        border-bottom: none;
+      }
+
+      td.b0 {
+        border-bottom: none;
+      }
+
+      th.t1 {
+        border-top: 1px solid var(--body-text-color);
+      }
+
+      td.t1 {
+        border-top: 1px solid var(--body-text-color);
+      }
+
+      th.t2 {
+        border-top: 2px solid var(--body-text-color);
+      }
+
+      td.t2 {
+        border-top: 2px solid var(--body-text-color);
+      }
+
+      th.t3 {
+        border-top: 3px solid var(--body-text-color);
+      }
+
+      td.t3 {
+        border-top: 3px solid var(--body-text-color);
+      }
+
+      th.t0 {
+        border-top: none;
+      }
+
+      td.t0 {
+        border-top: none;
+      }
+
+      th.r1 {
+        border-right: 1px solid var(--body-text-color);
+      }
+
+      td.r1 {
+        border-right: 1px solid var(--body-text-color);
+      }
+
+      th.r2 {
+        border-right: 2px solid var(--body-text-color);
+      }
+
+      td.r2 {
+        border-right: 2px solid var(--body-text-color);
+      }
+
+      th.r3 {
+        border-right: 3px solid var(--body-text-color);
+      }
+
+      td.r3 {
+        border-right: 3px solid var(--body-text-color);
+      }
+
+      th.r0 {
+        border-right: none;
+      }
+
+      td.r0 {
+        border-right: none;
+      }
+
+      th.l1 {
+        border-left: 1px solid var(--body-text-color);
+      }
+
+      td.l1 {
+        border-left: 1px solid var(--body-text-color);
+      }
+
+      th.l2 {
+        border-left: 2px solid var(--body-text-color);
+      }
+
+      td.l2 {
+        border-left: 2px solid var(--body-text-color);
+      }
+
+      th.l3 {
+        border-left: 3px solid var(--body-text-color);
+      }
+
+      td.l3 {
+        border-left: 3px solid var(--body-text-color);
+      }
+
+      th.l0 {
+        border-left: none;
+      }
+
+      td.l0 {
+        border-left: none;
+      }
+    }
+
+    tr.header-vertical {
+      th {
+        writing-mode: vertical-rl;
+        padding-left: 2em;
+      }
+    }
+  }
+
+  table.notation-list {
+    tr {
+      th {
+        text-align: left;
+        margin-left: 1em;
+      }
+
+      td {
+        text-align: left;
+        vertical-align: top;
+      }
+    }
+  }
+
+  tr {
+    th.r0.l0 {
+      padding-left: 0.8em;
+      padding-right: 0.8em;
+    }
+
+    td.r0.l0 {
+      padding-left: 0.8em;
+      padding-right: 0.8em;
+    }
+  }
+}
+
+.center {
+  table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.tabular-box.natural-width table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tabular-box {
+  margin-top: 0.5em;  //minimum space above to separate from figcaption
+}

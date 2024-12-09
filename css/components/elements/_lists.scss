@@ -1,0 +1,42 @@
+// Entry point for ol/ul/dl web styling
+
+@use "list-styles";
+@use "description-lists";
+@use '../helpers/cols';
+
+// generate multi column rules for lists
+@include cols.allow-cols('li');
+
+// use .ptx-content to avoid styling lists in toc/header/etc...
+.ptx-content {
+  ol,
+  ul {
+    // margin-top: 0.75em;
+    margin-bottom: 0;
+
+    ol,
+    ul {
+      // margin-top: 0.5em;
+    }
+  }
+
+  li {
+    margin-top: 0.5em;
+    // margin-bottom: 0;
+
+    // & > .para:first-child {
+    //     margin-top: 0;
+    // }
+
+    .title {
+      font-size: 100%;
+      font-weight: normal;
+      font-style: italic;
+    }
+  }
+}   // .ptx-content
+
+// provide space for custom markers
+ol > li {
+  padding-left: 0.25em;
+}

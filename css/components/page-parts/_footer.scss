@@ -1,0 +1,47 @@
+$max-width: 0 !default;  // 0 == no max width
+$navbar-breakpoint: 856px !default;
+$nav-height: 36px !default;
+
+@use 'components/helpers/buttons-default' as buttons;
+
+.ptx-page-footer {
+  background: var(--footer-background);
+  padding-top: 0;
+  border-top: 2px solid var(--page-border-color);
+  border-bottom: 2px solid var(--page-border-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  gap: 90px;
+  position: relative;
+  @if $max-width > 0 {
+    max-width: $max-width;
+  }
+  
+  
+  & > a {
+    margin: 1em 0;
+    color: var(--body-text-color);
+  }
+
+  & > a > .logo:first-child {
+    height: 3em;
+    width: unset;
+    margin: 0;
+  }
+
+  .feedback-link {
+    @include buttons.ptx-button;
+  }
+}
+
+
+@media screen and (max-width: $navbar-breakpoint) {
+  .ptx-page-footer {
+    // prevent icons from spreading too much
+    gap: 50px;
+    justify-content: center;
+    margin-bottom: $nav-height - 2;
+  }
+}

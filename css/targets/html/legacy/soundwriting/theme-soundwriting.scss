@@ -1,0 +1,12 @@
+// Designed to support custom styling for https://github.com/UPS-CWLT/soundwriting
+// Imports in this file should be relative to css root
+@use 'legacy/pretext.css';
+@use 'legacy/pretext_add_on.css';
+@use 'legacy/pretext_search';
+@use 'targets/html/legacy/default/shell_default.css';
+@use 'targets/html/legacy/default/banner_default.css';
+@use 'targets/html/legacy/default/navbar_default.css';
+@use 'targets/html/legacy/default/toc_default.css';
+@use 'targets/html/legacy/default/knowls_default.css';
+@use 'style_soundwriting.css';
+@use 'legacy/colors/all_colors.scss';

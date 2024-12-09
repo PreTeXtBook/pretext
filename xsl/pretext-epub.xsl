@@ -67,14 +67,6 @@
     <xsl:text>endnotes.xhtml</xsl:text>
 </xsl:variable>
 
-<!-- A publisher file can set HTML styling which will apply  -->
-<!-- here since EPUB is just packaged-up XHTML.  We get two  -->
-<!-- values set free of charge in the -html converter, and   -->
-<!-- we later pass them on to the packaging step.  These     -->
-<!-- are complete filenames, with no path information.       -->
-<!--   $html-css-colorfile                                   -->
-<!--   $html-css-stylefile                                   -->
-
 <!-- The value of the unique-identifier attribute of -->
 <!-- the package element of the container file must  -->
 <!-- match the value of the id attribute of the      -->
@@ -260,14 +252,10 @@
     <!-- other exsl:document uses.                                             -->
     <exsl:document href="{$file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
+            <xsl:call-template name="html-theme-attributes"/>
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                 <xsl:call-template name="converter-blurb-html" />
-                <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>
@@ -451,11 +439,6 @@
     <xsl:variable name="discovery-manifest" select="exsl:node-set($discovery)"/>
     <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
-        <item id="css-ptx"    href="{$css-dir}/pretext.css"           media-type="text/css"/>
-        <item id="css-addon"  href="{$css-dir}/pretext_add_on.css"    media-type="text/css"/>
-        <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
-        <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
-        <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
         <xsl:choose>
             <xsl:when test="$b-kindle">
                 <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
@@ -699,7 +682,6 @@
         <author>
             <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
         </author>
-        <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
         <!-- Decide what to do with preview images, etc. -->
         <images>
             <xsl:for-each select="$document-root//image">
@@ -833,6 +815,7 @@ width: 100%
 <xsl:template match="frontmatter" mode="epub">
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
+            <xsl:call-template name="html-theme-attributes"/>
             <!-- head element should not be empty -->
             <head>
                 <meta charset="utf-8"/>
@@ -840,11 +823,6 @@ width: 100%
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
                 <xsl:if test="not($b-authored-cover)">
-                    <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
                     <xsl:call-template name="epub-kindle-css"/>
                 </xsl:if>
@@ -886,13 +864,9 @@ width: 100%
     </exsl:document>
     <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html xmlns:epub="http://www.idpf.org/2007/ops">
+            <xsl:call-template name="html-theme-attributes"/>
             <head>
                 <meta charset="utf-8"/>
-                <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
-                <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>Table of Contents</title>
@@ -1284,14 +1258,10 @@ width: 100%
         <!-- cribbed from "file-wrap" elsewhere -->
         <exsl:document href="{$content-dir}/{$xhtml-dir}/{$endnote-file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
             <html>
+                <xsl:call-template name="html-theme-attributes"/>
                 <head>
                     <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                     <xsl:call-template name="converter-blurb-html" />
-                    <link href="../{$css-dir}/pretext.css"           rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
-                    <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
                     <xsl:call-template name="epub-kindle-css"/>
                     <title>Endnotes</title>

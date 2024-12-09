@@ -1,0 +1,135 @@
+
+
+/* the index at the back of the book */
+// TODO - refactor
+
+
+.navbar .indexnav {
+  position: absolute;
+  top: 46px;
+  right: 0;
+}
+
+.mininav {
+  float: left;
+  padding-top: 0.7ex;
+  padding-left: 1ex;
+}
+
+
+.indexjump {
+  margin-left: 1.5ex;
+  margin-top: 0.2ex;
+  padding-top: 0;
+  float: left;
+  line-height: 0.95;
+}
+
+.indexjump a {
+  padding-left: 2.5px;
+  padding-right: 0.5px;
+  width: 2.5ex;
+/*
+*  *  omitted, because we put a space in the source
+*      padding-right: 3px;
+*      */
+  margin-right: -1px;
+  color: inherit;
+  font-size: 80%;
+  text-align: center;
+}
+.indexjump a::after{
+  content: "";
+  display: inline-block;
+}
+.indexjump a:nth-of-type(14){
+  padding-left: 1.8ex;
+}
+.indexjump a:last-child {
+  padding-right: 10px;
+}
+
+.indexjump a:hover {
+  background: var(--activated-content-bg);
+}
+
+.indexitem {
+  margin-top: 4px;
+}
+
+.subindexitem {
+  margin-left: 2em;
+  font-size: 95%;
+  margin-top: -1px;
+}
+
+.subsubindexitem {
+  margin-left: 3.5em;
+  font-size: 95%;
+  margin-top: -1px;
+}
+
+.indexknowl {
+  margin-left: 0.11em;
+}
+em + .indexknowl  {
+  margin-left: -0.25em;
+}
+.indexknowl a {
+  margin-left: 2em;
+}
+
+.indexitem .see,
+.subindexitem .see,
+.subsubindexitem .see {
+  margin-left: 1em;
+  margin-right: 0;
+}
+.indexitem .seealso,
+.subindexitem .seealso,
+.subsubindexitem .seealso {
+  margin-left: 1em;
+  margin-right: 0;
+}
+.indexitem .see em,
+.subindexitem .see em,
+.subsubindexitem .see em,
+.indexitem .seealso em,
+.subindexitem .seealso em,
+.subsubindexitem .seealso em {
+  margin-right: 0.25em;
+  font-style: italic;
+}
+/*  note that multiple things after "see" are in separate spans */
+.indexitem .see + .see,
+.subindexitem .see + .see,
+.subsubindexitem .see + .see,
+.indexitem .seealso + .seealso,
+.subindexitem .seealso + .seealso,
+.subsubindexitem .seealso + .seealso {
+   margin-left: 0;
+   margin-right: 0;
+}
+
+.indexitem .indexknowl {
+  font-size: 90%;
+}
+
+.indexitem [data-knowl], .subindexitem [data-knowl], .indexitem [data-knowl]:hover {
+  padding-right: 2px;
+  padding-left: 2px;
+}
+.indexknowl [data-knowl]:hover, .indexknowl .active[data-knowl] {
+  margin-left: 2em;
+}
+
+.subindexitem .indexknowl {
+  font-size: 95%;
+}
+.subsubindexitem .indexknowl {
+  font-size: 95%;
+}
+
+.indexletter {
+  margin-top: 1.5em;
+}

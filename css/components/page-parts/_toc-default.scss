@@ -1,0 +1,78 @@
+$scrolling: true !default;
+$sidebar-width: 240px !default;
+$nav-height: 36px !default;
+$sidebar-breakpoint: 856px !default;
+$navbar-breakpoint: 800px !default;
+
+@use 'toc-basics' with (
+  $sidebar-width: $sidebar-width,
+  $nav-height: $nav-height
+);
+
+.ptx-sidebar {
+  flex: 0 0 $sidebar-width;
+  @if $scrolling {
+    position: sticky;
+    top: $nav-height;
+    overflow-y: hidden;
+  }
+}
+
+.ptx-toc {
+  @if $scrolling {
+    position: sticky;
+    top: $nav-height;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - $nav-height);
+    margin-top: -1px; // partially hide top border of first toc item
+
+    // need space to disappear behind footer - pretext logo fills that space
+    @include toc-basics.ptx-logo;
+
+    // border under the last item before the pretext icon
+    & > .toc-item-list:first-child > .toc-item:last-child {
+      border-bottom: 3px solid var(--toc-border-color);
+    }
+  }
+  @else {
+    // not scrolling
+    scrollbar-width: none;
+    padding: 10px 0;
+    box-sizing: border-box;
+    border-right: 1px solid var(--toc-border-color);
+  }
+}
+
+// Hide once we get too narrow
+@media screen and (max-width: $sidebar-breakpoint) {
+  .ptx-sidebar {
+    display: none;
+    position: sticky;
+    top: $nav-height;
+    z-index: 1000;
+    background: var(--content-background);
+    min-height: 30vh;
+    max-height: 80vh;
+    border-right: 2px solid var(--toc-border-color);
+    border-bottom: 2px solid var(--toc-border-color);
+    width: $sidebar-width;
+  }
+
+  @if not $scrolling {
+    .ptx-sidebar {
+      overflow-y: scroll;
+    }
+  }
+}
+
+// flip sidebar to bottom one navbar moves
+@media screen and (max-width: min($sidebar-breakpoint, $navbar-breakpoint)) {
+  .ptx-sidebar {
+    position: fixed;
+    top: unset;
+    bottom: $nav-height;
+    border-top: 2px solid var(--toc-border-color);
+    border-bottom: 0;
+  }
+}

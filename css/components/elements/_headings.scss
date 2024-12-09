@@ -1,0 +1,86 @@
+// headings for standard page elements - sections/articles/etc...
+// more specialized headings (exercises) should be defined in the specific component
+// complex stylizing (like boxes) should be done by "chunks"
+
+// reset size/margin for headings
+.heading:is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  font-size: unset;
+}
+
+.heading {
+  line-height: 1.1;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+section > .heading {
+  font-size: 1.75em;
+  color: var(--body-title-color);
+  line-height: 1.25em;
+  margin-top: 2.5em;
+  margin-bottom: 0.5em;
+
+  // pull in any following items that default to a larger top margin
+  & + * {
+    margin-top: 0.5em;
+  }
+}
+
+.ptx-content > section > .heading {
+  //first heading on page
+  margin-top: 0.5em;
+}
+
+section section > .heading {
+  font-size: 1.5em;
+  margin-top: 2em;
+}
+
+section section section > .heading {
+  font-size: 1.40em;
+  margin-top: 2em;
+}
+
+
+article > .heading {
+  font-size: 1.25em;
+  margin-top: 1.5em;
+
+  // pull in any following items that default to a larger top margin
+  & + * {
+    margin-top: 0.5em;
+  }
+}
+
+.paragraphs > .heading {
+  font-size: 1.125em;
+}
+
+// heading followed by no content and then a subsection that starts with heading
+:is(section, article) > .heading + :is(section, article) > .heading {
+  margin-top: 0.5em;
+}
+
+// smaller headings on phone screens
+@media screen and (max-width: 480px) {
+  section > .heading {
+      font-size: 1.5em;
+      line-height: 1.33em;
+      margin-top: 1em;
+  }
+  section section > .heading {
+      font-size: 1.3em;
+      line-height: 1.15em;
+  }
+  section section section > .heading {
+      font-size: 1.15em;
+      line-height: 1em;
+  }
+}
+
+.heading.hide-type > .type {
+  display: none;
+}

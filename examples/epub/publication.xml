@@ -34,7 +34,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- HTML-Specific Options -->
     <html>
-        <css style="default" colors="maroon_grey"/>
+        <css theme="default-modern" palette="blue-gray"/>
     </html>
 
 </publication>
