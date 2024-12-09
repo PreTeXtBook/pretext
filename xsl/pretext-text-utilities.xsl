@@ -285,17 +285,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="substring-before-last">
     <xsl:param name="input" />
     <xsl:param name="substr" />
-    <xsl:if test="$substr and contains($input, $substr)">
-        <xsl:variable name="temp" select="substring-after($input, $substr)" />
-        <xsl:value-of select="substring-before($input, $substr)" />
-        <xsl:if test="contains($temp, $substr)">
-            <xsl:value-of select="$substr" />
-            <xsl:call-template name="substring-before-last">
-                <xsl:with-param name="input" select="$temp" />
-                <xsl:with-param name="substr" select="$substr" />
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:if>
+    <!-- preserve the contents of $input if there is no match -->
+    <xsl:param name="preserve" select="false()" />
+    <xsl:choose>
+      <xsl:when test="$substr and contains($input, $substr)">
+          <xsl:variable name="temp" select="substring-after($input, $substr)" />
+          <xsl:value-of select="substring-before($input, $substr)" />
+          <xsl:if test="contains($temp, $substr)">
+              <xsl:value-of select="$substr" />
+              <xsl:call-template name="substring-before-last">
+                  <xsl:with-param name="input" select="$temp" />
+                  <xsl:with-param name="substr" select="$substr" />
+                  <!-- intentionally do not pass on $preserve -->
+              </xsl:call-template>
+          </xsl:if>
+      </xsl:when>
+      <xsl:when test="$preserve and not(contains($input, $substr))">
+          <xsl:value-of select="$input" />
+      </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- If the substring is not contained, the first substring-after()   -->
