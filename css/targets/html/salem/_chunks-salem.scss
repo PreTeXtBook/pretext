@@ -61,7 +61,7 @@ $border-radius: 2px !default;
   );
 }
 
-$c-boxes: "theorem-like", "definition-like", "example-like", "project-like", "computation-like", "proof-like";
+$c-boxes: "theorem-like", "definition-like", "example-like", "exercise-like", "project-like", "computation-like", "proof-like";
 
 @each $box in $c-boxes {
   .#{$box} {

@@ -1,4 +1,8 @@
-@mixin ptx-button {
+$border-radius: 0 !default;
+
+@mixin ptx-button(
+  $border-radius: $border-radius
+) {
   font: inherit;
   display: flex;
   justify-content: center;
@@ -11,6 +15,7 @@
   border-width: 1px;
   border-color: var(--button-border-color);
   border-style: solid;
+  border-radius: $border-radius;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
