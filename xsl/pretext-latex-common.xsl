@@ -4338,14 +4338,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Articles may have an abstract in the frontmatter. We -->
 <!-- accept the LaTeX article class approach and switch   -->
 <!-- to a localization of the heading just prior to use.  -->
+<!-- Keywords are placed inside the abstract, at the end. -->
 <xsl:template match="article/frontmatter/abstract">
     <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <xsl:if test="$bibinfo/keywords">
+        <xsl:apply-templates select="$bibinfo/keywords"/>
+    </xsl:if>
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
+
+<xsl:template match="bibinfo/keywords">
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+    <xsl:text>\noindent{\bfseries </xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}. </xsl:text>
+    <xsl:apply-templates select="*" />
+    <xsl:text>.&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ################### -->
 <!-- Front Matter, Books -->
