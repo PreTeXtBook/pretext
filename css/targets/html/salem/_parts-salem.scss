@@ -14,6 +14,7 @@ $sidebar-breakpoint: $content-width + $sidebar-width + $content-side-padding * 2
   $content-width: $content-width,
   $content-side-padding: $content-side-padding,
   $centered-content: true,
+  $footer-button-border-radius: 2px,
 );
 
 @use 'components/page-parts/banner' with (
