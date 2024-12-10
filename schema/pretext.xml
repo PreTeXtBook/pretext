@@ -2963,6 +2963,17 @@
 
         <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg/> <init>URL</init>s).  <c>bibinfo</c> is like a very small database whose content migrates to a titlepage and colophon if <c>titlepage/titlepage-items</c> or <c>colophon/colophon-items</c> are present. For HTML, titlepage means the page for the <c>frontmatter</c> , and for <latex/> these items migrate to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
 
+        <p>Some notes about new additions to <c>bibinfo</c>.
+            <ul>
+                <li>
+                    <p>JATS has <c>permissions</c> but we have <c>copyright</c>.  It seems like these have the same content.</p>
+                </li>
+                <li>
+                    <p>We introduce <c>keywords</c> (equivalent to JATS <c>kwd-group</c>) which contains a sequence of <c>keyword</c> elements.  There can be multiple <c>keywords</c> elements, as this can be used for subject classifications, or author keywords, etc.  Attributes on the <c>keywords</c> element can be used to distinguish these: <attr>authority</attr> can be <q>msc</q> for Math Subject Classification, in which cas the <tag>keywords</tag> can also have <attr>variant</attr> to specify the year version of the MSC.  The default <attr>authority</attr> is <q>author.</q></p>
+                </li>
+            </ul>
+        </p>
+
         <fragment xml:id="frontmatter">
             <title>Front matter</title>
             <code>
@@ -2986,21 +2997,17 @@
             Bibinfo =
                 element bibinfo {
                     (
-                        (Author, Author*, Editor*)
+                        (Author+, Editor*)
                         |
-                        (Editor, Editor*)
+                        (Editor+)
                     ),
                     Credit*,
                     Date?,
                     ColophonCredit*,
                     element edition {text}?,
+                    Keywords*,
                     Website?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        ShortLicense?
-                    }?
+                    Copyright?
                 }
             TitlePage =
                 element titlepage {
@@ -3010,6 +3017,16 @@
             PersonName = element personname {TextSimple}
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
+            Keywords = element keywords {
+                attribute authority {text}?,
+                attribute variant {text}?,
+                Title?,
+                Keyword+
+            }
+            Keyword = element keyword {
+                attribute primary {"yes"|"no"}?,
+                TextSimple
+            }
             Author =
                 element author {
                     PersonName,
@@ -3044,6 +3061,13 @@
                 }
             ShortLicense = element shortlicense {TextLong}
             Website = element website {Url}
+            Copyright = 
+                element copyright {
+                    element year {TextShort},
+                    element holder {text},
+                    element minilicense {TextShort}?,
+                    ShortLicense?
+                }
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
