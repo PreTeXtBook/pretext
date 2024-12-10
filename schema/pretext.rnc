@@ -197,21 +197,17 @@
             Bibinfo =
                 element bibinfo {
                     (
-                        (Author, Author*, Editor*)
+                        (Author+, Editor*)
                         |
-                        (Editor, Editor*)
+                        (Editor+)
                     ),
                     Credit*,
                     Date?,
                     ColophonCredit*,
                     element edition {text}?,
+                    Keywords*,
                     Website?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        ShortLicense?
-                    }?
+                    Copyright?
                 }
             TitlePage =
                 element titlepage {
@@ -221,6 +217,16 @@
             PersonName = element personname {TextSimple}
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
+            Keywords = element keywords {
+                attribute authority {text}?,
+                attribute variant {text}?,
+                Title?,
+                Keyword+
+            }
+            Keyword = element keyword {
+                attribute primary {"yes"|"no"}?,
+                TextSimple
+            }
             Author =
                 element author {
                     PersonName,
@@ -255,6 +261,13 @@
                 }
             ShortLicense = element shortlicense {TextLong}
             Website = element website {Url}
+            Copyright = 
+                element copyright {
+                    element year {TextShort},
+                    element holder {text},
+                    element minilicense {TextShort}?,
+                    ShortLicense?
+                }
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
