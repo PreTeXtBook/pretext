@@ -1,0 +1,95 @@
+// Styles for the items that are (at least generally) a part of the front matter
+// There are some pretty generic class names. Those get wrapped with a class
+// limiting their scope to the expected page
+
+.frontmatter {
+  & > .heading {
+    display: block;
+    text-align: center;
+  }
+
+  & > .heading .title,
+  .book > .heading .title {
+    font-size: 1.3em;
+  }
+
+  & > .heading .subtitle,
+  .book > .heading .subtitle {
+    display: block;
+    font-weight: normal;
+    color: var(--byline-color);
+    font-size: 0.875em;
+    line-height: 1.42857em;
+    margin-top: 0.35714em;
+  }
+
+  & > .para:first-of-type {
+    margin-top: 4em;
+  }
+
+  & > .author,
+  & > .credit {
+    margin-top: 2em;
+    text-align: center;
+  }
+
+  .author:first-of-type {
+    margin-top: 4em;
+  }
+
+  & > .author .author-name {
+    font-size: 120%;
+  }
+
+  .date {
+    display: block;
+    margin-top: 2em;
+    text-align: center;
+  }
+
+  .credit .title {
+    font-size: 1em;
+  }
+
+  .credit .author {
+    font-size: 0.9em;
+    margin-top: 0.75em;
+  }
+
+  .author-info {
+    font-size: 90%;
+  }
+
+  .summary-links {
+    margin-top: 4em;
+  }
+
+  .abstract {
+    margin: 4em 2em;
+  }
+
+  .abstract > .title {
+    font-size: 1.125em;
+    font-weight: 600;
+    line-height: 1.125em;
+    display: inline;
+  }
+
+  .abstract > .title::after {
+    content: ".\2009\2009\2009";
+  }
+  
+  .abstract > .title + .para {
+    display: inline;
+  }
+
+  .colophon {
+    .copyright {
+      margin-top: 2.5em;
+    }
+  
+    .license {
+      margin-top: 2.5em;
+    }
+  }
+}

@@ -1,0 +1,77 @@
+// TODO - refactor
+
+.sagecell_sessionOutput pre {
+  font-family: var(--font-monospace);
+}
+
+.sagecell {
+  white-space: normal;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.sage-interact.sagecell {
+  margin: 0;
+}
+
+.sagecell_evalButton {
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 0 0.65em;
+}
+
+.sagecell_evalButton {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  /* Disable accidental text-selection */
+  user-select: none;
+  /* Truncate overflowing text with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.sagecell_evalButton {
+  color: #383838;
+  background-image: linear-gradient(#f7f7f7, #bbbbbb);
+  border-color: #c4c4c4;
+}
+
+.sagecell_evalButton:hover {
+  color: #181868;
+  background-image: linear-gradient(#bbbbbb, #f7f7f7);
+}
+
+.sagecell_evalButton:focus,
+.sagecell_evalButton:active {
+  color: #20160b;
+  background-image: linear-gradient(#ff6852, #ffd7d1);
+  border-color: #ff2822;
+}
+
+.sagecell .sagecell_editor {
+  margin-bottom: 8px;
+}
+
+.sageanswer {
+  font-family: monospace;
+  white-space: pre;
+  margin-left: 3em;
+  margin-bottom: 2em;
+}
+
+.sageanswer .key {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 1em;
+}
+
+.sageanswer .output {
+  display: inline-block;
+  vertical-align: top;
+}

@@ -1117,7 +1117,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     if external_abs:
         external_dir = os.path.join(tmp_dir, "external")
         shutil.copytree(external_abs, external_dir)
-    copy_html_css_js(tmp_dir)
+    copy_html_js(tmp_dir)
 
     # Build list of id's into a scratch directory/file
     id_filename = os.path.join(tmp_dir, "dynamic-ids.txt")
@@ -2404,8 +2404,8 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Copy in external resources (e.g., js code)
     _, external_abs = get_managed_directories(xml_source, pub_file)
     copy_managed_directories(tmp_dir, external_abs=external_abs)
-    # place CSS and JS in scratch directory
-    copy_html_css_js(tmp_dir)
+    # place JS in scratch directory
+    copy_html_js(tmp_dir)
 
     # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
@@ -3184,22 +3184,13 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # EPUB exists from above xsltproc call
     css_dir = os.path.join(tmp_dir, "EPUB", "css")
     os.mkdir(css_dir)
-    stylefile = packaging_tree.xpath("/packaging/css/@stylefile")[0]
-    colorfile = packaging_tree.xpath("/packaging/css/@colorfile")[0]
-    for cssfilename in [
-        str(stylefile),
-        str(colorfile),
-        "pretext.css",
-        "pretext_add_on.css",
-        "setcolors.css",
-    ]:
-        css = os.path.join(get_ptx_xsl_path(), "..", "css", cssfilename)
-        shutil.copy2(css, css_dir)
+
+    # All styles are baked into one of these two files
     if math_format == "kindle":
-        css = os.path.join(get_ptx_xsl_path(), "..", "css", "kindle.css")
+        css = os.path.join(get_ptx_xsl_path(), "../css/dist/kindle.css")
         shutil.copy2(css, css_dir)
     if math_format == "svg":
-        css = os.path.join(get_ptx_xsl_path(), "..", "css", "epub.css")
+        css = os.path.join(get_ptx_xsl_path(), "../css/dist/epub.css")
         shutil.copy2(css, css_dir)
 
     # EPUB Cover File
@@ -3408,9 +3399,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     images = packaging_tree.xpath("/packaging/images/image[@filename]")
     for im in images:
         source = os.path.join(source_dir, str(im.get("sourcename")))
-        dest = os.path.join(xhtml_dir, str(im.get("filename")))
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
-        shutil.copy2(source, dest)
+        # empty image names in sample book were breaking my build
+        if im.get("sourcename") != "":
+            dest = os.path.join(xhtml_dir, str(im.get("filename")))
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            shutil.copy2(source, dest)
 
     # clean-up the trash
     # TODO: squelch knowls or find alternative
@@ -3564,6 +3557,139 @@ def _runestone_services(params):
     altrs_version = services.xpath("/all/version")[0].text
     return (altrs_js, altrs_css, altrs_cdn_url, altrs_version)
 
+# Helper to move a prebuilt css theme into the build directory as theme.css
+def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
+    css_src = os.path.join(get_ptx_path(), "css/dist")
+    css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
+
+    src = os.path.join(get_ptx_path(), "css/dist/theme-{}.css".format(theme_name))
+    dest = os.path.join(get_ptx_path(), os.path.join(css_dest, "theme.css"))
+
+    # ugly to have this here - it exists for more general use in _palette-dual.scss,
+    # but to support prebuilt default theme we need to look up its colors here
+    color_schemes = {
+      "blue-red": {
+        "primary-color": "#195684",
+        "secondary-color": "#932c1c",
+      },
+      "blue-green": {
+        "primary-color": "#195684",
+        "secondary-color": "#28803f",
+      },
+      "green-blue": {
+        "primary-color": "#1a602d",
+        "secondary-color": "#2a5ea4",
+      },
+      "greens": {
+        "primary-color": "#193e1c",
+        "secondary-color": "#347a3a",
+      },
+      "blues": {
+        "primary-color": "hsl(217, 70%, 20%)",
+        "secondary-color": "hsl(216, 42%, 47%)",
+      }
+    }
+
+    scheme = "blue-red"
+    if 'palette' in theme_opts['options'].keys():
+        if theme_opts['options']['palette']:
+            selected_palette = theme_opts['options']['palette']
+            if selected_palette in color_schemes.keys():
+                scheme = theme_opts['options']['palette']
+            else:
+                log.warning("Selected palette " + selected_palette + " not found in color schemes. Using default scheme.")
+
+    if 'primary-color' not in theme_opts['options'].keys():
+        theme_opts['options']['primary-color'] = color_schemes[scheme]['primary-color']
+
+    if 'secondary-color' not in theme_opts['options'].keys():
+        theme_opts['options']['secondary-color'] = color_schemes[scheme]['secondary-color']
+
+    log.debug("Using prebuilt theme: " + theme_name + " with options: " + str(theme_opts))
+
+    # copy src -> dest with modifications
+    with open(src, 'r') as theme_file:
+        filedata = theme_file.read()
+
+        # modify file so that it points to the map file theme.css.map
+        filedata = re.sub(r'sourceMappingURL=[^\s]*', r'sourceMappingURL=theme.css.map', filedata)
+
+        # append some css variables to the file so that colors can be customized
+        # without rebuilding the theme
+        regular_vars = {k:v for k, v in theme_opts['options'].items() if "-dark" not in k}
+        if regular_vars:
+            filedata += "\n/* generated from pub variables */\n:root:not(.dark-mode) {"
+            for key, value in regular_vars.items():
+                filedata += "--{}: {};".format(key, value)
+            filedata += "}"
+
+        dark_vars = {k.replace("-dark",""):v for k, v in theme_opts['options'].items() if "-dark" in k}
+        if dark_vars:
+            filedata += "\n/* generated from pub variables */\n:root.dark-mode {"
+            for key, value in dark_vars.items():
+                filedata += "--{}: {};".format(key, value)
+            filedata += "}"
+
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        with open(dest, 'w+') as file:
+            file.write(filedata)
+
+    # map file copied as is if it exists
+    if os.path.exists(src + ".map"):
+        shutil.copy(src + ".map", dest + ".map")
+
+# Helper to build a custom version of a theme
+def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
+    ptx_path = get_ptx_path()
+    script = os.path.join(ptx_path, "script", "cssbuilder", "cssbuilder.mjs")
+    css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
+
+    # if doing building a completely custom theme, update entry-point to include full path as string
+    if theme_name == "custom":
+        theme_opts['options']['entry-point'] = os.path.join(get_source_path(xml), theme_opts['options']['entry-point'])
+
+    # attempt build
+    error_message = "Node.js is required to build themes other than default-modern. Make sure it is installed and in your PATH"
+    try:
+        import subprocess, json
+        # theme name is prefixed with "theme-" in the cssbuilder script output
+        full_name = "theme-{}".format(theme_name)
+        log.debug("Building custom theme: " + full_name)
+        log.debug("Theme options:" + json.dumps(theme_opts))
+        result = subprocess.run(["node", script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=10)
+        if result.stdout:
+            log.debug(result.stdout.decode())
+        if result.stderr:
+            error_message = result.stderr.decode()
+            raise Exception("Failed to build custom theme")
+    except Exception as e:
+        log.error(error_message)
+        raise e
+
+def check_color_contrast(color1, color2):
+    from coloraide import Color
+    contrast = Color(color1).contrast(color2, method='wcag21')
+    if contrast < 4.5:
+        log.warning("Color " + color1 + " does not have enough contrast with expected background color " + color2 + ". Contrast ratio is " + str(contrast) + " but should be at least 4.5. Adjust your publisher file html/css/variables to ensure sufficient contrast.")
+
+def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
+    theme_name = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-name')
+    theme_opts_json = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-options')
+    import json
+    theme_opts = json.loads(theme_opts_json)
+
+    # attempt basic sanity check of colors
+    for var, check_color in theme_opts['contrast-checks'].items():
+        if var in theme_opts['options']:
+            check_color_contrast(theme_opts['options'][var], check_color)
+
+    # prerolled themes with no options get copied from css/dist; otherwise, build a custom theme
+    prerolled = "-legacy" in theme_name or theme_name == "default-modern"
+    if prerolled:
+        _move_prebuilt_theme(theme_name, theme_opts, tmp_dir)
+    else:
+        _build_custom_theme(xml, theme_name, theme_opts, tmp_dir)
+
 # todo - rewrite other code that does similar things to use this function?
 def get_web_asset(url):
     """Get the contents of an http request"""
@@ -3693,8 +3819,11 @@ def html(
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place CSS and JS in scratch directory
-    copy_html_css_js(tmp_dir)
+    # place JS in scratch directory
+    copy_html_js(tmp_dir)
+
+    # build or copy theme
+    build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -4555,17 +4684,11 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
         shutil.copytree(generated_abs, generated_dir)
 
 
-def copy_html_css_js(work_dir):
+def copy_html_js(work_dir):
     '''Copy all necessary CSS and JS into working directory'''
 
     # Place support files where expected.
-    # We are not careful about placing files that are not used/necessary.
-    # In particular, all CSS themes are present for the situation where
-    # the reader can choose/switch themes on-the-fly.
-    css_src = os.path.join(get_ptx_path(), "css")
-    css_dest = os.path.join(work_dir, "_static", "pretext", "css")
-    shutil.copytree(css_src, css_dest)
-
+    # We are not careful about placing only modules that are needed, all are copied.
     js_src = os.path.join(get_ptx_path(), "js")
     js_dest = os.path.join(work_dir, "_static", "pretext", "js")
     shutil.copytree(js_src, js_dest)
@@ -4683,7 +4806,8 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
             if len(parts) == 1:
                 pairs[parts[0]] = ''
             else:
-                pairs[parts[0]] = parts[1]
+                # value could have spaces, so rejoin other parts
+                pairs[parts[0]] = " ".join(parts[1:])
 
     if variable in pairs:
         return pairs[variable]

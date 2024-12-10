@@ -1,0 +1,35 @@
+// Entry point for common web styling
+
+// It is assumed these are used by all web stylesheets
+// page-parts/ and chunks/ are not included here as they vary more from theme to theme
+
+// Breakpoint at which the navbar moves to the bottom of the screen
+$navbar-breakpoint: 800px !default;
+
+@use 'spacing';
+@use 'elements/lists';
+@use 'elements/headings';
+@use 'elements/links';
+@use 'elements/tables';
+@use 'elements/front-matter';
+@use 'elements/summary-links';
+@use 'elements/footnotes';
+@use 'elements/index'; 
+@use 'elements/media';
+@use 'elements/figures';
+@use 'elements/poem';
+@use 'elements/prism';
+@use 'elements/math';
+@use 'elements/permalinks';
+@use 'elements/misc-content';
+@use 'printing';
+@use 'worksheet';
+@use 'google-search';
+@use 'pretext-search';
+@use 'interactives/runestone';
+@use 'interactives/webwork';
+@use 'interactives/sagecell';
+
+@use 'interactives/calculators' with (
+  $navbar-breakpoint: $navbar-breakpoint,
+);

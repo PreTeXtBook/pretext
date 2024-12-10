@@ -1,0 +1,61 @@
+// Implements a palette with one main --primary-color used in a very sparing fashion
+
+@use "sass:meta";
+@use "sass:color";
+@use "sass:map";
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/color-vars" as color-vars;
+
+$primary-color: #2a5ea4 !default;
+
+// Start with values from color-vars
+$colors: map.merge(
+  color-vars.$colors, ()
+);
+
+// Compute color blends and add them as variables
+$blends: colorHelpers.get-blends('primary-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);
+
+// Override some colors
+$colors: map.merge(
+  $colors,
+  (
+    "primary-color": $primary-color,
+
+    "link-text-color": var(--primary-color),
+    "link-active-text-color": var(--primary-color-white-40),
+    "link-active-background": var(--background-color-gray-30),
+    "link-alt-text-color": var(--link-text-color),
+    "link-alt-active-background": var(--link-active-text-color),
+
+    "banner-background": "#fafafa",
+
+    "toc-border-color": #c9c9c9,
+    "toc-text-color": var(--primary-color-black-30),
+    "tocitem-background": #f2f2f2,
+
+    "tocitem-active-background": var(--primary-color),
+    "tocitem-highlight-background": var(--primary-color-white-10),
+
+    // "toclevel1-background": var(--primary-color-white-95),
+    "toclevel2-background": var(--primary-color-white-98),
+    "toclevel3-background": var(--primary-color-white-95),
+
+    "doc-title-color": var(--primary-color),
+    "body-title-color": "black",
+
+    "knowl-background": #f8f8f8,
+    "knowl-nested-1-background": var(--knowl-background),
+    "knowl-nested-2-background": var(--knowl-background),
+    "knowl-nested-3-background": var(--knowl-background),
+    "knowl-nested-4-background": var(--knowl-background),
+    "knowl-border-color": var(--primary-color-gray-80),
+    "block-border-color": black,
+
+    "goal-border-color": var(--primary-color-white-20),
+  )
+);
