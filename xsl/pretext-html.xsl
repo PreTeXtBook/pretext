@@ -10407,11 +10407,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- MyOpenMath Javascript header -->
-<xsl:template name="myopenmath-js">
-    <xsl:if test="$b-has-myopenmath">
-        <script src="{$html.js.dir}/lti_iframe_resizer.js"></script>
-    </xsl:if>
+<!-- lti-iframe-resizer -->
+<xsl:template name="lti-iframe-resizer">
+    <script src="{$html.js.dir}/lti_iframe_resizer.js"></script>
 </xsl:template>
 
 
@@ -10717,7 +10715,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sagecell-code" />
     <xsl:call-template name="favicon"/>
     <xsl:call-template name="webwork-js"/>
-    <xsl:call-template name="myopenmath-js"/>
+    <xsl:call-template name="lti-iframe-resizer"/>
     <xsl:call-template name="syntax-highlight"/>
     <xsl:call-template name="hypothesis-annotation" />
     <xsl:call-template name="geogebra" />
