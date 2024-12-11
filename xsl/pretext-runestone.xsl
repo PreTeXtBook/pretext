@@ -54,13 +54,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Infrastructure -->
 <!-- ######################## -->
 
-<!-- While under development, or maybe forever, do not load  -->
-<!-- Runestone Javascript unless it is necessary.  Various   -->
-<!-- values of @exercise-interactive are added in the        -->
-<!-- pre-processing phase.  program/@interactive takes on    -->
-<!-- values of 'activecode' and 'codelens'.                  -->
-<xsl:variable name="b-needs-runestone" select="boolean($document-root//*[@exercise-interactive and not(@exercise-interactive='container') and not(@exercise-interactive='static') and not(@exercise-interactive='webwork-reps') and not(@exercise-interactive='webwork-task')]|$document-root//program[@interactive]|$document-root//datafile)"/>
-
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
 <!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
@@ -211,8 +204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- Runestone for All build -->
         <!-- Hosted without a Runestone Server, just using Javascript -->
-        <!-- NB: condition on problems that benefit/need this?        -->
-        <xsl:when test="not($b-host-runestone) and $b-needs-runestone">
+        <xsl:when test="not($b-host-runestone)">
             <xsl:comment>** eBookCongig is necessary to configure interactive       **</xsl:comment><xsl:text>&#xa;</xsl:text>
             <xsl:comment>** Runestone components to run locally in reader's browser **</xsl:comment><xsl:text>&#xa;</xsl:text>
             <xsl:comment>** No external communication:                              **</xsl:comment><xsl:text>&#xa;</xsl:text>
@@ -312,9 +304,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- parameters, the tokenized node sets will be employed.  Note    -->
     <!-- how the unions of the two node-sets in the "for-each" are more -->
     <!-- like exclusive-or, as we always get exactly one of the two.    -->
-    <!-- N.B. Enclosing "if" goes away if/when $b-needs-runestone    -->
-    <!-- just becomes true all the time.  Indentation predicts this. -->
-    <xsl:if test="$b-host-runestone or $b-needs-runestone">
     <xsl:comment>*** Runestone Services ***</xsl:comment>
 
     <xsl:text>&#xa;</xsl:text>
@@ -344,7 +333,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </link>
     </xsl:for-each>
-    </xsl:if>
 </xsl:template>
 
 <!-- User Menu (aka Bust Menu)                    -->
