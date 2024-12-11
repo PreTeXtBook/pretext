@@ -4709,4 +4709,48 @@ TEST_CASE( "Test the add function" ) {
             </hint>
         </exercise>
     </exercises>
+
+    <section xml:id="splice-integration">
+        <title>Splice Integration</title>
+        <figure xml:id="horstmann-codecheck">
+            <caption>CodeCheck <c>iframe</c></caption>
+            <!-- <interactive xml:id="interactive-horstmann-codecheck" iframe="https://horstmann.com/codecheck/examples/dijkstra.html" width="95%" aspect="1:1" /> -->
+            <interactive xml:id="interactive-horstmann-codecheck" iframe="https://codecheck.io/files/wiley/ch-bj4cc-c06_exp_6_105" width="95%" aspect="1:1" />
+        </figure>
+
+        <figure xml:id="opendsa-slideshow">
+        <caption>Stack pop slideshow</caption>
+        <interactive xml:id="opendsa-slideshow-pop"
+          iframe="https://opendsax.cs.vt.edu/embed/astackPopCON"
+          width="95%"
+        />
+        </figure>
+
+        <figure xml:id="splice-integration-insert">
+          <caption>A List Insertion Exercise</caption>
+          <interactive xml:id="OpenDSA-list-insertion"
+            iframe="https://opendsax.cs.vt.edu/OpenDSA/Exercises/List/AlistInsertPRO.html"
+            width="100%"
+          />
+        </figure>
+
+        <figure xml:id="splice-integration-bs">
+          <caption>A Binary Search Exercise</caption>
+          <interactive xml:id="OpenDSA-list-insertion"
+            iframe="https://opendsax.cs.vt.edu/OpenDSA/AV/Searching/binarySearchPRO.html"
+            width="175%"
+            aspect="3:1"
+          />
+        </figure>
+
+        <figure xml:id="splice-integration-dijkstra">
+          <caption>Dijkstra's Algorithm Exercise</caption>
+          <interactive xml:id="OpenDSA-list-insertion"
+            iframe="https://opendsax.cs.vt.edu/OpenDSA/AV/Graph/DijkstraPE.html"
+            width="175%"
+            aspect="1:1"
+          />
+        </figure>
+
+    </section>
 </chapter>
