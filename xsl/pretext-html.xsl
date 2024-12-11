@@ -1019,15 +1019,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </div>
         <div class="author-info">
-            <xsl:if test="department">
-                <xsl:apply-templates select="department" />
-                <xsl:if test="department/following-sibling::*">
-                    <br />
-                </xsl:if>
-            </xsl:if>
-            <xsl:if test="institution">
-                <xsl:apply-templates select="institution" />
-                <xsl:if test="institution/following-sibling::*">
+            <xsl:if test="affiliation">
+                <xsl:apply-templates select="affiliation"/>
+                <xsl:if test="affiliation/following-sibling::*">
                     <br />
                 </xsl:if>
             </xsl:if>
@@ -1041,12 +1035,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<xsl:template match="affiliation">
+    <xsl:if test="department">
+        <xsl:apply-templates select="department" />
+        <xsl:if test="department/following-sibling::*">
+            <br />
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="institution">
+        <xsl:apply-templates select="institution" />
+        <xsl:if test="institution/following-sibling::*">
+            <br />
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="location">
+        <xsl:apply-templates select="location" />
+        <xsl:if test="location/following-sibling::*">
+            <br />
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
 <!-- Departments and Institutions are free-form, or sequences of lines -->
-<xsl:template match="department|institution">
+<xsl:template match="department|institution|location">
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="department[line]|institution[line]">
+<xsl:template match="department[line]|institution[line]|location[line]">
     <xsl:apply-templates select="line" />
 </xsl:template>
 
@@ -4611,22 +4626,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="personname" />
     </div>
     <div class="contributor-info">
-        <xsl:if test="department">
-            <xsl:apply-templates select="department" />
-            <xsl:if test="department/following-sibling::*">
-                <br />
-            </xsl:if>
-        </xsl:if>
-        <xsl:if test="institution">
-            <xsl:apply-templates select="institution" />
-            <xsl:if test="institution/following-sibling::*">
-                <br />
-            </xsl:if>
-        </xsl:if>
-        <xsl:if test="location">
-            <xsl:apply-templates select="location" />
-            <xsl:if test="location/following-sibling::*">
-                <br />
+        <xsl:if test="affiliation">
+            <xsl:apply-templates select="affiliation"/>
+            <xsl:if test="affiliation/following-sibling::*">
+                <br/>
             </xsl:if>
         </xsl:if>
         <xsl:if test="email">
