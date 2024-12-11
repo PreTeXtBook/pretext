@@ -146,25 +146,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Compute length of indentation of first line                   -->
 <!-- Assumes no leading blank lines                                -->
-<!-- Assumes each line, including last, ends in a carriage return  -->
 <xsl:template name="count-pad-length">
-   <xsl:param name="text"/>
-   <xsl:param name="pad" select="''"/>
-   <xsl:variable name="first-char" select="substring($text, 1, 1)" />
-   <xsl:choose>
-        <xsl:when test="$first-char='&#xA;'">
-            <xsl:value-of select="string-length($pad)" />
+    <xsl:param name="text"/>
+    <xsl:param name="cur-index" select="1"/>
+    <xsl:variable name="first-char" select="substring($text, $cur-index, 1)" />
+    <xsl:choose>
+        <!-- reached end of string or newline... bail out -->
+        <xsl:when test="$first-char = '' or $first-char = '&#xA;'">
+            <xsl:value-of select="$cur-index - 1"/>
         </xsl:when>
         <xsl:when test="contains($whitespaces, $first-char)">
             <xsl:call-template name="count-pad-length">
-                <xsl:with-param name="text" select="substring($text, 2)" />
-                <xsl:with-param name="pad"  select="concat($pad, $first-char)" />
+                <xsl:with-param name="text" select="$text" />
+                <xsl:with-param name="cur-index" select="$cur-index + 1" />
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="string-length($pad)" />
+            <xsl:value-of select="$cur-index - 1" />
         </xsl:otherwise>
-   </xsl:choose>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Compute width of left margin        -->
