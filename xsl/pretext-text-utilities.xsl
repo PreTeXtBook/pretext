@@ -895,21 +895,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (form feed) so we ignore them for now.  Perhaps see -->
 <!-- https://stackoverflow.com/questions/404107/         -->
 <!-- why-are-control-characters-illegal-in-xml-1-0       -->
+
+<!-- First define the replacements. These must be in     -->
+<!-- order as search + replace pairs                     -->
+<xsl:variable name="json-replacements">
+    <search>\</search>
+    <replace>\\</replace>
+    <search>/</search>
+    <replace>\/</replace>
+    <search><xsl:value-of select="string('&#x0a;')"/></search>
+    <replace>\n</replace>
+    <search><xsl:value-of select="string('&#x09;')"/></search>
+    <replace>\t</replace>
+    <search><xsl:value-of select="string('&#x0d;')"/></search>
+    <replace>\r</replace>
+    <search><xsl:value-of select="string('&#x22;')"/></search>
+    <replace>\&#x22;</replace>
+</xsl:variable>
+<xsl:variable name="json-replacements-search-set" select="exsl:node-set($json-replacements)/search" />
+<xsl:variable name="json-replacements-replace-set" select="exsl:node-set($json-replacements)/replace" />
+
 <xsl:template name="escape-json-string">
     <xsl:param name="text"/>
 
-    <!-- backslash first since it will be introduced -->
-    <!-- later as the escape character itself        -->
-    <xsl:variable name="sans-backslash" select="str:replace($text,           '\',      '\\'     )"/>
-    <xsl:variable name="sans-slash"     select="str:replace($sans-backslash, '/',      '\/'     )"/>
-    <xsl:variable name="sans-quote"     select="str:replace($sans-slash,     '&#x22;', '\&#x22;')"/>
-<!--<xsl:variable name="sans-backspace" select="str:replace($sans-quote,     '&#x08;', '\b'     )"/>-->
-    <xsl:variable name="sans-tab"       select="str:replace($sans-quote,     '&#x09;', '\t'     )"/>
-    <xsl:variable name="sans-newline"   select="str:replace($sans-tab,       '&#x0a;', '\n'     )"/>
-<!--<xsl:variable name="sans-formfeed"  select="str:replace($sans-newline,   '&#x0c;', '\f'     )"/>-->
-    <xsl:variable name="sans-return"    select="str:replace($sans-newline,   '&#x0d;', '\r'     )"/>
-
-    <xsl:value-of select="$sans-return" />
+    <xsl:value-of select="str:replace($text, $json-replacements-search-set, $json-replacements-replace-set)" />
 </xsl:template>
 
 <xsl:template name="quote-string">
