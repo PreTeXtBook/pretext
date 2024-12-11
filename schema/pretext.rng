@@ -594,20 +594,16 @@
     <element name="bibinfo">
       <choice>
         <group>
-          <ref name="Author"/>
-          <zeroOrMore>
+          <oneOrMore>
             <ref name="Author"/>
-          </zeroOrMore>
+          </oneOrMore>
           <zeroOrMore>
             <ref name="Editor"/>
           </zeroOrMore>
         </group>
-        <group>
+        <oneOrMore>
           <ref name="Editor"/>
-          <zeroOrMore>
-            <ref name="Editor"/>
-          </zeroOrMore>
-        </group>
+        </oneOrMore>
       </choice>
       <zeroOrMore>
         <ref name="Credit"/>
@@ -624,25 +620,27 @@
         </element>
       </optional>
       <optional>
+        <element name="version">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <ref name="Event"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Keywords"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="Affiliation"/>
+      </optional>
+      <optional>
+        <ref name="Support"/>
+      </optional>
+      <optional>
         <ref name="Website"/>
       </optional>
       <optional>
-        <element name="copyright">
-          <element name="year">
-            <ref name="TextShort"/>
-          </element>
-          <element name="holder">
-            <text/>
-          </element>
-          <optional>
-            <element name="minilicense">
-              <ref name="TextShort"/>
-            </element>
-          </optional>
-          <optional>
-            <ref name="ShortLicense"/>
-          </optional>
-        </element>
+        <ref name="Copyright"/>
       </optional>
     </element>
   </define>
@@ -661,6 +659,21 @@
   <define name="PersonName">
     <element name="personname">
       <ref name="TextSimple"/>
+    </element>
+  </define>
+  <define name="Affiliation">
+    <element name="affiliation">
+      <interleave>
+        <optional>
+          <ref name="Department"/>
+        </optional>
+        <optional>
+          <ref name="Institution"/>
+        </optional>
+        <optional>
+          <ref name="Location"/>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="Department">
@@ -683,17 +696,100 @@
       </choice>
     </element>
   </define>
-  <define name="Author">
-    <element name="author">
-      <ref name="PersonName"/>
+  <define name="Location">
+    <element name="address">
+      <choice>
+        <ref name="TextSimple"/>
+        <oneOrMore>
+          <ref name="ShortLine"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="Keywords">
+    <element name="keywords">
       <optional>
-        <ref name="Department"/>
+        <attribute name="authority"/>
       </optional>
       <optional>
-        <ref name="Institution"/>
+        <attribute name="variant"/>
+      </optional>
+      <optional>
+        <ref name="Title"/>
+      </optional>
+      <oneOrMore>
+        <ref name="Keyword"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Keyword">
+    <element name="keyword">
+      <optional>
+        <attribute name="primary">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <ref name="TextSimple"/>
+    </element>
+  </define>
+  <define name="Support">
+    <element name="funding">
+      <optional>
+        <ref name="Title"/>
+      </optional>
+      <oneOrMore>
+        <ref name="Paragraph"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Event">
+    <element name="event">
+      <ref name="TextLong"/>
+    </element>
+  </define>
+  <define name="Author">
+    <element name="author">
+      <optional>
+        <attribute name="corresponding">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="xml:id"/>
+      </optional>
+      <ref name="PersonName"/>
+      <optional>
+        <choice>
+          <interleave>
+            <optional>
+              <ref name="Department"/>
+            </optional>
+            <optional>
+              <ref name="Institution"/>
+            </optional>
+            <optional>
+              <ref name="Location"/>
+            </optional>
+          </interleave>
+          <oneOrMore>
+            <ref name="Affiliation"/>
+          </oneOrMore>
+        </choice>
       </optional>
       <optional>
         <ref name="Email"/>
+      </optional>
+      <optional>
+        <ref name="Biography"/>
+      </optional>
+      <optional>
+        <ref name="Support"/>
       </optional>
     </element>
   </define>
@@ -701,10 +797,22 @@
     <element name="editor">
       <ref name="PersonName"/>
       <optional>
-        <ref name="Department"/>
-      </optional>
-      <optional>
-        <ref name="Institution"/>
+        <choice>
+          <interleave>
+            <optional>
+              <ref name="Department"/>
+            </optional>
+            <optional>
+              <ref name="Institution"/>
+            </optional>
+            <optional>
+              <ref name="Location"/>
+            </optional>
+          </interleave>
+          <oneOrMore>
+            <ref name="Affiliation"/>
+          </oneOrMore>
+        </choice>
       </optional>
       <optional>
         <ref name="Email"/>
@@ -757,6 +865,24 @@
   <define name="Website">
     <element name="website">
       <ref name="Url"/>
+    </element>
+  </define>
+  <define name="Copyright">
+    <element name="copyright">
+      <element name="year">
+        <ref name="TextShort"/>
+      </element>
+      <element name="holder">
+        <text/>
+      </element>
+      <optional>
+        <element name="minilicense">
+          <ref name="TextShort"/>
+        </element>
+      </optional>
+      <optional>
+        <ref name="ShortLicense"/>
+      </optional>
     </element>
   </define>
   <define name="ColophonFront">
@@ -2830,15 +2956,22 @@
       <ref name="MetaDataTarget"/>
       <ref name="PersonName"/>
       <optional>
-        <ref name="Department"/>
-      </optional>
-      <optional>
-        <ref name="Institution"/>
-      </optional>
-      <optional>
-        <element name="location">
-          <ref name="TextSimple"/>
-        </element>
+        <choice>
+          <group>
+            <optional>
+              <ref name="Department"/>
+            </optional>
+            <optional>
+              <ref name="Institution"/>
+            </optional>
+            <optional>
+              <ref name="Location"/>
+            </optional>
+          </group>
+          <oneOrMore>
+            <ref name="Affiliation"/>
+          </oneOrMore>
+        </choice>
       </optional>
       <optional>
         <ref name="Email"/>

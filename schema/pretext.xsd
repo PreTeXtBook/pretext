@@ -429,44 +429,27 @@
       <xs:sequence>
         <xs:choice>
           <xs:sequence>
-            <xs:group ref="Author"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Author"/>
+            <xs:group maxOccurs="unbounded" ref="Author"/>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Editor"/>
           </xs:sequence>
-          <xs:sequence>
-            <xs:group ref="Editor"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Editor"/>
-          </xs:sequence>
+          <xs:group maxOccurs="unbounded" ref="Editor"/>
         </xs:choice>
         <xs:group minOccurs="0" maxOccurs="unbounded" ref="Credit"/>
         <xs:element minOccurs="0" ref="date"/>
         <xs:group minOccurs="0" maxOccurs="unbounded" ref="ColophonCredit"/>
         <xs:element minOccurs="0" ref="edition"/>
+        <xs:element minOccurs="0" ref="version"/>
+        <xs:element minOccurs="0" ref="event"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="keywords"/>
+        <xs:element minOccurs="0" ref="affiliation"/>
+        <xs:element minOccurs="0" ref="funding"/>
         <xs:element minOccurs="0" ref="website"/>
-        <xs:element minOccurs="0" name="copyright">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="year">
-                <xs:complexType mixed="true">
-                  <xs:group ref="TextShort"/>
-                </xs:complexType>
-              </xs:element>
-              <xs:element ref="holder"/>
-              <xs:element minOccurs="0" ref="minilicense"/>
-              <xs:element minOccurs="0" ref="shortlicense"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
+        <xs:group minOccurs="0" ref="Copyright"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="edition" type="xs:string"/>
-  <xs:element name="holder" type="xs:string"/>
-  <xs:element name="minilicense">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextShort"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="version" type="xs:string"/>
   <xs:element name="titlepage">
     <xs:complexType>
       <xs:sequence>
@@ -481,6 +464,15 @@
   <xs:element name="personname">
     <xs:complexType mixed="true">
       <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="affiliation">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="department"/>
+        <xs:element ref="institution"/>
+        <xs:element ref="address"/>
+      </xs:choice>
     </xs:complexType>
   </xs:element>
   <xs:element name="department">
@@ -499,16 +491,77 @@
       </xs:choice>
     </xs:complexType>
   </xs:element>
+  <xs:element name="address">
+    <xs:complexType mixed="true">
+      <xs:choice>
+        <xs:group ref="TextSimple"/>
+        <xs:group maxOccurs="unbounded" ref="ShortLine"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="keywords">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="Title"/>
+        <xs:element maxOccurs="unbounded" ref="keyword"/>
+      </xs:sequence>
+      <xs:attribute name="authority"/>
+      <xs:attribute name="variant"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="keyword">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+      <xs:attribute name="primary">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="funding">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="Title"/>
+        <xs:group maxOccurs="unbounded" ref="Paragraph"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="event">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="Author">
     <xs:sequence>
       <xs:element name="author">
         <xs:complexType>
           <xs:sequence>
             <xs:element ref="personname"/>
-            <xs:element minOccurs="0" ref="department"/>
-            <xs:element minOccurs="0" ref="institution"/>
+            <xs:choice minOccurs="0">
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="department"/>
+                <xs:element ref="institution"/>
+                <xs:element ref="address"/>
+              </xs:choice>
+              <xs:element maxOccurs="unbounded" ref="affiliation"/>
+            </xs:choice>
             <xs:element minOccurs="0" ref="email"/>
+            <xs:element minOccurs="0" ref="biography"/>
+            <xs:element minOccurs="0" ref="funding"/>
           </xs:sequence>
+          <xs:attribute name="corresponding">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute ref="xml:id"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -519,8 +572,14 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element ref="personname"/>
-            <xs:element minOccurs="0" ref="department"/>
-            <xs:element minOccurs="0" ref="institution"/>
+            <xs:choice minOccurs="0">
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="department"/>
+                <xs:element ref="institution"/>
+                <xs:element ref="address"/>
+              </xs:choice>
+              <xs:element maxOccurs="unbounded" ref="affiliation"/>
+            </xs:choice>
             <xs:element minOccurs="0" ref="email"/>
           </xs:sequence>
         </xs:complexType>
@@ -586,6 +645,30 @@
   <xs:element name="website">
     <xs:complexType>
       <xs:group ref="Url"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Copyright">
+    <xs:sequence>
+      <xs:element name="copyright">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="year">
+              <xs:complexType mixed="true">
+                <xs:group ref="TextShort"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:element ref="holder"/>
+            <xs:element minOccurs="0" ref="minilicense"/>
+            <xs:element minOccurs="0" ref="shortlicense"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="holder" type="xs:string"/>
+  <xs:element name="minilicense">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
     </xs:complexType>
   </xs:element>
   <xs:group name="ColophonFront">
@@ -2494,17 +2577,17 @@
       <xs:sequence>
         <xs:group ref="MetaDataTarget"/>
         <xs:element ref="personname"/>
-        <xs:element minOccurs="0" ref="department"/>
-        <xs:element minOccurs="0" ref="institution"/>
-        <xs:element minOccurs="0" ref="location"/>
+        <xs:choice minOccurs="0">
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="department"/>
+            <xs:element minOccurs="0" ref="institution"/>
+            <xs:element minOccurs="0" ref="address"/>
+          </xs:sequence>
+          <xs:element maxOccurs="unbounded" ref="affiliation"/>
+        </xs:choice>
         <xs:element minOccurs="0" ref="email"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTarget"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="location">
-    <xs:complexType mixed="true">
-      <xs:group ref="TextSimple"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="contributors">
@@ -3586,7 +3669,7 @@
         <xs:element ref="pilcrow"/>
         <xs:element ref="section-mark"/>
         <xs:element ref="copyleft"/>
-        <xs:element ref="copyright"/>
+        <xs:group ref="CopyrightCharacter"/>
         <xs:element ref="registered"/>
         <xs:element ref="trademark"/>
         <xs:element ref="phonomark"/>
@@ -3696,9 +3779,13 @@
       <xs:attribute name="name"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="copyright">
-    <xs:complexType/>
-  </xs:element>
+  <xs:group name="CopyrightCharacter">
+    <xs:sequence>
+      <xs:element name="copyright">
+        <xs:complexType/>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="flat">
     <xs:complexType/>
   </xs:element>

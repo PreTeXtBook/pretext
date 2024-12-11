@@ -2963,6 +2963,36 @@
 
         <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg/> <init>URL</init>s).  <c>bibinfo</c> is like a very small database whose content migrates to a titlepage and colophon if <c>titlepage/titlepage-items</c> or <c>colophon/colophon-items</c> are present. For HTML, titlepage means the page for the <c>frontmatter</c> , and for <latex/> these items migrate to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
 
+        <p>Some notes about new additions to <c>bibinfo</c>.
+        <ul>
+            <li>
+                <p>
+                    <c>version</c> might be useful for books (could be draft or preview for example) but is mainly for articles, where it's content could be <q>authors submitted version</q> or <q>revision 2.</q>  A book might have both a version and an edition, but editions don't really apply to articles.
+                </p>
+            </li>
+            <li>
+                <p>
+                    JATS has <c>permissions</c> but we have <c>copyright</c>.  It seems like these have the same content.
+                </p>
+            </li>
+            <li>
+                <p>
+                    We introduce <c>keywords</c> (equivalent to JATS <c>kwd-group</c>) which contains a sequence of <c>keyword</c> elements.  There can be multiple <c>keywords</c> elements, as this can be used for subject classifications, or author keywords, etc.  Attributes on the <c>keywords</c> element can be used to distinguish these: <attr>authority</attr> can be <q>msc</q> for Math Subject Classification, in which cas the <tag>keywords</tag> can also have <attr>variant</attr> to specify the year version of the MSC.  The default <attr>authority</attr> is <q>author.</q>
+                </p>
+            </li>
+            <li>
+                <p>
+                    To describe the financial support for the work, we use <c>support</c>.  This can go in <c>bibinfo</c> directly or tied directly to an author or authors.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Slideshows already have a <tag>event</tag>, which we make official here and use to describe a conference for which the work was prepared.  JATS uses <c>conference</c> for this, and structures it with elements such as <c>date</c>, <c>accronym</c>, and similar, but we do not go that far.
+                </p>
+            </li>
+        </ul>
+        </p>
+
         <fragment xml:id="frontmatter">
             <title>Front matter</title>
             <code>
@@ -2986,21 +3016,21 @@
             Bibinfo =
                 element bibinfo {
                     (
-                        (Author, Author*, Editor*)
+                        (Author+, Editor*)
                         |
-                        (Editor, Editor*)
+                        (Editor+)
                     ),
                     Credit*,
                     Date?,
                     ColophonCredit*,
                     element edition {text}?,
+                    element version {text}?,
+                    Event?,
+                    Keywords*,
+                    Affiliation?,
+                    Support?,
                     Website?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        ShortLicense?
-                    }?
+                    Copyright?
                 }
             TitlePage =
                 element titlepage {
@@ -3008,20 +3038,52 @@
                 }
             Email = element email {text}
             PersonName = element personname {TextSimple}
+            Affiliation =
+                element affiliation {
+                    Department? &amp;
+                    Institution? &amp;
+                    Location?
+                }
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
+            Location = element address {TextSimple | ShortLine+}
+            Keywords = element keywords {
+                attribute authority {text}?,
+                attribute variant {text}?,
+                Title?,
+                Keyword+
+            }
+            Keyword = element keyword {
+                attribute primary {"yes"|"no"}?,
+                TextSimple
+            }
+            Support = element funding {
+                Title?,
+                Paragraph+
+            }
+            Event = element event {
+                TextLong
+            }
             Author =
                 element author {
+                    attribute corresponding {"yes" | "no"}?,
+                    attribute xml:id {text}?,
                     PersonName,
-                    Department?,
-                    Institution?,
-                    Email?
+                    (
+                        (Department? &amp; Institution? &amp; Location?) |
+                        Affiliation+
+                    )?,
+                    Email?,
+                    Biography?,
+                    Support?
                 }
             Editor =
                 element editor {
                     PersonName,
-                    Department?,
-                    Institution?,
+                    (
+                        (Department? &amp; Institution? &amp; Location?) |
+                        Affiliation+
+                    )?,
                     Email?
                 }
             Credit =
@@ -3044,6 +3106,13 @@
                 }
             ShortLicense = element shortlicense {TextLong}
             Website = element website {Url}
+            Copyright = 
+                element copyright {
+                    element year {TextShort},
+                    element holder {text},
+                    element minilicense {TextShort}?,
+                    ShortLicense?
+                }
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
@@ -3124,9 +3193,15 @@
                 element contributor {
                     MetaDataTarget,
                     PersonName,
-                    Department?,
-                    Institution?,
-                    element location {TextSimple}?,
+                    (
+                        (
+                        Department?,
+                        Institution?,
+                        Location?
+                        )
+                        |
+                        Affiliation+
+                    )?,
                     Email?
                 }
             Contributors =

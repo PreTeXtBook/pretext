@@ -197,21 +197,21 @@
             Bibinfo =
                 element bibinfo {
                     (
-                        (Author, Author*, Editor*)
+                        (Author+, Editor*)
                         |
-                        (Editor, Editor*)
+                        (Editor+)
                     ),
                     Credit*,
                     Date?,
                     ColophonCredit*,
                     element edition {text}?,
+                    element version {text}?,
+                    Event?,
+                    Keywords*,
+                    Affiliation?,
+                    Support?,
                     Website?,
-                    element copyright {
-                        element year {TextShort},
-                        element holder {text},
-                        element minilicense {TextShort}?,
-                        ShortLicense?
-                    }?
+                    Copyright?
                 }
             TitlePage =
                 element titlepage {
@@ -219,20 +219,52 @@
                 }
             Email = element email {text}
             PersonName = element personname {TextSimple}
+            Affiliation =
+                element affiliation {
+                    Department? &
+                    Institution? &
+                    Location?
+                }
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
+            Location = element address {TextSimple | ShortLine+}
+            Keywords = element keywords {
+                attribute authority {text}?,
+                attribute variant {text}?,
+                Title?,
+                Keyword+
+            }
+            Keyword = element keyword {
+                attribute primary {"yes"|"no"}?,
+                TextSimple
+            }
+            Support = element funding {
+                Title?,
+                Paragraph+
+            }
+            Event = element event {
+                TextLong
+            }
             Author =
                 element author {
+                    attribute corresponding {"yes" | "no"}?,
+                    attribute xml:id {text}?,
                     PersonName,
-                    Department?,
-                    Institution?,
-                    Email?
+                    (
+                        (Department? & Institution? & Location?) |
+                        Affiliation+
+                    )?,
+                    Email?,
+                    Biography?,
+                    Support?
                 }
             Editor =
                 element editor {
                     PersonName,
-                    Department?,
-                    Institution?,
+                    (
+                        (Department? & Institution? & Location?) |
+                        Affiliation+
+                    )?,
                     Email?
                 }
             Credit =
@@ -255,6 +287,13 @@
                 }
             ShortLicense = element shortlicense {TextLong}
             Website = element website {Url}
+            Copyright = 
+                element copyright {
+                    element year {TextShort},
+                    element holder {text},
+                    element minilicense {TextShort}?,
+                    ShortLicense?
+                }
             ColophonFront =
                 element colophon {
                     MetaDataTarget,
@@ -1126,9 +1165,15 @@
                 element contributor {
                     MetaDataTarget,
                     PersonName,
-                    Department?,
-                    Institution?,
-                    element location {TextSimple}?,
+                    (
+                        (
+                        Department?,
+                        Institution?,
+                        Location?
+                        )
+                        |
+                        Affiliation+
+                    )?,
                     Email?
                 }
             Contributors =
