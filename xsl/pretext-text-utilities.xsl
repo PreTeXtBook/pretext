@@ -182,7 +182,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Non-destructively count leading whitespace -->
             <xsl:variable name="pad-top-line">
                 <xsl:call-template name="count-pad-length">
-                    <xsl:with-param name="text" select="$text" />
+                    <xsl:with-param name="text" select="substring-before($text, '&#xa;')" />
                 </xsl:call-template>
             </xsl:variable>
             <xsl:variable name="content-top-line" select="substring-before($text, '&#xa;')" />
