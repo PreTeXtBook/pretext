@@ -210,9 +210,71 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+
+<!-- Divide and conquer strip-indentation                              -->
+<!-- Appropriate for long chunks of text. Minimal overhead on small    -->
+<!-- chunks of text.                                                   -->
 <!-- An "out-dented" line is assumed to be intermediate blank line     -->
 <!-- indent parameter is a number giving number of characters to strip -->
 <xsl:template name="strip-indentation">
+    <xsl:param name="text" />
+    <xsl:param name="indent" />
+
+    <!-- string length at which to give up divide and conquer          -->
+    <xsl:variable name="divide-threshold" select="500" />
+
+    <xsl:variable name="text-len" select="string-length($text)" />
+    <xsl:choose>
+        <!-- short string, hand off to line by line algorithm -->
+        <xsl:when test="$divide-threshold > $text-len">
+            <xsl:call-template name="strip-indentation-core">
+                <xsl:with-param name="text" select="$text" />
+                <xsl:with-param name="indent" select="$indent" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- Cut string in half -->
+            <xsl:variable name="cut-location" select="floor(string-length($text) div 2)"/>
+            <xsl:variable name="first-half" select="substring($text, 1, $cut-location)"/>
+            <xsl:variable name="second-half" select="substring($text, $cut-location + 1)"/>
+            <!-- First half needs to take on everything before first newline -->
+            <!-- in second-half and have a trailing newline                  -->
+            <xsl:variable name="first-half-augmented" select="concat($first-half, substring-before($second-half, '&#xA;'), '&#xA;')"/>
+            <!-- Second half only gets text after the first newline in it    -->
+            <xsl:variable name="second-half-augmented" select="substring-after($second-half, '&#xA;')"/>
+
+            <!-- Stop dividing? -->
+            <xsl:choose>
+                <xsl:when test="$second-half-augmented = ''">
+                    <!-- Nothing in second half (can happen with really long lines) -->
+                    <!-- Give up and hand first half to line-by-line                -->
+                    <xsl:call-template name="strip-indentation-core">
+                        <xsl:with-param name="text" select="$first-half-augmented" />
+                        <xsl:with-param name="indent" select="$indent" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- Recurse on each half -->
+                    <xsl:call-template name="strip-indentation">
+                        <xsl:with-param name="text" select="$first-half-augmented" />
+                        <xsl:with-param name="indent" select="$indent" />
+                    </xsl:call-template>
+                    <xsl:call-template name="strip-indentation">
+                        <xsl:with-param name="text" select="$second-half-augmented" />
+                        <xsl:with-param name="indent" select="$indent" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Line by line strip-indentation                                    -->
+<!-- should only be called on shortish chunks of text                  -->
+<!-- (dozens of lines not hundreds)                                    -->
+<!-- An "out-dented" line is assumed to be intermediate blank line     -->
+<!-- indent parameter is a number giving number of characters to strip -->
+<xsl:template name="strip-indentation-core">
     <xsl:param name="text" />
     <xsl:param name="indent" />
     <xsl:if test="$text != ''">
@@ -221,7 +283,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="substring($first-line, $indent + 1)" />
         </xsl:if>
         <xsl:text>&#xA;</xsl:text>
-        <xsl:call-template name="strip-indentation">
+        <xsl:call-template name="strip-indentation-core">
             <xsl:with-param name="text" select="substring-after($text, '&#xA;')" />
             <xsl:with-param name="indent" select="$indent" />
         </xsl:call-template>
