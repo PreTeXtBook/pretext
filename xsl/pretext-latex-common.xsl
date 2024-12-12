@@ -4101,10 +4101,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="type-name"/>
     </xsl:if>
     <xsl:text>}\\</xsl:text>
-    <xsl:if test="institution">
+    <xsl:if test="affiliation/institution">
         <xsl:text>[0.5\baselineskip]&#xa;</xsl:text>
         <xsl:text>{\Large </xsl:text>
-        <xsl:apply-templates select="institution" />
+        <xsl:apply-templates select="affiliation/institution" />
         <xsl:text>}\\</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -4119,9 +4119,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{\normalsize </xsl:text>
         <xsl:apply-templates select="personname" />
         <xsl:text>}\\</xsl:text>
-        <xsl:if test="institution">
+        <xsl:if test="affiliation/institution">
             <xsl:text>[0.25\baselineskip]&#xa;</xsl:text>
-            <xsl:apply-templates select="institution" />
+            <xsl:apply-templates select="affiliation/institution" />
             <xsl:text>\\</xsl:text>
         </xsl:if>
         <xsl:if test="following-sibling::author">
@@ -4250,13 +4250,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author" mode="article-info">
     <xsl:apply-templates select="personname" />
-    <xsl:if test="department">
-        <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="department" />
-    </xsl:if>
-    <xsl:if test="institution">
-        <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="institution" />
+    <xsl:if test="affiliation">
+        <xsl:apply-templates select="affiliation" />
     </xsl:if>
     <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
@@ -4272,6 +4267,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="personname" />
     <xsl:text>, </xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:if test="affiliation">
+        <xsl:apply-templates select="affiliation"/>
+    </xsl:if>
+    <xsl:if test="email">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="email" />
+    </xsl:if>
+    <xsl:if test="following-sibling::editor" >
+        <xsl:text>&#xa;\and</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Preprocessor always puts Department, Institution, and Address          -->
+<!-- inside Affiliation. This just adds line breaks between them as needed. -->
+<xsl:template match="affiliation">
     <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />
@@ -4280,25 +4291,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="institution" />
     </xsl:if>
-    <xsl:if test="email">
+    <xsl:if test="location">
         <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="email" />
+        <xsl:apply-templates select="location" />
     </xsl:if>
-    <xsl:if test="following-sibling::author" >
-        <xsl:text>&#xa;\and</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- Departments and Institutions are free-form, or sequences of lines -->
-<!-- Line breaks are inserted above, due to \and, etc,                 -->
-<!-- so do not end last line here                                      -->
-<xsl:template match="department|institution">
+<!-- Departments, Institutions, and Addresses are free-form, or sequences of lines  -->
+<!-- Line breaks are inserted above, due to \and, etc, so do not end last line here -->
+<xsl:template match="department|institution|location">
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="department[line]|institution[line]">
+<xsl:template match="department[line]|institution[line]|location[line]">
     <xsl:apply-templates select="line" />
 </xsl:template>
 
@@ -5056,25 +5061,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\contributorname{</xsl:text>
     <xsl:apply-templates select="personname" />
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:if test="department|institution|email">
+    <xsl:if test="affiliation|email">
         <xsl:text>\contributorinfo{</xsl:text>
-        <xsl:if test="department">
-            <xsl:apply-templates select="department" />
-            <xsl:if test="department/following-sibling::*">
+        <xsl:if test="affiliation/department">
+            <xsl:apply-templates select="affiliation/department" />
+            <xsl:if test="affiliation/department/following-sibling::*">
                 <xsl:text>\\&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
-        <xsl:if test="institution">
-            <xsl:apply-templates select="institution" />
-            <xsl:if test="institution/following-sibling::*">
+        <xsl:if test="affiliation/institution">
+            <xsl:apply-templates select="affiliation/institution" />
+            <xsl:if test="affiliation/institution/following-sibling::*">
                 <xsl:text>\\&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
-        <xsl:if test="location">
-            <xsl:apply-templates select="location" />
-            <xsl:if test="location/following-sibling::*">
+        <xsl:if test="affiliation/location">
+            <xsl:apply-templates select="affiliation/location" />
+            <xsl:if test="affiliation/location/following-sibling::*">
                 <xsl:text>\\&#xa;</xsl:text>
             </xsl:if>
+        </xsl:if>
+        <xsl:if test="affiliation/following-sibling::*">
+            <xsl:text>\\&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="email">
             <!-- switch to node-set with "c" if characters need escaping -->
