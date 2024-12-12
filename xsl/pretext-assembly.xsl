@@ -1405,6 +1405,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- We allow an author/editor/contributor to have their affiliation information not -->
+<!-- wrapped in affiliation tags, but in that case we put them in affiliation tags.  -->
+<xsl:template match="frontmatter//author[not(affiliation)]|frontmatter//editor[not(affiliation)]|frontmatter//contributor[not(affiliation)]" mode="repair">
+    <xsl:copy>
+        <!-- Include "personname" first -->
+        <xsl:apply-templates select="personname|@*" mode="repair"/>
+        <!-- If there are bare deparmtment/institution/address, wrap them in affailiation -->
+        <xsl:if test="department or institution or location">
+            <affiliation>
+                <xsl:apply-templates select="department|institution|location" mode="repair"/>
+            </affiliation>
+        </xsl:if>
+        <!-- Include all additional elements as they are -->
+        <xsl:apply-templates select="*[not(self::personname or self::department or self::institution or self::location)]" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
