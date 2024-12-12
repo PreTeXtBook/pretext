@@ -285,7 +285,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- XSLT Cookbook, 2nd Edition               -->
 <!-- Copyright 2006, O'Reilly Media, Inc.     -->
 <!-- Recipe 2.4, nearly verbatim, reformatted -->
-<xsl:template name="substring-before-last">
+<xsl:template name="substring-before-last-iterative">
     <xsl:param name="input" />
     <xsl:param name="substr" />
     <xsl:if test="$substr and contains($input, $substr)">
@@ -293,13 +293,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="substring-before($input, $substr)" />
         <xsl:if test="contains($temp, $substr)">
             <xsl:value-of select="$substr" />
-            <xsl:call-template name="substring-before-last">
+            <xsl:call-template name="substring-before-last-iterative">
                 <xsl:with-param name="input" select="$temp" />
                 <xsl:with-param name="substr" select="$substr" />
             </xsl:call-template>
         </xsl:if>
     </xsl:if>
 </xsl:template>
+
+<!-- Substrings at last markers                                 -->
+<!-- Approach - keep throwing away the first half of the string -->
+<!-- until we reach a point where one more slice would result   -->
+<!-- in no more copies of substr. Produce everything that was   -->
+<!-- sliced, then let iterative version handle the rest.        -->
+<!-- Implemented mostly to prevent lxml from dying due to       -->
+<!-- depth limit when processing large strings                  -->
+<xsl:template name="substring-before-last">
+    <xsl:param name="input" />
+    <xsl:param name="substr" />
+
+    <xsl:variable name="mid-index" select="ceiling(string-length($input) div 2)"/>
+    <xsl:variable name="front" select="substring($input, 1, $mid-index)"/>
+    <xsl:variable name="back" select="substring($input, $mid-index + 1)"/>
+
+    <xsl:choose>
+        <xsl:when test="contains($back, $substr)">
+            <!-- Need front for sure, recurse on back -->
+            <xsl:value-of select="$front" />
+            <xsl:call-template name="substring-before-last">
+                <xsl:with-param name="input" select="$back" />
+                <xsl:with-param name="substr" select="$substr" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- substr might be in front, or bridging front and back -->
+            <!-- hand off entire string to iterative version          -->
+            <xsl:call-template name="substring-before-last-iterative">
+                <xsl:with-param name="input" select="$input" />
+                <xsl:with-param name="substr" select="$substr" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- If the substring is not contained, the first substring-after()   -->
 <!-- will return empty and entire template will return empty.  To     -->
