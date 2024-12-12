@@ -55,7 +55,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:str="http://exslt.org/strings"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="pi str"
+    xmlns:math="http://exslt.org/math"
+    extension-element-prefixes="pi str math"
 >
 
 <!-- ########################## -->
@@ -167,42 +168,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Compute width of left margin        -->
-<!-- Assumes each line ends in a newline -->
-<!-- A blank line will not contribute    -->
+<!-- Compute width of left margin                                -->
+<!-- Assumes each line ends in a newline                         -->
+<!-- A blank line will not contribute                            -->
+<!-- Intentionally non-recursive to avoid recursion depth issues -->
+<!-- on long code samples                                        -->
 <xsl:template name="left-margin">
     <xsl:param name="text" />
-    <xsl:param name="margin" select="32767" />  <!-- 2^15 - 1 as max? -->
+
+    <!-- construct a variable that is just a list of padding counts -->
+    <!-- as pad nodes                                               -->
+    <xsl:variable name="lines" select="str:tokenize($text, '&#xA;')" />
+    <xsl:variable name="pad-counts-rtf">
+        <xsl:for-each select="$lines">
+            <!-- str:tokenize in current implementation does not produce -->
+            <!-- zero-length strings. (e.g. string between two newlines) -->
+            <!-- but that appears to differ between implementations, so  -->
+            <!-- guard against it                                        -->
+            <xsl:if test=". != ''">
+                <pad>
+                    <xsl:call-template name="count-pad-length">
+                        <xsl:with-param name="text" select="." />
+                    </xsl:call-template>
+                </pad>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="pad-counts" select="exsl:node-set($pad-counts-rtf)"/>
+
+    <!-- grab minimum value from list-->
+    <xsl:variable name="min-pad" select="math:min($pad-counts/pad)" />
+    
+    <!-- min-pad will be NaN if there was nothing to count -->
     <xsl:choose>
-        <xsl:when test="$text=''">
-            <!-- Nothing left, then done, return -->
-            <xsl:value-of select="$margin" />
+        <xsl:when test="string($min-pad)='NaN'">
+            <xsl:value-of select="0" />
         </xsl:when>
         <xsl:otherwise>
-            <!-- Non-destructively count leading whitespace -->
-            <xsl:variable name="pad-top-line">
-                <xsl:call-template name="count-pad-length">
-                    <xsl:with-param name="text" select="substring-before($text, '&#xa;')" />
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:variable name="content-top-line" select="substring-before($text, '&#xa;')" />
-            <!-- Compute margin as smaller of incoming and computed -->
-            <!-- Unless incoming is 0 due to blank line             -->
-            <xsl:variable name="new-margin">
-                <xsl:choose>
-                    <xsl:when test="($margin > $pad-top-line) and not(string-length($content-top-line) = 0)">
-                        <xsl:value-of select="$pad-top-line" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$margin" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <!-- Recursive call with one less line, new margin -->
-            <xsl:call-template name="left-margin">
-                <xsl:with-param name="margin" select="$new-margin" />
-                <xsl:with-param name="text" select="substring-after($text,'&#xA;')" />
-            </xsl:call-template>
+            <xsl:value-of select="$min-pad" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
