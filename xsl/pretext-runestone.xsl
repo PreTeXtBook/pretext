@@ -98,16 +98,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="altrs-css" select="''"/>
 <xsl:param name="altrs-cdn-url" select="''"/>
 <xsl:param name="altrs-version" select="''"/>
-<!-- We arbitrarily use the version parameter as a flag for the   -->
-<!-- use of alternate services and rely on code to always specify -->
-<!-- all four parameters or none at all.                          -->
-<xsl:variable name="b-altrs-services" select="not($altrs-version = '') and not($b-debugging-rs-services)"/>
 <!-- The Runestone Services version actually in use is -->
 <!-- needed several places, so we compute it once now. -->
 <!-- Manifest, two "ebookConfig".                      -->
 <xsl:variable name="runestone-version">
     <xsl:choose>
-        <xsl:when test="$b-altrs-services">
+        <xsl:when test="not($b-debugging-rs-services)">
             <xsl:value-of select="$altrs-version"/>
         </xsl:when>
         <xsl:otherwise>
@@ -275,7 +271,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- CDN URL should end in a slash, -->
                 <!-- as version has no slashes      -->
                 <xsl:choose>
-                    <xsl:when test="$b-altrs-services">
+                    <xsl:when test="not($b-debugging-rs-services)">
                         <xsl:value-of select="$altrs-cdn-url"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -317,7 +313,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:for-each select="$runestone-services/all/js/item[not($b-altrs-services)]|$altrs-js-tokens[$b-altrs-services]">
+    <xsl:for-each select="$runestone-services/all/js/item[$b-debugging-rs-services]|$altrs-js-tokens[not($b-debugging-rs-services)]">
         <script>
             <xsl:attribute name="src">
                 <xsl:value-of select="$rs-fileroot"/>
@@ -325,7 +321,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </script>
     </xsl:for-each>
-    <xsl:for-each select="$runestone-services/all/css/item[not($b-altrs-services)]|$altrs-css-tokens[$b-altrs-services]">
+    <xsl:for-each select="$runestone-services/all/css/item[$b-debugging-rs-services]|$altrs-css-tokens[not($b-debugging-rs-services)]">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
                 <xsl:value-of select="$rs-fileroot"/>
