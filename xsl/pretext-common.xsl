@@ -1833,7 +1833,10 @@ Book (with parts), "section" at level 3
 
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="name()"/>
-    <xsl:apply-templates select="." mode="serialize-namespace" />
+    <!-- only copy namespace if trying to show original source -->
+    <xsl:if test="$as-authored-source = 'yes'">
+        <xsl:apply-templates select="." mode="serialize-namespace" />
+    </xsl:if>
     <xsl:apply-templates select="@*" mode="serialize">
         <xsl:with-param name="as-authored-source" select="$as-authored-source"/>
     </xsl:apply-templates>
@@ -1870,25 +1873,18 @@ Book (with parts), "section" at level 3
 
 <!-- A namespace "attribute" is not really an attribute, and not captured by @* above.   -->
 <!-- There seems to be no way to separate an element's actual namespaces from those that -->
-<!-- are explicitly written where the element was created. Here, we loop through all the -->
-<!-- element's namespaces, discarding some that can be safley assumed to not be in the   -->
-<!-- original element declaration. And then serialize what is left.                      -->
+<!-- are explicitly written where the element was created.                               -->
+<!-- So we cheat by comparing the namespace-uri for the current node to that of its      -->
+<!-- parent. If they differ, that means the current node added something. If so,         -->
+<!-- determine what it is by removing parent's version                                   -->
 <xsl:template match="*" mode="serialize-namespace">
-    <xsl:for-each select="./namespace::*">
-        <!-- Comment test taken from http://lenzconsulting.com/namespace-normalizer/normalize-namespaces.xsl -->
-        <!-- scanning all ancestors is too time consuming... it they leak through, so be it                  -->
-        <!-- <xsl:if test="name()!='xml' and not(.=../preceding::*/namespace::* or .=ancestor::*[position()>1]/namespace::*)"> -->
-        <xsl:if test="name()!='xml' and name()!='xi'">
-            <xsl:text> xmlns</xsl:text>
-            <xsl:if test="not(name(current())='')">
-                <xsl:text>:</xsl:text>
-                <xsl:value-of select="name(current())"/>
-            </xsl:if>
-            <xsl:text>="</xsl:text>
-            <xsl:value-of select="current()"/>
-            <xsl:text>"</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
+    <xsl:variable name="own-namespace" select="namespace-uri()"/>
+    <xsl:variable name="parent-namespace" select="namespace-uri(..)"/>
+    <xsl:if test="$own-namespace != $parent-namespace">
+        <xsl:text> xmlns="</xsl:text>
+        <xsl:value-of select="str:replace($own-namespace, $parent-namespace, '')"/>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="text()" mode="serialize">
