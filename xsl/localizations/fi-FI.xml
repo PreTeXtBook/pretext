@@ -251,6 +251,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>Painos</localization>
     <localization string-id='website'>Nettisivu</localization>
     <localization string-id='copyright'>Tekijänoikeus</localization>
+    <!-- <localization string-id='keywords'>Keywords</localization> -->
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>linkki</localization>
     <localization string-id='incontext'>in-context</localization>

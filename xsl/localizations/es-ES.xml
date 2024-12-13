@@ -243,9 +243,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='todo'>Para hacer</localization>
     <localization string-id='editor'>Editor</localization>
     <localization string-id='edition'>Edición</localization>
-    <localization string-id='keywords'>Palabras clave</localization>
     <!-- <localization string-id='website'>Website</localization> -->
     <localization string-id='copyright'>Derechos de autor</localization>
+    <localization string-id='keywords'>Palabras clave</localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>enlace permanente</localization>
     <localization string-id='incontext'>en contexto</localization>

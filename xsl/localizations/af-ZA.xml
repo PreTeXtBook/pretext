@@ -241,6 +241,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>Uitgawe</localization>
     <localization string-id='website'>Webtuiste</localization>
     <localization string-id='copyright'>Kopiereg</localization>
+    <!-- <localization string-id='keywords'>Keywords</localization> -->
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>perma-skakel</localization>
     <localization string-id='incontext'>in-konteks</localization>

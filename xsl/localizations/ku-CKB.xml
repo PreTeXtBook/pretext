@@ -275,6 +275,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>چاپ</localization>
     <localization string-id='website'>وێبسایت</localization>
     <localization string-id='copyright'>مافی پاراستن</localization>
+    <!-- <localization string-id='keywords'>Keywords</localization> -->
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>بەستەری چەسپاو</localization>
     <localization string-id='incontext'>ناو-کۆنتێکستدا</localization>

@@ -248,6 +248,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>Edição</localization>
     <localization string-id='website'>Endereço eletrônico</localization>
     <localization string-id='copyright'>XXXCopyright</localization>
+    <!-- <localization string-id='keywords'>Keywords</localization> -->
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>link permanente</localization>
     <localization string-id='incontext'>em contexto</localization>
