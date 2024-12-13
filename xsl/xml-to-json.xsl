@@ -212,9 +212,7 @@ done`
 
     <xsl:template name="indent">
         <xsl:param name="depth" select="'0'" />
-        <xsl:for-each select="//*[position() &lt;= $depth]">
-            <xsl:if test="position() &lt;= $depth"><xsl:text>  </xsl:text></xsl:if>
-        </xsl:for-each>
+        <xsl:value-of select="substring('                                                ', 1, $depth * 2)" />
     </xsl:template>
 
     <!-- Escape strings for JSON. This process first escapes backslashes,
