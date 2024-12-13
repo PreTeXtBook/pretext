@@ -3526,12 +3526,13 @@ def _runestone_services(params):
             online_success = False
 
     if not(online_success):
-        msg = '\n'.join(["unable to get the very latest Runestone Services from the Runestone CDN",
-                         "this is due to an error reported immediately prior. A slightly older",
-                         "version will be used based on information in the PreTeXt repository,",
-                         "so this is not a fatal error, and a fallback is being used"
+        msg = '\n'.join(["unable to get Runestone Services from the Runestone CDN.",
+                         "This is due to an error reported immediately prior in the log.",
+                         "Unable to proceed and build useful HTML output without this."
                          ])
         log.debug(msg)
+        raise Exception(msg)
+
         # and we cannot proceed, so return with a result that is empty
         return ('', '', '', '')
 
