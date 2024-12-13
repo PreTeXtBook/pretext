@@ -1067,38 +1067,36 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         # Previous line will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
-        online_success = (altrs_version != '')
-        if online_success:
-            msg = 'Runestone Services via online CDN query: version {}'
-            log.info(msg.format(altrs_version))
-            # with a successful online query, we load up some string parameters
-            # the receiving stylesheet has the parameters default to empty strings
-            # which translates to consulting the services file in the repository,
-            # so we do nothing when the online query fails
-            stringparams["altrs-js"] = altrs_js
-            stringparams["altrs-css"] = altrs_css
-            stringparams["altrs-cdn-url"] = altrs_cdn_url
-            stringparams["altrs-version"] = altrs_version
+        msg = 'Runestone Services via online CDN query: version {}'
+        log.info(msg.format(altrs_version))
+        # with a successful online query, we load up some string parameters
+        # the receiving stylesheet has the parameters default to empty strings
+        # which translates to consulting the services file in the repository,
+        # so we do nothing when the online query fails
+        stringparams["altrs-js"] = altrs_js
+        stringparams["altrs-css"] = altrs_css
+        stringparams["altrs-cdn-url"] = altrs_cdn_url
+        stringparams["altrs-version"] = altrs_version
 
-            # get all the runestone files and place in tmp dir
-            services_file_name = "dist-{}.tgz".format(altrs_version)
-            output_dir = os.path.join(tmp_dir, "_static")
-            services_full_path = os.path.join(output_dir, services_file_name)
-            try:
-                msg = 'Downloading Runestone Services, version {}'
-                log.info(msg.format(altrs_version))
-                download_file(altrs_cdn_url + services_file_name, services_full_path)
-                log.info("Extracting Runestone Services from archive file")
-                import tarfile
-                file = tarfile.open(services_full_path)
-                file.extractall(output_dir)
-                file.close()
-                # we don't bother to delete archive after extraction since
-                # the temporary directory is never copied out anywhere
-                stringparams["rs-local-files"] = "yes"
-            except Exception as e:
-                log.warning(e)
-                log.warning("Failed to download all Runestone Services files")
+        # get all the runestone files and place in tmp dir
+        services_file_name = "dist-{}.tgz".format(altrs_version)
+        output_dir = os.path.join(tmp_dir, "_static")
+        services_full_path = os.path.join(output_dir, services_file_name)
+        try:
+            msg = 'Downloading Runestone Services, version {}'
+            log.info(msg.format(altrs_version))
+            download_file(altrs_cdn_url + services_file_name, services_full_path)
+            log.info("Extracting Runestone Services from archive file")
+            import tarfile
+            file = tarfile.open(services_full_path)
+            file.extractall(output_dir)
+            file.close()
+            # we don't bother to delete archive after extraction since
+            # the temporary directory is never copied out anywhere
+            stringparams["rs-local-files"] = "yes"
+        except Exception as e:
+            log.warning(e)
+            log.warning("Failed to download all Runestone Services files")
     else:
         if "debug.rs.dev.folder" in stringparams:
             rs_src = os.path.join(stringparams["debug.rs.dev.folder"])
@@ -3629,46 +3627,44 @@ def html(
         # Previous line will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
-        online_success = (altrs_version != '')
-        if online_success:
-            msg = 'Runestone Services via online CDN query: version {}'
-            log.info(msg.format(altrs_version))
-            # with a successful online query, we load up some string parameters
-            # the receiving stylesheet has the parameters default to empty strings
-            # which translates to consulting the services file in the repository,
-            # so we do nothing when the online query fails
-            stringparams["altrs-js"] = altrs_js
-            stringparams["altrs-css"] = altrs_css
-            stringparams["altrs-cdn-url"] = altrs_cdn_url
-            stringparams["altrs-version"] = altrs_version
+        msg = 'Runestone Services via online CDN query: version {}'
+        log.info(msg.format(altrs_version))
+        # with a successful online query, we load up some string parameters
+        # the receiving stylesheet has the parameters default to empty strings
+        # which translates to consulting the services file in the repository,
+        # so we do nothing when the online query fails
+        stringparams["altrs-js"] = altrs_js
+        stringparams["altrs-css"] = altrs_css
+        stringparams["altrs-cdn-url"] = altrs_cdn_url
+        stringparams["altrs-version"] = altrs_version
 
-            # get all the runestone files and place in tmp dir
-            services_file_name = "dist-{}.tgz".format(altrs_version)
-            output_dir = os.path.join(tmp_dir, "_static")
-            services_full_path = os.path.join(output_dir, services_file_name)
-            final_output_path = os.path.join(dest_dir, "_static", services_file_name)
-            if file_format  == "html" and os.path.exists(final_output_path):
-                msg = "Using existing Runestone Services located in {}. Delete Runestone files there to force a fresh download."
-                log.info(msg.format(os.path.join(dest_dir, '_static')))
-                os.path.exists(services_full_path)
+        # get all the runestone files and place in tmp dir
+        services_file_name = "dist-{}.tgz".format(altrs_version)
+        output_dir = os.path.join(tmp_dir, "_static")
+        services_full_path = os.path.join(output_dir, services_file_name)
+        final_output_path = os.path.join(dest_dir, "_static", services_file_name)
+        if file_format  == "html" and os.path.exists(final_output_path):
+            msg = "Using existing Runestone Services located in {}. Delete Runestone files there to force a fresh download."
+            log.info(msg.format(os.path.join(dest_dir, '_static')))
+            os.path.exists(services_full_path)
+            stringparams["rs-local-files"] = "yes"
+        else:
+            try:
+                msg = 'Downloading Runestone Services, version {}'
+                log.info(msg.format(altrs_version))
+                download_file(altrs_cdn_url + services_file_name, services_full_path)
+                log.info("Extracting Runestone Services from archive file")
+                import tarfile
+                file = tarfile.open(services_full_path)
+                file.extractall(output_dir)
+                file.close()
+                # once unpacked, archive no longer necessary and we
+                # don't want to copy it out into produced "_static"
+                os.remove(services_full_path)
                 stringparams["rs-local-files"] = "yes"
-            else:
-                try:
-                    msg = 'Downloading Runestone Services, version {}'
-                    log.info(msg.format(altrs_version))
-                    download_file(altrs_cdn_url + services_file_name, services_full_path)
-                    log.info("Extracting Runestone Services from archive file")
-                    import tarfile
-                    file = tarfile.open(services_full_path)
-                    file.extractall(output_dir)
-                    file.close()
-                    # once unpacked, archive no longer necessary and we
-                    # don't want to copy it out into produced "_static"
-                    os.remove(services_full_path)
-                    stringparams["rs-local-files"] = "yes"
-                except Exception as e:
-                    log.warning(e)
-                    log.warning("Failed to download all Runestone Services files")
+            except Exception as e:
+                log.warning(e)
+                log.warning("Failed to download all Runestone Services files")
     else:
         log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
         stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
