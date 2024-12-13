@@ -1061,13 +1061,15 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     # Copy in external resources (e.g., js code)
     # Decide which Runestone Services to use
     if "debug.rs.dev" not in stringparams:
-        # See if we can get the very latest Runestone Services from the Runestone
-        # CDN.  A non-empty version (fourth parameter) indicates success
+        # See if we can get Runestone Services from the Runestone CDN.
         #  "altrs" = alternate Runestone
         altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
+        # Previous line will raise a fatal error if the Runestone servers
+        # do not cooperate, so we assume we have good information for
+        # locating the most recent version of Runestone Services
         online_success = (altrs_version != '')
         if online_success:
-            msg = 'Runestone Services (using newer, via online CDN query): version {}'
+            msg = 'Runestone Services via online CDN query: version {}'
             log.info(msg.format(altrs_version))
             # with a successful online query, we load up some string parameters
             # the receiving stylesheet has the parameters default to empty strings
@@ -1096,7 +1098,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
                 stringparams["rs-local-files"] = "yes"
             except Exception as e:
                 log.warning(e)
-                log.warning("Failed to download all Runestone Services files - will rely on links to web resources")
+                log.warning("Failed to download all Runestone Services files")
     else:
         if "debug.rs.dev.folder" in stringparams:
             rs_src = os.path.join(stringparams["debug.rs.dev.folder"])
@@ -3621,13 +3623,15 @@ def html(
 
     # Decide which Runestone Services to use
     if "debug.rs.dev" not in stringparams:
-        # See if we can get the very latest Runestone Services from the Runestone
-        # CDN.  A non-empty version (fourth parameter) indicates success
+        # See if we can get Runestone Services from the Runestone CDN.
         #  "altrs" = alternate Runestone
         altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
+        # Previous line will raise a fatal error if the Runestone servers
+        # do not cooperate, so we assume we have good information for
+        # locating the most recent version of Runestone Services
         online_success = (altrs_version != '')
         if online_success:
-            msg = 'Runestone Services (using newer, via online CDN query): version {}'
+            msg = 'Runestone Services via online CDN query: version {}'
             log.info(msg.format(altrs_version))
             # with a successful online query, we load up some string parameters
             # the receiving stylesheet has the parameters default to empty strings
@@ -3664,7 +3668,7 @@ def html(
                     stringparams["rs-local-files"] = "yes"
                 except Exception as e:
                     log.warning(e)
-                    log.warning("Failed to download all Runestone Services files - will rely on links to web resources")
+                    log.warning("Failed to download all Runestone Services files")
     else:
         log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
         stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
