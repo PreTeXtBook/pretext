@@ -227,6 +227,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <!-- Can set date manually or use the "today" element -->
                 <date><today /></date>
+                <keywords>
+                <keyword>samples</keyword><keyword>PreTeXt</keyword><keyword>testing document</keyword>
+                </keywords>
+                <keywords authority="msc" variant="2010">
+                    <keyword primary="yes">00-01</keyword>
+                    <keyword>00-02</keyword>
+                    <keyword primary="no">00A99</keyword>
+                </keywords>
+                <support><p>This is an example of a statement describing funding support for the current document.</p></support>
             </bibinfo>
 
             <titlepage>
