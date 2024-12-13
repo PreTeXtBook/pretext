@@ -1875,8 +1875,10 @@ Book (with parts), "section" at level 3
 <!-- original element declaration. And then serialize what is left.                      -->
 <xsl:template match="*" mode="serialize-namespace">
     <xsl:for-each select="./namespace::*">
-        <!-- test taken from http://lenzconsulting.com/namespace-normalizer/normalize-namespaces.xsl -->
-        <xsl:if test="name()!='xml' and not(.=../preceding::*/namespace::* or .=ancestor::*[position()>1]/namespace::*)">
+        <!-- Comment test taken from http://lenzconsulting.com/namespace-normalizer/normalize-namespaces.xsl -->
+        <!-- scanning all ancestors is too time consuming... it they leak through, so be it                  -->
+        <!-- <xsl:if test="name()!='xml' and not(.=../preceding::*/namespace::* or .=ancestor::*[position()>1]/namespace::*)"> -->
+        <xsl:if test="name()!='xml' and name()!='xi'">
             <xsl:text> xmlns</xsl:text>
             <xsl:if test="not(name(current())='')">
                 <xsl:text>:</xsl:text>
