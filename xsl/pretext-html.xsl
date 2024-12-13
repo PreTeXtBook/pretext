@@ -834,6 +834,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="title-full"/>
         </span>
         <xsl:apply-templates select="*"/>
+        <!-- Display keywords.  Note: the placement of this here works for  -->
+        <!-- articles that have an abstract.  Books (no abstract) will put  -->
+        <!-- their keywords in the colophon.                                -->
+        <xsl:apply-templates select="$bibinfo/keywords" />
+        <!-- Display general support (funding) statement -->
+        <xsl:apply-templates select="$bibinfo/support" />
     </div>
 </xsl:template>
 
@@ -1065,6 +1071,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="line" />
 </xsl:template>
 
+<!-- Keywords -->
+<xsl:template match="bibinfo/keywords">
+    <div class="keywords">
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </span>
+        <xsl:apply-templates select="*" />
+        <xsl:text>.</xsl:text>
+    </div>
+</xsl:template>
+
+<!-- General support (not for a particular author) -->
+<xsl:template match="bibinfo/support">
+    <div class="support">
+        <xsl:apply-templates select="*"/>
+    </div>
+</xsl:template>
+
+
 <!-- Front Colophon -->
 <!-- Licenses, ISBN, Cover Designer, etc -->
 <!-- We process pieces, in document order -->
@@ -1081,6 +1106,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
      <xsl:apply-templates select="$bibinfo/edition" />
      <xsl:apply-templates select="$bibinfo/website" />
      <xsl:apply-templates select="$bibinfo/copyright" />
+     <!-- NB: keywords are included in a colophon for a book, but under the abstract of an article -->
+     <xsl:apply-templates select="$bibinfo/keywords" />
+     <xsl:apply-templates select="$bibinfo/support" />
 </xsl:template>
 
 <xsl:template match="bibinfo/credit[role]">
@@ -10481,7 +10509,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-plain" />
             </title>
-            <meta name="Keywords" content="Authored in PreTeXt" />
+            <!-- Add keywords, including those in bibinfo -->
+            <xsl:call-template name="keywords-meta-element"/>
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <!-- canonical link for better SEO -->
@@ -10643,7 +10672,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="language-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
-            <meta name="Keywords" content="Authored in PreTeXt" />
+            <!-- keywords, including those from bibinfo -->
+            <xsl:call-template name="keywords-meta-element" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <!-- canonical link for better SEO -->
             <xsl:call-template name="canonical-link">
@@ -10707,6 +10737,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="'yes'"/>
         </xsl:attribute>
     </xsl:if>
+</xsl:template>
+
+<!-- ############# -->
+<!-- Meta keywords -->
+<!-- ############# -->
+
+<xsl:template name="keywords-meta-element" >
+    <meta name="Keywords">
+        <xsl:attribute name="content">
+            <xsl:if test="$bibinfo/keywords[not(@authority='msc')]">
+                <xsl:apply-templates select="$bibinfo/keywords[not(@authority='msc')]/keyword" />
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+            <xsl:text>Authord in PreTeXt</xsl:text>
+        </xsl:attribute>
+    </meta>
 </xsl:template>
 
 <!-- ################### -->
