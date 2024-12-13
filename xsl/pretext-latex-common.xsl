@@ -1434,6 +1434,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
+    <!-- If there is a <support> tag in an article, create a unnumbered footnote environment for it -->
+    <xsl:if test="$b-is-article and $bibinfo/support">
+        <xsl:text>%% add a \support command as unnumbered footnote&#xa;</xsl:text>
+        <xsl:text>\let\svdthefootnote\thefootnote%&#xa;</xsl:text>
+        <xsl:text>\newcommand\support[1]{%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
+        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\svdthefootnote%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Font Awesome package -->
@@ -3953,6 +3963,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="$docinfo/event" />
     </xsl:if>
+    <xsl:if test="$bibinfo/support">
+        <xsl:text>\support{</xsl:text>
+        <xsl:apply-templates select="$bibinfo/support" mode="article-info"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:if test="$bibinfo/author or $bibinfo/editor">
         <xsl:text>\author{</xsl:text>
@@ -4209,9 +4224,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <!-- Add support statement from bibinfo if present. -->
+    <xsl:if test="$bibinfo/support">
+        <xsl:apply-templates select="$bibinfo/support" mode="copyright-page"/>
+    </xsl:if>
     <!-- Something so page is not totally nothing -->
     <xsl:text>\null\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Only for a book with a colophon, we put the statement of support at the bottom of the colophon -->
+<xsl:template match="bibinfo/support" mode="copyright-page">
+    <xsl:text>%% Funding/Support statement:</xsl:text>
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+    <xsl:text>\noindent{}</xsl:text>
+    <xsl:apply-templates select="*" />
+    <xsl:text>\par&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- URL for canonical project website -->
@@ -4297,6 +4326,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="bibinfo/support" mode="article-info">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<xsl:template match="bibinfo/support" mode="article-info">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- Departments, Institutions, and Addresses are free-form, or sequences of lines  -->
 <!-- Line breaks are inserted above, due to \and, etc, so do not end last line here -->
 <xsl:template match="department|institution|location">
@@ -4343,14 +4380,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Articles may have an abstract in the frontmatter. We -->
 <!-- accept the LaTeX article class approach and switch   -->
 <!-- to a localization of the heading just prior to use.  -->
+<!-- Keywords are placed inside the abstract, at the end. -->
 <xsl:template match="article/frontmatter/abstract">
     <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <xsl:if test="$bibinfo/keywords">
+        <xsl:apply-templates select="$bibinfo/keywords"/>
+    </xsl:if>
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
+
+<xsl:template match="bibinfo/keywords">
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+    <xsl:text>\noindent{\bfseries </xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}. </xsl:text>
+    <xsl:apply-templates select="*" />
+    <xsl:text>.&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ################### -->
 <!-- Front Matter, Books -->
