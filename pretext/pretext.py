@@ -1093,7 +1093,6 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
             file.close()
             # we don't bother to delete archive after extraction since
             # the temporary directory is never copied out anywhere
-            stringparams["rs-local-files"] = "yes"
         except Exception as e:
             log.warning(e)
             log.warning("Failed to download all Runestone Services files")
@@ -1103,7 +1102,6 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
         stringparams["altrs-cdn-url"] = ""
         stringparams["altrs-version"] = "dev"
-        stringparams["rs-local-files"] = "yes"
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
@@ -3642,7 +3640,6 @@ def html(
             msg = "Using existing Runestone Services located in {}. Delete Runestone files there to force a fresh download."
             log.info(msg.format(os.path.join(dest_dir, '_static')))
             os.path.exists(services_full_path)
-            stringparams["rs-local-files"] = "yes"
         else:
             try:
                 msg = 'Downloading Runestone Services, version {}'
@@ -3656,7 +3653,6 @@ def html(
                 # once unpacked, archive no longer necessary and we
                 # don't want to copy it out into produced "_static"
                 os.remove(services_full_path)
-                stringparams["rs-local-files"] = "yes"
             except Exception as e:
                 log.warning(e)
                 log.warning("Failed to download all Runestone Services files")
@@ -3666,7 +3662,6 @@ def html(
         stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
         stringparams["altrs-cdn-url"] = ""
         stringparams["altrs-version"] = "dev"
-        stringparams["rs-local-files"] = "yes"
 
     # support publisher file, and subtree argument
     if pub_file:
