@@ -210,11 +210,14 @@ done`
         <xsl:text>": </xsl:text>
     </xsl:template>
 
+    <!-- 2 paces of indentation for each $depth -->
     <xsl:template name="indent">
         <xsl:param name="depth" select="'0'" />
-        <xsl:for-each select="//*[position() &lt;= $depth]">
-            <xsl:if test="position() &lt;= $depth"><xsl:text>  </xsl:text></xsl:if>
-        </xsl:for-each>
+
+        <xsl:call-template name="duplicate-string">
+             <xsl:with-param name="text" select="'  '"/>
+             <xsl:with-param name="count" select="$depth" />
+        </xsl:call-template>
     </xsl:template>
 
     <!-- Escape strings for JSON. This process first escapes backslashes,
