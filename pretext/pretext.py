@@ -1066,9 +1066,6 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         #  "altrs" = alternate Runestone
         altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
         online_success = (altrs_version != '')
-        # report repository version always, supersede if newer found
-        msg = 'Runestone Services (via PreTeXt repository): version {}'
-        log.info(msg.format(get_runestone_services_version()))
         if online_success:
             msg = 'Runestone Services (using newer, via online CDN query): version {}'
             log.info(msg.format(altrs_version))
@@ -3628,9 +3625,6 @@ def html(
         #  "altrs" = alternate Runestone
         altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
         online_success = (altrs_version != '')
-        # report repository version always, supersede if newer found
-        msg = 'Runestone Services (via PreTeXt repository): version {}'
-        log.info(msg.format(get_runestone_services_version()))
         if online_success:
             msg = 'Runestone Services (using newer, via online CDN query): version {}'
             log.info(msg.format(altrs_version))
@@ -4274,15 +4268,6 @@ def build_info_message():
     master = get_git_master_commit()
     msg = 'built with {} using commit {} at tip of branch "{}" ("master": {})'
     return msg.format("pretext/pretext script", commit, branch, master)
-
-
-def get_runestone_services_version():
-    """Examine Runestone Services file for version number"""
-
-    services_file = os.path.join(get_ptx_path(), "xsl", "support", "webpack_static_imports.xml")
-    services = ET.parse(services_file)
-    version_element = services.xpath("/all/version")[0]
-    return version_element.text
 
 
 def set_executables(adict):
