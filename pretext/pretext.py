@@ -1098,12 +1098,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
             log.warning(e)
             log.warning("Failed to download all Runestone Services files")
     else:
-        if "debug.rs.dev.folder" in stringparams:
-            rs_src = os.path.join(stringparams["debug.rs.dev.folder"])
-            rs_dest = os.path.join(tmp_dir, "_static")
-            shutil.copytree(rs_src, rs_dest)
-
-        log.info("Building for local developmental Runestone Services. Make sure to provide link to _static source in debug.rs.dev.folder.")
+        log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
         stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
         stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
         stringparams["altrs-cdn-url"] = ""
