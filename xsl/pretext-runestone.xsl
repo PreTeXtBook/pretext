@@ -42,10 +42,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.rs.services.file" select="''"/>
 <xsl:variable name="b-debugging-rs-services" select="not($debug.rs.services.file = '')"/>
 
-<!-- Using local versions of Runestone Services   -->
-<xsl:param name="rs-local-files" select="''" />
-<xsl:variable name="b-local-rs" select="$rs-local-files = 'yes'"/>
-
 
 <!-- ######################## -->
 <!-- Runestone Infrastructure -->
@@ -300,20 +296,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:comment>*** Runestone Services ***</xsl:comment>
 
     <xsl:text>&#xa;</xsl:text>
-    <xsl:variable name="rs-fileroot">
-        <xsl:choose>
-            <xsl:when test="$b-local-rs">
-                <xsl:text>_static/</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$runestone-cdn"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:for-each select="$runestone-services/all/js/item[$b-debugging-rs-services]|$altrs-js-tokens[not($b-debugging-rs-services)]">
         <script>
             <xsl:attribute name="src">
-                <xsl:value-of select="$rs-fileroot"/>
+                <xsl:text>_static/</xsl:text>
                 <xsl:value-of select="."/>
             </xsl:attribute>
         </script>
@@ -321,7 +307,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$runestone-services/all/css/item[$b-debugging-rs-services]|$altrs-css-tokens[not($b-debugging-rs-services)]">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
-                <xsl:value-of select="$rs-fileroot"/>
+                <xsl:text>_static/</xsl:text>
                 <xsl:value-of select="."/>
             </xsl:attribute>
         </link>
