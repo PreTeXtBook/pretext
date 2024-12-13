@@ -427,29 +427,27 @@
   <xs:element name="bibinfo">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
+        <xs:choice minOccurs="0">
           <xs:sequence>
             <xs:group maxOccurs="unbounded" ref="Author"/>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Editor"/>
           </xs:sequence>
           <xs:group maxOccurs="unbounded" ref="Editor"/>
         </xs:choice>
-        <xs:group minOccurs="0" maxOccurs="unbounded" ref="Credit"/>
-        <xs:element minOccurs="0" ref="date"/>
-        <xs:group minOccurs="0" maxOccurs="unbounded" ref="ColophonCredit"/>
-        <xs:element minOccurs="0" ref="edition"/>
-        <xs:element minOccurs="0" ref="version"/>
-        <xs:element minOccurs="0" ref="event"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="keywords"/>
-        <xs:element minOccurs="0" ref="affiliation"/>
-        <xs:element minOccurs="0" ref="funding"/>
-        <xs:element minOccurs="0" ref="website"/>
-        <xs:group minOccurs="0" ref="Copyright"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:choice>
+            <xs:group ref="Credit"/>
+            <xs:group ref="ColophonCredit"/>
+          </xs:choice>
+          <xs:element ref="date"/>
+          <xs:element ref="edition"/>
+          <xs:element ref="keywords"/>
+          <xs:element ref="website"/>
+          <xs:group ref="Copyright"/>
+        </xs:choice>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="edition" type="xs:string"/>
-  <xs:element name="version" type="xs:string"/>
   <xs:element name="titlepage">
     <xs:complexType>
       <xs:sequence>
@@ -491,6 +489,11 @@
       </xs:choice>
     </xs:complexType>
   </xs:element>
+  <xs:element name="support">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextParagraph"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="address">
     <xs:complexType mixed="true">
       <xs:choice>
@@ -522,14 +525,7 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="funding">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group minOccurs="0" ref="Title"/>
-        <xs:group maxOccurs="unbounded" ref="Paragraph"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="edition" type="xs:string"/>
   <xs:element name="event">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
@@ -551,7 +547,7 @@
             </xs:choice>
             <xs:element minOccurs="0" ref="email"/>
             <xs:element minOccurs="0" ref="biography"/>
-            <xs:element minOccurs="0" ref="funding"/>
+            <xs:element minOccurs="0" ref="support"/>
           </xs:sequence>
           <xs:attribute name="corresponding">
             <xs:simpleType>

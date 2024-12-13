@@ -200,18 +200,13 @@
                         (Author+, Editor*)
                         |
                         (Editor+)
-                    ),
-                    Credit*,
-                    Date?,
-                    ColophonCredit*,
-                    element edition {text}?,
-                    element version {text}?,
-                    Event?,
-                    Keywords*,
-                    Affiliation?,
-                    Support?,
-                    Website?,
-                    Copyright?
+                    )?,
+                    ((Credit | ColophonCredit)* &
+                    Date? &
+                    Edition? &
+                    Keywords* &
+                    Website? &
+                    Copyright?)
                 }
             TitlePage =
                 element titlepage {
@@ -227,6 +222,7 @@
                 }
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
+            Support = element support {TextParagraph}
             Location = element address {TextSimple | ShortLine+}
             Keywords = element keywords {
                 attribute authority {text}?,
@@ -238,10 +234,7 @@
                 attribute primary {"yes"|"no"}?,
                 TextSimple
             }
-            Support = element funding {
-                Title?,
-                Paragraph+
-            }
+            Edition = element edition {text}
             Event = element event {
                 TextLong
             }

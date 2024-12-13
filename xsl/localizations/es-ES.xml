@@ -242,7 +242,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'>Para hacer</localization>
     <localization string-id='editor'>Editor</localization>
-    <localization string-id='edition'>Edición</localization> 
+    <localization string-id='edition'>Edición</localization>
+    <localization string-id='keywords'>Palabras clave</localization>
     <!-- <localization string-id='website'>Website</localization> -->
     <localization string-id='copyright'>Derechos de autor</localization>
     <!-- HTML clickables (lowercase strings to click on) -->

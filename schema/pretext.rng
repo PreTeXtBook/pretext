@@ -592,56 +592,44 @@
   </define>
   <define name="Bibinfo">
     <element name="bibinfo">
-      <choice>
-        <group>
+      <optional>
+        <choice>
+          <group>
+            <oneOrMore>
+              <ref name="Author"/>
+            </oneOrMore>
+            <zeroOrMore>
+              <ref name="Editor"/>
+            </zeroOrMore>
+          </group>
           <oneOrMore>
-            <ref name="Author"/>
-          </oneOrMore>
-          <zeroOrMore>
             <ref name="Editor"/>
-          </zeroOrMore>
-        </group>
-        <oneOrMore>
-          <ref name="Editor"/>
-        </oneOrMore>
-      </choice>
-      <zeroOrMore>
-        <ref name="Credit"/>
-      </zeroOrMore>
-      <optional>
-        <ref name="Date"/>
+          </oneOrMore>
+        </choice>
       </optional>
-      <zeroOrMore>
-        <ref name="ColophonCredit"/>
-      </zeroOrMore>
-      <optional>
-        <element name="edition">
-          <text/>
-        </element>
-      </optional>
-      <optional>
-        <element name="version">
-          <text/>
-        </element>
-      </optional>
-      <optional>
-        <ref name="Event"/>
-      </optional>
-      <zeroOrMore>
-        <ref name="Keywords"/>
-      </zeroOrMore>
-      <optional>
-        <ref name="Affiliation"/>
-      </optional>
-      <optional>
-        <ref name="Support"/>
-      </optional>
-      <optional>
-        <ref name="Website"/>
-      </optional>
-      <optional>
-        <ref name="Copyright"/>
-      </optional>
+      <interleave>
+        <zeroOrMore>
+          <choice>
+            <ref name="Credit"/>
+            <ref name="ColophonCredit"/>
+          </choice>
+        </zeroOrMore>
+        <optional>
+          <ref name="Date"/>
+        </optional>
+        <optional>
+          <ref name="Edition"/>
+        </optional>
+        <zeroOrMore>
+          <ref name="Keywords"/>
+        </zeroOrMore>
+        <optional>
+          <ref name="Website"/>
+        </optional>
+        <optional>
+          <ref name="Copyright"/>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="TitlePage">
@@ -696,6 +684,11 @@
       </choice>
     </element>
   </define>
+  <define name="Support">
+    <element name="support">
+      <ref name="TextParagraph"/>
+    </element>
+  </define>
   <define name="Location">
     <element name="address">
       <choice>
@@ -735,14 +728,9 @@
       <ref name="TextSimple"/>
     </element>
   </define>
-  <define name="Support">
-    <element name="funding">
-      <optional>
-        <ref name="Title"/>
-      </optional>
-      <oneOrMore>
-        <ref name="Paragraph"/>
-      </oneOrMore>
+  <define name="Edition">
+    <element name="edition">
+      <text/>
     </element>
   </define>
   <define name="Event">
