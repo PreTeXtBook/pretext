@@ -2641,7 +2641,7 @@ Book (with parts), "section" at level 3
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|abstract|references|glossary|exercises|worksheet|reading-questions|exercisegroup|solutions|backmatter|index|case|interactive/instructions" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|abstract|references|glossary|exercises|worksheet|reading-questions|exercisegroup|solutions|backmatter|index|case|interactive/instructions|keywords" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -2649,6 +2649,22 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- NB: these templates return a property of the title's parent -->
+
+<xsl:template match="keywords" mode="default-title">
+    <xsl:choose>
+        <xsl:when test="@authority='msc'">
+            <xsl:if test="@variant">
+                <xsl:value-of select="@variant"/>
+                <xsl:text>&#160;</xsl:text>
+            </xsl:if>
+            <xsl:text>Math Subject Classification</xsl:text>
+        </xsl:when>
+        <!-- Default is @authority='author' or no recognized authority given -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="type-name"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Normally a default title is the "type-name" of the object. -->
 <!-- But to indicate that a "worksheet" or "exercises" division -->
@@ -7110,6 +7126,19 @@ Book (with parts), "section" at level 3
 <!-- No conversion will create content directly from bibinfo -->
 <xsl:template match="bibinfo"/>
 
+<!-- Keywords: create a comma-separated list.  No punctuation after final keyword -->
+<xsl:template match="keywords/keyword">
+    <xsl:if test="@primary='yes'">
+        <xsl:text>Primary </xsl:text>
+    </xsl:if>
+    <xsl:if test="@primary='no' or @secondary='yes'">
+        <xsl:text>Secondary </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="."/>
+    <xsl:if test="following-sibling::keyword">
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+</xsl:template>
 
 
 <!-- ############# -->

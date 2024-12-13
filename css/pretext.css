@@ -489,6 +489,27 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     display: inline;
 }
 
+.ptx-content .keywords {
+    margin-top: 1em;
+}
+.ptx-content .keywords > .title {
+    font-weight: 600;
+    line-height: 1.125em;
+    display: inline;
+}
+.ptx-content .keywords > .title::after {
+    content: ".\2009\2009\2009";
+}
+.ptx-content .keywords > .title + .para {
+    display: inline;
+}
+
+.ptx-content .support {
+    display: block;
+    margin-top: 1em;
+}
+
+
 /*       -----      */
 
 
