@@ -41,9 +41,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override the Runestone Services file     -->
 <xsl:param name="debug.rs.services.file" select="''"/>
 <xsl:variable name="b-debugging-rs-services" select="not($debug.rs.services.file = '')"/>
-<!-- Use dev version of Runestone files       -->
-<xsl:param name="debug.rs.dev" select="''" />
-<xsl:variable name="b-debugging-rs" select="not($debug.rs.dev = '')"/>
 
 <!-- Using local versions of Runestone Services   -->
 <xsl:param name="rs-local-files" select="''" />
