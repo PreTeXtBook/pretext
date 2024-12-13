@@ -95,14 +95,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- needed several places, so we compute it once now. -->
 <!-- Manifest, two "ebookConfig".                      -->
 <xsl:variable name="runestone-version">
-    <xsl:choose>
-        <xsl:when test="not($b-debugging-rs-services)">
-            <xsl:value-of select="$altrs-version"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$runestone-services/all/version"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="$altrs-version"/>
 </xsl:variable>
 
 <!-- The Runestone platform option requires output that can be used  -->
