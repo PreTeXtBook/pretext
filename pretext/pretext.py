@@ -3616,10 +3616,24 @@ def html(
 
     # Decide which Runestone Services to use
     if "debug.rs.dev" not in stringparams:
-        # See if we can get Runestone Services from the Runestone CDN.
-        #  "altrs" = alternate Runestone
-        altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = _runestone_services(stringparams)
-        # Previous line will raise a fatal error if the Runestone servers
+        
+        use_stored_services = False
+        if "html.quick-dirty" in stringparams:
+            #see if we can find an existing runestone-services.xml file
+            import glob
+            services_record_files = glob.glob(os.path.join(dest_dir, "_static", "_runestone-services-*.xml"))
+            if services_record_files:
+                old_services_file = open(services_record_files[0])
+                old_xml = old_services_file.read()
+                altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = parse_rs_services(old_xml)
+                use_stored_services = True
+
+        if not use_stored_services:
+            # See if we can get the very latest Runestone Services from the Runestone
+            #  "altrs" = alternate Runestone
+            altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = _runestone_services(stringparams)
+
+        # Previous code will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
         msg = 'Runestone Services via online CDN query: version {}'
@@ -3684,10 +3698,12 @@ def html(
 
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    if "html.quick-dirty" not in stringparams:
+        copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # place CSS and JS in scratch directory
-    copy_html_css_js(tmp_dir)
+    if "html.quick-dirty" not in stringparams:
+        copy_html_css_js(tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
