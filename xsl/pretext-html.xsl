@@ -12415,220 +12415,220 @@ TODO:
 <!-- cross-reference knowls also have these bits of set-up -->
 <!-- javascript, but only for what the knowl content needs.-->
 <xsl:template match="*" mode="sagecell">
+    <!-- only check for all the special types if there is actually a sage element -->
+    <xsl:if test=".//sage">
+        <!-- special types -->
+        <xsl:if test=".//sage[@type='display']">
+            <xsl:call-template name="sagecell-display" />
+        </xsl:if>
 
-    <!-- special types -->
+        <xsl:if test=".//sage[@type='practice']">
+            <xsl:call-template name="sagecell-practice" />
+        </xsl:if>
 
-    <xsl:if test=".//sage[@type='display']">
-        <xsl:call-template name="sagecell-display" />
+        <!-- 2016-06-13: sage, gap, gp, html, maxima, octave, python, r, and singular -->
+        <!-- 2024-02-07: add macaulay2                                                -->
+
+        <xsl:if test=".//sage[not(@type) and (not(@language) or @language='sage') and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>sage</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">Sage</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[not(@type) and (not(@language) or @language='sage') and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>sage</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">Sage</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='gap' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>gap</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">GAP</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='gap' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>gap</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">GAP</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='gp' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>gp</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">GP</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='gp' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>gp</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">GP</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='html' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>html</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">HTML</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='html' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>html</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">HTML</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='macaulay2' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>macaulay2</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">Macaulay2</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='macaulay2' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>macaulay2</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">Macaulay2</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='maxima' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>maxima</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">Maxima</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='maxima' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>maxima</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">Maxima</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='octave' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>octave</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">Octave</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='octave' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>octave</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">Octave</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='python' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>python</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">Python</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='python' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>python</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">Python</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='r' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>r</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">R</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='r' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>r</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">R</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='singular' and not(@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>singular</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="false()"/>
+                <xsl:with-param name="language-text">Singular</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test=".//sage[@language='singular' and (@auto-evaluate = 'yes')]">
+            <xsl:call-template name="makesagecell">
+                <xsl:with-param name="language-attribute">
+                    <xsl:text>singular</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="b-autoeval" select="true()"/>
+                <xsl:with-param name="language-text">Singular</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
     </xsl:if>
-
-    <xsl:if test=".//sage[@type='practice']">
-        <xsl:call-template name="sagecell-practice" />
-    </xsl:if>
-
-    <!-- 2016-06-13: sage, gap, gp, html, maxima, octave, python, r, and singular -->
-    <!-- 2024-02-07: add macaulay2                                                -->
-
-    <xsl:if test=".//sage[not(@type) and (not(@language) or @language='sage') and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>sage</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">Sage</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[not(@type) and (not(@language) or @language='sage') and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>sage</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">Sage</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='gap' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>gap</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">GAP</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='gap' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>gap</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">GAP</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='gp' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>gp</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">GP</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='gp' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>gp</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">GP</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='html' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>html</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">HTML</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='html' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>html</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">HTML</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='macaulay2' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>macaulay2</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">Macaulay2</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='macaulay2' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>macaulay2</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">Macaulay2</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='maxima' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>maxima</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">Maxima</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='maxima' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>maxima</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">Maxima</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='octave' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>octave</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">Octave</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='octave' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>octave</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">Octave</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='python' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>python</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">Python</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='python' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>python</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">Python</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='r' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>r</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">R</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='r' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>r</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">R</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='singular' and not(@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>singular</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="false()"/>
-            <xsl:with-param name="language-text">Singular</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
-    <xsl:if test=".//sage[@language='singular' and (@auto-evaluate = 'yes')]">
-        <xsl:call-template name="makesagecell">
-            <xsl:with-param name="language-attribute">
-                <xsl:text>singular</xsl:text>
-            </xsl:with-param>
-            <xsl:with-param name="b-autoeval" select="true()"/>
-            <xsl:with-param name="language-text">Singular</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-
 </xsl:template>
 
 
