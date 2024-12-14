@@ -103,6 +103,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
+<!-- Fast HTML build that skips steps inessential for quickly checking      -->
+<!-- changes to a document or a portion of a document.                      -->
+<!-- It will omit updating knowls, search index, theme, Runestone files,... -->
+<!-- When combined with param subtree, it will only process that subtree.   -->
+<xsl:param name="html.quick-dirty" select="''"/>
+<xsl:variable name="b-quick-dirty" select="not($html.quick-dirty = '')"/>
+
 <!-- CSS and Javascript Directories -->
 <!-- These are convenience variables to specify file prefixes  -->
 <!-- consistently.  If you know what you are doing you could   -->
