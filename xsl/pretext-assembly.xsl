@@ -1729,6 +1729,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="duplication-check-attribute">
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+    <xsl:param name="target-attr"/>
+
+    <!-- construct a list of just the sorted labels -->
+    <xsl:variable name="attr-values-sorted-rtf">
+        <xsl:for-each select="$nodes/@*[name() = $target-attr]">
+            <xsl:sort select="."/>
+            <label>
+                <xsl:value-of select="."/>
+            </label>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="attr-values-sorted" select="exsl:node-set($attr-values-sorted-rtf)"/>
+
+    <!-- traverse sorted list to find duplicates -->
+    <xsl:for-each select="$attr-values-sorted/*">
+        <!-- save off the string on current node -->
+        <xsl:variable name="attr-value" select="."/>
+        <!-- get previous two labels - will be '' if out of bounds -->
+        <xsl:variable name="prev-value" select="string(preceding-sibling::*[1])"/>
+        <xsl:variable name="prev-prev-value" select="string(preceding-sibling::*[2])"/>
+        <!-- identify only first instance of a duplicate for each label -->
+        <xsl:if test="($attr-value= $prev-value) and ($attr-value != $prev-prev-value)">
+            <xsl:choose>
+                <xsl:when test="$purpose = 'authored'">
+                    <xsl:message>PTX:ERROR: the @<xsl:value-of select="$target-attr"/> value "<xsl:value-of select="$attr-value"/>" should be unique, but is authored multiple times.</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
+            <!-- use the original nodes to report location of instances -->
+            <!-- select where they have an attr with the correct name and it has correct value -->
+            <xsl:for-each select="$nodes[@*[name() = $target-attr] = $attr-value]">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Languages -->
