@@ -1670,9 +1670,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- assembly and right after automatic generation.  The   -->
 <!-- application of these templates is mixed-in to the     -->
 <!-- creation of the trees.                                -->
-<!-- NB: these two templates are identical (keep it that   -->
-<!-- way!) because we can't see how to make the attribute  -->
-<!-- itself a parameter.                                   -->
 <!-- NB: these were built as regular templates and the     -->
 <!-- root of the relevant tree was passed in, this created -->
 <!-- some error with the construction of the final tree:   -->
@@ -1683,24 +1680,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- 'authored' or 'generated', just influences messages -->
     <xsl:param name="purpose"/>
 
-    <xsl:for-each select="$nodes">
-        <!-- save off the string on current node -->
-        <xsl:variable name="the-id" select="string(./@xml:id)"/>
-        <!-- locate all elements that are duplicates of this one -->
-        <xsl:variable name="duplicates" select="$nodes[@xml:id = $the-id]"/>
-        <!-- warn only for the element that occurs earliest in the duplicate list -->
-        <xsl:if test="(count($duplicates) > 1) and (count(.|$duplicates[1]) = 1)">
-            <xsl:choose>
-                <xsl:when test="$purpose = 'authored'">
-                    <xsl:message>PTX:ERROR: the @xml:id value "<xsl:value-of select="$the-id"/>" should be unique, but is authored <xsl:value-of select="count($duplicates)"/> times.</xsl:message>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
-            <xsl:for-each select="$duplicates">
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:for-each>
-        </xsl:if>
-    </xsl:for-each>
+    <xsl:call-template name="duplication-check-attribute">
+        <xsl:with-param name="nodes" select="$nodes"/>
+        <xsl:with-param name="purpose" select="$purpose"/>
+        <xsl:with-param name="target-attr" select="'xml:id'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="duplication-check-label">
@@ -1709,24 +1693,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- 'authored' or 'generated', just influences messages -->
     <xsl:param name="purpose"/>
 
-    <xsl:for-each select="$nodes">
-        <!-- save off the string on current node -->
-        <xsl:variable name="the-id" select="string(./@label)"/>
-        <!-- locate all elements that are duplicates of this one -->
-        <xsl:variable name="duplicates" select="$nodes[@label = $the-id]"/>
-        <!-- warn only for the element that occurs earliest in the duplicate list -->
-        <xsl:if test="(count($duplicates) > 1) and (count(.|$duplicates[1]) = 1)">
-            <xsl:choose>
-                <xsl:when test="$purpose = 'authored'">
-                    <xsl:message>PTX:ERROR: the @label value "<xsl:value-of select="$the-id"/>" should be unique, but is authored <xsl:value-of select="count($duplicates)"/> times.</xsl:message>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
-            <xsl:for-each select="$duplicates">
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:for-each>
-        </xsl:if>
-    </xsl:for-each>
+    <xsl:call-template name="duplication-check-attribute">
+        <xsl:with-param name="nodes" select="$nodes"/>
+        <xsl:with-param name="purpose" select="$purpose"/>
+        <xsl:with-param name="target-attr" select="'label'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="duplication-check-attribute">
