@@ -3428,6 +3428,12 @@ def _parse_runestone_services(et):
 
     return (rs_js, rs_css, rs_cdn_url, rs_version)
 
+# Update stringparams with Runestone Services information
+def _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version):
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
@@ -3477,9 +3483,7 @@ def _runestone_services(stringparams):
         rs_version = "dev"
         services_xml = None
         # Return, plus side-effect
-        stringparams["rs-js"] = rs_js
-        stringparams["rs-css"] = rs_css
-        stringparams["rs-version"] = rs_version
+        _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
         return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
     # Otherwise, we have a URL pointing to the Runestone server/CDN
@@ -3537,9 +3541,7 @@ def _runestone_services(stringparams):
     rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
 
     # Return, plus side-effect
-    stringparams["rs-js"] = rs_js
-    stringparams["rs-css"] = rs_css
-    stringparams["rs-version"] = rs_version
+    _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
 
@@ -3784,9 +3786,26 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
+    add_runestone_services = True
+    # quick and dirty tries to use existing rs services
+    # on failure, will get new ones
+    if "html.quick-dirty" in stringparams:
+        try:
+            services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+            with open(services_record_files, 'r') as f:
+                services_xml = f.read()
+            services = ET.fromstring(services_xml)
+            rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
+            _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
+            log.info("Quick and dirty HTML is using old Runestone Services. Delete _static/_runestone-services.xml from output to update Runestone.")
+            add_runestone_services = False
+        except:
+            log.info("Quick and dirty HTML failed to use old Runestone Services. Will download Runestone.")
+
     # interrogate Runestone server (or debugging switches) and populate
     # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams)
+    if add_runestone_services:
+        _place_runestone_services(tmp_dir, stringparams)
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -3799,15 +3818,16 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    # place managed directories - some of these (Asymptote HTML) are
-    # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    if "html.quick-dirty" not in stringparams:
+        # place managed directories - some of these (Asymptote HTML) are
+        # consulted during the XSL run and so need to be placed beforehand
+        copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place JS in scratch directory
-    copy_html_js(tmp_dir)
+        # place JS in scratch directory
+        copy_html_js(tmp_dir)
 
-    # build or copy theme
-    build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
+        # build or copy theme
+        build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
