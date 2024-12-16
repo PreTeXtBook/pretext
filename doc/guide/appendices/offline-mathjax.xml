@@ -19,7 +19,9 @@
         <title>MathJax and Speech Rule Engine</title>
         <idx>Speech Rule Engine</idx>
 
-        <p>MathJax is packaged as a <c>node.js</c> program.  A component of MathJax is Speech Rule Engine (<init>SRE</init>), which converts <latex/> to text that represents a spoken version of the mathematics, and to Nemeth braille, a braille code for expressing mathematics.</p>
+        <p>MathJax is packaged as a <c>node.js</c> program. A component of MathJax is Speech Rule Engine (<init>SRE</init>), which converts <latex/> to text that represents a spoken version of the mathematics, and to Nemeth braille, a braille code for expressing mathematics.</p>
+
+        <p>Any <c>node.js</c> script requires installing Node. See <xref ref="node-and-npm"/> for instructions on doing so. Once Node is installed, you can use the following instructions to complete the installation of MathJax and the <init>SRE</init>.</p>
 
         <p>Follow the directions here <em>exactly</em>.  Do not free-style and think some modification will have a better or identical result.  In a terminal, set your working directory with<cd>
             <cline>cd /path/to/mathbook/script/mjsre</cline>
