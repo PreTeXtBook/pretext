@@ -3392,12 +3392,16 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # position image files
     images = packaging_tree.xpath("/packaging/images/image[@filename]")
     for im in images:
-        source = os.path.join(source_dir, str(im.get("sourcename")))
-        # empty image names in sample book were breaking my build
-        if im.get("sourcename") != "":
-            dest = os.path.join(xhtml_dir, str(im.get("filename")))
+        sourcename = str(im.get("sourcename"))
+        filename = str(im.get("filename"))
+        try:
+            source = os.path.join(source_dir, sourcename)
+            dest = os.path.join(xhtml_dir, filename)
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             shutil.copy2(source, dest)
+        except:
+            msg = 'PTX:BUG: error copying image with sourcename "{}" and filename "{}".  Perhaps see issue #2326.'
+            log.warning(msg.format(sourcename, filename))
 
     # clean-up the trash
     # TODO: squelch knowls or find alternative
