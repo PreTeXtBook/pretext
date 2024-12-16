@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="node-and-npm">
+    <title>Node and npm</title>
+    <idx>Node</idx>
+    <idx>npm</idx>
+
+    <p>To run a Javascript program <em>outside</em> a web browser requires a program that can interpret the Javascript language.  A popular choice is <c>node.js</c>, whose executable is simply <c>node</c>.  Programs designed for execution by <c>node</c> often build on other programs.  These are all organized in packages, which can be managed by the Node Package Manager, known as <c>npm</c> for short.  A basic purpose of <c>npm</c> is to manage versions and dependencies among packages.</p>
+
+    <p>So the first step is to install both <c>node</c> and <c>npm</c> on your system.  <url href="https://nodejs.org/en/download/package-manager">Instructions for installing node and npm</url> can be found at <url href="https://nodejs.org/">nodejs.org</url>.  These programs are meant to be cross-platform, so once you do these two operating-system-specific installations, we can proceed with generic instructions.</p>
+
+    <p>Now <c>node</c> should be on your path, and you can try <cd>which node</cd> to see if your operating system can locate it automatically.  If not, then you will need to edit your personal copy of the <c>pretext.cfg</c> configuration file to have the <c>node</c> key provide a path to the executable (see <xref ref="pretext-helpers"/>).</p>
+
+    <p>Some useful <c>npm</c> commands are listed below, in the form of examples. These commands depend on running in a <term>package</term> <em/> a folder containing a file named <q>package.json</q>. So before trying to run any of them, make sure to navigate to such a folder (e.g. <c>script/mjsre</c> or <c>script/cssbuilder</c>).  In particular, note <c>npm install</c> which must be run before using a script.</p>
+
+    <p>When using node with git (see <xref ref="git-author"/>), you generally should should check <c>package.json</c> and <c>package-lock.json</c> into source control, but ignore the entire <c>node_modules</c> folder.</p>
+
+    <table>
+        <title>Useful <c>npm</c> commands</title>
+        <tabular>
+            <row>
+                <cell><c>npm install</c></cell>
+                <cell>Install the packages listed in the <q>package.json</q> file to the folder <c>node_modules</c>. This is required one time before you use a package.</cell>
+            </row>
+            <row>
+                <cell><c>npm list</c></cell>
+                <cell>Full tree of installed packages (local)</cell>
+            </row>
+            <row>
+                <cell><c>npm list mathjax-full</c></cell>
+                <cell>Just one package</cell>
+            </row>
+            <row>
+                <cell><c>npm view speech-rule-engine version</c></cell>
+                <cell><em>Available</em> version</cell>
+            </row>
+        </tabular>
+    </table>
+</appendix>
