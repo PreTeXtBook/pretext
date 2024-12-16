@@ -88,6 +88,7 @@ body.pretext > a.assistive:focus {
   border-width: 1px;
   border-color: var(--button-border-color);
   border-style: solid;
+  border-radius: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -240,6 +241,7 @@ body.pretext > a.assistive:focus {
   border-width: 1px;
   border-color: var(--button-border-color);
   border-style: solid;
+  border-radius: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -576,7 +578,6 @@ body.pretext > a.assistive:focus {
   overflow-x: hidden;
   height: calc(100vh - 36px);
   margin-top: -1px;
-  scrollbar-gutter: stable;
 }
 .ptx-toc::after {
   content: "";
@@ -650,6 +651,7 @@ body.pretext > a.assistive:focus {
   border-width: 1px;
   border-color: var(--button-border-color);
   border-style: solid;
+  border-radius: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1046,6 +1048,7 @@ section.solutions section > h6.heading {
 .discussion-like > .heading:first-child {
   display: inline;
   line-height: initial;
+  border-bottom: 0;
 }
 .discussion-like > .heading:first-child:after {
   content: "\2009";
@@ -1073,6 +1076,7 @@ section.solutions section > h6.heading {
 .discussion-like > .heading .type::after {
   content: ". ";
 }
+.source-view__link,
 .knowl__link {
   cursor: pointer;
   margin-left: 0.1em;
@@ -1080,15 +1084,24 @@ section.solutions section > h6.heading {
   color: var(--knowl-link-color);
   border-bottom: 1px dotted var(--knowl-link-color);
 }
+.source-view {
+  margin: 0.5em 0;
+}
+summary.source-view__link,
 summary.knowl__link {
   display: list-item inline;
 }
+.source-view__link > *,
 .knowl__link > * {
   display: inline;
 }
+.source-view__link:is(:hover, :focus, [open]),
 .knowl__link:is(:hover, :focus, [open]) {
   background-color: var(--knowl-background);
   border-bottom-color: transparent;
+}
+.source-view__content {
+  margin: 0.2em 0;
 }
 .knowl__content {
   margin: 0.75em 0;
@@ -1290,6 +1303,7 @@ section.solutions:not(:is(:first-child)):not(.knowl__content, .born-hidden-knowl
 article > .heading:first-child {
   display: inline;
   line-height: initial;
+  border-bottom: 0;
 }
 .paragraphs > .heading:first-child:after,
 article > .heading:first-child:after {
@@ -1910,7 +1924,7 @@ a[href^="mailto:"] {
 }
 .ptx-content .summary-links a {
   color: var(--summary-link-text-color);
-  background: var(--summary-link-active-background);
+  background: var(--summary-link-background);
   font-size: 1.5em;
   line-height: 1.25em;
   padding: 10px 20px;
@@ -3052,6 +3066,7 @@ body.standalone.worksheet section.worksheet > .heading + .para {
   border-width: 1px;
   border-color: var(--button-border-color);
   border-style: solid;
+  border-radius: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

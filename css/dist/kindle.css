@@ -609,7 +609,7 @@ a[href^="mailto:"] {
 }
 .ptx-content .summary-links a {
   color: var(--summary-link-text-color);
-  background: var(--summary-link-active-background);
+  background: var(--summary-link-background);
   font-size: 1.5em;
   line-height: 1.25em;
   padding: 10px 20px;
@@ -1751,6 +1751,7 @@ body.standalone.worksheet section.worksheet > .heading + .para {
   border-width: 1px;
   border-color: var(--button-border-color);
   border-style: solid;
+  border-radius: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
