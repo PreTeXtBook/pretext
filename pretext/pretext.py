@@ -3397,10 +3397,13 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # position image files
     images = packaging_tree.xpath("/packaging/images/image[@filename]")
     for im in images:
-        source = os.path.join(source_dir, str(im.get("sourcename")))
-        dest = os.path.join(xhtml_dir, str(im.get("filename")))
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
-        shutil.copy2(source, dest)
+        try:
+            source = os.path.join(source_dir, str(im.get("sourcename")))
+            dest = os.path.join(xhtml_dir, str(im.get("filename")))
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            shutil.copy2(source, dest)
+        except:
+            log.warning(f"Error copying image with sourcename '{im.get('sourcename')}' and filename '{im.get('filename')}'")
 
     # clean-up the trash
     # TODO: squelch knowls or find alternative
