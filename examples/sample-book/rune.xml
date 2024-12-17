@@ -4709,4 +4709,56 @@ TEST_CASE( "Test the add function" ) {
             </hint>
         </exercise>
     </exercises>
+
+    <section xml:id="splice-integration">
+        <title>Splice Integration</title>
+
+        <p>These are examples that use the <url href="https://cssplice.org/slcp/index.html" visual="cssplice.org/slcp">SPLICE</url> protocol for communicating with a server, such as Runestone.  The first uses <url href="https://codecheck.io" visual="codecheck.io">CodeCheck</url>.  The remaing four are from the <url href="https://opendsax.cs.vt.edu/" visual="opendsax.cs.vt.edu">OpenDSA</url> project.</p>
+
+        <p>They are all integrated into this <pretext/> book as an <tag>interactive</tag> that uses an <attr>iframe</attr> attribute to embed an iframe from some other server.</p>
+
+        <figure xml:id="horstmann-codecheck">
+            <caption>CodeCheck <c>iframe</c></caption>
+            <interactive label="interactive-horstmann-codecheck"
+                iframe="https://codecheck.io/files/wiley/ch-bj4cc-c06_exp_6_105"
+                width="95%"
+                aspect="1:1"
+            />
+        </figure>
+
+        <figure xml:id="opendsa-slideshow">
+            <caption>Stack pop slideshow</caption>
+            <interactive label="opendsa-slideshow-pop"
+                iframe="https://opendsax.cs.vt.edu/embed/astackPopCON"
+                width="95%"
+            />
+        </figure>
+
+        <figure xml:id="splice-integration-insert">
+            <caption>A List Insertion Exercise</caption>
+            <interactive label="OpenDSA-list-insertion"
+                iframe="https://opendsax.cs.vt.edu/OpenDSA/Exercises/List/AlistInsertPRO.html"
+                width="100%"
+            />
+        </figure>
+
+        <figure xml:id="splice-integration-bs">
+            <caption>A Binary Search Exercise</caption>
+            <interactive label="OpenDSA-integration-bs"
+                iframe="https://opendsax.cs.vt.edu/OpenDSA/AV/Searching/binarySearchPRO.html"
+                width="175%"
+                aspect="3:1"
+            />
+        </figure>
+
+        <figure xml:id="splice-integration-dijkstra">
+            <caption>Dijkstra's Algorithm Exercise</caption>
+            <interactive label="OpenDSA-integration-dijkstra"
+                iframe="https://opendsax.cs.vt.edu/OpenDSA/AV/Graph/DijkstraPE.html"
+                width="175%"
+                aspect="1:1"
+            />
+        </figure>
+
+    </section>
 </chapter>
