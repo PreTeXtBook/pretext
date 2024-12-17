@@ -6827,26 +6827,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                     <xsl:apply-templates select="." mode="title-plain" />
                 </title>
-                <meta name="Keywords" content="Authored in PreTeXt" />
                 <!-- canonical link for better SEO -->
                 <xsl:call-template name="canonical-link">
                     <xsl:with-param name="filename" select="$filename"/>
                 </xsl:call-template>
-                <!-- more "meta" elements for discovery -->
-                <xsl:call-template name="open-graph-info"/>
-                <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                <!-- ########################################## -->
-                <!-- A variety of libraries were loaded here    -->
-                <!-- Only purpose of this page is YouTube video -->
-                <!-- A hook could go here for some extras       -->
-                <!-- ########################################## -->
-                <xsl:call-template name="pretext-js" />
-                <xsl:call-template name="fonts" />
-                <xsl:call-template name="font-awesome" />
-                <xsl:call-template name="diagcess-header" />
-                <xsl:call-template name="css" />
-                <xsl:call-template name="runestone-header"/>
+                <!-- grab the contents every page gets -->
+                <xsl:copy-of select="$file-wrap-basic-head-cache"/>
+                <!-- now do anything that is or could be page-specific and comes after cache -->
                 <xsl:apply-templates select="." mode="knowl" />
             </head>
             <body>
@@ -6917,14 +6904,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
-                <xsl:call-template name="runestone-ethical-ads"/>
-                <!-- analytics services, if requested -->
-                <xsl:call-template name="statcounter"/>
-                <xsl:call-template name="google-classic"/>
-                <xsl:call-template name="google-universal"/>
-                <xsl:call-template name="google-gst"/>
-                <xsl:call-template name="diagcess-footer"/>
-                <xsl:call-template name="extra-js-footer"/>
+                <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
             </body>
         </html>
     </exsl:document>
@@ -9787,13 +9767,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <html>
             <xsl:call-template name="language-attributes"/>
             <head>
-                <!-- configure MathJax by default for @platform variants -->
-                <xsl:call-template name="mathjax" />
-                <!-- need CSS for sidebyside         -->
-                <!-- perhaps this can be specialized -->
-                <xsl:call-template name="css" />
-                <!-- maybe icons in captions? -->
-                <xsl:call-template name="font-awesome" />
+                <!-- grab the contents every iframe gets -->
+                <xsl:copy-of select="$file-wrap-iframe-head-cache"/>
+                <!-- now do anything that is or could be page-specific and comes after cache -->
                 <!-- and CSS for the entire interactive, into the head -->
                 <xsl:apply-templates select="@css" />
                 <!-- load header libraries (for all "slate") -->
@@ -10957,7 +10933,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <!-- grab the contents every page gets -->
             <xsl:copy-of select="$file-wrap-simple-head-cache"/>
-            <!-- now do anything that is page-specific and comes after cache -->
             <!-- now do anything that is or could be page-specific and comes after cache -->
             <xsl:apply-templates select="." mode="knowl" />
             <xsl:apply-templates select="." mode="sagecell" />
@@ -10971,7 +10946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="react-in-use-flag"/>
             <xsl:copy-of select="$content" />
             
-            <xsl:copy-of select="$file-wrap-simple-endbody-cache"/>
+            <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
         </body>
     </html>
     </exsl:document>
