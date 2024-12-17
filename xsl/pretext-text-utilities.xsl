@@ -803,6 +803,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Remove consecutive run of blanks and  -->
 <!-- newlines in first portion of a string -->
+<!-- Performance audited 2024-12-15 - this is so frequently called -->
+<!-- in the simple case (nothing to strip) that just about any     -->
+<!-- optimization for the general case ends up being slower.       -->
 <xsl:template name="strip-leading-whitespace">
     <xsl:param name="text" />
     <xsl:variable name="first-char" select="substring($text, 1, 1)" />
@@ -824,6 +827,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Remove consecutive run of blanks and -->
 <!-- newlines in last portion of a string -->
+<!-- Performance audited 2024-12-15 - this is so frequently called -->
+<!-- in the simple case (nothing to strip) that just about any     -->
+<!-- optimization for the general case ends up being slower.       -->
 <xsl:template name="strip-trailing-whitespace">
     <xsl:param name="text" />
     <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
