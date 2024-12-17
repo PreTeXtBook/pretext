@@ -1073,9 +1073,9 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         # the receiving stylesheet has the parameters default to empty strings
         # which translates to consulting the services file in the repository,
         # so we do nothing when the online query fails
-        stringparams["altrs-js"] = altrs_js
-        stringparams["altrs-css"] = altrs_css
-        stringparams["altrs-version"] = altrs_version
+        stringparams["rs-js"] = altrs_js
+        stringparams["rs-css"] = altrs_css
+        stringparams["rs-version"] = altrs_version
 
         # get all the runestone files and place in tmp dir
         services_file_name = "dist-{}.tgz".format(altrs_version)
@@ -1097,9 +1097,9 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
             log.warning("Failed to download all Runestone Services files")
     else:
         log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
-        stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
-        stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
-        stringparams["altrs-version"] = "dev"
+        stringparams["rs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+        stringparams["rs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
+        stringparams["rs-version"] = "dev"
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
@@ -3624,9 +3624,9 @@ def html(
         # the receiving stylesheet has the parameters default to empty strings
         # which translates to consulting the services file in the repository,
         # so we do nothing when the online query fails
-        stringparams["altrs-js"] = altrs_js
-        stringparams["altrs-css"] = altrs_css
-        stringparams["altrs-version"] = altrs_version
+        stringparams["rs-js"] = altrs_js
+        stringparams["rs-css"] = altrs_css
+        stringparams["rs-version"] = altrs_version
 
         # get all the runestone files and place in tmp dir
         services_file_name = "dist-{}.tgz".format(altrs_version)
@@ -3655,9 +3655,9 @@ def html(
                 log.warning("Failed to download all Runestone Services files")
     else:
         log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
-        stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
-        stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
-        stringparams["altrs-version"] = "dev"
+        stringparams["rs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+        stringparams["rs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
+        stringparams["rs-version"] = "dev"
 
     # support publisher file, and subtree argument
     if pub_file:

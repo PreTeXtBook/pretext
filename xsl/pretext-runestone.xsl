@@ -55,15 +55,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- always human-friendly.  Sometimes these parameters are provided   -->
 <!-- from alternate sources due to some debugging mode being employed. -->
 <!-- See the Python script for more detail.                            -->
-<xsl:param name="altrs-js" select="''"/>
-<xsl:param name="altrs-css" select="''"/>
-<xsl:param name="altrs-version" select="''"/>
+<xsl:param name="rs-js" select="''"/>
+<xsl:param name="rs-css" select="''"/>
+<xsl:param name="rs-version" select="''"/>
 
 <!-- The Runestone Services version actually in use is -->
 <!-- needed several places, so we compute it once now. -->
 <!-- Manifest, two "ebookConfig".                      -->
 <xsl:variable name="runestone-version">
-    <xsl:value-of select="$altrs-version"/>
+    <xsl:value-of select="$rs-version"/>
 </xsl:variable>
 
 <!-- The Runestone platform option requires output that can be used  -->
@@ -216,13 +216,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (':'), so this character should not ever appear in the filenames.    -->
     <!-- Note: these variables will be vacuous when the string parameters are -->
     <!-- empty strings, and then will not ever be employed                    -->
-    <xsl:variable name="altrs-js-tokens" select="str:tokenize($altrs-js, ':')"/>
-    <xsl:variable name="altrs-css-tokens" select="str:tokenize($altrs-css, ':')"/>
+    <xsl:variable name="rs-js-tokens" select="str:tokenize($rs-js, ':')"/>
+    <xsl:variable name="rs-css-tokens" select="str:tokenize($rs-css, ':')"/>
 
     <!-- Javascript and CSS "master" links/pointers into _static -->
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:for-each select="$altrs-js-tokens">
+    <xsl:for-each select="$rs-js-tokens">
         <script>
             <xsl:attribute name="src">
                 <xsl:text>_static/</xsl:text>
@@ -230,7 +230,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </script>
     </xsl:for-each>
-    <xsl:for-each select="$altrs-css-tokens">
+    <xsl:for-each select="$rs-css-tokens">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
                 <xsl:text>_static/</xsl:text>
