@@ -37,60 +37,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl str pi"
 >
 
-<!-- Not documented, for development use only -->
-<!-- Override the Runestone Services file     -->
-<xsl:param name="debug.rs.services.file" select="''"/>
-<xsl:variable name="b-debugging-rs-services" select="not($debug.rs.services.file = '')"/>
-
-
 <!-- ######################## -->
 <!-- Runestone Infrastructure -->
 <!-- ######################## -->
 
 <!-- Runestone Services -->
 <!-- Runestone provides universally-applicable Javascript, and since Brad Miller -->
-<!-- is "such a nice guy" he provides an XML version of the necessary files,     -->
-<!-- which we store as "support/webpack_static_imports.xml".  The structure of   -->
-<!-- that file is pretty simple, and should be apparent to the cognescenti.      -->
-<!-- NB: dev.runestoneinteractive.org  is temporary while testing -->
-<!-- NB: we may eventually condition on Runestone server/hosting  -->
-<!-- to affect the prefix network location.                       -->
-<!--  -->
-<!-- We allow for experimental services vis a "debug" parameter.  -->
-<!-- Note that any path must be relative to *this* file you are   -->
-<!-- viewing right now, i.e. relative to the "xsl" directory of   -->
-<!-- the PreteXt distribution.  An absolute path should always    -->
-<!-- be correct.                                                  -->
-<xsl:variable name="runestone-services-filename">
-    <xsl:choose>
-        <xsl:when test="$b-debugging-rs-services">
-            <xsl:value-of select="$debug.rs.services.file"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>support/webpack_static_imports.xml</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<!-- is "such a nice guy" he provides an XML version of the necessary files.     -->
+<!-- These are obtained/created/analyzed in the Python script. The structure     -->
+<!-- of this file is pretty simple, and should be apparent to the cognescenti.   -->
 
-<xsl:variable name="runestone-services" select="document($runestone-services-filename)"/>
-
-<!-- Alternate Runestone Services -->
-<!-- We allow for an override of the content of the services file via      -->
-<!-- string parameters passed into this stylesheet. The purpose is to      -->
-<!-- allow the core Pythoon routines to query the Runestone server for     -->
-<!-- the *very latest* services file available online.  This will be       -->
-<!-- used instead of the recent (but not always latest) offline version    -->
-<!-- in the repository. This is meant to be a totally automated operation, -->
-<!-- so parameter names are not always human-friendly.                     -->
-<!--                                                                       -->
-<!-- Priority order                                                        -->
-<!--   1.  Respect debugging parameter                                     -->
-<!--   2.  Accept non-empty parameters (from Python online query, "altrs") -->
-<!--   3.  Offline, standard, use file in repository "support" directory   -->
+<!-- The content of the services file  is provided via                 -->
+<!-- string parameters passed into this stylesheet. The purpose is to  -->
+<!-- allow the core Python routines to query the Runestone server for  -->
+<!-- the *very latest* services file available online. This is meant   -->
+<!-- to be a totally automated operation, so parameter names are not   -->
+<!-- always human-friendly.  Sometimes these parameters are provided   -->
+<!-- from alternate sources due to some debugging mode being employed. -->
+<!-- See the Python script for more detail.                            -->
 <xsl:param name="altrs-js" select="''"/>
 <xsl:param name="altrs-css" select="''"/>
 <xsl:param name="altrs-cdn-url" select="''"/>
 <xsl:param name="altrs-version" select="''"/>
+
 <!-- The Runestone Services version actually in use is -->
 <!-- needed several places, so we compute it once now. -->
 <!-- Manifest, two "ebookConfig".                      -->
@@ -242,54 +211,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
 
-    <!-- If hosted on Runestone then we point to "_static" directory right -->
-    <!-- on the Runestone Server.  But in the "Runestone for All" case,    -->
-    <!-- any build/hosting can hit the Runestone site for the necessary    -->
-    <!-- Javascript/CSS to power interactive questions in much the same    -->
-    <!-- manner as at Runestone Academy.  Additionally, overrides via      -->
-    <!-- string parameters are supported.                                  -->
-    <xsl:variable name="runestone-cdn">
-        <xsl:choose>
-            <xsl:when test="$b-host-runestone">
-                <xsl:text>_static/</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- CDN URL should end in a slash, -->
-                <!-- as version has no slashes      -->
-                <xsl:choose>
-                    <xsl:when test="not($b-debugging-rs-services)">
-                        <xsl:value-of select="$altrs-cdn-url"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$runestone-services/all/cdn-url"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="$runestone-version"/>
-                <xsl:text>/</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-
     <!-- The Runestone Services file typically contains multiple filenames    -->
-    <!-- for Javascript and CSS (like two or three).  In the alternate case,  -->
-    <!-- we expect the two string parameters to be lists delimited by a colon -->
+    <!-- for Javascript and CSS (like two or three).                          -->
+    <!-- We expect the two string parameters to be lists delimited by a colon -->
     <!-- (':'), so this character should not ever appear in the filenames.    -->
     <!-- Note: these variables will be vacuous when the string parameters are -->
-    <!-- empty strings, and then will not ever be employed (below).           -->
+    <!-- empty strings, and then will not ever be employed                    -->
     <xsl:variable name="altrs-js-tokens" select="str:tokenize($altrs-js, ':')"/>
     <xsl:variable name="altrs-css-tokens" select="str:tokenize($altrs-css, ':')"/>
 
-    <!-- The $runestone-cdn variable will point to the right Runestone  -->
-    <!-- Services file: when hosted on Runestone, inside of _static; or -->
-    <!-- when building for arbitrary hosting, inside the repository.    -->
-    <!-- In the case of alternate information provided via string       -->
-    <!-- parameters, the tokenized node sets will be employed.  Note    -->
-    <!-- how the unions of the two node-sets in the "for-each" are more -->
-    <!-- like exclusive-or, as we always get exactly one of the two.    -->
+    <!-- Javascript and CSS "master" links/pointers into _static -->
     <xsl:comment>*** Runestone Services ***</xsl:comment>
-
     <xsl:text>&#xa;</xsl:text>
-    <xsl:for-each select="$runestone-services/all/js/item[$b-debugging-rs-services]|$altrs-js-tokens[not($b-debugging-rs-services)]">
+    <xsl:for-each select="$altrs-js-tokens">
         <script>
             <xsl:attribute name="src">
                 <xsl:text>_static/</xsl:text>
@@ -297,7 +231,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </script>
     </xsl:for-each>
-    <xsl:for-each select="$runestone-services/all/css/item[$b-debugging-rs-services]|$altrs-css-tokens[not($b-debugging-rs-services)]">
+    <xsl:for-each select="$altrs-css-tokens">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
                 <xsl:text>_static/</xsl:text>
