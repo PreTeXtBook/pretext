@@ -57,7 +57,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See the Python script for more detail.                            -->
 <xsl:param name="altrs-js" select="''"/>
 <xsl:param name="altrs-css" select="''"/>
-<xsl:param name="altrs-cdn-url" select="''"/>
 <xsl:param name="altrs-version" select="''"/>
 
 <!-- The Runestone Services version actually in use is -->

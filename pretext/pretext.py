@@ -1075,7 +1075,6 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         # so we do nothing when the online query fails
         stringparams["altrs-js"] = altrs_js
         stringparams["altrs-css"] = altrs_css
-        stringparams["altrs-cdn-url"] = altrs_cdn_url
         stringparams["altrs-version"] = altrs_version
 
         # get all the runestone files and place in tmp dir
@@ -1100,7 +1099,6 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
         stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
         stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
-        stringparams["altrs-cdn-url"] = ""
         stringparams["altrs-version"] = "dev"
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
@@ -3628,7 +3626,6 @@ def html(
         # so we do nothing when the online query fails
         stringparams["altrs-js"] = altrs_js
         stringparams["altrs-css"] = altrs_css
-        stringparams["altrs-cdn-url"] = altrs_cdn_url
         stringparams["altrs-version"] = altrs_version
 
         # get all the runestone files and place in tmp dir
@@ -3660,7 +3657,6 @@ def html(
         log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
         stringparams["altrs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
         stringparams["altrs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
-        stringparams["altrs-cdn-url"] = ""
         stringparams["altrs-version"] = "dev"
 
     # support publisher file, and subtree argument
