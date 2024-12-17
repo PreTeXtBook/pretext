@@ -6842,12 +6842,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- A hook could go here for some extras       -->
                 <!-- ########################################## -->
                 <xsl:call-template name="pretext-js" />
-                <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="font-awesome" />
                 <xsl:call-template name="diagcess-header" />
                 <xsl:call-template name="css" />
                 <xsl:call-template name="runestone-header"/>
+                <xsl:apply-templates select="." mode="knowl" />
             </head>
             <body>
                 <!-- potential document-id per-page -->
@@ -10721,7 +10721,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="myopenmath-js"/>
     <xsl:call-template name="syntax-highlight"/>
     <xsl:call-template name="pretext-js" />
-    <xsl:call-template name="knowl" />
     <xsl:call-template name="fonts" />
     <xsl:call-template name="hypothesis-annotation" />
     <xsl:call-template name="geogebra" />
@@ -10806,7 +10805,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <!-- grab the contents every page gets -->
             <xsl:copy-of select="$file-wrap-full-head-cache"/>
-            <!-- now do anything that is page-specific and comes after cache -->
+            <!-- now do anything that is or could be page-specific and comes after cache -->
+            <xsl:apply-templates select="." mode="knowl" />
             <!-- webwork's iframeResizer needs to come before sagecell template -->
             <xsl:apply-templates select="." mode="sagecell" />
         </head>
@@ -10936,6 +10936,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- grab the contents every page gets -->
             <xsl:copy-of select="$file-wrap-simple-head-cache"/>
             <!-- now do anything that is page-specific and comes after cache -->
+            <!-- now do anything that is or could be page-specific and comes after cache -->
+            <xsl:apply-templates select="." mode="knowl" />
             <xsl:apply-templates select="." mode="sagecell" />
         </head>
         <!-- TODO: needs some padding etc -->
@@ -13042,7 +13044,7 @@ TODO:
 </xsl:template>
 
 <!-- Knowl header -->
-<xsl:template name="knowl">
+<xsl:template match="*" mode="knowl">
     <xsl:if test="not($b-debug-react)">
         <script src="{$html.jslib.dir}/knowl.js"></script>
         <!-- Variables are defined to defaults in knowl.js and  -->
