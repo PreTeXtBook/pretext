@@ -1,0 +1,12 @@
+// levels 2 & 3 only get new colors if they contain further levels
+// that way bottom level has default styling
+
+.ptx-toc:is(.depth0, .depth1, .depth2) .toc-item .toc-item {
+  background-color: var(--tocitem-background);
+  color: var(--toc-text-color);
+}
+
+.ptx-toc:is(.depth0, .depth1, .depth2, .depth3) .toc-item .toc-item .toc-item  {
+  background-color: var(--tocitem-background);
+  color: var(--toc-text-color);
+}

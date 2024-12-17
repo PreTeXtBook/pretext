@@ -1,0 +1,19 @@
+// GeoGebra calculator
+
+$navbar-breakpoint: 856px !default;
+
+.calculator-container {
+  position: fixed;
+  z-index: 100;
+  bottom: 5px;
+  right: 5px;
+  width: 253px;
+  height: 460px;
+}
+
+@media screen and (max-width: $navbar-breakpoint) {
+  .calculator-container {
+    //assumes navbar moves to bottom of screen
+    bottom: 50px !important;
+  }
+}

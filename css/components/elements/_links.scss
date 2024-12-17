@@ -1,0 +1,41 @@
+
+// Reset for all links
+a {
+  color: var(--link-text-color);
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+
+a[href^="mailto:"] {
+  white-space: pre;
+}
+
+
+// Body links. .ptx-content to avoid hitting navbar, toc, etc...
+.ptx-content {
+  a.internal {
+    color: var(--link-text-color);
+    font-weight: bold;
+  }
+  a.external {
+    color: var(--link-alt-text-color);
+    font-weight: bold;
+  }
+  a.internal:hover, a.internal:hover *,
+  a.internal:focus, a.internal:focus * {
+    color: var(--link-active-text-color);
+    background-color: var(--link-active-background);
+    font-weight: bold;
+  }
+  a.external:hover, a.external:hover *,
+  a.external:focus, a.external:focus * {
+    color: var(--link-alt-active-text-color);
+    background-color: var(--link-alt-active-background);
+    font-weight: bold;
+  }
+}

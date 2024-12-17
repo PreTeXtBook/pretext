@@ -1,0 +1,115 @@
+// TODO - refactor
+$opacity: 0.0 !default;
+
+/* so that we can position things (like .autopermalink) absolutely wrt these items */
+section,
+article,
+.exercisegroup,
+.discussion-like,
+.para {
+  position: relative;
+}
+
+.autopermalink {
+  position: absolute;
+  display: inline-block;
+  top: 0.5ex;
+  left: -2em;
+  font-size: 85%;
+  // variable allows theme to set different opacities for dark/light
+  opacity: var(--permalink-opacity, $opacity);
+  transition: opacity 0.2s;
+  margin-top: 0 !important;
+}
+
+li > .para > .autopermalink {
+  left: -3.4em;
+  top: 0;
+}
+
+.autopermalink > * {
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+}
+
+/* when jumping to a permalink, push down so sticky navbar does not cover */
+:target {
+  scroll-margin-top: 45px;
+}
+
+.para > .autopermalink {
+  margin-top: 0.2em;
+}
+
+.exercises > .autopermalink,
+.introduction > .autopermalink,
+.glossary > .autopermalink {
+  margin-top: 0.3em;
+  /*
+  margin-top: 1em;
+*/
+}
+
+.appendix > .autopermalink,
+.chapter > .autopermalink,
+.index > .autopermalink,
+.section > .autopermalink {
+  margin-top: 0.3em;
+  /*
+  margin-top: 2.7em;
+*/
+}
+
+.subsection > .autopermalink,
+.references > .autopermalink,
+.exercises > .autopermalink {
+  margin-top: 0.3em;
+  /*
+  margin-top: 2.0em;
+*/
+}
+
+.subsubsection > .autopermalink {
+  margin-top: 0;
+}
+
+.exercisegroup > .autopermalink {
+  /*
+  margin-top: 0.3em;
+*/
+  margin-top: 1.4em;
+}
+
+.ptx-content:has(.autopermalink:hover) .autopermalink {
+  opacity: 0.2;
+}
+
+.ptx-content:has(.autopermalink:hover) .autopermalink:hover {
+  opacity: 1;
+}
+
+.autopermalink:has(a:focus-visible) {
+  opacity: 1;
+}
+
+.permalink-alert { 
+  position: absolute;
+  top: -3em;
+  left: 5em;
+  padding: 1.5em 2em;
+  background: var(--content-background);
+  border: 3px solid var(--page-border-color);
+  z-index: 2001;
+}
+
+/* the "pink flash" when navigating to a target
+*/
+:target {
+    animation: target-fade 10s 1;
+}
+
+@keyframes target-fade {
+    // 0% { background-color: var(--activated-content-bg) }
+    // 100% { background-color: inherit;
+    //        opacity: 1; }
+}

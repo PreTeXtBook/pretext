@@ -1,0 +1,156 @@
+/*
+  Master list of color variables and default values.
+  Variables are defined in SCSS to allow for calculation of values. They are
+  then converted to CSS variables for use in the HTML so authors can, if
+  need be, override them with custom CSS.
+
+  Any new variable should be added to this file and either defined to another
+  variable or given a reasonable default value for the red-blue default theme.
+
+  Variables should be semantic, not descriptive
+  i.e. --link-color, not --pretty-blue
+*/
+
+@use "sass:map";
+
+// ==============================================================================
+// Light theme
+
+// ==============================================================================
+// Page structures
+
+$colors: (
+  // Background of page (gutters if any)
+  "page-color": white,
+  // Background of content area
+  "content-background": white,
+  // Border around content area - also possibly used for internal borders
+  "page-border-color": #ccc,
+
+  // ------------------------------------------------------------------------------
+  // Banner/nav related
+
+  "doc-title-color": #932919,
+  "byline-color": #333,
+  "banner-background": #fafafa,
+  "navbar-background": #ededed,
+  "footer-background": var(--banner-background),
+
+  // ------------------------------------------------------------------------------
+  // TOC related
+
+  "toc-border-color": #666,
+  "toc-background": var(--content-background),
+
+  "tocitem-background": var(--toc-background),
+  "toc-text-color": var(--body-text-color),
+
+  // highlight styles are used for hover
+  "tocitem-highlight-background": #671d12,
+  "tocitem-highlight-text-color": white,
+  "tocitem-highlight-border-color": var(--toc-border-color),
+  
+  // active styles are used for the current toc item
+  "tocitem-active-background": #671d12,
+  "tocitem-active-text-color": white,
+  "tocitem-active-border-color": var(--toc-border-color),
+
+  // level based colors for TOC
+  // levels are not necessarily all used
+  // see the toc-basics.scss for how these are determined
+  "toclevel1-background": var(--content-background),
+  "toclevel1-text-color": var(--toc-text-color),
+  "toclevel2-background": var(--content-background),
+  "toclevel2-text-color": var(--toc-text-color),
+  "toclevel3-background": var(--content-background),
+  "toclevel3-text-color": var(--toc-text-color),
+
+
+  // ==============================================================================
+  // Content
+  // ==============================================================================
+
+  // ------------------------------------------------------------------------------
+  // Text & titles
+
+  "body-text-color": #000,
+  "body-title-color": #000,
+
+  "ptx-image-bg": transparent,
+  "activated-content-bg": rgba(241, 185, 255, 30%),
+
+  "summary-link-background": var(--button-background),
+  "summary-link-text-color": var(--button-text-color),
+  "summary-link-hover-background": var(--button-hover-background),
+  "summary-link-hover-text-color": var(--button-hover-text-color),
+
+  // ------------------------------------------------------------------------------
+  // Links & knowls
+
+  "link-text-color": #2B5F82,
+  "link-background": transparent,
+  "link-active-text-color": var(--link-text-color),
+  "link-active-background": #cad2e1,
+
+  "link-alt-text-color": #A62E1C,
+  "link-alt-background": transparent,
+  "link-alt-active-text-color": var(--link-alt-text-color),
+  "link-alt-active-background": #e3d1ce,
+
+  "knowl-link-color": var(--link-text-color),
+  "knowl-background": #f5f8ff,
+  "knowl-border-color": #e0e9ff,
+  "knowl-nested-1-background": #f5f5ff,
+  "knowl-nested-2-background": #fffff5,
+  "knowl-nested-3-background": #f5ffff,
+  "knowl-nested-4-background": #fff5f5,
+
+  // ------------------------------------------------------------------------------
+  // Blocks
+
+  // Fall back generic block colors:
+  "block-body-background": var(--content-background),
+  "block-border-color": var(--knowl-border-color),
+  "block-head-color": var(--body-text-color),
+
+  // See below for specific block types
+
+  // ------------------------------------------------------------------------------
+  // Buttons & Widgets
+
+  "button-background": #ededed,
+  "button-text-color": #333333,
+  "button-border-color": #ccc,
+  "button-hover-background": #c7c7c7,
+  "button-hover-text-color": var(--button-text-color),
+  "code-inline": #ededed,
+
+  "dropdown-background": var(--content-background),
+  "dropdown-border-color": var(--toc-border-color),
+  "dropdown-text-color": var(--toc-text-color),
+  "dropdown-hover-background": var(--tocitem-active-background),
+  "dropdown-hover-text-color": var(--tocitem-active-text-color),
+);
+
+// ==============================================================================
+// Block types
+
+// Variables for specific block types should look like those below. In this file
+// only "top level" blocks from the -like families are defined. 
+// Other themes/color palettes may define
+// more specific ones - see palette_quad_chunks.scss for an example.
+
+// block-types based on those in entities.ent
+$block-types: "assemblage-like", "definition-like", "theorem-like", "theorem-like", "axiom-like", "remark-like", "computation-like", "openproblem-like", "aside-like", "proof-like", "example-like", "project-like", "goal-like", "solution-like";
+// TODO - "proof" should probably be updated to "proof-like" in HTML css
+
+@each $block in $block-types {
+  $colors: map.merge(
+    $colors,
+    (
+      // define background and border, but default to generic block colors
+      "#{$block}-body-background": var(--block-body-background),
+      "#{$block}-border-color": var(--block-border-color),
+    )
+  );
+}
