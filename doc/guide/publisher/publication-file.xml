@@ -637,23 +637,61 @@
         </subsection>
 
         <subsection xml:id="online-style-options">
-            <title>HTML Style</title>
+            <title>HTML Style (Theme)</title>
             <idx><h>style</h><h>HTML</h></idx>
+            <idx><h>theme</h><h>HTML</h></idx>
 
             <p>The<cd>
                 <cline>/publication/html/css</cline>
-            </cd>element can have the following attributes:<ul>
-                <li><attr>colors</attr>: used to construct the filename for CSS controlling colors.</li>
-                <li><attr>style</attr>:  used to construct the filename for CSS controlling content appearance.</li>
-                <li><attr>knowls</attr>: used to construct the filename for CSS controlling knowls.</li>
-                <li><attr>toc</attr>:    used to construct the filename for CSS controlling the Table of Contents.</li>
-                <li><attr>banner</attr>: used to construct the filename for CSS controlling the banner (masthead).</li>
-                <li><attr>navbar</attr>: used to construct the filename for CSS controlling the navigation bar.</li>
-                <li><attr>shell</attr>:  used to construct the filename for CSS controlling the shell.</li>
-            </ul>In each case the default file is replaced and instead a new filename is formed from the attributes value.  For example, the specification<cd>
-                <cline>&lt;css colors='bright_red'/&gt;</cline>
-            </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  Possible values for the last four attributes are <c>default</c> and <c>crc</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
+                </cd>element can have a <attr>theme</attr> to specify the theme used to style the pages. See <xref ref="online-style"/> for examples of what different themes look like. Depending on the theme chosen, there may be other attributes that can be set. See <xref ref="online-style-options-list"/> below for details.</p>
 
+            <p>The <q>legacy</q> stylesheets are still available. Any publication file that references <c>html/css/@style</c> will use the corresponding legacy style sheet (default, crc, wide, oscar-levin) as well as the colors selected for it. However, the full range of configuration is no longer available. If your publisher file mixes legacy style parts in an unexpected way (<c>toc="crc"</c> but <c>sidebar="wide"</c>) you will get one or the other complete style.</p>
+
+            <p>To rapidly test out different themes and options while using the CLI (see <xref ref="processing-CLI-build"/>) you can use <c>pretext build --theme</c> to rebuild the theme without a full book rebuild. If you are using the pretext script (see <xref ref="pretext-script"/>) you can use the flag <c>-c theme</c>. Note that doing this assumes the HTML needed for the different themes is the same. This should generally be the case, but if you encounter odd rendering issues you should do a full rebuild.</p>
+
+            <list xml:id="online-style-options-list">
+                <title>Theme attribute options</title>
+                <dl>
+                    <li>
+                        <title>default-modern</title>
+                        <p>The following attributes can be set on CSS to modify the appearance of default-modern:
+                            <ul>
+                                <li><attr>palette</attr> controls the colors used. Options include: blue-red, blue-green, green-blue, greens, and blues.</li>
+                                <li><attr>primary-color</attr> override the primary color set by the palette. This, and all other color attributes, can be in CSS color format (hex, rbg, hsl<etc/>).</li>
+                                <li><attr>secondary-color</attr> override the secondary color set by the palette.</li>
+                                <li><attr>provide-dark-mode</attr> can be set to <c>"no"</c> to disable dark mode on the theme. This may be desirable if the work has significant elements that do not render correctly with a dark background and you are not able to modify them to do so.</li>
+                                <li><attr>primary-color-dark</attr> override the primary color used in dark mode.</li>
+                            </ul>
+                        </p>
+                    </li>
+                    <li>
+                        <title>tacoma, greeley</title>
+                        <p>The following attributes can be set on CSS to modify the appearance of tacoma and greely. They function in the same way as the corresponding attributes for default-modern.
+                            <ul>
+                                <li><attr>primary-color</attr></li>
+                                <li><attr>primary-color-dark</attr></li>
+                                <li><attr>provide-dark-mode</attr></li>
+                            </ul>
+                        </p>
+                    </li>
+                    <li>
+                        <title>salem, denver</title>
+                        <p>The following attributes can be set on CSS to modify the appearance of salem and denver.
+                            <ul>
+                                <li><attr>palette</attr> controls the colors used. Options include: bold, bold2, primaries, primaries2, ice-fire, earth-sea, leaves, and slate.</li>
+                                <li><attr>color-main</attr> override the primary color set by the palette.</li>
+                                <li><attr>color-do</attr> override the color used for elements that ask the reader to do something (e.g. an exercise).</li>
+                                <li><attr>color-fact</attr> override the color used for elements that present a fact (e.g. a theorem).</li>
+                                <li><attr>color-meta</attr> override the color used for elements that provide meta information to the reader (e.g. goals, remarks).</li>
+                                <li><attr>provide-dark-mode</attr> - see default-modern.</li>
+                                <li><attr>primary-color-dark</attr> - see default-modern.</li>
+                            </ul>
+                        </p>
+                    </li>
+                </dl>
+            </list>
+
+            <p>Finally, if you wish to do development on a custom theme using SCSS, you can set <c>/publication/html/css/@theme</c> to <c>"custom"</c>. If you do so, you need to also set <attr>entry-point</attr> to be the path to an SCSS file that will be used to build the theme. This path should be relative to the xml file that is your document root.</p>
         </subsection>
 
         <subsection xml:id="online-search-options">

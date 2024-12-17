@@ -1,0 +1,50 @@
+// Left aligned "page" with limited width, beyond which it is centered
+
+$max-width: 1200px !default;
+$sidebar-width: 240px !default;
+$scrolling-toc: true !default;
+$nav-height: 36px !default;
+$content-width: 600px !default;
+$content-side-padding: 48px !default;
+$content-side-padding-tight: 28px !default;
+$navbar-breakpoint: 800px !default;
+
+$sidebar-breakpoint: $content-width + $sidebar-width + $content-side-padding * 2;
+$content-with-padding-width: $content-width + 2 * $content-side-padding;
+
+@use 'components/page-parts/body' with (
+  $max-width: $max-width,
+  $content-width: $content-width,
+  $content-side-padding: $content-side-padding,
+);
+
+@use 'components/page-parts/banner' with (
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'components/page-parts/navbar' with (
+  $nav-height: $nav-height,
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'components/page-parts/toc-default' with (
+  $scrolling: $scrolling-toc,
+  $sidebar-width: $sidebar-width,
+  $sidebar-breakpoint: $sidebar-breakpoint,
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'components/page-parts/footer' with (
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+// Decrease the side margins once out of room
+@container ptx-main (width < #{$content-with-padding-width}) {
+  .ptx-page > .ptx-main { 
+    .ptx-content {
+      padding-left: #{$content-side-padding-tight};
+      padding-right: #{$content-side-padding-tight};
+      max-width: calc($content-width + 2 * #{$content-side-padding-tight});
+    }
+  }
+}

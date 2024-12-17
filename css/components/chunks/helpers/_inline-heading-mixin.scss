@@ -1,0 +1,24 @@
+// Generate styles for an inline heading
+@mixin heading {
+  & > .heading:first-child {
+    display: inline;
+    line-height: initial;
+    border-bottom: 0;  // disable underline that may come from underlined headings
+
+    &:after {
+      content: "\2009";
+    }
+
+    & + .para {
+      display: inline;
+    }
+
+    & + .introduction {
+      display: inline;
+    }
+
+    & + .introduction > .para:first-child {
+      display: inline;
+    }
+  }
+}

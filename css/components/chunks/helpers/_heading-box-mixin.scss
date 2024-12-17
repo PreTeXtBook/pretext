@@ -1,0 +1,91 @@
+// These values can be set on @use to avoid repeating values in each @import
+$pad: 20px !default;
+$border-radius: 0px !default;
+$border-width: 3px !default;
+$margin-top: 2.5em !default;
+$font-style: 'normal' !default;
+// $font-size: 1.25em !default;
+$box-padding: 5px !default;
+$background-color: var(--block-body-background) !default;
+$border-color: var(--block-border-color) !default;
+$heading-background: var(--content-background) !default;
+$heading-color: var(--block-head-color) !default;
+$side-borders: true !default;
+
+// Generate styles for a box with inset heading
+@mixin box($border-width: $border-width,
+  $style: solid,
+  $background-color: $background-color,
+  $border-color: $border-color,
+  $heading-background: $heading-background,
+  $heading-color: $heading-color,
+  $padding: $pad,
+  $border-radius: $border-radius,
+  $side-borders: $side-borders,
+  $margin-top: $margin-top,
+  $font-style: $font-style,
+  $box-padding: $box-padding,
+  // $font-size: $font-size,
+  $hide-number: false)
+{
+  // this *should* always work well for reasonable padding/font sizes
+  //$heading-top: calc(-1 * $box-padding - 1.65ex);
+  $heading-top: calc(-1 * ($padding + $box-padding) - 1.65ex);
+  
+  &:not(.knowl__content, .born-hidden-knowl) {
+    border: $border-width $style $border-color;
+    @if not $side-borders {
+      border-left: 0;
+      border-right: 0;
+    }
+    background-color: $background-color;
+    padding: $pad;
+    //extra top-padding to make room for heading
+    padding-top: calc($pad + 0.25ex);
+
+    // need to control margin to overcome negative margin on heading
+    // !important to override default article styling
+    margin-top: $margin-top !important;
+
+    @if $border-radius > 0 {
+      border-radius: $border-radius;
+    }
+
+    & > .heading:first-child {
+      background-color: $heading-background;
+      display: block;
+      color: $heading-color;
+      margin-bottom: 0.5em;
+      padding: $box-padding (2 * $box-padding);
+      // font-size: $font-size;
+      margin-top: $heading-top;
+      width: fit-content;
+      border: 0;  //in case picking up border from elsewhere
+
+      @if $font-style != 'normal' {
+        font-style: $font-style;
+      }
+      @if $border-radius > 0 {
+        border-radius: $border-radius;
+      }
+
+      @if $hide-number {
+        .codenumber {
+          display: none;
+        }
+      }
+
+      &:after {
+        //disable any extra junk
+        display: none;
+      }
+    }
+  }
+
+  // if the first child of a knowl, need just enough margin to clear exposed heading
+  @at-root {
+    .knowl__content *:first-child & {
+      margin-top: 1em;
+    }
+  }
+}

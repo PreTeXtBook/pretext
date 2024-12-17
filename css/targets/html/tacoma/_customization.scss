@@ -1,0 +1,7 @@
+// more generous spacing for sections/articles
+section>*:not(:first-child) {
+  margin-top: 1.5em;
+}
+article>*:not(:first-child):has(.heading) {
+  margin-top: 1.5em;
+}

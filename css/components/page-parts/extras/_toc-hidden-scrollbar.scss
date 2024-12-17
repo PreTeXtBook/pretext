@@ -1,0 +1,9 @@
+// blend in with page until hover
+.ptx-toc {
+  scrollbar-color: var(--content-background) var(--content-background);
+
+  // reveal scroll on hover
+  &:hover {
+    scrollbar-color: var(--page-border-color) var(--content-background);
+  }
+}

@@ -1,0 +1,26 @@
+// turn on some optional design features
+@use 'components/page-parts/extras/navbar-btn-borders';
+@use 'components/page-parts/extras/toc-last-level-plain';
+@use 'components/page-parts/extras/toc-borders';
+
+// used to expand math and RS blocks
+@use 'components/helpers/expandable';
+
+// underlines to headings
+@use 'components/elements/extras/heading-underlines';
+
+// let math stretch out to fill space on right
+.displaymath {
+  @include expandable.expandable;
+}
+
+.code-display {
+  @include expandable.expandable;
+}
+
+// grow some rs elements
+$wide-rs-elements: ".parsons_section, .ac_section, .codelens";
+
+.ptx-runestone-container:has(#{$wide-rs-elements}) {
+  @include expandable.expandable($always-expand: true);
+}

@@ -1,0 +1,174 @@
+// Defines colors for grouping elements based on four colors to identify 
+// block elements as either main, do, fact, or meta.
+
+// Intended to be used as a supplement to a palette that handles non-block elements
+// See theme-denver.scss for an example
+
+// Hint: color palettes general make the most sense if all four colors are distinct
+// or, if they are not, the close/identical colors are main/fact or do/meta
+
+@use 'sass:color';
+@use 'sass:map';
+
+$schemes: (
+  "earth-sea": (
+    "color-main": #573d31,
+    "color-do": #0f6385,
+    "color-fact": #997562,
+    "color-meta": #358292,
+  ),
+  "leaves": (
+    "color-main": #105b2f,
+    "color-do": #987436,
+    "color-fact": #29895c,
+    "color-meta": #c7522a,
+  ),
+  "ice-fire": (
+    "color-main": hsl(210, 45%, 27%),
+    "color-do": hsl(208, 7%, 49%),
+    "color-fact": #0f80b0,
+    "color-meta": #a13838,
+  ),
+  "slate": (
+    "color-main": hsl(210, 12%, 20%),
+    "color-do": #165976,
+    "color-fact": hsl(210, 5%, 32%),
+    "color-meta": #021e2a,
+  ),
+  "bold": (
+    "color-main": hsl(221, 61%, 21%),
+    "color-do": #51b39a,
+    "color-fact": #9a51b3,
+    "color-meta": #b3516a,
+  ),
+  "bold2": (
+    "color-main": hsl(221, 61%, 21%),
+    "color-do": hsl(118, 51%, 42%),
+    "color-fact": hsl(182, 90%, 35%),
+    "color-meta": hsl(51, 84%, 63%),
+  ),
+  "primaries": (
+    "color-main": #195684,
+    "color-do": #28803f,
+    "color-fact": #195684,
+    "color-meta": #932c1c, 
+  ),
+  "primaries2": (
+    "color-main": #28803f,
+    "color-do": #195684,
+    "color-fact": #28803f,
+    "color-meta": #932c1c,
+  ),
+);
+
+$color-scheme: 'bold' !default;
+
+@if not map.has-key($schemes, $color-scheme) {
+  @error "Unknown color scheme #{$color-scheme} in theme. Valid schemes are: #{map.keys($schemes)}";
+}
+
+// color-main is for basic groupings and knowls
+$color-main: null !default;
+
+// color-do is for examples and things for the reader to do
+$color-do: null !default;
+
+// color-fact is for statements of fact (definitions/theorems/etc...)
+$color-fact: null !default;
+
+// color-meta is for meta information for the reader (notes/objectives/etc...)
+$color-meta: null !default;
+
+// if a color is not set, use the scheme colors
+@if $color-main == null {
+  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-main");
+  $color-main: $scheme-color;
+}
+@if $color-do == null {
+  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-do");
+  $color-do: $scheme-color;
+}
+@if $color-fact == null {
+  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-fact");
+  $color-fact: $scheme-color;
+}
+@if $color-meta == null {
+  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-meta");
+  $color-meta: $scheme-color;
+}
+
+
+// text color for headings
+$heading-text-color: white !default;
+
+$body-light: 96%;
+$body-light-alt: 93%;
+$body-sat: -20%;
+
+//lighter version of color-main for knowl borders
+$color-main-alt: color.adjust(color.scale($color-main, $lightness: 25%), $saturation: $body-sat);
+
+//Make light versions of the 4 colors for backgrounds behind 
+$color-main-light: color.adjust(color.change($color-main, $lightness: $body-light), $saturation: $body-sat);
+$color-do-light: color.adjust(color.change($color-do, $lightness: $body-light), $saturation: $body-sat);
+$color-fact-light: color.adjust(color.change($color-fact, $lightness: $body-light), $saturation: $body-sat);
+$color-meta-light: color.adjust(color.change($color-meta, $lightness: $body-light), $saturation: $body-sat);
+//and an alt of color-main for nested knowls
+$color-main-light-alt: color.change($color-main, $lightness: $body-light-alt);
+
+$colors: (
+  "color-main": $color-main,
+  "color-meta": $color-meta,
+  "color-do": $color-do,
+  "color-fact": $color-fact,
+
+  // color-main
+  "block-body-background": $color-main-light,
+  "block-border-color": $color-main-alt,
+  "block-head-color": $heading-text-color,
+
+  "knowl-background": $color-main-light,
+  "knowl-border-color": $color-main-alt,
+  "knowl-nested-1-background": $color-main-light-alt,
+  "knowl-nested-2-background": $color-main-light,
+  "knowl-nested-3-background": $color-main-light-alt,
+  "knowl-nested-4-background": $color-main-light,
+);
+
+
+// block-types based on those in entities.ent
+$do-types: "exercise-like", "project-like", "solution-like", "example-like";
+@each $block in $do-types {
+  $colors: map.merge(
+    $colors,
+    (
+      // define background and border, but default to generic block colors
+      "#{$block}-body-background": $color-do-light,
+      "#{$block}-border-color": $color-do,
+    )
+  );
+}
+
+$fact-types: "definition-like", "proof-like", "theorem-like", "computation-like";
+@each $block in $fact-types {
+  $colors: map.merge(
+    $colors,
+    (
+      // define background and border, but default to generic block colors
+      "#{$block}-body-background": $color-fact-light,
+      "#{$block}-border-color": $color-fact,
+    )
+  );
+}
+
+$meta-types: "goal-like", "asside-like", "remark-like";
+@each $block in $meta-types {
+  $colors: map.merge(
+    $colors,
+    (
+      // define background and border, but default to generic block colors
+      "#{$block}-body-background": $color-meta-light,
+      "#{$block}-border-color": $color-meta,
+    )
+  );
+}
