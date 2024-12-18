@@ -1063,7 +1063,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     if "debug.rs.dev" not in stringparams:
         # See if we can get Runestone Services from the Runestone CDN.
         #  "altrs" = alternate Runestone
-        altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
+        altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = _runestone_services(stringparams)
         # Previous line will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
@@ -3532,8 +3532,11 @@ def _runestone_services(params):
 
     # Convert Runestone file back to XML to unpack with lxml
     services_xml = services_response.text
-    services = ET.fromstring(services_xml)
+    return parse_rs_services(services_xml)
 
+
+def parse_rs_services(services_xml):
+    services = ET.fromstring(services_xml)
     # Unpack contents into format for XSL string parameters
     # This mirrors the XML file format, including multiple "item"
     #
@@ -3551,7 +3554,8 @@ def _runestone_services(params):
     altrs_cdn_url = services.xpath("/all/cdn-url")[0].text
     # single Runestone Services version
     altrs_version = services.xpath("/all/version")[0].text
-    return (altrs_js, altrs_css, altrs_cdn_url, altrs_version)
+    return (altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml)
+
 
 # todo - rewrite other code that does similar things to use this function?
 def get_web_asset(url):
@@ -3612,10 +3616,24 @@ def html(
 
     # Decide which Runestone Services to use
     if "debug.rs.dev" not in stringparams:
-        # See if we can get Runestone Services from the Runestone CDN.
-        #  "altrs" = alternate Runestone
-        altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
-        # Previous line will raise a fatal error if the Runestone servers
+        
+        use_stored_services = False
+        if "html.quick-dirty" in stringparams:
+            #see if we can find an existing runestone-services.xml file
+            import glob
+            services_record_files = glob.glob(os.path.join(dest_dir, "_static", "_runestone-services-*.xml"))
+            if services_record_files:
+                old_services_file = open(services_record_files[0])
+                old_xml = old_services_file.read()
+                altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = parse_rs_services(old_xml)
+                use_stored_services = True
+
+        if not use_stored_services:
+            # See if we can get the very latest Runestone Services from the Runestone
+            #  "altrs" = alternate Runestone
+            altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = _runestone_services(stringparams)
+
+        # Previous code will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
         msg = 'Runestone Services via online CDN query: version {}'
@@ -3629,14 +3647,17 @@ def html(
         stringparams["rs-version"] = altrs_version
 
         # get all the runestone files and place in tmp dir
+        # services_file is copy of services xml file
         services_file_name = "dist-{}.tgz".format(altrs_version)
         output_dir = os.path.join(tmp_dir, "_static")
         services_full_path = os.path.join(output_dir, services_file_name)
         final_output_path = os.path.join(dest_dir, "_static", services_file_name)
-        if file_format  == "html" and os.path.exists(final_output_path):
+        # services_record is copy of services xml file
+        services_record_name = "_runestone-services-{}.xml".format(altrs_version)
+        services_record_output_path = os.path.join(dest_dir, "_static", services_record_name)
+        if file_format  == "html" and os.path.exists(services_record_output_path):
             msg = "Using existing Runestone Services located in {}. Delete Runestone files there to force a fresh download."
             log.info(msg.format(os.path.join(dest_dir, '_static')))
-            os.path.exists(services_full_path)
         else:
             try:
                 msg = 'Downloading Runestone Services, version {}'
@@ -3644,12 +3665,17 @@ def html(
                 download_file(altrs_cdn_url + services_file_name, services_full_path)
                 log.info("Extracting Runestone Services from archive file")
                 import tarfile
-                file = tarfile.open(services_full_path)
-                file.extractall(output_dir)
-                file.close()
+                services_file = tarfile.open(services_full_path)
+                services_file.extractall(output_dir)
+                services_file.close()
                 # once unpacked, archive no longer necessary and we
                 # don't want to copy it out into produced "_static"
                 os.remove(services_full_path)
+                # write the services_record xml file to the output directory for version
+                # checking next time
+                services_record = open(services_record_output_path, 'w')
+                services_record.write(services_xml)
+                services_record.close()
             except Exception as e:
                 log.warning(e)
                 log.warning("Failed to download all Runestone Services files")
@@ -3672,10 +3698,12 @@ def html(
 
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    if "html.quick-dirty" not in stringparams:
+        copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # place CSS and JS in scratch directory
-    copy_html_css_js(tmp_dir)
+    if "html.quick-dirty" not in stringparams:
+        copy_html_css_js(tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
