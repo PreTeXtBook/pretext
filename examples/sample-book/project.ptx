@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    This file provides the overall configuration for your PreTeXt
+    project. To edit the content of your document, open `source/main.ptx`
+    (default location).
+-->
+<project ptx-version="2" source="." publication=".">
+  <targets>
+    <target name="html"
+      format="html"
+      source="sample-book.xml"
+      publication="publication-noparts.xml" />
+    <target name="runestone"
+      format="html"
+      source="sample-book.xml"
+      publication="publication-runestone-academy.xml">
+      <!-- <stringparams debug.rs.dev="yes" /> -->
+    </target>
+    <target name="pdf"
+      format="pdf"
+      source="sample-book.xml"
+      publication="publication-noparts.xml" />
+    <target name="latex"
+      format="latex"
+      source="sample-book.xml"
+      publication="publication-noparts.xml" />
+
+  </targets>
+</project>
