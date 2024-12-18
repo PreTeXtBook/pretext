@@ -3532,8 +3532,11 @@ def _runestone_services(params):
 
     # Convert Runestone file back to XML to unpack with lxml
     services_xml = services_response.text
-    services = ET.fromstring(services_xml)
+    return parse_rs_services(services_xml)
 
+
+def parse_rs_services(services_xml):
+    services = ET.fromstring(services_xml)
     # Unpack contents into format for XSL string parameters
     # This mirrors the XML file format, including multiple "item"
     #
@@ -3552,6 +3555,7 @@ def _runestone_services(params):
     # single Runestone Services version
     altrs_version = services.xpath("/all/version")[0].text
     return (altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml)
+
 
 # todo - rewrite other code that does similar things to use this function?
 def get_web_asset(url):
