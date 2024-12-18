@@ -32,7 +32,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="pi exsl date str"
+    xmlns:dyn="http://exslt.org/dynamic"
+    extension-element-prefixes="pi exsl date str dyn"
     xmlns:mb="https://pretextbook.org/"
     xmlns:pf="https://prefigure.org"
     exclude-result-prefixes="mb"
@@ -10964,6 +10965,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecations -->
 <!-- ############ -->
 
+<xsl:param name="author.deprecations.all" select="''" />
+<xsl:variable name="deprecation-max-age">
+    <xsl:choose>
+        <xsl:when test="$author.deprecations.all = 'yes'">
+            <xsl:text>P100Y</xsl:text>
+            <xsl:message>PTX:INFO:   checking all deprecated elements.</xsl:message>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>P2Y</xsl:text>
+            <xsl:message>PTX:INFO:   checking the last 2 years of element deprecations. Rerun with '-x author.deprecations.all yes' stringparam to see all deprecations.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Generic deprecation message for uniformity    -->
 <!-- occurrences is a node-list of "problem" nodes -->
 <!-- A message string like "'foo'" cannot contain  -->
@@ -10980,28 +10995,40 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
     <xsl:param name="message" />
-    <xsl:if test="$occurrences">
-        <xsl:message>
-            <xsl:text>PTX:DEPRECATE: (</xsl:text>
-            <xsl:value-of select="$date-string" />
-            <xsl:text>) </xsl:text>
-            <xsl:value-of select="$message" />
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="count($occurrences)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($occurrences) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-            <!-- once verbosity is implemented -->
-            <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
-        </xsl:message>
-        <xsl:for-each select="$occurrences">
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:for-each>
-        <xsl:message>
-            <xsl:text>--------------</xsl:text>
-        </xsl:message>
+
+    <!-- These apparent re-definitions are local to this template -->
+    <!-- Reasons are historical, so to be a convenience           -->
+    <xsl:variable name="docinfo" select="./docinfo"/>
+    <xsl:variable name="document-root" select="./*[not(self::docinfo)]"/>
+    
+    <xsl:variable name="expire-date" select="date:seconds(date:add($date-string, $deprecation-max-age))"/>
+    <xsl:variable name="today" select="date:seconds(date:date-time())"/>
+
+    <xsl:if test="$expire-date > $today">
+        <xsl:variable name="occurrences-rtf" select="dyn:evaluate($occurrences)" />
+        <xsl:if test="$occurrences-rtf">
+            <xsl:message>
+                <xsl:text>PTX:DEPRECATE: (</xsl:text>
+                <xsl:value-of select="$date-string" />
+                <xsl:text>) </xsl:text>
+                <xsl:value-of select="$message" />
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="count($occurrences-rtf)" />
+                <xsl:text> time</xsl:text>
+                <xsl:if test="count($occurrences-rtf) > 1">
+                    <xsl:text>s</xsl:text>
+                </xsl:if>
+                <xsl:text>)</xsl:text>
+                <!-- once verbosity is implemented -->
+                <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
+            </xsl:message>
+            <xsl:for-each select="$occurrences-rtf">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+            <xsl:message>
+                <xsl:text>--------------</xsl:text>
+            </xsl:message>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
