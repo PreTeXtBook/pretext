@@ -16,8 +16,14 @@
       publication="publication-runestone-academy.xml">
       <!-- <stringparams debug.rs.dev="yes" /> -->
     </target>
-    <target name="pdf" format="pdf" source="sample-book-noparts.xml" />
-    <target name="latex" format="latex" source="sample-book-noparts.xml" />
+    <target name="pdf"
+      format="pdf"
+      source="sample-book.xml"
+      publication="publication-noparts.xml" />
+    <target name="latex"
+      format="latex"
+      source="sample-book.xml"
+      publication="publication-noparts.xml" />
 
   </targets>
 </project>
