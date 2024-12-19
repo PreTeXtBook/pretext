@@ -50,6 +50,12 @@
 <!--#######################################################################-->
 
 <xsl:template match="/">
+    <xsl:variable name="macro-folder">
+        <xsl:value-of select="$generated-directory"/>
+        <xsl:text>webwork/pg/</xsl:text>
+        <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe" />
+        <xsl:text>/macros</xsl:text>
+    </xsl:variable>
     <xsl:variable name="macro-file-name">
         <xsl:choose>
             <xsl:when test="$docinfo/initialism">
@@ -65,7 +71,7 @@
         <xsl:call-template name="header"/>
         <xsl:apply-templates select="$document-root" mode="latex-image-preamble"/>
     </xsl:variable>
-    <exsl:document href="{$macro-file-name}" method="text">
+    <exsl:document href="{$macro-folder}/{$macro-file-name}" method="text">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="$macro-file-content" />
         </xsl:call-template>
