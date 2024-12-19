@@ -1267,7 +1267,7 @@
                             </p>
                             <image width="50%">
                                 <description>
-                                    this image has pictures of text with special characters like $, %, and @
+                                    this image has pictures of text with special perl characters
                                 </description>
                                 <latex-image>
                                     \begin{tikzpicture}
