@@ -806,7 +806,6 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
             console.log("showing extra space");
             var this_proportion_scaledX = 12*this_proportion_number;
             this_work.style.background = "linear-gradient( #eef 0px, #eef " + this_proportion_scaledX + "px, #eef " + this_proportion_scaledX + "px, #99f " + (this_proportion_scaledX + 5) + "px, #99f " + (this_proportion_scaledX + 5) + "px, #99f 100%)";
-  //          this_work.style.background = "linear-gradient( #eef 0px, #eef 200px, #eef 200px, #99f 205px, #99f 205px, #99f 100%)";
         } else {
              this_work.style.background = null;
         }
@@ -831,10 +830,6 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
             } else {
                 this_work.classList.remove("tight")
             }
-/*
-            console.log(this_work.parentElement, "iparent rectangle", this_work.parentElement.getBoundingClientRect())
-            console.log(this_work.parentElement.parentElement, "parent parent rectangle", this_work.parentElement.parentElement.getBoundingClientRect())
-*/
         }
     }
     return obj.clientHeight
@@ -858,8 +853,8 @@ function adjustWorkspace() {
 
     for (var i = 0; i < all_pages.length; i++) {
         /* for assigning page height later */
-        if (pagelayout == "a4") { pageheight.push(1320) }
-        else { pageheight.push(1243) }
+        if (pagelayout == "a4") { pageheight.push(1100) }
+        else { pageheight.push(1030) }
 
         this_item = all_pages[i];
         if (i == 0) { this_item.classList.add("firstpage") }
@@ -885,7 +880,6 @@ function adjustWorkspace() {
        if (this_item.classList.contains("lastpage")) {
            pageExtraHeight += worksheetData["bottom"] - pageData["bottom"];
        }
-  //     pageExtraHeight += 150;
        pageheight[i] -= pageExtraHeight
        console.log("worksheetData", worksheetData, "pageData", pageData);
        console.log(i, "i", pageExtraHeight, "pageExtraHeight");
@@ -897,27 +891,8 @@ function adjustWorkspace() {
        /* a magicscale makes the output the height of the minimum specified input */
        var magicscale = 12;
 
-/*
-       heightA += pageExtraHeight;
-       heightB += pageExtraHeight;
-*/
-
        if (heightA != heightB) {
-/*
-         magicscale = (1328 - 2*height10 + 1*height20)/(height20 - height10)
-         magicscale = (1324 - 2*height10 + 1*height20)/(height20 - height10)
-*/
          magicscale = (pageheight[i]*(a - b) + b*heightA - a*heightB)/(heightA - heightB);
-/*
-         if (pagelayout == "a4") {
-             magicscale = (1413*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
-         } else if (pagelayout == "letter") {
-             magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
-         } else {
-             console.log("Error: unknown pagelayout", pagelayout)
-         }
-*/
-
        }
        console.log("magicscale", magicscale, "of", this_item);
        scaleWorkspaceIn(this_item, this_item, magicscale, "final");
@@ -929,7 +904,6 @@ function adjustWorkspace() {
        console.log(this_item.parentElement.getBoundingClientRect(), "222ddd", this_item.parentElement);
 
 
-//   alert("part of one page");
        /* now go back and see if any of the squashed non-tight items can be expanded */
        var these_squashed = this_item.querySelectorAll('.squashed:not(.tight)');
        console.log("these_squashed", these_squashed);
@@ -968,8 +942,6 @@ window.addEventListener("load",function(event) {
 
       window.setTimeout(urlattribute, 1500);
   }
-//  console.log("done adjusting workspace");
-
 });
 
 /*
