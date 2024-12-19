@@ -328,7 +328,7 @@ console.log("this is e", e);
             if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
             if (this_item.classList.contains("para")) {
                if (this_item.id == "") {
-                   // should be .para inside .para.logical 
+                   // should be .para inside .para.logical
                    this_anchor  = this_item.parentElement.id;
                    if(this_item.parentElement.parentElement.nodeName == "LI") {
                    // we actually had a para inside a para.logical inside an li
@@ -460,9 +460,9 @@ function updateURLParameter(url, param, paramVal){
   var rows_txt = temp + "" + param + "=" + paramVal;
   return baseURL + "?" + newAdditionalURL + rows_txt;
 }
-  
+
 function WWiframeReseed(iframe, seed) {
-  var this_problem = document.getElementsByName(iframe)[0];    
+  var this_problem = document.getElementsByName(iframe)[0];
   var this_problem_url = this_problem.src;
   if (seed === undefined){seed = Number(this_problem.getAttribute('data-seed')) + 80 + 84 + 88;}
   this_problem.setAttribute('data-seed', seed);
@@ -520,7 +520,7 @@ window.addEventListener("load",function(event) {
              $('#calculator-toggle').attr('aria-expanded', 'true');
              create_calc_script = document.getElementById("create_ggb_calc");
              if (!create_calc_script) {
-                 var ggbscript = document.createElement("script"); 
+                 var ggbscript = document.createElement("script");
                  ggbscript.id = "create_ggb_calc";
                  ggbscript.innerHTML = "ggbApp.inject('geogebra-calculator')";
                  document.body.appendChild(ggbscript);
@@ -558,11 +558,11 @@ window.addEventListener("load",function(event) {
 
 window.addEventListener("load",function(event) {
     document.onkeyup = function(event)
-    {                   
+    {
         var e = (!event) ? window.event : event;
         switch(e.keyCode)
-        {                       
-            case 13:  //CR 
+        {
+            case 13:  //CR
                  just_hit_escape = false;
                  if($(document.activeElement).hasClass("aside-like")) {
                     $(document.activeElement).toggleClass("front")
@@ -583,7 +583,7 @@ window.addEventListener("load",function(event) {
      //              var this_sage_cell = $(document.activeElement).closest(".sagecell_editor");
      //              this_sage_cell.next().focus;
      //           }
-     //           else 
+     //           else
                 } else
                 if(knowl_focus_stack.length > 0 ) {
                    most_recently_opened = knowl_focus_stack.pop();
@@ -639,7 +639,7 @@ function loadResource(type, file) {
   var linktype = "script";
   if (type == "css") { linktype = "link" }
   newresource = document.createElement(linktype);
- 
+
   if (type == "css") {
       newresource.type = 'text/css';
       newresource.rel = 'stylesheet';
@@ -852,7 +852,7 @@ function adjustWorkspace() {
     var heightA, heightB, this_item;
 
     var pagelayout = "letter";
-    if (document.body.classList.contains("a4")) { pagelayout = "a4" } 
+    if (document.body.classList.contains("a4")) { pagelayout = "a4" }
 
     var pageheight = [];
 
@@ -917,7 +917,7 @@ function adjustWorkspace() {
              console.log("Error: unknown pagelayout", pagelayout)
          }
 */
-         
+
        }
        console.log("magicscale", magicscale, "of", this_item);
        scaleWorkspaceIn(this_item, this_item, magicscale, "final");
