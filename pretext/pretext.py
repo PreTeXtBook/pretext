@@ -1058,48 +1058,10 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
 
     tmp_dir = get_temporary_directory()
 
-    # Copy in external resources (e.g., js code)
-    # Decide which Runestone Services to use
-    if "debug.rs.dev" not in stringparams:
-        # See if we can get Runestone Services from the Runestone CDN.
-        #  "altrs" = alternate Runestone
-        altrs_js, altrs_css, altrs_cdn_url, altrs_version = _runestone_services(stringparams)
-        # Previous line will raise a fatal error if the Runestone servers
-        # do not cooperate, so we assume we have good information for
-        # locating the most recent version of Runestone Services
-        msg = 'Runestone Services via online CDN query: version {}'
-        log.info(msg.format(altrs_version))
-        # with a successful online query, we load up some string parameters
-        # the receiving stylesheet has the parameters default to empty strings
-        # which translates to consulting the services file in the repository,
-        # so we do nothing when the online query fails
-        stringparams["rs-js"] = altrs_js
-        stringparams["rs-css"] = altrs_css
-        stringparams["rs-version"] = altrs_version
-
-        # get all the runestone files and place in tmp dir
-        services_file_name = "dist-{}.tgz".format(altrs_version)
-        output_dir = os.path.join(tmp_dir, "_static")
-        services_full_path = os.path.join(output_dir, services_file_name)
-        try:
-            msg = 'Downloading Runestone Services, version {}'
-            log.info(msg.format(altrs_version))
-            download_file(altrs_cdn_url + services_file_name, services_full_path)
-            log.info("Extracting Runestone Services from archive file")
-            import tarfile
-            file = tarfile.open(services_full_path)
-            file.extractall(output_dir)
-            file.close()
-            # we don't bother to delete archive after extraction since
-            # the temporary directory is never copied out anywhere
-        except Exception as e:
-            log.warning(e)
-            log.warning("Failed to download all Runestone Services files")
-    else:
-        log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
-        stringparams["rs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
-        stringparams["rs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
-        stringparams["rs-version"] = "dev"
+    # interrogate Runestone server (or debugging switches) and populate
+    # NB: dest_dir checked to see if _static is already filled
+    # NB: stringparams is augmented with Runestone Services information
+    _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir)
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
@@ -3553,62 +3515,14 @@ def _runestone_services(params):
     altrs_version = services.xpath("/all/version")[0].text
     return (altrs_js, altrs_css, altrs_cdn_url, altrs_version)
 
-# todo - rewrite other code that does similar things to use this function?
-def get_web_asset(url):
-    """Get the contents of an http request"""
-    try:
-        import requests
-    except ImportError:
-        msg = 'The "requests" module is not available and is necessary for downloading files.'
-        log.debug(msg)
-        raise Exception(msg)
 
-    try:
-        services_response = requests.get(url, timeout=10)
-    except requests.exceptions.RequestException as e:
-        msg = '\n'.join(['There was a network problem while trying to download "{}"',
-                            'and the reported problem is:',
-                            '{}'
-                            ])
-        log.debug(msg.format(url, e))
-        raise Exception(msg.format(url, e))
+def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
+    '''Obtain Runestone Services and place in _static directory of build'''
 
-    # Check that an online request was "OK", HTTP response code 200
-    response_status_code = services_response.status_code
-    if response_status_code != 200:
-        msg = '\n'.join(["The file {} was not found",
-                            "the server returned response code {}"
-                            ])
-        log.debug(msg.format(url, response_status_code))
-        raise Exception(msg.format(url, response_status_code))
-
-    return services_response.content
-
-def download_file(url, dest_filename):
-    """Write a web asset to a local file"""
-    contents = get_web_asset(url)
-    try:
-        dest_dir = os.path.dirname(dest_filename)
-        os.makedirs(dest_dir, exist_ok=True)
-
-        with open(dest_filename, 'wb') as f:
-            f.write(contents)
-    except Exception as e:
-        raise Exception("Failed to save download", dest_filename)
-
-def html(
-    xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
-):
-    """Convert XML source to HTML files, in destination directory or as zip file"""
-
-    # to ensure provided stringparams aren't mutated unintentionally
-    stringparams = stringparams.copy()
-
-    # Consult publisher file for locations of images
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
-
-    # names for scratch directories
-    tmp_dir = get_temporary_directory()
+    # stringparams - this will be changed, receives Runestone Services information
+    #                also contains potential debugging switches to influence behavior
+    # file_format - necessary for caching check, perhaps to be removed
+    # dest_dir - necessary for caching check, perhaps to be removed
 
     # Decide which Runestone Services to use
     if "debug.rs.dev" not in stringparams:
@@ -3658,6 +3572,66 @@ def html(
         stringparams["rs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
         stringparams["rs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
         stringparams["rs-version"] = "dev"
+
+# todo - rewrite other code that does similar things to use this function?
+def get_web_asset(url):
+    """Get the contents of an http request"""
+    try:
+        import requests
+    except ImportError:
+        msg = 'The "requests" module is not available and is necessary for downloading files.'
+        log.debug(msg)
+        raise Exception(msg)
+
+    try:
+        services_response = requests.get(url, timeout=10)
+    except requests.exceptions.RequestException as e:
+        msg = '\n'.join(['There was a network problem while trying to download "{}"',
+                            'and the reported problem is:',
+                            '{}'
+                            ])
+        log.debug(msg.format(url, e))
+        raise Exception(msg.format(url, e))
+
+    # Check that an online request was "OK", HTTP response code 200
+    response_status_code = services_response.status_code
+    if response_status_code != 200:
+        msg = '\n'.join(["The file {} was not found",
+                            "the server returned response code {}"
+                            ])
+        log.debug(msg.format(url, response_status_code))
+        raise Exception(msg.format(url, response_status_code))
+
+    return services_response.content
+
+def download_file(url, dest_filename):
+    """Write a web asset to a local file"""
+    contents = get_web_asset(url)
+    try:
+        dest_dir = os.path.dirname(dest_filename)
+        os.makedirs(dest_dir, exist_ok=True)
+
+        with open(dest_filename, 'wb') as f:
+            f.write(contents)
+    except Exception as e:
+        raise Exception("Failed to save download", dest_filename)
+
+def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir):
+    """Convert XML source to HTML files, in destination directory or as zip file"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # Consult publisher file for locations of images
+    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+
+    # names for scratch directories
+    tmp_dir = get_temporary_directory()
+
+    # interrogate Runestone server (or debugging switches) and populate
+    # NB: dest_dir checked to see if _static is already filled
+    # NB: stringparams is augmented with Runestone Services information
+    _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir)
 
     # support publisher file, and subtree argument
     if pub_file:
