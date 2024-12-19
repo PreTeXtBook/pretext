@@ -544,18 +544,18 @@ Book (with parts), "section" at level 3
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 <!-- ####################################################################### -->
-
- <!-- Specific top-level divisions -->
+<!-- These "level-expensive" go away once there is confidence in "new-level" -->
+<!-- Specific top-level divisions -->
 <!-- article/frontmatter, article/backmatter are faux divisions, but   -->
 <!-- will function as a terminating condition in recursive count below -->
-<xsl:template match="book|article|slideshow|letter|memo|article/frontmatter|article/backmatter" mode="level">
+<xsl:template match="book|article|slideshow|letter|memo|article/frontmatter|article/backmatter" mode="level-expensive">
     <xsl:value-of select="0"/>
 </xsl:template>
 
 <!-- A book/part will divide the mainmatter, so a "chapter" is at -->
 <!-- level 2, so we also put the faux divisions at level 1 in the -->
 <!-- case of parts, to again terminate recursive count            -->
-<xsl:template match="book/part|book/frontmatter|book/backmatter" mode="level">
+<xsl:template match="book/part|book/frontmatter|book/backmatter" mode="level-expensive">
     <xsl:choose>
         <xsl:when test="$b-has-parts">
             <xsl:value-of select="1"/>
@@ -577,14 +577,14 @@ Book (with parts), "section" at level 3
 <!-- chapters of books, sections of articles, or in the case of         -->
 <!-- solutions or references, children of an appendix.                  -->
 
-<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
+<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level-expensive">
     <xsl:variable name="level-above">
-        <xsl:apply-templates select="parent::*" mode="level"/>
+        <xsl:apply-templates select="parent::*" mode="level-expensive"/>
     </xsl:variable>
     <xsl:value-of select="$level-above + 1"/>
 </xsl:template>
 
-<xsl:template match="*" mode="level">
+<xsl:template match="*" mode="level-expensive">
     <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its level</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
