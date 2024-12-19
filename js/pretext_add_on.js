@@ -328,7 +328,7 @@ console.log("this is e", e);
             if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
             if (this_item.classList.contains("para")) {
                if (this_item.id == "") {
-                   // should be .para inside .para.logical 
+                   // should be .para inside .para.logical
                    this_anchor  = this_item.parentElement.id;
                    if(this_item.parentElement.parentElement.nodeName == "LI") {
                    // we actually had a para inside a para.logical inside an li
@@ -460,9 +460,9 @@ function updateURLParameter(url, param, paramVal){
   var rows_txt = temp + "" + param + "=" + paramVal;
   return baseURL + "?" + newAdditionalURL + rows_txt;
 }
-  
+
 function WWiframeReseed(iframe, seed) {
-  var this_problem = document.getElementsByName(iframe)[0];    
+  var this_problem = document.getElementsByName(iframe)[0];
   var this_problem_url = this_problem.src;
   if (seed === undefined){seed = Number(this_problem.getAttribute('data-seed')) + 80 + 84 + 88;}
   this_problem.setAttribute('data-seed', seed);
@@ -520,7 +520,7 @@ window.addEventListener("load",function(event) {
              $('#calculator-toggle').attr('aria-expanded', 'true');
              create_calc_script = document.getElementById("create_ggb_calc");
              if (!create_calc_script) {
-                 var ggbscript = document.createElement("script"); 
+                 var ggbscript = document.createElement("script");
                  ggbscript.id = "create_ggb_calc";
                  ggbscript.innerHTML = "ggbApp.inject('geogebra-calculator')";
                  document.body.appendChild(ggbscript);
@@ -558,11 +558,11 @@ window.addEventListener("load",function(event) {
 
 window.addEventListener("load",function(event) {
     document.onkeyup = function(event)
-    {                   
+    {
         var e = (!event) ? window.event : event;
         switch(e.keyCode)
-        {                       
-            case 13:  //CR 
+        {
+            case 13:  //CR
                  just_hit_escape = false;
                  if($(document.activeElement).hasClass("aside-like")) {
                     $(document.activeElement).toggleClass("front")
@@ -583,7 +583,7 @@ window.addEventListener("load",function(event) {
      //              var this_sage_cell = $(document.activeElement).closest(".sagecell_editor");
      //              this_sage_cell.next().focus;
      //           }
-     //           else 
+     //           else
                 } else
                 if(knowl_focus_stack.length > 0 ) {
                    most_recently_opened = knowl_focus_stack.pop();
@@ -639,7 +639,7 @@ function loadResource(type, file) {
   var linktype = "script";
   if (type == "css") { linktype = "link" }
   newresource = document.createElement(linktype);
- 
+
   if (type == "css") {
       newresource.type = 'text/css';
       newresource.rel = 'stylesheet';
@@ -806,7 +806,6 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
             console.log("showing extra space");
             var this_proportion_scaledX = 12*this_proportion_number;
             this_work.style.background = "linear-gradient( #eef 0px, #eef " + this_proportion_scaledX + "px, #eef " + this_proportion_scaledX + "px, #99f " + (this_proportion_scaledX + 5) + "px, #99f " + (this_proportion_scaledX + 5) + "px, #99f 100%)";
-  //          this_work.style.background = "linear-gradient( #eef 0px, #eef 200px, #eef 200px, #99f 205px, #99f 205px, #99f 100%)";
         } else {
              this_work.style.background = null;
         }
@@ -831,10 +830,6 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
             } else {
                 this_work.classList.remove("tight")
             }
-/*
-            console.log(this_work.parentElement, "iparent rectangle", this_work.parentElement.getBoundingClientRect())
-            console.log(this_work.parentElement.parentElement, "parent parent rectangle", this_work.parentElement.parentElement.getBoundingClientRect())
-*/
         }
     }
     return obj.clientHeight
@@ -852,14 +847,14 @@ function adjustWorkspace() {
     var heightA, heightB, this_item;
 
     var pagelayout = "letter";
-    if (document.body.classList.contains("a4")) { pagelayout = "a4" } 
+    if (document.body.classList.contains("a4")) { pagelayout = "a4" }
 
     var pageheight = [];
 
     for (var i = 0; i < all_pages.length; i++) {
         /* for assigning page height later */
-        if (pagelayout == "a4") { pageheight.push(1320) }
-        else { pageheight.push(1243) }
+        if (pagelayout == "a4") { pageheight.push(1100) }
+        else { pageheight.push(1030) }
 
         this_item = all_pages[i];
         if (i == 0) { this_item.classList.add("firstpage") }
@@ -885,7 +880,6 @@ function adjustWorkspace() {
        if (this_item.classList.contains("lastpage")) {
            pageExtraHeight += worksheetData["bottom"] - pageData["bottom"];
        }
-  //     pageExtraHeight += 150;
        pageheight[i] -= pageExtraHeight
        console.log("worksheetData", worksheetData, "pageData", pageData);
        console.log(i, "i", pageExtraHeight, "pageExtraHeight");
@@ -897,27 +891,8 @@ function adjustWorkspace() {
        /* a magicscale makes the output the height of the minimum specified input */
        var magicscale = 12;
 
-/*
-       heightA += pageExtraHeight;
-       heightB += pageExtraHeight;
-*/
-
        if (heightA != heightB) {
-/*
-         magicscale = (1328 - 2*height10 + 1*height20)/(height20 - height10)
-         magicscale = (1324 - 2*height10 + 1*height20)/(height20 - height10)
-*/
          magicscale = (pageheight[i]*(a - b) + b*heightA - a*heightB)/(heightA - heightB);
-/*
-         if (pagelayout == "a4") {
-             magicscale = (1413*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
-         } else if (pagelayout == "letter") {
-             magicscale = (1324*(a - b) + b*heightA - a*heightB)/(heightA - heightB)
-         } else {
-             console.log("Error: unknown pagelayout", pagelayout)
-         }
-*/
-         
        }
        console.log("magicscale", magicscale, "of", this_item);
        scaleWorkspaceIn(this_item, this_item, magicscale, "final");
@@ -929,7 +904,6 @@ function adjustWorkspace() {
        console.log(this_item.parentElement.getBoundingClientRect(), "222ddd", this_item.parentElement);
 
 
-//   alert("part of one page");
        /* now go back and see if any of the squashed non-tight items can be expanded */
        var these_squashed = this_item.querySelectorAll('.squashed:not(.tight)');
        console.log("these_squashed", these_squashed);
@@ -968,8 +942,6 @@ window.addEventListener("load",function(event) {
 
       window.setTimeout(urlattribute, 1500);
   }
-//  console.log("done adjusting workspace");
-
 });
 
 /*
