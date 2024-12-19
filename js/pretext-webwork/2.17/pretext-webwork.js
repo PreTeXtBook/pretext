@@ -23,7 +23,7 @@ function handleWW(ww_id, action) {
 	const ww_sourceFilePath = ww_container.dataset.sourcefilepath;
 	const ww_course_id = ww_container.dataset.courseid;
 	const ww_user_id = ww_container.dataset.userid;
-	const ww_course_password = ww_container.dataset.coursepassword;
+	const ww_course_password = ww_container.dataset.coursepassword || ww_container.dataset.passwd;
 	const localize_correct = ww_container.dataset.localizeCorrect || "Correct";
 	const localize_incorrect = ww_container.dataset.localizeIncorrect || "Incorrect";
 	const localize_blank = ww_container.dataset.localizeBlank || "Blank";
