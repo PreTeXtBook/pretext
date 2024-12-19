@@ -3500,20 +3500,20 @@ def _runestone_services(params):
     # This mirrors the XML file format, including multiple "item"
     #
     # colon-delimited string of the JS files
-    altrs_js = ''
+    rs_js = ''
     for js in services.xpath("/all/js/item"):
-        altrs_js = altrs_js + js.text + ':'
-    altrs_js = altrs_js[:-1]
+        rs_js = rs_js + js.text + ':'
+    rs_js = rs_js[:-1]
     # colon-delimited string of the CSS files
-    altrs_css = ''
+    rs_css = ''
     for css in services.xpath("/all/css/item"):
-        altrs_css = altrs_css + css.text + ':'
-    altrs_css = altrs_css[:-1]
+        rs_css = rs_css + css.text + ':'
+    rs_css = rs_css[:-1]
     # single CDN URL
-    altrs_cdn_url = services.xpath("/all/cdn-url")[0].text
+    rs_cdn_url = services.xpath("/all/cdn-url")[0].text
     # single Runestone Services version
-    altrs_version = services.xpath("/all/version")[0].text
-    return (altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml)
+    rs_version = services.xpath("/all/version")[0].text
+    return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
 
 def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
@@ -3527,29 +3527,28 @@ def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
     # Decide which Runestone Services to use
     if "debug.rs.dev" not in stringparams:
         # See if we can get Runestone Services from the Runestone CDN.
-        #  "altrs" = alternate Runestone
-        altrs_js, altrs_css, altrs_cdn_url, altrs_version, services_xml = _runestone_services(stringparams)
+        rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_services(stringparams)
         # Previous line will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
         msg = 'Runestone Services via online CDN query: version {}'
-        log.info(msg.format(altrs_version))
+        log.info(msg.format(rs_version))
         # with a successful online query, we load up some string parameters
         # the receiving stylesheet has the parameters default to empty strings
         # which translates to consulting the services file in the repository,
         # so we do nothing when the online query fails
-        stringparams["rs-js"] = altrs_js
-        stringparams["rs-css"] = altrs_css
-        stringparams["rs-version"] = altrs_version
+        stringparams["rs-js"] = rs_js
+        stringparams["rs-css"] = rs_css
+        stringparams["rs-version"] = rs_version
 
         # get all the runestone files and place in tmp dir
         # services_file is copy of services xml file
-        services_file_name = "dist-{}.tgz".format(altrs_version)
+        services_file_name = "dist-{}.tgz".format(rs_version)
         output_dir = os.path.join(tmp_dir, "_static")
         services_full_path = os.path.join(output_dir, services_file_name)
         final_output_path = os.path.join(dest_dir, "_static", services_file_name)
         # services_record is copy of services xml file
-        services_record_name = "_runestone-services-{}.xml".format(altrs_version)
+        services_record_name = "_runestone-services-{}.xml".format(rs_version)
         services_record_output_path = os.path.join(tmp_dir, "_static", services_record_name)
         if file_format  == "html" and os.path.exists(services_record_output_path):
             msg = "Using existing Runestone Services located in {}. Delete Runestone files there to force a fresh download."
@@ -3557,8 +3556,8 @@ def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
         else:
             try:
                 msg = 'Downloading Runestone Services, version {}'
-                log.info(msg.format(altrs_version))
-                download_file(altrs_cdn_url + services_file_name, services_full_path)
+                log.info(msg.format(rs_version))
+                download_file(rs_cdn_url + services_file_name, services_full_path)
                 log.info("Extracting Runestone Services from archive file")
                 import tarfile
                 services_file = tarfile.open(services_full_path)
