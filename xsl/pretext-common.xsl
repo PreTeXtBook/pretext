@@ -536,12 +536,24 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <!-- actual value here, above is debugging -->
+<!-- ####################################################################### -->
+<!-- These "new-level" eventually become "level"                             -->
+<xsl:template match="&STRUCTURAL;" mode="new-level">
     <xsl:value-of select="@level"/>
 </xsl:template>
 
-<xsl:template match="*" mode="new-level">
-    <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its *new* level</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
+<!-- Safety catch all -->
+<xsl:template match="*" mode="new-level" priority="-1">
+    <xsl:choose>
+        <xsl:when test="@level">
+            <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") thinks it doesn't do *new* level but does </xsl:message>
+            <xsl:value-of select="@level"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its *new* level</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <!-- ####################################################################### -->
 <!-- These "level-expensive" go away once there is confidence in "new-level" -->
