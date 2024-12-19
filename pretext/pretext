@@ -324,9 +324,9 @@ def get_cli_arguments():
         ("latex-image", "LaTeX pictures (method: [xelatex], pdflatex)"),
         (
             "webwork",
-            "WeBWorK problems in authored, PG, url, and static representations",
+            "WeBWorK problems in PG files and various representations",
         ),
-        ("pg-macros", "Server-side macros for WeBWorK problem generation"),
+        ("pg-macros", "PG macros for WeBWorK problem generation"),
         ("dynamic", "Expression subsitutions for dynamically generated exercises"),
         ("youtube", "Thumbnails for YouTube videos (JPEG only)"),
         ("play-button", "generate generic static video image"),
