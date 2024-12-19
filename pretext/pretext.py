@@ -3434,14 +3434,14 @@ def _runestone_services(params):
     # (If the HTML stylesheet doesn't like it, it could be removed after recording.)
 
     if "debug.rs.version" in params:
-        rs_version = params["debug.rs.version"]
-        services_url = services_url_template.format(rs_version)
+        rs_debug_version = params["debug.rs.version"]
+        services_url = services_url_template.format(rs_debug_version)
         msg = '\n'.join(["Requested Runestone Services, version {} from the CDN via the  debug.rs.version  string parameter.",
             "This is strictly for DEBUGGING and not for PRODUCTION.  The requested version may not exist,",
             "or there could be a network error and you will get the version in the PreTrext repository.",
             "Subsequent diagnostic messages may be inaccurate.  Verify your HTML output is as intended."
             ])
-        log.info(msg.format(rs_version))
+        log.info(msg.format(rs_debug_version))
     else:
         services_url = services_url_template.format("latest")
 
