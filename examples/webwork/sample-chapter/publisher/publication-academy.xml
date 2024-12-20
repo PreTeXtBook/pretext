@@ -26,7 +26,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </source>
 
     <!-- These are the defaults but written explicitly here to serve as a model. -->
-    <webwork server="https://webwork-ptx.aimath.org" course="anonymous" coursepassword="anonymous" user="anonymous" userpassword="anonymous" task-reveal="preceding-correct" />
+    <webwork server="https://webwork-ptx.aimath.org" course="anonymous" user="anonymous" password="anonymous" task-reveal="preceding-correct" />
 
     <html>
         <platform host="runestone"/>

@@ -120,9 +120,9 @@
 
             <preface>
                 <p>This is a sample book to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  It is structured as a book whose chapters are again structured with sections (no introductions or conclusions) so that it fits Ruestone's chaper/subchapter model and can be used for testing on Runestone Academy.</p>
-                <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
+                <p>This work was funded with grants from <url href="http://openoregon.org">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
                 <p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext /> enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork /> end, and generally maintaining <webwork /> software.</p>
-                <p>This book assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
+                <p>This book assumes a mild familiarity with both <url href="https://pretextbook.org"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
             </preface>
 
         </frontmatter>
@@ -1267,7 +1267,7 @@
                             </p>
                             <image width="50%">
                                 <description>
-                                    this image has pictures of text with special characters like $, %, and @
+                                    this image has pictures of text with special perl characters
                                 </description>
                                 <latex-image>
                                     \begin{tikzpicture}
