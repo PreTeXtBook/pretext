@@ -3416,34 +3416,59 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
-def _runestone_services(params):
+def _runestone_services(stringparams):
     """Query the very latest Runestone Services file from the RS CDN"""
 
-    # params - string parameter dictionary, just for  debug.rs.version
+    # stringparams - string parameter dictionary, this gains three
+    #                new keys which are passed on to the XSL eventually
+    # Result - returns five pieces of discovered or set information,
+    #          see *two* retrn statements, one is intermediate.
+    #          Failure is an option, if a network request fails
 
     # Canonical location of file of redirections to absolute-latest
     # released version of Runestone Services when parameterized by
     # "latest", otherwise will get a specific previous version
     services_url_template = 'https://runestone.academy/cdn/runestone/{}/webpack_static_imports.xml'
 
-    # The  debug.rs.version  string parameter is a bit of a poser.  It is
-    # provided via the usual interfaces as if it were really a string parameter
-    # but it gets intercepted here in the Python, and while it is provided to
-    # the HTML stylesheet, there is no definition there to receive it and it
-    # is silently ignored.
-    # (If the HTML stylesheet doesn't like it, it could be removed after recording.)
-
-    if "debug.rs.version" in params:
-        rs_debug_version = params["debug.rs.version"]
+    # First, set the URL to hit on Runestone servers to initiate discovery
+    # 1. debugging with a specific (old) version, set a URL and warn
+    # 2. The generic  debug.rs.dev  requires developer to populate _static
+    # 3. The "usual" case is provided by Runestone's "latest" directory, set a URL
+    # (2) always succeeds, (1) and (3) can fail due to network errors
+    if "debug.rs.version" in stringparams:
+        rs_debug_version = stringparams["debug.rs.version"]
         services_url = services_url_template.format(rs_debug_version)
-        msg = '\n'.join(["Requested Runestone Services, version {} from the CDN via the  debug.rs.version  string parameter.",
+        msg = '\n'.join(["Requested Runestone Services, version {} from Runestone servers via the  debug.rs.version  string parameter.",
             "This is strictly for DEBUGGING and not for PRODUCTION.  The requested version may not exist,",
-            "or there could be a network error and you will get the version in the PreTrext repository.",
+            "or there could be a network error and you will get something you did not expect.",
             "Subsequent diagnostic messages may be inaccurate.  Verify your HTML output is as intended."
             ])
         log.info(msg.format(rs_debug_version))
+        # could remove the  debug.rs.version  key here,
+        # no longer necessary to distinguish this case
+    elif "debug.rs.dev" in stringparams:
+        # basically a "pass"
+        log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
     else:
         services_url = services_url_template.format("latest")
+
+    # Predictable and convenient debugging situation
+    # Developer is responsible for placement of the right files in _static
+    # ** Simply return early with stock values (or None) **
+    if "debug.rs.dev" in stringparams:
+        rs_js = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+        rs_css = "prefix-runtime-libs.css:prefix-runestone.css"
+        rs_cdn_url = None
+        rs_version = "dev"
+        services_xml = None
+        # Return, plus side-effect
+        stringparams["rs-js"] = rs_js
+        stringparams["rs-css"] = rs_css
+        stringparams["rs-version"] = rs_version
+        return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
+
+    # Otherwise, we have a URL pointing to the Runestone server/CDN
+    # which may be successful and may not.  Network failure is fatal.
 
     # We assume an online query is a success, until we learn otherwise
     online_success = True
@@ -3484,10 +3509,8 @@ def _runestone_services(params):
                          "Unable to proceed and build useful HTML output without this."
                          ])
         log.debug(msg)
+        # fatal error here, a URL is not doing the job
         raise Exception(msg)
-
-        # and we cannot proceed, so return with a result that is empty
-        return ('', '', '', '')
 
     # Now online_success is still True, we have not return'ed
     # and services_response should be meaningful
@@ -3513,6 +3536,11 @@ def _runestone_services(params):
     rs_cdn_url = services.xpath("/all/cdn-url")[0].text
     # single Runestone Services version
     rs_version = services.xpath("/all/version")[0].text
+
+    # Return, plus side-effect
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
 
@@ -3524,22 +3552,18 @@ def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
     # file_format - necessary for caching check, perhaps to be removed
     # dest_dir - necessary for caching check, perhaps to be removed
 
-    # Decide which Runestone Services to use
+    # See if we can get Runestone Services, or interpret debugging selections
+    # This call will always change  stringparams (absent network failures)
+    # These get communicated eventually to the XSL to formulate the HTML #head
+    rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_services(stringparams)
+    # A URL to the Runestone servers will have been successful
+    # in the "usual" and  debug.rs.version  cases
     if "debug.rs.dev" not in stringparams:
-        # See if we can get Runestone Services from the Runestone CDN.
-        rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_services(stringparams)
         # Previous line will raise a fatal error if the Runestone servers
         # do not cooperate, so we assume we have good information for
         # locating the most recent version of Runestone Services
         msg = 'Runestone Services via online CDN query: version {}'
         log.info(msg.format(rs_version))
-        # with a successful online query, we load up some string parameters
-        # the receiving stylesheet has the parameters default to empty strings
-        # which translates to consulting the services file in the repository,
-        # so we do nothing when the online query fails
-        stringparams["rs-js"] = rs_js
-        stringparams["rs-css"] = rs_css
-        stringparams["rs-version"] = rs_version
 
         # Get all the Runestone files and place in _static
         # We "build" in tmp_dir, place "output" in dest_dir
@@ -3576,11 +3600,6 @@ def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
             except Exception as e:
                 log.warning(e)
                 log.warning("Failed to download all Runestone Services files")
-    else:
-        log.info("Building for local developmental Runestone Services. Make sure to build Runestone Services to _static in the output directory.")
-        stringparams["rs-js"] = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
-        stringparams["rs-css"] = "prefix-runtime-libs.css:prefix-runestone.css"
-        stringparams["rs-version"] = "dev"
 
 # todo - rewrite other code that does similar things to use this function?
 def get_web_asset(url):
