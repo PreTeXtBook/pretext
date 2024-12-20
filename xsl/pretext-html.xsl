@@ -11396,9 +11396,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
-<!-- Sidebars -->
-<!-- Two HTML aside's for ToC (left), Annotations (right)       -->
-<!-- Need to pass node down into "toc-items", which is per-page -->
+<!-- ToC sidebar                                                -->
 <xsl:template match="*" mode="sidebars">
     <div id="ptx-sidebar" class="ptx-sidebar">
         <nav id="ptx-toc">
@@ -11427,7 +11425,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:if>
             <!-- now, all the actual ToC entries -->
-            <xsl:apply-templates select="." mode="toc-items"/>
+            <xsl:apply-templates select="." mode="customized-toc-items"/>
         </nav>
     </div>
  </xsl:template>
