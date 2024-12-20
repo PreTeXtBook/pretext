@@ -11023,8 +11023,16 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- Comments without implementations have moved -->
     <!-- to Schematron rules after residing here for -->
     <!-- at least 16 months (one year plus grace)    -->
+
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="date-string" select="'2014-05-04'" />
+        <xsl:with-param name="message" select="'the &quot;filebase&quot; attribute is deprecated, convert to &quot;xml:id&quot;'" />
+        <xsl:with-param name="occurences" select="&quot;count(//@filebase)&quot;" />
+    </xsl:call-template>
+    <!--  -->
+    cite[@provisional]|xref[@provisional]
     <!-- 2014-06-25  xref once had cite as a variant -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
     <!--  -->
@@ -11033,10 +11041,42 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
     <!--  -->
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are no longer accomodated -->
+    
+        <!-- tikz is generalized to latex-image-code -->
+    <xsl:if test="//tikz">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/02/20'" />
+            <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
+            <xsl:with-param name="occurences" select="count(//tikz)" />
+        </xsl:call-template>
+    </xsl:if>
     <!-- 2015-02-20  tikz element is entirely abandoned -->
-    <!-- 2017-12-22  latex-image-code element is entirely abandoned -->
     <!--  -->
-    <!-- Active deprecations follow -->
+    <!-- naked tikz, asymptote, sageplot are banned                -->
+    <!-- typically these would be in a figure, but not necessarily -->
+    <xsl:if test="//figure/tikz or //figure/asymptote or //figure/sageplot">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/02/08'" />
+            <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
+            <xsl:with-param name="occurences" select="count(//figure/tikz) + count(//figure/asymptote) + count(//figure/sageplot)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- xref once had variant called "cite" -->
+    <xsl:if test="//cite">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2014/06/25'" />
+            <xsl:with-param name="message" select="'the &quot;cite&quot; element is deprecated, convert to &quot;xref&quot;'" />
+            <xsl:with-param name="occurences" select="count(//cite)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- 2017-12-22  latex-image-code to simply latex-image -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//latex-image-code" />
+        <xsl:with-param name="date-string" select="'2017-08-25'" />
+        <xsl:with-param name="message" select="'the &quot;latex-image-code&quot; element has been replaced by the functionally equivalent &quot;latex-image&quot;'" />
+    </xsl:call-template>
     <!--  -->
     <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs           -->
     <!-- 2017-07-16  removed all backwards compatibility and added empty template -->
