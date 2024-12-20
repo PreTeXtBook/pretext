@@ -11553,6 +11553,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- Table of Contents per-page customization      -->
+<xsl:template match="*" mode="customized-toc-items">
+    <!-- get a copy of the toc-cach that we will decorate -->
+    <xsl:variable name="toc-contents-rtf">
+        <xsl:copy-of select="$toc-cache-rtf"/>
+    </xsl:variable>
+    <xsl:variable name="toc-contents" select="exsl:node-set($toc-contents-rtf)"/>
+
+    <!-- get the unique id of the current page -->
+    <xsl:variable name="uid" select="@unique-id"/>
+    <!-- use that to find the ToC node for that page -->
+    <xsl:variable name="this-page-node" select="$toc-contents//*[@uid = $uid]"/>
+    <!-- ancestor list will allow us to identify when we are in the path to the page -->
+    <xsl:variable name="this-page-ancestors" select="$this-page-node/ancestor::*" />
+
+    <!-- begin copying ToC at root element -->
+    <xsl:apply-templates select="$toc-contents" mode="customized-toc-item">
+        <xsl:with-param name="this-page" select="$this-page-node"/>
+        <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- boring element (span, etc...) -->
+<xsl:template match="@*|*" mode="customized-toc-item">
+    <xsl:param name="this-page"/>
+    <xsl:param name="this-page-ancestors"/>
+    <xsl:copy>
+        <!-- process all other attributes, nodes, and text-->
+        <xsl:apply-templates select="@*|*|text()" mode="customized-toc-item">
+            <xsl:with-param name="this-page" select="$this-page"/>
+            <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- items that may need to be customized-->
+<xsl:template match="ul|li" mode="customized-toc-item">
+    <xsl:param name="this-page"/>
+    <xsl:param name="this-page-ancestors"/>
+
+    <xsl:variable name="is-ancestor" select="count($this-page-ancestors|.) = count($this-page-ancestors)"/>
+    <xsl:variable name="is-page" select="count($this-page|.) = count($this-page)"/>
+    <xsl:choose>
+        <!-- ToC item contains or is active page -->
+        <xsl:when test="$is-ancestor or $is-page">
+            <!-- need to copy with modified class list -->
+            <xsl:copy>
+                <!-- reconstruct class attr -->
+                <xsl:variable name="old-class" select="@class"/>
+                <xsl:attribute name="class">
+                    <xsl:value-of select="$old-class"/>
+                    <xsl:choose>
+                        <xsl:when test="$is-ancestor">
+                            <xsl:text> contains-active</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text> active</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <!-- filter the uids and class, process all other attributes, nodes, and text-->
+                <xsl:apply-templates select="@*[name() != 'uid' and name() != 'class']|*|text()" mode="customized-toc-item">
+                    <xsl:with-param name="this-page" select="$this-page"/>
+                    <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:when>
+        <!-- ToC item is not on path to active page, simple copy minus uid-->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="@*[name() != 'uid']|*|text()" mode="customized-toc-item">
+                    <xsl:with-param name="this-page" select="$this-page"/>
+                    <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- A standalone XML file with ToC necessities  -->
 <!-- Infrastructure for file, initiate recursion -->
 <xsl:template name="doc-manifest">
