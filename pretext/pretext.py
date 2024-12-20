@@ -1059,9 +1059,8 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     tmp_dir = get_temporary_directory()
 
     # interrogate Runestone server (or debugging switches) and populate
-    # NB: dest_dir checked to see if _static is already filled
     # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir)
+    _place_runestone_services(tmp_dir, stringparams)
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
@@ -3544,13 +3543,11 @@ def _runestone_services(stringparams):
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
 
-def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
+def _place_runestone_services(tmp_dir, stringparams):
     '''Obtain Runestone Services and place in _static directory of build'''
 
     # stringparams - this will be changed, receives Runestone Services information
     #                also contains potential debugging switches to influence behavior
-    # file_format - necessary for caching check, perhaps to be removed
-    # dest_dir - necessary for caching check, perhaps to be removed
 
     # See if we can get Runestone Services, or interpret debugging selections
     # This call will always change  stringparams (absent network failures)
@@ -3568,38 +3565,30 @@ def _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir):
         # Get all the Runestone files and place in _static
         # We "build" in tmp_dir, place "output" in dest_dir
         build_dir = os.path.join(tmp_dir, "_static")
-        output_dir = os.path.join(dest_dir, "_static")
         services_file_name = "dist-{}.tgz".format(rs_version)
         services_build_path = os.path.join(build_dir, services_file_name)
         # services_record is copy of services xml file
         # predictable name, contains version information
-        services_record_name = "_runestone-services.xml"
-        services_record_build_path = os.path.join(build_dir, services_record_name)
-        services_record_output_path = os.path.join(output_dir, services_record_name)
-        if file_format  == "html" and os.path.exists(services_record_output_path):
-            msg = "Using existing Runestone Services located in {}. Delete Runestone files there to force a fresh download."
-            log.info(msg.format(output_dir))
-        else:
-            try:
-                msg = 'Downloading Runestone Services, version {}'
-                log.info(msg.format(rs_version))
-                download_file(rs_cdn_url + services_file_name, services_build_path)
-                log.info("Extracting Runestone Services from archive file")
-                import tarfile
-                services_file = tarfile.open(services_build_path)
-                services_file.extractall(build_dir)
-                services_file.close()
-                # once unpacked, archive no longer necessary and we
-                # don't want to copy it out into dest_dir "_static"
-                os.remove(services_build_path)
-                # write the services_record XML file to the destination
-                # directory for version checking next time
-                services_record = open(services_record_build_path, 'w')
-                services_record.write(services_xml)
-                services_record.close()
-            except Exception as e:
-                log.warning(e)
-                log.warning("Failed to download all Runestone Services files")
+        services_record_build_path = os.path.join(build_dir, "_runestone-services.xml")
+        try:
+            msg = 'Downloading Runestone Services, version {}'
+            log.info(msg.format(rs_version))
+            download_file(rs_cdn_url + services_file_name, services_build_path)
+            log.info("Extracting Runestone Services from archive file")
+            import tarfile
+            services_file = tarfile.open(services_build_path)
+            services_file.extractall(build_dir)
+            services_file.close()
+            # once unpacked, archive no longer necessary
+            os.remove(services_build_path)
+            # write the services_record XML file for potential
+            # version checking with a caching implementation
+            services_record = open(services_record_build_path, 'w')
+            services_record.write(services_xml)
+            services_record.close()
+        except Exception as e:
+            log.warning(e)
+            log.warning("Failed to download all Runestone Services files")
 
 # todo - rewrite other code that does similar things to use this function?
 def get_web_asset(url):
@@ -3657,9 +3646,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     tmp_dir = get_temporary_directory()
 
     # interrogate Runestone server (or debugging switches) and populate
-    # NB: dest_dir checked to see if _static is already filled
     # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, file_format, dest_dir)
+    _place_runestone_services(tmp_dir, stringparams)
 
     # support publisher file, and subtree argument
     if pub_file:
