@@ -3412,6 +3412,32 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 # Conversion to HTML
 ####################
 
+# Leads with various helper functions, see
+# also the dynamic_subsitutions() function
+
+def _parse_runestone_services(et):
+    # Unpack contents into format for XSL string parameters
+    # This mirrors the XML file format, including multiple "item"
+    #
+    # creates PreTeXt-specific format for passing to XSL to unpack
+
+    # colon-delimited string of the JS files
+    rs_js = ''
+    for js in et.xpath("/all/js/item"):
+        rs_js = rs_js + js.text + ':'
+    rs_js = rs_js[:-1]
+    # colon-delimited string of the CSS files
+    rs_css = ''
+    for css in et.xpath("/all/css/item"):
+        rs_css = rs_css + css.text + ':'
+    rs_css = rs_css[:-1]
+    # single CDN URL
+    rs_cdn_url = et.xpath("/all/cdn-url")[0].text
+    # single Runestone Services version
+    rs_version = et.xpath("/all/version")[0].text
+
+    return (rs_js, rs_css, rs_cdn_url, rs_version)
+
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
@@ -3517,24 +3543,8 @@ def _runestone_services(stringparams):
     # Convert Runestone file back to XML to unpack with lxml
     services_xml = services_response.text
     services = ET.fromstring(services_xml)
-
-    # Unpack contents into format for XSL string parameters
-    # This mirrors the XML file format, including multiple "item"
-    #
-    # colon-delimited string of the JS files
-    rs_js = ''
-    for js in services.xpath("/all/js/item"):
-        rs_js = rs_js + js.text + ':'
-    rs_js = rs_js[:-1]
-    # colon-delimited string of the CSS files
-    rs_css = ''
-    for css in services.xpath("/all/css/item"):
-        rs_css = rs_css + css.text + ':'
-    rs_css = rs_css[:-1]
-    # single CDN URL
-    rs_cdn_url = services.xpath("/all/cdn-url")[0].text
-    # single Runestone Services version
-    rs_version = services.xpath("/all/version")[0].text
+    # Interrogate the services XML
+    rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
 
     # Return, plus side-effect
     stringparams["rs-js"] = rs_js
