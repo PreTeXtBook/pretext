@@ -11477,8 +11477,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Table of Contents Contents (Items) -->
-<!-- Includes "active" class for enclosing outer node              -->
+<!-- Table of Contents Contents (Items)                            -->
+<!-- This is the pre-computed TOC that is on every page. It will   -->
+<!-- be customized later as it is rendered to each page.           -->
+<xsl:variable name="toc-cache-rtf">
+    <xsl:apply-templates select="/" mode="toc-items"/>
+</xsl:variable>
+
 <xsl:template match="*" mode="toc-items">
     <!-- start recursion at the top, since the  -->
     <!-- ToC is global for the whole document   -->
