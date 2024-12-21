@@ -10965,6 +10965,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecations -->
 <!-- ############ -->
 
+<xsl:param name="author.deprecations.all" select="''" />
+<xsl:variable name="deprecation-max-age">
+    <xsl:choose>
+        <xsl:when test="$author.deprecations.all = 'yes'">
+            <xsl:text>P100Y</xsl:text>
+            <xsl:message>PTX:INFO:   checking all deprecated elements.</xsl:message>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>P2Y</xsl:text>
+            <xsl:message>PTX:INFO:   checking ONLY the last TWO YEARS of element deprecations.&#xa;Rerun with the string parameter "author.deprecations.all" set to "yes" to check your source against all deprecations.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Generic deprecation message for uniformity    -->
 <!-- "occurrences" is a quote-protected expression -->
 <!-- that evaluates to node-set of "problem" nodes -->
