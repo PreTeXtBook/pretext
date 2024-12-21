@@ -9344,87 +9344,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
-<!-- Geogebra -->
-<!-- Similar again, but with options fixed -->
-<xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
-    <xsl:param name="default-aspect" select="'1:1'" />
-    <xsl:variable name="ggbToolBar">
-        <xsl:choose>
-            <xsl:when test="@toolbar='yes'">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>false</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="ggbAlgebraInput">
-        <xsl:choose>
-            <xsl:when test="@algebra-input='yes'">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>false</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="ggbResetIcon">
-        <xsl:choose>
-            <xsl:when test="@reset-icon='yes'">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>false</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="ggbShiftDragZoom">
-        <xsl:choose>
-            <xsl:when test="@shift-drag-zoom='yes'">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>false</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="ggbMaterialWidth">
-        <xsl:choose>
-            <xsl:when test="@material-width">
-                <xsl:value-of select="@material-width"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>800</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="aspect-ratio">
-        <xsl:apply-templates select="." mode="get-aspect-ratio">
-            <xsl:with-param name="default-aspect" select="$default-aspect" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:variable name="ggbMaterialHeight">
-        <xsl:choose>
-            <xsl:when test="@material-height">
-                <xsl:value-of select="@material-height"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- iframe options not implemented: -->
-    <!-- smb = show menu bar                   -->
-    <!-- asb = allow style bar                 -->
-    <!-- rc = enable right click options       -->
-    <!-- ld = enable label drag                -->
-    <!-- ctl = click to launch                 -->
-    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
-    </iframe>
-</xsl:template>
-
 <!-- CalcPlot3D -->
 <!-- A bit more complicated, as the configuration   -->
 <!-- is a query string of a URL, and we can specify -->
@@ -9854,18 +9773,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="@geogebra" />
                 <xsl:text>",&#xa;</xsl:text>
             </xsl:when>
-            <!-- Now must be authored in source, so we can check for   -->
-            <!-- setting perspective via an attribute.  This bypasses  -->
-            <!-- a bug where using "setPerspective()" in source caused -->
-            <!-- the focus to be grabbed here.                         -->
             <xsl:otherwise>
-                <xsl:if test="@perspective">
-                    <xsl:text>perspective:"</xsl:text>
-                    <xsl:value-of select="@perspective"/>
-                    <xsl:text>",&#xa;</xsl:text>
-                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
+        <!-- Perspective must be authored in source, so we can check -->
+        <!-- setting perspective via an attribute.  This bypasses a  -->
+        <!-- bug where using "setPerspective()" in source caused the -->
+        <!-- focus to be grabbed here.                               -->
+        <xsl:if test="@perspective">
+            <xsl:text>perspective:"</xsl:text>
+            <xsl:value-of select="@perspective"/>
+            <xsl:text>",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@toolbar">
+            <xsl:text>showToolBar: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@toolbar='yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@algebra-input">
+            <xsl:text>showAlgebraInput: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@algebra-input='yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@reset-icon">
+            <xsl:text>showResetIcon: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@reset-icon='yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@shift-drag-zoom">
+            <xsl:text>enableShiftDragZoom: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@shift-drag-zoom='yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@zoom-buttons">
+            <xsl:text>showZoomButtons: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@zoom-buttons='yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
+        </xsl:if>
         <xsl:text>width:</xsl:text><xsl:value-of select="$material-width" />
         <xsl:text>,&#xa;</xsl:text>
         <xsl:text>height:</xsl:text><xsl:value-of select="$material-height" />
