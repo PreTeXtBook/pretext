@@ -11396,9 +11396,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
-<!-- Sidebars -->
-<!-- Two HTML aside's for ToC (left), Annotations (right)       -->
-<!-- Need to pass node down into "toc-items", which is per-page -->
+<!-- ToC sidebar                                                -->
 <xsl:template match="*" mode="sidebars">
     <div id="ptx-sidebar" class="ptx-sidebar">
         <nav id="ptx-toc">
@@ -11427,7 +11425,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:if>
             <!-- now, all the actual ToC entries -->
-            <xsl:apply-templates select="." mode="toc-items"/>
+            <xsl:apply-templates select="." mode="customized-toc-items"/>
         </nav>
     </div>
  </xsl:template>
@@ -11477,49 +11475,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Table of Contents Contents (Items) -->
-<!-- Includes "active" class for enclosing outer node              -->
+<!-- Table of Contents Contents (Items)                            -->
+<!-- This is the pre-computed TOC that is on every page. It will   -->
+<!-- be customized later as it is rendered to each page.           -->
+<xsl:variable name="toc-cache-rtf">
+    <xsl:apply-templates select="/" mode="toc-items"/>
+</xsl:variable>
+
 <xsl:template match="*" mode="toc-items">
-    <!-- record the page which is receiving this ToC       -->
-    <!-- pass this along for consultation at each ToC item -->
-    <xsl:variable name="this-page" select="self::*" />
-    <!-- also record the ancestors to the page creating TOC  -->
-    <xsl:variable name="this-page-ancestors" select="ancestor::*" />
     <!-- start recursion at the top, since the  -->
     <!-- ToC is global for the whole document   -->
-    <ul class="structural contains-active toc-item-list">
-        <xsl:apply-templates select="$document-root" mode="toc-item">
-            <xsl:with-param name="possessing-page" select="$this-page"/>
-            <xsl:with-param name="possessing-page-ancestors" select="$this-page-ancestors"/>
-        </xsl:apply-templates>
+    <ul class="structural toc-item-list">
+        <xsl:apply-templates select="$document-root" mode="toc-item"/>
     </ul>
 </xsl:template>
 
 <!-- NB no "book", "article" -->
 <xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item">
-    <xsl:param name="possessing-page"/>
-    <xsl:param name="possessing-page-ancestors"/>
-
     <li>
-        <xsl:apply-templates select="." mode="toc-item-properties">
-            <xsl:with-param name="possessing-page" select="$possessing-page"/>
-            <xsl:with-param name="possessing-page-ancestors" select="$possessing-page-ancestors"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="toc-item-properties"/>
         <!-- Recurse into children divisions (if any)-->
         <xsl:variable name="child-list" select="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon"/>
         <xsl:if test="$child-list">
             <ul>
+                <!-- copy id of this ui for use in customization pass, will remove there -->
+                <xsl:attribute name="uid">
+                    <xsl:value-of select="@unique-id"/>
+                </xsl:attribute>
                 <xsl:attribute name="class">
                     <xsl:text>structural toc-item-list</xsl:text>
-                    <xsl:if test="count($possessing-page-ancestors|.) = count($possessing-page-ancestors)">
-                        <!-- ToC item contains active page -->
-                        <xsl:text> contains-active</xsl:text>
-                    </xsl:if>
                 </xsl:attribute>
-                <xsl:apply-templates select="*" mode="toc-item">
-                    <xsl:with-param name="possessing-page" select="$possessing-page"/>
-                    <xsl:with-param name="possessing-page-ancestors" select="$possessing-page-ancestors"/>
-                </xsl:apply-templates>
+                <xsl:apply-templates select="*" mode="toc-item"/>
             </ul>
         </xsl:if>
     </li>
@@ -11529,38 +11515,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: pass along current page -->
 <!-- Will pickup blocks, etc on unstructured divisions while picking up specialized divisions -->
 <xsl:template match="*" mode="toc-item">
-    <xsl:param name="possessing-page"/>
-    <xsl:param name="possessing-page-ancestors"/>
-
-    <xsl:apply-templates select="*" mode="toc-item">
-        <xsl:with-param name="possessing-page" select="$possessing-page"/>
-        <xsl:with-param name="possessing-page-ancestors" select="$possessing-page-ancestors"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="*" mode="toc-item"/>
 </xsl:template>
 
 <!-- The contents of a division's "li" -->
 <xsl:template match="*" mode="toc-item-properties">
-    <xsl:param name="possessing-page"/>
-    <xsl:param name="possessing-page-ancestors"/>
-
     <xsl:variable name="the-url">
         <xsl:apply-templates select="." mode="url"/>
     </xsl:variable>
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
-
     <xsl:attribute name="class">
         <xsl:text>toc-item</xsl:text>
         <xsl:text> toc-</xsl:text><xsl:value-of select="translate(local-name(), '/', '-')"/>
-        <xsl:if test="count($possessing-page-ancestors|.) = count($possessing-page-ancestors)">
-            <!-- ToC item contains active page -->
-            <xsl:text> contains-active</xsl:text>
-        </xsl:if>
-        <xsl:if test="count($possessing-page|.) = 1">
-            <!-- ToC item equals the page receiving this ToC -->
-            <xsl:text> active</xsl:text>
-        </xsl:if>
+    </xsl:attribute>
+    <!-- copy id of this li for use in customization pass, will remove there -->
+    <xsl:attribute name="uid">
+        <xsl:value-of select="@unique-id"/>
     </xsl:attribute>
     <div class="toc-title-box">
         <a href="{$the-url}" class="internal">
@@ -11577,6 +11549,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </span>
         </a>
     </div>
+</xsl:template>
+
+<!-- Table of Contents per-page customization      -->
+<xsl:template match="*" mode="customized-toc-items">
+    <!-- get a copy of the toc-cach that we will decorate -->
+    <xsl:variable name="toc-contents-rtf">
+        <xsl:copy-of select="$toc-cache-rtf"/>
+    </xsl:variable>
+    <xsl:variable name="toc-contents" select="exsl:node-set($toc-contents-rtf)"/>
+
+    <!-- get the unique id of the current page -->
+    <xsl:variable name="uid" select="@unique-id"/>
+    <!-- use that to find the ToC node for that page -->
+    <xsl:variable name="this-page-node" select="$toc-contents//*[@uid = $uid]"/>
+    <!-- ancestor list will allow us to identify when we are in the path to the page -->
+    <xsl:variable name="this-page-ancestors" select="$this-page-node/ancestor::*" />
+
+    <!-- begin copying ToC at root element -->
+    <xsl:apply-templates select="$toc-contents" mode="customized-toc-item">
+        <xsl:with-param name="this-page" select="$this-page-node"/>
+        <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- boring element (span, etc...) -->
+<xsl:template match="@*|*" mode="customized-toc-item">
+    <xsl:param name="this-page"/>
+    <xsl:param name="this-page-ancestors"/>
+    <xsl:copy>
+        <!-- process all other attributes, nodes, and text-->
+        <xsl:apply-templates select="@*|*|text()" mode="customized-toc-item">
+            <xsl:with-param name="this-page" select="$this-page"/>
+            <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- items that may need to be customized-->
+<xsl:template match="ul|li" mode="customized-toc-item">
+    <xsl:param name="this-page"/>
+    <xsl:param name="this-page-ancestors"/>
+
+    <xsl:variable name="is-ancestor" select="count($this-page-ancestors|.) = count($this-page-ancestors)"/>
+    <xsl:variable name="is-page" select="count($this-page|.) = count($this-page)"/>
+    <xsl:choose>
+        <!-- ToC item contains or is active page -->
+        <xsl:when test="$is-ancestor or $is-page">
+            <!-- need to copy with modified class list -->
+            <xsl:copy>
+                <!-- reconstruct class attr -->
+                <xsl:variable name="old-class" select="@class"/>
+                <xsl:attribute name="class">
+                    <xsl:value-of select="$old-class"/>
+                    <xsl:choose>
+                        <xsl:when test="$is-ancestor">
+                            <xsl:text> contains-active</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text> active</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <!-- filter the uids and class, process all other attributes, nodes, and text-->
+                <xsl:apply-templates select="@*[name() != 'uid' and name() != 'class']|*|text()" mode="customized-toc-item">
+                    <xsl:with-param name="this-page" select="$this-page"/>
+                    <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:when>
+        <!-- ToC item is not on path to active page, simple copy minus uid-->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="@*[name() != 'uid']|*|text()" mode="customized-toc-item">
+                    <xsl:with-param name="this-page" select="$this-page"/>
+                    <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A standalone XML file with ToC necessities  -->
