@@ -10972,9 +10972,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>P100Y</xsl:text>
             <xsl:message>PTX:INFO:   checking all deprecated elements.</xsl:message>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="($author.deprecations.all = 'no') or ($author.deprecations.all = '')">
             <xsl:text>P2Y</xsl:text>
             <xsl:message>PTX:INFO:   checking ONLY the last TWO YEARS of element deprecations.&#xa;Rerun with the string parameter "author.deprecations.all" set to "yes" to check your source against all deprecations.</xsl:message>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>P2Y</xsl:text>
+            <xsl:message>PTX:ERROR:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "no"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
