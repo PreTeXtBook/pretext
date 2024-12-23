@@ -234,7 +234,7 @@
                 </sidebyside>
                 <sidebyside widths="40%" margins="5% 55%" valign="middle">
                     <figure>
-                      <image source="theme-salem.jpg" width="100%">
+                      <image source="theme-salem.png" width="100%">
                           <description>Screenshot of the salem theme</description>
                       </image>
                       <caption><term>salem</term> A theme that is optimized for displaying wide interactive elements (such as Active Code and Parsons).</caption>
