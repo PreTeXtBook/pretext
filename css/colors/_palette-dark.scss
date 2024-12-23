@@ -1,0 +1,113 @@
+// Implements a dark theme single color palette using a --primary-color
+
+@use "sass:meta";
+@use "sass:color";
+@use "sass:map";
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/color-vars.scss" as color-vars;
+
+$primary-color: #6285ca !default;
+$background-color: #23241f !default;
+
+// Grab all color variables, override some for palette
+$colors: map.merge(
+  color-vars.$colors,
+  (
+  "primary-color": $primary-color,
+  "background-color": $background-color,
+
+  // Background of page (gutters if any)
+  "page-color": var(--background-color),
+  // Background of content area
+  "content-background": var(--page-color),
+  // Border around content area - also possibly used for internal borders
+  "page-border-color": var(--background-color-white-25),
+
+  // ------------------------------------------------------------------------------
+  // Banner/nav related
+
+  "doc-title-color": var(--primary-color),
+  "banner-background": $background-color,
+  "navbar-background": var(--background-color-gray-15),
+  "footer-background": var(--background-color-black-10),
+
+  // ------------------------------------------------------------------------------
+  // TOC related
+
+  "toc-border-color": #555,
+  "toc-text-color": var(--body-text-color),
+
+  // highlight styles are used for hover/active states
+  "tocitem-highlight-background": var(--primary-color-gray-5),
+  // "tocitem-highlight-text-color": white,
+  "tocitem-highlight-text-color": var(--background-color-black-50),
+  
+  "tocitem-active-background": var(--primary-color-gray-5),
+  // "tocitem-active-text-color": white,
+  "tocitem-active-text-color": var(--background-color-black-50),
+
+  "toclevel1-background": var(--background-color-gray-10),
+  "toclevel1-text-color": var(--primary-color-white-40),
+  "toclevel2-background": var(--toclevel1-background),
+  "toclevel2-text-color": var(--toclevel1-text-color),
+  "toclevel3-background": var(--content-background),
+  "toclevel3-text-color": var(--toc-text-color),
+
+  // ==============================================================================
+  // Content
+  // ==============================================================================
+
+  // ------------------------------------------------------------------------------
+  // Text & titles
+
+  "body-text-color": #f2f2f2,
+  "body-title-color": var(--primary-color-white-20),
+  "byline-color": var(--background-color-white-50),
+  
+  "ptx-image-bg": white,
+
+  "activated-content-bg": rgba(255, 237, 185, 20%),
+
+  // ------------------------------------------------------------------------------
+  // Links & knowls
+
+  "link-text-color": var(--primary-color-white-10),
+  "link-active-background": var(--background-color-gray-30),
+  "link-active-text-color": var(--primary-color-white-40),
+  "link-alt-text-color": var(--link-text-color),
+  "link-alt-active-background": var(--link-active-text-color),
+  "knowl-link-color": var(--doc-title-color),
+  "knowl-background": var(--background-color-black-10),
+  "knowl-border-color": var(--background-color-white-20),
+  "knowl-nested-1-background": var(--background-color-gray-10),
+  "knowl-nested-2-background": var(--background-color-black-10),
+  "knowl-nested-3-background": var(--background-color-gray-10),
+  "knowl-nested-4-background": var(--background-color-black-10),
+
+  // ------------------------------------------------------------------------------
+  // Groupings (assemblages, etc...)
+
+  // ------------------------------------------------------------------------------
+  // Buttons & Widgets
+  "button-background": var(--background-color-gray-15),
+  "button-border-color": var(--background-color-white-25),
+  "button-hover-background": var(--primary-color),
+  "button-text-color": var(--body-text-color),
+  "code-inline": var(--background-color-gray-20),
+  )
+);
+
+
+// Compute color blends and add them as variables
+$blends: colorHelpers.get-blends('background-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);
+
+// Compute color blends and add them as variables
+$blends: colorHelpers.get-blends('primary-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);

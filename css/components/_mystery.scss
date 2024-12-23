@@ -1,0 +1,877 @@
+// Chunks of code that seem like one off fixes for books that may not exist
+// This file is not included anywhere else - kept around temporarily for reference
+
+.APEXlogo {
+  white-space: nowrap;
+}
+.APEXlogo .A {
+  margin-right: -0.07em;
+}
+.APEXlogo .P {
+  margin-right: -0.33em;
+  position: relative;
+  top: -0.30em;
+}
+.APEXlogo .E {
+  position: relative;
+ top: 0.33em;
+}
+
+
+#aboelkins-ACS .ptx-main .ptx-content > section:first-of-type > section:first-of-type > .project-like:first-of-type li {
+  font-size: 300%
+}
+
+.toolBPanel {
+    overflow: hidden !important;
+}
+.toolBPanel:hover {
+    overflow: auto !important;
+}
+
+.unprocessed {
+    padding: 8px;
+    background-color: rgb(255,230,230)
+}
+
+.unprocessed .unprocessed {
+    margin: 8px;
+    background-color: rgb(255,200,255)
+}
+
+.unprocessed .unprocessed .unprocessed {
+    margin: 8px;
+    background-color: rgb(205,205,255)
+}
+
+
+.ptx-navbar .preferences_menu_holder .active  > li {
+  color: #ddd;
+}
+.ptx-navbar .preferences_menu_holder > ol > li:focus {
+  background: #eef;
+  border: 2px solid #909;
+  padding: 2px 24px 2px 8px;
+}
+.ptx-navbar .preferences_menu_holder > ol > li > ol > li:focus {
+  background: #eef;
+  border: 2px solid #909;
+  padding: 4px 4px 2px 4px;
+}
+
+.ptx-navbar .preferences_menu_holder .active .selected {
+  background: #eef;
+  color: #111;
+}
+.ptx-navbar .button.user-preferences-button {
+  overflow: visible;
+  display: none;
+}
+.preferences_menu_holder {
+  z-index: 30;
+  background: #fee;
+  color: #222;
+  position: absolute;
+  left: -11em;
+  top: 4em;
+}
+.preferences_menu_holder ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.preferences_menu_holder > ol {
+  width: 12.5em;
+}
+.preferences_menu_holder > ol > li {
+  padding: 4px 26px 4px 10px;
+}
+.preferences_menu_holder ol li ol {
+  z-index: 40;
+  position: absolute;
+  left: 13em;
+  top: -2em;
+  background: #fee;
+}
+.preferences_menu_holder ol li ol li {
+  padding: 6px 6px 4px 6px;
+  display: flex;
+  align-items: center;
+}
+.preferences_menu_holder ol.fonts:not(.hidden) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.preferences_menu_holder ol.fonts li:nth-child(8n+1),
+.preferences_menu_holder ol.fonts li:nth-child(8n+2),
+.preferences_menu_holder ol.fonts li:nth-child(8n+3),
+.preferences_menu_holder ol.fonts li:nth-child(8n+4) {
+    background-color: #eff;
+}
+.preferences_menu_holder ol.fonts li:nth-child(4n+2) {
+ width: 4em;
+ justify-content: center;
+ text-align: center;
+ align-items: center;
+}
+.preferences_menu_holder ol.fonts li:nth-child(4n+1) {
+  padding-left: 14px;
+}
+
+.preferences_menu_holder .wrap_to_submenu {
+  float: right;
+  line-height: 0.95em;
+  margin-right: -7px;
+}
+.preferences_menu_holder .to_submenu {
+  position: absolute;
+}
+.preferences_menu_holder .avatars li {
+  font-size: 200%;
+  text-align: center;
+}
+.preferences_menu_holder .fontfamily .name {
+  margin-right: 2em;
+}
+.preferences_menu_holder .fontfamily .sample {
+  margin-left: auto;
+}
+.preferences_menu_holder .fonts .byunits {
+  font-size: 80%;
+  margin-bottom: -0.3em;
+}
+#choose_topic {
+  background: #eef;
+}
+.ffcheck,
+.atmospherecheck,
+.avatarcheck,
+.rulercheck,
+.motioncheck {
+  width: 1em;
+  margin-left: 0.2em;
+  margin-right: 0.7em;
+  font-size: 11pt;
+}
+
+.preferences_menu_holder .moveQ {
+  padding-top: 0.5em;
+  border-top: 0.3em solid #eef;
+}
+.preferences_menu_holder .moveQ,
+.preferences_menu_holder .moveQ ~ li {
+  background: #efe;
+}
+
+
+
+// No sign of continuation class
+.para.continuation {
+  margin-top: 0;
+}
+pre + .para.continuation,
+pre + form,
+div + form {
+  margin-top: 1em;
+}
+ul + .para.continuation,
+ol + .para.continuation,
+dl + .para.continuation {
+  margin-top: 0.75em;
+}
+
+
+// theoretically in colophon, but do not match actual html
+section .para.credit + .para.credit {
+  margin-top: 0.25em;
+}
+section .para.credit > .title {
+  font-weight: 700;
+  margin-right: 0.5em;
+}
+
+// No sign of contributors class
+.frontmatter .contributors, .book .contributors {
+  text-align: center;
+  font-style: normal;
+}
+
+// exercise-stage??
+article .exercise-stage {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  color: inherit;
+  font-size: 100%;
+  margin-top: 0.4em;
+}
+
+
+// .status ???
+.discussion-like.status > .heading {
+  display: none;
+}
+.discussion-like.status > .heading + .para,
+.discussion-like.status > .para {
+  font-style: italic;
+  display: block;
+  padding-left: 1em;
+}
+
+
+// schema doesn't allow for title in paragraph?
+ .paragraphs .para .title {
+  font-family: var(--font-headings);
+  font-size: 1.125em;
+  font-weight: 700;
+}
+
+
+
+// ---------------------------------------------------
+// bug chunk of styles for older style knowls
+
+
+// This entire section causes issues with non-white backgounds. Can't identify actual problem it solves
+// /* show wide equation overflow even when no scroll bars,
+// from Jiří Lebl */
+// .MJXc-display, .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
+// pre.prettyprint,
+// pre.plainprint,
+// pre.console,
+// .code-box {
+
+//     // background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
+//     // background-position: left center, right center, left center, right center;
+//     // background-repeat: no-repeat;
+//     // background-color: inherit;
+//     // background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+//     // background-attachment: local, local, scroll, scroll;
+// }
+// .knowl-output .MJXc-display {
+//     background-image: linear-gradient(to right, var(--knowl-background), var(--knowl-background)), linear-gradient(to right, var(--knowl-background), var(--knowl-background)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowl-background)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowl-background));
+// }
+// /* this should have a variable name, maybe? */
+// .knowl-output.original .MJXc-display {
+//     background: inherit;
+// }
+// .assemblage-like .MJXc-display {
+// /*
+//     background-image: none;
+//     background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+// */
+//     background-image: linear-gradient(to right, var(--assemb-body-background), var(--assemb-body-background)), linear-gradient(to right, var(--assemb-body-background), var(--assemb-body-background)), linear-gradient(to right, rgba(0,0,0,.25), var(--assemb-body-background)), linear-gradient(to left, rgba(0,0,0,.25), var(--assemb-body-background));
+// }
+// .knowl-output .knowl-output .MJXc-display {
+//     background-image: none;
+//     background-image: linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,243,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,243,0));
+// }
+// .knowl-output .knowl-output .knowl-output .MJXc-display {
+//     background-image: none;
+//     background-image: linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,243,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,243,254,0));
+// }
+
+
+
+/* not sure where this was being used, but it made short knowls
+ * look bad, like the hint here:
+ * SAFurtherReading.html
+*/
+.knowl-output .knowl-content > *:last-child:not(.incontext) {
+  margin-bottom: 0.5em;
+}
+.knowl-output .knowl .knowl-content > .solution-like,
+.knowl-output .knowl .knowl-content > .solution-like:not(.incontext) {
+  margin-bottom: 0.15em;
+}
+.knowl-output .knowl .knowl-content > .solution-like.hint {
+  border-left: 1px solid #0f0;
+  padding-left: 0.35em;
+  background: #efe;
+}
+.knowl-output .knowl .knowl-content > .solution-like.answer {
+  border-left: 2px solid #00f;
+  padding-left: 0.35em;
+  background: #eef;
+}
+.knowl-output .knowl .knowl-content > .solution-like.solution {
+  border-left: 3px solid #c0c;
+  padding-left: 0.5em;
+  background: #fef;
+}
+
+.knowl-content > article:first-child,
+.knowl-content > .solution-like:first-child {
+/* padding, not margin, to get colored background (and not be absorbed) */
+  padding-top: 0.25em;
+}
+
+
+.hidden-knowl-wrapper [data-knowl]::after, .hidden-knowl-wrapper [data-knowl]:hover::after, .hidden-knowl-wrapper .active[data-knowl]::after {
+  right: 7px;
+}
+
+
+
+.exercisegroup .exercisegroup-exercises.cols1 .knowl-output {
+  display: block;
+}
+
+.standalone.worksheet article > .knowl-output.original {
+    margin: 0;
+}
+
+.cols2 .knowl-output, .cols3 .knowl-output, .cols4 .knowl-output, .cols5 .knowl-output, .cols5 .knowl-output {
+    width: 100%;
+}
+
+.standalone.worksheet .knowl-content {
+    padding: 0;
+}
+
+// ---------------------------------------------------
+
+// Obsoluete mathjax styling?
+
+
+/* maybe the remainder of this case is subsumed by the above,
+   and also does not apply to MJ3 */
+   .mjx-chtml.MJXc-display {
+    /*Allow users on smaller screens to scroll equations*/
+    /*horizontally when they don't fit on the screen*/
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  #MathJax_ZoomFrame {
+    position: static;
+    background: white;
+  }
+  #MathJax_Zoom {
+    background-color: inherit;
+    border: 0;
+    padding: 0;
+    position: absolute;
+    overflow-x: auto;
+    overflow-y: visible;
+    left: 10% !important;
+    max-height: none !important;
+  }
+
+/*  http://sites.wcsu.edu/mbxml/OER_Linear_Alg/glossary.html
+   to fix the extra margin on top of the next term when
+   the previous definition ends in display math
+   May need to make less specific
+*/
+dd .displaymath:last-child .MJXc-display {
+  margin-bottom: 0;
+}
+
+/* Example 4.8 of sample article (compare main page of sample book (4^{th} edition)`*/
+a .heading .mjx-chtml {
+    z-index: 1;
+    background: #fff;
+}
+
+/* solution to Example 4.2.12 in http://spot.pcc.edu/math/orcca-draft/orcca/section-radical-expressions-and-rational-exponents.html
+*/
+.solution ol li > .para:first-child, .solution ol li > .displaymath:first-child {
+  vertical-align: top;
+  display: inline-block;
+  margin-top: 0;
+}
+.solution ol li > .displaymath:first-child .MJXc-display {
+  margin-top: 0;
+}
+
+
+/* to stop things being blue when rendering MathJax with SVG */
+a.mjx-svg-href  {
+  fill: inherit;
+  stroke: inherit;
+}
+
+
+
+// Old UI for sage cell?
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
+  left: 0 !important;
+  top: 0 !important;
+}
+
+
+
+
+// no sign of posterior /* Currently only for Solution to example */
+.posterior .heading {
+  font-weight: normal;
+  font-size: 1.125em;
+  line-height: 1.125em;
+  margin-top: 0;
+}
+/* if hints and solutions are in .posterior, then
+ * some of the above styling does not apply */
+article.exercise-like + .posterior {
+    margin-top: -0.75em;
+}
+// Currently only for Solution to example
+.posterior .heading {
+  font-weight: normal;
+  font-size: 1.125em;
+  line-height: 1.125em;
+  margin-top: 0;
+}
+
+
+
+
+
+
+// Can't find use of .wrap
+figcaption .wrap {
+  margin: 10px;
+  font-size: 100%;
+  text-align: center;
+}
+no sign of wrap class
+&.wrap img {
+  width: 250px;
+}
+figure.wrap {
+  float: right;
+  margin-right: 0;
+  margin-left: 30px;
+}
+figure img.wrap {
+  float: right;
+  margin: 0;
+}
+
+// Permalinks break these and have for years... currently useless
+figure.table-like figcaption:first-child {
+  font-style: oblique;
+  margin-top: 0;
+}
+figure.table-like figcaption:first-child .type,
+figure.table-like figcaption:first-child .codenumber {
+  font-style: normal;
+}
+
+
+// autoterm??
+.autoterm [knowl], .autoterm [knowl]:after {
+  font-weight: inherit;
+  color: inherit;
+  padding: 0;
+  margin-bottom: inherit;
+  border-bottom: inherit;
+  border-bottom-color: inherit;
+}
+.autoterm [knowl]:hover {
+  background: #ffddff;
+  border-top: 2px dotted purple;
+  border-bottom: 1px dotted red;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+
+// floatnav??
+.floatnav {
+  margin-top: 8px;
+  margin-left: 50px;
+}
+
+.floatnav a {
+  padding-left: 3px;
+/*
+*  omitted, because we put a space in the source
+  padding-right: 3px;
+*/
+  margin-right: -1px;
+  color: inherit;
+}
+
+.floatnav a:hover {
+    background: #eeaaff;
+}
+
+
+
+// tt ??
+a > tt {
+  font-size: 110%;
+}
+
+
+
+
+
+/* next is for the old code formatting js */
+pre.prettyprint,
+pre.plainprint {
+  margin-top: 0;
+  padding-left: 15px;
+  border-left: 1px solid #aaa;
+  font-size: 93%;
+  overflow: auto;
+/* preveiously turned off the border and padding from pretty.css */
+}
+
+pre.prettyprint:before,
+pre.plainprint:before {
+  content:'';
+  font-size: 50%;
+  border-top: 1px solid #aaa;
+  display: block;
+  margin-right: auto;
+  margin-left: -15px;
+  width: 2.5em;
+}
+
+
+
+/* math directly adajacent to words is wrapped to avoid bad line breaks */
+.mathword {
+  white-space: nowrap;
+}
+
+
+
+/* Born-hidden example with a very long title */
+/* http://physics.thomasmore.edu/ConnectedPhysics/sss-netforce.html */
+a .heading {
+  white-space: normal;
+}
+
+
+
+.minipage  + .minipage {
+  display: inline-block;
+}
+
+
+// Early attempt at merging Runestone???
+/* Runestone nav for Runestone-wide features */
+.pretext #brand-navbar,
+.pretext .brand-navbar {
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: 1030;
+  height: 50px;
+  border-width: 0 0 1px;
+  top: 0;
+  margin-bottom: 0;
+}
+.pretext #brand-navbar > .container::before,
+.pretext .brand-navbar > .container::before,
+.pretext #brand-navbar > .container::after,
+.pretext .brand-navbar > .container::after {
+  display: none;
+}
+.pretext #brand-navbar + .ptx-masthead,
+.pretext .brand-navbar + .ptx-masthead {
+  margin-top: 50px;
+}
+.pretext #brand-navbar .navbar-collapse.collapse,
+.pretext .brand-navbar .navbar-collapse.collapse {
+  overflow: hidden !important;
+}
+.pretext #brand-navbar ~ .ptx-navbar,
+.pretext .brand-navbar ~ .ptx-navbar {
+  top: 50px;
+}
+@media screen and (max-width: 800px) {
+  .pretext #brand-navbar ~ .ptx-navbar,
+  .pretext .brand-navbar ~ .ptx-navbar {
+    top: auto;
+  }
+}
+
+
+
+
+// does not match any current output from xsl
+hr.ptx-pagebreak {
+  width: 30em;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2.0em;
+  margin-top: 0;
+  height: 4em;
+  border: 0;
+  border-bottom: 1px dashed #ccc;
+}
+
+hr.ptx-pagebreak:after {
+  content: "page";
+  display: inline-block;
+  position: relative;
+  top: 4.0em;
+  font-size: 80%;
+  padding: 0 0.25em;
+  background: white;
+}
+
+
+
+// consecutive headings? need sample
+.exercise-like .task > .heading + .heading {
+  font-weight: 600;  /* should be slightly less bold, but some browsers make it bold */
+}
+.exercise-like .task > .heading + .heading + .para,
+.exercise-like .task > .heading + .heading + div {
+  display: block;
+  margin-top: 0;
+}
+
+
+
+
+// ---------------------------------------------------
+// spacing rules - these were in pretext/pretext_add_on
+// attempting to forgo them with simpler spacing rules
+
+// table + article {
+//     margin-top: 1em;
+// }
+
+
+// .image-box + table,
+// .image-box + .sidebyside > .sbsrow:first-child > .sbspanel > table:first-child {
+//     margin-top: 1.5em;
+// }
+
+
+// section.introduction + section {
+//     margin-top: 2em;
+// }
+
+
+// section section + section {
+//     margin-top: 3em;
+// }
+
+
+// .solution > ol li + li {
+//     margin-top: 0.5em;
+// }
+
+
+// section > ol:last-child,
+// section > ul:last-child {
+//     margin-bottom: 1.5em;
+// }
+
+// .objectives {
+//     margin-bottom: 1.25em;
+// }
+
+
+// li > .heading + ol,
+// li > .heading + ul {
+//   margin-top: 0.25em;
+// }
+
+
+// li > .heading + ol > li:nth-child(1),
+// li > .heading + ul > li:nth-child(1) {
+//   margin-top: 0;
+// }
+
+// li > .heading + ol.cols2 > li:nth-child(2),
+// li > .heading + ul.cols2 > li:nth-child(2) {
+//   margin-top: 0;
+// }
+
+// /* http://spot.pcc.edu/math/APEXCalculus/sec_prod_quot_rules.html
+//  * solution to Example 2.4.14
+//  */
+// .solution ol li {
+//     margin-top: 1em;
+//     padding-left: 0.5em;
+// }
+
+// /*
+// nested tasks. see
+// https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#aBc
+// */
+
+// article.example-like > .heading + .introduction {
+//     display: inline;
+// }
+// article.example-like > .heading + .introduction > .para:first-child {
+//     display: inline;
+// }
+// article.example-like > .exercise-like > .para {
+//     margin-top: 1.25em;
+// }
+
+/* end of nested tasks */
+
+// /*
+//    See 10.1.8c in http://faculty.valpo.edu/calculus3ibl/ch10_01_gradient.html
+// and condider having this replace line 3338 of the general code (which uses .heading + p)
+// */
+// .example-like > .exercise-like > .para:first-of-type {
+//     display: inline;
+// }
+// .example-like > .exercise-like > .aside-like {
+//     margin-top: -3em;
+// }
+// .example-like > .exercise-like > .aside-like.front {
+//     margin-top: 0;
+// }
+
+// don't appear to work due to permalinks. But not needed
+// /* we use .para as a wrapper around some "compound" p, so the
+//    first p in .para is block-like because of the .pare */
+// .para > p:first-child,
+// .para > .para:first-child {
+//     display: inline;
+// }
+
+
+
+// .paragraphs + .paragraphs {
+//   margin-top: 3em;
+// }
+
+
+// /* spacing around and after .para, and around and after article */
+
+// .aside-like > .para:first-child,
+// td > .para:first-child,
+// .solution-like > .para:first-child {
+//     margin-top: 0;
+// }
+// /* for assemblages without a title */
+// .assemblage-like > .para:first-of-type {
+//     margin-top: 0;
+// }
+// .assemblage-like > .heading + .para {
+//     margin-top: 0.25em;
+// }
+// .assemblage-like + .para {
+//     margin-top: 1.75em;
+// }
+
+
+// .para + table {
+//     margin-top: 1em;
+// }
+
+// table tr td .para + .para {
+//     margin-top: 1em;
+// }
+
+// table + .para {
+//     margin-top: 1.5em;
+// }
+
+// .para + figure.figure-like > table {
+//     margin-top: 1em;
+// }
+
+// .para + pre.prettyprint,
+// .para + pre.plainprint {
+//     margin-top: 1.25em;
+// }
+// .para + .code-box {
+//     margin-top: 1.25em;
+// }
+
+// /* 1.25 = ol top + li top ?  looked too big with 0.75 below */
+// .exercise-like .para + ol {
+//   margin-top: 0.5em;
+// }
+
+
+// /* this > may be too restrictive.  The purpose is to not put a
+//    top margin on an article at the top of a knowl */
+// section > article, section > section.paragraphs, .paragraphs > article {
+//     margin-top: 1.25em;
+// }
+// section article + article,
+// section .introduction + article,
+// section .para + article,
+// section .posterior + article {
+//     margin-top: 1.75em;
+// }
+// section article > .introduction + article {
+//     margin-top: 1em;
+// }
+
+// section article > .discussion-like {
+//     margin-top: 1em;
+// }
+// section article > .discussion-like .para {
+//     margin-top: 1em;
+// }
+
+// article + .posterior {
+//     margin-top: 0.5em;
+// }
+// section .para + .tabular-box {
+//     margin-top: 0.75em;
+// }
+// section .tabular-box + .tabular-box {
+//     margin-top: 1.0em;
+// }
+// section .proof,
+// section .hiddenproof {
+//     margin-top: 0.75em;
+// }
+
+// section > pre, .para + pre {
+//     margin-top: 1.25em;
+// }
+
+// ol .para + .para, ul .para + .para {
+//     margin-top: 1em;
+// }
+
+// /* see Ex 29 https://yoshiwarabooks.org/linear-functions.html
+// and ex 2.91 in
+// https://yoshiwarabooks.org/mfg/MathModels.html */
+// .introduction + .sidebyside,
+// .para + .sidebyside,
+// ol + .sidebyside,
+// ul + .sidebyside {
+//     margin-top: 1em;
+// }
+
+
+
+// section .heading + .para,
+// section .title + .para, /* list items have bare .title, not in a .heading */
+// section .heading + .introduction > .para:first-child,
+// section .blob > .para:first-child {
+//     margin-top: 0.25em;
+// }
+
+// /*
+//  * Contents of articles
+//  */
+
+// .conclusion {
+//     margin-top: 1em;
+// }
+// .conclusion > .para:first-child {
+//     margin-top: 0.5em;
+// }
+
+// .exercise-like > ol:first-child,
+// .exercise-like > ul:first-child {
+//     margin-top: 0;
+// }
+
+// .heading + ol, .heading + ul {
+//     margin-top: 0.45em;
+// }
+
+// article .para:first-child {
+//     margin-top: 0;
+// }

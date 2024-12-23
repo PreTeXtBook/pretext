@@ -1,0 +1,17 @@
+
+$border-width: 1px !default;
+
+// apply some borders to the TOC
+.toc-item {
+  border-top: $border-width solid var(--toc-border-color);
+}
+.ptx-toc.focused .toc-title-box > a:hover {
+  border-right: $border-width solid var(--toc-border-color);
+}
+.ptx-toc.focused .toc-expander:is(:hover) {
+    border-left: $border-width solid var(--toc-border-color);
+}
+// Extra border above top level items
+.ptx-toc > .toc-item-list > .toc-item {
+  border-top: $border-width + 1 solid var(--toc-border-color);
+}

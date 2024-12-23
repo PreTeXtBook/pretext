@@ -30,7 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <index-page ref="guide-toc"/>
         <baseurl href="https://pretextbook.org/doc/guide/html/"/>
-        <css style="default" colors="blue_red"/>
+        <css theme="default-modern" palette="blue-red"/>
         <analytics google-gst="UA-48811660-1" statcounter-project="9664088" statcounter-security="6e60c510"/>
         <search variant="reference"/>
     </html>

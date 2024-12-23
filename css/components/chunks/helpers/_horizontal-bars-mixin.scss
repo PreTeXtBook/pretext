@@ -1,0 +1,59 @@
+// These values can be set on @use to avoid repeating values in each @import
+$pad: 0px !default;   //all sides
+$border-color: var(--block-border-color) !default;
+$background-color: var(--content-background) !default;
+$border-width: 3px !default;
+$title-pos: "border" !default; // can be "border", "inside", or "outside"
+$heading-background: var(--content-background) !default;
+$heading-color: var(--body-text-colorolor) !default;
+$font-style: 'normal' !default;
+
+// Generate styles for a box with horizontal rules
+@mixin bars($border-width: $border-width,
+  $style: solid,
+  $border-color: $border-color,
+  $background-color: $background-color,
+  $padding: $pad,
+  $title-pos: $title-pos,
+  $heading-background: $heading-background,
+  $heading-color: $heading-color,
+  $font-style: $font-style
+  )
+{
+    $heading-top: 0;
+    $heading-left: 0;
+    @if $title-pos == "border" {
+        $heading-top: -1.5em;
+        $heading-left: 10px;
+    } @else if $title-pos == "inside" {
+        $heading-top: 0;
+    } @else if $title-pos == "outside" {
+        $heading-top: 3em;
+    }
+
+    &:not(.knowl__content, .born-hidden-knowl) {
+    padding: $padding;
+    border-top: $border-width $style $border-color;
+    border-bottom: $border-width $style $border-color;
+    border-left: none;
+    border-right: none;
+    background-color: $background-color;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    }
+
+
+    & > .heading:first-child {
+        background-color: $heading-background;
+        display: block;
+        color: $heading-color;
+        margin-bottom: 0.5em;
+        // font-size: $font-size;
+        margin-top: $heading-top;
+        margin-left: $heading-left;
+        width: fit-content;
+        padding: 5px 1em;
+        $font-style: $font-style;
+
+  }
+}

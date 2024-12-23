@@ -16,3 +16,4 @@ examples/webwork/minimal/generated/*
 **/cli.log
 **/rsbuild
 **/build
+**/node_modules/

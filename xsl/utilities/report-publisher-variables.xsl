@@ -83,6 +83,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$qrcode-image"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2024-07-21 theme for html build -->
+    <xsl:text>html-theme-name</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$html-theme-name"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>html-theme-options</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$html-theme-options"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- 2024-10-04 LaTeX style xsl -->
     <xsl:text>latex-style</xsl:text>
     <xsl:text> </xsl:text>

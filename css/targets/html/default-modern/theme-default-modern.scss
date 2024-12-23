@@ -1,0 +1,51 @@
+// Variables used by theme. CSSBuilder overrides these by prepending
+// different definitions for these variables to this file before the theme
+// is compiled.
+
+$color-scheme: 'blue-red' !default;
+$primary-color: null !default;
+$secondary-color: null !default;
+$primary-color-dark: #698aa8 !default;
+$background-color-dark: #23241f !default;
+
+@use "sass:map";
+
+// ---------------------------------------------
+// components and layout
+@use 'parts-default';
+@use 'chunks-default';
+@use 'components/pretext' with (
+  $navbar-breakpoint: parts-default.$navbar-breakpoint,
+);
+
+// ---------------------------------------------
+// fonts and colors
+@use 'fonts/fonts-google';
+
+@use "colors/color-helpers" as colorHelpers;
+@use 'colors/palette-dual' as palette-dual with (
+  $color-scheme: $color-scheme,
+  $primary-color: $primary-color,
+  $secondary-color: $secondary-color,
+);
+
+// primary/secondary color defined as determined by palette-dual using
+// $color-scheme, $primary-color, $secondary-color
+$primary-color: map.get(palette-dual.$colors, 'primary-color');
+$secondary-color: map.get(palette-dual.$colors, 'secondary-color');
+
+@use 'colors/palette-dark' as palette-dark with (
+  $primary-color: $primary-color-dark,
+  $background-color: $background-color-dark,
+);
+
+// ---------------------------------------------
+// extra customizations
+
+@use './customization';
+
+// ---------------------------------------------
+// concrete rules / includes that generate CSS
+
+// render the actual colors
+@include colorHelpers.set-root-colors(palette-dual.$colors, palette-dark.$colors);

@@ -1,0 +1,83 @@
+// extra specific to override Runestone margin
+.ptx-content .ptx-runestone-container .runestone {
+  margin: unset;
+  border-radius: 0;
+  border-width: 1px;
+}
+
+// avoid label splitting into multiple lines
+.multiplechoice_section label > .para {
+  display: inline;
+}
+
+// extra specific to override Runestone margin
+.ptx-content .ptx-runestone-container .ac_question { 
+  max-width: var(--base-content-width);
+  margin: 0 auto 10px;
+}
+
+.runestone .runestone_caption {
+  // caption is always just something like "ActiveCode" in PTX
+  display: none;
+}
+
+
+/* to undo Runestone's draganddrop.css */
+.ptx-content .ptx-runestone-container .rsdraggable {
+  font-size: 100%;
+}
+
+// Unsure if still needed
+/* hack for runestone */
+/* to undo Runestone's presentermode.css */
+.ptx-content .bottom {
+    position: unset;
+}
+
+// override Runestone's pre formatting with these extra specific rules
+.ptx-runestone-container .runestone code,
+.ptx-runestone-container .runestone pre {
+  font-size: .93rem;
+  line-height: 1.2;
+  font-family: var(--font-monospace);
+}
+
+// override Runestone's pre formatting with these extra specific rules
+.ptx-runestone-container code[class*="language-"],
+.ptx-runestone-container pre[class*="language-"] {
+  color: black;
+  background: #fdfdfd;
+}
+
+//Fixup datafile captions
+.runestone.datafile {
+  .datafile_caption {
+    background: var(--code-inline);
+    border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+  }
+  img {
+    margin: 0 auto;
+    display: block;
+    border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  }
+  pre, textarea {
+    margin: 0 auto;
+    border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+    background-color: var(--page-color);
+  }
+}
+.runestone.datafile + .program {
+  margin-top: 0;
+}
+
+:root.dark-mode {
+  // Darker styling to match Runesone's code mirror theme
+  .ptx-runestone-container code[class*="language-"],
+  .ptx-runestone-container pre[class*="language-"] {
+    color: white;
+    background: hsl(0, 0%, 8%);
+  }
+}

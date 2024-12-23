@@ -1,0 +1,6 @@
+// underlines to headings
+@use 'components/elements/extras/heading-underlines';
+
+.hide-type .codenumber:not(:empty)::after {
+  content: " -";
+}

@@ -1,0 +1,56 @@
+// Implements a palette with one main --primary-color
+
+@use "sass:meta";
+@use "sass:color";
+@use "sass:map";
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/color-vars" as color-vars;
+
+$primary-color: #2a5ea4 !default;
+
+// Start with values from color-vars
+$colors: map.merge(
+  color-vars.$colors, ()
+);
+
+// Compute color blends and add them as variables
+$blends: colorHelpers.get-blends('primary-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);
+
+// Override some colors
+$colors: map.merge(
+  $colors,
+  (
+    "primary-color": $primary-color,
+
+    "banner-background": "#fafafa",
+
+    "link-text-color": var(--primary-color),
+    "link-active-text-color": var(--primary-color-white-40),
+    "link-active-background": var(--background-color-gray-30),
+    "link-alt-text-color": var(--link-text-color),
+    "link-alt-active-background": var(--link-active-text-color),
+
+    "toc-border-color": var(--primary-color-white-80),
+
+    "toc-text-color": var(--primary-color-black-30),
+
+    "tocitem-active-background": var(--primary-color-white-15),
+    "tocitem-highlight-background": var(--primary-color-white-15),
+
+    "toclevel2-background": var(--primary-color-white-95),
+    "toclevel3-background": var(--primary-color-white-90),
+
+    "doc-title-color": var(--primary-color),
+    "body-title-color": var(--primary-color-black-20),
+    "button-hover-background": var(--primary-color-white-80),
+    "assemb-border-color": var(--primary-color-white-50),
+
+    "block-head-color": white,
+    "knowl-background": var(--primary-color-white-95),
+    "knowl-border-color": var(--primary-color),
+  )
+);

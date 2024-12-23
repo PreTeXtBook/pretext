@@ -1,0 +1,21 @@
+
+// columns are arranged in row-major order to match print output in LaTeX
+:is(.cols2, .cols3, .cols4, .cols5, .cols6) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+// allow a selector to appear in columns
+// see lists and exercises for sample use
+
+@mixin allow-cols($el, $col-gap: 2em) {
+  @for $i from 2 through 6 {
+    .cols#{$i} > #{$el} {
+      width: calc(100% / $i - #{$col-gap});
+      max-width: calc(100% / $i - #{$col-gap});
+      margin-right: $col-gap;
+    }
+  }
+}
+

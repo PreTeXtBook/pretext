@@ -1,0 +1,17 @@
+
+$border-width: 1px !default;
+
+@mixin navbar-btn-borders {
+  .ptx-navbar {
+    .button {
+      border-left-width: $border-width;
+      border-right-width: $border-width;
+      border-color: var(--page-border-color);
+    }
+  
+    & > *:not(:first-child) {
+      //hide double borders
+      margin-left: -1 * $border-width;
+    }
+  }
+}

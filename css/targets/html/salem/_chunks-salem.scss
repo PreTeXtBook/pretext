@@ -1,0 +1,73 @@
+// Standard collection of chunks. This file should only be modified
+// to fix bugs or improve the default-modern theme. If you want to
+// make changes for use in some other theme, create a _chunks-XXX file
+// in that theme's directory.
+
+$border-radius: 2px !default;
+
+// One stop include for default style content blocks
+@use 'components/chunks/asides-floating';
+@use 'components/chunks/codelike';
+@use 'components/chunks/exercises';
+@use 'components/chunks/solutions';
+@use 'components/chunks/sidebyside';
+@use 'components/chunks/discussion-inline';
+
+@use 'components/chunks/knowls' with (
+  $border-radius: $border-radius,
+  $border-width: 1px,
+  $pad: 12px
+);
+
+@use 'components/chunks/helpers/L-mixin';
+@use 'components/chunks/helpers/box-mixin' with ($border-radius: $border-radius);
+@use 'components/chunks/helpers/heading-box-mixin' with (
+  $heading-color: white,
+);
+@use 'components/chunks/helpers/sidebar-mixin' with (
+  $border-width: 4px,
+  $border-radius: 4px,
+);
+@use 'components/chunks/helpers/inline-heading-mixin';
+@use 'components/chunks/helpers/C-box-mixin' with (
+  $heading-color: white,
+  $border-radius: $border-radius,
+  $border-width: 1px,
+  $padding: 12px,
+  $padding-right: 0px
+);
+
+.remark-like {
+  @include sidebar-mixin.box(
+    $background-color: var(--remark-like-body-background),
+    $border-color: var(--remark-like-border-color),
+  );
+}
+
+.assemblage-like {
+  @include box-mixin.box(
+    $border-color: var(--assemblage-like-border-color), 
+    $background-color: var(--assemblage-like-body-background)
+  );
+}
+
+.conclusion,
+.goal-like {
+  @include heading-box-mixin.box(
+    $background-color: var(--goal-like-body-background),
+    $border-color: var(--goal-like-border-color),
+    $heading-background: var(--goal-like-border-color),
+    $heading-color: white
+  );
+}
+
+$c-boxes: "theorem-like", "definition-like", "example-like", "exercise-like", "project-like", "computation-like", "proof-like";
+
+@each $box in $c-boxes {
+  .#{$box} {
+    @include C-box-mixin.box(
+      $border-color: var(--#{$box}-border-color),
+      $heading-background: var(--#{$box}-border-color),
+    );
+  }
+}

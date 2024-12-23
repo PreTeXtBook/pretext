@@ -1,0 +1,65 @@
+// Implements a palette with one main --primary-color
+// More dramatic than _palette-single.scss
+
+@use "sass:meta";
+@use "sass:color";
+@use "sass:map";
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/color-vars" as color-vars;
+
+$primary-color: #2a5ea4 !default;
+
+// Start with values from color-vars
+$colors: map.merge(
+  color-vars.$colors, ()
+);
+
+// Compute color blends and add them as variables
+$blends: colorHelpers.get-blends('primary-color');
+$colors: map.merge(
+  $colors,
+  $blends
+);
+
+$slate: #3a3a3a;
+
+// Override some colors
+$colors: map.merge(
+  $colors,
+  (
+    "primary-color": $primary-color,
+    "doc-title-color": var(--primary-color),
+    "banner-background": #f8f8f8,
+
+    "toc-text-color": var(--primary-color-black-30),
+    "toc-border": var(--primary-color-gray-10),
+
+    "tocitem-highlight-background": $slate,
+    "tocitem-highlight-text-color": #fff,
+    "tocitem-highlight-border-color": $slate,
+
+    "tocitem-active-background": var(--primary-color-white-15),
+
+    "toclevel1-text-color": var(--toc-text-color),
+    "toclevel1-background": var(--content-background),
+
+    "toclevel2-background": var(--primary-color-white-98),
+    "toclevel3-background": var(--primary-color-white-96),
+
+    "link-text-color": var(--primary-color),
+    "link-active-text-color": var(--primary-color),
+    "link-active-background": var(--primary-color-white-96),
+    "link-alt-text-color": var(--link-text-color),
+    "link-alt-active-background": var(--primary-color-white-96),
+
+    "body-title-color": var(--primary-color-black-20),
+    "navbar-background": var(--primary-color),
+    "button-background": var(--primary-color),
+    "button-border-color": $slate,
+    "button-text-color": var(--primary-color-white-90),
+    "button-hover-background": $slate,
+
+    "knowl-background": #f8f8f8,
+    "knowl-border-color": var(--primary-color-gray-80),
+  )
+);
