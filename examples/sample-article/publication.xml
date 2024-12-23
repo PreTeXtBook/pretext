@@ -97,7 +97,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- While testing themes, it can be useful to turn off    -->
         <!-- all knowls. This next line attempts to do so.         -->
         <!-- Uncomment it to activate it.                          -->
-        <knowl proof="no" example="no" example-solution="no" exercise-inline="no"/>
+        <!-- <knowl proof="no" example="no" example-solution="no" exercise-inline="no"/> -->
         <!-- Specify the theme for the HTML.                       -->
         <!-- See the guide for options                             -->
         <css theme="default-modern" palette="blue-red"/>
