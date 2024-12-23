@@ -80,6 +80,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>no</xsl:text>
 </xsl:template>
 
+<!-- The HTML conversion computes a global "universal" Table of    -->
+<!-- Contents for the sidebar.  Then later, for each page it sees  -->
+<!-- some customization.  So we reset the variable here, and that  -->
+<!-- also means the work done in the "toc-items" template never    -->
+<!-- occurs.  (And even better, doing the work was exposing that   -->
+<!-- the "level" template wasn't working right for a "slideshow".) -->
+<xsl:variable name="toc-cache-rtf" select="''"/>
+
 <!-- Write the infrastructure for a page -->
 <xsl:template match="slideshow">
     <xsl:call-template name="converter-blurb-html" />
