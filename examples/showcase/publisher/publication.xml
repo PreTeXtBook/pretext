@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <baseurl href="https://pretextbook.org/examples/pretext-showcase/html" />
         <calculator model="geogebra-classic"/>
-        <css style="default" colors="blue_red"/>
+        <css theme="default-modern" palette="blue-red"/>
     </html>
 
     <!-- Relative path, relative to "main" source file -->
