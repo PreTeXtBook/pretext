@@ -9108,17 +9108,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
             <!-- div is constraint/positioning for contained program/console -->
             <div class="code-box">
-                <xsl:attribute name="style">
-                    <xsl:text>width: </xsl:text>
-                    <xsl:value-of select="$layout/width"/>
-                    <xsl:text>%;</xsl:text>
-                    <xsl:text> margin-left: </xsl:text>
-                    <xsl:value-of select="$layout/left-margin"/>
-                    <xsl:text>%;</xsl:text>
-                    <xsl:text> margin-right: </xsl:text>
-                    <xsl:value-of select="$layout/right-margin"/>
-                    <xsl:text>%;</xsl:text>
-                </xsl:attribute>
+                <!-- only produce inline styles if width has been changed -->
+                <xsl:if test="$layout/width != 100">
+                    <xsl:attribute name="style">
+                        <xsl:text>width: </xsl:text>
+                        <xsl:value-of select="$layout/width"/>
+                        <xsl:text>%;</xsl:text>
+                        <xsl:text> margin-left: </xsl:text>
+                        <xsl:value-of select="$layout/left-margin"/>
+                        <xsl:text>%;</xsl:text>
+                        <xsl:text> margin-right: </xsl:text>
+                        <xsl:value-of select="$layout/right-margin"/>
+                        <xsl:text>%;</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
                 <xsl:apply-templates select="." mode="code-inclusion"/>
             </div>
         </xsl:otherwise>
@@ -9335,12 +9338,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An iframe has @width, @height attributes,  -->
 <!-- specified in pixels                        -->
 
+<!-- Check if author wants to dark mode to propagate into iframe   -->
+<!-- Propogation will only work for iframes on same server as page -->
+<xsl:template match="*" mode="iframe-dark-mode-attribute">
+    <xsl:if test="$b-theme-has-darkmode and @dark-mode-enabled">
+        <xsl:attribute name="data-dark-mode-enabled">true</xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
 <!-- Desmos -->
 <!-- The simplest possible example of this type -->
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9422,6 +9434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9456,6 +9469,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe src="{$full-url}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9489,6 +9503,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9511,6 +9526,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe src="{$location}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9522,6 +9538,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
 
@@ -10499,6 +10516,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="converter-blurb-html-no-date"/>
     <html>
         <xsl:call-template name="language-attributes"/>
+        <xsl:call-template name="html-theme-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
@@ -11286,6 +11304,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
+<xsl:template name="light-dark-button">
+    <button id="light-dark-button" class="light-dark-button button" title="Dark Mode">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'dark_mode'"/>
+        </xsl:call-template>
+        <span class="name">Dark Mode</span>
+    </button>
+</xsl:template>
+
 <xsl:template match="*" mode="print-button"/>
 
 <xsl:template match="worksheet" mode="print-button">
@@ -11307,21 +11334,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <nav id="ptx-navbar">
         <xsl:attribute name="class">
             <xsl:text>ptx-navbar navbar</xsl:text>
-            <xsl:if test="$b-host-runestone">
-                <xsl:text> ptx-runestone-container</xsl:text>
-            </xsl:if>
         </xsl:attribute>
 
-        <!-- Pick an ordering for the nav components based on layout needs -->
-        <xsl:apply-templates select="." mode="primary-navigation-toc" />
-        <xsl:apply-templates select="." mode="primary-navigation-index" />
-        <xsl:apply-templates select="." mode="primary-navigation-search" />
-        <xsl:apply-templates select="." mode="primary-navigation-other-controls" />
-        <xsl:apply-templates select="." mode="primary-navigation-treebuttons" />
-        <xsl:apply-templates select="." mode="primary-navigation-runestone" />
+        <div class="ptx-navbar-contents">
+            <!-- Pick an ordering for the nav components based on layout needs -->
+            <xsl:apply-templates select="." mode="primary-navigation-toc" />
+            <xsl:apply-templates select="." mode="primary-navigation-index" />
+            <xsl:apply-templates select="." mode="primary-navigation-search" />
+            <xsl:apply-templates select="." mode="primary-navigation-other-controls" />
+            <xsl:apply-templates select="." mode="primary-navigation-treebuttons" />
+            <xsl:apply-templates select="." mode="primary-navigation-runestone" />
 
-        <!-- Annotations button was once here, see GitHub issue -->
-        <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+            <!-- Annotations button was once here, see GitHub issue -->
+            <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+        </div>
     </nav>
 </xsl:template>
 
@@ -11355,11 +11381,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="primary-navigation-other-controls">
-    <!-- Button to show/hide the calculator -->
     <span class="nav-other-controls">
+        <!-- Button to show/hide the calculator -->
         <xsl:if test="$b-has-calculator">
             <xsl:call-template name="calculator-toggle" />
             <xsl:call-template name="calculator" />
+        </xsl:if>
+        <xsl:if test="$b-theme-has-darkmode">
+            <xsl:call-template name="light-dark-button" />
         </xsl:if>
     </span>
 </xsl:template>
@@ -12110,21 +12139,21 @@ TODO:
     <a class="pretext-link" href="https://pretextbook.org" title="PreTeXt">
         <div class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="338 3000 8772 6866">
-                <g style="stroke-width:.025in; stroke:black; fill:none">
-                    <polyline points="472,3590 472,9732 " style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/>
-                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:butt;"  d="M 4724,9448 A 4660 4660  0  0  1  8598  9259"/>
-                    <path style="stroke:#000000;stroke-width:174;stroke-linecap:butt;"  d="M 4488,9685 A 4228 4228  0  0  0   472  9732"/>
-                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:butt;"  d="M 4724,3590 A 4241 4241  0  0  1  8598  3496"/>
-                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:round;" d="M 850,3496  A 4241 4241  0  0  1  4724  3590"/>
-                    <path style="stroke:#000000;stroke-width:126;stroke-linecap:round;" d="M 850,9259  A 4507 4507  0  0  1  4724  9448"/>
-                    <polyline points="5385,4299 4062,8125"           style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <polyline points="8598,3496 8598,9259"           style="stroke:#000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <polyline points="850,3496 850,9259"             style="stroke:#000000;stroke-width:126; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <polyline points="4960,9685 4488,9685"           style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <polyline points="3070,4582 1889,6141 3070,7700" style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <polyline points="6418,4582 7600,6141 6418,7700" style="stroke:#000000;stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <polyline points="8976,3590 8976,9732"           style="stroke:#000000;stroke-width:174; stroke-linejoin:miter; stroke-linecap:round;"/>
-                    <path style="stroke:#000000;stroke-width:174;stroke-linecap:butt;" d="M 4960,9685 A 4228 4228  0  0  1  8976  9732"/>
+                <g style="stroke-width:.025in; stroke:currentColor; fill:none">
+                    <polyline points="472,3590 472,9732 " style="stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/>
+                    <path style="stroke-width:126;stroke-linecap:butt;"  d="M 4724,9448 A 4660 4660  0  0  1  8598  9259"/>
+                    <path style="stroke-width:174;stroke-linecap:butt;"  d="M 4488,9685 A 4228 4228  0  0  0   472  9732"/>
+                    <path style="stroke-width:126;stroke-linecap:butt;"  d="M 4724,3590 A 4241 4241  0  0  1  8598  3496"/>
+                    <path style="stroke-width:126;stroke-linecap:round;" d="M 850,3496  A 4241 4241  0  0  1  4724  3590"/>
+                    <path style="stroke-width:126;stroke-linecap:round;" d="M 850,9259  A 4507 4507  0  0  1  4724  9448"/>
+                    <polyline points="5385,4299 4062,8125"           style="stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="8598,3496 8598,9259"           style="stroke-width:126; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="850,3496 850,9259"             style="stroke-width:126; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="4960,9685 4488,9685"           style="stroke-width:174; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="3070,4582 1889,6141 3070,7700" style="stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="6418,4582 7600,6141 6418,7700" style="stroke-width:300; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <polyline points="8976,3590 8976,9732"           style="stroke-width:174; stroke-linejoin:miter; stroke-linecap:round;"/>
+                    <path style="stroke-width:174;stroke-linecap:butt;" d="M 4960,9685 A 4228 4228  0  0  1  8976  9732"/>
                 </g>
             </svg>
         </div>
@@ -12686,15 +12715,18 @@ TODO:
 <!-- Program Listings highlighted by Prism -->
 <xsl:template name="syntax-highlight">
     <xsl:if test="$b-has-program and not($b-debug-react)">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
-        <!-- We could conditionally load the following based on line number -->
-        <!-- requests, but have chosen not to enact that efficiency         -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.css" integrity="sha512-nXlJLUeqPMp1Q3+Bd8Qds8tXeRVQscMscwysJm821C++9w6WtsFbJjPenZ8cQVMXyqSAismveQJc0C1splFDCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha512-93uCmm0q+qO5Lb1huDqr7tywS8A2TFA+1/WHvyiWaK6/pvsFl6USnILagntBx8JnVbQH5s3n0vQZY6xNthNfKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <xsl:if test="contains($html-theme-name, '-legacy')">
+            <!-- Legacy themes rely on external css for prism, but newer ones have it built in -->
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
+            <!-- We could conditionally load the following based on line number -->
+            <!-- requests, but have chosen not to enact that efficiency         -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.css" integrity="sha512-nXlJLUeqPMp1Q3+Bd8Qds8tXeRVQscMscwysJm821C++9w6WtsFbJjPenZ8cQVMXyqSAismveQJc0C1splFDCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
@@ -12878,16 +12910,19 @@ TODO:
 <xsl:template name="fonts">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Tinos:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
-    <!-- DejaVu Serif from an alternate CDN -->
-    <link href="https://fonts.cdnfonts.com/css/dejavu-serif" rel="stylesheet"/>
-    <!-- A variable font from Google, with serifs -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wdth,wght@8..144,50..150,100..900&amp;display=swap" rel="stylesheet"/>
-    <!-- A variable font from Google, sans serif -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&amp;display=swap" rel="stylesheet"/>
-    <!-- NB: not loading (binary) italic axis for variable fonts, tests seem to indicate this is OK -->
     <!-- Material Symbols font used for symbols -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Legacy themes need these fonts, modern ones load them on their own -->
+    <xsl:if test="contains($html-theme-name, '-legacy')">
+            <!-- DejaVu Serif from an alternate CDN -->
+            <link href="https://fonts.cdnfonts.com/css/dejavu-serif" rel="stylesheet"/>
+            <!-- A variable font from Google, with serifs -->
+            <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"></link>
+            <!-- A variable font from Google, sans serif -->
+            <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&amp;display=swap" rel="stylesheet"/>
+            <!-- NB: not loading (binary) italic axis for variable fonts, tests seem to indicate this is OK -->
+            <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&amp;" rel="stylesheet"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Hypothes.is Annotations -->
@@ -12926,9 +12961,12 @@ TODO:
     <xsl:if test="$b-has-mermaid">
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+            let theme = '<xsl:value-of select="$mermaid-theme"/>';
+            if (isDarkMode())
+                theme = 'dark';
             mermaid.initialize({
                 securityLevel: 'loose',
-                theme: '<xsl:value-of select="$publication/common/mermaid/@theme"/>',
+                theme: theme,
             });
         </script>
     </xsl:if>
@@ -12951,16 +12989,7 @@ TODO:
 <!-- CSS header -->
 <xsl:template name="css">
     <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.dir}/pretext.css" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/pretext_add_on.css" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-shellfile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-bannerfile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-navbarfile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-tocfile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-knowlfile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/setcolors.css" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/theme.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <xsl:if test="not($html.css.extra = '')">
@@ -12983,6 +13012,27 @@ TODO:
         <xsl:comment> for testing purposes, and the developer who chose to use it </xsl:comment>
         <xsl:comment> must supply it.                                             </xsl:comment>
         <link href="developer.css" rel="stylesheet" type="text/css" />
+    </xsl:if>
+</xsl:template>
+
+<!-- Inject classes into the root div of a book. Only for used for   -->
+<!-- legacy styles - handles old css@colors and dark-mode disabling  -->
+<xsl:template name="html-theme-attributes">
+    <!-- check for use of old css color sheets -->
+    <xsl:if test="contains($html-theme-name, '-legacy')">
+        <xsl:attribute name="data-legacy-colorscheme">
+            <xsl:choose>
+                <xsl:when test="not($debug.colors = '')">
+                    <xsl:value-of select="$debug.colors"/>
+                </xsl:when>
+                <xsl:when test="not($html.css.colors = '')">
+                    <xsl:value-of select="$html.css.colors"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>default</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
     </xsl:if>
 </xsl:template>
 
