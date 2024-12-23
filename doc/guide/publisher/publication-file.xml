@@ -647,6 +647,8 @@
 
             <p>The <q>legacy</q> stylesheets are still available. Any publication file that references <c>html/css/@style</c> will use the corresponding legacy style sheet (default, crc, wide, oscar-levin) as well as the colors selected for it. However, the full range of configuration is no longer available. If your publisher file mixes legacy style parts in an unexpected way (<c>toc="crc"</c> but <c>sidebar="wide"</c>) you will get one or the other complete style.</p>
 
+            <p>New themes other than <q>default-modern</q> require a build step involving node.js. If you are using the CLI, installing node will be handled for you. If you are using the <c>pretext/pretext</c> script, you will need to manually install node (see <xref ref="node-and-npm"/>) and then, one time, run <c>npm install</c> in the <c>script/cssbuilder</c> directory. Once node is installed, the necessary build script will automatically be invoked when you build a document.</p>
+
             <p>To rapidly test out different themes and options while using the CLI (see <xref ref="processing-CLI-build"/>) you can use <c>pretext build --theme</c> to rebuild the theme without a full book rebuild. If you are using the pretext script (see <xref ref="pretext-script"/>) you can use the flag <c>-c theme</c>. Note that doing this assumes the HTML needed for the different themes is the same. This should generally be the case, but if you encounter odd rendering issues you should do a full rebuild.</p>
 
             <list xml:id="online-style-options-list">
@@ -656,7 +658,7 @@
                         <title>default-modern</title>
                         <p>The following attributes can be set on CSS to modify the appearance of default-modern:
                             <ul>
-                                <li><attr>palette</attr> controls the colors used. Options include: blue-red, blue-green, green-blue, greens, and blues.</li>
+                                <li><attr>palette</attr> controls the colors used. Options include: <c>"blue-red"</c>, <c>"blue-green"</c>, <c>"green-blue"</c>, <c>"greens"</c>, and <c>"blues"</c>.</li>
                                 <li><attr>primary-color</attr> override the primary color set by the palette. This, and all other color attributes, can be in CSS color format (hex, rbg, hsl<etc/>).</li>
                                 <li><attr>secondary-color</attr> override the secondary color set by the palette.</li>
                                 <li><attr>provide-dark-mode</attr> can be set to <c>"no"</c> to disable dark mode on the theme. This may be desirable if the work has significant elements that do not render correctly with a dark background and you are not able to modify them to do so.</li>
@@ -678,7 +680,7 @@
                         <title>salem, denver</title>
                         <p>The following attributes can be set on CSS to modify the appearance of salem and denver.
                             <ul>
-                                <li><attr>palette</attr> controls the colors used. Options include: bold, bold2, primaries, primaries2, ice-fire, earth-sea, leaves, and slate.</li>
+                                <li><attr>palette</attr> controls the colors used. Options include: <c>"bold"</c>, <c>"bold2"</c>, <c>"primaries"</c>, <c>"primaries2"</c>, <c>"ice-fire"</c>, <c>"earth-sea"</c>, <c>"leaves"</c>, and <c>"slate"</c>.</li>
                                 <li><attr>color-main</attr> override the primary color set by the palette.</li>
                                 <li><attr>color-do</attr> override the color used for elements that ask the reader to do something (e.g. an exercise).</li>
                                 <li><attr>color-fact</attr> override the color used for elements that present a fact (e.g. a theorem).</li>

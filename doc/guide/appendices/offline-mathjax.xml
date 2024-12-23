@@ -15,41 +15,13 @@
         <p><pretext/> uses the well-known <latex/> syntax for mathematics.  One fundamental reason for this choice is that the <url href="https://www.mathjax.org/" visual="www.mathjax.org/">MathJax</url> Javascript library is so capable at rendering <latex/> inside of an <init>HTML</init> web page.  Of course, it is not hard to render <latex/> syntax inside of <latex/> output!  But what about output formats that are not processed by <latex/> or Javascript, such as <init>EPUB</init> or braille?  That is where running MathJax offline (locally) comes into play.</p>
     </introduction>
 
-    <section xml:id="node-and-npm">
-        <title>Node and npm</title>
-
-        <p>To run a Javascript program <em>outside</em> a web browser requires a program that can interpret the Javascript language.  A popular choice is <c>node.js</c>, whose executable is simply <c>node</c>.  Programs designed for execution by <c>node</c> often build on other programs.  These are all organized in packages, which can be managed by the Node Package Manager, known as <c>npm</c> for short.  A basic purpose of <c>npm</c> is to manage versions and dependencies among packages.</p>
-
-        <p>So the first step is to install both <c>node</c> and <c>npm</c> on your system.  These programs are meant to be cross-platform, so once you do these two operating-system-specific installations, we can proceed with generic instructions. (2020-11-09: we could add instructions for specific operating systems to other appendices?)</p>
-
-        <p>Now <c>node</c> should be on your path, and you can try <cd>which node</cd> to see if your operating system can locate it automatically.  If not, then you will need to edit your peronal copy of the <c>pretext.cfg</c> configuration file to have the <c>node</c> key provide a path to the executable (see <xref ref="pretext-helpers"/>).</p>
-
-        <p>Some useful <c>npm</c> commands, in the form of examples.</p>
-
-        <table>
-            <title>Useful <c>npm</c> commands</title>
-            <tabular>
-                <row>
-                    <cell><c>npm list</c></cell>
-                    <cell>Full tree of installed packages (local)</cell>
-                </row>
-                <row>
-                    <cell><c>npm list mathjax-full</c></cell>
-                    <cell>Just one package</cell>
-                </row>
-                <row>
-                    <cell><c>npm view speech-rule-engine version</c></cell>
-                    <cell><em>Available</em> version</cell>
-                </row>
-            </tabular>
-        </table>
-    </section>
-
     <section xml:id="install-mathjax">
         <title>MathJax and Speech Rule Engine</title>
         <idx>Speech Rule Engine</idx>
 
-        <p>MathJax is packaged as a <c>node.js</c> program.  A component of MathJax is Speech Rule Engine (<init>SRE</init>), which converts <latex/> to text that represents a spoken version of the mathematics, and to Nemeth braille, a braille code for expressing mathematics.</p>
+        <p>MathJax is packaged as a <c>node.js</c> program. A component of MathJax is Speech Rule Engine (<init>SRE</init>), which converts <latex/> to text that represents a spoken version of the mathematics, and to Nemeth braille, a braille code for expressing mathematics.</p>
+
+        <p>Any <c>node.js</c> script requires installing Node. See <xref ref="node-and-npm"/> for instructions on doing so. Once Node is installed, you can use the following instructions to complete the installation of MathJax and the <init>SRE</init>.</p>
 
         <p>Follow the directions here <em>exactly</em>.  Do not free-style and think some modification will have a better or identical result.  In a terminal, set your working directory with<cd>
             <cline>cd /path/to/mathbook/script/mjsre</cline>
