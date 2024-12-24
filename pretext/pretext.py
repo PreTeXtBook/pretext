@@ -3870,8 +3870,8 @@ def revealjs(
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place CSS and JS in scratch directory
-    copy_html_css_js(tmp_dir)
+    # place JS in scratch directory
+    copy_html_js(tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
