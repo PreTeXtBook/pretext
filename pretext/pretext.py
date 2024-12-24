@@ -3136,10 +3136,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
     # All styles are baked into one of these two files
     if math_format == "kindle":
-        css = os.path.join(get_ptx_xsl_path(), "../css/dist/kindle.css")
+        css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "kindle.css")
         shutil.copy2(css, css_dir)
     if math_format == "svg":
-        css = os.path.join(get_ptx_xsl_path(), "../css/dist/epub.css")
+        css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "epub.css")
         shutil.copy2(css, css_dir)
 
     # EPUB Cover File
@@ -3595,10 +3595,10 @@ def _place_runestone_services(tmp_dir, stringparams):
 
 # Helper to move a prebuilt css theme into the build directory as theme.css
 def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
-    css_src = os.path.join(get_ptx_path(), "css/dist")
+    css_src = os.path.join(get_ptx_path(), "css", "dist")
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
 
-    src = os.path.join(get_ptx_path(), "css/dist/theme-{}.css".format(theme_name))
+    src = os.path.join(get_ptx_path(), "css", "dist", "theme-{}.css".format(theme_name))
     dest = os.path.join(get_ptx_path(), os.path.join(css_dest, "theme.css"))
 
     # ugly to have this here - it exists for more general use in _palette-dual.scss,
