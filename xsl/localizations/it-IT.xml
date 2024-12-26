@@ -159,7 +159,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Capoverso</localization>
     <localization string-id='blockquote'>Citazione</localization>
-    <!-- <localization string-id='pre'>Code Block</localization> -->
+    <localization string-id='pre'>Blocco di codice</localization>
     <!-- Literate programming, a chunk of computer code -->
     <localization string-id='fragment'>Porzione</localization> -->
     <!-- Parts of an exercise and its solution -->
@@ -241,7 +241,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>Edizione</localization>
     <localization string-id='website'>Sito web</localization>
     <localization string-id='copyright'>Copyright</localization>
-    <!-- <localization string-id='keywords'>Keywords</localization> -->
+    <localization string-id='keywords'>Parole chiave</localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>Nel contesto</localization>
