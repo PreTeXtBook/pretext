@@ -45,18 +45,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xi:include href="./bookinfo.xml" /> <!-- ISBN, website, other metadata -->
 
-    <!-- Use the "no-parts" component -->
+    <!-- Use the "with-parts" component -->
     <book xml:id="sample-book" xmlns:xi="http://www.w3.org/2001/XInclude">
         <title><pretext/> Sample Book</title>
         <subtitle>Abstract Algebra (SAMPLE ONLY)</subtitle>
 
-        <xi:include href="./frontmatter.xml" />             <!-- Title Page, Preface, etc. -->
+        <xi:include href="./frontmatter.xml" />                 <!-- Title Page, Preface, etc. -->
 
-        <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
-        <xi:include href="./integers.xml" />                <!-- Integers -->
-        <xi:include href="./groups.xml" />                  <!-- Groups -->
-        <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
-        <xi:include href="./rune.xml" />                    <!-- Runestone -->
+        <!-- Parts are optional, included here for testing   -->
+        <!-- Use "structural" parts for maximum effect      -->
+
+        <part xml:id="part-basics">
+            <title>Basics</title>
+            <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
+            <xi:include href="./integers.xml" />                <!-- Integers -->
+        </part>
+
+        <part xml:id="part-algebra">
+            <title>Algebra</title>
+            <xi:include href="./groups.xml" />                  <!-- Groups -->
+            <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
+            <xi:include href="./rune.xml" />                    <!-- Runestone -->
+        </part>
 
         <!-- Many chapters removed from original AATA, here -->
 

@@ -31,6 +31,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- contents get recycled.                                   -->
     <source>
         <directories external="ext" generated="gen"/>
+        <version include="no-parts"/>
     </source>
 
     <!-- EPUB-Specific Options -->

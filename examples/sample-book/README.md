@@ -16,24 +16,15 @@ PreTeXt `book` with `chapter` and `section`
 - as an example for Runestone, many Runestone features
 are tested in a new chapter devoted to these features.
 
-The `sample-book.xml` file is the main (and only) source file.
-It incorporates two `book` under version control.  So there
-are publication files to control which version is created.
-In other words, `sample-book-no-parts.xml` and
-`sample-book-with-parts.xml` are not meant to be main files.
+The Sample Book comes in several flavors:
 
-### With Parts
+* Wihout any parts, use `sample-book.xml` as the source
+with the "no-parts" publication file.
+* With parts, use `sample-book-parts.xml` as the source
+with the "decorative" or "structural" publication files.
+* As a solution manual, use `sample-book-solutions-manual.xsl`
+as the source, with the "solution-manual" publication file.
 
-`sample-book.xml` can be used with two different publication
-files to get either "decorative" or "structural" parts.
-
-### No Parts
-
-`sample-book.xml` can be used with a publication file so that
-no parts employed.  This would be the vcase for books hosted
-on a Runestone server.
-
-### Solution Manual
-
-There is a separate main file and publication file to get
-a LaTeX/PDF solution manual.
+Other than changes in organization, the only difference in content
+comes in the front matter, where the Preface has cross-references
+to items in parts, or no such cross-references.
