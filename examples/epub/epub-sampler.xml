@@ -40,38 +40,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <author>
                     <personname>Rob Beezer</personname>
                 </author>
-        		<website>
-        		    <name>PreTeXt</name>
-        		    <address>https://www.pretextbook.org</address>
-        		</website>
-        		<copyright>
-        		    <year>2016<ndash />2021</year>
-        		    <holder>Robert A. Beezer</holder>
-        		</copyright>
+                <website>
+                    <name>PreTeXt</name>
+                    <address>https://www.pretextbook.org</address>
+                </website>
+                <copyright>
+                    <year>2016<ndash />2021</year>
+                    <holder>Robert A. Beezer</holder>
+                </copyright>
             </bibinfo>
             <titlepage>
                 <titlepage-items/>
             </titlepage>
-    	    <colophon>
-                    <colophon-items/>
-    	    </colophon>
-	    <biography>
-		<title>Biographical sketch with title</title>
-		<p>This is about the author and has a title.</p>
-	    </biography>
-	    <biography>
-		<p>This sketch doesn't actually have a title in the
-		<pretext /> source.</p>
-	    </biography>
-	    <dedication>
-		<p>To all those who like reflowable electronic
-		books.</p>
-	    </dedication>
-	    <acknowledgement>
-		<p>Mitchel T. Keller has added a number of things to
-		this sampler to continue to stress out the EPUB
-		conversion and make sure it's all working right.</p>
-	    </acknowledgement>
+            <colophon>
+                <colophon-items/>
+            </colophon>
+            <biography>
+                <title>Biographical sketch with title</title>
+                <p>This is about the author and has a title.</p>
+            </biography>
+            <biography>
+                <p>This sketch doesn't actually have a title in the
+                <pretext /> source.</p>
+            </biography>
+            <dedication>
+                <p>To all those who like reflowable electronic books.</p>
+            </dedication>
+            <acknowledgement>
+                <p>Mitchel T. Keller has added a number of things to
+                this sampler to continue to stress out the EPUB
+                conversion and make sure it's all working right.</p>
+            </acknowledgement>
         </frontmatter>
 
         <chapter>
