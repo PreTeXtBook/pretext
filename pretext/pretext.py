@@ -3393,9 +3393,6 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
             for root, dirs, files in os.walk("META-INF"):
                 for name in files:
                     epub.write(os.path.join(root, name))
-            for root, dirs, files in os.walk("css"):
-                for name in files:
-                    epub.write(os.path.join(root, name))
         derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
         log.info("EPUB file deposited as {}".format(derivedname))
         shutil.copy2(epub_file, derivedname)
