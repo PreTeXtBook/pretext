@@ -36,21 +36,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <title>An EPUB Sampler</title>
 
         <frontmatter>
-            <titlepage>
+            <bibinfo>
                 <author>
                     <personname>Rob Beezer</personname>
                 </author>
+        		<website>
+        		    <name>PreTeXt</name>
+        		    <address>https://www.pretextbook.org</address>
+        		</website>
+        		<copyright>
+        		    <year>2016<ndash />2021</year>
+        		    <holder>Robert A. Beezer</holder>
+        		</copyright>
+            </bibinfo>
+            <titlepage>
+                <titlepage-items/>
             </titlepage>
-	    <colophon>
-		<website>
-		    <name>PreTeXt</name>
-		    <address>https://www.pretextbook.org</address>
-		</website>
-		<copyright>
-		    <year>2016<ndash />2021</year>
-		    <holder>Robert A. Beezer</holder>
-		</copyright>
-	    </colophon>
+    	    <colophon>
+                    <colophon-items/>
+    	    </colophon>
 	    <biography>
 		<title>Biographical sketch with title</title>
 		<p>This is about the author and has a title.</p>
