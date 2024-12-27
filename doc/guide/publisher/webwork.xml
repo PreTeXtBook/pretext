@@ -71,7 +71,7 @@
   </section>
 
   <section xml:id="webwork-renderer-static-processing">
-    <title>Using a local copy of PG</title>
+    <title>Using a PG rendering service</title>
     <p>
       <webwork/> problems can be processed using a standalone PG renderer. At this time, this
       feature is under development. There is one functional renderer on an AIM server. We hope to
