@@ -54,6 +54,10 @@ $centered-content: false !default;
   .logo-link {
     height: 5em;
     display: flex;
+
+    img {
+      max-height:100%; //fix rendering bug on safari with large images
+    }
   }
 
   // // Insert a placeholder icon if the logo-link is empty
