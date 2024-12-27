@@ -1404,12 +1404,14 @@
             ConsoleInput =
                 element input {
                     attribute prompt {text}?,
+                    attribute continuation {text}?,
                     text
                 }
             Console =
                 element console {
                     Component?,
                     attribute prompt {text}?,
+                    attribute continuation {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
                     (

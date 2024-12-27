@@ -1399,6 +1399,9 @@
       <optional>
         <attribute name="prompt"/>
       </optional>
+      <optional>
+        <attribute name="continuation"/>
+      </optional>
       <text/>
     </element>
   </define>
@@ -1409,6 +1412,9 @@
       </optional>
       <optional>
         <attribute name="prompt"/>
+      </optional>
+      <optional>
+        <attribute name="continuation"/>
       </optional>
       <optional>
         <attribute name="width"/>

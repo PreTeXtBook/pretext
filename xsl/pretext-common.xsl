@@ -1705,6 +1705,27 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Determine what string, if any, should be used for input "continuation" -->
+<!-- Each line after the first would be prepended by this string -->
+<!-- Looks for @continuation in the input, fall back to @continuation in console -->
+<!-- Else default to empty. (Or should it be a number of spaces equaling the prompt?) -->
+<xsl:template match="console/input" mode="determine-console-continuation">
+    <xsl:choose>
+        <xsl:when test="@continuation">
+            <xsl:value-of select="@continuation"/>
+        </xsl:when>
+        <!-- parent is guaranteed to be a "console", which can    -->
+        <!-- carry a default continuation for the entire session  -->
+        <xsl:when test="parent::console/@continuation">
+            <xsl:value-of select="parent::console/@continuation"/>
+        </xsl:when>
+        <!-- Default is empty -->
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ################# -->
 <!-- Preformatted Text -->
 <!-- ################# -->

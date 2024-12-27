@@ -9231,6 +9231,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="runestone-to-interactive"/>
 </xsl:template>
 
+<!-- Console/input helper -->
+<!-- A single line of input, possibly with "prefix" (prompt or continuation) -->
+<!-- prefix gets wrapped in span if not empty -->
+<xsl:template name="input-line-with-prompt">
+    <xsl:param name="text" />
+    <xsl:param name="prefix" />
+    <xsl:if test="not($prefix = '')">
+        <span class="prompt unselectable">
+            <xsl:value-of select="$prefix"/>
+        </span>
+    </xsl:if>
+    <b>
+        <xsl:value-of select="$text" />
+    </b>
+</xsl:template>
+
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console" mode="code-inclusion">
@@ -9241,20 +9257,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="console/input">
-    <!-- place prompt in a span (but not if empty) -->
     <xsl:variable name="prompt">
         <xsl:apply-templates select="." mode="determine-console-prompt"/>
     </xsl:variable>
-    <xsl:if test="not($prompt = '')">
-        <span class="prompt unselectable">
-            <xsl:value-of select="$prompt"/>
-        </span>
-    </xsl:if>
-    <b>
+    <xsl:variable name="continuation">
+        <xsl:apply-templates select="." mode="determine-console-continuation"/>
+    </xsl:variable>
+    <xsl:variable name="sanitized-text">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
-    </b>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$continuation = ''">
+            <xsl:call-template name="input-line-with-prompt">
+                <xsl:with-param name="text" select="$sanitized-text" />
+                <xsl:with-param name="prefix" select="$prompt" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:for-each select="str:tokenize($sanitized-text, '&#xa;')">
+                <xsl:choose>
+                    <xsl:when test="preceding-sibling::token">
+                        <xsl:call-template name="input-line-with-prompt">
+                            <xsl:with-param name="text" select="." />
+                            <xsl:with-param name="prefix" select="$continuation" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="input-line-with-prompt">
+                            <xsl:with-param name="text" select="." />
+                            <xsl:with-param name="prefix" select="$prompt" />
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:for-each>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="console/output">

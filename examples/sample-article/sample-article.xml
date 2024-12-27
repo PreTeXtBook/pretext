@@ -10747,6 +10747,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </console>
             </listing>
 
+            <p>A <tag>console</tag> may specify a continuation symbol, as a prefix on every line but the first.</p>
+
+            <console>
+                <input prompt=">>> ">
+                for x in range(0:20):
+                   print(x)
+                   print("Excellent!")
+                </input>
+                <input prompt=">>> " continuation="... ">
+                for x in range(0:20):
+                   print(x)
+                   print("Excellent!")
+                </input>
+                <!-- Test for empty input. Should create an empty entry. -->
+                <input />
+                <!-- Test for only whitespace input. Should create an empty entry. -->
+                <input> </input>
+                <!-- Test for only whitespace input with newlines. Should create an empty entry. -->
+                <input>
+
+                </input>
+            </console>
+
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
             <p>The next listing is just absurdity, to check various characters from <latex /> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.  We use <c>(*</c> and <c>*)</c> as sequences used to escape embedded <latex/> commands, so we test those also.</p>

@@ -1220,6 +1220,7 @@
       <xs:element name="input">
         <xs:complexType mixed="true">
           <xs:attribute name="prompt"/>
+          <xs:attribute name="continuation"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1232,6 +1233,7 @@
       </xs:sequence>
       <xs:attribute name="component"/>
       <xs:attribute name="prompt"/>
+      <xs:attribute name="continuation"/>
       <xs:attribute name="width"/>
       <xs:attribute name="margins"/>
     </xs:complexType>
