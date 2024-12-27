@@ -2585,7 +2585,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- representations.                                              -->
 <!-- NB: this does not preclude the match below (scrubbing default -->
 <!-- items) from functioning.                                      -->
-<xsl:template match="statement//ul[@form]" mode="webwork-rep-to-static">
+<xsl:template match="statement//ul[@form]|statement//var[@form]" mode="webwork-rep-to-static">
     <ul>
         <!-- duplicate attributes, but for @form -->
         <xsl:apply-templates select="@*[not(name() = 'form')]" mode="repair"/>
