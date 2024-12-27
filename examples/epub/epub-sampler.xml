@@ -88,8 +88,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <title>Two</title>
             <introduction>
                 <p>This is the introduction to the chapter. We put
-		some math <me>\int_a^b f(t)\, dt</me> in here for
-		validation purposes.</p>
+                some math <me>\int_a^b f(t)\, dt</me> in here for
+                validation purposes.</p>
             </introduction>
             <section>
                 <title>A silly section.</title>
@@ -198,16 +198,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Some Images <m>ax^2+bx+c=0</m></title>
             <shorttitle>Some Imagex ax^2+bx+c=0</shorttitle>
-	    <objectives>
-		<ul>
-		    <li>To discuss formats for graphics</li>
-		    <li>To stress test the EPUB conversion with
-		    <m>y=f'(x)</m> math in here</li>
-		</ul>
-	    </objectives>
+            <objectives>
+                <ul>
+                    <li>To discuss formats for graphics</li>
+                    <li>To stress test the EPUB conversion with
+                    <m>y=f'(x)</m> math in here</li>
+                </ul>
+            </objectives>
             <section>
                 <title>Graphics formats <m>f'(x)</m></title>
-		<shorttitle>Graphics formats f'(x)</shorttitle>
+                <shorttitle>Graphics formats f'(x)</shorttitle>
                 <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
                 <figure xml:id="figure-cubic-polynomial">
                     <caption>A cubic polynomial and its derivative</caption>
@@ -423,13 +423,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Index</title>
                 <index-list/>
             </index>
-	    <colophon>
-		<blockquote><p>This document was authored in <pretext
-		/> to stress test conversion to
-		<init>EPUB</init>. Please do not judge its contents,
-		which randomly has some <m>y=e^{ax+b}</m> math in the
-		rear colophon.</p></blockquote>
-	    </colophon>
+            <colophon>
+                <blockquote>
+                    <p>This document was authored in <pretext/>
+                    to stress test conversion to
+                    <init>EPUB</init>. Please do not judge its contents,
+                    which randomly has some <m>y=e^{ax+b}</m> math in the
+                    rear colophon.</p>
+                </blockquote>
+            </colophon>
         </backmatter>
     </book>
 </pretext>
