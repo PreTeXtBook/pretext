@@ -2603,6 +2603,7 @@ em.alert {
 .bib .bibitem + .bibentry {
   display: inline-block;
   width: 90%;
+  margin-top: 0;
 }
 .caption {
   margin-top: 10px;
