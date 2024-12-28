@@ -183,7 +183,7 @@
             </li>
             <li>
               <p>
-                Select a <pretext /> command from the VS Code command pallette, which you can access by clicking the icon in the bottom left of the VS Code window. You can also access this by typing <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>p</kbd> (again, replacing <kbd>CTRL</kbd> with <kbd>CMD</kbd> if you have a Mac).  Start typing <q>pretext</q> to get a list of commands available.
+                Select a <pretext /> command from the VS Code command palette, which you can access by clicking the icon in the bottom left of the VS Code window. You can also access this by typing <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>p</kbd> (again, replacing <kbd>CTRL</kbd> with <kbd>CMD</kbd> if you have a Mac).  Start typing <q>pretext</q> to get a list of commands available.
               </p>  
             </li>
             <li>
@@ -214,7 +214,7 @@
         </p>
 
         <p>
-          The VS Code Live Preview is a good option, but it is buggy when used inside Codespaces.  It seems to help to use the VS Code command pallette to run <c>Live Preview: Show Preview (External Browser)</c>, then close the tab that opens, and start the process over.  You may need to do this a few times before it works. 
+          The VS Code Live Preview is a good option, but it is buggy when used inside Codespaces.  It seems to help to use the VS Code command palette to run <c>Live Preview: Show Preview (External Browser)</c>, then close the tab that opens, and start the process over.  You may need to do this a few times before it works.
         </p>
 
         <p>
