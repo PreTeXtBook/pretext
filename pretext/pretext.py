@@ -4751,41 +4751,46 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
     # NB: there may not be a publication file (pub_file = None)
     # Variables are still computed and should have reasonable default values
 
-    log.debug("determining value of publisher variable '{}'".format(variable))
+    # Only do the work to extract the variable values once and store them
+    # in a dictionary attached to get_publisher_variable.variables. Future
+    # calls will reuse the dictionary.
+    if not hasattr(get_publisher_variable, "variables"):
+        log.debug("determining value of publisher variable '{}'".format(variable))
 
-    # to ensure provided stringparams aren't mutated unintentionally
-    params = params.copy()
+        # to ensure provided stringparams aren't mutated unintentionally
+        params = params.copy()
 
-    if pub_file:
-        params["publisher"] = pub_file
+        if pub_file:
+            params["publisher"] = pub_file
 
-    # construct filename for the XSL to report variable/value pairs
-    reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
+        # construct filename for the XSL to report variable/value pairs
+        reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
 
-    # file to receive result of stylesheet
-    tmp_dir = get_temporary_directory()
-    log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
-    temp_file = os.path.join(tmp_dir, "pub_var.txt")
-    log.debug("file of publisher variables: {}".format(temp_file))
+        # file to receive result of stylesheet
+        tmp_dir = get_temporary_directory()
+        log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
+        temp_file = os.path.join(tmp_dir, "pub_var.txt")
+        log.debug("file of publisher variables: {}".format(temp_file))
 
-    # Apply the stylesheet, with source and publication file
-    xsltproc(reporting_xslt, xml_source, temp_file, None, params)
+        # Apply the stylesheet, with source and publication file
+        xsltproc(reporting_xslt, xml_source, temp_file, None, params)
 
-    # parse file into a dictionary, interrogate with variable
-    pairs = {}
-    with open(temp_file, 'r') as f:
-        for line in f:
-            parts = line.split()
-            # careful: value could be empty string,
-            # then split() returns 1 part only
-            if len(parts) == 1:
-                pairs[parts[0]] = ''
-            else:
-                # value could have spaces, so rejoin other parts
-                pairs[parts[0]] = " ".join(parts[1:])
+        # parse file into a dictionary, interrogate with variable
+        get_publisher_variable.variables = {}
+        with open(temp_file, 'r') as f:
+            for line in f:
+                parts = line.split()
+                # careful: value could be empty string,
+                # then split() returns 1 part only
+                if len(parts) == 1:
+                    get_publisher_variable.variables[parts[0]] = ''
+                else:
+                    # value could have spaces, so rejoin other parts
+                    get_publisher_variable.variables[parts[0]] = " ".join(parts[1:])
 
-    if variable in pairs:
-        return pairs[variable]
+    # Now that get_publisher_variable.variables is populated, use it
+    if variable in get_publisher_variable.variables:
+        return get_publisher_variable.variables[variable]
     else:
         msg = '\n'.join(["the publisher variable '{}' could not be located.",
                         "Did you spell it correctly or does it need implementation?",
