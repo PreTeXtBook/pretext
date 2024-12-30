@@ -3700,10 +3700,13 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         raise e
 
 def check_color_contrast(color1, color2):
-    from coloraide import Color
-    contrast = Color(color1).contrast(color2, method='wcag21')
-    if contrast < 4.5:
-        log.warning("Color " + color1 + " does not have enough contrast with expected background color " + color2 + ". Contrast ratio is " + str(contrast) + " but should be at least 4.5. Adjust your publisher file html/css/variables to ensure sufficient contrast.")
+    try:
+        from colora2ide import Color
+        contrast = Color(color1).contrast(color2, method='wcag21')
+        if contrast < 4.5:
+            log.warning("Color " + color1 + " does not have enough contrast with expected background color " + color2 + ". Contrast ratio is " + str(contrast) + " but should be at least 4.5. Adjust your publisher file html/css/variables to ensure sufficient contrast.")
+    except ImportError:
+        log.warning("The coloraide module is not available and is necessary for checking color contrast. Install it with 'pip install coloraide' or by using the requirements.txt file.")
 
 def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
     theme_name = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-name')
