@@ -1,8 +1,9 @@
-# EPUB Conversion (Preliminary, 2016-05-19)
+# EPUB Sampler
 
-The `build.sh` BASH script shows how to use various tools to create the necessary files for an EPUB version of a PreTeXt `book`.  A small uncomplicated test document is included, which does contain non-trivial mathematics and graphics.
+This short book is designed for testing conversions to EPUB.
+Of course, the Sample Book would be a good, longer,
+test document as well.
 
-The `mathjax-node` program is a major pre-requisite.  See the two different ways to employ it in the script.  See `xsl/pretext-epub.xsl` for a key component.
-
-Everything here is subject to change and possible relocation.
-
+Features that need to be handled differently for EPUB should
+have examples added here.  For example, footnotes and endnotes
+require extra care in EPUB.
