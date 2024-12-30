@@ -61,10 +61,10 @@ $schemes: (
   ),
 );
 
-$color-scheme: 'bold' !default;
+$palette: 'bold' !default;
 
-@if not map.has-key($schemes, $color-scheme) {
-  @error "Unknown color scheme #{$color-scheme} in theme. Valid schemes are: #{map.keys($schemes)}";
+@if not map.has-key($schemes, $palette) {
+  @error "Unknown color scheme #{$palette} in theme. Valid schemes are: #{map.keys($schemes)}";
 }
 
 // color-main is for basic groupings and knowls
@@ -81,19 +81,19 @@ $color-meta: null !default;
 
 // if a color is not set, use the scheme colors
 @if $color-main == null {
-  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-main");
+  $scheme-color: map.get(map.get($schemes, $palette), "color-main");
   $color-main: $scheme-color;
 }
 @if $color-do == null {
-  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-do");
+  $scheme-color: map.get(map.get($schemes, $palette), "color-do");
   $color-do: $scheme-color;
 }
 @if $color-fact == null {
-  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-fact");
+  $scheme-color: map.get(map.get($schemes, $palette), "color-fact");
   $color-fact: $scheme-color;
 }
 @if $color-meta == null {
-  $scheme-color: map.get(map.get($schemes, $color-scheme), "color-meta");
+  $scheme-color: map.get(map.get($schemes, $palette), "color-meta");
   $color-meta: $scheme-color;
 }
 
