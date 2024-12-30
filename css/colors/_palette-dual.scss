@@ -29,10 +29,10 @@ $schemes: (
   ),
 );
 
-$color-scheme: 'red-blue' !default;
+$palette: 'red-blue' !default;
 
-@if not map.has-key($schemes, $color-scheme) {
-  @error "Unknown color scheme #{$color-scheme} for theme. Valid schemes are: #{map.keys($schemes)}";
+@if not map.has-key($schemes, $palette) {
+  @error "Unknown color scheme #{$palette} for theme. Valid schemes are: #{map.keys($schemes)}";
 }
 
 // if primary-color or secondary-color are not set, use the scheme colors
@@ -40,11 +40,11 @@ $primary-color: null !default;
 $secondary-color: null !default;
 
 @if $primary-color == null {
-  $scheme-primary-color: map.get(map.get($schemes, $color-scheme), "primary-color");
+  $scheme-primary-color: map.get(map.get($schemes, $palette), "primary-color");
   $primary-color: $scheme-primary-color;
 }
 @if $secondary-color == null {
-  $scheme-secondary-color: map.get(map.get($schemes, $color-scheme), "secondary-color");
+  $scheme-secondary-color: map.get(map.get($schemes, $palette), "secondary-color");
   $secondary-color: $scheme-secondary-color;
 }
 

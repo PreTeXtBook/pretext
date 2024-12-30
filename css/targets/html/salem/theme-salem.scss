@@ -7,7 +7,7 @@
 // is compiled.
 
 // light colors
-$color-scheme: 'ice-fire' !default; 
+$palette: 'ice-fire' !default;
 $color-main: null !default;
 $color-do: null !default;
 $color-fact: null !default;
@@ -38,7 +38,7 @@ $heading-font: 'Noto Sans, Helvetica Neue, Helvetica, Arial, sans-serif' !defaul
 
 // fancy colors for chunks
 @use 'colors/palette-quad-chunks' as palette-chunks with (
-  $color-scheme: $color-scheme,
+  $palette: $palette,
   $color-main: $color-main,
   $color-do: $color-do,
   $color-fact: $color-fact,

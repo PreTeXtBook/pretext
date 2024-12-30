@@ -2,7 +2,7 @@
 // different definitions for these variables to this file before the theme
 // is compiled.
 
-$color-scheme: 'blue-red' !default;
+$palette: 'blue-red' !default;
 $primary-color: null !default;
 $secondary-color: null !default;
 $primary-color-dark: #698aa8 !default;
@@ -24,13 +24,13 @@ $background-color-dark: #23241f !default;
 
 @use "colors/color-helpers" as colorHelpers;
 @use 'colors/palette-dual' as palette-dual with (
-  $color-scheme: $color-scheme,
+  $palette: $palette,
   $primary-color: $primary-color,
   $secondary-color: $secondary-color,
 );
 
 // primary/secondary color defined as determined by palette-dual using
-// $color-scheme, $primary-color, $secondary-color
+// $palette, $primary-color, $secondary-color
 $primary-color: map.get(palette-dual.$colors, 'primary-color');
 $secondary-color: map.get(palette-dual.$colors, 'secondary-color');
 
