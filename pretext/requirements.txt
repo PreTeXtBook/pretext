@@ -1,6 +1,7 @@
 # Python packages to be installed by pip.
 # From this folder, run `pip install` to ensure all the following are installed.
 
+coloraide
 lxml
 pdfCropMargins >= 1.0.9, < 1.1
 playwright
