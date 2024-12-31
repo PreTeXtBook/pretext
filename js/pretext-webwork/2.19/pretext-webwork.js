@@ -316,6 +316,11 @@ async function handleWW(ww_id, action) {
             buttonContainer.appendChild(reset)
         }
 
+        if (runestone_logged_in && action == 'check') {
+            // Runestone trigger
+            $("body").trigger('runestone_ww_check', data)
+        }
+
         let iframeContents = '<!DOCTYPE html><head>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
             `<script>
