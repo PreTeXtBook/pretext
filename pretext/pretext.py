@@ -3701,7 +3701,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
 
 def check_color_contrast(color1, color2):
     try:
-        from colora2ide import Color
+        from coloraide import Color
         contrast = Color(color1).contrast(color2, method='wcag21')
         if contrast < 4.5:
             log.warning("Color " + color1 + " does not have enough contrast with expected background color " + color2 + ". Contrast ratio is " + str(contrast) + " but should be at least 4.5. Adjust your publisher file html/css/variables to ensure sufficient contrast.")
