@@ -3137,10 +3137,12 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # All styles are baked into one of these two files
     if math_format == "kindle":
         css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "kindle.css")
-        shutil.copy2(css, css_dir)
+        css_map = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "kindle.css.map")
     if math_format == "svg":
         css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "epub.css")
-        shutil.copy2(css, css_dir)
+        css_map = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "epub.css.map")
+    shutil.copy2(css, css_dir)
+    shutil.copy2(css_map, css_dir)
 
     # EPUB Cover File
 

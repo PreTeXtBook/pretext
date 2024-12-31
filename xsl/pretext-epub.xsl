@@ -442,9 +442,11 @@
         <xsl:choose>
             <xsl:when test="$b-kindle">
                 <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
+                <item id="css-kindle-map" href="{$css-dir}/kindle.css.map"            media-type="text/css"/>
             </xsl:when>
             <xsl:otherwise>
                 <item id="css-epub" href="{$css-dir}/epub.css"            media-type="text/css"/>
+                <item id="css-epub-map" href="{$css-dir}/epub.css.map"            media-type="text/css"/>
             </xsl:otherwise>
         </xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
