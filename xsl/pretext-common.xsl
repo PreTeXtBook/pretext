@@ -420,9 +420,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- HTML only, a developer must elect to use this CSS file -->
 <xsl:param name="debug.developer.css" select="'no'"/>
 
-<!-- HTML only, to load a js style browser for testing      -->
- <xsl:param name="debug.style.browser" select="''"/>
-
 <!-- HTML only, testing early-releases of MathJax 4                    -->
 <!-- See: https://github.com/mathjax/MathJax/releases                  -->
 <!-- https://github.com/mathjax/MathJax-src/releases/tag/4.0.0-alpha.1 -->
