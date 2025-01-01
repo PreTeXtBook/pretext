@@ -51,8 +51,6 @@
 
 <xsl:template match="/">
     <xsl:variable name="macro-folder">
-        <xsl:value-of select="$generated-directory"/>
-        <xsl:text>webwork/pg/</xsl:text>
         <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe" />
         <xsl:text>/macros</xsl:text>
     </xsl:variable>

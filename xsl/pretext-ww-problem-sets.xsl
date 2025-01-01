@@ -86,12 +86,6 @@
 <!-- Filename Utilities -->
 <!-- ################## -->
 
-<!-- Overall document title, for root directory name -->
-<xsl:template name="root-directory">
-    <xsl:value-of select="$generated-directory"/>
-    <xsl:text>webwork/pg</xsl:text>
-</xsl:template>
-
 <xsl:template name="project-folder">
     <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe" />
 </xsl:template>
@@ -140,8 +134,6 @@
     <xsl:text>.pg</xsl:text>
 </xsl:template>
 <xsl:template match="webwork[statement|task]" mode="filename">
-    <xsl:value-of select="$generated-directory"/>
-    <xsl:text>webwork/pg/</xsl:text>
     <xsl:apply-templates select="." mode="relative-filename"/>
 </xsl:template>
 
@@ -241,8 +233,6 @@
     <xsl:if test="not($content = '')">
         <!-- filenames -->
         <xsl:variable name="def-filename">
-            <xsl:call-template name="root-directory" />
-            <xsl:text>/</xsl:text>
             <xsl:call-template name="project-folder" />
             <xsl:text>/def/</xsl:text>
             <!-- mandatory filename initial string -->
@@ -263,8 +253,6 @@
             <xsl:text>.pg</xsl:text>
         </xsl:variable>
         <xsl:variable name="header-filename">
-            <xsl:call-template name="root-directory" />
-            <xsl:text>/</xsl:text>
             <xsl:value-of select="$relative-header-filename"/>
         </xsl:variable>
         <!-- set-definition file -->

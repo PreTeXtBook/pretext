@@ -2124,6 +2124,15 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
 
     if pub_file:
         stringparams["publisher"] = pub_file
+        generated_dir, _ = get_managed_directories(xml_source, pub_file)
+    else:
+        generated_dir = None
+
+    if generated_dir is not None:
+        if not (os.path.isdir(os.path.join(generated_dir, 'webwork', 'pg'))):
+            os.makedirs(os.path.join(generated_dir, 'webwork', 'pg'))
+        dest_dir = os.path.join(generated_dir, 'webwork', 'pg')
+
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-ww-problem-sets.xsl")
     tmp_dir = get_temporary_directory()
@@ -2137,10 +2146,10 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
         targz(archive_file, folder)
         shutil.copy2(archive_file, dest_dir)
     else:
-        # with multiple files, we need to copy a tree
-        # see comments at  copy_build_directory()
-        # before replacing with  shutil.copytree()
-        copy_build_directory(folder, os.path.join(dest_dir,folder_name))
+        # With multiple files, we need to copy a tree
+        # copy_build_directory() doesn't work for this and seems like a bug
+        # Could replace copytree() with copy_build_directory() once bug is fixed
+        shutil.copytree(folder, os.path.join(dest_dir, folder_name), dirs_exist_ok=True)
     pg_macros(xml_source, pub_file, stringparams, dest_dir)
 
 
@@ -2158,6 +2167,15 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
     if pub_file:
         stringparams["publisher"] = pub_file
+        generated_dir, _ = get_managed_directories(xml_source, pub_file)
+    else:
+        generated_dir = None
+
+    if generated_dir is not None:
+        if not (os.path.isdir(os.path.join(generated_dir, 'webwork', 'pg'))):
+            os.makedirs(os.path.join(generated_dir, 'webwork', 'pg'))
+        dest_dir = os.path.join(generated_dir, 'webwork', 'pg')
+
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
     tmp_dir = get_temporary_directory()

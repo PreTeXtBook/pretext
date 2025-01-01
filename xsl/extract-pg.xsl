@@ -103,6 +103,17 @@
 <!-- used in the formation of WeBWorK problems                             -->
 <xsl:variable name="design-width-pg" select="'600'" />
 
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--#######################################################################-->
 <!-- Dictionary Architecture                                               -->
 <!--#######################################################################-->
