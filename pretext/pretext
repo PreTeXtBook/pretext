@@ -622,6 +622,7 @@ def main():
                 dest_dir,
                 args.format,
                 method,
+                None,
             )
         else:
             raise NotImplementedError(
@@ -636,6 +637,7 @@ def main():
                 args.xmlid,
                 dest_dir,
                 args.format,
+                None,
             )
         else:
             raise NotImplementedError(
@@ -659,6 +661,8 @@ def main():
                 dest_dir,
                 args.format,
                 method,
+                True,
+                None,
             )
         elif args.format in ["tactile"]:
             ptx.latex_tactile_image_conversion(
