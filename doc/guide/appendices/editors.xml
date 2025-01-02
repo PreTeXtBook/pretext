@@ -14,6 +14,14 @@
         <p>This appendix has information about using various text editors efficiently with <pretext/> source, along with suggestions for spell-checking.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, community support (plug-ins), and cross-platform support (Linux, Mac, and Windows).  So we lead with Sublime Text, but also include Emacs, XML Copy Editor, Atom, Visual Studio Code, and vi/vim.  A summary table of schema-aware editors can be found at <xref ref="editors-supporting-schema" />.</p>
     </introduction>
 
+    <section xml:id="vscode">
+        <title>Visual Studio Code</title>
+        <author>Oscar Levin</author>
+        <p>
+            VS Code is a free and open source, cross platform text editor from Microsoft, with many of the same features as Sublime Text and Atom.  The package <url href="https://marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools" visual="marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools">PreTeXt-tools</url> provides highlighting and snippets for <pretext/> by extending the XML language support of VS Code.
+        </p>
+    </section>
+
     <section xml:id="section-sublime-text">
         <title>Sublime Text</title>
         <author>Dave Rosoff</author>
@@ -333,14 +341,6 @@
         <title>XML Copy Editor</title>
 
         <p>Michael Doob reports on 2017-02-03 that <url href="http://xml-copy-editor.sourceforge.net/" visual="xml-copy-editor.sourceforge.net/">XML Copy Editor</url> works well, in particular on Windows.  This is an open source program, for Windows and a variety of popular Linux distributions, that supports both <init>DTD</init> and <acro>RELAX-NG</acro> schemas.  It is less of a general programmer's editor and more like dedicated tools for working strictly with <init>XML</init> documents.</p>
-    </section>
-
-    <section xml:id="vscode">
-        <title>Visual Studio Code</title>
-        <author>Oscar Levin</author>
-        <p>
-            VS Code is a free and open source, cross platform text editor from Microsoft, with many of the same features as Sublime Text and Atom.  The package <url href="https://marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools" visual="marketplace.visualstudio.com/items?itemName=oscarlevin.pretext-tools">PreTeXt-tools</url> provides highlighting and snippets for <pretext/> by extending the XML language support of VS Code.
-        </p>
     </section>
 
     <section xml:id="vi">
