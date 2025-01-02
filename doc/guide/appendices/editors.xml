@@ -19,9 +19,9 @@
         <author>Dave Rosoff</author>
 
         <introduction>
-            <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June<nbsp />2016.</p>
-            <p>Here we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your MathBook <init>XML</init> project. We also introduce the MBXTools package designed to help MathBook <init>XML</init> authors work more efficiently.</p>
-            <p>Sublime Text 2 and 3 are both available for an unlimited evaluation period, but a licence must be purchased for continued use. I have found the additional features of Sublime Text 3 to be well worth the cost of the license.</p>
+            <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of December<nbsp />2024. However after build 4180 of Sublime Text 4, the PreTeXt support is broken.</p>
+            <p>Here we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your <pretext/> project. We also introduce the no longer maintained PreTeXtual package designed to help <pretext/> authors work more efficiently.</p>
+            <p>Sublime Text 2, 3 and 4 are available for an unlimited evaluation period, but a licence must be purchased for continued use.</p>
         </introduction>
         <subsection xml:id="subsection-settings">
             <title>Settings</title>
@@ -41,10 +41,6 @@
                 <li><p>Open the Sublime Text console (<c>Ctrl-`</c>) and paste the command into the window that appears, then press <c>Enter</c>.</p></li>
             </ol></p>
             <p>Having installed Package Control, you can use the command palette to deploy its commands, such as Install Package, List Packages, and Remove Package. See the documentation for more. A few packages that are especially useful are recommended throughout this section, and summarized in <xref ref="subsection-recommended-packages" />.</p>
-        </subsection>
-        <subsection xml:id="subsection-keyboard-shortcuts">
-            <title>(*) Keyboard Shortcuts</title>
-            <p>To be written.</p>
         </subsection>
         <subsection xml:id="subsection-project-management">
             <title>Project Management</title>
@@ -182,31 +178,31 @@
             <p>Emmet is a very powerful package that can do much more than is outlined here. However, it is by default mostly adapted to writing CSS and HTML. Customizing it to work more directly with MathBook <init>XML</init> is an ongoing project. You can discover more about Emmet by examining the <url href="http://docs.emmet.io/" visual="docs.emmet.io/">Emmet documentation</url> or poking around in the Settings and Keymap files.</p>
         </subsection>
         <subsection xml:id="subsection-mbxtools">
-            <title>MBXTools<mdash />a Sublime Text package for MathBook <init>XML</init></title>
+            <title>PreTeXtual<mdash />a Sublime Text package for <pretext/></title>
             <introduction>
-                <p>MBXTools is a Sublime Text package designed to assist authors using MathBook <init>XML</init>. It is very experimental and may behave unexpectedly.</p>
-                <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools" visual="github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/mbxtools/issues" visual="github.com/daverosoff/mbxtools/issues">creating a GitHub issue</url>.</p>
+                <p>PreTeXtual is a Sublime Text package designed to assist authors using <pretext/>. It is no longer supported and will not work in the latest version of Sublime Text 4.</p>
+                <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools" visual="github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/PreTeXtual/issues" visual="github.com/daverosoff/PreTeXtual/issues">creating a GitHub issue</url>.</p>
             </introduction>
             <subsubsection xml:id="subsubsection-mbxtools-install">
                 <title>Installation</title>
                 <paragraphs xml:id="paragraphs-mbxtools-install-via-package-control">
                     <title>via Package Control</title>
-                    <p>It is recommended to install MBXTools via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterwards).</p>
-                    <p>After Package Control is installed, use the <c>Install Package</c> command to search for the MBXTools package, and select it from the Quick Panel to install. This method of installation allows Package Control to automatically update your installation and show you appropriate release notes.</p>
+                    <p>It is recommended to install PreTeXtual via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterwards).</p>
+                    <p>After Package Control is installed, use the <c>Install Package</c> command to search for the PreTeXtual package, and select it from the Quick Panel to install. This method of installation allows Package Control to automatically update your installation and show you appropriate release notes.</p>
                 </paragraphs>
                 <paragraphs xml:id="paragraphs-mbxtools-install-via-git">
                     <title>via git</title>
-                    <p>You may also install MBXTools via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 3 menu on OS X). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>.</p>
-                    <p>Then, run<cd>git clone https://github.com/daverosoff/MBXTools.git</cd>and restart Sublime Text (probably not necessary).</p>
+                    <p>You may also install PreTeXtual via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 4 menu on OS X). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>.</p>
+                    <p>Then, run<cd>git clone https://github.com/daverosoff/PreTeXtual.git</cd>and restart Sublime Text (probably not necessary).</p>
                 </paragraphs>
             </subsubsection>
-            <subsubsection xml:id="mbxtools-usage">
+            <subsubsection xml:id="pretextual-usage">
                 <title>Usage</title>
-                <p>You can activate the package features by enabling the MathBook <init>XML</init> syntax. The syntax definition looks for <c>.mbx</c> file extensions, which most of us do not use (yet?). If your MathBook <init>XML</init> files end with <c>.xml</c>, you will either need to add a comment to the first line of each file (after the <init>XML</init> declaration):<cd>&lt;!-- MBX --&gt;</cd>or you will need to enable the syntax manually using the command palette. To enable it manually, open a MathBook <init>XML</init> file and press <c>Ctrl+Shift+P</c> (<c>Cmd+Shift+P</c> on <init>OS X</init>) and type <c>pretext</c>. Select <q>Set Syntax: MathBook <init>XML</init></q> from the list of options.</p>
-                <p>You should see the text <q>MathBook <init>XML</init></q> in the lower right corner if you have the status bar visible (command palette: Toggle Status Bar).</p>
+                <p>You can activate the package features by enabling the <pretext/> syntax. The syntax definition looks for <c>.mbx</c> or <c>.ptx</c> file extensions. If your <pretext/> files end with <c>.xml</c>, you will either need to add a comment to the first line of each file (after the <init>XML</init> declaration):<cd>&lt;!-- PTX --&gt;</cd>or you will need to enable the syntax manually using the command palette. To enable it manually, open a <pretext/> file and press <c>Ctrl+Shift+P</c> (<c>Cmd+Shift+P</c> on <init>OS X</init>) and type <c>pretext</c>. Select <q>Set Syntax: PreTeXt</q> from the list of options.</p>
+                <p>You should see the text <q>PreTeXt</q> in the lower right corner if you have the status bar visible (command palette: Toggle Status Bar).</p>
                 <p>There are only a few features implemented so far.<ol>
                     <li>
-                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <attr>xml:id</attr> names.</p>
+                        <p>If you have some sectioning in your PTX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <attr>xml:id</attr> names.</p>
                     </li>
                     <li>
                         <p>If you have been using <attr>xml:id</attr> to label your stuff, try typing <c>&lt;xref ref="</c> (the beginning of a cross-reference). Sublime Text should show you a panel containing all <attr>xml:id</attr> values along with the elements they go with. Choose one to insert it at the caret and close the <c>xref</c> tag. Alternatively, type <c>ref</c> and hit <c>Tab</c> to activate the <c>xref</c> snippet. Then hit <c>Ctrl+l</c> followed by <c>x</c> or <c>Ctrl+l</c> followed by <c>Ctrl+Space</c> to bring up the completions menu. There are several variants of the <c>ref</c> snippet, namely <c>refa</c>, <c>refp</c>, and <c>refpa</c>.</p>
@@ -216,7 +212,7 @@
                     </li>
                 </ol></p>
             </subsubsection>
-            <subsubsection xml:id="mbxtools-known-issues">
+            <subsubsection xml:id="pretextual-known-issues">
                 <title>Known issues</title>
                 <p><ol>
                     <li>
@@ -234,10 +230,6 @@
                     </li>
                 </ol></p>
             </subsubsection>
-        </subsection>
-        <subsection xml:id="subsection-sublime-linter">
-            <title>(*) Sublime Linter</title>
-            <p>To be written.</p>
         </subsection>
         <subsection xml:id="subsection-recommended-packages">
             <title>Recommended Packages</title>
