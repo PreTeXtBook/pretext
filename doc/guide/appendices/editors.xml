@@ -335,22 +335,6 @@
         <p>Michael Doob reports on 2017-02-03 that <url href="http://xml-copy-editor.sourceforge.net/" visual="xml-copy-editor.sourceforge.net/">XML Copy Editor</url> works well, in particular on Windows.  This is an open source program, for Windows and a variety of popular Linux distributions, that supports both <init>DTD</init> and <acro>RELAX-NG</acro> schemas.  It is less of a general programmer's editor and more like dedicated tools for working strictly with <init>XML</init> documents.</p>
     </section>
 
-    <section xml:id="atom">
-        <title>Atom</title>
-        <author>Oscar Levin</author>
-        <p>
-            An open source alternative to Sublime Text with many of the same features is <url href="https://atom.io" visual="atom.io">Atom</url>, made by the folks at GitHub.  Much of the advice given in <xref ref="section-sublime-text"/> also applies to Atom, although the shortcuts and packages might be slightly different.  Atom is available for Windows, Mac, and Linux.
-        </p>
-
-        <p>
-            There are two packages specifically for <pretext /> that can speed up writing.  First, <url href="https://atom.io/packages/language-pretext" visual="atom.io/packages/language-pretext">language-pretext</url> provides syntax highlighting and <em>snippets</em> for <pretext /> documents.  This should highlight math enclosed in <tag>m</tag> tags and in fact allow you to use <latex /> snippets there.  The <pretext /> snippets allow you to, for example, start typing <c>example</c> and upon hitting return or tab, expand to the tags needed to write an example.  Particularly helpful are the snippets for <tag>p</tag>, <tag>li</tag>, and <tag>m</tag>, as these put your cursor in the right spot (hitting tab again should pop you out of the <tag>m</tag> tags).
-        </p>
-
-        <p>
-            Second, <url href="https://atom.io/packages/linter-spell-pretext" visual="atom.io/packages/linter-spell-pretext">linter-spell-pretext</url> provides spell checking that is <pretext/> aware (so it should only check your text, not tags for spelling errors).  This requires the linter-spell package, which in turn requires that you have aspell or hunspell installed.
-        </p>
-    </section>
-
     <section xml:id="vscode">
         <title>Visual Studio Code</title>
         <author>Oscar Levin</author>
