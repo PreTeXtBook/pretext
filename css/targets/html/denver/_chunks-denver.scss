@@ -36,6 +36,15 @@ $chunk-heading-font-size: 1.125em !default;
   @include chunk-heading;
 }
 
+.definition-like {
+  @include heading-box-mixin.box(
+    $background-color: var(--definition-like-body-background),
+    $border-color: var(--definition-like-border-color),
+    $heading-background: var(--definition-like-border-color),
+  );
+  @include chunk-heading;
+}
+
 .assemblage-like {
   @include heading-box-mixin.box(
     $background-color: var(--assemblage-like-body-background),
@@ -173,4 +182,9 @@ $chunk-heading-font-size: 1.125em !default;
       display: none;
     }
   }
+}
+
+.paragraphs,
+article {
+  @include inline-heading-mixin.heading;
 }
