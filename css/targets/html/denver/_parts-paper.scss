@@ -44,7 +44,7 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   $nav-height: $nav-height,
   $navbar-breakpoint: $navbar-breakpoint,
 );
- 
+
 @use 'components/page-parts/toc-overlay' with (
   $sidebar-width: $sidebar-width,
   $navbar-breakpoint: $navbar-breakpoint,
@@ -76,10 +76,8 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
 
 // .ptx-main is the center column - apply page shadow to it
 .ptx-main {
-  // OSCAR - suggestion - if primary is red or something similar
-  //     assemb-border-color ends up looking a bit like a demon glow. Make it page-border-color?
-  // box-shadow: 5px 10px 40px -10px var(--assemb-border-color);
-  box-shadow: 5px 10px 40px -10px var(--page-border-color);
+  // The color of the shadow is mostly gray, but with a slight tint of the primary color
+  box-shadow: 5px 10px 40px -10px var(--primary-color-gray-80);
 }
 
 // visually shift the sidebar off the page
@@ -92,17 +90,26 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
   transform: translateX(-$sidebar-total-width);
   position: absolute;
   left: 0;
-  justify-content: center;
+  justify-content: left;
 }
 
 .ptx-toc {
   margin-top: 36px;
-  border-right: none;
-  border-left: none;
+  border: none;
   position: sticky;
   top: $nav-height;
 }
 
+// Make expanded parts of TOC look more like subsections
+.toc-item.visible {
+  border-left: 3px solid var(--primary-color-white-95);
+  font-size: .95em;
+  padding-left: 10px;
+}
+
+.ptx-page-footer{
+  z-index: 1000;
+}
 
 // Sidebar hits the left side of page - need to lock it in place
 $sidebar-lock-breakpoint: $content-with-padding-width + 2 * $sidebar-total-width;
@@ -151,7 +158,7 @@ $page-border-breakpoint: $content-with-padding-width + $sidebar-width + 2 * $sid
   :root {
     --content-padding: #{$content-side-padding-tight};
   }
-  
+
   // adjust sidebar position to match just its dimensions
   .ptx-sidebar {
     transform: translateX(-$sidebar-width);
@@ -171,7 +178,7 @@ $page-border-breakpoint: $content-with-padding-width + $sidebar-width + 2 * $sid
     width: var(--cur-width);
     margin-left: calc(-0.5 * (var(--cur-width) - 100%));
   }
-  
+
   :is(#{$grouping-elements}) .ptx-runestone-container:has(.parsons_section,.ac_section,.codelens) {
     //no more fudge needed
     margin-left: calc(-0.5 * (var(--cur-width) - 100%));

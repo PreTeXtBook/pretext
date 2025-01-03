@@ -54,12 +54,17 @@ $secondary-color: map.get(palette-chunks.$colors, 'color-meta');
   // $secondary-color: $secondary-color
 );
 
-$palette-chunk-colors: map.merge(palette-chunks.$colors, (
+$custom-colors: map.merge(palette-chunks.$colors, (
   "example-like-body-background": var(--content-background),
   "example-like-border-color": var(--color-main),
+  "toclevel1-background": var(--content-background),
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--content-background),
 ));
 
-$light-colors: map.merge(palette-light.$colors, $palette-chunk-colors);
+
+$light-colors: map.merge(palette-light.$colors, $custom-colors);
+
 
 @use 'colors/palette-dark' as palette-dark with (
   $primary-color: $primary-color-dark,
@@ -68,7 +73,7 @@ $light-colors: map.merge(palette-light.$colors, $palette-chunk-colors);
 
 $dark-colors: map.merge(palette-dark.$colors, (
   "toclevel2-background": var(--content-background),
-  "toclevel3-background": var(--background-color-gray-20),
+  "toclevel3-background": var(--content-background),
   "toclevel1-background": var(--content-background),
 ));
 
