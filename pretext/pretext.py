@@ -3207,7 +3207,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 tex.write(cover_tex)
             latex_cmd = tex_executable_cmd + ["-interaction=batchmode", cover_tex_file]
             cover_pdf_file = os.path.join(tmp_dir, "cover.pdf")
-            pdfpng_executable_cmd = get_executable_cmd("pdfpng")
+            # Presume ImageMagick's "convert" executable is on the path
+            pdfpng_executable_cmd = ["convert"]
             png_cmd = pdfpng_executable_cmd + [
                 "-quiet",
                 "-density",
@@ -3229,10 +3230,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
                 subprocess.run(latex_cmd)
                 subprocess.run(png_cmd)
         except:
-            log.warning("failed to construct cover image using LaTeX and ImageMagick")
-            log.info(
-                'attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
-            )
+            msg = '\n'.join(["failed to construct cover image using LaTeX and ImageMagick",
+                             'perhaps because the "convert" executable is not on your path.'])
+            log.warning(msg)
+            log.info('attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"')
             try:
                 title_size = 100
                 title_font = PIL.ImageFont.truetype("Arial Bold.ttf", title_size)
