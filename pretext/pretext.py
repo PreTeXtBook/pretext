@@ -544,7 +544,7 @@ def individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cm
     shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, pyMuPDF, ext_converter
+    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
 ):
     # stringparams is a dictionary, best for lxml parsing
 
@@ -586,9 +586,9 @@ def latex_image_conversion(
         for latex_image in files:
             try:
                 if ext_converter:
-                    ext_converter(latex_image, outformat, dest_dir, method, pyMuPDF)
+                    ext_converter(latex_image, outformat, dest_dir, method)
                 else:
-                    individual_latex_image_conversion(latex_image, outformat, dest_dir, method, pyMuPDF)
+                    individual_latex_image_conversion(latex_image, outformat, dest_dir, method)
             except Exception as e:
                 failed_images.append(latex_image)
 
@@ -605,7 +605,7 @@ def latex_image_conversion(
         image_list = "\n  " + "\n  ".join(failed_images)
         raise ValueError(msg + image_list)
 
-def individual_latex_image_conversion(latex_image, outformat, dest_dir, method, pyMuPDF):
+def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
 
     # external module, often forgotten
     try:
@@ -613,11 +613,10 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method, 
     except ImportError:
         global __module_warning
         raise ImportError(__module_warning.format("pdfCropMargins"))
-    if pyMuPDF:
-        try:
-            import fitz # for svg and png conversion
-        except ImportError:
-            raise ImportError(__module_warning.format("pyMuPDF"))
+    try:
+        import fitz # for svg and png conversion
+    except ImportError:
+        raise ImportError(__module_warning.format("pyMuPDF"))
 
     if outformat == "source":
         shutil.copy2(latex_image, dest_dir)
@@ -716,22 +715,13 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method, 
             if outformat == "pdf" or outformat == "all":
                 shutil.copy2(latex_image_pdf, dest_dir)
             if outformat == "svg" or outformat == "all":
-                if pyMuPDF:
-                    # create svg using pymupdf:
-                    log.info("converting {} to {}".format(latex_image_pdf, latex_image_svg))
-                    with fitz.Document(latex_image_pdf) as doc:
-                        svg = doc.load_page(0).get_svg_image()
-                    with open(latex_image_svg, "w") as f:
-                        f.write(svg)
-                else:
-                    pdfsvg_executable_cmd = get_executable_cmd("pdfsvg")
-                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    log.debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
-                    svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
-                    log.info(
-                        "converting {} to {} using {}".format(latex_image_pdf, latex_image_svg, svg_cmd)
-                    )
-                    subprocess.call(svg_cmd)
+                # create svg using pymupdf:
+                log.info("converting {} to {}".format(latex_image_pdf, latex_image_svg))
+                with fitz.Document(latex_image_pdf) as doc:
+                    svg = doc.load_page(0).get_svg_image()
+                with open(latex_image_svg, "w") as f:
+                    f.write(svg)
+
                 if not os.path.exists(latex_image_svg):
                     log.error(
                         "There was a problem converting {} to svg and {} was not created".format(
@@ -740,29 +730,13 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method, 
                     )
                 shutil.copy2(latex_image_svg, dest_dir)
             if outformat == "png" or outformat == "all":
-                if pyMuPDF:
-                    # create high-quality png using pymupdf:
-                    log.info("converting {} to {}".format(latex_image_pdf, latex_image_png))
-                    with fitz.Document(latex_image_pdf) as doc:
-                        png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
-                    png.save(latex_image_png)
-                    shutil.copy2(latex_image_png, dest_dir)
-                else:
-                    pdfpng_executable_cmd = get_executable_cmd("pdfpng")
-                    # TODO why this debug line? get_executable_cmd() outputs the same debug info
-                    log.debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
-                    png_cmd = pdfpng_executable_cmd + [
-                        "-density",
-                        "300",
-                        latex_image_pdf,
-                        "-quality",
-                        "100",
-                        latex_image_png,
-                    ]
-                    log.info(
-                        "converting {} to {} using command {}".format(latex_image_pdf, latex_image_png, png_cmd)
-                    )
-                    subprocess.call(png_cmd)
+                # create high-quality png using pymupdf:
+                log.info("converting {} to {}".format(latex_image_pdf, latex_image_png))
+                with fitz.Document(latex_image_pdf) as doc:
+                    png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
+                png.save(latex_image_png)
+                shutil.copy2(latex_image_png, dest_dir)
+
                 if not os.path.exists(latex_image_png):
                     log.error(
                         "There was a problem converting {} to png and {} was not created".format(
