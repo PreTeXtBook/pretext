@@ -2563,12 +2563,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- From the code comment when this was done with Python: "p with -->
 <!-- only a single fillin, not counting those inside an li without -->
 <!-- preceding siblings"                                           -->
-<!-- NB: prefixing the @match here with "webwork-reps/static"      -->
-<!-- (which is known anyway (?)) seems to take the entire assembly -->
-<!-- phase for the WW sample chapter to a runtime of 4 seconds,    -->
-<!-- up from 0.4 seconds.  Removing this line takes the runtime    -->
-<!-- down to 0.12 seconds.                                         -->
-<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li) or (parent::li and preceding-sibling::*)]" mode="webwork-rep-to-static"/>
+<xsl:template match="p" mode="webwork-rep-to-static">
+    <!-- Substantially faster to have a simple match and then selectively -->
+    <!-- filter matched elements. Start with the tests that are cheapest  -->
+    <!-- and hope short-circuit evaluation avoids expensive ones.         -->
+    <xsl:variable name="prune">
+        <xsl:if test="count(fillin)=1 and 
+                      count(*)=1 and 
+                      not(normalize-space(text())) and
+                      (not(parent::li) or preceding-sibling::*)">
+            <xsl:value-of select="true()"/>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:if test="$prune != 'true'">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Some answer forms return a default/initial choice that is -->
 <!-- simply a question-mark.  We scrub them here, with care.   -->
