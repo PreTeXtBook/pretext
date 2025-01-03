@@ -3487,7 +3487,7 @@ def _runestone_services(stringparams, ext_rs_methods):
     # Otherwise, we have a URL pointing to the Runestone server/CDN
     # which may be successful and may not.
     try:
-        if ext_rs_methods:
+        if ext_rs_methods and "debug.rs.version" not in stringparams:
             # ext_rs_methods can be passed by the calling function.
             # It should only accept keyword arguments, including `format` to
             # distinguish between different types of requests.  Here we use
