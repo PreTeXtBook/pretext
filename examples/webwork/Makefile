@@ -165,7 +165,7 @@ mini-latex:
 
 sample-chapter-html:
 	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
-	$(PTX)/pretext/pretext -c latex-image -f svg -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -vv -c latex-image -f svg -p $(SMPCPUB) $(SMPC)
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
 	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
