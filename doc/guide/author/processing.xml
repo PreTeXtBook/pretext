@@ -573,7 +573,6 @@
                         xelatex="xelatex"
                         asy="asy"
                         sage="sage"
-                        pdfpng="convert"
                         pdfeps="pdftops"
                         node="node"
                         liblouis="file2brl" />
