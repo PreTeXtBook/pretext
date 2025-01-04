@@ -12808,7 +12808,7 @@ TODO:
         <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
         <script src="{$html.js.dir}/pretext_search.js"/>
-        <link href="{$html.css.dir}/pretext_search.css" rel="stylesheet" type="text/css"/>
+        <!-- CSS for search is bundled into theme.css -->
     </xsl:if>
 </xsl:template>
 
