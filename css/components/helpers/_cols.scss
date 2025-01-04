@@ -6,14 +6,15 @@
   justify-content: start;
 }
 
-// allow a selector to appear in columns
 // see lists and exercises for sample use
-
 @mixin allow-cols($el, $col-gap: 2em) {
   @for $i from 2 through 6 {
     .cols#{$i} > #{$el} {
-      width: calc(100% / $i - #{$col-gap});
-      max-width: calc(100% / $i - #{$col-gap});
+      // columns are a suggestion enforced by a minimum size
+      // content that needs to be wider can reduce number of columns
+      // in its row
+      min-width: calc(100% / $i - #{$col-gap});
+      width: min-content;
       margin-right: $col-gap;
     }
   }
