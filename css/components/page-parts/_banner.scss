@@ -56,7 +56,11 @@ $centered-content: false !default;
     display: flex;
 
     img {
-      max-height:100%; //fix rendering bug on safari with large images
+      max-height: 100%; //fix rendering bug on safari with large images
+    }
+    img[src$=".svg"] {
+      height: 100%; //svg's in safari don't get a correct width with max-height
+      // don't use this for all images as we wouldn't want to stretch raster images
     }
   }
 
