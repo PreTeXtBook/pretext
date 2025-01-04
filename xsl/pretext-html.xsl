@@ -12178,7 +12178,8 @@ TODO:
 <xsl:template name="pretext-link">
     <a class="pretext-link" href="https://pretextbook.org" title="PreTeXt">
         <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="338 3000 8772 6866">
+            <!-- explicitly only have a height here to prevent rendering issue in Safari -->
+            <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="338 3000 8772 6866">
                 <g style="stroke-width:.025in; stroke:currentColor; fill:none">
                     <polyline points="472,3590 472,9732 " style="stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/>
                     <path style="stroke-width:126;stroke-linecap:butt;"  d="M 4724,9448 A 4660 4660  0  0  1  8598  9259"/>

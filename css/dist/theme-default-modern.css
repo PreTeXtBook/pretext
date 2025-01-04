@@ -159,6 +159,9 @@ body.pretext > a.assistive:focus {
 .ptx-masthead .logo-link img {
   max-height: 100%;
 }
+.ptx-masthead .logo-link img[src$=".svg"] {
+  height: 100%;
+}
 .ptx-masthead .byline {
   color: var(--byline-color);
   font-weight: normal;
