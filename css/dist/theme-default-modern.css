@@ -909,28 +909,28 @@ section dl dd .aside-like.front {
   justify-content: start;
 }
 .cols2 > .exercise-like {
-  width: calc(50% - 2em);
-  max-width: calc(50% - 2em);
+  min-width: calc(50% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols3 > .exercise-like {
-  width: calc(33.3333333333% - 2em);
-  max-width: calc(33.3333333333% - 2em);
+  min-width: calc(33.3333333333% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols4 > .exercise-like {
-  width: calc(25% - 2em);
-  max-width: calc(25% - 2em);
+  min-width: calc(25% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols5 > .exercise-like {
-  width: calc(20% - 2em);
-  max-width: calc(20% - 2em);
+  min-width: calc(20% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols6 > .exercise-like {
-  width: calc(16.6666666667% - 2em);
-  max-width: calc(16.6666666667% - 2em);
+  min-width: calc(16.6666666667% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .exercise-like > .heading {
@@ -1478,28 +1478,28 @@ dl.description-list dl dd {
   }
 }
 .cols2 > li {
-  width: calc(50% - 2em);
-  max-width: calc(50% - 2em);
+  min-width: calc(50% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols3 > li {
-  width: calc(33.3333333333% - 2em);
-  max-width: calc(33.3333333333% - 2em);
+  min-width: calc(33.3333333333% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols4 > li {
-  width: calc(25% - 2em);
-  max-width: calc(25% - 2em);
+  min-width: calc(25% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols5 > li {
-  width: calc(20% - 2em);
-  max-width: calc(20% - 2em);
+  min-width: calc(20% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .cols6 > li {
-  width: calc(16.6666666667% - 2em);
-  max-width: calc(16.6666666667% - 2em);
+  min-width: calc(16.6666666667% - 2em);
+  width: min-content;
   margin-right: 2em;
 }
 .ptx-content ol,
