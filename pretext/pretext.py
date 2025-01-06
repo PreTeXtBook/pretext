@@ -589,6 +589,8 @@ def latex_image_conversion(
                     ext_converter(latex_image, outformat, dest_dir, method)
                 else:
                     individual_latex_image_conversion(latex_image, outformat, dest_dir, method)
+            except ImportError:
+                raise
             except Exception as e:
                 failed_images.append(latex_image)
 
