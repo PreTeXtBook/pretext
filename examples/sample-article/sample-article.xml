@@ -5267,7 +5267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol marker="*I*">
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will not currently be rendered by <url href="https://en.wikipedia.org/wiki/WebKit">WebKit</url>-based browsers (such as Safari) when viewing HTML output.<ol marker="*I*">
                     <li><p>Level 1, first.</p></li>
                     <li><p>Level 1, second.<ol marker="++A">
                             <li><p>Level 2, first.</p></li>
