@@ -211,6 +211,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Here we assume there is at most one                      -->
 <xsl:variable name="the-index"          select="($document-root//index)[1]"/>
 
+<!-- ol markers                                                 -->
+<!-- Make a master list of all author-supplied ol marker styles -->
+<xsl:variable name="ol-markers">
+    <ol-markers>
+        <xsl:apply-templates select="$document-root//ol[@marker]" mode="ol-markers" />
+    </ol-markers>
+</xsl:variable>
+<xsl:key name="marker-key" match="ol-marker" use="concat(@value,@level)" />
+
+
 <!-- ######## -->
 <!-- WeBWorK  -->
 <!-- ######## -->
@@ -325,6 +335,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- subsetting? don't bother (for now) -->
     <xsl:if test="not($b-subsetting)">
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
+    </xsl:if>
+    <!-- custom ol marker css production -->
+    <xsl:if test="not($b-subsetting)">
+        <xsl:call-template name="ol-marker-styles"/>
     </xsl:if>
 </xsl:template>
 
@@ -5550,8 +5564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Utility templates to translate PTX              -->
 <!-- enumeration style to HTML list-style-type       -->
-<!-- NB: this may not be needed any more             -->
-<xsl:template match="ol" mode="html-list-class">
+<xsl:template match="ol|ol-marker" mode="html-list-class">
     <xsl:variable name="mbx-format-code" select="./@format-code" />
     <xsl:choose>
         <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
@@ -5581,6 +5594,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Utility template to determine           -->
+<!-- marker style class for an ol list       -->
+<xsl:template match="ol[@marker]" mode="ol-marker-class">
+    <xsl:variable name="marker-value" select="./@marker" />
+    <xsl:variable name="level" select="./@ordered-list-level" />
+    <xsl:for-each select="exsl:node-set($ol-markers)">
+        <!-- can take the first marker node with matching   -->
+        <!-- key as all others will be identical            -->
+        <xsl:apply-templates select="key('marker-key', concat($marker-value,$level))[1]" mode="ol-marker-class" />
+    </xsl:for-each>
+</xsl:template>
+
 <!-- Lists themselves -->
 <!-- Hard-code the list style, trading -->
 <!-- on match in label templates.      -->
@@ -5602,6 +5627,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{local-name(.)}">
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
+            <xsl:variable name="ol-marker-class">
+                <xsl:choose>
+                    <xsl:when test="self::ol/@marker">
+                        <xsl:apply-templates select="." mode="ol-marker-class" />
+                    </xsl:when>
+                    <xsl:when test="self::ol and $mbx-format-code = 'a' and @ordered-list-level = '1'">
+                        <xsl:text>lower-alpha-level-1</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="not($ol-marker-class = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$ol-marker-class"/>
+            </xsl:if>
             <xsl:variable name="cols-class-name">
                 <!-- HTML-specific, but in pretext-common.xsl -->
                 <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
@@ -5614,57 +5653,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
+        <xsl:if test="$mbx-format-code = '0'">
+            <xsl:attribute name="start">
+                <xsl:text>0</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="li">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 
-<!-- Markers -->
-<xsl:template match="ol" mode="ol-marker-style">
+<xsl:template match="ol" mode="ol-markers">
     <xsl:variable name="mbx-format-code" select="./@format-code" />
-    <xsl:variable name="mbx-html-id">
-        <xsl:apply-templates select="." mode="html-id" />
-    </xsl:variable>
-    <!-- set up custom counter for this ol -->
-    <xsl:text>#</xsl:text>
-    <xsl:value-of select="$mbx-html-id" />
-    <xsl:text> { counter-set: </xsl:text>
-    <xsl:value-of select="$mbx-html-id" />
-    <xsl:text>&#x20;</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$mbx-format-code = '0'">-1</xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>; }&#xa;</xsl:text>
-    <!-- format child li's -->
-    <xsl:text>#</xsl:text>
-    <xsl:value-of select="$mbx-html-id" />
-    <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
-    <xsl:value-of select="./@marker-prefix" />
-    <xsl:text>&quot;counter(</xsl:text>
-    <xsl:value-of select="$mbx-html-id" />
-    <xsl:text>,</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
-        <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
-        <xsl:when test="$mbx-format-code = 'a'">lower-alpha</xsl:when>
-        <xsl:when test="$mbx-format-code = 'A'">upper-alpha</xsl:when>
-        <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
-        <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>)&quot;</xsl:text>
-    <xsl:value-of select="./@marker-suffix" />
-    <xsl:text>&quot;; }&#xa;</xsl:text>
-    <!-- increment custom counter -->
-    <xsl:text>#</xsl:text>
-    <xsl:value-of select="$mbx-html-id" />
-    <xsl:text> &gt; li { counter-increment: </xsl:text>
-    <xsl:value-of select="$mbx-html-id" />
-    <xsl:text>; }&#xa;</xsl:text>
+    <xsl:element name="ol-marker">
+        <xsl:attribute name="format-code">
+            <xsl:value-of select="$mbx-format-code" />
+        </xsl:attribute>
+        <xsl:attribute name="value">
+            <xsl:value-of select="./@marker" />
+        </xsl:attribute>
+        <xsl:attribute name="level">
+            <xsl:value-of select="./@ordered-list-level" />
+        </xsl:attribute>
+        <xsl:attribute name="prefix">
+            <xsl:value-of select="./@marker-prefix" />
+        </xsl:attribute>
+        <xsl:attribute name="suffix">
+            <xsl:value-of select="./@marker-suffix" />
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="ol-marker" mode="ol-marker-class">
+    <xsl:text>ol-marker-</xsl:text>
+    <xsl:value-of select="generate-id()" />
+</xsl:template>
+
+<!-- Creates custom formatting for  -->
+<!-- each unique combination of     -->
+<!-- ol/@marker and list level      -->
+<xsl:template match="ol-marker" mode="ol-marker-style">
+    <xsl:variable name="marker-id" select="generate-id()" />
+    <!-- only create style rule if we are the first of -->
+    <!-- our specific combination of marker list level -->
+    <xsl:if test="$marker-id = generate-id(key('marker-key', concat(@value,@level))[1])">
+        <!-- format child li elements according to marker prefix/code/suffix -->
+        <xsl:text>ol.</xsl:text>
+        <xsl:apply-templates select="." mode="ol-marker-class" />
+        <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
+        <xsl:value-of select="./@prefix" />
+        <xsl:text>&quot;counter(list-item,</xsl:text>
+        <xsl:apply-templates select="." mode="html-list-class" />
+        <xsl:text>)&quot;</xsl:text>
+        <xsl:value-of select="./@suffix" />
+        <xsl:text> &quot;; }&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- CSS file for custom ol markers -->
+<xsl:template name="ol-marker-styles">
+    <xsl:variable name="ol-marker-nodes" select="exsl:node-set($ol-markers)" />
+    <xsl:if test="$ol-marker-nodes//ol-marker">
+        <exsl:document href="ol-markers.css" method="text">
+            <xsl:apply-templates select="$ol-marker-nodes//ol-marker" mode="ol-marker-style" />
+        </exsl:document>
+    </xsl:if>
 </xsl:template>
 
 <!-- We let CSS react to narrow titles for dl -->
@@ -10600,11 +10654,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
             <xsl:call-template name="mermaid-header" />
-            <!-- Custom styles for li where parent ol has @marker specified -->
-            <style>
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:apply-templates select="$document-root//ol" mode="ol-marker-style"/>
-            </style>
         </head>
         <body>
             <!-- potential document-id per-page -->
@@ -13032,6 +13081,8 @@ TODO:
     <xsl:if test="not($b-debug-react)">
         <link href="{$html.css.dir}/theme.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
+    <!-- Temporary until css handling overhaul by ascholer complete -->
+    <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <xsl:if test="not($html.css.extra = '')">
         <xsl:variable name="csses" select="str:tokenize($html.css.extra, ', ')"/>

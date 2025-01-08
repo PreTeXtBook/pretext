@@ -1995,7 +1995,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- DEPRECATED 2015-12-12 -->
                 <xsl:when test="@marker=''" />
                 <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                    <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -2015,20 +2015,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol" mode="augment">
     <xsl:param name="ordered-list-level"/>
-    <xsl:variable name="this-level">
-        <xsl:choose>
-            <xsl:when test="self::ol">
-                <xsl:value-of select="$ordered-list-level" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="0" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="next-level" select="$this-level + 1" />
+    <xsl:variable name="next-level" select="$ordered-list-level + 1" />
     <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code">
-            <xsl:with-param name="level" select="$this-level"/>
+            <xsl:with-param name="level" select="$ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:variable>
     <!-- deconstruct the left and right adornments of the label   -->
@@ -2039,7 +2029,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="@marker">
                 <xsl:value-of select="substring-before(@marker, $format-code)" />
             </xsl:when>
-            <xsl:when test="$format-code='a'">
+            <xsl:when test="$format-code = 'a' and $ordered-list-level = '1'">
                 <xsl:text>(</xsl:text>
             </xsl:when>
             <xsl:otherwise />
@@ -2050,7 +2040,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="@marker">
                 <xsl:value-of select="substring-after(@marker, $format-code)" />
             </xsl:when>
-            <xsl:when test="$format-code='a'">
+            <xsl:when test="$format-code = 'a' and $ordered-list-level = '1'">
                 <xsl:text>)</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -2060,19 +2050,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:copy>
         <xsl:attribute name="ordered-list-level">
-            <xsl:value-of select="$this-level"/>
+            <xsl:value-of select="$ordered-list-level"/>
         </xsl:attribute>
-        <xsl:if test="self::ol">
-            <xsl:attribute name="format-code">
-                <xsl:value-of select="$format-code"/>
-            </xsl:attribute>
-            <xsl:attribute name="marker-prefix">
-                <xsl:value-of select="$marker-prefix"/>
-            </xsl:attribute>
-            <xsl:attribute name="marker-suffix">
-                <xsl:value-of select="$marker-suffix"/>
-            </xsl:attribute>
-        </xsl:if>
+        <xsl:attribute name="format-code">
+            <xsl:value-of select="$format-code"/>
+        </xsl:attribute>
+        <xsl:attribute name="marker-prefix">
+            <xsl:value-of select="$marker-prefix"/>
+        </xsl:attribute>
+        <xsl:attribute name="marker-suffix">
+            <xsl:value-of select="$marker-suffix"/>
+        </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="ordered-list-level" select="$next-level"/>
         </xsl:apply-templates>
