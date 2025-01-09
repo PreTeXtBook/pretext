@@ -1,5 +1,7 @@
 // TODO - needs refactoring and dark mode update
 
+@use 'components/helpers/buttons-default' as buttons;
+
 /*  WW problems */
 .ptx-content .wwprob table.attemptResults {
   margin-left: 2em;
@@ -95,44 +97,21 @@ label.incorrect .feedback {
   color: #e07070;
 }
 
-
-.ptx-content .webwork-button {
-  border-radius: 3px;
-  padding: 0px 3px 0px 3px;
-  border: 1px solid #999;
-  background-color: #ffffff;
-}
-
-.ptx-content .webwork-button:hover {
-  cursor: pointer;
-  background-color: #e0e0ff;
-  border: 1px solid #000;
-}
-
-.ptx-content .webwork-button:active {
-  cursor: pointer;
-  background-color: #a0a0a0;
-  border: 1px solid #999;
-}
-
 .webwork img,
 .webwork + .knowl-output img {
   max-width: 100%;
 }
 
-.ptx-content .exercise-wrapper form button {
-  border-radius: 3px;
-  padding: 0px 3px 0px 3px;
-  border: 1px solid #999;
-  color: black;
-  background-color: #ffffff;
+// Make the default margin for items inside the exercise-wrapper similar to
+// default for items in a section
+.exercise-wrapper > *:not(:first-child) {
+  margin-top: 1.5em;
 }
 
-.ptx-content .webwork-button.activate {
-  width: 22px;
-  height: 22px;
-  background-image: url('https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico');
-  background-size: contain;
-  position: absolute;
-  right: -35px;
+.ptx-content .problem-buttons {
+  display: flex;
+}
+
+.ptx-content .webwork-button {
+  @include buttons.ptx-button;
 }
