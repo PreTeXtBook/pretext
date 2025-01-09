@@ -115,3 +115,10 @@ label.incorrect .feedback {
 .ptx-content .webwork-button {
   @include buttons.ptx-button;
 }
+
+//.hidden-content used to be used for knowls and got repurposed for hiding webwork contents
+// now just used by webwork
+.problem-buttons.hidden-content,
+.problem-contents.hidden-content {
+  display: none;
+}
