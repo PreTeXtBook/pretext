@@ -387,9 +387,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
+<!-- see pretext-html for full version of these params             -->
+<xsl:param name="subtree" select="''"/>
+<xsl:param name="html.quick-dirty" select="''"/>
 <xsl:variable name="pruning-tree-rtf">
     <xsl:choose>
-        <xsl:when test="$subtree != '' and $b-quick-dirty">
+        <xsl:when test="$subtree != '' and $html.quick-dirty != ''">
             <xsl:apply-templates select="$version" mode="pruning">
                 <xsl:with-param name="target-node" select="//*[@id=$subtree]"/>
             </xsl:apply-templates>
