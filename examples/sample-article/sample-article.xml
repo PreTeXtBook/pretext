@@ -5856,6 +5856,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </subsection>
 
+            <subsection>
+                <title>List Column Testing</title>
+
+                <p>This is a list arranged into two columns with some intentional layout challenges. The math is too long to fit in one column and can't be wrapped - it reduces the number of columns in its row. The long text items can be wrapped and stay within their column.
+                    <ol cols="2" marker="(a)">
+                    <li>One item.</li>
+                    <li><em>Two</em> <alert>ducks</alert>.</li>
+                    <li>
+                        <md alignment="alignat">
+                            <mrow>3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
+                            <mrow>2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
+                            <mrow>1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
+                        </md>
+                    </li>
+                    <li>Short item.</li>
+                    <li>A long item that can be wrapped over multiple lines.</li>
+                    <li>Four items.</li>
+                    <li><!-- empty --></li>
+                    <li>Another long entry that simultaneously tests that long entries look good in a list,
+                        and also tests an odd number of entries in a two column list.</li>
+                </ol></p>
+            </subsection>
+
 
             <exercises>
                 <title>Exercises (with lists)</title>
@@ -15216,6 +15239,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
                     </statement>
                 </exercise>
+            </exercises>
+
+            <exercises>
+                <title>Layout challenge</title>
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>A multicolumn exercisegroup with layout challenges. The first two should be on one row. The next two should be on one row until the hint is opened. Then one that takes up an entire row. The final row should always have two exercises.</p>
+                    </introduction>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
+                                <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
+                                <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
+                                <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
+                                <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
+                                <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
+                                <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
+                                <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
+                                <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                        <hint>
+                            <title>OPEN ME!</title>
+                            <md alignment="alignat">
+                                <mrow>3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
+                                <mrow>2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
+                                <mrow>1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
+                            </md>
+                        </hint>
+                    </exercise>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>200t \amp {}+{} 3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
+                                <mrow> \amp {}+{} 2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
+                                <mrow>100t \amp {}+{} 1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
+                                <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
+                                <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <statement>
+                            <md alignment="alignat">
+                                <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
+                                <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
+                                <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
+                            </md>
+                        </statement>
+                    </exercise>
+                </exercisegroup>
             </exercises>
 
             <references>
