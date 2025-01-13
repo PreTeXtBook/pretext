@@ -184,7 +184,7 @@ $chunk-heading-font-size: 1.125em !default;
   }
 }
 
-.paragraphs,
-article {
+
+.exercise-like {
   @include inline-heading-mixin.heading;
 }
