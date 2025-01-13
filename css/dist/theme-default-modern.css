@@ -3342,6 +3342,9 @@ label.incorrect .feedback {
   color: var(--button-hover-text-color);
   background-color: var(--button-hover-background);
 }
+.problem-buttons.hidden-content,
+.problem-contents.hidden-content {
+  display: none;
 }
 .sagecell_sessionOutput pre {
   font-family: var(--font-monospace);
