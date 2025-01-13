@@ -3291,40 +3291,52 @@ label.partly-correct .feedback {
 label.incorrect .feedback {
   color: #e07070;
 }
-.ptx-content .webwork-button {
-  border-radius: 3px;
-  padding: 0px 3px 0px 3px;
-  border: 1px solid #999;
-  background-color: #ffffff;
-}
-.ptx-content .webwork-button:hover {
-  cursor: pointer;
-  background-color: #e0e0ff;
-  border: 1px solid #000;
-}
-.ptx-content .webwork-button:active {
-  cursor: pointer;
-  background-color: #a0a0a0;
-  border: 1px solid #999;
-}
 .webwork img,
 .webwork + .knowl-output img {
   max-width: 100%;
 }
-.ptx-content .exercise-wrapper form button {
-  border-radius: 3px;
-  padding: 0px 3px 0px 3px;
-  border: 1px solid #999;
-  color: black;
-  background-color: #ffffff;
+.exercise-wrapper > *:not(:first-child) {
+  margin-top: 1.5em;
 }
-.ptx-content .webwork-button.activate {
-  width: 22px;
-  height: 22px;
-  background-image: url(https://raw.githubusercontent.com/openwebwork/webwork2/main/htdocs/images/favicon.ico);
-  background-size: contain;
-  position: absolute;
-  right: -35px;
+.ptx-content .problem-buttons {
+  display: flex;
+}
+.ptx-content .webwork-button {
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+  color: var(--button-text-color);
+  background-color: var(--button-background);
+  border-width: 1px;
+  border-color: var(--button-border-color);
+  border-style: solid;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+}
+.ptx-content .webwork-button:hover:not(.disabled) {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-content .webwork-button:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: -2px;
+}
+.ptx-content .webwork-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ptx-content .webwork-button.open {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
 }
 .sagecell_sessionOutput pre {
   font-family: var(--font-monospace);
