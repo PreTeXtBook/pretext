@@ -102,9 +102,8 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
 
 // Make expanded parts of TOC look more like subsections
 .toc-item.visible {
-  border-left: 3px solid var(--primary-color-white-95);
   font-size: .95em;
-  padding-left: 10px;
+  padding-left: 8px;
 }
 
 .ptx-page-footer{
