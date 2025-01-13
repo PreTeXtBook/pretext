@@ -3326,6 +3326,10 @@ label.incorrect .feedback {
   position: absolute;
   right: -35px;
 }
+.problem-buttons.hidden-content,
+.problem-contents.hidden-content {
+  display: none;
+}
 .sagecell_sessionOutput pre {
   font-family: var(--font-monospace);
 }
