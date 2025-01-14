@@ -122,7 +122,32 @@ async function handleWW(ww_id, action) {
         formData.set("problemUUID",ww_id);
     }
 
-    $.post(url, Object.fromEntries(formData), (data) => {
+    // If in Runestone, check if there are previous answer submissions and get them now to use in the form.
+    let checkboxesString = '';
+    if (runestone_logged_in && !action) {
+        const answersObject = (wwList[ww_id.replace(/-ww-rs$/,'')].answers ? wwList[ww_id.replace(/-ww-rs$/,'')].answers : {'answers' : [], 'mqAnswers' : []});
+        const previousAnswers = answersObject.answers;
+        if (previousAnswers !== null) {
+            formData.set('WWsubmit', 1);
+        }
+        for (const answer in previousAnswers) {
+            if (previousAnswers[answer].constructor === Array) {
+                for (const k in previousAnswers[answer]) {
+                    checkboxesString += '&';
+                    checkboxesString += answer;
+                    checkboxesString += '=';
+                    checkboxesString += previousAnswers[answer][k];
+                }
+            } else {
+                formData.set(answer, previousAnswers[answer]);
+            }
+        }
+    }
+    // Need to get form data as a string, including possible repeated checkbox names
+    // Do not pass post data as an object, or checkbox names will overwrite one another
+    const formString = new URLSearchParams(formData).toString();
+
+    $.post(url, formString + checkboxesString, (data) => {
         // Create the form that will contain the text and input fields of the interactive problem.
         const form = document.createElement("form");
         form.id = ww_id + "-form";
@@ -137,6 +162,29 @@ async function handleWW(ww_id, action) {
 
         // Dump the problem text, answer blanks, etc.
         body_div.innerHTML = data.rh_result.text;
+
+        // If showPartialCorrectAnswers = 0, alter the feedback buttons according to whether or not the score is 100%.
+        if ('showPartialCorrectAnswers' in data.rh_result.flags && data.rh_result.flags.showPartialCorrectAnswers == 0) {
+            if ('score' in data.rh_result.problem_result && data.rh_result.problem_result.score >= 1) {
+                body_div.querySelectorAll('button.ww-feedback-btn').forEach(
+                    function(button) {
+                        button.classList.remove('btn-info');
+                        button.classList.add('btn-success');
+                        button.setAttribute('aria-label', 'Correct');
+                        button.dataset.bsCustomClass = button.dataset.bsCustomClass + ' correct';
+                        button.dataset.bsTitle = button.dataset.bsTitle.replace('Answer Preview', 'Correct');
+                        button.firstChild.classList.add('correct')
+                    }
+                );
+            } else {
+                body_div.querySelectorAll('button.ww-feedback-btn').forEach(
+                    function(button) {
+                        button.setAttribute('aria-label', 'One or more answers incorrect');
+                        button.dataset.bsTitle = button.dataset.bsTitle.replace('Answer Preview', 'One or more answers incorrect');
+                    }
+                );
+            }
+        }
 
         // Replace all hn headings with h6 headings.
         for (const tag_name of ['h6', 'h5', 'h4', 'h3', 'h2', 'h1']) {
@@ -185,36 +233,6 @@ async function handleWW(ww_id, action) {
                 if (input && input.value == '') {
                     input.setAttribute('value', answers[answer]);
                 }
-                if (input && input.type.toUpperCase() == 'RADIO') {
-                    const buttons = body_div.querySelectorAll('input[name=' + answer + ']');
-                    for (const button of buttons) {
-                        if (button.value == answers[answer]) {
-                            button.setAttribute('checked', 'checked');
-                        }
-                    }
-                }
-                if (input && input.type.toUpperCase() == 'CHECKBOX') {
-                    const checkboxes = body_div.querySelectorAll('input[name=' + answer + ']');
-                    for (const checkbox of checkboxes) {
-                        // This is not a bulletproof approach if the problem used input values that are weird
-                        // For example, with commas in them
-                        // However, we are stuck with WW providing answers[answer] as a string like `[value0, value1]`
-                        // and note that it is not `["value0", "value1"]`, so we cannot cleanly parse it into an array
-                        let checkbox_regex = new RegExp('(\\[|, )' + checkbox.value + '(, |\\])');
-                        if (answers[answer].match(checkbox_regex)) {
-                            checkbox.setAttribute('checked', 'checked');
-                        }
-                    }
-                }
-                var select = body_div.querySelector('select[id=' + answer + ']');
-                if (select && answers[answer]) {
-                    // answers[answer] may be wrapped in \text{...} that we want to remove, since value does not have this.
-                    let this_answer = answers[answer];
-                    if (/^\\text\{.*\}$/.test(this_answer)) {this_answer = this_answer.match(/^\\text\{(.*)\}$/)[1]};
-                    let quote_escaped_answer = this_answer.replace(/"/g, '\\"');
-                    const option = body_div.querySelector(`select[id="${answer}"] option[value="${quote_escaped_answer}"]`);
-                    if (option) {option.setAttribute('selected', 'selected')};
-                }
             }
         }
 
@@ -256,10 +274,8 @@ async function handleWW(ww_id, action) {
         let buttonContainer = ww_container.querySelector('.problem-buttons.webwork');
         // Create the submission buttons if they have not yet been created.
         if (!buttonContainer) {
-            // Hide the original div that contains the old make active button.
-            ww_container.querySelector('.problem-buttons').classList.add('hidden-content');
-            // And the newer activate button if it is there
-            if (activate_button != null) {activate_button.classList.add('hidden-content');};
+            // Hide the original div that contains the Activate.
+            ww_container.querySelector('.problem-buttons').classList.add('hidden-content', 'hidden');
 
             // Create a new div for the webwork buttons.
             buttonContainer = document.createElement('div');
@@ -278,11 +294,8 @@ async function handleWW(ww_id, action) {
             check.style.marginRight = "0.25rem";
             check.classList.add('webwork-button');
 
-            // Adjust if more than one answer to check
-            const answerCount = body_div.querySelectorAll("input:not([type=hidden])").length +
-                body_div.querySelectorAll("select:not([type=hidden])").length;
-
             check.textContent = runestone_logged_in ? localize_submit : localize_check_responses;
+
             check.addEventListener('click', () => handleWW(ww_id, "check"));
 
             buttonContainer.appendChild(check);
@@ -429,7 +442,7 @@ async function handleWW(ww_id, action) {
             iframe.classList.add('problem-iframe');
 
             // Hide the static problem
-            ww_container.querySelector('.problem-contents').classList.add('hidden-content');
+            ww_container.querySelector('.problem-contents').classList.add('hidden-content', 'hidden');
 
             if (activate_button != null) {
                 // Make sure the iframe follows the activate button in the DOM
@@ -513,7 +526,6 @@ function WWshowCorrect(ww_id, answers) {
             const correct_ans = answers[name].correct_choice || answers[name].correct_ans;
             if (input.value == correct_ans) {
                 input.checked = true;
-                //input.setAttribute('checked', 'checked');
             } else {
                 input.checked = false;
             }
@@ -523,10 +535,8 @@ function WWshowCorrect(ww_id, answers) {
             const correct_choices = answers[name].correct_choices;
             if (correct_choices.includes(input.value)) {
                 input.checked = true;
-            //  input.setAttribute('checked', 'checked');
             } else {
                 input.checked = false;
-            //   input.setAttribute('checked', false);
             }
         }
     }
@@ -582,12 +592,12 @@ function resetWW(ww_id) {
     iframe = ww_container.querySelector('.problem-iframe');
     iframe.remove();
 
-    ww_container.querySelector('.problem-contents').classList.remove('hidden-content');
+    ww_container.querySelector('.problem-contents').classList.remove('hidden-content', 'hidden');
 
     ww_container.querySelector('.problem-buttons.webwork').remove();
-    ww_container.querySelector('.problem-buttons').classList.remove('hidden-content');
+    ww_container.querySelector('.problem-buttons').classList.remove('hidden-content', 'hidden');
     // if the newer activate button is there (but hidden) bring it back too
-    if (activate_button != null) {activate_button.classList.remove('hidden-content');};
+    if (activate_button != null) {activate_button.classList.remove('hidden-content', 'hidden');};
 }
 
 function adjustSrcHrefs(container,ww_domain) {
@@ -650,7 +660,6 @@ function translateHintSol(ww_id, body_div, ww_domain, b_ptx_has_hint, b_ptx_has_
         hintSol.remove();
 
         const originalDetailsContent = knowlDetails.getElementsByTagName('div')[0];
-        // const newDetailsContent = originalDetailsContent.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
         const newDetailsContent = originalDetailsContent.getElementsByTagName('div')[0];
         newDetailsContent.className = '';
         newDetailsContent.classList.add(hintSolType, 'solution-like', 'knowl__content');
