@@ -4137,7 +4137,25 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml, parser=huge_parser)
-    src_tree.xinclude()
+    try:
+        src_tree.xinclude()
+    except ET.XIncludeError as e:
+        # xinclude() does not show what file a parsing error occured in
+        # So if there was an error, build a custom loader and redo with ElementInclude
+        # which will include the file name in the stack dump.
+        # ElementInclude is a limited version of xinclude(), so can't rely
+        # on it for the real include process.
+
+        # Generate custom loader
+        from lxml import ElementInclude
+        def my_loader(href, parse, encoding=None, parser=None):
+            ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
+            return ret
+
+        # Reparse the tree (was modified in try clause) and run ElementInclude
+        # This should also fail, but will give a better error message
+        src_tree = ET.parse(xml, parser=huge_parser)
+        ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
 
     # parse xsl, and build a transformation object
     # allow writing if an output directory is given
