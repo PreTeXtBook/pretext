@@ -2600,7 +2600,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 #######################
 
 
-def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
+def braille(xml_source, pub_file, stringparams, xmlid_root, out_file, dest_dir, page_format):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -2672,6 +2672,8 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     stringparams["page-format"] = page_format
     if pub_file:
         stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
     preprint = os.path.join(tmp_dir, "preprint.xml")
     braille_xslt = os.path.join(get_ptx_xsl_path(), "pretext-braille-preprint.xsl")
     xsltproc(braille_xslt, xml_source, preprint, tmp_dir, stringparams)
