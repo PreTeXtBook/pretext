@@ -11639,7 +11639,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$toc-contents" mode="customized-toc-item">
         <xsl:with-param name="this-page" select="$this-page-node"/>
         <xsl:with-param name="this-page-ancestors" select="$this-page-ancestors"/>
-        <xsl:with-param name="is-root-ul" select="true()"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -11660,11 +11659,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ul|li" mode="customized-toc-item">
     <xsl:param name="this-page"/>
     <xsl:param name="this-page-ancestors"/>
-    <xsl:param name="is-root-ul" select="false()"/>
 
-    <!-- root ul in toc should always be considered "contains-active" -->
+    <!-- root ul in toc should always be considered "is-ancestor"     -->
     <!-- even if there is no active page (e.g. index.html)            -->
-    <xsl:variable name="is-ancestor" select="$is-root-ul or count($this-page-ancestors|.) = count($this-page-ancestors)"/>
+    <xsl:variable name="is-ancestor" select="not(ancestor::ul) or count($this-page-ancestors|.) = count($this-page-ancestors)"/>
     <xsl:variable name="is-page" select="count($this-page|.) = count($this-page)"/>
     <xsl:choose>
         <!-- ToC item contains or is active page -->
