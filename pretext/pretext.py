@@ -3706,11 +3706,12 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
     error_message = "Node.js is required to build themes other than default-modern. Make sure it is installed and in your PATH"
     try:
         import subprocess, json
+        node_exec_cmd = get_executable_cmd("node")
         # theme name is prefixed with "theme-" in the cssbuilder script output
         full_name = "theme-{}".format(theme_name)
         log.debug("Building custom theme: " + full_name)
         log.debug("Theme options:" + json.dumps(theme_opts))
-        result = subprocess.run(["node", script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=10)
+        result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=10)
         if result.stdout:
             log.debug(result.stdout.decode())
         if result.stderr:
@@ -3740,9 +3741,18 @@ def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
         if var in theme_opts['options']:
             check_color_contrast(theme_opts['options'][var], check_color)
 
-    # prerolled themes with no options get copied from css/dist; otherwise, build a custom theme
-    prerolled = "-legacy" in theme_name or theme_name == "default-modern"
-    if prerolled:
+    # use prerolled theme if legacy or default-modern and no node available
+    use_prerolled = False
+    if "-legacy" in theme_name:
+        use_prerolled = True
+    elif theme_name == "default-modern":
+        try:
+            get_executable_cmd("node")
+        except Exception as e:
+            log.info("Node.js not available. Relying on prebuilt default-modern.")
+            use_prerolled = True
+
+    if use_prerolled:
         _move_prebuilt_theme(theme_name, theme_opts, tmp_dir)
     else:
         _build_custom_theme(xml, theme_name, theme_opts, tmp_dir)
