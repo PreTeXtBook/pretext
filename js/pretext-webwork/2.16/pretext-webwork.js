@@ -47,6 +47,7 @@ function handleWW(ww_id, action) {
     loader.style.display = 'flex';
     loader.style.alignItems = 'center';
     loader.style.justifyContent = 'center';
+    loader.style.marginTop = '0';
     loader.tabIndex = -1;
     const loaderText = document.createElement('span');
     loaderText.textContent = 'Loading';
