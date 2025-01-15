@@ -849,6 +849,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Working from end, remove whitespace back to and including last newline -->
+<xsl:template name="strip-trailing-whitespace-line">
+    <xsl:param name="text" />
+    <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
+    <xsl:choose>
+        <!-- if empty, quit -->
+        <xsl:when test="not($last-char)" />
+        <!-- if last character is newline, return everything else -->
+        <xsl:when test="$last-char = '&#xa;'">
+            <xsl:value-of select="substring($text, 1, string-length($text)-1)" />
+        </xsl:when>
+        <!-- if last character is whitespace, drop it -->
+        <xsl:when test="contains($whitespaces, $last-char)">
+            <xsl:call-template name="strip-trailing-whitespace">
+                <xsl:with-param name="text" select="substring($text, 1, string-length($text)-1)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- else finished stripping, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- spurious newlines introduce whitespace on either side -->
 <!-- we split at newlines, strip consecutive whitesapce on either side, -->
 <!-- and replace newlines by spaces (could restore a single newline) -->
