@@ -428,9 +428,7 @@
             <xsl:when test="exsl:node-set($check)/evaluate/test[@correct='yes']">
                 <xsl:copy-of select="exsl:node-set($check)/evaluate/test[@correct='yes']"/>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy-of select="exsl:node-set($check)/evaluate/test[position()=1]"/>
-            </xsl:otherwise>
+            <!-- If no test matches @correct='yes', then use the default answer. Leave blank. -->
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$blankNum > 1">
@@ -442,7 +440,7 @@
         <xsl:when test="string-length($multiAns)>0">
             <xsl:value-of select="$multiAns"/>
         </xsl:when>
-        <xsl:when test="$checkCorrectTest">
+        <xsl:when test="string-length($checkCorrectTest) > 0">
             <xsl:apply-templates select="exsl:node-set($checkCorrectTest)/test" mode="create-test-feedback">
                 <xsl:with-param name="fillin" select="$curFillIn" />
                 <xsl:with-param name="b-correct" select="'yes'" />
@@ -459,10 +457,12 @@
                             <xsl:value-of select="exsl:node-set($curFillIn)/@answer"/>
                             <xsl:text>,</xsl:text>
                             <xsl:value-of select="exsl:node-set($curFillIn)/@answer"/>
+                            <xsl:text>]</xsl:text>
                         </xsl:when>
                         <xsl:when test="$curFillIn/@mode='string'">
-                            <xsl:text>"regex": </xsl:text>
+                            <xsl:text>"regex": "</xsl:text>
                             <xsl:value-of select="exsl:node-set($curFillIn)/@answer"/>
+                            <xsl:text>"</xsl:text>
                         </xsl:when>
                     </xsl:choose>
                 </xsl:when>
