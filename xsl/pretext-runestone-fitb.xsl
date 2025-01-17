@@ -107,7 +107,7 @@
                     <xsl:text>"problemHtml": </xsl:text>
                     <xsl:call-template name="escape-quote-xml">
                         <xsl:with-param name="xml_content">
-                            <xsl:apply-templates select="statement/*" mode="body" />
+                            <xsl:apply-templates select="statement/*" />
                             <xsl:if test="$b-dynamics-static-seed">
                                 <div>
                                     <xsl:attribute name="id">
@@ -124,7 +124,7 @@
                     <xsl:text>,&#xa;"solutionHtml": </xsl:text>
                     <xsl:call-template name="escape-quote-xml">
                         <xsl:with-param name="xml_content">
-                            <xsl:apply-templates select="solution/*" mode="body" />
+                            <xsl:apply-templates select="solution/*" />
                         </xsl:with-param>
                     </xsl:call-template>
                     <!-- Add packages that need to be loaded as javascript -->
