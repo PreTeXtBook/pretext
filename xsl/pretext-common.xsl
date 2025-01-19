@@ -10943,7 +10943,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:if test="p and section">
             <xsl:message>
                 <xsl:text>PTX:WARNING: </xsl:text>
-                <xsl:text>A chapter containing sections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
+                <xsl:text>In a chapter containing sections, any content that is not inside a section needs to be inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
@@ -10952,7 +10952,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:if test="p and subsection">
             <xsl:message>
                 <xsl:text>PTX:WARNING: </xsl:text>
-                <xsl:text>A section containing subsections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
+                <xsl:text>In a section containing subsections, any content that is not inside a subsection needs to be inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
@@ -10961,7 +10961,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:if test="p and subsubsection">
             <xsl:message>
                 <xsl:text>PTX:WARNING: </xsl:text>
-                <xsl:text>A subsection containing subsubsections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
+                <xsl:text>In a subsection containing subsubsections, any content that is not inside a subsubsection needs to be inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
