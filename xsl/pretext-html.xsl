@@ -12179,7 +12179,9 @@ TODO:
     <a class="pretext-link" href="https://pretextbook.org" title="PreTeXt">
         <div class="logo">
             <!-- explicitly only have a height here to prevent rendering issue in Safari -->
-            <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="338 3000 8772 6866">
+            <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="338 3000 8772 6866" role="img">
+            <!-- Use @role="img" and <title> elements for accessibility -->
+                <title>PreTeXt logo</title>
                 <g style="stroke-width:.025in; stroke:currentColor; fill:none">
                     <polyline points="472,3590 472,9732 " style="stroke-width:174; stroke-linejoin:miter; stroke-linecap:round; "/>
                     <path style="stroke-width:126;stroke-linecap:butt;"  d="M 4724,9448 A 4660 4660  0  0  1  8598  9259"/>
@@ -12203,13 +12205,13 @@ TODO:
 
 <xsl:template name="runestone-link">
     <a class="runestone-link" href="https://runestone.academy" title="Runestone Academy">
-        <img class="logo" src="https://runestone.academy/runestone/static/images/RAIcon_cropped.png"/>
+        <img class="logo" src="https://runestone.academy/runestone/static/images/RAIcon_cropped.png" alt="Runstone Academy logo"/>
     </a>
 </xsl:template>
 
 <xsl:template name="mathjax-link">
     <a class="mathjax-link" href="https://www.mathjax.org" title="MathJax">
-        <img class="logo" src="https://www.mathjax.org/badge/badge-square-2.png"/>
+        <img class="logo" src="https://www.mathjax.org/badge/badge-square-2.png" alt="MathJax logo"/>
     </a>
 </xsl:template>
 
