@@ -81,18 +81,17 @@ body.standalone {
 body.pretext > a.assistive {
   padding:6px;
   position: absolute;
-  top:-40px;
+  top:-40px; // hide off screen until keyboard focus
   left: 0px;
   color:white;
   border-right:1px solid white;
   border-bottom:1px solid white;
   border-bottom-right-radius:8px;
-  background:transparent;
+  background:#BF1722; // always have correct contrast
   z-index: 10000;
 
   &:focus {
-    top:0px;
-    background:#BF1722;
+    top:0px; // move into view when keyboard focus
     outline:0;
     transition: top .1s ease-in, background .5s linear;
   }
