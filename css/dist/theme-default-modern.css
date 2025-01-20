@@ -57,12 +57,11 @@ body.pretext > a.assistive {
   border-right: 1px solid white;
   border-bottom: 1px solid white;
   border-bottom-right-radius: 8px;
-  background: transparent;
+  background: #BF1722;
   z-index: 10000;
 }
 body.pretext > a.assistive:focus {
   top: 0px;
-  background: #BF1722;
   outline: 0;
   transition: top 0.1s ease-in, background 0.5s linear;
 }
