@@ -41,7 +41,7 @@ const helpContents = [
       {
         name: 'config-options',
         typeLabel: '{underline json-text}',
-        description: 'A string containing a JSON blob with configuration options for the build. This includes variables and options for building a customized version of a theme. This might look like {bold \'\\{"options": \\{"assemblages": "oscar-levin"\\}, "variables": \\{"primary-color": "#801811", "primary-color-dark": "#801811", "secondary-color": "#2a5ea4"\\}\\}\'}.',
+        description: 'A string containing a JSON blob with configuration options for the build. This includes variables and options for building a customized version of a theme. This might look like {bold \'\\{"options": \\{"primary-color": "#801811", "primary-color-dark": "#801811", "secondary-color": "#2a5ea4"\\}\\}\'}.',
       },
       {
         name: 'help',
@@ -196,6 +196,10 @@ async function getESBuildConfig(options) {
         sassPlugin({
           'loadPaths': [cssRoot],
           precompile(source, pathname, isRoot) {
+            // If this is root file, add custom variables. Anything else is just passed through
+            if(!isRoot)
+              return source;
+
             // Tack on any config variables to the top of the file
             let prefix = '';
             if (options['selected-target'] && options['config-options']) {
@@ -203,7 +207,7 @@ async function getESBuildConfig(options) {
                 prefix += `$${key}: ${value};\n`;
               }
             }
-            return isRoot ? prefix + source : source;
+            return prefix + source;
           }
         }),
       ],
