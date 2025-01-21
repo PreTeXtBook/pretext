@@ -12,19 +12,19 @@ $monospace: 'Inconsolata, Consolas, Monaco, monospace;' !default;
 // lists are 1-indexed
 
 $body-font: list.nth(string.split($body, ','), 1);
-@import url("https://fonts.googleapis.com/css?family=#{$body-font}:wdth,wght@75..100,300..800&amp;display=swap");
+@import url("https://fonts.googleapis.com/css2?family=#{$body-font}:ital,wght@0,300..800;1,300..800&display=swap");
 :root {
   --font-body: #{$body};
 }
 
 $heading-font: list.nth(string.split($heading, ','), 1);
-@import url("https://fonts.googleapis.com/css?family=#{$heading-font}:wdth,wght@75..100,300..800&amp;display=swap");
+@import url("https://fonts.googleapis.com/css2?family=#{$heading-font}:ital,wght@0,300..800;1,300..800&display=swap");
 :root {
   --font-headings: #{$heading};
 }
 
 $monospace-font: list.nth(string.split($monospace, ','), 1);
-@import url("https://fonts.googleapis.com/css?family=#{$monospace-font}:wdth,wght@75..100,300..800&amp;display=swap");
+@import url("https://fonts.googleapis.com/css2?family=#{$monospace-font}:ital,wght@0,300..800;1,300..800&display=swap");
 :root {
   --font-monospace: #{$monospace};
 }
@@ -46,7 +46,7 @@ $monospace-font: list.nth(string.split($monospace, ','), 1);
 // @function add-fonts($list, $backups, $fonts: ()) {
 //   @each $font in $list {
 //     $fonts: map.set($fonts, $font, (
-//       url: '"https://fonts.googleapis.com/css?family=#{$font}:wdth,wght@75..100,300..800&amp;display=swap"',
+//       url: '"https://fonts.googleapis.com/css2?family=#{$font}:wdth,wght@75..100,300..800&amp;display=swap"',
 //       fontlist: $font + $backups,
 //     ));
 //   }

@@ -1,7 +1,7 @@
 @charset "UTF-8";
-@import "https://fonts.googleapis.com/css?family=Open Sans:wdth,wght@75..100,300..800&amp;display=swap";
-@import "https://fonts.googleapis.com/css?family=PT Serif:wdth,wght@75..100,300..800&amp;display=swap";
-@import "https://fonts.googleapis.com/css?family=Inconsolata:wdth,wght@75..100,300..800&amp;display=swap";
+@import "https://fonts.googleapis.com/css2?family=Open Sans:ital,wght@0,300..800;1,300..800&display=swap";
+@import "https://fonts.googleapis.com/css2?family=PT Serif:ital,wght@0,300..800;1,300..800&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Inconsolata:ital,wght@0,300..800;1,300..800&display=swap";
 
 /* ../../css/targets/html/default-modern/theme-default-modern.scss */
 :root {
