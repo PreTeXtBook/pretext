@@ -17,3 +17,6 @@ examples/webwork/minimal/generated/*
 **/rsbuild
 **/build
 **/node_modules/
+
+# cssbuilder output
+css/dist/*.map
