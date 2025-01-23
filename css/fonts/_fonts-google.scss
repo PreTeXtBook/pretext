@@ -7,28 +7,47 @@ $body: 'Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif' !default;
 $heading: 'PT Serif, Times New Roman, Times, serif' !default;
 $monospace: 'Inconsolata, Consolas, Monaco, monospace;' !default;
 
+@function is-variable-font($font-name) {
+  $static-fonts: ('PT Serif');  // list of known static fonts used by themes
+  @if list.index($font-name, $static-fonts) {
+    @return false;
+  }
+  @return true;
+}
+
+@function generate-import($font-name) {
+  @if is-variable-font($font-name) {
+    @return 'https://fonts.googleapis.com/css2?family=' + $font-name + ':ital,wght@0,400..700;1,400..700&display=swap';
+  }
+  @else {
+    @return 'https://fonts.googleapis.com/css2?family=' + $font-name + ':ital,wght@0,400;0,700;1,400;1,700&display=swap';
+  }
+}
+
 // For now, only try to fetch the first name in the list and assume
 // the rest are system defined fallbacks.
 // lists are 1-indexed
-
 $body-font: list.nth(string.split($body, ','), 1);
-@import url("https://fonts.googleapis.com/css2?family=#{$body-font}:ital,wght@0,300..800;1,300..800&display=swap");
+// @debug "----------------" $body-font;
+@import url( generate-import($body-font) );
+
+$heading-font: list.nth(string.split($heading, ','), 1);
+// generate-import($heading-font);
+@import url( generate-import($heading-font) );
+
+$monospace-font: list.nth(string.split($monospace, ','), 1);
+// generate-import($monospace-font);
+@import url( generate-import($monospace-font) );
+
 :root {
   --font-body: #{$body};
 }
-
-$heading-font: list.nth(string.split($heading, ','), 1);
-@import url("https://fonts.googleapis.com/css2?family=#{$heading-font}:ital,wght@0,300..800;1,300..800&display=swap");
 :root {
   --font-headings: #{$heading};
 }
-
-$monospace-font: list.nth(string.split($monospace, ','), 1);
-@import url("https://fonts.googleapis.com/css2?family=#{$monospace-font}:ital,wght@0,300..800;1,300..800&display=swap");
 :root {
   --font-monospace: #{$monospace};
 }
-
 
 // 9/5/24 ... TODO controlled list of fonts ... wait and explore later
 // // Available fonts
