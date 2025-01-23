@@ -1,6 +1,7 @@
 // This file contains functions and mixins for working with colors in SCSS
 
 @use "sass:map";
+@use "sass:color";
 
 @mixin set-root-colors($colors, $dark-colors: null) {
   :root {
@@ -64,14 +65,34 @@ $std-mixes: (1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 65, 70, 75, 80, 
 
 //--------------------------------------------------------------------------
 // https://jonnykates.medium.com/automating-colour-contrast-ratios-with-sass-e201f3b52797
+// Formula there has a typo, need parens around the sum of the three color channels
 
 @function text-contrast($color, $light: #ffffff, $dark: #000000) {
-  $color-brightness: round((red($color) * 299) + (green($color) * 587) + (blue($color) * 114) / 1000);
-  $light-color: round((red(#ffffff) * 299) + (green(#ffffff) * 587) + (blue(#ffffff) * 114) / 1000);
+  $color-brightness: round(
+    (
+      (color.red($color) * 299) +
+      (color.green($color) * 587) +
+      (color.blue($color) * 114)
+    ) / 1000
+  );
+
+  $light-color: round(
+    (
+      (color.red(#ffffff) * 299) +
+      (color.green(#ffffff) * 587) +
+      (color.blue(#ffffff) * 114)
+    ) / 1000
+  );
+
   @if abs($color-brightness) < calc($light-color / 2){
     @return $light;
   } @else {
     @return $dark;
   }
 }
-//--------------------------------------------------------------------------
+
+// @debug "text-contrast(#7b7b55) should be #ffffff: " text-contrast(#7b7b55);
+// @debug "text-contrast(#9b9b70) should be #000000: " text-contrast(#9b9b70);
+// @debug "text-contrast(#766f7a) should be #ffffff: " text-contrast(#766f7a);
+// @debug "text-contrast(#70909b) should be #000000: " text-contrast(#70909b);
+//--------------------------------------------rgb(25, 25, 24)-----------------------
