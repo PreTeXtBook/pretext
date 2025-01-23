@@ -31,10 +31,6 @@ $initially-visible: false !default;
   background: var(--page-color);
   width: $sidebar-width;
 
-  // need space to disappear behind footer - pretext logo fills that space
-  @include toc-basics.ptx-logo;
-
-
   // border under the last item before the pretext icon
   & > .toc-item-list:first-child > .toc-item:last-child {
     border-bottom: 3px solid var(--toc-border-color);

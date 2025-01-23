@@ -27,9 +27,6 @@ $navbar-breakpoint: 800px !default;
     height: calc(100vh - $nav-height);
     margin-top: -1px; // partially hide top border of first toc item
 
-    // need space to disappear behind footer - pretext logo fills that space
-    @include toc-basics.ptx-logo;
-
     // border under the last item before the pretext icon
     & > .toc-item-list:first-child > .toc-item:last-child {
       border-bottom: 3px solid var(--toc-border-color);
@@ -50,10 +47,8 @@ $navbar-breakpoint: 800px !default;
     display: none;
     position: sticky;
     top: $nav-height;
-    z-index: 1000;
     background: var(--content-background);
     min-height: 30vh;
-    max-height: 80vh;
     border-right: 2px solid var(--toc-border-color);
     border-bottom: 2px solid var(--toc-border-color);
     width: $sidebar-width;
