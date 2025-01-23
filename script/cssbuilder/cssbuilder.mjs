@@ -103,15 +103,15 @@ function getTargets(options) {
     // -------------------------------------------------------------------------
     // Web targets - pretext assumes output name will be 'theme-XXX'
     // Legacy targets
-    { out: 'theme-default-legacy', in: path.join(cssRoot, 'targets/html/legacy/default/theme-default.scss'), autobuild: true },
-    { out: 'theme-min-legacy', in: path.join(cssRoot, 'targets/html/legacy/min/theme-min.scss'), autobuild: true },
-    { out: 'theme-crc-legacy', in: path.join(cssRoot, 'targets/html/legacy/crc/theme-crc.scss'), autobuild: true },
-    { out: 'theme-soundwriting-legacy', in: path.join(cssRoot, 'targets/html/legacy/soundwriting/theme-soundwriting.scss'), autobuild: true },
-    { out: 'theme-wide-legacy', in: path.join(cssRoot, 'targets/html/legacy/wide/theme-wide.scss'), autobuild: true },
-    { out: 'theme-oscarlevin-legacy', in: path.join(cssRoot, 'targets/html/legacy/oscarlevin/theme-oscarlevin.scss'), autobuild: true },
+    { out: 'theme-default-legacy', in: path.join(cssRoot, 'targets/html/legacy/default/theme-default.scss')},
+    { out: 'theme-min-legacy', in: path.join(cssRoot, 'targets/html/legacy/min/theme-min.scss')},
+    { out: 'theme-crc-legacy', in: path.join(cssRoot, 'targets/html/legacy/crc/theme-crc.scss')},
+    { out: 'theme-soundwriting-legacy', in: path.join(cssRoot, 'targets/html/legacy/soundwriting/theme-soundwriting.scss')},
+    { out: 'theme-wide-legacy', in: path.join(cssRoot, 'targets/html/legacy/wide/theme-wide.scss')},
+    { out: 'theme-oscarlevin-legacy', in: path.join(cssRoot, 'targets/html/legacy/oscarlevin/theme-oscarlevin.scss')},
     // -------------------------------------------------------------------------
     // Modern web targets
-    { out: 'theme-default-modern', in: path.join(cssRoot, 'targets/html/default-modern/theme-default-modern.scss'), autobuild: true },
+    { out: 'theme-default-modern', in: path.join(cssRoot, 'targets/html/default-modern/theme-default-modern.scss')},
     // only default is prebuilt
     { out: 'theme-salem', in: path.join(cssRoot, 'targets/html/salem/theme-salem.scss')},
     { out: 'theme-denver', in: path.join(cssRoot, 'targets/html/denver/theme-denver.scss') },
@@ -120,9 +120,9 @@ function getTargets(options) {
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // Non-web targets
-    { out: 'reveal', in: path.join(cssRoot, 'targets/revealjs/reveal.scss'), autobuild: true },
-    { out: 'kindle', in: path.join(cssRoot, 'targets/ebook/kindle/kindle.scss'), autobuild: true },
-    { out: 'epub', in: path.join(cssRoot, 'targets/ebook/epub/epub.scss'), autobuild: true },
+    { out: 'reveal', in: path.join(cssRoot, 'targets/revealjs/reveal.scss')},
+    { out: 'kindle', in: path.join(cssRoot, 'targets/ebook/kindle/kindle.scss')},
+    { out: 'epub', in: path.join(cssRoot, 'targets/ebook/epub/epub.scss')},
   ]
 
   if (options['selected-target']) {
@@ -136,7 +136,7 @@ function getTargets(options) {
       if (configOptions && configOptions['options'] && configOptions['options']['entry-point']) {
         // Custom theme build with output directory
         targets = [
-          { out: 'theme-custom', in: configOptions['options']['entry-point'], autobuild: true }
+          { out: 'theme-custom', in: configOptions['options']['entry-point']}
         ]
         // Remove the entry-point from the options so it doesn't get turned into scss variable
         delete configOptions['options']['entry-point'];
@@ -163,16 +163,7 @@ function getTargets(options) {
         }
       }
     }
-  } else {
-    // Only build targets that have the autobuild flag set
-    targets = targets.filter(target => target.autobuild);
   }
-
-  // Clear the autobuild value from the targets. ESBuild just wants in/out 
-  targets = targets.map(target => {
-    delete target.autobuild;
-    return target;
-  });
 
   return targets;
 }
