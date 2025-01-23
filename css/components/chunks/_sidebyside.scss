@@ -1,9 +1,10 @@
-.sidebyside {
-  width: 100%;
+// Space all rows in a sbsgroup, no other styling
+.sbsgroup > *:not(:first-child)
+{
+    margin-top: 1.5em;
+}
 
-  .sbsgroup {
-    width: 100%;
-  }
+.sidebyside {
 
   .sbsrow {
     display: flex;
