@@ -15,7 +15,6 @@ $sidebar-total-width: $sidebar-width + $sidebar-right-margin;
 $content-width: 600px !default;
 $content-side-padding: 120px !default;
 $content-side-padding-tight: 20px !default;
-$content-with-padding-width: $content-width + 2 * $content-side-padding;
 
 $sidebar-breakpoint: $content-width + $sidebar-total-width + 24px; // a little extra for padding
 
@@ -28,34 +27,44 @@ $main-right-margin: $sidebar-total-width;
 $page-width: $sidebar-total-width + $main-width + $main-right-margin;
 
 @use 'components/page-parts/body' with (
-  $max-width: $content-with-padding-width,
+  $max-width: $page-width,
   $content-width: $content-width,
   $content-side-padding: $content-side-padding,
   $centered-content: $centered-content,
 );
 
 @use 'components/page-parts/banner' with (
-  $max-width: $content-with-padding-width,
+  $max-width: $main-width,
   $navbar-breakpoint: $navbar-breakpoint,
 );
 
 @use 'components/page-parts/navbar' with (
-  $max-width: $content-with-padding-width,
+  $max-width: $main-width,
   $nav-height: $nav-height,
   $navbar-breakpoint: $navbar-breakpoint,
 );
 
-@use 'components/page-parts/toc-overlay' with (
+@use 'components/page-parts/toc-default' with (
+  $scrolling: $scrolling-toc,
   $sidebar-width: $sidebar-width,
+  $sidebar-breakpoint: $sidebar-breakpoint,
   $navbar-breakpoint: $navbar-breakpoint,
-  $initially-visible: true,
 );
+
 @use 'components/page-parts/extras/toc-hidden-scrollbar';
 
 //@use 'summary-links';
 @use 'components/page-parts/footer' with (
   $navbar-breakpoint: $navbar-breakpoint,
 );
+
+.ptx-main {
+  margin-right: $sidebar-total-width;
+}
+
+.ptx-sidebar.hidden + .ptx-main {
+  margin-left: $sidebar-total-width;
+}
 
 // Oscar - note - you might consider how to handle nested RS containers
 // see "Projects and Friends" in sample book
@@ -82,7 +91,8 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
 
 // visually shift the sidebar off the page
 .ptx-sidebar {
-  transform: translateX(-$sidebar-total-width);
+  //transform: translateX(-$sidebar-right-margin);
+  margin-right: $sidebar-right-margin;
 }
 
 // move contents button out of navbar-contents and align with sidebar
@@ -94,7 +104,7 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
 }
 
 .ptx-toc {
-  margin-top: 36px;
+  padding-top: 36px;
   border: none;
   position: sticky;
   top: $nav-height;
@@ -106,16 +116,22 @@ $grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-l
   padding-left: 8px;
 }
 
-.ptx-page-footer{
-  z-index: 1000;
-}
 
 // Sidebar hits the left side of page - need to lock it in place
-$sidebar-lock-breakpoint: $content-with-padding-width + 2 * $sidebar-total-width;
+$sidebar-lock-breakpoint: $main-width + 2 * $sidebar-total-width;
 // @debug "$sidebar-lock-breakpoint: #{$sidebar-lock-breakpoint}";
 @media screen and (width <= $sidebar-lock-breakpoint) {
   .ptx-page {
-    margin-left: $sidebar-total-width;
+    margin-left: 0;
+    max-width: 100%;
+  }
+  .ptx-main {
+    margin-right: calc(100% - $main-width - $sidebar-total-width);
+    max-width: $main-width;
+  }
+  .ptx-sidebar.hidden + .ptx-main {
+    margin-right: auto;
+    margin-left: auto;
   }
   .ptx-navbar .ptx-navbar-contents {
     margin-left: $sidebar-total-width;
@@ -125,25 +141,13 @@ $sidebar-lock-breakpoint: $content-with-padding-width + 2 * $sidebar-total-width
 // When the the main content is almost to the edge of the screen, we remove the drop-shadow
 // and change the layout strategy to center the content in what space is available
 // Sidebar no only consumes minimum required space as whitespace on left/right of main should be equal
-$page-border-breakpoint: $content-with-padding-width + $sidebar-width + 2 * $sidebar-right-margin;
+$page-border-breakpoint: $main-width + $sidebar-width + 2 * $sidebar-right-margin;
 // @debug "page-border-breakpoint: #{$page-border-breakpoint}";
 @media screen and (width <= $page-border-breakpoint) {
-  // page now extends to fill all extra space
-  .ptx-page {
-    margin-left: $sidebar-width;
-    width: calc(100% - $sidebar-width);
-    max-width: unset;
-  }
-
-  // if sidebar is hidden, no need for margin
-  .ptx-page:has(.ptx-sidebar.hidden) {
-    margin-left: 0;
-    width: 100%;
-  }
-
   // main is centered in page
   .ptx-main {
     box-shadow: unset;
+    margin-right: auto;
 
     // shrink content padding
     .ptx-content {
@@ -153,15 +157,10 @@ $page-border-breakpoint: $content-with-padding-width + $sidebar-width + 2 * $sid
     }
   }
 
-  // adjust root variable to match new padding
-  :root {
-    --content-padding: #{$content-side-padding-tight};
+  .ptx-sidebar {
+    margin-right: 0;
   }
 
-  // adjust sidebar position to match just its dimensions
-  .ptx-sidebar {
-    transform: translateX(-$sidebar-width);
-  }
   // align toc-toggle with right edge of sidebar
   .ptx-navbar .ptx-navbar-contents {
     margin-left: $sidebar-width;
@@ -185,39 +184,11 @@ $page-border-breakpoint: $content-with-padding-width + $sidebar-width + 2 * $sid
 }
 
 
-// Now it is time to hide the sidebar unless requested, at which point it overlays
+// Now it is time to hide the sidebar unless requested
 $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $sidebar-width;
 // @debug "sidebar-hide-breakpoint: #{$sidebar-hide-breakpoint}";
 @media screen and (width <= $sidebar-hide-breakpoint) {
   .ptx-sidebar {
     display: none;
-    transform: translate(0px);
-  }
-
-  .ptx-toc {
-    margin-top: 0;  //no longer need/want gap
-  }
-
-  // no longer need to move the page over or control size
-  .ptx-page {
-    margin: 0;
-    width: unset;
-  }
-}
-
-// Nav to bottom breakpoint. Assumes that sidebar is already hidden
-@media screen and (width <= #{$navbar-breakpoint}){
-  .ptx-masthead .ptx-banner {
-    width: 100%;
-    padding: 10px 10px;
-  }
-
-  // restore toc-toggle and navbar-contents to normal
-  .ptx-navbar .ptx-navbar-contents {
-    margin-left: 0;
-  }
-  .ptx-navbar .toc-toggle {
-    transform: unset;
-    position: relative;
   }
 }

@@ -70,9 +70,18 @@ $navbar-breakpoint: 800px !default;
 @media screen and (max-width: min($sidebar-breakpoint, $navbar-breakpoint)) {
   .ptx-sidebar {
     position: fixed;
+    z-index: 1000;
     top: unset;
+    height: auto;
+    max-height: 80vh;
+    max-width: 80vw;
     bottom: $nav-height;
+    border-right: 2px solid var(--toc-border-color);
+    border-top: 2px solid var(--toc-border-color);
+  }
+  .ptx-toc {
     border-top: 2px solid var(--toc-border-color);
     border-bottom: 0;
+    max-height: 80vh;
   }
 }
