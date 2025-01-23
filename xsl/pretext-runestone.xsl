@@ -1211,7 +1211,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Parsons Problem (Horizontal)-->
 
-<xsl:template  match="exercise[@exercise-interactive = 'parson-horizontal']" mode="runestone-to-interactive">
+<xsl:template  match="*[@exercise-interactive = 'parson-horizontal']" mode="runestone-to-interactive">
     <!-- determine these options before context switches -->
     <xsl:variable name="active-language">
       <xsl:apply-templates select="." mode="active-language"/>
