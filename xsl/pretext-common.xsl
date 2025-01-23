@@ -6035,9 +6035,21 @@ Book (with parts), "section" at level 3
 <!-- it is the layout template for each sidebyside     -->
 <!-- that goes out to the enclosing group to get them  -->
 
+<!-- default wrapper does nothing, output modes may    -->
+<!-- optionally provide some containing structure      -->
+<xsl:template name="sbsgroup-wrapper">
+    <xsl:param name="sbsgroup-content"/>
+    <xsl:copy-of select="$sbsgroup-content"/>
+</xsl:template>
+
 <xsl:template match="sbsgroup">
-    <xsl:apply-templates select="sidebyside" />
-    <xsl:apply-templates select="." mode="post-sbsgroup"/>
+    <xsl:variable name="data">
+        <xsl:apply-templates select="sidebyside" />
+        <xsl:apply-templates select="." mode="post-sbsgroup"/>
+    </xsl:variable>
+    <xsl:call-template name="sbsgroup-wrapper">
+        <xsl:with-param name="sbsgroup-content" select="$data"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Since stackable items do not carry titles or captions,   -->
