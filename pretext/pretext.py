@@ -3703,7 +3703,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         theme_opts['options']['entry-point'] = os.path.join(get_source_path(xml), theme_opts['options']['entry-point'])
 
     # attempt build
-    error_message = "Node.js is required to build themes other than default-modern. Make sure it is installed and in your PATH"
+    error_message = "Node.js is required to build themes other than default-modern. Make sure it is installed and in your PATH. Then do 'npm install' in the pretext/script/cssbuilder directory. https://pretextbook.org/doc/guide/html/node-and-npm.html"
     try:
         import subprocess, json
         node_exec_cmd = get_executable_cmd("node")
@@ -3748,6 +3748,9 @@ def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
     elif theme_name == "default-modern":
         try:
             get_executable_cmd("node")
+            if not os.path.exists(os.path.join(get_ptx_path(), "script", "cssbuilder", "node_modules")):
+                log.info("CSSBuilder packages not installed. Relying on prebuilt default-modern. To fix this, run 'npm install' in the pretext/script/cssbuilder directory. https://pretextbook.org/doc/guide/html/node-and-npm.html")
+                use_prerolled = True
         except Exception as e:
             log.info("Node.js not available. Relying on prebuilt default-modern.")
             use_prerolled = True
