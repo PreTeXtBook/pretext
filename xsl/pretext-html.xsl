@@ -13218,28 +13218,32 @@ TODO:
 
 <!-- Brand Logo -->
 <!-- Place image in masthead -->
+<!-- We either create a link with an image, or just an image. -->
+<!-- NB: This template does nothing unless $docinfo/brandlogo -->
+<!-- exists, in which case we assume @source exists, as       -->
+<!-- required by the schema.                                  -->
 <xsl:template name="brand-logo">
-    <a id="logo-link" class="logo-link" target="_blank" >
-        <xsl:attribute name="href">
-            <xsl:choose>
-                <xsl:when test="not($docinfo/brandlogo/@url = '')">
-                    <xsl:value-of select="$docinfo/brandlogo/@url"/>
-                </xsl:when>
-                <xsl:when test="$b-has-baseurl">
-                    <xsl:value-of select="$baseurl"/>
-                </xsl:when>
-                <xsl:otherwise/>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:if test="$docinfo/brandlogo/@source">
-            <xsl:variable name="location">
-                <!-- empty when not using managed directories -->
-                <xsl:value-of select="$external-directory"/>
-                <xsl:value-of select="$docinfo/brandlogo/@source"/>
-            </xsl:variable>
-            <img src="{$location}" alt="Logo image"/>
-        </xsl:if>
-    </a>
+    <xsl:if test="$docinfo/brandlogo">
+        <xsl:variable name="location">
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="$docinfo/brandlogo/@source"/>
+        </xsl:variable>
+
+        <xsl:choose>
+            <xsl:when test="$docinfo/brandlogo/@url">
+                <a id="logo-link" class="logo-link" target="_blank" >
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$docinfo/brandlogo/@url"/>
+                    </xsl:attribute>
+                    <img src="{$location}" alt="Logo image"/>
+                </a>
+            </xsl:when>
+            <xsl:otherwise>
+                    <img src="{$location}" alt="Logo image"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
 </xsl:template>
 
 <!-- Analytics Footers -->
