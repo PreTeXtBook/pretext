@@ -1714,6 +1714,38 @@ dl.description-list dl dd {
 ol > li {
   padding-left: 0.25em;
 }
+.fillin {
+  display: inline-block;
+  border-bottom-style: solid;
+  border-width: 1px;
+  margin-right: 0.1em;
+  margin-bottom: -0.25em;
+}
+.fillin .underline {
+  display: inline-block;
+  border-bottom-style: solid;
+  border-width: 1px;
+  margin-right: 0.1em;
+  margin-bottom: -0.25em;
+}
+.fillin .box {
+  display: inline-block;
+  border: none;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  margin-bottom: -0.25em;
+  outline: 1px solid black;
+  height: 1.3em;
+}
+.fillin .shade {
+  display: inline-block;
+  border: none;
+  margin-right: 0.1em;
+  margin-left: 0.1em;
+  margin-bottom: -0.25em;
+  background-color: #eee;
+  height: 1.3em;
+}
 .heading:is(h1, h2, h3, h4, h5, h6) {
   margin: 0;
   font-size: unset;
