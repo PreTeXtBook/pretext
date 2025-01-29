@@ -109,7 +109,7 @@ li > .para > .autopermalink {
 }
 
 @keyframes target-fade {
-    // 0% { background-color: var(--activated-content-bg) }
-    // 100% { background-color: inherit;
-    //        opacity: 1; }
+    0% { background-color: var(--activated-content-bg) }
+    100% { background-color: inherit;
+           opacity: 1; }
 }
