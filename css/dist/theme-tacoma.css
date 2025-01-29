@@ -953,6 +953,9 @@ section dl dd .aside-like.front {
 .exercisegroup .conclusion .heading {
   font-size: inherit;
 }
+.exercise-like > .exercise-like.task {
+  margin-left: 20px;
+}
 .exercise-wrapper form button:hover {
   cursor: pointer;
   background-color: #e0e0ff;

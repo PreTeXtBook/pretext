@@ -47,7 +47,10 @@
   }
 }
 
-
+// subtasks are indented
+.exercise-like > .exercise-like.task {
+  margin-left: 20px;
+}
 
 
 
