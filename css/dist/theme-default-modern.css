@@ -2620,6 +2620,13 @@ li > .para > .autopermalink {
   animation: target-fade 10s 1;
 }
 @keyframes target-fade {
+  0% {
+    background-color: var(--activated-content-bg);
+  }
+  100% {
+    background-color: inherit;
+    opacity: 1;
+  }
 }
 em.alert {
   font-weight: bold;
