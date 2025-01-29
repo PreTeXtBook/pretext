@@ -979,7 +979,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #  Dynamic Exercise Static Representations
 #
 ################################
-def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ext_rs_methods):
     import asyncio  # get_event_loop()
 
     # external module, often forgotten
@@ -1060,7 +1060,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
 
     # interrogate Runestone server (or debugging switches) and populate
     # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams)
+    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
@@ -3431,11 +3431,13 @@ def _parse_runestone_services(et):
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
-def _runestone_services(stringparams):
+def _runestone_services(stringparams, ext_rs_methods):
     """Query the very latest Runestone Services file from the RS CDN"""
 
     # stringparams - string parameter dictionary, this gains three
     #                new keys which are passed on to the XSL eventually
+    # ext_rs_methods - an optional function that can replace the querying
+    #                   of the Runestone Services file
     # Result - returns five pieces of discovered or set information,
     #          see *two* retrn statements, one is intermediate.
     #          Failure is an option, if a network request fails
@@ -3483,7 +3485,37 @@ def _runestone_services(stringparams):
         return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
     # Otherwise, we have a URL pointing to the Runestone server/CDN
-    # which may be successful and may not.  Network failure is fatal.
+    # which may be successful and may not.
+    try:
+        if ext_rs_methods and "debug.rs.version" not in stringparams:
+            # ext_rs_methods can be passed by the calling function.
+            # It should only accept keyword arguments, including `format` to
+            # distinguish between different types of requests.  Here we use
+            # format="xml" to indicate we are getting the small XML file containing
+            # data about the services and returning it as a string.
+            services_xml = ext_rs_methods(url=services_url, format="xml")
+        else:
+            # Network failure is fatal.  query_runestone_services() will raise an exception
+            # if it cannot get the Runestone Services file
+            services_xml = query_runestone_services(services_url)
+    except Exception as e:
+        raise Exception(e)
+
+    # Now services_xml should be meaningful since we haven't raised an exception.
+
+    services = ET.fromstring(services_xml)
+    # Interrogate the services XML
+    rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
+
+    # Return, plus side-effect
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+    return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
+
+
+def query_runestone_services(services_url):
+    """Query the Runestone Services file from the Runestone CDN.  Returns the response object's text (xml) or raises an exception if the network request fails."""
 
     # We assume an online query is a success, until we learn otherwise
     online_success = True
@@ -3499,7 +3531,7 @@ def _runestone_services(stringparams):
     # Make a request with requests, which could fail if offline
     if online_success:
         try:
-            services_response = requests.get(services_url, timeout=10)
+            services_response = requests.get(services_url, timeout=(1,10)) # 1 second connect, 10 second read
         except requests.exceptions.RequestException as e:
             msg = '\n'.join(['there was a network problem while trying to retrieve "{}"',
                              'from the Runestone CDN and the reported problem is:',
@@ -3526,33 +3558,22 @@ def _runestone_services(stringparams):
         log.debug(msg)
         # fatal error here, a URL is not doing the job
         raise Exception(msg)
-
-    # Now online_success is still True, we have not return'ed
-    # and services_response should be meaningful
-
-    # Convert Runestone file back to XML to unpack with lxml
-    services_xml = services_response.text
-    services = ET.fromstring(services_xml)
-    # Interrogate the services XML
-    rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
-
-    # Return, plus side-effect
-    stringparams["rs-js"] = rs_js
-    stringparams["rs-css"] = rs_css
-    stringparams["rs-version"] = rs_version
-    return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
+    # Return the XML from the services response
+    return services_response.text
 
 
-def _place_runestone_services(tmp_dir, stringparams):
+def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
     '''Obtain Runestone Services and place in _static directory of build'''
 
     # stringparams - this will be changed, receives Runestone Services information
     #                also contains potential debugging switches to influence behavior
+    # ext_rs_methods - an optional function that can replace the querying and
+    #                  downloading of the Runestone Services file
 
     # See if we can get Runestone Services, or interpret debugging selections
     # This call will always change  stringparams (absent network failures)
     # These get communicated eventually to the XSL to formulate the HTML #head
-    rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_services(stringparams)
+    rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_services(stringparams, ext_rs_methods)
     # A URL to the Runestone servers will have been successful
     # in the "usual" and  debug.rs.version  cases
     if "debug.rs.dev" not in stringparams:
@@ -3573,7 +3594,15 @@ def _place_runestone_services(tmp_dir, stringparams):
         try:
             msg = 'Downloading Runestone Services, version {}'
             log.info(msg.format(rs_version))
-            download_file(rs_cdn_url + services_file_name, services_build_path)
+            if ext_rs_methods:
+                # ext_rs_methods can be passed by the calling function.
+                # It should only accept keyword arguments, including `format` to
+                # distinguish between different types of requests.  Here we use
+                # the format "tgz" to indicate that we are finding the full
+                # tgz archive of Runestone Services.
+                ext_rs_methods(url=rs_cdn_url + services_file_name, out_path=services_build_path, format="tgz")
+            else:
+                download_file(rs_cdn_url + services_file_name, services_build_path)
             log.info("Extracting Runestone Services from archive file")
             import tarfile
             services_file = tarfile.open(services_build_path)
@@ -3743,7 +3772,7 @@ def get_web_asset(url):
         raise Exception(msg)
 
     try:
-        services_response = requests.get(url, timeout=10)
+        services_response = requests.get(url, timeout=(1,10))
     except requests.exceptions.RequestException as e:
         msg = '\n'.join(['There was a network problem while trying to download "{}"',
                             'and the reported problem is:',
@@ -3775,7 +3804,7 @@ def download_file(url, dest_filename):
     except Exception as e:
         raise Exception("Failed to save download", dest_filename)
 
-def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir):
+def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir, ext_rs_methods):
     """Convert XML source to HTML files, in destination directory or as zip file"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -3789,7 +3818,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     # interrogate Runestone server (or debugging switches) and populate
     # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams)
+    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
 
     # support publisher file, and subtree argument
     if pub_file:
