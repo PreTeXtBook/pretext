@@ -2376,8 +2376,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="get-theme-option">
     <xsl:param name="optname"/>
     <xsl:choose>
-        <!-- Must be an option in the theme -->
-        <xsl:when test="$html-theme/option[@name = $optname]">
+        <!-- Must be an option in the theme or a custom theme -->
+        <xsl:when test="$html-theme/option[@name = $optname] or $html-theme[@name = 'custom']">
             <xsl:choose>
                 <xsl:when test="$publication/html/css/options/@*[name() = $optname]">
                     <!-- Exists in pub file, use that -->
@@ -2414,8 +2414,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="options-string">
             <xsl:for-each select="$publication/html/css/@*">
                 <xsl:variable name="optname" select="name(.)"/>
-                <!-- only pass on values that match theme options -->
-                <xsl:if test="$html-theme/option[@name = $optname]">
+                <!-- only pass on values that match theme options unless custom -->
+                <xsl:if test="$html-theme/option[@name = $optname] or $html-theme[@name = 'custom']">
                     <xsl:value-of select="concat('&quot;', name(.), '&quot;:')"/>
                     <xsl:value-of select="concat('&quot;', ., '&quot;')"/>
                     <xsl:text>,</xsl:text>
