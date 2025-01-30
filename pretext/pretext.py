@@ -3721,6 +3721,14 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         log.error(error_message)
         raise e
 
+# Temporary helper to move style file for custom ol markers into _static/pretext/css
+def move_ol_marker_css(tmp_dir):
+    css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
+    src = os.path.join(tmp_dir, "ol-markers.css")
+    dest = os.path.join(get_ptx_path(), os.path.join(css_dest, "ol-markers.css"))
+    if os.path.exists(src):
+        shutil.move(src, dest)
+
 def check_color_contrast(color1, color2):
     try:
         from coloraide import Color
@@ -3849,6 +3857,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
+    # extra css for custom ol markers
+    move_ol_marker_css(tmp_dir)
 
     if file_format  == "html":
         # with multiple files, we need to copy a tree

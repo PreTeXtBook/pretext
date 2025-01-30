@@ -15,6 +15,11 @@ ol.lower-alpha {
     list-style-type: lower-alpha;
 }
 
+// Match LaTeX style for second level (i.e. level="1") lists
+ol.lower-alpha-level-1 > li::marker {
+    content: "("counter(list-item,lower-alpha)") ";
+}
+
 ol.upper-alpha {
     list-style-type: upper-alpha;
 }
