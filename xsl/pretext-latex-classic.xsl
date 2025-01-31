@@ -113,7 +113,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{document}&#xa;&#xa;</xsl:text>
     <xsl:call-template name="bibinfo-post-begin-document" />
 
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*"/>
 
     <xsl:text>\end{document}&#xa;&#xa;</xsl:text>
 </xsl:template>
@@ -337,7 +337,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="abstract">
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
 
@@ -517,24 +517,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 
 <xsl:template match="section|subsection|subsubsection|appendix">
+    <xsl:apply-templates select="." mode="console-typeout"/>
     <xsl:text>\</xsl:text>
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}&#xa;&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>% end of </xsl:text>
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>: </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
+
 <xsl:template match="subsubsubsection">
+    <xsl:apply-templates select="." mode="console-typeout"/>
     <xsl:text>\paragraph</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}&#xa;&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>% end of subsubsubsection: </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
@@ -592,11 +595,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: The following will certainly change when the bibliography work is completed -->
 
 <xsl:template match="references">
+    <xsl:apply-templates select="." mode="console-typeout"/>
     <xsl:text>\bibliographystyle{</xsl:text>
     <xsl:value-of select="$bibliographystyle"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{thebibliography}{99}&#xa;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{thebibliography}&#xa;&#xa;</xsl:text>
 </xsl:template>
 
