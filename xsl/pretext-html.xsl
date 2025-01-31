@@ -211,14 +211,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Here we assume there is at most one                      -->
 <xsl:variable name="the-index"          select="($document-root//index)[1]"/>
 
-<!-- ol markers                                                 -->
-<!-- Make a master list of all author-supplied ol marker styles -->
+<!-- ol markers                                                        -->
+<!-- Make a master list of all unique author-supplied ol marker styles -->
+<xsl:key name="marker-key" match="ol|ol-marker" use="@marker"/> <!-- never used on node sets that contain mix of ol and ol-marker -->
 <xsl:variable name="ol-markers">
     <ol-markers>
-        <xsl:apply-templates select="$document-root//ol[@marker]" mode="ol-markers" />
+        <xsl:apply-templates select="$document-root//ol[@marker and count(. | key('marker-key', @marker)[1]) = 1]" mode="ol-markers"/>
     </ol-markers>
 </xsl:variable>
-<xsl:key name="marker-key" match="ol-marker" use="concat(@value,@level)" />
 
 
 <!-- ######## -->
@@ -5594,18 +5594,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Utility template to determine           -->
-<!-- marker style class for an ol list       -->
-<xsl:template match="ol[@marker]" mode="ol-marker-class">
-    <xsl:variable name="marker-value" select="./@marker" />
-    <xsl:variable name="level" select="./@ordered-list-level" />
-    <xsl:for-each select="exsl:node-set($ol-markers)">
-        <!-- can take the first marker node with matching   -->
-        <!-- key as all others will be identical            -->
-        <xsl:apply-templates select="key('marker-key', concat($marker-value,$level))[1]" mode="ol-marker-class" />
-    </xsl:for-each>
-</xsl:template>
-
 <!-- Lists themselves -->
 <!-- Hard-code the list style, trading -->
 <!-- on match in label templates.      -->
@@ -5628,14 +5616,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
             <xsl:variable name="ol-marker-class">
-                <xsl:choose>
-                    <xsl:when test="self::ol/@marker">
-                        <xsl:apply-templates select="." mode="ol-marker-class" />
-                    </xsl:when>
-                    <xsl:when test="self::ol and $mbx-format-code = 'a' and @ordered-list-level = '1'">
-                        <xsl:text>lower-alpha-level-1</xsl:text>
-                    </xsl:when>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="ol-marker-class" />
             </xsl:variable>
             <xsl:if test="not($ol-marker-class = '')">
                 <xsl:text> </xsl:text>
@@ -5664,51 +5645,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="ol" mode="ol-markers">
-    <xsl:variable name="mbx-format-code" select="./@format-code" />
+<xsl:template match="ol[@marker]" mode="ol-marker-class">
+    <xsl:variable name="marker-value" select="./@marker" />
+    <xsl:for-each select="exsl:node-set($ol-markers)">
+        <!-- Should be only one match since ol marker -->
+        <!-- index node set contains no duplicates    -->
+        <xsl:value-of select="key('marker-key', $marker-value)[1]/@classname"/>
+    </xsl:for-each >
+</xsl:template>
+
+<xsl:template match="ol" mode="ol-marker-class">
+    <xsl:choose>
+        <xsl:when test="@format-code = 'a' and @ordered-list-level = '1'">
+            <xsl:text>lower-alpha-level-1</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ul" mode="ol-marker-class"/>
+
+<xsl:template match="ol[@marker]" mode="ol-markers">
     <xsl:element name="ol-marker">
-        <xsl:attribute name="format-code">
-            <xsl:value-of select="$mbx-format-code" />
-        </xsl:attribute>
-        <xsl:attribute name="value">
-            <xsl:value-of select="./@marker" />
-        </xsl:attribute>
-        <xsl:attribute name="level">
-            <xsl:value-of select="./@ordered-list-level" />
-        </xsl:attribute>
-        <xsl:attribute name="prefix">
-            <xsl:value-of select="./@marker-prefix" />
-        </xsl:attribute>
-        <xsl:attribute name="suffix">
-            <xsl:value-of select="./@marker-suffix" />
+        <xsl:copy-of select="@format-code"/>
+        <xsl:copy-of select="@marker"/>
+        <xsl:copy-of select="@marker-prefix"/>
+        <xsl:copy-of select="@marker-suffix"/>
+        <xsl:attribute name="classname">
+            <xsl:text>ol-marker-</xsl:text>
+            <xsl:value-of select="position()" />
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="ol-marker" mode="ol-marker-class">
-    <xsl:text>ol-marker-</xsl:text>
-    <xsl:value-of select="generate-id()" />
-</xsl:template>
-
-<!-- Creates custom formatting for  -->
-<!-- each unique combination of     -->
-<!-- ol/@marker and list level      -->
+<!-- Creates custom formatting for each unique ol/@marker -->
 <xsl:template match="ol-marker" mode="ol-marker-style">
-    <xsl:variable name="marker-id" select="generate-id()" />
-    <!-- only create style rule if we are the first of -->
-    <!-- our specific combination of marker list level -->
-    <xsl:if test="$marker-id = generate-id(key('marker-key', concat(@value,@level))[1])">
-        <!-- format child li elements according to marker prefix/code/suffix -->
-        <xsl:text>ol.</xsl:text>
-        <xsl:apply-templates select="." mode="ol-marker-class" />
-        <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
-        <xsl:value-of select="./@prefix" />
-        <xsl:text>&quot;counter(list-item,</xsl:text>
-        <xsl:apply-templates select="." mode="html-list-class" />
-        <xsl:text>)&quot;</xsl:text>
-        <xsl:value-of select="./@suffix" />
-        <xsl:text> &quot;; }&#xa;</xsl:text>
-    </xsl:if>
+    <!-- format child li elements according to marker prefix/code/suffix -->
+    <xsl:text>ol.</xsl:text>
+    <xsl:value-of select="./@classname"/>
+    <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
+    <xsl:value-of select="./@marker-prefix" />
+    <xsl:text>&quot;counter(list-item,</xsl:text>
+    <xsl:apply-templates select="." mode="html-list-class" />
+    <xsl:text>)&quot;</xsl:text>
+    <xsl:value-of select="./@marker-suffix" />
+    <xsl:text> &quot;; }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- CSS file for custom ol markers -->
@@ -10737,7 +10717,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:with-param name="name" select="'expand_less'"/>
                             </xsl:call-template>
                             <span class="name">Top</span>
-                        </a> 
+                        </a>
                         <xsl:apply-templates select="." mode="next-button"/>
                     </div>
                 </main>
