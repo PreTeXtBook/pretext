@@ -105,17 +105,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$documentclass" />
-    <xsl:text>}&#xa;&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
 
     <xsl:call-template name="latex-preamble" />
 
     <xsl:call-template name="bibinfo-pre-begin-document" />
-    <xsl:text>\begin{document}&#xa;&#xa;</xsl:text>
+    <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="bibinfo-post-begin-document" />
 
     <xsl:apply-templates select="*"/>
 
-    <xsl:text>\end{document}&#xa;&#xa;</xsl:text>
+    <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -273,7 +273,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root/frontmatter/abstract">
         <xsl:apply-templates select="$document-root/frontmatter/abstract"/>
     </xsl:if>
-    <xsl:text>\maketitle&#xa;&#xa;</xsl:text>
+    <xsl:text>\maketitle&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="article-title">
@@ -289,7 +289,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="subtitle"/>
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:text>}&#xa;&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="bibinfo/author" mode="article-info">
@@ -469,13 +469,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>\end{proof}&#xa;&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+    <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Cases in proofs -->
 <xsl:template match="case">
-    <xsl:text>\textit{</xsl:text>
+    <xsl:text>\par\medskip%&#xa;</xsl:text>
+    <xsl:text>\noindent\textit{</xsl:text>
     <xsl:if test="@direction">
         <xsl:apply-templates select="." mode="case-direction"/>
         <xsl:text>&#xa0;</xsl:text>
@@ -491,10 +492,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- label -->
     <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -522,13 +521,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}&#xa;&#xa;</xsl:text>
+    <xsl:text>}\label{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id" />
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>% end of </xsl:text>
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>: </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="subsubsubsection">
@@ -536,11 +537,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\paragraph</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}&#xa;&#xa;</xsl:text>
+    <xsl:text>}\label{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id" />
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>% end of subsubsubsection: </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Paragraphs -->
@@ -570,7 +573,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>%% end paragraphs&#xa;&#xa;</xsl:text>
+    <xsl:text>%% end paragraphs&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
@@ -601,7 +604,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{thebibliography}{99}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>\end{thebibliography}&#xa;&#xa;</xsl:text>
+    <xsl:text>\end{thebibliography}&#xa;</xsl:text>
 </xsl:template>
 
 
