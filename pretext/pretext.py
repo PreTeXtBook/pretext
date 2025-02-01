@@ -3690,7 +3690,7 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
     if 'secondary-color' not in theme_opts['options'].keys():
         theme_opts['options']['secondary-color'] = color_schemes[scheme]['secondary-color']
 
-    log.debug("Using prebuilt theme: " + theme_name + " with options: " + str(theme_opts))
+    log.info("Using prebuilt CSS theme: " + theme_name + " with options: " + str(theme_opts))
 
     # copy src -> dest with modifications
     with open(src, 'r') as theme_file:
@@ -3740,7 +3740,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         node_exec_cmd = get_executable_cmd("node")
         # theme name is prefixed with "theme-" in the cssbuilder script output
         full_name = "theme-{}".format(theme_name)
-        log.debug("Building custom theme: " + full_name)
+        log.info("Building custom css theme: " + full_name)
         log.debug("Theme options:" + json.dumps(theme_opts))
         result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=60)
         if result.stdout:
