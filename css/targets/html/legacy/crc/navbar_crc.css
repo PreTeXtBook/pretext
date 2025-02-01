@@ -23,6 +23,7 @@
 .ptx-navbar-contents {
   display: flex;
   flex: 1;
+  max-width: 100%;
 }
 
 
