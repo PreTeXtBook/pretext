@@ -192,3 +192,16 @@ $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $si
     display: none;
   }
 }
+
+//Adjust again when navbar moves to bottom.
+@media screen and (max-width: $navbar-breakpoint) {
+  // Undo modifications to toc-toggle and margin that held space for it
+  .ptx-navbar .ptx-navbar-contents {
+    margin-left: 0;
+  }
+  .ptx-navbar .toc-toggle {
+      transform: none;
+      position: relative;
+      justify-content: center;
+  }
+}
