@@ -40,8 +40,12 @@ $nav-height: 36px !default;
 @media screen and (max-width: $navbar-breakpoint) {
   .ptx-page-footer {
     // prevent icons from spreading too much
-    gap: 50px;
+    gap: 20px;
     justify-content: center;
     margin-bottom: $nav-height - 2;
+
+    & > a > .logo:first-child {
+      height: 2em;
+    }
   }
 }
