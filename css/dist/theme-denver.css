@@ -366,6 +366,10 @@ body.pretext > a.assistive:focus {
     right: 0;
     z-index: 1100;
     background: var(--button-border-color);
+    max-width: 100vw;
+  }
+  .ptx-navbar .ptx-navbar-contents {
+    max-width: 100vw;
   }
   .ptx-navbar .nav-runestone-controls {
     flex: 0;
@@ -686,9 +690,12 @@ body.pretext > a.assistive:focus {
 }
 @media screen and (max-width: 800px) {
   .ptx-page-footer {
-    gap: 50px;
+    gap: 20px;
     justify-content: center;
     margin-bottom: 34px;
+  }
+  .ptx-page-footer > a > .logo:first-child {
+    height: 2em;
   }
 }
 .ptx-main {
@@ -776,6 +783,16 @@ body.pretext > a.assistive:focus {
 @media screen and (width <= 880px) {
   .ptx-sidebar {
     display: none;
+  }
+}
+@media screen and (max-width: 800px) {
+  .ptx-navbar .ptx-navbar-contents {
+    margin-left: 0;
+  }
+  .ptx-navbar .toc-toggle {
+    transform: none;
+    position: relative;
+    justify-content: center;
   }
 }
 .aside-like {

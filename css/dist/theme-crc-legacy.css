@@ -4340,6 +4340,7 @@ body.pretext {
 .ptx-navbar-contents {
   display: flex;
   flex: 1;
+  max-width: 100%;
 }
 .ptx-navbar .nav-other-controls {
   margin-left: 1em;

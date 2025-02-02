@@ -4344,6 +4344,7 @@ nav.ptx-navbar {
 .ptx-navbar-contents {
   display: flex;
   flex: 1;
+  max-width: 100%;
 }
 .ptx-navbar .button {
   font-size: 1em;
@@ -4503,6 +4504,7 @@ nav.ptx-navbar {
 .ptx-navbar-contents {
   display: flex;
   flex: 1;
+  max-width: 100%;
 }
 .pretext .ptx-navbar .toc-toggle {
   border-left: 0;
