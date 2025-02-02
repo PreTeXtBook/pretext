@@ -128,6 +128,11 @@ $center-content: true !default;
     right: 0;
     z-index: 1100;
     background: var(--button-border-color);
+    max-width: 100vw;
+
+    .ptx-navbar-contents {
+      max-width: 100vw;
+    }
 
     .nav-runestone-controls {
       flex: 0;
