@@ -1020,11 +1020,10 @@ section.solutions > h6.heading,
 section.solutions section > h6.heading {
   font-size: 1.25em;
 }
-.sidebyside {
-  width: 100%;
+.sbsgroup > *:not(:first-child) {
+  margin-top: 1.5em;
 }
-.sidebyside .sbsgroup {
-  width: 100%;
+.sidebyside {
 }
 .sidebyside .sbsrow {
   display: flex;
@@ -2229,7 +2228,7 @@ figure {
 figcaption {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 2px;
+  margin-top: 0.5em;
 }
 figcaption code.code-inline {
   white-space: pre;
