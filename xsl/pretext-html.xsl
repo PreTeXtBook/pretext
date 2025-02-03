@@ -5655,11 +5655,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ol" mode="ol-marker-class">
-    <xsl:choose>
-        <xsl:when test="@format-code = 'a' and @ordered-list-level = '1'">
-            <xsl:text>lower-alpha-level-1</xsl:text>
-        </xsl:when>
-    </xsl:choose>
+    <xsl:if test="@format-code = 'a' and @ordered-list-level = '1'">
+        <xsl:text>lower-alpha-level-1</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="ul" mode="ol-marker-class"/>
