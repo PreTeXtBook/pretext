@@ -70,6 +70,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         % employed in a PreFigure linear algebra diagram
         \newcommand{\bvec}{{\mathbf b}}
         \newcommand{\vvec}{{\mathbf v}}
+        % employed in Valerio De Angelis sbsgroup operation tables
+        \newcommand{\class}[2][\sim]{\lbrack #2\rbrack_{#1}}% Classe di equivalenza
         </macros>
         <prefigure-preamble xmlns="https://prefigure.org">
             <!-- employed in a PreFigure linear algebra diagram -->
@@ -12284,7 +12286,108 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </sbsgroup>
 
+                <p>The following is a <tag>sbsgroup</tag> full of <q>operation</q> tables.  Once upon a time it was rather cramped vertically in HTML output, but Andrew Scholer improved the spacing at <url href="https://github.com/PreTeXtBook/pretext/pull/2387" visual="github.com/PreTeXtBook/pretext/pull/2387">GitHub #2387</url>.  The example is from Valerio De Angelis.</p>
 
+                <figure xml:id="tabelle_classi_di_resto">
+                    <caption>Tabelle delle operazioni per <m>1\le n\le 4</m></caption>
+                    <sbsgroup>
+                        <sidebyside>
+                          <p>
+                            <me>
+                              \begin{array}{c|c}
+                                + \amp \class[1]{0} \\
+                                \hline
+                                \class[1]{0} \amp \class[1]{0}
+                              \end{array}
+                            </me>
+                          </p>
+                          <p>
+                            <me>
+                              \begin{array}{c|c}
+                                \cdot \amp \class[1]{0} \\
+                                \hline
+                                \class[1]{0} \amp \class[1]{0}
+                              \end{array}
+                            </me>
+                          </p>
+                        </sidebyside>
+
+                        <sidebyside>
+                          <p>
+                            <me>
+                              \begin{array}{c|cc}
+                                + \amp \class[2]{0} \amp \class[2]{1} \\
+                                \hline
+                                \class[2]{0} \amp \class[2]{0} \amp \class[2]{1}\\
+                                \class[2]{1} \amp \class[2]{1} \amp \class[2]{0}
+                              \end{array}
+                            </me>
+                          </p>
+                          <p>
+                            <me>
+                              \begin{array}{c|cc}
+                                \cdot \amp \class[2]{0} \amp \class[2]{1} \\
+                                \hline
+                                \class[2]{0} \amp \class[2]{0} \amp \class[2]{0}\\
+                                \class[2]{1} \amp \class[2]{0} \amp \class[2]{1}
+                              \end{array}
+                            </me>
+                          </p>
+                        </sidebyside>
+
+                        <sidebyside>
+                          <p>
+                            <me>
+                              \begin{array}{c|ccc}
+                                + \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
+                                \hline
+                                \class[3]{0} \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
+                                \class[3]{1} \amp \class[3]{1} \amp \class[3]{2} \amp \class[3]{0} \\
+                                \class[3]{2} \amp \class[3]{2} \amp \class[3]{0} \amp \class[3]{1} \\
+                              \end{array}
+                            </me>
+                          </p>
+                          <p>
+                            <me>
+                              \begin{array}{c|ccc}
+                                \cdot \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
+                                \hline
+                                \class[3]{0} \amp \class[3]{0} \amp \class[3]{0} \amp \class[3]{0} \\
+                                \class[3]{1} \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
+                                \class[3]{2} \amp \class[3]{0} \amp \class[3]{2} \amp \class[3]{1} \\
+                              \end{array}
+                            </me>
+                          </p>
+                        </sidebyside>
+
+                        <sidebyside>
+                          <p>
+                            <me>
+                              \begin{array}{c|cccc}
+                              + \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
+                              \hline
+                              \class[4]{0} \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
+                              \class[4]{1} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \amp \class[4]{0} \\
+                              \class[4]{2} \amp \class[4]{2} \amp \class[4]{3} \amp \class[4]{0} \amp \class[4]{1} \\
+                              \class[4]{3} \amp \class[4]{3} \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \\
+                            \end{array}
+                            </me>
+                          </p>
+                          <p>
+                            <me>
+                              \begin{array}{c|cccc}
+                                \cdot \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
+                                \hline
+                                \class[4]{0} \amp \class[4]{0} \amp \class[4]{0} \amp \class[4]{0} \amp \class[4]{0} \\
+                                \class[4]{1} \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
+                                \class[4]{2} \amp \class[4]{0} \amp \class[4]{2} \amp \class[4]{0} \amp \class[4]{2} \\
+                                \class[4]{3} \amp \class[4]{0} \amp \class[4]{3} \amp \class[4]{2} \amp \class[4]{1} \\
+                              \end{array}
+                            </me>
+                          </p>
+                        </sidebyside>
+                    </sbsgroup>
+                </figure>
             </subsection>
 
             <subsection>
