@@ -2112,7 +2112,8 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Establish whether there is an image from pub file
     has_image = False
     try:
-        image = get_publisher_variable(xml_source, pub_file, stringparams, 'qrcode-image')
+        pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
+        image = get_publisher_variable(pub_vars, 'qrcode-image')
         _, external_dir = get_managed_directories(xml_source, pub_file)
         image_path = os.path.join(external_dir, image)
         if (image != '' and os.path.exists(image_path)):
@@ -2215,7 +2216,8 @@ def mermaid_images(
     #generate mmd files with markdown to be converted to png
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
-    mermaid_theme = get_publisher_variable(xml_source, pub_file, stringparams, 'mermaid-theme')
+    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
+    mermaid_theme = get_publisher_variable(pub_vars, 'mermaid-theme')
 
     import glob
     # Resulting *.mmd files are in tmp_dir, switch there to work
@@ -3767,9 +3769,9 @@ def check_color_contrast(color1, color2):
     except ImportError:
         log.warning("The coloraide module is not available and is necessary for checking color contrast. Install it with 'pip install coloraide' or by using the requirements.txt file.")
 
-def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
-    theme_name = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-name')
-    theme_opts_json = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-options')
+def build_or_copy_theme(xml, pub_var_dict, tmp_dir):
+    theme_name = get_publisher_variable(pub_var_dict, 'html-theme-name')
+    theme_opts_json = get_publisher_variable(pub_var_dict, 'html-theme-options')
     import json
     theme_opts = json.loads(theme_opts_json)
 
@@ -3800,7 +3802,8 @@ def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
 # entry point for pretext script to only build the theme
 def update_theme(xml_source, publication_file, stringparams, dest_dir):
     tmp_dir = get_temporary_directory()
-    build_or_copy_theme(xml_source,publication_file, stringparams, tmp_dir)
+    pub_vars = get_publisher_variable_report(xml_source, publication_file, stringparams)
+    build_or_copy_theme(xml_source, pub_vars, tmp_dir)
     copy_build_directory(tmp_dir, dest_dir)
 
 # todo - rewrite other code that does similar things to use this function?
@@ -3881,7 +3884,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     copy_html_js(tmp_dir)
 
     # build or copy theme
-    build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -4011,7 +4015,8 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
         stringparams["publisher"] = pub_file
 
     # Get potential extra XSL for LaTeX style from publication file
-    latex_style = get_publisher_variable(xml_source=xml, pub_file=pub_file, params=stringparams, variable="latex-style")
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    latex_style = get_publisher_variable(pub_vars, "latex-style")
 
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
@@ -4828,15 +4833,15 @@ def working_directory(path):
         log.debug(f"Successfully changed directory back to {current_directory}")
 
 
-def get_publisher_variable(xml_source, pub_file, params, variable):
-    """Get a computed publisher-variable's value via variable name"""
+def get_publisher_variable_report(xml_source, pub_file, params):
+    """Parse the pubfile and return a dict containing the variables"""
 
     # IMPORTANT: to report the value of a (computed) publisher variable,
     # two related routines are involved.  For a variable not previously
     # supported, a developer must take action to implement a report. The
     # XSL in the "utilities/report-publisher-variable.xsl" stylesheet must
     # include the report of a value, which will be captured in a temporary
-    # file to be read by the Python routine "get_publisher_variable()".
+    # file to be read by the Python routine "get_publisher_variable_report()".
 
     # NB: this will always be consistent with what *is computed* from
     # the publisher file.  An eception is given by the  get_platform_host()
@@ -4844,52 +4849,58 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
 
     # NB: there may not be a publication file (pub_file = None)
     # Variables are still computed and should have reasonable default values
+    log.debug("parsing the publisher file variables")
 
-    # Only do the work to extract the variable values once and store them
-    # in a dictionary attached to get_publisher_variable.variables. Future
-    # calls will reuse the dictionary.
-    if not hasattr(get_publisher_variable, "variables"):
-        log.debug("determining value of publisher variable '{}'".format(variable))
+    # to ensure provided stringparams aren't mutated unintentionally
+    params = params.copy()
 
-        # to ensure provided stringparams aren't mutated unintentionally
-        params = params.copy()
+    if pub_file:
+        params["publisher"] = pub_file
 
-        if pub_file:
-            params["publisher"] = pub_file
+    # construct filename for the XSL to report variable/value pairs
+    reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
 
-        # construct filename for the XSL to report variable/value pairs
-        reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
+    # file to receive result of stylesheet
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
+    temp_file = os.path.join(tmp_dir, "pub_var.txt")
+    log.debug("file of publisher variables: {}".format(temp_file))
 
-        # file to receive result of stylesheet
-        tmp_dir = get_temporary_directory()
-        log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
-        temp_file = os.path.join(tmp_dir, "pub_var.txt")
-        log.debug("file of publisher variables: {}".format(temp_file))
+    # Apply the stylesheet, with source and publication file
+    xsltproc(reporting_xslt, xml_source, temp_file, None, params)
 
-        # Apply the stylesheet, with source and publication file
-        xsltproc(reporting_xslt, xml_source, temp_file, None, params)
+    # parse file into a dictionary
+    variables = {}
+    with open(temp_file, 'r') as f:
+        for line in f:
+            parts = line.split()
+            # careful: value could be empty string,
+            # then split() returns 1 part only
+            if len(parts) == 1:
+                variables[parts[0]] = ''
+            else:
+                # value could have spaces, so rejoin other parts
+                variables[parts[0]] = " ".join(parts[1:])
 
-        # parse file into a dictionary, interrogate with variable
-        get_publisher_variable.variables = {}
-        with open(temp_file, 'r') as f:
-            for line in f:
-                parts = line.split()
-                # careful: value could be empty string,
-                # then split() returns 1 part only
-                if len(parts) == 1:
-                    get_publisher_variable.variables[parts[0]] = ''
-                else:
-                    # value could have spaces, so rejoin other parts
-                    get_publisher_variable.variables[parts[0]] = " ".join(parts[1:])
+    return variables
 
-    # Now that get_publisher_variable.variables is populated, use it
-    if variable in get_publisher_variable.variables:
-        return get_publisher_variable.variables[variable]
+
+def get_publisher_variable(variable_dict, variable_name):
+    """Get a computed publisher-variable's value via variable name"""
+
+    # Actually parsing the pub file is relatively expensive, so callers must do that
+    # and pass the resulting dict to this function, hopefully retaining the dict
+    # for any other calls.
+
+    log.debug("determining value of publisher variable '{}'".format(variable_name))
+
+    if variable_name in variable_dict:
+        return variable_dict[variable_name]
     else:
         msg = '\n'.join(["the publisher variable '{}' could not be located.",
                         "Did you spell it correctly or does it need implementation?",
                         "If the latter, read instructions in code comments in the relevant routines."])
-        raise ValueError(msg.format(variable))
+        raise ValueError(msg.format(variable_name))
 
 
 ###########################
