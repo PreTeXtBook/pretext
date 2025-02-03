@@ -6383,6 +6383,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The main templates for "sidebyside" and "sbsgroup"   -->
 <!-- are in xsl/pretext-common.xsl, as befits containers -->
 
+
+<xsl:template name="sbsgroup-wrapper">
+    <xsl:param name="sbsgroup-content"/>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>sbsgroup</xsl:text>
+        </xsl:attribute>
+        <xsl:copy-of select="$sbsgroup-content"/>
+    </xsl:element>
+</xsl:template>
+
 <!-- When we use CSS margins (or padding), then percentage        -->
 <!-- widths are relative to the remaining space.  This utility    -->
 <!-- takes in a width relative to full-text-width and the margins -->
