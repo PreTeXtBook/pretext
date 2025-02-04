@@ -128,7 +128,7 @@ except ImportError:
 #############################
 
 
-def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
+def mathjax_latex(xml_source, pub_file_info, out_file, dest_dir, math_format):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     # Internal calls will specify out_file with complete path
@@ -165,8 +165,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         punctuation = "none"
     params = {}
     params["math.punctuation"] = punctuation
-    if pub_file:
-        params["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, params)
     xsltproc(extraction_xslt, xml_source, mjinput, None, params)
     # Trying to correct baseline for inline math in Kindle, so we
     # insert a \mathstrut into all the inline math before feeding to MathJax
@@ -244,7 +243,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 #
 ##############################################
 
-def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+def prefigure_conversion(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, outformat):
     """Extract PreFigure code for diagrams and convert to graphics formats"""
     # stringparams is a dictionary, best for lxml parsing
     import glob
@@ -265,8 +264,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-prefigure.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
@@ -344,7 +342,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             )
 
 def asymptote_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
+    xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
 ):
     """Extract asymptote code for diagrams and convert to graphics formats"""
     # stringparams is a dictionary, best for lxml parsing
@@ -384,8 +382,7 @@ def asymptote_conversion(
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-asymptote.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
@@ -486,7 +483,7 @@ def individual_asymptote_conversion(asydiagram, outform, method, asy_cli, asyver
         log.warning("\n".join(msg))
 
 def sage_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, ext_converter
+    xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, outformat, ext_converter
 ):
 
     # ext_converter: an optinal hook for external libraries to patch
@@ -498,14 +495,14 @@ def sage_conversion(
     # four times and halt gracefully with an explicit "return"
     if outformat == "all":
         log.info('Pass 1 for "all" formats, now generating PDF')
-        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, "pdf", ext_converter)
+        sage_conversion(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, "pdf", ext_converter)
         log.info('Pass 2 for "all" formats, now generating SVG')
-        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, "svg", ext_converter)
+        sage_conversion(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, "svg", ext_converter)
         log.info('Pass 3 for "all" formats, now generating PNG')
-        sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, "png", ext_converter)
+        sage_conversion(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, "png", ext_converter)
         log.info('Pass 4 for "all" formats, now generating HTML')
         sage_conversion(
-            xml_source, pub_file, stringparams, xmlid_root, dest_dir, "html", ext_converter
+            xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, "html", ext_converter
         )
         return None
     # The real routine, which is thinly parameterized by "outformat",
@@ -529,8 +526,7 @@ def sage_conversion(
     # this is an internal parameter only, do not use otherwise
     stringparams["sageplot.fileformat"] = outformat
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
@@ -551,7 +547,7 @@ def individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cm
     shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
+    xml_source, pub_file_info, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
 ):
     # stringparams is a dictionary, best for lxml parsing
     # ext_converter: an optinal hook for external libraries to patch
@@ -572,8 +568,7 @@ def latex_image_conversion(
     ptx_xsl_dir = get_ptx_xsl_path()
     log.info("extracting latex-image pictures from {}".format(xml_source))
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, pub_file_inf)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     log.info(
@@ -582,7 +577,7 @@ def latex_image_conversion(
     # Need to copy entire external directory in the managed case.
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
-    _, external_dir = get_managed_directories(xml_source, pub_file)
+    _, external_dir = get_managed_directories(xml_source, pub_file_info)
     copy_managed_directories(tmp_dir, external_abs=external_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
@@ -786,7 +781,7 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
 #
 #############################################
 
-def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def datafiles_to_xml(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
     """Convert certain  files in source to text representations in XML files"""
     # stringparams is a dictionary, best for lxml parsing
 
@@ -804,8 +799,7 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-datafile.xsl")
     the_files = os.path.join(tmp_dir, 'datafile-list.txt')
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
@@ -815,7 +809,7 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     xsltproc(extraction_xslt, xml_source, the_files, None, stringparams)
 
     # Copy in external resources (e.g., js code)
-    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file_info)
 
     # Each file receives a single element as its root
     # element. These are templates for that entry
@@ -889,7 +883,7 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #######################
 
 
-def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir, outformat):
+def latex_tactile_image_conversion(xml_source, pub_file_info, stringparams, dest_dir, outformat):
     '''Support for tactile versions of "latex-image" removed 2024-07-29'''
 
     msg = "\n".join(['Support for production of "latex-image" as tactile',
@@ -905,7 +899,7 @@ def latex_tactile_image_conversion(xml_source, pub_file, stringparams, dest_dir,
 # Convert program source code into traces for the interactive
 # CodeLens tool in Runestone
 
-def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def tracer(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -929,8 +923,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-trace.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's, languages, sources into a scratch directory/file
@@ -999,7 +992,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #  Dynamic Exercise Static Representations
 #
 ################################
-def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def dynamic_substitutions(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
     import asyncio  # get_event_loop()
 
     # external module, often forgotten
@@ -1071,8 +1064,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     # Where to store the results
     dyn_subs_file = os.path.join(dest_dir, "dynamic_substitutions.xml")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
 
@@ -1082,7 +1074,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     # NB: stringparams is augmented with Runestone Services information
     _place_runestone_services(tmp_dir, stringparams)
 
-    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml_source, pub_file_info)
     if external_abs:
         external_dir = os.path.join(tmp_dir, "external")
         shutil.copytree(external_abs, external_dir)
@@ -1162,7 +1154,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
 
 
 def webwork_to_xml(
-    xml_source, pub_file, stringparams, xmlid_root, abort_early, server_params, dest_dir
+    xml_source, pub_file_info, stringparams, xmlid_root, abort_early, server_params, dest_dir
 ):
     import urllib.parse  # urlparse()
     import base64  # b64encode()
@@ -1178,8 +1170,7 @@ def webwork_to_xml(
         raise ImportError(__module_warning.format("requests"))
 
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     log.info(
@@ -1187,7 +1178,7 @@ def webwork_to_xml(
     )
 
     # Either we have a "generated" directory, or we must assume placing everything in dest_dir
-    generated_dir, _ = get_managed_directories(xml_source, pub_file)
+    generated_dir, _ = get_managed_directories(xml_source, pub_file_info)
     if generated_dir:
         ww_reps_dir = os.path.join(generated_dir, "webwork")
         ww_images_dir = os.path.join(ww_reps_dir, "images")
@@ -1976,13 +1967,12 @@ def webwork_to_xml(
 ################################
 
 
-def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+def webwork_sets(xml_source, pub_file_info, stringparams, dest_dir, tgz):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-ww-problem-sets.xsl")
     tmp_dir = get_temporary_directory()
@@ -1993,7 +1983,7 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
     folder = os.path.join(tmp_dir, folder_name)
     macros_folder = os.path.join(folder, 'macros')
     os.mkdir(macros_folder)
-    pg_macros(xml_source, pub_file, stringparams, macros_folder)
+    pg_macros(xml_source, pub_file_info, stringparams, macros_folder)
     if tgz:
         archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
         targz(archive_file, folder)
@@ -2012,13 +2002,12 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
 ################################
 
 
-def pg_macros(xml_source, pub_file, stringparams, dest_dir):
+def pg_macros(xml_source, pub_file_info, stringparams, dest_dir):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
     xsltproc(extraction_xslt, xml_source, None, output_dir=dest_dir, stringparams=stringparams)
@@ -2031,7 +2020,7 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 ##############################
 
 
-def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def youtube_thumbnail(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2050,8 +2039,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-youtube.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
@@ -2104,7 +2092,7 @@ def play_button(dest_dir):
 ########################
 
 
-def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def qrcode(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2112,8 +2100,9 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Establish whether there is an image from pub file
     has_image = False
     try:
-        image = get_publisher_variable(xml_source, pub_file, stringparams, 'qrcode-image')
-        _, external_dir = get_managed_directories(xml_source, pub_file)
+        pub_vars = ensure_publisher_variables(xml_source, pub_file_info, stringparams)
+        image = get_publisher_variable(pub_vars, 'qrcode-image')
+        _, external_dir = get_managed_directories(xml_source, pub_file_info)
         image_path = os.path.join(external_dir, image)
         if (image != '' and os.path.exists(image_path)):
             has_image = True
@@ -2137,8 +2126,7 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-qrcode.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
@@ -2192,7 +2180,7 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #####################################
 
 def mermaid_images(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir
+    xml_source, pub_file_info, stringparams, xmlid_root, dest_dir
 ):
     msg = 'converting Mermaid diagrams from {} to png graphics for placement in {}'
     log.info(msg.format(xml_source, dest_dir))
@@ -2203,8 +2191,7 @@ def mermaid_images(
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-mermaid.xsl")
 
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
 
@@ -2215,7 +2202,8 @@ def mermaid_images(
     #generate mmd files with markdown to be converted to png
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
-    mermaid_theme = get_publisher_variable(xml_source, pub_file, stringparams, 'mermaid-theme')
+    pub_vars = ensure_publisher_variables(xml_source, pub_file_info, stringparams)
+    mermaid_theme = get_publisher_variable(pub_vars, 'mermaid-theme')
 
     import glob
     # Resulting *.mmd files are in tmp_dir, switch there to work
@@ -2248,7 +2236,7 @@ def mermaid_images(
 #####################################
 
 
-def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def preview_images(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
     import asyncio  # get_event_loop()
 
     # external module, often forgotten
@@ -2354,8 +2342,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-interactive.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
@@ -2371,7 +2358,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Copy in external resources (e.g., js code)
-    _, external_abs = get_managed_directories(xml_source, pub_file)
+    _, external_abs = get_managed_directories(xml_source, pub_file_info)
     copy_managed_directories(tmp_dir, external_abs=external_abs)
     # place JS in scratch directory
     copy_html_js(tmp_dir)
@@ -2400,7 +2387,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 ############
 
 
-def all_images(xml, pub_file, stringparams, xmlid_root):
+def all_images(xml, pub_file_info, stringparams, xmlid_root):
     """All images, in all necessary formats, in subdirectories, for production of any project"""
 
     # parse source, no harm to assume
@@ -2428,7 +2415,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
     # get the target output directory from the publisher file
     # this is *required* so fail if pieces are missing
-    if not (pub_file):
+    if not (pub_file_info):
         msg = " ".join(
             [
                 "creating all images requires a directory specification",
@@ -2436,7 +2423,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
             ]
         )
         raise ValueError(msg)
-    generated_dir, _ = get_managed_directories(xml, pub_file)
+    generated_dir, _ = get_managed_directories(xml, pub_file_info)
 
     # correct attribute and not a directory gets caught earlier
     # but could have publisher file and bad elements/attributes
@@ -2460,8 +2447,8 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         # make directory if not already present
         if not (os.path.isdir(dest_dir)):
             os.mkdir(dest_dir)
-        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "pdf", True, None)
-        latex_image_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "svg", True, None)
+        latex_image_conversion(xml, pub_file_info, stringparams, xmlid_root, dest_dir, "pdf", True, None)
+        latex_image_conversion(xml, pub_file_info, stringparams, xmlid_root, dest_dir, "svg", True, None)
 
     # Asymptote
     #
@@ -2469,8 +2456,8 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         dest_dir = os.path.join(generated_dir, "asymptote", "")
         if not (os.path.isdir(dest_dir)):
             os.mkdir(dest_dir)
-        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "pdf", None)
-        asymptote_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "html", None)
+        asymptote_conversion(xml, pub_file_info, stringparams, xmlid_root, dest_dir, "pdf", None)
+        asymptote_conversion(xml, pub_file_info, stringparams, xmlid_root, dest_dir, "html", None)
 
     # Sage plots
     #
@@ -2480,8 +2467,8 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
             os.mkdir(dest_dir)
         # for 3D images might produce a single PNG instead of an SVG and a PDF
         # conversions look for this PNG as a fallback absent SVG or PDF
-        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "pdf", None)
-        sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "svg", None)
+        sage_conversion(xml, pub_file_info, stringparams, xmlid_root, dest_dir, "pdf", None)
+        sage_conversion(xml, pub_file_info, stringparams, xmlid_root, dest_dir, "svg", None)
 
     # YouTube previews
     #
@@ -2490,7 +2477,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         if not (os.path.isdir(dest_dir)):
             os.mkdir(dest_dir)
         # no format, they are what they are (*.jpg)
-        youtube_thumbnail(xml, pub_file, stringparams, xmlid_root, dest_dir)
+        youtube_thumbnail(xml, pub_file_info, stringparams, xmlid_root, dest_dir)
 
     # Previews (headless screenshots)
     #
@@ -2499,7 +2486,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         if not (os.path.isdir(dest_dir)):
             os.mkdir(dest_dir)
         # no format, they are what they are (*.png)
-        preview_images(xml, pub_file, stringparams, xmlid_root, dest_dir)
+        preview_images(xml, pub_file_info, stringparams, xmlid_root, dest_dir)
 
 
 #####################################
@@ -2509,7 +2496,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 #####################################
 
 
-def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def mom_static_problems(xml_source, pub_file_info, stringparams, xmlid_root, dest_dir):
 
     import urllib.parse
     import PIL.Image
@@ -2531,8 +2518,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-mom.xsl")
     # support publisher file, subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
@@ -2600,7 +2586,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 #######################
 
 
-def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
+def braille(xml_source, pub_file_info, stringparams, out_file, dest_dir, page_format):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -2616,10 +2602,14 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # get chunk level from publisher file, start with sentinel
     # eventually passed to routine that splits up a BRF
     chunk_level = ''
-    if pub_file:
+    if isinstance(pub_file_info, dict):
+        pub_file_path = pub_file_info.get("pub_file_path")
+    else:
+        pub_file_path = pub_file_info
+    if pub_file_path:
         # parse publisher file, xinclude is conceivable
         # for multiple similar publisher files with common parts
-        pub_tree = ET.parse(pub_file)
+        pub_tree = ET.parse(pub_file_path)
         pub_tree.xinclude()
         # "chunking" element => single-item list
         # no "chunking" element => empty list
@@ -2663,15 +2653,14 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file_info, math_representations, None, math_format)
 
     # use XSL to make a simplified BRF-like XML version, "preprint"
     msg = "converting source ({}) and clean representations ({}) into preprint XML file ({})"
     stringparams["mathfile"] = math_representations.replace(os.sep, "/")
     # pass in the page format (for messages about graphics, etc.)
     stringparams["page-format"] = page_format
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     preprint = os.path.join(tmp_dir, "preprint.xml")
     braille_xslt = os.path.join(get_ptx_xsl_path(), "pretext-braille-preprint.xsl")
     xsltproc(braille_xslt, xml_source, preprint, tmp_dir, stringparams)
@@ -3031,7 +3020,7 @@ def _split_brf(filename):
 ####################
 
 
-def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
+def epub(xml_source, pub_file_info, out_file, dest_dir, math_format, stringparams):
     """Produce complete document in an EPUB container"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -3086,11 +3075,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file_info, math_representations, None, math_format)
     # optionally, build a file of speech versions of the math
     if math_format == "svg":
         log.debug(msg.format(xml_source, "speech", speech_representations))
-        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech")
+        mathjax_latex(xml_source, pub_file_info, speech_representations, None, "speech")
 
     # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
@@ -3116,8 +3105,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
         params["speechfile"] = ""
     params["math.format"] = math_format
     params["tmpdir"] = tmp_dir.replace(os.sep, "/")
-    if pub_file:
-        params["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, params)
     xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
 
     # XHTML files lack an overall namespace,
@@ -3659,7 +3647,7 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
     if 'secondary-color' not in theme_opts['options'].keys():
         theme_opts['options']['secondary-color'] = color_schemes[scheme]['secondary-color']
 
-    log.debug("Using prebuilt theme: " + theme_name + " with options: " + str(theme_opts))
+    log.info("Using prebuilt css theme: " + theme_name + " with options: " + str(theme_opts))
 
     # copy src -> dest with modifications
     with open(src, 'r') as theme_file:
@@ -3709,7 +3697,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         node_exec_cmd = get_executable_cmd("node")
         # theme name is prefixed with "theme-" in the cssbuilder script output
         full_name = "theme-{}".format(theme_name)
-        log.debug("Building custom theme: " + full_name)
+        log.info("Building custom css theme: " + full_name)
         log.debug("Theme options:" + json.dumps(theme_opts))
         result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=10)
         if result.stdout:
@@ -3738,9 +3726,9 @@ def check_color_contrast(color1, color2):
     except ImportError:
         log.warning("The coloraide module is not available and is necessary for checking color contrast. Install it with 'pip install coloraide' or by using the requirements.txt file.")
 
-def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
-    theme_name = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-name')
-    theme_opts_json = get_publisher_variable(xml, pub_file, stringparams, 'html-theme-options')
+def build_or_copy_theme(xml, pub_var_dict, tmp_dir):
+    theme_name = get_publisher_variable(pub_var_dict, 'html-theme-name')
+    theme_opts_json = get_publisher_variable(pub_var_dict, 'html-theme-options')
     import json
     theme_opts = json.loads(theme_opts_json)
 
@@ -3771,7 +3759,8 @@ def build_or_copy_theme(xml, pub_file, stringparams, tmp_dir):
 # entry point for pretext script to only build the theme
 def update_theme(xml_source, publication_file, stringparams, dest_dir):
     tmp_dir = get_temporary_directory()
-    build_or_copy_theme(xml_source,publication_file, stringparams, tmp_dir)
+    pub_vars = ensure_publisher_variables(xml_source, publication_file, stringparams)
+    build_or_copy_theme(xml_source, pub_vars, tmp_dir)
     copy_build_directory(tmp_dir, dest_dir)
 
 # todo - rewrite other code that does similar things to use this function?
@@ -3817,14 +3806,14 @@ def download_file(url, dest_filename):
     except Exception as e:
         raise Exception("Failed to save download", dest_filename)
 
-def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir):
+def html(xml, pub_file_info, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir):
     """Convert XML source to HTML files, in destination directory or as zip file"""
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
     # Consult publisher file for locations of images
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml, pub_file_info)
 
     # names for scratch directories
     tmp_dir = get_temporary_directory()
@@ -3834,8 +3823,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     _place_runestone_services(tmp_dir, stringparams)
 
     # support publisher file, and subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Optional extra XSL could be None, or sanitized full filename
@@ -3852,7 +3840,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     copy_html_js(tmp_dir)
 
     # build or copy theme
-    build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
+    pub_vars = ensure_publisher_variables(xml, pub_file_info, stringparams)
+    build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -3886,7 +3875,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
 
 def revealjs(
-    xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
+    xml, pub_file_info, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
     """Convert XML source "slideshow" to reveal.js HTML file"""
 
@@ -3894,14 +3883,13 @@ def revealjs(
     stringparams = stringparams.copy()
 
     # Consult publisher file for locations of images
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml, pub_file_info)
 
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
     # support publisher file, and subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Optional extra XSL could be None, or sanitized full filename
@@ -3935,15 +3923,14 @@ def revealjs(
 # Parameterized by static v. dynamic exercises
 
 
-def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
+def assembly(xml, pub_file_info, stringparams, out_file, dest_dir, method):
     """Convert XML source to pre-processed PreTeXt in destination directory"""
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
     # support publisher file, not subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     # method dictates which type of exercises are produced
     # parameter is exclusive to utility styleheet below
     stringparams["debug.assembly.exercise"] = method
@@ -3971,18 +3958,18 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
 
-def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
+def latex(xml, pub_file_info, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
     # support publisher file, not subtree argument
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
 
     # Get potential extra XSL for LaTeX style from publication file
-    latex_style = get_publisher_variable(xml_source=xml, pub_file=pub_file, params=stringparams, variable="latex-style")
+    pub_vars = ensure_publisher_variables(xml, pub_file_info, stringparams)
+    latex_style = get_publisher_variable(pub_vars, "latex-style")
 
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
@@ -4007,23 +3994,22 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
 ###################
 
 
-def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
+def pdf(xml, pub_file_info, stringparams, extra_xsl, out_file, dest_dir, method):
     """Convert XML source to a PDF (incomplete)"""
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    generated_abs, external_abs = get_managed_directories(xml, pub_file_info)
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
-    if pub_file:
-        stringparams["publisher"] = pub_file
+    add_pub_file_to_params(pub_file_info, stringparams)
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
     # make the LaTeX source file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory
-    latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir)
+    latex(xml, pub_file_info, stringparams, extra_xsl, None, tmp_dir)
 
     # Create localized filenames for pdflatex conversion step
     # sourcename  needs to match behavior of latex() with above arguments
@@ -4593,7 +4579,7 @@ def verify_input_directory(inputdir):
     return absdir
 
 
-def get_managed_directories(xml_source, pub_file):
+def get_managed_directories(xml_source, pub_file_info):
     """Returns pair: (generated, external) absolute paths, derived from publisher file"""
 
     # N.B. manage attributes carefully to distinguish
@@ -4610,6 +4596,11 @@ def get_managed_directories(xml_source, pub_file):
     # Unknown until running the gauntlet
     generated = None
     external = None
+    # In case pub_file_info is a dictionary, get the pub_file's path
+    if isinstance(pub_file, dict):
+        pub_file = pub_file_info.get("pub_file_path")
+    else:
+        pub_file = pub_file_info
     if pub_file:
         # parse publisher file, xinclude is conceivable
         # for multiple similar publisher files with common parts
@@ -4781,15 +4772,30 @@ def working_directory(path):
         log.debug(f"Successfully changed directory back to {current_directory}")
 
 
-def get_publisher_variable(xml_source, pub_file, params, variable):
-    """Get a computed publisher-variable's value via variable name"""
+def add_pub_file_to_params(pub_file_info, params):
+    """
+    Add the publication file path to the params dictionary if it exists.  
+    No return value since this just updates the mutable dictionary.
+    """
+    if pub_file_info is not None:
+        # If pub_file_info is already a dictionary, then the path to the publication
+        # file is in the dictionary with key "pub_file_path".
+        if isinstance(pub_file_info, dict):
+            pub_file_info = pub_file_info.get("pub_file_path")
+        else:
+            assert isinstance(pub_file_info, (str, None))
+            params["publisher"] = pub_file_info
+
+
+def get_publisher_variable_report(xml_source, pub_file, params):
+    """Parse the pubfile and return a dict containing the variables"""
 
     # IMPORTANT: to report the value of a (computed) publisher variable,
     # two related routines are involved.  For a variable not previously
     # supported, a developer must take action to implement a report. The
     # XSL in the "utilities/report-publisher-variable.xsl" stylesheet must
     # include the report of a value, which will be captured in a temporary
-    # file to be read by the Python routine "get_publisher_variable()".
+    # file to be read by the Python routine "get_publisher_variable_report()".
 
     # NB: this will always be consistent with what *is computed* from
     # the publisher file.  An eception is given by the  get_platform_host()
@@ -4797,53 +4803,76 @@ def get_publisher_variable(xml_source, pub_file, params, variable):
 
     # NB: there may not be a publication file (pub_file = None)
     # Variables are still computed and should have reasonable default values
+    log.debug("parsing the publisher file variables")
 
-    # Only do the work to extract the variable values once and store them
-    # in a dictionary attached to get_publisher_variable.variables. Future
-    # calls will reuse the dictionary.
-    if not hasattr(get_publisher_variable, "variables"):
-        log.debug("determining value of publisher variable '{}'".format(variable))
+    # to ensure provided stringparams aren't mutated unintentionally
+    params = params.copy()
 
-        # to ensure provided stringparams aren't mutated unintentionally
-        params = params.copy()
+    if pub_file:
+        # Ensure the pub_file really is a string (path) and not a dictionary as it
+        # is sometimes used elsewhere
+        assert isinstance(pub_file, str)
+        params["publisher"] = pub_file
 
-        if pub_file:
-            params["publisher"] = pub_file
+    # construct filename for the XSL to report variable/value pairs
+    reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
 
-        # construct filename for the XSL to report variable/value pairs
-        reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
+    # file to receive result of stylesheet
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
+    temp_file = os.path.join(tmp_dir, "pub_var.txt")
+    log.debug("file of publisher variables: {}".format(temp_file))
 
-        # file to receive result of stylesheet
-        tmp_dir = get_temporary_directory()
-        log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
-        temp_file = os.path.join(tmp_dir, "pub_var.txt")
-        log.debug("file of publisher variables: {}".format(temp_file))
+    # Apply the stylesheet, with source and publication file
+    xsltproc(reporting_xslt, xml_source, temp_file, None, params)
 
-        # Apply the stylesheet, with source and publication file
-        xsltproc(reporting_xslt, xml_source, temp_file, None, params)
+    # parse file into a dictionary
+    variables = {}
+    # Add the path of the publication file to the dictionary
+    variables["pub_file_path"] = pub_file
+    # Add all other variables.
+    with open(temp_file, 'r') as f:
+        for line in f:
+            parts = line.split()
+            # careful: value could be empty string,
+            # then split() returns 1 part only
+            if len(parts) == 1:
+                variables[parts[0]] = ''
+            else:
+                # value could have spaces, so rejoin other parts
+                variables[parts[0]] = " ".join(parts[1:])
 
-        # parse file into a dictionary, interrogate with variable
-        get_publisher_variable.variables = {}
-        with open(temp_file, 'r') as f:
-            for line in f:
-                parts = line.split()
-                # careful: value could be empty string,
-                # then split() returns 1 part only
-                if len(parts) == 1:
-                    get_publisher_variable.variables[parts[0]] = ''
-                else:
-                    # value could have spaces, so rejoin other parts
-                    get_publisher_variable.variables[parts[0]] = " ".join(parts[1:])
+    return variables
 
-    # Now that get_publisher_variable.variables is populated, use it
-    if variable in get_publisher_variable.variables:
-        return get_publisher_variable.variables[variable]
+
+def get_publisher_variable(variable_dict, variable_name):
+    """Get a computed publisher-variable's value via variable name"""
+
+    # Actually parsing the pub file is relatively expensive, so callers must do that
+    # and pass the resulting dict to this function, hopefully retaining the dict
+    # for any other calls.
+
+    log.debug("determining value of publisher variable '{}'".format(variable_name))
+
+    if variable_name in variable_dict:
+        return variable_dict[variable_name]
     else:
         msg = '\n'.join(["the publisher variable '{}' could not be located.",
                         "Did you spell it correctly or does it need implementation?",
                         "If the latter, read instructions in code comments in the relevant routines."])
-        raise ValueError(msg.format(variable))
+        raise ValueError(msg.format(variable_name))
 
+
+def ensure_publisher_variables(xml_source, pub_file_or_vars, params):
+    """
+    Return a dictionary of publisher variables, which is either pub_file_or_vars itself (a dictionary), if that is a dictionary, or is the result of extracting the publisher variables from the publication file at pub_file_or_vars (a string)
+    @param pub_file_or_vars: either a dictionary of publisher variables or a string containing the path to the publication file
+    """
+    if isinstance(pub_file_or_vars, dict):
+        return pub_file_or_vars
+    else:
+        return get_publisher_variable_report(xml_source, pub_file_or_vars, params)
+    
 
 ###########################
 #
@@ -4880,3 +4909,5 @@ __executables = None
 
 #  cache of temporary directories
 __temps = []
+
+# Cache of publisher variables 
