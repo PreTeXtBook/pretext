@@ -6834,9 +6834,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:variable name="watermark-css">
-    <xsl:text>background-image:url('data:image/svg+xml;utf8,</xsl:text>
-    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize" />
+    <xsl:text>background-image:url('data:image/svg+xml;charset=utf-8,</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize">
+        <!-- as-authored-source to preserve namespace on svg -->
+        <xsl:with-param name="as-authored-source" select="true()"/>
+    </xsl:apply-templates>
     <xsl:text>');</xsl:text>
+    <xsl:text>background-position:center top;background-repeat:repeat-y;</xsl:text>
 </xsl:variable>
 
 <!-- NB: here, and elesewhere, references -->
@@ -10710,14 +10714,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="ptx-main">
+                    <xsl:if test="$b-watermark">
+                        <xsl:attribute name="style">
+                            <xsl:value-of select="$watermark-css"/>
+                        </xsl:attribute>
+                    </xsl:if>
                     <div id="ptx-content" class="ptx-content">
                         <xsl:if test="$b-printable">
                             <xsl:apply-templates select="." mode="print-button"/>
-                        </xsl:if>
-                        <xsl:if test="$b-watermark">
-                            <xsl:attribute name="style">
-                                <xsl:value-of select="$watermark-css" />
-                            </xsl:attribute>
                         </xsl:if>
                         <!-- Alternative to "copy-of": convert $content to a  -->
                         <!-- node-set, and then hit with an identity template -->
