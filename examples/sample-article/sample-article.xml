@@ -70,7 +70,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         % employed in a PreFigure linear algebra diagram
         \newcommand{\bvec}{{\mathbf b}}
         \newcommand{\vvec}{{\mathbf v}}
-        % employed in Valerio De Angelis sbsgroup operation tables
+        % employed in Valerio Monti sbsgroup operation tables
         \newcommand{\class}[2][\sim]{\lbrack #2\rbrack_{#1}}% Classe di equivalenza
         </macros>
         <prefigure-preamble xmlns="https://prefigure.org">
@@ -12286,7 +12286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </sbsgroup>
 
-                <p>The following is a <tag>sbsgroup</tag> full of <q>operation</q> tables.  Once upon a time it was rather cramped vertically in HTML output, but Andrew Scholer improved the spacing at <url href="https://github.com/PreTeXtBook/pretext/pull/2387" visual="github.com/PreTeXtBook/pretext/pull/2387">GitHub #2387</url>.  The example is from Valerio De Angelis.</p>
+                <p>The following is a <tag>sbsgroup</tag> full of <q>operation</q> tables.  Once upon a time it was rather cramped vertically in HTML output, but Andrew Scholer improved the spacing at <url href="https://github.com/PreTeXtBook/pretext/pull/2387" visual="github.com/PreTeXtBook/pretext/pull/2387">GitHub #2387</url>.  The example is from Valerio Monti.</p>
 
                 <figure xml:id="tabelle_classi_di_resto">
                     <caption>Tabelle delle operazioni per <m>1\le n\le 4</m></caption>
