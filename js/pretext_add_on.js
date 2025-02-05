@@ -314,55 +314,60 @@ console.log("this is e", e);
         this_url = window.location.href.split('#')[0];
         permalink_word = "&#x1F517;";
         for (var i = 0; i < items_needing_permalinks.length; i++) {
-            this_item = items_needing_permalinks[i];
-            var this_anchor = this_item.id;
-            if (Boolean(this_item.closest(".parsons"))) { continue }  /* parsons block */
-            if (Boolean(this_item.closest("details"))) { continue }  /* hidden in details */
-            if (this_item.parentElement.classList.contains("lines")) { continue }  /* parsons block */
-            if (getComputedStyle(this_item).display == "inline") { continue }  /* inline paragraph at start of article, for example*/
             try {
-                if(this_item.closest(".hidden-content")) {continue}
+                this_item = items_needing_permalinks[i];
+                var this_anchor = this_item.id;
+                if (Boolean(this_item.closest(".parsons"))) { continue }  /* parsons block */
+                if (Boolean(this_item.closest("details"))) { continue }  /* hidden in details */
+                if (this_item.parentElement.classList.contains("lines")) { continue }  /* parsons block */
+                if (getComputedStyle(this_item).display == "inline") { continue }  /* inline paragraph at start of article, for example*/
+                try {
+                    if(this_item.closest(".hidden-content")) {continue}
+                } catch {
+                    // do nothing, because we are just avoiding permalinks on born-hidden knowls
+                }
+                if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
+                if (this_item.classList.contains("para")) {
+                    if (this_item.id == "") {
+                        // should be .para inside .para.logical
+                        this_anchor  = this_item.parentElement.id;
+                    if(this_item.parentElement.parentElement.nodeName == "LI") {
+                    // we actually had a para inside a para.logical inside an li
+                        this_anchor  = "" //this_item.parentElement.parentElement.id;
+                        }
+                    } else if (this_item.parentElement.nodeName == "LI") {
+                        //    this_anchor  = this_item.parentElement.id;
+                        this_anchor  = "";
+                    }
+                }
+                if(this_anchor) {
+                    this_file_name = this_url.split('/').pop().split(".")[0];
+                    this_permalink_url = this_url;
+                    if (this_file_name !== this_anchor)
+                        this_permalink_url += "#" + this_anchor;
+                    const this_permalink_description = permalinkDescription(this_item);
+                    this_permalink_container = document.createElement('div');
+                    this_permalink_container.setAttribute('class', 'autopermalink');
+                    this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
+                    this_permalink_container.setAttribute('data-description', this_permalink_description);
+                    //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
+                    this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
+                    // if permalinks are inserted as first element, they break lots of CSS that uses
+                    // first-child or first-of-type selectors (in both old and new styling)
+                    this_item.insertAdjacentElement("beforeend", this_permalink_container);
+                } else {
+                    /*
+                    console.log("      no permalink, because no id", this_item)
+                    */
+                }
             } catch {
-                // do nothing, because we are just avoiding permalinks on born-hidden knowls
-            }
-            if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
-            if (this_item.classList.contains("para")) {
-               if (this_item.id == "") {
-                   // should be .para inside .para.logical
-                   this_anchor  = this_item.parentElement.id;
-                   if(this_item.parentElement.parentElement.nodeName == "LI") {
-                   // we actually had a para inside a para.logical inside an li
-                       this_anchor  = "" //this_item.parentElement.parentElement.id;
-                   }
-               } else if (this_item.parentElement.nodeName == "LI") {
-               //    this_anchor  = this_item.parentElement.id;
-                   this_anchor  = "";
-               }
-            }
-            if(this_anchor) {
-                this_file_name = this_url.split('/').pop().split(".")[0];
-                this_permalink_url = this_url;
-                if (this_file_name !== this_anchor)
-                    this_permalink_url += "#" + this_anchor;
-                const this_permalink_description = permalinkDescription(this_item);
-                this_permalink_container = document.createElement('div');
-                this_permalink_container.setAttribute('class', 'autopermalink');
-                this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
-                this_permalink_container.setAttribute('data-description', this_permalink_description);
-    //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
-                this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
-                // if permalinks are inserted as first element, they break lots of CSS that uses
-                // first-child or first-of-type selectors (in both old and new styling)
-                this_item.insertAdjacentElement("beforeend", this_permalink_container);
-            } else {
-/*
-                console.log("      no permalink, because no id", this_item)
-*/
+                console.log("error with this_item", i, items_needing_permalinks);
+                continue
             }
         }
     }
 
-  // first of these is for pre-overhaul html.  Delete when possible
+    // first of these is for pre-overhaul html.  Delete when possible
     $(".pretext-content .autopermalink a").on("click", function(event){
         event.preventDefault();
     });
