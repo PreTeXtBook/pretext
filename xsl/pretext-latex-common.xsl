@@ -2948,9 +2948,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#3}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#3}{}}, breakable, before upper app={\setparstyle}, after={\par}, </xsl:text>
+    <xsl:text>\hypertarget{#3}{}}, breakable, after={\par}, </xsl:text>
     <xsl:value-of select="$proof-name"/>
-    <xsl:text>style }&#xa;</xsl:text>
+    <xsl:text>style, before upper app={\setparstyle} }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- PROOF-LIKE (solutions, minor) -->
@@ -2990,7 +2990,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ objectivesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setparstyle}, objectivesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, objectivesstyle, before upper app={\setparstyle}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
@@ -3001,7 +3001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ outcomesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, before upper app={\setparstyle}, outcomesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, outcomesstyle, before upper app={\setparstyle}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
@@ -3015,7 +3015,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, before upper app={\setparstyle}, backcolophonstyle}&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, backcolophonstyle, before upper app={\setparstyle}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
@@ -3036,9 +3036,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setparstyle}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, </xsl:text>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>style}&#xa;</xsl:text>
+    <xsl:text>style, before upper app={\setparstyle}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "gi" -->
@@ -3049,7 +3049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ glossaryitemstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1}, after title={\notblank{#1}{\space}{}}, phantomlabel={#2}, breakable, before upper app={\setparstyle}, glossaryitemstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{glossaryitem}[2]{title={#1}, after title={\notblank{#1}{\space}{}}, phantomlabel={#2}, breakable, glossaryitemstyle, before upper app={\setparstyle}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "paragraphs" -->
@@ -3092,9 +3092,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[3]{title={\notblank{#2}{#2}{}}, </xsl:text>
-    <xsl:text>phantomlabel={#3}, breakable, before upper app={\setparstyle}, </xsl:text>
+    <xsl:text>phantomlabel={#3}, breakable, </xsl:text>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>style}&#xa;</xsl:text>
+    <xsl:text>style, before upper app={\setparstyle}}&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -3340,14 +3340,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- list will be unbreakable once inside sidebyside     -->
     <xsl:choose>
         <xsl:when test="self::list">
-            <xsl:text>breakable, before upper app={\setparstyle}, </xsl:text>
+            <xsl:text>breakable, </xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>unbreakable, </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>style, }&#xa;</xsl:text>
+    <xsl:text>style, </xsl:text>
+    <xsl:if test="self::list">
+        <xsl:text>before upper app={\setparstyle}, </xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
     <!-- end: options -->
     <!-- subnumbered version requires manipulating low-level counters -->
     <xsl:if test="$b-subnumbered">
@@ -3493,11 +3497,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setparstyle}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, before upper app={\setparstyle}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, before upper app={\setparstyle}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, before upper app={\setparstyle}, </xsl:text>
 </xsl:template>
 
 <!-- FIGURE-LIKE: -->
