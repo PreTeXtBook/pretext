@@ -9045,6 +9045,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="parent::stack and preceding-sibling::*">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>\noindent</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
 
@@ -9384,7 +9385,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- with layout control (inside sidebyside), scale down, but not up  -->
     <!-- https://tex.stackexchange.com/questions/327887/                  -->
     <!-- resizing-or-scaling-table-only-if-it-is-larger-than-column-width -->
-    <xsl:text>\resizebox{\ifdim\width > \linewidth\linewidth\else\width\fi}{!}{%&#xa;</xsl:text>
+    <xsl:text>\noindent\resizebox{\ifdim\width > \linewidth\linewidth\else\width\fi}{!}{%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="tabular-inclusion"/>
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
