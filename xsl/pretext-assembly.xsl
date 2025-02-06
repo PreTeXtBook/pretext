@@ -1422,6 +1422,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- 2025-02-06: remove trailing whitespace in the last text node of latex-image -->
+<!-- and cap off with a % to prevent unwanted space in output                    -->
+<xsl:template match="latex-image/text()[last()]" mode="repair">
+    <xsl:call-template name="strip-trailing-whitespace">
+        <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+    <xsl:text>%</xsl:text>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
