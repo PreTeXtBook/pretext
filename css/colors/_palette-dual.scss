@@ -75,9 +75,10 @@ $colors: map.merge(
     "link-text-color": var(--primary-color),
     "link-active-text-color": var(--primary-color-black-20),
     "link-background": var(--primary-color-white-97),
+    "link-active-background": var(--link-background),
 
     "link-alt-text-color": var(--secondary-color-black-10),
-    "link-alt-active-background": var(--secondary-color),
+    "link-alt-active-background": var(--secondary-color-white-97),
     "link-alt-background": var(--secondary-color-white-97),
 
     "toc-border-color": var(--primary-color-white-30),
