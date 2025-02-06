@@ -48,6 +48,9 @@
         color: var(--summary-link-hover-text-color);
         background: var(--summary-link-hover-background);
       }
+      .title {
+        font-weight: normal;
+      }
 
       &::after {
         border-left: 0.4em solid var(--summary-link-hover-text-color);
