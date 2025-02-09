@@ -260,6 +260,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+
+<!-- Pruning templates generate a subtree towards $target-node -->
+<!-- that prunes as many other branches as possible while      -->
+<!-- retaining halfway decent output of the desire tree.       -->
+<xsl:template match="node()|@*" mode="pruning">
+    <xsl:param name="target-node"/>
+    <xsl:choose>
+        <!-- This node contains the target node, copy and keep going -->
+        <xsl:when test="count(descendant::*|$target-node) = count(descendant::*)">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="pruning">
+                    <xsl:with-param name="target-node" select="$target-node"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:when>
+        <!-- This node is target node, keep it all -->
+        <xsl:when test="count(.|$target-node) = 1">
+            <xsl:apply-templates select="." mode="pruning-keep"/>
+        </xsl:when>
+        <!-- Shift to aggressive pruning -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="pruning-prune"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- If we hit frontmatter or docinfo, preserve all the content   -->
+<!-- docinfo and bookinfo have important config info. frontmatter -->
+<!-- has authors/subtitle/etc...                                  -->
+<xsl:template match="frontmatter|docinfo|bookinfo" mode="pruning">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="pruning-keep"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Preserve anything from here on down -->
+<xsl:template match="node()|@*" mode="pruning-keep">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="pruning-keep"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Once aggressively pruning, only keep structural elements that give us -->
+<!-- numbering and toc info. We could prune these and lose that, but       -->
+<!-- keeping them is cheap and looks a lot less broken on generated pages. -->
+<xsl:template match="&STRUCTURAL;|@*" mode="pruning-prune">
+    <xsl:copy>
+        <xsl:apply-templates select="&STRUCTURAL;|title|@*" mode="pruning-prune">
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- If we hit a title, grab all the contents so the ToC gets content-->
+<xsl:template match="title" mode="pruning-prune">
+    <xsl:apply-templates select="." mode="pruning-keep"/>
+</xsl:template>
+
 <!-- These templates initiate and create several iterations of -->
 <!-- the source tree via modal templates.  Think of each as a  -->
 <!-- "pass" through the source. Generally this constructs the  -->
@@ -288,15 +345,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
-<xsl:variable name="commentary-rtf">
-    <xsl:apply-templates select="$version" mode="commentary"/>
-</xsl:variable>
-<xsl:variable name="commentaried" select="exsl:node-set($commentary-rtf)"/>
-
-<!-- A global list of all "webwork" used for       -->
-<!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$commentaried//webwork"/>
-
 <!-- Support for versions mean there may be multiple instances of  -->
 <!-- the same structure in authored source, and conceivably they   -->
 <!-- might all be absent once a version has been selected.  We are -->
@@ -306,6 +354,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-root" select="$version/pretext"/>
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
+
+<!-- see pretext-html for full version of these params             -->
+<xsl:param name="subtree" select="''"/>
+<xsl:param name="html.quick-dirty" select="''"/>
+<xsl:variable name="pruning-tree-rtf">
+    <xsl:choose>
+        <xsl:when test="$subtree != '' and $html.quick-dirty != ''">
+            <xsl:apply-templates select="$version" mode="pruning">
+                <xsl:with-param name="target-node" select="//*[@id=$subtree]"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy-of select="$version"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="pruning-tree" select="exsl:node-set($pruning-tree-rtf)"/>
+
+<xsl:variable name="commentary-rtf">
+    <xsl:apply-templates select="$pruning-tree" mode="commentary"/>
+</xsl:variable>
+<xsl:variable name="commentaried" select="exsl:node-set($commentary-rtf)"/>
+
+<!-- A global list of all "webwork" used for       -->
+<!-- efficient backward-compatible indentification -->
+<xsl:variable name="all-webwork" select="$commentaried//webwork"/>
 
 <xsl:variable name="webwork-rtf">
     <xsl:apply-templates select="$commentaried" mode="webwork"/>
