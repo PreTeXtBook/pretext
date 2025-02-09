@@ -722,7 +722,7 @@ def main():
         ptx.datafiles_to_xml(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == "dynamic":
         ptx.dynamic_substitutions(
-            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir, None
         )
     elif args.component == "theme":
         ptx.update_theme(xml_source, publication_file, stringparams, dest_dir)
@@ -737,6 +737,7 @@ def main():
                 extra_stylesheet,
                 out_file,
                 dest_dir,
+                None
             )
         elif args.format == "html-zip":
             # no "subtree root" build is possible
@@ -749,6 +750,7 @@ def main():
                 extra_stylesheet,
                 out_file,
                 dest_dir,
+                None
             )
         elif args.format == "revealjs":
             ptx.revealjs(
