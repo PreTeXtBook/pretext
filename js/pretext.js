@@ -58,10 +58,6 @@ window.addEventListener("DOMContentLoaded",function(event) {
        thetocbutton.addEventListener('click', () => toggletoc() );
 });
 
-window.addEventListener("DOMContentLoaded",function(event) {
-       scrollTocToActive();
-});
-
 /* jump to next page if reader tries to scroll past the bottom */
 // var hitbottom = false;
 // window.onscroll = function(ev) {
@@ -83,7 +79,7 @@ window.addEventListener("DOMContentLoaded",function(event) {
 
 
 //-----------------------------------------------------------------------------
-// Dynamic TOC logic 
+// Dynamic TOC logic
 //-----------------------------------------------------------------------------
 
 //item is assumed to be expander in toc-item
@@ -91,7 +87,7 @@ function toggleTOCItem(expander) {
     let listItem = expander.closest(".toc-item");
     listItem.classList.toggle("expanded");
     let expanded = listItem.classList.contains("expanded");
-    
+
     let itemType = getTOCItemType(listItem);
     if(expanded) {
         expander.title = "Close" + (itemType !== "" ? " " + itemType : "");
@@ -175,4 +171,9 @@ window.addEventListener("DOMContentLoaded", function(event) {
             }
         }
       }
+});
+
+// This needs to be after the TOC's geometry is settled
+window.addEventListener("DOMContentLoaded",function(event) {
+    scrollTocToActive();
 });
