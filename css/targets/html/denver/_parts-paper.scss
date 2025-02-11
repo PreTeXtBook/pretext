@@ -204,4 +204,9 @@ $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $si
       position: relative;
       justify-content: center;
   }
+
+  .ptx-content-footer {
+    padding-left: $content-side-padding-tight;
+    padding-right: $content-side-padding-tight;
+  }
 }
