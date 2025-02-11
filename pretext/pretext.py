@@ -3711,7 +3711,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         full_name = "theme-{}".format(theme_name)
         log.debug("Building custom theme: " + full_name)
         log.debug("Theme options:" + json.dumps(theme_opts))
-        result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=10)
+        result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=60)
         if result.stdout:
             log.debug(result.stdout.decode())
         if result.stderr:
