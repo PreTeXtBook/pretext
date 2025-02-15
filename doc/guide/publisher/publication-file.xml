@@ -909,7 +909,6 @@
             </cd>element can have the following attributes:<ul>
                 <li><attr>customizations</attr>: A filename for a structured file of <tag>custom</tag> elements, each with a <attr>name</attr> attribute and content meant to be substituted into source.  See <xref ref="publisher-customizations"/> for details about the use of customizations.</li>
                 <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</li>
-                <li><attr>webwork-problems</attr>: A filename for a structured file of multiple representations of <webwork/> problems.  It is now recommended that when using <webwork/>, that you also use managed directories (see <xref ref="processing-directory-management"/>), in which case this attribute is unsused.</li>
             </ul></p>
         </subsection>
     </section>
@@ -921,83 +920,137 @@
 
         <introduction>
             <p>
-                A <webwork/> host course on a <webwork/> server somewhere does the processing of a project's <tag>webwork</tag> elements.
-                These are the details needed to specify where that course is and how <pretext/> will access it.
-                These are discussed again in <xref ref="webwork-representations"/>.
+                <webwork/> exercises in a <pretext/> project can be processed in three ways: using
+                a local copy of <c>pg</c>, using an instance of the PG renderer, or using a
+                <c>webwork2</c> server. The variables here control which method is used where, and
+                how it is used. These are discussed again in <xref ref="webwork-representations"/>.
             </p>
             <p>
-                See <xref ref="online-webwork-dynamism"/> for publisher file attributes that control <webwork/>'s dynamic behavior in HTML.
+                See <xref ref="online-webwork-dynamism"/> for publisher file attributes that control
+                <webwork/>'s dynamic behavior in HTML.
             </p>
         </introduction>
+
+        <subsection xml:id="publication-file-webwork-static-processing">
+            <title>Static Processing</title>
+            <p>The attribute
+                <cd>
+                    <cline>/publication/webwork/@static-processing</cline>
+                </cd>
+                can have value <c>webwork2</c> (the default), <c>renderer</c>, or <c>local</c>. When
+                <webwork/> exercises are processed to make static <pretext/> representations, this
+                is the method that will be used. Either communicating with a <c>webwork2</c> server,
+                a PG renderer, or a local copy of <c>pg</c>. The fastest processing happens if you
+                use <c>local</c>. See <xref ref="webwork-local-pg-static-processing"/>.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-interactive-processing">
+            <title>Interactive Processing</title>
+            <p>The attribute
+                <cd>
+                    <cline>/publication/webwork/@interactive-processing</cline>
+                </cd>
+                can have value <c>webwork2</c> (the default). Once the standalone PG renderer is
+                better at supporting live rendering, it will also be possible to set this to
+                <c>renderer</c>. When <webwork/> exercises are <q>live</q>, embedded in HTML, this
+                is the method that will be used. Either communicating with a <c>webwork2</c> server
+                or a PG renderer.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-pg-location">
+            <title>PG Location</title>
+            <p>The attribute
+                <cd>
+                    <cline>/publication/webwork/@pg-location</cline>
+                </cd>
+                gives the absolute file path to a local copy of the <c>pg</c> repository, for when
+                static processing is local. The default value is <c>/opt/webwork/pg</c>.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-renderer">
+            <title>PG Renderer</title>
+            <p>
+                The URL to a PG renderer instance is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@renderer</cline>
+                </cd>
+                It should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not
+                include a trailing slash. The renderer should use PG 2.19 or later. The default
+                value is <c>https://webwork-dev.aimath.org</c>. At this time, this is the only
+                instance of the PG renderer that is configured to work for <pretext/>
+            </p>
+        </subsection>
 
         <subsection xml:id="publication-file-webwork-server">
             <title>Server</title>
             <p>
-                The URL to the <webwork/> server is in the attribute
+                The URL to a <c>webwork2</c> server is in the attribute
                 <cd>
                     <cline>/publication/webwork/@server</cline>
                 </cd>
-                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include a trailing slash.
-                The server should be version 2.14 or later.
+                It should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not
+                include a trailing slash. The server should be version 2.16 or later. The default
+                value is <c>https://webwork-ptx.aimath.org</c>.
             </p>
         </subsection>
 
         <subsection xml:id="publication-file-webwork-course">
             <title>Course</title>
             <p>
-                The name of the host course is in the attribute
+                The name of the host course on the <c>webwork2</c> server is in the attribute
                 <cd>
                     <cline>/publication/webwork/@course</cline>
                 </cd>
-            </p>
-        </subsection>
-
-        <subsection xml:id="publication-file-webwork-course-password">
-            <title>Course Password</title>
-            <p>
-                A course password (distinct from a user password) is in the attribute
-                <cd>
-                    <cline>/publication/webwork/@coursepassword</cline>
-                </cd>
+                The default value is <c>anonymous</c>.
             </p>
         </subsection>
 
         <subsection xml:id="publication-file-webwork-user">
             <title>User</title>
             <p>
-                The username that signs in to the host course to process exercises is in the attribute
+                The username that signs in to the host course to process exercises is in the
+                attribute
                 <cd>
                     <cline>/publication/webwork/@user</cline>
                 </cd>
+                The default value is <c>anonymous</c>.
             </p>
         </subsection>
 
-        <subsection xml:id="publication-file-webwork-user-password">
-            <title>User Password</title>
+        <subsection xml:id="publication-file-webwork-password">
+            <title>Password</title>
             <p>
                 That user's password is in the attribute
                 <cd>
-                    <cline>/publication/webwork/@userpassword</cline>
+                    <cline>/publication/webwork/@password</cline>
                 </cd>
+                The default value is <c>anonymous</c>.
+                (If the <c>webwork2</c> server is version 2.18 or earlier, instead of
+                <attr>password</attr>, there should be both <attr>coursepassword</attr>
+                and <attr>userpassword</attr>.)
             </p>
         </subsection>
 
         <subsection xml:id="publication-file-webwork-task-reveal">
             <title>Task Reveal</title>
-
-            <p>The
+            <p>The attribute
                 <cd>
                     <cline>/publication/webwork/@task-reveal</cline>
                 </cd>
-                attribute is used to control how tasks in a multi-task exercise are made available to the reader.
-                This applies to live interactive renderings of the exercises, either in HTML, in <webwork/>,
-                or otherwise. Possible values are:
+                is used to control how tasks in a multi-task exercise are made available to the
+                reader. This applies to live interactive renderings of the exercises, either in
+                HTML, in <webwork/>, or otherwise. Possible values are:
                 <ul>
-                    <li><c>preceding-correct</c> (all preceding tasks must be correctly answered before the next is available)</li>
+                    <li>
+                        <c>preceding-correct</c> (all preceding tasks must be correctly answered
+                        before the next is available)
+                    </li>
                     <li><c>all</c> (all tasks are available)</li>
                 </ul>
             </p>
         </subsection>
     </section>
-
 </chapter>

@@ -106,11 +106,14 @@ PGOUT      = $(SCRATCH)/pg
 #########################################################################
 #  Construct macros file. This must be uploaded into the macros folder
 #  of the server's host course before building representations below.
-#  There are no macros for the minimal example, so omitted
+#  This file will be built inside a folder tree in generated/webwork/pg
+#  or if there is no generated folder, into the destination folder. The
+#  folder tree will be in the form PROJECT_TITLE/macros/INITIALISM.pl.
+#  If building representations locally, this must be run first and
+#  the macros file will be in the right place relative to the generated
+#  folder. There are no macros for the minimal example, so omitted.
 
 sample-chapter-macros:
-	install -d $(PGOUT)/macros
-	cd $(PGOUT)/macros; \
 	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) $(SMPC)
 
 
@@ -199,13 +202,13 @@ sample-chapter-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(SMPCPUB) $(SMPC)
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(MINIPUB) $(MINI)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(MINIPUB) $(MINI)
 
 
 #########################################################################
