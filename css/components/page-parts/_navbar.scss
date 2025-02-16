@@ -44,7 +44,11 @@ $center-content: true !default;
       // Disable normal borders - top/bottom provided by container
       // Use extras/_navbar-btn-borders.scss for side borders if desired
       border-width: 0;
+    }
 
+    .name {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -92,7 +96,7 @@ $center-content: true !default;
   }
 
   .index-button {
-    width: 70px;
+    min-width: 70px;
   }
 
   .runestone-profile {
