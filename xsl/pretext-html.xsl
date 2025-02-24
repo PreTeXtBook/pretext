@@ -1051,6 +1051,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <br />
                 </xsl:if>
             </xsl:if>
+            <xsl:if test="support">
+                <xsl:apply-templates select="support" />
+                <xsl:if test="support/following-sibling::*">
+                    <br />
+                </xsl:if>
+            </xsl:if>
         </div>
     </div>
 </xsl:template>
