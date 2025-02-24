@@ -68,26 +68,32 @@
     margin: 4em 2em;
   }
 
-  .abstract > .title {
-    font-size: 1.125em;
-    font-weight: 600;
-    line-height: 1.125em;
-    display: inline;
+  .keywords, .support {
+    margin-top: 2em;
   }
 
-  .abstract > .title::after {
-    content: ".\2009\2009\2009";
-  }
-  
-  .abstract > .title + .para {
-    display: inline;
+  .abstract, .keywords, .support {
+    & > .title {
+      font-size: 1.125em;
+      font-weight: 600;
+      line-height: 1.125em;
+      display: inline;
+    }
+
+    & > .title::after {
+      content: ".\2009\2009\2009";
+    }
+
+    & > .title + .para {
+      display: inline;
+    }
   }
 
   .colophon {
     .copyright {
       margin-top: 2.5em;
     }
-  
+
     .license {
       margin-top: 2.5em;
     }
