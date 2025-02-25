@@ -116,7 +116,7 @@
             </p>
 
             <p>
-                To verify that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (1.7.5, for example).
+                To verify that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (2.13.5, for example).
             </p>
 
             <p>
@@ -144,11 +144,11 @@
             </console>
 
             <p>
-                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 1.7.5:
+                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 2.13.5:
             </p>
 
             <console>
-                <input>pip install pretext=="1.7.5"</input>
+                <input>pip install pretext=="2.13.5"</input>
             </console>
             <warning>
                 <p>
@@ -172,7 +172,7 @@
             </console>
 
             <p>
-                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.  You might also try <c>pretext new demo</c> to get a project that shows off more features available.
+                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.  You might also try <c>pretext new demo</c> to get a project that shows off more features available, or <c>pretext new course</c> for a collection of course documents.
             </p>
 
             <p>
@@ -312,6 +312,16 @@
             <p>
                 Behind the scenes, this command copies the contents of the output folders you want to deploy to a folder <c>output/stage</c>, and then moves the entire contents of that folder to the <c>gh-pages</c> branch of your github repository.  If you have not already created a <c>gh-pages</c> branch, the CLI will create one for you.  If you have not already set up your repository to track your source files, the CLI will walk you through the steps you need to get set up.
             </p>
+
+            <insight>
+                <p>
+                    If you don't have your project set up with GitHub yet, the CLI will try to walk you through the process.
+                </p>
+                <p>
+                    Sometimes authentication with GitHub can be tricky.  Especially on Macs, it appears that conflicts can arise if you use different methods for authenticating in different applications.  A fix that seems to work is to open Keychain Access, search for <q>github</q> and delete some or all of the entries you find (GitHub api seems to be a culprit).  You will need to reauthenticate then, but after that, it should work.
+                </p>
+            </insight>
+
             <insight>
 
                 <p>
@@ -326,7 +336,7 @@
             <idx><h><c>pretext generate</c></h></idx>
             <idx><h>CLI</h><h><c>generate</c></h></idx>
             <p>
-                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.  \
+                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.
             </p>
 
             <p>
