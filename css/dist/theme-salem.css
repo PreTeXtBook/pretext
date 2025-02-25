@@ -924,6 +924,7 @@ section dl dd .aside-like.front {
 .program {
   border: 1px solid var(--page-border-color);
   padding: 5px 15px;
+  overflow-x: auto;
   font-family: var(--font-monospace);
   font-size: 0.93rem;
   line-height: 1.2;
@@ -943,6 +944,7 @@ section dl dd .aside-like.front {
 .code-block {
   border-left: 1px solid #aaa;
   padding: 0 15px 5px;
+  overflow-x: auto;
   font-family: var(--font-monospace);
   font-size: 0.93rem;
   line-height: 1.2;
