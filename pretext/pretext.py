@@ -535,11 +535,28 @@ def sage_conversion(
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     with working_directory(tmp_dir):
+        failed_images = []
         for sageplot in os.listdir(tmp_dir):
-            if ext_converter:
-                ext_converter(sageplot, outformat, dest_dir, sage_executable_cmd)
-            else:
-                individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cmd)
+            try:
+                if ext_converter:
+                    ext_converter(sageplot, outformat, dest_dir, sage_executable_cmd)
+                else:
+                    individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cmd)
+            except Exception as e:
+                failed_images.append(sageplot)
+                log.warning(e)
+    # raise an error if there were *any* failed images
+    if failed_images:
+        msg = "\n".join(
+            [
+                'Sage conversion failed for {} sageplot(s).',
+                "Build with '-v debug' option and review the log for error messages.",
+                "Images are:",
+            ]
+        ).format(len(failed_images))
+        # 2-space indentation
+        image_list = "\n  " + "\n  ".join(failed_images)
+        raise ValueError(msg + image_list)
 
 def individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cmd):
     filebase, _ = os.path.splitext(sageplot)
@@ -547,8 +564,13 @@ def individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cm
     sage_cmd = sage_executable_cmd + [sageplot]
     log.info("converting {} to {}".format(sageplot, sageout))
     log.debug("sage conversion {}".format(sage_cmd))
-    subprocess.call(sage_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-    shutil.copy2(sageout, dest_dir)
+
+    result = subprocess.run(sage_cmd, capture_output=True, encoding="utf-8")
+    if result.returncode:
+        log.debug(result.stderr)
+        raise Exception("sage conversion of {} failed".format(sageplot))
+    else:
+        shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
