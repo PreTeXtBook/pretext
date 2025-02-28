@@ -1194,7 +1194,7 @@ def webwork_to_xml(
         if not (os.path.isdir(ww_images_dir)):
             os.mkdir(ww_images_dir)
 
-        webwork_sets(xml_source, pub_file, stringparams, dest_dir, False)
+        webwork_sets(xml_source, pub_file, stringparams, None, False)
 
     else:
         msg = "".join(
@@ -2119,6 +2119,9 @@ def webwork_to_xml(
 
 def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
 
+    # make PG macros that may be needed
+    pg_macros(xml_source, pub_file, stringparams, dest_dir)
+
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
@@ -2128,7 +2131,10 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
     else:
         generated_dir = None
 
-    if generated_dir is not None:
+    if generated_dir is None and dest_dir is None:
+        raise ValueError("No destination directory specified or assumed, and the generated directory could not be determined.")
+
+    if dest_dir is None:
         if not (os.path.isdir(os.path.join(generated_dir, 'webwork', 'pg'))):
             os.makedirs(os.path.join(generated_dir, 'webwork', 'pg'))
         dest_dir = os.path.join(generated_dir, 'webwork', 'pg')
@@ -2150,7 +2156,6 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
         # copy_build_directory() doesn't work for this and seems like a bug
         # Could replace copytree() with copy_build_directory() once bug is fixed
         shutil.copytree(folder, os.path.join(dest_dir, folder_name), dirs_exist_ok=True)
-    pg_macros(xml_source, pub_file, stringparams, dest_dir)
 
 
 ################################
@@ -2171,7 +2176,10 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
     else:
         generated_dir = None
 
-    if generated_dir is not None:
+    if generated_dir is None and dest_dir is None:
+        raise ValueError("No destination directory specified or assumed, and the generated directory could not be determined.")
+
+    if dest_dir is None:
         if not (os.path.isdir(os.path.join(generated_dir, 'webwork', 'pg'))):
             os.makedirs(os.path.join(generated_dir, 'webwork', 'pg'))
         dest_dir = os.path.join(generated_dir, 'webwork', 'pg')
