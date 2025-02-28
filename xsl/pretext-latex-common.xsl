@@ -6362,7 +6362,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--     \textopenbullet, \textbigcircle (textcomp)            -->
         <!-- To adjust in preamble, see use of $b-has-webwork-var      -->
         <xsl:when test="@pi:ww-form = 'buttons'" >
-            <xsl:text>\begin{itemize}[label=$\circledcirc$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\bigcirc$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:apply-templates select="li"/>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
