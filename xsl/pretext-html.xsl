@@ -13169,7 +13169,12 @@ TODO:
             <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
-    <div id="latex-macros" class="hidden-content process-math" style="display:none" data-macros="{$packages-and-macros}">
+    <div id="latex-macros" class="hidden-content process-math" style="display:none">
+        <xsl:if test="$b-has-webwork-reps">
+            <p id="latex-macros-text">
+                <xsl:value-of select="$packages-and-macros"/>
+            </p>
+        </xsl:if>
         <xsl:call-template name="inline-math-wrapper">
             <xsl:with-param name="math" select="$packages-and-macros"/>
         </xsl:call-template>
