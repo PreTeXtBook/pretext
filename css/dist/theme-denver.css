@@ -794,6 +794,10 @@ body.pretext > a.assistive:focus {
     position: relative;
     justify-content: center;
   }
+  .ptx-content-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 .aside-like {
   position: absolute;

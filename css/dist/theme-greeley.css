@@ -2938,6 +2938,10 @@ body.pretext > a.assistive:focus {
     position: relative;
     justify-content: center;
   }
+  .ptx-content-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 .hide-type .codenumber:not(:empty)::after {
   content: ". ";
