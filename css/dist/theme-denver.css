@@ -2215,6 +2215,9 @@ a[href^="mailto:"] {
   color: var(--summary-link-hover-text-color);
   background: var(--summary-link-hover-background);
 }
+.ptx-content .summary-links a:hover .title {
+  font-weight: normal;
+}
 .ptx-content .summary-links a:hover::after {
   border-left: 0.4em solid var(--summary-link-hover-text-color);
 }
