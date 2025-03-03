@@ -1053,7 +1053,7 @@ pre[class*=language-] .token:is(.operator, .entity, .url) {
 }
 code[class*=language-] .token:is(.atrule, .attr-value, .keyword),
 pre[class*=language-] .token:is(.atrule, .attr-value, .keyword) {
-  color: rgb(18, 137, 201);
+  color: #0679B7;
 }
 code[class*=language-] .token.function,
 code[class*=language-] .token.class-name,
