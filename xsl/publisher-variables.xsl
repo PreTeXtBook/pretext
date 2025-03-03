@@ -2584,6 +2584,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-host-web"       select="$host-platform = 'web'"/>
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
 
+<!-- To create a standalone html document with all css and js served by CDN -->
+<!-- we can select platform/@portable to "yes"                              -->
+<xsl:variable name="portable-html">
+    <xsl:apply-templates select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='portable']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-portable-html" select="$portable-html = 'yes'"/>
+
 <!--                            -->
 <!-- HTML Favicon Specification -->
 <!--                            -->
@@ -3136,6 +3143,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </video>
         <platform>
             <pi:pub-attribute name="host" default="web" options="runestone" legacy-options="aim"/>
+            <pi:pub-attribute name="portable" default="no" options="yes"/>
         </platform>
     </html>
     <epub>

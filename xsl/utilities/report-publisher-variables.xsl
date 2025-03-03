@@ -102,6 +102,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$journal-name"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2025-03-10 portable html switch -->
+    <xsl:text>portable-html</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$portable-html"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--
