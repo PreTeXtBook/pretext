@@ -312,7 +312,7 @@ body.pretext > a.assistive:focus {
   display: none;
 }
 .ptx-navbar .index-button {
-  width: 70px;
+  min-width: 70px;
 }
 .ptx-navbar .runestone-profile {
   position: relative;
