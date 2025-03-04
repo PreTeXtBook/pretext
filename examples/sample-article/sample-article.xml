@@ -10702,6 +10702,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </program>
             </listing>
 
+            <p>Although a program should have a <tag>code</tag> element surrounding its code, we attempt to provide one when it is missing. This next sample tests that and intentionally has no leading or trailing newline inside the program.</p>
+
+            <program languge="python">print("Hello world")</program>
+
             <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof may be included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
 
             <algorithm xml:id="algorithm-sieve-eratosthenes">
