@@ -4194,7 +4194,60 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Bibliographic Information</title>
 
-            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliogrphic information are planned.</p>
+            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>keywords</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliogrphic information are planned.</p>
+
+            <paragraphs>
+                <title>Authors and editors</title>
+                <p>
+                    Each author and editor should be described in their own <tag>author</tag> or <tag>editor</tag> element, which are structured identically (in output, authors are listed first, followed by editors, sometimes using less prominent formatting).  An author can be designated as the <term>corresponding author</term> using the <attr>corresponding</attr> attribute.
+                </p>
+
+                <p>
+                    The name of an author or editor should be enclosed in a <tag>personname</tag> element.  Following this, affiliation information can be provided either by using elements <tag>department</tag>, <tag>institution</tag>, and <tag>location</tag> (each of which can be further structured with <tag>line</tag> tags), or by enclosing these in an <tag>affiliation</tag> element.  (Grouping affiliation details is useful when an author might have multiple affiliations.)
+                </p>
+
+                <p>
+                    An author or editor can also have an <tag>email</tag>, <tag>biographcy</tag>, or <tag>support</tag> element.  The <tag>support</tag> element can be used to describe funding sources particular to that author as required by some journals.  Notice that the <tag>support</tag> element could also be a child of <tag>bibinfo</tag> itself, in which case it would appear as applying to the entire document, not just an individual author.
+                </p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Keywords</title>
+                <p>
+                    Many journals require papers to contain a list of keywords or subject classification codes.  These are both captured by the <tag>keywords</tag> element.  This groups a collection of <tag>keyword</tag> elements, each of which is a single keyword or subject classification code.
+                </p>
+
+                <p>
+                    To distinguish between author-provided keywords and subject classification codes, the <tag>keywords</tag> element can have attributes <attr>authority</attr> and <attr>variant</attr>.  As of 2025-02-18, the values of these attributes that are recognized are given in <xref ref="table-keywords"/>.
+                </p>
+
+                <table xml:id="table-keywords">
+                    <title>Recognized keyword attribute values</title>
+                    <tabular>
+                        <row header="yes" bottom="minor">
+                            <cell>Type</cell><cell><attr>authority</attr></cell><cell>variant</cell>
+                        </row>
+                        <row>
+                            <cell>Author-provided keywords</cell>
+                            <cell><c>author</c> or none</cell>
+                            <cell>none</cell>
+                        </row>
+                        <row>
+                            <cell>Math Subject Classification (MSC) codes</cell>
+                            <cell><c>msc</c></cell>
+                            <cell><c>2020</c> or <c>2010</c> or etc.</cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <p>
+                    For subject classification codes, to distinguish between primary or secondary codes, the <tag>keyword</tag> element can have the optional attribute <attr>primary</attr> (with value <c>yes</c> or <c>no</c>).  Put <c>primary="yes"</c> on the <em>first</em> primary keyword, and <c>primary="no"</c> on the <em>first</em> secondary keyword.  Alternatively, using <c>secondary="yes"</c> on the first secondary keyword is also acceptable.
+                </p>
+
+                <p>
+                    If you are writing a paper that needs a different classification from those currently available, please submit a request.
+                </p>
+            </paragraphs>
         </subsection>
 
         <subsection>

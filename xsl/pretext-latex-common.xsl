@@ -4290,6 +4290,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
     </xsl:if>
+    <xsl:if test="support">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="support" />
+    </xsl:if>
     <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
     </xsl:if>
@@ -4313,7 +4317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Preprocessor always puts Department, Institution, and Address          -->
+<!-- Preprocessor always puts Department, Institution, and Location         -->
 <!-- inside Affiliation. This just adds line breaks between them as needed. -->
 <xsl:template match="affiliation">
     <xsl:if test="department">

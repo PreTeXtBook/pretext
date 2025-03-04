@@ -62,31 +62,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Do not support exercises or reading questions or solutions -->
 <xsl:template match="exercises|reading-questions|solutions">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">Exercises divisions are not yet supported in latex-classic conversions.  No content of such a division will be included in your output.</xsl:with-param>
+        <xsl:with-param name="warning">Exercises divisions are not yet supported in latex-classic conversions.  No content of such a division will be included in your output, and xref's to such divisions will be broken.</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <!-- Do not support glossary yet -->
 <xsl:template match="glossary">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">Glossary divisions are not yet supported in latex-classic conversions.  No content of such a division will be included in your output.</xsl:with-param>
+        <xsl:with-param name="warning">Glossary divisions are not yet supported in latex-classic conversions.  No content of such a division will be included in your output, and xref's to such divisions will be broken.</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="section//references">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">References (bibliography) for individual sections are not yet supported in latex-classic conversions.  No content of such a division will be included in your output. You can still have a bibliography at the end of your article.</xsl:with-param>
+        <xsl:with-param name="warning">References (bibliography) for individual sections are not yet supported in latex-classic conversions.  No content of such a division will be included in your output, and xref's to such divisions will be broken. You can still have a bibliography at the end of your article.</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="worksheet">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">Worksheets are not yet supported in latex-classic conversions.  No content of such a division will be included in your output. </xsl:with-param>
+        <xsl:with-param name="warning">Worksheets are not yet supported in latex-classic conversions.  No content of such a division will be included in your output, and xref's to such divisions will be broken.</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <!-- Defaults that can be overriden by style files -->
-<xsl:variable name="documentclass" select="'amsart'"/>
+<xsl:variable name="documentclass" select="'article'"/>
 <xsl:variable name="bibliographystyle" select="'amsplain'"/>
 
 <!-- An article, LaTeX structure -->
@@ -120,11 +120,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <xsl:template name="latex-preamble">
+    <!-- Some journal styles require specific packages be loaded right away -->
+    <xsl:call-template name="journal-packages"/>
+    <xsl:call-template name="frontmatter-helpers"/>
     <xsl:call-template name="preamble-early"/>
     <xsl:call-template name="cleardoublepage"/>
     <xsl:call-template name="standard-packages"/>
     <xsl:call-template name="latex-theorem-environments"/>
     <xsl:call-template name="tcolorbox-init"/>
+    <xsl:call-template name="numberless-environments"/>
     <xsl:call-template name="page-setup"/>
     <xsl:call-template name="latex-engine-support"/>
     <xsl:call-template name="font-support"/>
@@ -137,7 +141,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="equation-numbering"/>
     <xsl:call-template name="image-tcolorbox"/>
     <xsl:call-template name="tables"/>
-    <xsl:call-template name="footnote-numbering"/>
+    <!--<xsl:call-template name="footnote-numbering"/>  -->
     <xsl:call-template name="font-awesome"/>
     <xsl:call-template name="poetry-support"/>
     <xsl:call-template name="music-support"/>
@@ -153,6 +157,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="late-preamble-adjustments"/>
 </xsl:template>
 
+<!-- No journal-packages by default; can be overridden by importing xsl -->
+<xsl:template name="journal-packages"/>
 
 <!-- paragraph and page setup -->
 <!-- TODO: Clean this up with just what -classic needs. -->
@@ -166,11 +172,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- In a similar fashion we save/restore the parskip, only should    -->
     <!-- an ambitious publisher try to set it globally                    -->
     <xsl:text>%% Save default paragraph indentation and parskip for use later, when adjusting parboxes&#xa;</xsl:text>
-    <!--<xsl:text>\newlength{\normalparindent}&#xa;</xsl:text>-->
-    <xsl:text>\newlength{\normalparskip}&#xa;</xsl:text>
-    <xsl:text>\AtBeginDocument{\setlength{\normalparindent}{\parindent}}&#xa;</xsl:text>
-    <xsl:text>\AtBeginDocument{\setlength{\normalparskip}{\parskip}}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\setparstyle}{\setlength{\parindent}{\normalparindent}\setlength{\parskip}{\normalparskip}}</xsl:text>
+    <xsl:text>\newlength{\ptxnormalparindent}&#xa;</xsl:text>
+    <xsl:text>\newlength{\ptxnormalparskip}&#xa;</xsl:text>
+    <xsl:text>\AtBeginDocument{\setlength{\ptxnormalparindent}{\parindent}}&#xa;</xsl:text>
+    <xsl:text>\AtBeginDocument{\setlength{\ptxnormalparskip}{\parskip}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\setparstyle}{\setlength{\parindent}{\ptxnormalparindent}\setlength{\parskip}{\ptxnormalparskip}}</xsl:text>
 
     <!-- could condition on "subfigure-reps" -->
     <xsl:if test="$b-has-sidebyside">
@@ -237,51 +243,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- By default, no bibinfo is included before the \begin{document}.     -->
 <!-- Other latex styles can override this to put some information there. -->
-<xsl:template name="bibinfo-pre-begin-document"/>
+<xsl:template name="bibinfo-pre-begin-document">
+    <xsl:apply-templates select="$document-root" mode="article-title"/>
+    <!--<xsl:apply-templates select="$bibinfo/support" mode="article-frontmatter"/>-->
+    <xsl:call-template name="article-authors"/>
+    <xsl:apply-templates select="$bibinfo/date" mode="article-frontmatter"/>
+</xsl:template>
 
 
 <!-- By default, all bibinfo goes inside (after) \begin{document}.             -->
 <!-- Other latex styles can override this in combination with the pre-version. -->
+<!-- Order of bibinfo elements after \begin{document} -->
 <xsl:template name="bibinfo-post-begin-document">
-    <xsl:apply-templates select="$document-root" mode="article-title"/>
-    <xsl:if test="$bibinfo/author or $bibinfo/editor">
-        <xsl:apply-templates select="$bibinfo/author" mode="article-info"/>
-        <xsl:apply-templates select="$bibinfo/editor" mode="article-info"/>
-    </xsl:if>
-    <xsl:if test="$bibinfo/keywords[@authority='msc']">
-        <xsl:text>\subjclass[</xsl:text>
-        <xsl:value-of select="$bibinfo/keywords[@authority='msc']/@variant"/>
-        <xsl:text>]{</xsl:text>
-        <xsl:apply-templates select="$bibinfo/keywords[@authority='msc']"/>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$bibinfo/date">
-        <xsl:text>\date{</xsl:text>
-        <xsl:apply-templates select="$bibinfo/date"/>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$bibinfo/keywords[not(@authority='msc')]">
-        <xsl:text>\keywords{</xsl:text>
-        <xsl:apply-templates select="$bibinfo/keywords[not(@authority='msc')]"/>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$bibinfo/support">
-        <xsl:text>\dedicatory{</xsl:text>
-        <xsl:apply-templates select="$bibinfo/support" mode="article-info"/>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root/frontmatter/abstract">
-        <xsl:apply-templates select="$document-root/frontmatter/abstract"/>
-    </xsl:if>
     <xsl:text>\maketitle&#xa;</xsl:text>
+    <xsl:apply-templates select="$document-root/frontmatter/abstract" mode="article-frontmatter"/>
 </xsl:template>
 
 <xsl:template match="*" mode="article-title">
     <xsl:text>%% Title page information for article&#xa;</xsl:text>
-    <xsl:text>\title[</xsl:text>
-    <xsl:apply-templates select="." mode="title-short"/>
-    <xsl:text>]{</xsl:text>
+    <xsl:text>\title{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:apply-templates select="$bibinfo/support" mode="article-frontmatter"/>
     <xsl:if test="subtitle">
         <xsl:text>\\&#xa;</xsl:text>
         <!-- Trying to match author fontsize -->
@@ -292,55 +274,83 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="bibinfo/author" mode="article-info">
+
+<!-- For now, this just wraps the common article-info for author in an \author{...} tag -->
+<xsl:template name="article-authors">
     <xsl:text>\author{</xsl:text>
-    <xsl:apply-templates select="personname"/>
+    <xsl:apply-templates select="$bibinfo/author" mode="article-frontmatter"/>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="affiliation">
-        <xsl:text>\address{</xsl:text>
-        <xsl:apply-templates select="affiliation"/>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="email">
-        <xsl:text>\email{</xsl:text>
-        <xsl:apply-templates select="email"/>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="author" mode="article-frontmatter">
+    <xsl:apply-templates select="personname" />
     <xsl:if test="support">
         <xsl:text>\thanks{</xsl:text>
-        <xsl:apply-templates select="support"/>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:apply-templates select="support" />
+        <xsl:text>}</xsl:text>
     </xsl:if>
+    <xsl:if test="affiliation">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="affiliation" />
+    </xsl:if>
+    <xsl:if test="email">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="email" />
+    </xsl:if>
+    <xsl:if test="following-sibling::author" >
+        <xsl:text>&#xa;\and</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- Preprocessor always puts Department, Institution, and Address          -->
 <!-- inside Affiliation. This just adds line breaks between them as needed. -->
 <xsl:template match="affiliation">
     <xsl:if test="department">
         <xsl:apply-templates select="department" />
-        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:if test="department/following-sibling::*">
+            <xsl:text>\\&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="institution">
         <xsl:apply-templates select="institution" />
-        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:if test="institution/following-sibling::*">
+            <xsl:text>\\&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="location">
         <xsl:apply-templates select="location" />
-        <xsl:text>\\&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="bibinfo/keywords">
-    <xsl:apply-templates select="*" />
-    <xsl:text>.</xsl:text>
+
+<xsl:template match="bibinfo/date" mode="article-frontmatter">
+    <xsl:text>\date{</xsl:text>
+    <xsl:apply-templates select="."/>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="abstract">
+
+<xsl:template match="bibinfo/support" mode="article-frontmatter">
+    <xsl:text>\support{</xsl:text>
+    <xsl:apply-templates select="$bibinfo/support" mode="article-info"/>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+
+<xsl:template match="frontmatter/abstract" mode="article-frontmatter">
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
-    <xsl:apply-templates select="*"/>
+        <xsl:apply-templates select="*"/>
+        <xsl:apply-templates select="$bibinfo/keywords"/>
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
 
+
+<xsl:template match="email" mode="article-info">
+    <xsl:value-of select="." />
+</xsl:template>
 
 <!-- Since the bibinfo-post-begin-document takes care of all frontmatter, we kill the frontmatter as a separate thing here -->
 <xsl:template match="article/frontmatter"/>
@@ -363,22 +373,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For preamble -->
 <xsl:template name="latex-theorem-environments">
     <xsl:text>%% Theorem-like environments&#xa;</xsl:text>
+    <xsl:text>%&#xa;% amsthm package: redundant if using amsart documentclass, but required otherwise.&#xa;</xsl:text>
+    <xsl:text>\usepackage{amsthm}%&#xa;%&#xa;</xsl:text>
     <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
-    <!-- We add a basic block element "thmbox" just to have a counter always -->
-    <xsl:text>\newtheorem{thmbox}{}[section]&#xa;</xsl:text>
+    <!-- We need a counter, and want it to be "theorem" to agree with some journal styles -->
+    <!-- So if the document contains theorem's, we can create it.  Otherwise we don't care-->
+    <!-- what it is called, so we can still use this and it will just have a blank name.  -->
+    <xsl:text>\newtheorem{theorem}{</xsl:text>
+    <xsl:apply-templates select="($document-root//theorem)[1]" mode="type-name"/>
+    <xsl:text>}[section]&#xa;</xsl:text>
+    <!-- Now continue with the remaining elements, checking to see if they are present -->
     <xsl:variable name="theoremstyle-plain" select="
-        ($document-root//theorem)[1]|
         ($document-root//lemma)[1]|
         ($document-root//proposition)[1]|
         ($document-root//corollary)[1]|
         ($document-root//claim)[1]|
         ($document-root//fact)[1]|
         ($document-root//identity)[1]|
-        ($document-root//conjecture)[1]"/>
+        ($document-root//conjecture)[1]
+    "/>
     <xsl:for-each select="$theoremstyle-plain">
         <xsl:apply-templates select="." mode="newtheorem"/>
     </xsl:for-each>
-    <xsl:text>\newtheorem*{assemblage}{}&#xa;</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 
     <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
@@ -436,19 +452,64 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="local-name(.)"/>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>}[thmbox]{</xsl:text>
+        <xsl:text>}[theorem]{</xsl:text>
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Preamble assemblage environment -->
+
+<xsl:template name="numberless-environments">
+    <!-- Assemblages -->
+    <xsl:if test="$document-root//assemblage">
+        <xsl:apply-templates select="($document-root//assemblage)[1]" mode="environment"/>
+    </xsl:if>
+    <!-- ASIDE-LIKE -->
+    <xsl:variable name="aside-reps" select="
+        ($document-root//aside)[1]|
+        ($document-root//historical)[1]|
+        ($document-root//biographical)[1]"/>
+    <xsl:if test="$aside-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for ASIDE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$aside-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- We need to redefine these to be more like regular environments -->
+<xsl:template match="assemblage|&ASIDE-LIKE;" mode="environment">
+    <!-- Names of various pieces use the element name -->
+    <xsl:variable name="environment-name">
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: fairly simple un-numbered block/structure&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style"/>
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}[1][]{title={#1}, </xsl:text>
+    <xsl:text>breakable, before upper app={\setparstyle}, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style}&#xa;</xsl:text>
+</xsl:template>
+
+
 <!-- In document -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|assemblage" mode="block-options">
-
-    <xsl:call-template name="env-title"/>
+    <xsl:apply-templates select="." mode="env-title"/>
     <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id"/>
-    <xsl:text>}</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
+
 
 
 <!-- Proofs and cases are handled using amsthm; anything other than a proof gets a title or the name of the proof-like env. -->
@@ -468,7 +529,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id"/>
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
@@ -476,32 +537,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Cases in proofs -->
 <xsl:template match="case">
     <xsl:text>\par\medskip%&#xa;</xsl:text>
-    <xsl:text>\noindent\textit{</xsl:text>
+    <xsl:text>\noindent{}</xsl:text>
     <xsl:if test="@direction">
         <xsl:apply-templates select="." mode="case-direction"/>
-        <xsl:text>&#xa0;</xsl:text>
+        <xsl:text> </xsl:text>
     </xsl:if>
     <xsl:if test="title">
-        <xsl:text>&#xa0;</xsl:text>
+        <xsl:text>\textit{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:if test="not(title) and not(@direction)">
+        <xsl:text>\textit{</xsl:text>
         <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:text>}</xsl:text>
     <!-- label -->
     <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
 
-<xsl:template name="env-title">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="env-title"> 
     <xsl:if test="title|creator">
         <xsl:text>[</xsl:text>
         <xsl:if test="title">
-            <xsl:apply-templates select="." mode="title-full"/>
+            <!-- Title, but without punctuation.  Or is there a smarter way? -->
+            <xsl:apply-templates select="." mode="title-xref"/>
         </xsl:if>
         <xsl:if test="(title) and (creator)">
             <xsl:text>&#160;</xsl:text>
@@ -509,6 +573,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="creator">
             <xsl:apply-templates select="." mode="creator-full"/>
         </xsl:if>
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="&ASIDE-LIKE;|assemblage" mode="env-title">
+    <xsl:if test="title">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>]</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -523,7 +595,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>% end of </xsl:text>
     <xsl:value-of select="local-name(.)"/>
@@ -539,7 +611,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>% end of subsubsubsection: </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
@@ -570,10 +642,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>%% end paragraphs&#xa;</xsl:text>
+    <xsl:text>% end of paragraphs&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
@@ -581,13 +652,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|references/introduction">
     <xsl:text>% Introduction&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>% end introduction&#xa;</xsl:text>
+    <xsl:text>% end of introduction&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|references/conclusion">
     <xsl:text>% Conclusion&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>% End conclusion&#xa;</xsl:text>
+    <xsl:text>% end of conclusion&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -608,9 +679,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-
 <xsl:template match="biblio[@type='raw'] | biblio[@type='bibtex']">
-
     <xsl:text>\bibitem</xsl:text>
     <!-- "label" (e.g. Jud99), or by default serial number -->
     <!-- LaTeX's bibitem will provide the visual brackets  -->
@@ -624,9 +693,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates/>
     <xsl:text>&#xa;</xsl:text>
-
 </xsl:template>
-
 
 
 <!-- A much smaller version from common: -->
@@ -744,19 +811,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$goal-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
-    <!-- ASIDE-LIKE -->
-    <xsl:variable name="aside-reps" select="
-        ($document-root//aside)[1]|
-        ($document-root//historical)[1]|
-        ($document-root//biographical)[1]"/>
-    <xsl:if test="$aside-reps">
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for ASIDE-LIKE&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:for-each select="$aside-reps">
-        <xsl:apply-templates select="." mode="environment"/>
-    </xsl:for-each>
+
     <!-- FIGURE-LIKE -->
     <!-- FIGURE-LIKE come in three flavors: blocks (not in a side-by-side),  -->
     <!-- panels (in a side-by-side, but not in an overall "figure"), or      -->
@@ -827,5 +882,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+
+<!-- Preamble template for elements needed to produce the frontmatter -->
+<xsl:template name="frontmatter-helpers">
+    <!-- If there is a <support> tag in an article, create a unnumbered footnote environment for it -->
+    <!-- NB: this is also part of the footnote-numbering named template (as of 2025-02-24), but we don't call that for -classic -->
+    <xsl:if test="$b-is-article and $bibinfo/support">
+        <xsl:text>%% add a \support command as unnumbered footnote&#xa;</xsl:text>
+        <xsl:text>\let\svdthefootnote\thefootnote%&#xa;</xsl:text>
+        <xsl:text>\newcommand\support[1]{%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
+        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\svdthefootnote%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
 
 </xsl:stylesheet>
