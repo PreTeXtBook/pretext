@@ -1291,7 +1291,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//@workspace">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
