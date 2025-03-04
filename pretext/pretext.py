@@ -4890,7 +4890,7 @@ def get_publisher_variable(variable_dict, variable_name):
 
     # Actually parsing the pub file is relatively expensive, so callers must do that
     # and pass the resulting dict to this function, hopefully retaining the dict
-    # for any other calls.
+    # for any other calls within the scope of the computed dictionary.
 
     log.debug("determining value of publisher variable '{}'".format(variable_name))
 
@@ -4925,6 +4925,12 @@ def get_publisher_variable(variable_dict, variable_name):
 #  __temps - created temporary directories, to report or release
 #
 #  __module_warning - stock import-failure warning message
+
+# NB: some uses of this module last for longer than processing
+# just one document, for example, on Runestone Academy when
+# building many books at once with the CLI.  These variables
+# then also have a long life, and so some care needs to be
+# exercised that they do not contain document-specific information.
 
 # Convenience
 __xml_header = '<?xml version="1.0" encoding="UTF-8"?>\n'
