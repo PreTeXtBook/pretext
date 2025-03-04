@@ -5926,7 +5926,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- object to hold the image.  For an annotated PreFigure diagram     -->
     <!-- we need a custom embedding for the diagcess JS to act on.  The    -->
     <!-- two files (SVG image, XML annotations) are products of PreFigure. -->
+
     <xsl:choose>
+        <xsl:when test="$b-portable-html and (latex-image|pf:prefigure[not(pf:diagram/pf:annotations)])">
+            <xsl:apply-templates select="." mode="svg-embedded"/>
+        </xsl:when>
         <xsl:when test="latex-image|pf:prefigure[not(pf:diagram/pf:annotations)]">
             <xsl:apply-templates select="." mode="svg-png-wrapper">
                 <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')" />
@@ -6144,6 +6148,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
         </xsl:choose>
     </img>
+</xsl:template>
+
+<!-- Instead of linking to an svg file as in the modal svg-png-wrapper above  -->
+<!-- we can include the svg directly in the html document, which is what      -->
+<!-- this does.  Used with b-portable-html is true, at least now (2025-03-04) -->
+<xsl:template match="image" mode="svg-embedded">
+    <!-- Get the filename of the generated svg file -->
+    <xsl:variable name="svg-source-filename">
+        <xsl:value-of select="$generated-directory-source" />
+        <xsl:if test="$b-managed-directories">
+            <xsl:choose>
+                <xsl:when test="latex-image">
+                    <xsl:text>latex-image/</xsl:text>
+                </xsl:when>
+                <xsl:when test="pf:prefigure">
+                    <xsl:text>prefigure/</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+        <xsl:apply-templates select="latex-image|pf:prefigure" mode="image-source-basename"/>
+        <xsl:text>.svg</xsl:text>
+    </xsl:variable>
+    <!-- Get the SVG file as an XML document -->
+    <xsl:variable name="image-svg-xml" select="document($svg-source-filename, $original)" />
+    <!-- Create an SVG element with the contents of the SVG file -->
+    <svg xmlns="http://www.w3.org/2000/svg">
+        <xsl:copy-of select="$image-svg-xml/svg:svg/namespace::*"/>
+        <xsl:copy-of select="$image-svg-xml/svg:svg/@version"/>
+        <xsl:copy-of select="$image-svg-xml/svg:svg/@viewBox"/>
+        <xsl:attribute name="role">
+            <xsl:text>img</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>contained</xsl:text>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="@decorative = 'yes'">
+                <xsl:attribute name="aria-hidden">
+                    <xsl:text>true</xsl:text>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="shortdescription">
+                <xsl:attribute name="aria-label">
+                    <xsl:apply-templates select="shortdescription"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="description">
+                <xsl:attribute name="aria-describedby">
+                    <xsl:apply-templates select="." mode="describedby-id"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+        <xsl:if test="shortdescription">
+            <title>
+                <xsl:apply-templates select="shortdescription"/>
+            </title>
+        </xsl:if>
+        <xsl:if test="description">
+            <desc>
+                <xsl:apply-templates select="description"/>
+            </desc>
+        </xsl:if>
+        <xsl:copy-of select="$image-svg-xml/svg:svg/*" />
+    </svg>
 </xsl:template>
 
 <xsl:template match="image" mode="description">
