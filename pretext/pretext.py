@@ -3858,9 +3858,10 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
-    # interrogate Runestone server (or debugging switches) and populate
-    # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    if get_publisher_variable(xml, pub_file, stringparams, 'portable-html') != "yes":
+        # interrogate Runestone server (or debugging switches) and populate
+        # NB: stringparams is augmented with Runestone Services information
+        _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -3877,11 +3878,12 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place JS in scratch directory
-    copy_html_js(tmp_dir)
+    if get_publisher_variable(xml, pub_file, stringparams, 'portable-html') != "yes":
+        # place JS in scratch directory
+        copy_html_js(tmp_dir)
 
-    # build or copy theme
-    build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
+        # build or copy theme
+        build_or_copy_theme(xml, pub_file, stringparams, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
