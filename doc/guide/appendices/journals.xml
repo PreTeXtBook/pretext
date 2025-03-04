@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2019  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="appendix-journals">
+    <title>List of Supported Journal Styles</title>
+
+    <introduction>
+        <p>
+            This appendix contains the list of supported journals and their short name codes.  To specify
+            one of these journals, use the publication file.  See <xref ref="common-journal"/>.
+        </p>
+
+        <p>
+            The code for a journal is taken from the list of abbreviations used by MathSciNet available at <url href="https://mathscinet.ams.org/msnhtml/serials.pdf">https://mathscinet.ams.org/msnhtml/serials.pdf</url>.
+        </p>
+    </introduction>
+
+    <section xml:id="journals-ams">
+        <title>Journals published by the American Mathematical Society</title>
+
+        <table>
+            <title>AMS Journals</title>
+            <tabular>
+                <row header="yes">
+                    <cell>Code</cell><cell>Full Journal Name</cell>
+                </row>
+                <row>
+                    <cell><c>Bull-Amer-Math-Soc</c></cell><cell>Bulletin (New Series) of the American Mathematical Society</cell>
+                </row>
+                <row>
+                    <cell><c>Conform-Geom-Dyn</c></cell><cell>Conformal Geometry and Dynamics</cell>
+                </row>
+                <row>
+                    <cell><c>J-Algebraic-Geom</c></cell><cell>Journal of Algebraic Geometry</cell>
+                </row>
+                <row>
+                    <cell><c>J-Amer-Math-Soc</c></cell><cell>Journal of the American Mathematical Society</cell>
+                </row>
+                <row>
+                    <cell><c>Math-Comp</c></cell><cell>Mathematics of Computation</cell>
+                </row>
+                <row>
+                    <cell><c>Quart-Appl-Math</c></cell><cell>Quarterly of Applied Mathematics</cell>
+                </row>
+                <row>
+                    <cell><c>Proc-Amer-Math-Soc</c></cell><cell>Proceedings of the American Mathematical Society</cell>
+                </row>
+                <row>
+                    <cell><c>Represent-Theory</c></cell><cell>Representation Theory</cell>
+                </row>
+                <row>
+                    <cell><c>St-Petersburg-Math-J</c></cell><cell>St. Petersburg Mathematical Journal</cell>
+                </row>
+                <row>
+                    <cell><c>Sugaku-Expositions</c></cell><cell>Sugaku Expositions</cell>
+                </row>
+                <row>
+                    <cell><c>Theory-Probab-Math-Statist</c></cell><cell>Theory of Probability and Mathematical Statistics</cell>
+                </row>
+                <row>
+                    <cell><c>Trans-Amer-Math-Soc</c></cell><cell>Transactions of the American Mathematical Society</cell>
+                </row>
+                <row>
+                    <cell><c>Trans-Moscow-Math-Soc</c></cell><cell>Transactions of the Moscow Mathematical Society</cell>
+                </row>
+                <row>
+                    <cell><c>ams-general</c></cell><cell>General - All other AMS journals</cell>
+                </row>
+            </tabular>
+        </table>
+  </section>
+</appendix>
