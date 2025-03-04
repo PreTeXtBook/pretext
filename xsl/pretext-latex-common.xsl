@@ -6362,18 +6362,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\end{itemize*})\quad&#xa;</xsl:text>
         </xsl:when>
         <!-- Radio button alternatives:                                -->
-        <!--     \ocircle (wasysym), \circledcirc (amssymb),           -->
+        <!--     \odot, \circledcirc (amssymb),                        -->
         <!--     \textopenbullet, \textbigcircle (textcomp)            -->
         <!-- To adjust in preamble, see use of $b-has-webwork-var      -->
         <xsl:when test="@pi:ww-form = 'buttons'" >
-            <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\bigcirc$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:apply-templates select="li"/>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <!-- var[@form = 'checkboxes'] comes back from the server as a  -->
-        <!-- description list ("dl") so we will need to wait for the    -->
-        <!-- server to tag it with @pi:ww-form so we can customize it   -->
-        <!-- here with a new match on dl[@pi:ww-form = 'checkboxes'].   -->
+        <xsl:when test="@pi:ww-form = 'checkboxes'" >
+            <xsl:text>\begin{itemize}[label=$\Box$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:apply-templates select="li"/>
+            <xsl:text>\end{itemize}&#xa;</xsl:text>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 
