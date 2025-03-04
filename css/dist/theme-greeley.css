@@ -622,16 +622,26 @@ a[href^="mailto:"] {
 .frontmatter .abstract {
   margin: 4em 2em;
 }
-.frontmatter .abstract > .title {
+.frontmatter .keywords,
+.frontmatter .support {
+  margin-top: 2em;
+}
+.frontmatter .abstract > .title,
+.frontmatter .keywords > .title,
+.frontmatter .support > .title {
   font-size: 1.125em;
   font-weight: 600;
   line-height: 1.125em;
   display: inline;
 }
-.frontmatter .abstract > .title::after {
+.frontmatter .abstract > .title::after,
+.frontmatter .keywords > .title::after,
+.frontmatter .support > .title::after {
   content: ".\2009\2009\2009";
 }
-.frontmatter .abstract > .title + .para {
+.frontmatter .abstract > .title + .para,
+.frontmatter .keywords > .title + .para,
+.frontmatter .support > .title + .para {
   display: inline;
 }
 .frontmatter .colophon .copyright {
