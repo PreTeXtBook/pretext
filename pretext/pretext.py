@@ -4000,6 +4000,28 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 # Conversion to LaTeX
 #####################
 
+def get_latex_style(xml, pub_file, stringparams):
+    """
+    Returns the name of a latex_style to be used for processing to latex.
+    - Checks the value of the publisher variable 'journal-name'.
+    - If it finds a journal name, tries to resolve that using the list of jounals, returning the corresponding latex-style entry for that journal.
+    - If there is no journal-name publisher variable, or the variable is not in the list of journals, checks for the publisher variable 'latex-style' and returns this.
+    """
+    journal_name = get_publisher_variable(xml_source=xml, pub_file=pub_file, params=stringparams, variable="journal-name")
+    pub_latex_style = get_publisher_variable(xml_source=xml, pub_file=pub_file,
+    params=stringparams, variable="latex-style")
+    if len(journal_name) > 0:
+        journal_info = get_journal_info(journal_name)
+        latex_style = journal_info["latex-style"]
+        if len(latex_style) == 0:
+            log.warning("The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using defaults instead.".format(journal_name))
+            latex_style = pub_latex_style
+        if len(pub_latex_style) > 0 and pub_latex_style != latex_style:
+            log.warning("Your publication file specifies a latex-style of {}, but a journal name of {}.  Building with the latex style {} which matches that journal instead.".format(pub_latex_style, journal_name, latex_style))
+    else:
+        latex_style = pub_latex_style
+    return latex_style
+
 # This is not a build target, there is no such thing as a "latex build."
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
@@ -4015,8 +4037,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
         stringparams["publisher"] = pub_file
 
     # Get potential extra XSL for LaTeX style from publication file
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    latex_style = get_publisher_variable(pub_vars, "latex-style")
+    latex_style = get_latex_style(xml, pub_file, stringparams)
 
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
@@ -4901,6 +4922,28 @@ def get_publisher_variable(variable_dict, variable_name):
                         "Did you spell it correctly or does it need implementation?",
                         "If the latter, read instructions in code comments in the relevant routines."])
         raise ValueError(msg.format(variable_name))
+
+
+def get_journal_info(journal_name):
+    """
+    Returns a dictionary of data for a journal based on a master list of journals in journals/journals.xml.
+    """
+    JOURNAL_XML = os.path.join(get_ptx_path(), "journals", "journals.xml")
+    log.debug("Reading list of journals in {}".format(JOURNAL_XML))
+    journals_tree = ET.parse(JOURNAL_XML)
+    journals_tree.xinclude()
+    # Find the node with <code> value journal_name:
+    try:
+        journal = journals_tree.xpath(f"//journal[code='{journal_name.lower()}']")[0]
+    except Exception as e:
+        log.warning("The journal name {} specified in the publication file is not supported.".format(journal_name))
+        return {"latex-style": ""}
+    keys = ["name", "code", "latex-style", "publisher"]
+    journal_info = {}
+    for key in keys:
+        if journal.find(key) is not None:
+            journal_info[key] = journal.find(key).text
+    return journal_info
 
 
 ###########################
