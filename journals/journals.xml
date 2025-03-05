@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ptx-journals>
+<!-- We might want some categories or other way to break these up?  More likely just use tags -->
+
+  <journal>
+    <code>bull-amer-math-soc</code>
+    <name>Bulletin (New Series) of the American Mathematical Society</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>conform-geom-dyn</code>
+    <name>Conformal Geometry and Dynamics</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>j-algebraic-geom</code>
+    <name>Journal of Algebraic Geometry</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>j-amer-math-soc</code>
+    <name>Journal of the American Mathematical Society</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>math-comp</code>
+    <name>Mathematics of Computation</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>quart-appl-math</code>
+    <name>Quarterly of Applied Mathematics</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>Proc-Amer-Math-Soc</code>
+    <name>Proceedings of the American Mathematical Society</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>represent-theory</code>
+    <name>Representation Theory</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>st-petersburg-math-j</code>
+    <name>St. Petersburg Mathematical Journal</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>sugaku-expositions</code>
+    <name>Sugaku Expositions</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>theory-probab-math-statist</code>
+    <name>Theory of Probability and Mathematical Statistics</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>trans-ams</code>
+    <name>Transactions of the American Mathematical Society</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>trans-moscow-math-soc</code>
+    <name>Transactions of the Moscow Mathematical Society</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>ams-general</code>
+    <name>General - All other AMS journals</name>
+    <publisher>American Mathematical Society</publisher>
+    <latex-style>amsart</latex-style>
+  </journal>
+
+  <journal>
+    <code>electron-j-combin</code>
+    <name>Electronic Journal of Combinatorics</name>
+    <publisher>Electronic Journal of Combinatorics</publisher>
+    <latex-style>ejc</latex-style>
+  </journal>
+
+  <journal>
+    <code>exp-math</code>
+    <name>Experimental Mathematics</name>
+    <publisher>Taylor &amp; Francis</publisher>
+    <latex-style>tf</latex-style>
+  </journal>
+
+  <journal>
+    <code>ann-pure-appl-logic</code>
+    <name>Annals of Pure and Applied Logic</name>
+    <publisher>Elsevier</publisher>
+    <latex-style>elsart</latex-style>
+  </journal>
+</ptx-journals>
