@@ -97,6 +97,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$latex-style"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2025-02-25 journal name -->
+    <xsl:text>journal-name</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$journal-name"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--
