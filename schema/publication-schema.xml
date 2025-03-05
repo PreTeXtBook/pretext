@@ -157,6 +157,9 @@
                     element qrcode {
                         attribute image { text }
                     }
+                    element journal {
+                        attribute name {text}
+                    }
                 }
 
             ExerciseAttributes =
