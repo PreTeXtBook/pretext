@@ -2575,7 +2575,8 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         # read lines, skipping blank lines
         problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
     for problem in problems:
-        url = "https://www.myopenmath.com/util/mbx.php?id={}".format(problem)
+        # &preservesvg=true is MOM flag to preserve embedded SVG
+        url = "https://www.myopenmath.com/util/mbx.php?id={}&preservesvg=true".format(problem)
         path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
         log.info("downloading MOM #{} to {}...".format(problem, path))
 
@@ -2611,6 +2612,23 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                     # replace image source, using pi:
                     newtagstart = ('<image' + imgwidthtag + match.group(1) + 'pi:generated="' + imageloc + '"')
                     problemcontent = problemcontent.replace(match.group(0), newtagstart)
+                # extract any embedded SVG
+                # must be after downloading images or it will attempt to download these
+                count = 1
+                svg_pattern = re.compile(r'(?i)(<image>)(<svg[\s\S]*?</svg>)(</image>)')
+                for match in re.finditer(svg_pattern, problemcontent):
+                    svgname = 'images/mom-{}-{}'.format(problem,count)
+                    svgname_ext = svgname + '.svg'
+                    svgpath = os.path.join(dest_dir,svgname_ext)
+                    with open(svgpath, "w") as svgfile:
+                        svgfile.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
+                        svgfile.write(match.group(2))
+                        svgfile.close()
+                    newimagetag = ('<image pi:generated="problems/' + svgname + '" />')
+                    problemcontent = problemcontent.replace('<image>',newimagetag,1)
+                    problemcontent = problemcontent.replace(match.group(2),'')
+                    problemcontent = problemcontent.replace('</image>','')
+                    count += 1
 
                 f.write(problemcontent)
             else:
