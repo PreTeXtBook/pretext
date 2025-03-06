@@ -3936,4 +3936,5 @@ article > .heading:first-child + .introduction > .para:first-child {
   --primary-color-gray-98: color-mix(in oklab, var(--primary-color), gray 98%);
   --primary-color-gray-99: color-mix(in oklab, var(--primary-color), gray 99%);
 }
+/*! Theme: greeley */
 /*# sourceMappingURL=theme-greeley.css.map */

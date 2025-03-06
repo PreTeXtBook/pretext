@@ -4140,4 +4140,5 @@ label.incorrect .feedback {
   --primary-color-gray-98: color-mix(in oklab, var(--primary-color), gray 98%);
   --primary-color-gray-99: color-mix(in oklab, var(--primary-color), gray 99%);
 }
+/*! Theme: denver */
 /*# sourceMappingURL=theme-denver.css.map */
