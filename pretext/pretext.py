@@ -2546,6 +2546,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     except ImportError:
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
+    try:
+        import pymupdf # for svg to pdf conversion
+    except ImportError:
+        raise ImportError(__module_warning.format("pyMuPDF"))
 
     log.info(
         "downloading MyOpenMath static problems from {} for placement in {}".format(
@@ -2620,10 +2624,23 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                     svgname = 'images/mom-{}-{}'.format(problem,count)
                     svgname_ext = svgname + '.svg'
                     svgpath = os.path.join(dest_dir,svgname_ext)
+                    pdfname_ext = svgname + '.pdf'
+                    pdfpath = os.path.join(dest_dir,pdfname_ext)
+                    pngname_ext = svgname + '.png'
+                    pngpath = os.path.join(dest_dir,pngname_ext)
                     with open(svgpath, "w") as svgfile:
                         svgfile.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
                         svgfile.write(match.group(2))
                         svgfile.close()
+                    # construct PDF and PNG using pymupdf
+                    log.info("convert {} to PDF".format(svgname))
+                    svg = pymupdf.open(svgpath)
+                    pdfbytes = svg.convert_to_pdf()
+                    pdf = pymupdf.open("pdf",pdfbytes)
+                    pdf.save(pdfpath)
+                    png = svg.load_page(0).get_pixmap(dpi=300, alpha=True)
+                    png.save(pngpath)
+                    # now update pretext xml
                     newimagetag = ('<image pi:generated="problems/' + svgname + '" />')
                     problemcontent = problemcontent.replace('<image>',newimagetag,1)
                     problemcontent = problemcontent.replace(match.group(2),'')
