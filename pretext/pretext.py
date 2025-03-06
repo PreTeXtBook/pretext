@@ -2605,6 +2605,7 @@ def braille(xml_source, pub_file_info, stringparams, out_file, dest_dir, page_fo
     if isinstance(pub_file_info, dict):
         pub_file_path = pub_file_info.get("pub_file_path")
     else:
+        assert isinstance(pub_file_info, (str, None))
         pub_file_path = pub_file_info
     if pub_file_path:
         # parse publisher file, xinclude is conceivable
@@ -4644,9 +4645,10 @@ def get_managed_directories(xml_source, pub_file_info):
     generated = None
     external = None
     # In case pub_file_info is a dictionary, get the pub_file's path
-    if isinstance(pub_file, dict):
+    if isinstance(pub_file_info, dict):
         pub_file = pub_file_info.get("pub_file_path")
     else:
+        assert isinstance(pub_file_info, (str, None))
         pub_file = pub_file_info
     if pub_file:
         # parse publisher file, xinclude is conceivable
@@ -4834,7 +4836,7 @@ def add_pub_file_to_params(pub_file_info, stringparams):
             stringparams["publisher"] = pub_file_info
 
 
-def get_publisher_variable_report(xml_source, pub_file, params):
+def get_publisher_variable_report(xml_source, pub_file_path, params):
     """Parse the pubfile and return a dict containing the variables"""
 
     # IMPORTANT: to report the value of a (computed) publisher variable,
@@ -4850,16 +4852,17 @@ def get_publisher_variable_report(xml_source, pub_file, params):
 
     # NB: there may not be a publication file (pub_file = None)
     # Variables are still computed and should have reasonable default values
+
+    ## pub_file is a string or None, however elsewhere this variable might be a dictionary.  Here we assert it is of the correct type.
+    assert isinstance(pub_file_path, (str, None))
+
     log.debug("parsing the publisher file variables")
 
     # to ensure provided stringparams aren't mutated unintentionally
     params = params.copy()
 
-    if pub_file:
-        # Ensure the pub_file really is a string (path) and not a dictionary as it
-        # is sometimes used elsewhere
-        assert isinstance(pub_file, str)
-        params["publisher"] = pub_file
+    if pub_file_path:
+        params["publisher"] = pub_file_path
 
     # construct filename for the XSL to report variable/value pairs
     reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
@@ -4875,8 +4878,8 @@ def get_publisher_variable_report(xml_source, pub_file, params):
 
     # parse file into a dictionary
     variables = {}
-    # Add the path of the publication file to the dictionary
-    variables["pub_file_path"] = pub_file
+    # Add the path (str) of the publication file (or None) to the dictionary
+    variables["pub_file_path"] = pub_file_path
     # Add all other variables.
     with open(temp_file, 'r') as f:
         for line in f:
@@ -4915,6 +4918,7 @@ def ensure_publisher_variables(xml_source, pub_file_or_vars, params):
     Return a dictionary of publisher variables, which is either pub_file_or_vars itself (a dictionary), if that is a dictionary, or is the result of extracting the publisher variables from the publication file at pub_file_or_vars (a string)
     @param pub_file_or_vars: either a dictionary of publisher variables or a string containing the path to the publication file
     """
+    assert isinstance(pub_file_or_vars, (dict, str, None))
     if isinstance(pub_file_or_vars, dict):
         return pub_file_or_vars
     else:
