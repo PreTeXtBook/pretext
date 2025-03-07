@@ -97,6 +97,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$latex-style"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2025-03-03 portable html switch -->
+    <xsl:text>portable-html</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$portable-html"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--

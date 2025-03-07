@@ -3861,9 +3861,13 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
-    # interrogate Runestone server (or debugging switches) and populate
-    # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+
+    if include_static_files:
+        # interrogate Runestone server (or debugging switches) and populate
+        # NB: stringparams is augmented with Runestone Services information
+        _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -3880,18 +3884,21 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place JS in scratch directory
-    copy_html_js(tmp_dir)
+    if include_static_files:
+        # Copy js and css, but only if not building portable html
+        # place JS in scratch directory
+        copy_html_js(tmp_dir)
 
-    # build or copy theme
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    build_or_copy_theme(xml, pub_vars, tmp_dir)
+        # build or copy theme
+        build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
-    # extra css for custom ol markers
-    move_ol_marker_css(tmp_dir)
+
+    if include_static_files:
+        # extra css for custom ol markers
+        move_ol_marker_css(tmp_dir)
 
     if file_format  == "html":
         # with multiple files, we need to copy a tree
