@@ -333,7 +333,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- knowl-production -->
     <!-- subsetting? don't bother (for now) -->
-    <xsl:if test="not($b-subsetting)">
+    <!-- portable html does not get xref knowls either. -->
+    <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
     <!-- custom ol marker css production -->
@@ -1640,7 +1641,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:param name="link" select="/.." />
     <xsl:choose>
-        <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never'">
+        <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never' or $b-portable-html">
             <xsl:value-of select="false()"/>
         </xsl:when>
         <xsl:when test="$html-xref-knowled = 'maximum'">
