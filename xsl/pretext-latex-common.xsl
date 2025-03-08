@@ -5581,13 +5581,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{paragraphs}%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Commentary -->
-<!-- 2024-02-16: deprecated, and not expected to survive      -->
-<!-- the assembly phase but we kill it here explicity, rather -->
-<!-- than having a default template process the contents.     -->
-<!-- (This should be expanded as a new implementation.)       -->
-<xsl:template match="commentary"/>
-
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 
 <!-- Theorems have statement/proof structure                    -->

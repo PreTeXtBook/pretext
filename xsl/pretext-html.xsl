@@ -2493,13 +2493,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (6) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<!-- Commentary -->
-<!-- 2024-02-16: deprecated, and not expected to survive      -->
-<!-- the assembly phase but we kill it here explicity, rather -->
-<!-- than having a default template process the contents.     -->
-<!-- (This should be expanded as a new implementation.)       -->
-<xsl:template match="commentary"/>
-
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
