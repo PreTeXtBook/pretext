@@ -205,6 +205,7 @@
                     Date? &
                     Edition? &
                     Keywords* &
+                    Support? &
                     Website? &
                     Copyright?)
                 }
@@ -223,7 +224,7 @@
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
             Support = element support {TextParagraph}
-            Location = element address {TextSimple | ShortLine+}
+            Location = element location {TextSimple | ShortLine+}
             Keywords = element keywords {
                 attribute authority {text}?,
                 attribute variant {text}?,

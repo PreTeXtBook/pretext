@@ -624,6 +624,9 @@
           <ref name="Keywords"/>
         </zeroOrMore>
         <optional>
+          <ref name="Support"/>
+        </optional>
+        <optional>
           <ref name="Website"/>
         </optional>
         <optional>
@@ -690,7 +693,7 @@
     </element>
   </define>
   <define name="Location">
-    <element name="address">
+    <element name="location">
       <choice>
         <ref name="TextSimple"/>
         <oneOrMore>

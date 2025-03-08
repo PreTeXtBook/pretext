@@ -442,6 +442,7 @@
           <xs:element ref="date"/>
           <xs:element ref="edition"/>
           <xs:element ref="keywords"/>
+          <xs:element ref="support"/>
           <xs:element ref="website"/>
           <xs:group ref="Copyright"/>
         </xs:choice>
@@ -469,7 +470,7 @@
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="department"/>
         <xs:element ref="institution"/>
-        <xs:element ref="address"/>
+        <xs:element ref="location"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -494,7 +495,7 @@
       <xs:group ref="TextParagraph"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="address">
+  <xs:element name="location">
     <xs:complexType mixed="true">
       <xs:choice>
         <xs:group ref="TextSimple"/>
@@ -541,7 +542,7 @@
               <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="department"/>
                 <xs:element ref="institution"/>
-                <xs:element ref="address"/>
+                <xs:element ref="location"/>
               </xs:choice>
               <xs:element maxOccurs="unbounded" ref="affiliation"/>
             </xs:choice>
@@ -572,7 +573,7 @@
               <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="department"/>
                 <xs:element ref="institution"/>
-                <xs:element ref="address"/>
+                <xs:element ref="location"/>
               </xs:choice>
               <xs:element maxOccurs="unbounded" ref="affiliation"/>
             </xs:choice>
@@ -2579,7 +2580,7 @@
           <xs:sequence>
             <xs:element minOccurs="0" ref="department"/>
             <xs:element minOccurs="0" ref="institution"/>
-            <xs:element minOccurs="0" ref="address"/>
+            <xs:element minOccurs="0" ref="location"/>
           </xs:sequence>
           <xs:element maxOccurs="unbounded" ref="affiliation"/>
         </xs:choice>
