@@ -171,12 +171,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="commentary">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="commentary"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="webwork">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork"/>
@@ -288,14 +282,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
-<xsl:variable name="commentary-rtf">
-    <xsl:apply-templates select="$version" mode="commentary"/>
-</xsl:variable>
-<xsl:variable name="commentaried" select="exsl:node-set($commentary-rtf)"/>
-
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$commentaried//webwork"/>
+<xsl:variable name="all-webwork" select="$version//webwork"/>
 
 <!-- Support for versions mean there may be multiple instances of  -->
 <!-- the same structure in authored source, and conceivably they   -->
@@ -308,7 +297,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$commentaried" mode="webwork"/>
+    <xsl:apply-templates select="$version" mode="webwork"/>
 </xsl:variable>
 <xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
@@ -1422,6 +1411,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- 2025-03-08:  "commentary" is deprecated.  Authors should remove it, -->
+<!-- but we have suggested that it could be used with version support.   -->
+<!-- So, if extant here in the repair phase, then it must have had a     -->
+<!-- @component value that a publication file suggested retaining.       -->
+<!-- So, just like the previous (now gone) "component" pass, we just     -->
+<!-- unwrap the element.                                                 -->
+<xsl:template match="commentary" mode="repair">
+    <!-- do not duplicate "commentary", do not replicate   -->
+    <!-- @component, do replicate element and text children -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
@@ -1838,20 +1839,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- thus we should not ever reach here      -->
         <xsl:otherwise/>
     </xsl:choose>
-</xsl:template>
-
-<!-- ########## -->
-<!-- Commentary -->
-<!-- ########## -->
-
-<!-- Unwrap any "commentary" that survives versions.  This is the      -->
-<!-- entire feature-set of a "commentary" element.  The schema         -->
-<!-- should enforce, and the code assumes, that every "commentary"     -->
-<!-- does have a @component attribute.  It would make no sense not to. -->
-<xsl:template match="commentary" mode="commentary">
-    <!-- do not duplicate "commentary", do not replicate   -->
-    <!-- @component, do replicate element and text children -->
-    <xsl:apply-templates select="node()" mode="commentary"/>
 </xsl:template>
 
 
