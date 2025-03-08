@@ -11723,8 +11723,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'a &quot;commentary&quot; element without a @component attribute is now routinely visible in all conversions.  This is unlikely to be what you want since the same effect can be had with no &quot;commentary&quot; element at all.  This message expands on the warning of 2023-02-13, and you might also be getting messages about the deprecation of the string parameter also named &quot;commentary&quot;.   Remove the &quot;commentary&quot; element, or consult the PreTeXt Guide to learn about version support and place the &quot;commentary&quot; element into a component using the attribute of the same name.'"/>
     </xsl:call-template>
     <!-- Any componentless "commentary" at all - fatal error -->
-    <xsl:if test="$document-root//commentary[not(@component)]">
-        <xsl:message terminate="yes">PTX:FATAL:    a "commentary" without a @component attribute is a fatal error from 2024-02-16 onward.  Read prior error messages and make the suggested changes.  Quitting...</xsl:message>
+    <!-- NB: $document-root is "too late" here it seems,     -->
+    <!-- as this is not the "deprecation-message" template,  -->
+    <!-- so we instead hard-code the $original tree          -->
+    <xsl:if test="$original//commentary[not(@component)]">
+        <xsl:message terminate="yes">PTX:FATAL:    a "commentary" without a @component attribute is a fatal error from 2024-02-16 onward.  Read preceding error messages (2023-02-13, 2024-02-16, 2025-03-08), and make the suggested changes.  Quitting...</xsl:message>
     </xsl:if>
     <!--  -->
     <!-- 2024-07-08  various mis-matches all settled in favor of "qrcode" -->
