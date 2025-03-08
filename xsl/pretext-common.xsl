@@ -11722,6 +11722,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2024-02-16'" />
         <xsl:with-param name="message" select="'a &quot;commentary&quot; element without a @component attribute is now routinely visible in all conversions.  This is unlikely to be what you want since the same effect can be had with no &quot;commentary&quot; element at all.  This message expands on the warning of 2023-02-13, and you might also be getting messages about the deprecation of the string parameter also named &quot;commentary&quot;.   Remove the &quot;commentary&quot; element, or consult the PreTeXt Guide to learn about version support and place the &quot;commentary&quot; element into a component using the attribute of the same name.'"/>
     </xsl:call-template>
+    <!-- 2025-03-08: add yet another warning message, but now -->
+    <!-- it is serious - "commentary" is deprecated (even if  -->
+    <!-- its use with version support will be respected)      -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//commentary&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-08'" />
+        <xsl:with-param name="message" select="'the &quot;commentary&quot; element has been deprecated.  Remove the &quot;commentary&quot; element, and consult the PreTeXt Guide to learn about how version support can have the same effect. (If your &quot;commentary&quot; element uses a &quot;component&quot; attribute, we will try to honor your intent.)'"/>
+    </xsl:call-template>
     <!-- Any componentless "commentary" at all - fatal error -->
     <!-- NB: $document-root is "too late" here it seems,     -->
     <!-- as this is not the "deprecation-message" template,  -->
