@@ -31,7 +31,6 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
-                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="reading-questions"/>
@@ -116,7 +115,6 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
-                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="reading-questions"/>
@@ -164,7 +162,6 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
-                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="reading-questions"/>
@@ -212,7 +209,6 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
-                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="reading-questions"/>
@@ -258,7 +254,6 @@
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockDivision"/>
               <xs:group ref="Paragraphs"/>
-              <xs:element ref="commentary"/>
             </xs:choice>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="reading-questions"/>
@@ -287,7 +282,6 @@
                     <xs:choice maxOccurs="unbounded">
                       <xs:group ref="BlockDivision"/>
                       <xs:group ref="Paragraphs"/>
-                      <xs:element ref="commentary"/>
                       <xs:element ref="notation-list"/>
                     </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -340,7 +334,6 @@
                     <xs:choice maxOccurs="unbounded">
                       <xs:group ref="BlockDivision"/>
                       <xs:group ref="Paragraphs"/>
-                      <xs:element ref="commentary"/>
                       <xs:element ref="notation-list"/>
                     </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -691,7 +684,6 @@
         <xs:choice maxOccurs="unbounded">
           <xs:group ref="BlockStatementNoCaption"/>
           <xs:group ref="ParagraphsNoNumber"/>
-          <xs:element ref="commentary"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
@@ -716,7 +708,6 @@
         <xs:choice maxOccurs="unbounded">
           <xs:group ref="BlockStatementNoCaption"/>
           <xs:group ref="ParagraphsNoNumber"/>
-          <xs:element ref="commentary"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
@@ -731,7 +722,6 @@
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockStatementNoCaption"/>
               <xs:group ref="ParagraphsNoNumber"/>
-              <xs:element ref="commentary"/>
             </xs:choice>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribution"/>
           </xs:sequence>
@@ -739,13 +729,11 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:group ref="BlockStatementNoCaption"/>
               <xs:group ref="ParagraphsNoNumber"/>
-              <xs:element ref="commentary"/>
             </xs:choice>
             <xs:element ref="contributors"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:group ref="BlockStatementNoCaption"/>
               <xs:group ref="ParagraphsNoNumber"/>
-              <xs:element ref="commentary"/>
             </xs:choice>
           </xs:sequence>
         </xs:choice>
@@ -840,11 +828,6 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="commentary">
-    <xs:complexType>
-      <xs:attribute name="component" use="required"/>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="reading-questions">
     <xs:complexType>
       <xs:complexContent>
