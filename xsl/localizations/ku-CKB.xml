@@ -97,7 +97,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>بەرگی پشتەوە</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>پەڕەگرافەکان</localization>
-    <localization string-id='commentary'>شیکردنەوە</localization>
     <localization string-id='subparagraph'>بەشە پەرەگراف</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->

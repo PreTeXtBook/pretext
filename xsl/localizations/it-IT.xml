@@ -93,7 +93,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>Materiale finale</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Capoversi</localization>
-    <localization string-id='commentary'>Commento</localization>
     <localization string-id='subparagraph'>Sottocapoverso</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->

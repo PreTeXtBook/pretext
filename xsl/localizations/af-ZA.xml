@@ -93,7 +93,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>Nasake</localization> <!-- Can't find this anywhere, so I made it up. -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Paragrawe</localization>
-    <localization string-id='commentary'>Kommentaar</localization>
     <localization string-id='subparagraph'>Onderparagrawe</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->

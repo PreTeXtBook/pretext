@@ -101,7 +101,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>Back Matter</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Paragraphs</localization>
-    <localization string-id='commentary'>Commentary</localization>
     <localization string-id='subparagraph'>Subparagraph</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- When the a "worksheet" or "exercises" is marked as being  -->
