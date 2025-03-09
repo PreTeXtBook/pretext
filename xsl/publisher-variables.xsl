@@ -1846,13 +1846,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="feedback-button-href">
     <!-- internal variable, just for error-checking -->
     <xsl:variable name="attempted-href">
-        <xsl:choose>
-            <xsl:when test="$publication/html/feedback/@href">
-                <xsl:value-of select="$publication/html/feedback/@href"/>
-            </xsl:when>
-            <!-- default to empty, as a signal of failure -->
-            <xsl:otherwise/>
-        </xsl:choose>
+        <xsl:if test="$publication/html/feedback/@href">
+            <xsl:value-of select="$publication/html/feedback/@href"/>
+        </xsl:if>
+        <!-- default to empty, as a signal of failure -->
     </xsl:variable>
     <!-- we error-check a bad @href *only* as a publisher -->
     <!-- variable, and not in the deprecated situation    -->
@@ -1867,12 +1864,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Empty is a meaningful value         -->
 <xsl:variable name="feedback-button-text">
     <xsl:variable name="provided-button-text">
-        <xsl:choose>
-            <xsl:when test="$publication/html/feedback">
-                <xsl:value-of select="$publication/html/feedback"/>
-            </xsl:when>
-            <xsl:otherwise/>
-        </xsl:choose>
+        <xsl:if test="$publication/html/feedback">
+            <xsl:value-of select="$publication/html/feedback"/>
+        </xsl:if>
     </xsl:variable>
     <!-- Clean-up *and* utilize emptieness as a signal to use -->
     <!-- default text. If empty, provide default text in      -->
@@ -2169,14 +2163,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: We add a trailing slash, if not authored already -->
 <xsl:variable name="baseurl">
     <xsl:variable name="raw-input">
-        <xsl:choose>
-            <!-- if publisher file has a base url, use it -->
-            <xsl:when test="$publication/html/baseurl/@href">
-                <xsl:value-of select="$publication/html/baseurl/@href"/>
-            </xsl:when>
-            <!-- otherwise use the default, is empty as sentinel -->
-            <xsl:otherwise/>
-        </xsl:choose>
+        <!-- if publisher file has a base url, use it -->
+        <xsl:if test="$publication/html/baseurl/@href">
+            <xsl:value-of select="$publication/html/baseurl/@href"/>
+        </xsl:if>
+        <!-- otherwise use the default, is empty as sentinel -->
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$raw-input =''"/>
@@ -2474,12 +2465,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2019-11-28 all settings used here are deprecated -->
 <xsl:variable name="google-universal-tracking">
-    <xsl:choose>
-        <xsl:when test="not($html.google-universal = '')">
-            <xsl:value-of select="$html.google-universal"/>
-        </xsl:when>
-        <xsl:otherwise/>
-    </xsl:choose>
+    <xsl:if test="not($html.google-universal = '')">
+        <xsl:value-of select="$html.google-universal"/>
+    </xsl:if>
 </xsl:variable>
 
 <!-- This is the preferred Google method as of 2019-11-28 -->
