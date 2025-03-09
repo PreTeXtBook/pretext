@@ -11787,6 +11787,45 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'program/input now should be program/code. An automatic correction will be attempted.'"/>
     </xsl:call-template>
     <!--  -->
+    <!--  -->
+    <!-- 2025-03-09: mass removal of backward-compatiblity of old-style specifications in "docinfo" -->
+    <!--  -->
+    <!--  -->
+    <!-- From 2019-04-14 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/analytics&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML analytics services (Statcounter, Google) provided within &quot;docinfo/analytics&quot; are now options supplied by publishers as command-line options.  See the Publishers Guide for specifics.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2019-04-14 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/search&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML search services (Google) is no longer provided within &quot;docinfo/search&quot;.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide. Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2020-11-22 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/html/baseurl/@href&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2023-01-07 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/feedback&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'election and configuration of a feedback button via a &quot;docinfo/feedback&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2023-01-10  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/covers&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
