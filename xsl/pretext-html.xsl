@@ -110,9 +110,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So the name says "dir", but effectively it is "location". -->
 <!-- But this is not the intent, nor supported, and thus can   -->
 <!-- change without warning.                                   -->
-<xsl:variable name="html.css.dir" select="'_static/pretext/css'"/>
-<xsl:variable name="html.js.dir" select="'_static/pretext/js'"/>
-<xsl:variable name="html.jslib.dir" select="'_static/pretext/js/lib'"/>
+<xsl:variable name="html.css.dir" select="concat($cdn-prefix, '_static/pretext/css')"/>
+<xsl:variable name="html.js.dir" select="concat($cdn-prefix, '_static/pretext/js')"/>
+<xsl:variable name="html.jslib.dir" select="concat($cdn-prefix, '_static/pretext/js/lib')"/>
+
+<!-- Add a prefix for the cdn url, which is empty unless the portable html variable is true -->
+<!-- We use version "latest" unless the CLI provides a version -->
+<xsl:param name="cli.version" select="'latest'"/>
+<xsl:variable name="cdn-prefix">
+    <xsl:if test="$b-portable-html">
+        <xsl:text>https://cdn.jsdelivr.net/gh/PreTeXtBook/html-static@</xsl:text>
+        <xsl:value-of select="$cli.version"/>
+        <xsl:text>/dist/</xsl:text>
+    </xsl:if>
+</xsl:variable>
+
+<!-- The css file name is usually "theme.css", but if portable html is selected, -->
+<!-- then we use a minified version and need to give the full theme name.        -->
+<xsl:variable name="html-css-theme-file">
+    <xsl:choose>
+        <xsl:when test="$b-portable-html">
+            <xsl:text>theme-</xsl:text>
+            <xsl:value-of select="$html-theme-name"/>
+            <xsl:text>.min.css</xsl:text> 
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>theme.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -13057,7 +13083,7 @@ TODO:
 <!-- Diagcess header library -->
 <xsl:template name="diagcess-header">
     <xsl:if test="$b-has-prefigure-annotations">
-        <script src="_static/pretext/js/diagcess/diagcess.js"></script>
+        <script src="{$html.js.dir}/diagcess/diagcess.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -13071,7 +13097,7 @@ TODO:
 <!-- CSS header -->
 <xsl:template name="css">
     <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.dir}/theme.css" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-theme-file}" rel="stylesheet" type="text/css"/>
     </xsl:if>
     <!-- Temporary until css handling overhaul by ascholer complete -->
     <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
