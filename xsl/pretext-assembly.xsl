@@ -826,52 +826,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- ############## -->
-<!-- Customizations -->
-<!-- ############## -->
-
-<!-- The "custom" element, with a @name in an auxiliary file,     -->
-<!-- and a @ref in a source file, allows for custom substitutions -->
-
-<!-- If the publisher variable  $customizations-file  is bad, -->
-<!-- then  document()  will raise an error.  The empty string -->
-<!-- (default) will not raise an error, so if not specified,  -->
-<!-- no problem.  But an empty string, and an attempted       -->
-<!-- access in the template *will* raise the error below.     -->
-<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
-
-<!-- Set the key, nodes to be located are named -->
-<!-- "custom" within the file just accessed     -->
-<!-- For each one, @name is the search term     -->
-<!-- that will locate it: the key, the index    -->
-<xsl:key name="name-key" match="custom" use="@name"/>
-
-<xsl:template match="custom[@ref]" mode="version">
-    <!-- We need to get the @ref attribute now, due to a context shift -->
-    <!-- And the "custom" context also, for use in a location report   -->
-    <xsl:variable name="the-ref" select="string(@ref)"/>
-    <xsl:variable name="the-custom" select="."/>
-    <!-- Now the context shift to query the customizations -->
-    <xsl:for-each select="$customizations">
-        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
-        <!-- This is an AWOL node, not empty content (which is allowed) -->
-        <xsl:if test="not($the-lookup)">
-            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
-            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
-            <xsl:apply-templates select="$the-custom" mode="location-report"/>
-        </xsl:if>
-        <!-- Copying the contents of "custom" via the "version" templates  -->
-        <!-- will keep the "pi" namespace from appearing in places, as it  -->
-        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
-        <!-- allows nested "custom" elements.                              -->
-        <!--                                                               -->
-        <!-- Do we want authors to potentially create cyclic references?   -->
-        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
-        <!-- will be caught quite easily, it seems.                        -->
-        <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
-    </xsl:for-each>
-</xsl:template>
-
 
 <!-- ########## -->
 <!-- Enrichment -->
@@ -1851,6 +1805,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- thus we should not ever reach here      -->
         <xsl:otherwise/>
     </xsl:choose>
+</xsl:template>
+
+<!-- The "custom" element, with a @name in an auxiliary file,     -->
+<!-- and a @ref in a source file, allows for custom substitutions -->
+
+<!-- If the publisher variable  $customizations-file  is bad, -->
+<!-- then  document()  will raise an error.  The empty string -->
+<!-- (default) will not raise an error, so if not specified,  -->
+<!-- no problem.  But an empty string, and an attempted       -->
+<!-- access in the template *will* raise the error below.     -->
+<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
+
+<!-- Set the key, nodes to be located are named -->
+<!-- "custom" within the file just accessed     -->
+<!-- For each one, @name is the search term     -->
+<!-- that will locate it: the key, the index    -->
+<xsl:key name="name-key" match="custom" use="@name"/>
+
+<xsl:template match="custom[@ref]" mode="version">
+    <!-- We need to get the @ref attribute now, due to a context shift -->
+    <!-- And the "custom" context also, for use in a location report   -->
+    <xsl:variable name="the-ref" select="string(@ref)"/>
+    <xsl:variable name="the-custom" select="."/>
+    <!-- Now the context shift to query the customizations -->
+    <xsl:for-each select="$customizations">
+        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
+        <!-- This is an AWOL node, not empty content (which is allowed) -->
+        <xsl:if test="not($the-lookup)">
+            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
+            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
+            <xsl:apply-templates select="$the-custom" mode="location-report"/>
+        </xsl:if>
+        <!-- Copying the contents of "custom" via the "version" templates  -->
+        <!-- will keep the "pi" namespace from appearing in places, as it  -->
+        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
+        <!-- allows nested "custom" elements.                              -->
+        <!--                                                               -->
+        <!-- Do we want authors to potentially create cyclic references?   -->
+        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
+        <!-- will be caught quite easily, it seems.                        -->
+        <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
+    </xsl:for-each>
 </xsl:template>
 
 
