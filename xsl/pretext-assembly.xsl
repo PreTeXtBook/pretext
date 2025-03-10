@@ -264,6 +264,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 
+<xsl:variable name="version-rtf">
+    <xsl:apply-templates select="/" mode="version"/>
+</xsl:variable>
+<xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
+
+<!-- Support for versions mean there may be multiple instances of  -->
+<!-- the same structure in authored source, and conceivably they   -->
+<!-- might all be absent once a version has been selected.  We are -->
+<!-- especially thinking of "docinfo" here since some defaults     -->
+<!-- expressed there can influence the creation of static          -->
+<!-- representations later in this sequence of passes.             -->
+<xsl:variable name="version-root" select="$version/pretext"/>
+<xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
+<xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
+
 <!-- This pass adds 100% internal identification for elements before    -->
 <!-- anything has been added or subtracted. The tree it builds is used  -->
 <!-- for constructing "View Source" knowls in HTML output as a form of  -->
@@ -280,24 +295,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
-<xsl:variable name="version-rtf">
-    <xsl:apply-templates select="/" mode="version"/>
-</xsl:variable>
-<xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
-
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
 <xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
-
-<!-- Support for versions mean there may be multiple instances of  -->
-<!-- the same structure in authored source, and conceivably they   -->
-<!-- might all be absent once a version has been selected.  We are -->
-<!-- especially thinking of "docinfo" here since some defaults     -->
-<!-- expressed there can influence the creation of static          -->
-<!-- representations later in this sequence of passes.             -->
-<xsl:variable name="version-root" select="$version/pretext"/>
-<xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
-<xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="webwork-rtf">
     <xsl:apply-templates select="$original-labeled" mode="webwork"/>
