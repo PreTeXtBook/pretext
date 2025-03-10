@@ -50,7 +50,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   "pretext" element.                                          -->
 <!-- * The "version" templates are applied to decide if certain    -->
 <!--   elements are excluded from the source tree.  This creates   -->
-<!--   the new $version source tree by *removing* source.          -->
+<!--   the new $version source tree by *removing* source.  It also -->
+<!--   resolves "custom" elements.  If these two features have     -->
+<!--   been used properly by an author, then the result should be  -->
+<!--   valid PreTeXt (when perhaps the authored source was not).   -->
 <!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
 <!--   has been "enhanced".  Various things happen in this pass,   -->
@@ -843,7 +846,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that will locate it: the key, the index    -->
 <xsl:key name="name-key" match="custom" use="@name"/>
 
-<xsl:template match="custom[@ref]" mode="assembly">
+<xsl:template match="custom[@ref]" mode="version">
     <!-- We need to get the @ref attribute now, due to a context shift -->
     <!-- And the "custom" context also, for use in a location report   -->
     <xsl:variable name="the-ref" select="string(@ref)"/>
@@ -857,15 +860,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
             <xsl:apply-templates select="$the-custom" mode="location-report"/>
         </xsl:if>
-        <!-- Copying the contents of "custom" via the "assembly" templates -->
-        <!-- will keep the "pi" namespace from appearing in palces, as it  -->
+        <!-- Copying the contents of "custom" via the "version" templates  -->
+        <!-- will keep the "pi" namespace from appearing in places, as it  -->
         <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
         <!-- allows nested "custom" elements.                              -->
         <!--                                                               -->
         <!-- Do we want authors to potentially create cyclic references?   -->
         <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
         <!-- will be caught quite easily, it seems.                        -->
-        <xsl:apply-templates select="$the-lookup/node()" mode="assembly"/>
+        <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
     </xsl:for-each>
 </xsl:template>
 
@@ -1807,6 +1810,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 <!-- Versions -->
 <!-- ######## -->
+
+<!-- The version feature (@component markings) allows for   -->
+<!-- invalid PreTeXt source.  For example, an author might  -->
+<!-- have two different "docinfo" elements for some reason. -->
+<!-- So we allow a sort of pre-PreTeXt, which does not      -->
+<!-- satisfy the schema.  Support for the "custom" element  -->
+<!-- is similar in spirit.  So very early on, we unravel    -->
+<!-- (resolve) these features, and if used properly the     -->
+<!-- result will be valid PreTeXt, according to the schema. -->
 
 <xsl:template match="*" mode="version">
     <xsl:choose>
