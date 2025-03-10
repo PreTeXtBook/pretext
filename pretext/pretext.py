@@ -4025,9 +4025,11 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 def get_latex_style(xml, pub_file, stringparams):
     """
     Returns the name of a latex_style to be used for processing to latex.
-    - Checks the value of the publisher variable 'journal-name'.
-    - If it finds a journal name, tries to resolve that using the list of jounals, returning the corresponding latex-style entry for that journal.
-    - If there is no journal-name publisher variable, or the variable is not in the list of journals, checks for the publisher variable 'latex-style' and returns this.
+      - Checks the value of the publisher variable 'journal-name'.
+      - If it finds a journal name, tries to resolve that using the list of
+        journals, returning the corresponding latex-style entry for that journal.
+      - If there is no journal-name publisher variable, or the variable is not in the
+        list of journals, checks for the publisher variable 'latex-style' and returns this.
     """
     pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
     journal_name = get_publisher_variable(pub_vars, "journal-name")
@@ -4036,10 +4038,12 @@ def get_latex_style(xml, pub_file, stringparams):
         journal_info = get_journal_info(journal_name)
         latex_style = journal_info["latex-style"]
         if len(latex_style) == 0:
-            log.warning("The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using defaults instead.".format(journal_name))
+            msg = "The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using the default LaTeX style instead."
+            log.warning(msg.format(journal_name))
             latex_style = pub_latex_style
         if len(pub_latex_style) > 0 and pub_latex_style != latex_style:
-            log.warning("Your publication file specifies a latex-style of {}, but a journal name of {}.  Building with the latex style {} which matches that journal instead.".format(pub_latex_style, journal_name, latex_style))
+            msg = "Your publication file specifies a latex-style of {}, but a journal name of {}.  Building with the latex style {} which matches that journal instead."
+            log.warning(msg.format(pub_latex_style, journal_name, latex_style))
     else:
         latex_style = pub_latex_style
     return latex_style
@@ -4948,11 +4952,12 @@ def get_publisher_variable(variable_dict, variable_name):
 
 def get_journal_info(journal_name):
     """
-    Returns a dictionary of data for a journal based on a master list of journals in journals/journals.xml.
+    Returns a dictionary of data for a journal based on
+    a master list of journals in journals/journals.xml.
     """
-    JOURNAL_XML = os.path.join(get_ptx_path(), "journals", "journals.xml")
-    log.debug("Reading list of journals in {}".format(JOURNAL_XML))
-    journals_tree = ET.parse(JOURNAL_XML)
+    journal_xml = os.path.join(get_ptx_path(), "journals", "journals.xml")
+    log.debug("Reading list of journals in {}".format(journal_xml))
+    journals_tree = ET.parse(journal_xml)
     journals_tree.xinclude()
     # Find the node with <code> value journal_name:
     try:
