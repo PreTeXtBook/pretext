@@ -282,11 +282,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This pass adds 100% internal identification for elements before    -->
 <!-- anything has been added or subtracted. The tree it builds is used  -->
 <!-- for constructing "View Source" knowls in HTML output as a form of  -->
-<!-- always-accurate documentation.                                     -->
-<!-- Update 2024-12-03: we needed to switch to using the $version-root  -->
-<!-- tree (a few trees later/further) since at this point versions have -->
-<!-- not been considered.  The "original-id" should still be            -->
-<!-- useful/valid after any version support has removed some elements.  -->
+<!-- always-accurate documentation.  And this is its only purpose.      -->
+<!-- N.B.: see the $original-labeled tree used in the HTML conversion,  -->
+<!-- optionally, under the sway of a string parameter.  This is in the  -->
+<!-- (imported) pretext-view-source.xsl stylesheet.                     -->
 <xsl:variable name="original-labeled-rtf">
     <xsl:apply-templates select="$version" mode="id-attribute">
         <!-- $parent-id defaults to 'root' in template -->

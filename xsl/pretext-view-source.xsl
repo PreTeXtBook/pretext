@@ -88,7 +88,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Locate the element with the same id, but in a very early -->
         <!-- pass of the assembly stylesheet, so with as little (no?) -->
         <!-- extraneous manufactured markup as possible.              -->
-        <xsl:variable name="original-element" select="$version-root//*[@original-id = $the-element-id]"/>
+        <xsl:variable name="original-element" select="$original-labeled//*[@original-id = $the-element-id]"/>
         <!-- Just for convenience, capture highly sanitized text      -->
         <!-- version of the XML source within a variable.             -->
         <!--                                                          -->
