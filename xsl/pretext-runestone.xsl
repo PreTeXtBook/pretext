@@ -225,6 +225,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$rs-js-tokens">
         <script>
             <xsl:attribute name="src">
+                <xsl:value-of select="$cdn-prefix"/>
                 <xsl:text>_static/</xsl:text>
                 <xsl:value-of select="."/>
             </xsl:attribute>
@@ -233,6 +234,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$rs-css-tokens">
         <link rel="stylesheet" type="text/css">
             <xsl:attribute name="href">
+                <xsl:value-of select="$cdn-prefix"/>
                 <xsl:text>_static/</xsl:text>
                 <xsl:value-of select="."/>
             </xsl:attribute>
