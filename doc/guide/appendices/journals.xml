@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2019  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="appendix-journals" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <title>List of Supported Journal Styles</title>
+
+        <p>
+            This appendix contains the list of supported journals and their short name codes.  To specify
+            one of these journals, use the publication file.  See <xref ref="common-journal"/>.
+        </p>
+
+        <p>
+            The code for a journal is taken from the list of abbreviations used by MathSciNet available at <url href="https://mathscinet.ams.org/msnhtml/serials.pdf">https://mathscinet.ams.org/msnhtml/serials.pdf</url>.
+        </p>
+
+        <xi:include href="journals-table.xml"/>
+
+</appendix>

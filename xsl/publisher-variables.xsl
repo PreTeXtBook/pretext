@@ -227,6 +227,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-watermark" select="$publication/common/watermark or ($watermark.text != '')"/>
 <xsl:variable name="b-latex-watermark" select="$b-watermark or ($latex.watermark != '')"/>
 
+<!-- Journal name for bibliography formatting and latex style selection -->
+<xsl:variable name="journal-name">
+    <xsl:apply-templates select="$publisher-attribute-options/common/journal/pi:pub-attribute[@name='name']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
@@ -3081,6 +3087,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <mermaid>
             <pi:pub-attribute name="theme" default="default" options="dark forest light"/>
         </mermaid>
+        <journal>
+            <pi:pub-attribute name="name" default="" freeform="yes"/>
+        </journal>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>

@@ -169,6 +169,27 @@
                 QR code pixels.
             </p>
         </subsection>
+
+        <subsection xml:id="common-journal">
+            <title>Journal name</title>
+            <idx><h>common option</h><h>journal name</h></idx>
+            <idx><h>journal name</h><h>common option</h></idx>
+
+            <p>
+                When an article is intended for publication in a particular journal, the name of the
+                journal can be specified with
+                <cd>
+                    <cline>/publication/common/journal/@name</cline>
+                </cd>
+                with a value being one of a list of supported journal short name codes.  Setting this option
+                will control the format of bibliography entries and the format of <latex/> that can be produced.
+            </p>
+
+            <p>
+                A complete list of the supported journals, together with their short name codes, will
+                be available in <xref ref="appendix-journals"/>.
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">
