@@ -273,7 +273,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- not been considered.  The "original-id" should still be            -->
 <!-- useful/valid after any version support has removed some elements.  -->
 <xsl:variable name="original-labeled-rtf">
-    <xsl:apply-templates select="/" mode="id-attribute">
+    <xsl:apply-templates select="$version" mode="id-attribute">
         <!-- $parent-id defaults to 'root' in template -->
         <xsl:with-param name="attr-name" select="'original-id'"/>
     </xsl:apply-templates>
@@ -281,13 +281,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
 <xsl:variable name="version-rtf">
-    <xsl:apply-templates select="$original-labeled" mode="version"/>
+    <xsl:apply-templates select="/" mode="version"/>
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$version//webwork"/>
+<xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
 
 <!-- Support for versions mean there may be multiple instances of  -->
 <!-- the same structure in authored source, and conceivably they   -->
@@ -300,7 +300,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
 <xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$version" mode="webwork"/>
+    <xsl:apply-templates select="$original-labeled" mode="webwork"/>
 </xsl:variable>
 <xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
