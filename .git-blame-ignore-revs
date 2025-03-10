@@ -1,7 +1,11 @@
 # PreTeXt whitespace/formatting commits
+# Commit message (e.g.): "Add whitespace commit to git blame ignore revisions"
 
 # May 2021: "black" formatting on Python pretext script
 56a27b3a41ece5a2eee1975e190e49b6cf98c500
 
 # Oct 2023: restructure WW chapter as a book, indentation
 87f4f5e712e03024ae85589c8086d273d8241fd3
+
+# Mar 2025: empty elements in sample article
+36decdaa299138281dd461d021483a83fb7d1964
