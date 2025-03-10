@@ -3484,7 +3484,7 @@ def _runestone_services(stringparams, ext_rs_methods):
     # ext_rs_methods - an optional function that can replace the querying
     #                   of the Runestone Services file
     # Result - returns five pieces of discovered or set information,
-    #          see *two* retrn statements, one is intermediate.
+    #          see *two* return statements, one is intermediate.
     #          Failure is an option, if a network request fails
 
     # Canonical location of file of redirections to absolute-latest
@@ -3557,6 +3557,61 @@ def _runestone_services(stringparams, ext_rs_methods):
     stringparams["rs-css"] = rs_css
     stringparams["rs-version"] = rs_version
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
+
+
+def _cdn_runestone_services(stringparams, ext_rs_methods):
+    """Version of _runestone_services function to query the Runestone Services file from the PreTeXt html-static CDN"""
+
+    # stringparams - string parameter dictionary, this gains three
+    #                new keys which are passed on to the XSL eventually
+    # ext_rs_methods - an optional function that can replace the querying
+    #                   of the Runestone Services file
+    # Result - returns None, but updates stringparams dictionary with relevant rs values.
+
+    # CDN url for runestone services xml file
+    services_url_template = 'https://cdn.jsdelivr.net/gh/pretextbook/html-static@{}/dist/_static/runestone_services.xml'
+
+    # When builing portable html using the pretext CDN, it doesn't make sense to
+    # use the rs.version or rs.dev stringparams.  We warn if either of these are set.
+    if "debug.rs.version" in stringparams:
+        log.warning("Building portable html so ignoring the debug.rs.version string param")
+        stringparams.pop("debug.rs.version")
+    if "debug.rs.dev" in stringparams:
+        log.warning("Building portable html so ignoring the debug.rs.dev string param")
+        stringparams.pop("debug.rs.dev")
+
+    # set version to "latest" unless cli set cdn version
+    rs_version = stringparams.get("cli.version") or "latest"
+    log.info("Using rs services version {} from the PreTeXt CDN".format(rs_version))
+    services_url = services_url_template.format(rs_version)
+
+    # Otherwise, we have a URL pointing to the Runestone server/CDN
+    # which may be successful and may not.
+    try:
+        if ext_rs_methods:
+            # ext_rs_methods can be passed by the calling function.
+            # It should only accept keyword arguments, including `format` to
+            # distinguish between different types of requests.  Here we use
+            # format="xml" to indicate we are getting the small XML file containing
+            # data about the services and returning it as a string.
+            services_xml = ext_rs_methods(url=services_url, format="xml")
+        else:
+            # Network failure is fatal.  query_runestone_services() will raise an exception
+            # if it cannot get the Runestone Services file
+            services_xml = query_runestone_services(services_url)
+    except Exception as e:
+        raise Exception(e)
+
+    # Now services_xml should be meaningful since we haven't raised an exception.
+    services = ET.fromstring(services_xml)
+    # Interrogate the services XML
+    rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
+
+    # Set rs stringparams
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+    return None
 
 
 def query_runestone_services(services_url):
@@ -3883,9 +3938,17 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
-    # interrogate Runestone server (or debugging switches) and populate
-    # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+
+    if include_static_files:
+        # interrogate Runestone server (or debugging switches) and populate
+        # NB: stringparams is augmented with Runestone Services information
+        _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    else:
+        # even if we don't need static files, we need to set stringparams for
+        # Runestone Services information.
+        _cdn_runestone_services(stringparams, ext_rs_methods)
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -3902,18 +3965,21 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place JS in scratch directory
-    copy_html_js(tmp_dir)
+    if include_static_files:
+        # Copy js and css, but only if not building portable html
+        # place JS in scratch directory
+        copy_html_js(tmp_dir)
 
-    # build or copy theme
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    build_or_copy_theme(xml, pub_vars, tmp_dir)
+        # build or copy theme
+        build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
-    # extra css for custom ol markers
-    move_ol_marker_css(tmp_dir)
+
+    if include_static_files:
+        # extra css for custom ol markers
+        move_ol_marker_css(tmp_dir)
 
     if file_format  == "html":
         # with multiple files, we need to copy a tree
