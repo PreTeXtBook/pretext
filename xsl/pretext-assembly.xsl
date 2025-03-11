@@ -285,12 +285,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
-<!-- Support for versions mean there may be multiple instances of  -->
-<!-- the same structure in authored source, and conceivably they   -->
-<!-- might all be absent once a version has been selected.  We are -->
-<!-- especially thinking of "docinfo" here since some defaults     -->
-<!-- expressed there can influence the creation of static          -->
-<!-- representations later in this sequence of passes.             -->
+<!-- The "version" tree should be valid PreTeXt.  Furthermore, there -->
+<!-- should not be anymore modifactions in subsequent passes which   -->
+<!-- change the gross structure of a document (i.e. nature of the    -->
+<!-- divisions).  The determination of various pubisher variables,   -->
+<!-- mostly relative to numbering depth, have default values that    -->
+<!-- depend on the structure.  So aspects of this tree are consulted -->
+<!-- frequently in  publisher-variables.xsl.                         -->
+<!-- Also, note that this tree is useful for certain tasks, like     -->
+<!-- validation, or reporting values of publisher variables, without -->
+<!-- regard to the subsequent passes.                                -->
 <xsl:variable name="version-root" select="$version/pretext"/>
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
@@ -371,17 +375,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$repair" mode="enrichment"/>
 </xsl:variable>
 <xsl:variable name="enrichment" select="exsl:node-set($enrichment-rtf)"/>
-
-<!-- Once the "repair" tree is formed, any source modifications      -->
-<!-- have been made, and it is on to *augmenting* the source.        -->
-<!-- Various publisher variables are consulted for the augmentation, -->
-<!-- notably the style/depth of numbering.  So this tree needs to    -->
-<!-- be available for creating those variables, notably sensible     -->
-<!-- defaults based on the source.  We refer to this tree as the     -->
-<!-- "assembly" tree.                                                -->
-<xsl:variable name="assembly-root" select="$enrichment/pretext"/>
-<xsl:variable name="assembly-docinfo" select="$assembly-root/docinfo"/>
-<xsl:variable name="assembly-document-root" select="$assembly-root/*[not(self::docinfo)]"/>
 
 <!-- 2024-02-08: the construction of @label from @xml:id was split  -->
 <!-- out of the "identification" pass, so is located here.  Perhaps -->
