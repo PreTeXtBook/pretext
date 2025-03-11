@@ -68,6 +68,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- handled the same way.                                              -->
 <xsl:template match="@original-id" mode="serialize"/>
 
+<!-- N.B.: the -assembly stylesheet first construct a "version" which   -->
+<!-- is the resolution of version support and customizations.  Then     -->
+<!-- "original-id" are added in the next pass.  These are solely for    -->
+<!-- the purpose of "going back" to this second pass to identify pieces -->
+<!-- of a document before the assembly process perturbs them.  So the   -->
+<!-- key tree this next template acts on is in the variable             -->
+<!-- $original-labeled.  Just above we explain how these id's get       -->
+<!-- scrubbed before presenting source to the reader.                   -->
+
 <!-- The template to place into the HTML stylesheet, which is        -->
 <!-- overriding a do-nothing stub in the HTML stylesheet.  This is   -->
 <!-- a no-op unless the $b-view-source has been set to true()        -->
